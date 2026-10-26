@@ -1,0 +1,1083 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pakistan: climate, seasons and sky</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+
+
+<style id="pkx-standalone">
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:#000}
+body{margin:0;background:#000}
+</style>
+
+<style>
+#pkx{--fg:#ececec;--hi:#fff;--mut:#9b9b9b;--dim:#666;--line:rgba(255,255,255,.14);--soft:rgba(255,255,255,.045);--soft2:rgba(255,255,255,.09);
+  background:#000;color:var(--fg);font-family:'Space Grotesk',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;line-height:1.5;
+  max-width:1440px;margin:0 auto;padding:clamp(18px,4vw,56px);box-sizing:border-box;-webkit-font-smoothing:antialiased}
+#pkx *,#pkx *::before,#pkx *::after{box-sizing:border-box}
+#pkx h1,#pkx h2,#pkx h3,#pkx p{margin:0}
+#pkx button{font:inherit;color:inherit;cursor:pointer}
+#pkx .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+#pkx :focus-visible{outline:2px solid #fff;outline-offset:2px}
+#pkx .pk-muted{color:var(--mut)}
+
+/* hero */
+#pkx .pk-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px 48px;align-items:end;padding:6px 0 36px}
+#pkx .pk-title{font-size:clamp(64px,13.5vw,190px);font-weight:300;letter-spacing:-.055em;line-height:.86;color:var(--hi)}
+#pkx .pk-lede{max-width:44ch;color:var(--mut);font-size:clamp(16px,1.5vw,19px);margin-top:22px}
+#pkx .pk-clock{display:grid;gap:10px;min-width:280px}
+#pkx .pk-time{font-size:clamp(38px,5vw,60px);font-weight:300;letter-spacing:-.02em;line-height:1;color:var(--hi)}
+#pkx .pk-time small{font-size:.38em;color:var(--mut);letter-spacing:0;margin-left:8px}
+#pkx .pk-date{color:var(--mut);font-size:15px}
+#pkx .pk-reads{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;margin-top:6px;padding-top:12px;border-top:1px solid var(--line)}
+#pkx .pk-reads div{display:flex;flex-direction:column;font-size:12px;color:var(--mut)}
+#pkx .pk-reads b{font-weight:400;font-size:14px;color:var(--fg)}
+#pkx .pk-facts{display:flex;flex-wrap:wrap;gap:10px 40px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:14px;color:var(--mut)}
+#pkx .pk-facts b{color:var(--fg);font-weight:500}
+
+/* sections */
+#pkx .pk-sec{padding:56px 0 8px}
+#pkx .pk-sec>header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px 32px;margin-bottom:24px}
+#pkx .pk-sec h2{font-size:clamp(28px,3.6vw,44px);font-weight:400;letter-spacing:-.03em;line-height:1.05;color:var(--hi)}
+#pkx .pk-sec header p{max-width:52ch;color:var(--mut);font-size:15px}
+
+/* atlas */
+#pkx .pk-atlas{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,.8fr);gap:28px;align-items:start}
+#pkx .pk-mapframe{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#000;aspect-ratio:1.039/1;touch-action:pan-y}
+#pkx .pk-mapframe canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+#pkx .pk-maptitle{position:absolute;left:16px;top:14px;z-index:3;pointer-events:none;max-width:70%}
+#pkx .pk-maptitle b{display:block;font-weight:500;font-size:15px;color:#fff;text-shadow:0 0 8px #000,0 0 14px #000}
+#pkx .pk-maptitle span{font-size:12px;color:#cfcfcf;text-shadow:0 0 8px #000,0 0 14px #000}
+#pkx .pk-pins{position:absolute;inset:0;z-index:2}
+#pkx .pk-pin{position:absolute;width:26px;height:26px;transform:translate(-50%,-50%);background:none;border:0;padding:0}
+#pkx .pk-pin i{position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#000;border:1.5px solid #fff;transition:transform .15s}
+#pkx .pk-pin span{position:absolute;left:17px;top:50%;transform:translateY(-50%);font-size:11px;color:#fff;white-space:nowrap;opacity:0;pointer-events:none;text-shadow:0 0 4px #000,0 0 9px #000,0 0 12px #000}
+#pkx .pk-pin.lab span,#pkx .pk-pin:hover span,#pkx .pk-pin:focus-visible span,#pkx .pk-pin[aria-current="true"] span{opacity:1}
+#pkx .pk-pin[aria-current="true"] i{background:#fff;transform:scale(1.5);box-shadow:0 0 0 4px rgba(255,255,255,.22)}
+#pkx .pk-cross{position:absolute;z-index:1;width:30px;height:30px;margin:-15px 0 0 -15px;pointer-events:none;display:none;border:1px solid rgba(255,255,255,.75);border-radius:50%}
+#pkx .pk-cross::before,#pkx .pk-cross::after{content:"";position:absolute;background:rgba(255,255,255,.75)}
+#pkx .pk-cross::before{left:50%;top:-8px;bottom:-8px;width:1px}
+#pkx .pk-cross::after{top:50%;left:-8px;right:-8px;height:1px}
+#pkx .pk-statusline{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:12px;font-size:13px;color:var(--mut)}
+#pkx .pk-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;background:#555;vertical-align:baseline}
+#pkx .pk-dot.on{background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.2)}
+
+#pkx .pk-side{display:grid;gap:22px}
+#pkx .pk-grp h3{font-size:13px;font-weight:500;color:var(--mut);margin-bottom:10px}
+#pkx .pk-modes{display:grid;gap:6px}
+#pkx .pk-mode{display:flex;justify-content:space-between;gap:12px;align-items:baseline;text-align:left;background:var(--soft);border:1px solid transparent;border-radius:10px;padding:10px 14px;transition:background .15s}
+#pkx .pk-mode:hover{background:var(--soft2)}
+#pkx .pk-mode b{font-weight:500;font-size:15px}
+#pkx .pk-mode small{color:var(--mut);font-size:12px;text-align:right}
+#pkx .pk-mode[aria-pressed="true"]{background:#f2f2f2;color:#000}
+#pkx .pk-mode[aria-pressed="true"] small{color:#444}
+#pkx .pk-months{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+#pkx .pk-chip{background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 4px;font-size:13px;text-align:center;transition:background .15s}
+#pkx .pk-chip:hover{background:var(--soft2)}
+#pkx .pk-chip[aria-pressed="true"]{background:#f2f2f2;color:#000;border-color:#f2f2f2}
+#pkx .pk-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+#pkx .pk-row .pk-chip{padding:6px 12px}
+#pkx .pk-dim{opacity:.4;pointer-events:none}
+#pkx .pk-legend canvas{display:block;width:100%;height:10px;border-radius:5px;border:1px solid var(--line)}
+#pkx .pk-ticks{position:relative;height:18px;margin-top:6px;font-size:11px;color:var(--mut)}
+#pkx .pk-ticks span{position:absolute;top:0;transform:translateX(-50%);white-space:nowrap}
+#pkx .pk-ticks span:first-child{transform:none}
+#pkx .pk-zones{display:grid;gap:5px;font-size:13px}
+#pkx .pk-zones div{display:flex;align-items:center;gap:10px}
+#pkx .pk-zones i{width:14px;height:14px;border-radius:3px;border:1px solid var(--line);flex:none}
+#pkx .pk-range{margin-top:4px;font-size:12px;color:var(--mut)}
+#pkx .pk-probe{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:13px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;min-height:94px}
+#pkx .pk-probe dt{color:var(--mut)}
+#pkx .pk-probe dd{margin:0;text-align:right}
+#pkx .pk-city{border:1px solid var(--line);border-radius:12px;padding:14px}
+#pkx .pk-city select{width:100%;background:#000;color:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit;margin-bottom:12px}
+#pkx .pk-citystats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+#pkx .pk-citystats div{font-size:11px;color:var(--mut);display:flex;flex-direction:column}
+#pkx .pk-citystats b{font-size:17px;font-weight:400;color:#fff}
+#pkx .pk-city canvas{display:block;width:100%;height:170px}
+#pkx .pk-citynote{font-size:12px;color:var(--mut);margin-top:6px}
+
+/* seasons */
+#pkx .pk-seasons{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;border-top:1px solid var(--line)}
+#pkx .pk-season{text-align:left;background:none;border:0;border-right:1px solid var(--line);padding:18px 18px 22px 0;margin-right:18px;display:grid;gap:8px;align-content:start}
+#pkx .pk-season:last-child{border-right:0;margin-right:0}
+#pkx .pk-season h3{font-size:22px;font-weight:400;letter-spacing:-.02em;color:#fff}
+#pkx .pk-season .m{font-size:12px;color:var(--mut)}
+#pkx .pk-season .st{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px;color:var(--mut)}
+#pkx .pk-season .st b{display:block;font-size:16px;font-weight:400;color:#fff}
+#pkx .pk-season p{font-size:13px;color:var(--mut)}
+#pkx .pk-season[aria-pressed="true"] h3::after{content:" selected";font-size:11px;color:#000;background:#f2f2f2;border-radius:999px;padding:2px 8px;margin-left:8px;letter-spacing:0;vertical-align:middle}
+#pkx .pk-season.now h3::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;margin-right:10px;box-shadow:0 0 0 3px rgba(255,255,255,.22);vertical-align:middle}
+#pkx .pk-subhead{margin:40px 0 14px;font-size:18px;font-weight:400;color:#fff}
+#pkx .pk-subhead span{color:var(--mut);font-size:14px;margin-left:10px}
+#pkx .pk-multi{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px 12px}
+#pkx .pk-mini{background:none;border:0;padding:0;text-align:left;display:grid;gap:4px}
+#pkx .pk-mini canvas{width:100%;display:block;border-radius:6px;background:var(--soft)}
+#pkx .pk-mini span{font-size:12px;color:var(--mut)}
+#pkx .pk-mini[aria-pressed="true"] span{color:#fff}
+#pkx .pk-mini[aria-pressed="true"] canvas{outline:2px solid #fff;outline-offset:2px}
+#pkx .pk-yearchart{border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:8px}
+#pkx .pk-yearchart canvas{width:100%;height:260px;display:block}
+
+/* sky */
+#pkx .pk-skybar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-bottom:18px;font-size:14px;color:var(--mut)}
+#pkx .pk-skybar select{background:#000;color:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font:inherit}
+#pkx .pk-sky{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+#pkx .pk-tile{border:1px solid var(--line);border-radius:18px;padding:20px;display:grid;gap:14px;align-content:start}
+#pkx .pk-tile h3{font-size:20px;font-weight:400;color:#fff;display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+#pkx .pk-tile h3 small{font-size:12px;color:var(--mut);font-weight:400}
+#pkx .pk-kv{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+#pkx .pk-kv div{display:flex;flex-direction:column;font-size:12px;color:var(--mut)}
+#pkx .pk-kv b{font-weight:400;font-size:17px;color:#fff}
+#pkx .pk-tile canvas{width:100%;display:block}
+#pkx .pk-moonrow{display:flex;gap:18px;align-items:center}
+#pkx .pk-moonrow canvas{width:120px;height:120px;flex:none}
+#pkx .pk-big{font-size:34px;font-weight:300;letter-spacing:-.02em;color:#fff;line-height:1}
+#pkx .pk-note{font-size:12px;color:var(--mut)}
+
+/* events */
+#pkx .pk-heroev{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:26px}
+#pkx .pk-card{border:1px solid var(--line);border-radius:18px;padding:20px;display:grid;gap:8px;align-content:start}
+#pkx .pk-card .l{font-size:13px;color:var(--mut)}
+#pkx .pk-card .t{font-size:20px;font-weight:400;color:#fff;line-height:1.2}
+#pkx .pk-card .c{font-size:clamp(26px,3vw,36px);font-weight:300;color:#fff;letter-spacing:-.01em}
+#pkx .pk-card .d{font-size:13px;color:var(--mut)}
+#pkx .pk-filters{display:flex;flex-wrap:wrap;gap:8px 24px;margin-bottom:18px}
+#pkx .pk-filters .pk-row{margin:0}
+#pkx .pk-feed{display:grid;gap:0;border-top:1px solid var(--line)}
+#pkx .pk-ev{display:grid;grid-template-columns:170px minmax(0,1fr) 190px;gap:6px 24px;padding:16px 0;border-bottom:1px solid var(--line)}
+#pkx .pk-ev .when{font-size:13px;color:var(--mut)}
+#pkx .pk-ev .what b{display:block;font-weight:500;font-size:16px;color:#fff}
+#pkx .pk-ev .what span{font-size:13px;color:var(--mut)}
+#pkx .pk-ev .rel{text-align:right;font-size:13px;color:#fff}
+#pkx .pk-ev .ty{display:block;font-size:11px;color:var(--mut);margin-top:2px}
+#pkx .pk-ev.fut .rel{color:#fff}
+#pkx .pk-ev.pst .rel{color:var(--mut)}
+#pkx .pk-nowline{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid #fff;color:#fff;font-size:13px}
+#pkx .pk-nowline::before{content:"";width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.22)}
+#pkx .pk-more{margin:16px 0 0;background:none;border:1px solid var(--line);border-radius:999px;padding:9px 18px}
+#pkx .pk-more:hover{background:var(--soft2)}
+#pkx .pk-notes{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;font-size:13px;color:var(--mut)}
+#pkx .pk-notes h3{font-size:14px;font-weight:500;color:#fff;margin-bottom:6px}
+
+@media (max-width:1020px){
+ #pkx .pk-atlas{grid-template-columns:1fr}
+ #pkx .pk-seasons{grid-template-columns:1fr 1fr}
+ #pkx .pk-season{border-right:0;border-bottom:1px solid var(--line);margin-right:0;padding-right:0}
+ #pkx .pk-multi{grid-template-columns:repeat(4,minmax(0,1fr))}
+ #pkx .pk-sky,#pkx .pk-heroev,#pkx .pk-notes{grid-template-columns:1fr}
+}
+@media (max-width:700px){
+ #pkx .pk-hero{grid-template-columns:1fr}
+ #pkx .pk-ev{grid-template-columns:1fr}
+ #pkx .pk-ev .rel{text-align:left}
+ #pkx .pk-seasons{grid-template-columns:1fr}
+ #pkx .pk-multi{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #pkx .pk-pin span{font-size:10px}
+}
+@media (prefers-reduced-motion:reduce){#pkx *{transition:none!important}}
+</style>
+
+
+<div id="pkx">
+
+  <section class="pk-hero" aria-label="Pakistan overview">
+    <div>
+      <h1 class="pk-title">Pakistan</h1>
+      <p class="pk-lede">Climate, seasons and the sky above it. The maps below are modelled from station normals and the clock, sun, moon and event feeds run live.</p>
+    </div>
+    <div class="pk-clock" aria-label="Live time">
+      <div class="pk-time mono"><span id="pkTime">--:--:--</span><small>PKT</small></div>
+      <div class="pk-date" id="pkDate">&nbsp;</div>
+      <div class="pk-reads mono">
+        <div>UTC<b id="pkUtc">--</b></div>
+        <div>Julian date<b id="pkJd">--</b></div>
+        <div>Sidereal time<b id="pkLst">--</b></div>
+        <div>Observer<b id="pkObs">--</b></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="pk-facts">
+    <span><b>881,913 km²</b> area</span>
+    <span><b>23.6° to 37.1° N</b> latitude span</span>
+    <span><b>0 to 8,611 m</b> from the Arabian Sea to K2</span>
+    <span><b>53.5 °C</b> reported at Mohenjo-daro, May 2010</span>
+  </div>
+
+  
+  <section class="pk-sec" id="pkAtlasSec" aria-labelledby="pkAtlasH">
+    <header>
+      <h2 id="pkAtlasH">Climate atlas</h2>
+      <p>Temperature is corrected for terrain height. Move over the map for a reading at any point, or select a city.</p>
+    </header>
+    <div class="pk-atlas">
+      <div>
+        <div class="pk-mapframe" id="pkFrame">
+          <canvas id="pkMap" role="img" aria-label="Map of Pakistan showing the selected climate layer"></canvas>
+          <div class="pk-pins" id="pkPins"></div>
+          <div class="pk-cross" id="pkCross"></div>
+          <div class="pk-maptitle"><b id="pkMapT">Temperature</b><span id="pkMapS"></span></div>
+        </div>
+        <div class="pk-statusline">
+          <span><i class="pk-dot" id="pkWxDot"></i><span id="pkWxTxt">Checking live weather</span></span>
+          <span class="pk-range mono" id="pkRange"></span>
+        </div>
+      </div>
+
+      <aside class="pk-side">
+        <div class="pk-grp">
+          <h3>Map layer</h3>
+          <div class="pk-modes" id="pkModes"></div>
+        </div>
+        <div class="pk-grp" id="pkTimeGrp">
+          <h3>Time of year</h3>
+          <div class="pk-months" id="pkMonths"></div>
+          <div class="pk-row" id="pkQuick"></div>
+        </div>
+        <div class="pk-grp pk-legend">
+          <h3 id="pkLegT">Scale</h3>
+          <canvas id="pkLegBar" width="256" height="10"></canvas>
+          <div class="pk-ticks mono" id="pkTicks"></div>
+          <div class="pk-zones" id="pkZones" hidden=""></div>
+          <div class="pk-row"><button class="pk-chip" id="pkPal" aria-pressed="false">Colour scale</button></div>
+        </div>
+        <div class="pk-grp">
+          <h3>Pointer reading</h3>
+          <dl class="pk-probe mono" id="pkProbe"><dt>Move over the map</dt><dd></dd></dl>
+        </div>
+        <div class="pk-grp">
+          <h3>City</h3>
+          <div class="pk-city">
+            <select id="pkCitySel" aria-label="Choose a city"></select>
+            <div class="pk-citystats" id="pkCityStats"></div>
+            <canvas id="pkClimo" aria-label="Monthly temperature and rainfall for the selected city"></canvas>
+            <p class="pk-citynote" id="pkCityNote"></p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  
+  <section class="pk-sec" id="pkSeasonSec" aria-labelledby="pkSeasonH">
+    <header>
+      <h2 id="pkSeasonH">Seasonal change</h2>
+      <p>Pakistan Meteorological Department seasons. Select one to average its months on the atlas.</p>
+    </header>
+    <div class="pk-seasons" id="pkSeasons"></div>
+
+    <h3 class="pk-subhead">The year in twelve maps<span>Mean temperature, same scale</span></h3>
+    <div class="pk-multi" id="pkMulti"></div>
+
+    <h3 class="pk-subhead">Five cities across the year<span>Mean monthly temperature</span></h3>
+    <div class="pk-yearchart"><canvas id="pkYear" aria-label="Annual temperature curves for five cities"></canvas></div>
+  </section>
+
+  
+  <section class="pk-sec" id="pkSkySec" aria-labelledby="pkSkyH">
+    <header>
+      <h2 id="pkSkyH">The sky above</h2>
+      <p>Sun and moon are calculated in your browser, to the second. The ISS panel reads a live position feed when it can reach one.</p>
+    </header>
+    <div class="pk-skybar">Observer location <select id="pkSkySel" aria-label="Observer city"></select><span id="pkSkyCoord" class="mono"></span></div>
+    <div class="pk-sky">
+      <article class="pk-tile">
+        <h3>Sun <small id="pkSunState">--</small></h3>
+        <div class="pk-kv mono">
+          <div>Sunrise<b id="pkRise">--</b></div>
+          <div>Sunset<b id="pkSet">--</b></div>
+          <div>Solar noon<b id="pkNoon">--</b></div>
+          <div>Day length<b id="pkLen">--</b></div>
+          <div>Altitude<b id="pkAlt">--</b></div>
+          <div>Azimuth<b id="pkAz">--</b></div>
+        </div>
+        <canvas id="pkSunPath" height="150" aria-label="Sun altitude through today"></canvas>
+      </article>
+      <article class="pk-tile">
+        <h3>Moon <small id="pkMoonName">--</small></h3>
+        <div class="pk-moonrow">
+          <canvas id="pkMoon" width="240" height="240" aria-label="Current phase of the Moon"></canvas>
+          <div><div class="pk-big mono" id="pkMoonIll">--</div><div class="pk-note">illuminated</div></div>
+        </div>
+        <div class="pk-kv mono">
+          <div>Age<b id="pkMoonAge">--</b></div>
+          <div>Next phase<b id="pkMoonNext">--</b></div>
+          <div>Next full moon<b id="pkMoonFull">--</b></div>
+          <div>Next new moon<b id="pkMoonNew">--</b></div>
+        </div>
+      </article>
+      <article class="pk-tile">
+        <h3>International Space Station <small id="pkIssSrc">--</small></h3>
+        <canvas id="pkIssMap" height="150" aria-label="ISS ground track over a world grid with Pakistan outlined"></canvas>
+        <div class="pk-kv mono">
+          <div>Latitude<b id="pkIssLat">--</b></div>
+          <div>Longitude<b id="pkIssLon">--</b></div>
+          <div>Altitude<b id="pkIssAlt">--</b></div>
+          <div>Speed<b id="pkIssVel">--</b></div>
+          <div>Distance to observer<b id="pkIssDist">--</b></div>
+          <div>From the observer<b id="pkIssEl">--</b></div>
+        </div>
+        <p class="pk-note" id="pkIssNote"></p>
+      </article>
+    </div>
+  </section>
+
+  
+  <section class="pk-sec" id="pkEvSec" aria-labelledby="pkEvH">
+    <header>
+      <h2 id="pkEvH">Space events, past and ahead</h2>
+      <p>Everything is placed against the live clock. Lunar phases are calculated; launches join the list when the launch feed is reachable.</p>
+    </header>
+    <div class="pk-heroev">
+      <div class="pk-card"><span class="l">Next sky or spaceflight event</span><span class="t" id="pkNxT">--</span><span class="c mono" id="pkNxC">--</span><span class="d" id="pkNxD"></span></div>
+      <div class="pk-card"><span class="l">Most recent event</span><span class="t" id="pkLsT">--</span><span class="c mono" id="pkLsC">--</span><span class="d" id="pkLsD"></span></div>
+      <div class="pk-card"><span class="l">Pakistan's next milestone</span><span class="t" id="pkPkT">--</span><span class="c" id="pkPkC" style="font-size:22px">--</span><span class="d" id="pkPkD"></span></div>
+    </div>
+    <div class="pk-filters">
+      <div class="pk-row" id="pkFTime"></div>
+      <div class="pk-row" id="pkFType"></div>
+    </div>
+    <div class="pk-feed" id="pkFeed"></div>
+    <button class="pk-more" id="pkMore" hidden="">Show earlier events</button>
+    <p class="pk-note" id="pkFeedNote" style="margin-top:14px"></p>
+  </section>
+
+  <section class="pk-notes" aria-label="About the data">
+    <div><h3>Climate maps</h3><p>Built from monthly mean temperature and rainfall at 23 stations, interpolated by inverse-distance weighting. Temperature is first reduced to sea level, interpolated, then lowered again by 6.5 °C per kilometre of modelled terrain height. Treat values between stations as estimates, especially in the far north.</p></div>
+    <div><h3>Climate zones</h3><p>Classified per pixel with the Köppen scheme from the modelled monthly fields, then merged into nine classes suited to Pakistan. The outline is schematic and shows Pakistan-administered territory.</p></div>
+    <div><h3>Live feeds</h3><p>Weather comes from Open-Meteo, the ISS position from wheretheiss.at and launches from Launch Library 2. When a feed cannot be reached the page says so and falls back to the calculated model. Moon phases use Meeus' algorithm, good to a few minutes.</p></div>
+  </section>
+</div>
+
+<script>
+(function(){
+'use strict';
+var root=document.getElementById('pkx');
+function $(s,r){return (r||root).querySelector(s)}
+function $$(s,r){return Array.prototype.slice.call((r||root).querySelectorAll(s))}
+var rad=function(d){return d*Math.PI/180}, deg=function(r){return r*180/Math.PI};
+var pad=function(n){return String(n).padStart(2,'0')};
+var PK=5*3600e3;
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var MONL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function pkd(ms){return new Date(ms+PK)}
+function fmtDate(ms,p){var d=pkd(ms);var s=pad(d.getUTCDate())+' '+MON[d.getUTCMonth()]+' '+d.getUTCFullYear();if(p==='m')s+=', '+pad(d.getUTCHours())+':'+pad(d.getUTCMinutes())+' PKT';return s}
+function fmtHM(min){min=((min%1440)+1440)%1440;return pad(Math.floor(min/60))+':'+pad(Math.floor(min%60))}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function mean(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i];return s/a.length}
+
+/* ---------- geography ---------- */
+var OUT=[[61.62,25.07],[61.66,25.78],[61.80,26.22],[62.30,26.45],[63.20,26.65],[63.25,27.15],[62.78,27.25],[62.78,28.25],[61.60,28.95],[60.88,29.85],
+[61.70,29.55],[62.50,29.40],[63.50,29.50],[64.50,29.50],[65.40,29.70],[66.20,30.10],[66.35,30.85],
+[67.00,31.20],[67.75,31.45],[68.25,31.75],[69.00,31.70],[69.35,31.95],[69.90,32.55],[70.25,33.15],[69.95,33.55],[70.15,33.95],[71.05,34.05],[71.35,34.50],[71.55,34.85],[71.25,35.25],[71.50,35.60],[71.70,36.05],[72.50,36.75],[73.30,36.88],[74.00,36.95],[74.75,37.05],[75.20,36.95],
+[75.90,36.60],[76.50,35.95],[77.00,35.70],[77.05,35.40],
+[76.00,35.05],[75.20,34.85],[74.55,34.70],[74.05,34.10],[74.00,33.55],[74.30,33.20],[74.60,32.80],
+[74.95,32.45],[74.70,32.05],[74.55,31.65],[74.55,31.05],[74.00,30.45],[73.60,29.95],[73.00,29.25],[72.30,28.75],[71.50,28.20],[70.70,27.60],[70.10,26.95],[70.00,26.30],[70.35,25.70],[70.75,25.20],[70.95,24.60],[70.85,24.30],[70.00,24.15],[69.50,24.20],[68.75,23.95],[68.15,23.70],
+[67.45,24.05],[67.20,24.55],[66.95,24.78],[66.67,24.83],[66.45,25.10],[66.55,25.45],[65.60,25.40],[64.60,25.16],[63.50,25.22],[62.30,25.05]];
+var LON0=60.6,LON1=77.4,LAT0=23.4,LAT1=37.4,C30=Math.cos(rad(30));
+var ASPECT=(LON1-LON0)*C30/(LAT1-LAT0);
+var GW=240,GH=Math.round(GW/ASPECT);
+function nx(lo){return (lo-LON0)/(LON1-LON0)}
+function ny(la){return (LAT1-la)/(LAT1-LAT0)}
+var LAPSE=0.0065;
+
+/* name, lat, lon, elevation m, label?, monthly mean T (C), monthly rainfall (mm) */
+function S(id,n,la,lo,el,lab,T,P){return {id:id,n:n,la:la,lo:lo,el:el,lab:lab,T:T,P:P}}
+var ST=[
+S('karachi','Karachi',24.86,67.01,8,1,[19.0,21.2,25.3,28.8,30.8,31.4,29.9,28.9,28.6,27.7,24.1,20.4],[6,8,8,5,1,10,70,60,20,2,1,4]),
+S('hyderabad','Hyderabad',25.39,68.37,13,0,[19.5,22.3,27.2,31.6,34.0,34.2,32.2,30.9,30.8,29.0,24.8,20.8],[1,3,3,1,1,5,55,50,18,1,1,1]),
+S('gwadar','Gwadar',25.12,62.32,10,1,[20.2,21.4,24.6,28.0,30.6,31.6,30.2,28.8,28.7,27.5,24.3,21.3],[12,15,12,3,0,2,6,3,1,1,2,6]),
+S('turbat','Turbat',26.0,63.05,150,0,[17.5,20.0,25.0,30.5,34.0,35.0,34.0,32.5,31.0,27.5,22.5,18.5],[12,15,12,4,1,1,5,4,1,1,2,7]),
+S('mithi','Mithi',24.74,69.8,45,0,[20,23,28,32.5,34.5,34,31.5,30,30.5,29,25,21.5],[1,2,2,1,2,8,70,70,25,2,1,1]),
+S('khuzdar','Khuzdar',27.8,66.6,1230,0,[10.5,13.5,19.0,25.0,29.5,32.0,32.0,30.5,27.5,22.5,16.5,11.5],[10,15,12,5,3,5,35,25,5,2,3,8]),
+S('quetta','Quetta',30.18,66.99,1680,1,[2.5,5.0,10.0,15.5,20.5,25.0,27.0,25.5,20.5,14.5,8.0,3.5],[35,40,45,25,10,8,28,18,6,4,8,20]),
+S('dalbandin','Dalbandin',28.89,64.41,850,0,[8.5,11.5,17.0,23.0,28.5,32.5,33.0,31.0,27.0,21.0,14.5,9.5],[8,12,13,6,3,2,5,3,1,1,2,6]),
+S('zhob','Zhob',31.34,69.45,1405,0,[4.5,7.0,12.0,17.5,22.5,26.5,26.0,25.0,21.5,15.5,9.5,5.5],[15,25,35,25,12,15,40,40,15,5,5,10]),
+S('jacobabad','Jacobabad',28.28,68.44,55,0,[14.0,17.5,24.0,31.0,35.5,36.5,34.5,33.0,31.5,27.0,20.0,15.5],[4,5,6,3,2,5,35,30,10,1,1,3]),
+S('bahawalpur','Bahawalpur',29.4,71.68,115,0,[13,16.5,22.5,29,34,36,34,32.5,30.5,26,19,14],[5,10,12,8,8,12,40,40,15,2,2,4]),
+S('multan','Multan',30.2,71.47,122,1,[12.5,16.0,22.0,28.5,33.5,35.5,33.5,32.0,30.5,26.0,19.0,14.0],[7,13,15,10,10,15,60,50,25,3,2,5]),
+S('dikhan','Dera Ismail Khan',31.83,70.9,165,0,[12,15.5,21,27.5,32.5,35,33.5,32,30,25.5,18.5,13.5],[10,15,20,12,10,15,55,50,25,5,3,6]),
+S('faisalabad','Faisalabad',31.42,73.08,185,0,[12,15,20.5,26.5,31.5,34,32,30.5,29,25,18,13],[10,15,20,12,10,25,95,90,40,5,3,6]),
+S('lahore','Lahore',31.55,74.34,217,1,[12.5,15.5,20.5,26.5,31.5,33.5,31.5,30.5,29,25,18.5,13.5],[23,30,33,22,20,55,200,185,70,10,5,12]),
+S('sialkot','Sialkot',32.5,74.53,255,0,[11.5,14.5,19.5,25.5,30.5,32.5,30,29,28,24,17.5,12.5],[25,35,40,25,20,60,260,240,100,15,8,15]),
+S('islamabad','Islamabad',33.68,73.05,540,1,[10.6,12.8,17.2,22.7,27.8,31.0,29.6,28.3,26.8,22.0,16.4,11.9],[55,65,80,45,30,60,260,290,105,20,12,30]),
+S('murree','Murree',33.9,73.39,2290,0,[3.5,4.5,8.5,13.5,18,21.5,20.5,19.5,17.5,13.5,9,5],[130,160,190,110,70,110,420,400,170,45,40,70]),
+S('peshawar','Peshawar',34.01,71.58,331,1,[10.5,13,18,24,29,32.5,32,30.5,28.5,23.5,17,12],[35,50,65,45,25,12,50,60,25,15,10,20]),
+S('chitral','Chitral',35.85,71.79,1500,0,[3.5,6,11,16.5,21.5,26,28.5,27.5,23.5,17,10.5,5],[40,55,75,70,50,20,20,20,15,15,15,20]),
+S('gilgit','Gilgit',35.92,74.31,1500,1,[2,5.5,11.5,17,21,26,29,28,23.5,16.5,9,3.5],[5,10,15,15,10,6,10,10,8,4,2,3]),
+S('skardu','Skardu',35.3,75.63,2230,1,[-3.5,-0.5,5.5,11,15.5,19.5,22.5,21.5,17,10.5,3.5,-1.5],[12,15,30,40,30,15,25,25,20,10,5,8]),
+S('khunjerab','Khunjerab Pass',36.85,75.42,4693,0,[-16,-14.5,-10,-4,1,5,8.5,7.5,3,-3.5,-9.5,-14],[15,20,25,25,25,20,20,20,15,10,5,10])
+];
+var NS=ST.length;
+var TERR=[[76.5,35.9,5200],[75.9,35.8,4500],[75.2,35.9,4300],[74.6,35.2,4200],[74.5,36.1,4400],[74.9,36.7,4300],[73.5,36.2,3800],[72.0,36.4,3900],[71.9,36.0,2800],[72.6,35.5,2800],[73.4,33.9,2300],[73.9,34.8,3500],[70.3,34.1,2400],[68.9,30.5,2000],[69.7,30.0,1600],[67.8,30.4,2300],[66.8,29.5,1700],[65.5,28.2,900],[67.2,26.8,900],[66.2,27.3,1300],[64.5,26.0,500],[63.0,26.8,700],[70.6,29.0,110],[72.5,30.5,150],[71.0,32.4,200],[68.7,26.5,45],[69.8,25.5,60],[68.3,25.2,20],[71.2,31.0,140]];
+var ELA=ST.map(function(s){return [s.lo,s.la,s.el]}).concat(TERR);
+
+/* ---------- grid, mask, weights, terrain ---------- */
+var IN=[],NIN=0,MASK=new Uint8Array(GW*GH),W,ELEV=new Float32Array(GW*GH);
+(function(){
+  var mc=document.createElement('canvas');mc.width=GW;mc.height=GH;var mx=mc.getContext('2d');
+  mx.fillStyle='#fff';mx.beginPath();
+  OUT.forEach(function(p,i){var x=nx(p[0])*GW,y=ny(p[1])*GH;if(i)mx.lineTo(x,y);else mx.moveTo(x,y)});
+  mx.closePath();mx.fill();
+  var d=mx.getImageData(0,0,GW,GH).data,arr=[];
+  for(var i=0;i<GW*GH;i++){if(d[i*4+3]>127){MASK[i]=1;arr.push(i)}}
+  IN=Int32Array.from(arr);NIN=IN.length;
+  W=new Float32Array(NIN*NS);
+  for(var k=0;k<NIN;k++){
+    var i2=IN[k],x=i2%GW,y=(i2/GW)|0,lo=LON0+(x+.5)/GW*(LON1-LON0),la=LAT1-(y+.5)/GH*(LAT1-LAT0),sum=0,o=k*NS;
+    for(var j=0;j<NS;j++){var dx=(lo-ST[j].lo)*C30,dy=la-ST[j].la,w=1/Math.pow(dx*dx+dy*dy+0.02,1.4);W[o+j]=w;sum+=w}
+    for(var j2=0;j2<NS;j2++)W[o+j2]/=sum;
+    var es=0,ws=0;
+    for(var q=0;q<ELA.length;q++){var ex=(lo-ELA[q][0])*C30,ey=la-ELA[q][1],ew=1/Math.pow(ex*ex+ey*ey+0.01,1.5);es+=ew*ELA[q][2];ws+=ew}
+    ELEV[i2]=es/ws;
+  }
+})();
+function interp(v){var F=new Float32Array(GW*GH);for(var k=0;k<NIN;k++){var o=k*NS,s=0;for(var j=0;j<NS;j++)s+=W[o+j]*v[j];F[IN[k]]=s}return F}
+function tempField(vals){var t0=vals.map(function(v,j){return v+LAPSE*ST[j].el});var F=interp(t0);for(var k=0;k<NIN;k++){var i=IN[k];F[i]-=LAPSE*ELEV[i]}return F}
+
+/* monthly fields, annual mean, swing, zones */
+var TM=[],PM=[],TA=new Float32Array(GW*GH),SW=new Float32Array(GW*GH),ZN=new Uint8Array(GW*GH);
+(function(){
+  for(var m=0;m<12;m++){TM.push(tempField(ST.map(function(s){return s.T[m]})));PM.push(interp(ST.map(function(s){return s.P[m]})))}
+  for(var k=0;k<NIN;k++){
+    var i=IN[k],sum=0,mx=-99,mn=99,ps=0,pw=0,pu=0;
+    for(var m=0;m<12;m++){var t=TM[m][i];sum+=t;if(t>mx)mx=t;if(t<mn)mn=t;var p=Math.max(0,PM[m][i]);ps+=p;if(m<3||m>8)pw+=p;else pu+=p}
+    var ta=sum/12;TA[i]=ta;SW[i]=mx-mn;
+    var z;
+    if(mx<0)z=9;else if(mx<10)z=8;
+    else{
+      var sh=ps>0?pu/ps:0.5,thr=20*ta+(sh>0.7?280:(sh<0.3?0:140));
+      if(ps<thr){var hot=ta>=18;z=ps<0.5*thr?(hot?1:2):(hot?3:4)}
+      else if(mn<-3)z=7;else z=mx>=22?5:6;
+    }
+    ZN[i]=z;
+  }
+})();
+var ZONES=[null,
+ {n:'Hot desert',c:[242,239,232]},{n:'Cold desert',c:[205,200,188]},{n:'Hot semi-arid',c:[170,165,152]},{n:'Cold semi-arid',c:[130,127,120]},
+ {n:'Humid subtropical',c:[122,138,154]},{n:'Subtropical highland',c:[90,107,123]},{n:'Cold highland',c:[62,77,92]},{n:'Alpine tundra',c:[200,212,222]},{n:'Permanent ice',c:[255,255,255]}];
+
+/* ---------- seasons ---------- */
+var SEA=[
+ {id:'winter',n:'Winter',m:[11,0,1],d:'Cold and dry on the plains, with dense fog from the Punjab to the Indus. Western disturbances bring rain and heavy snow to the north and to Balochistan.'},
+ {id:'spring',n:'Spring',m:[2,3],d:'Quick warming and unsettled weather. Hail and thunderstorms are common in the north while the wheat crop fills.'},
+ {id:'summer',n:'Summer',m:[4,5],d:'The pre-monsoon peak. Heatwaves above 45 °C hit Sindh and southern Punjab, dust storms are frequent and glacier melt accelerates.'},
+ {id:'monsoon',n:'Monsoon',m:[6,7,8],d:'Moist south-easterly flow brings most of the year\'s rain to Punjab, Kashmir and Khyber Pakhtunkhwa. River and urban floods are the main risk.'},
+ {id:'autumn',n:'Autumn',m:[9,10],d:'Dry, clear and cooling after the monsoon. Harvest season, and the start of smog build-up in the Punjab plains late in the period.'}
+];
+function seasonOf(m){for(var i=0;i<SEA.length;i++)if(SEA[i].m.indexOf(m)>-1)return SEA[i]}
+function seaStats(se){
+  var pl=ST.filter(function(s){return s.el<500}),hi=ST.filter(function(s){return s.el>1000});
+  function avg(list,key){var a=[];list.forEach(function(s){se.m.forEach(function(m){a.push(s[key][m])})});return mean(a)}
+  return {pt:avg(pl,'T'),ht:avg(hi,'T'),pr:avg(pl,'P')};
+}
+
+/* ---------- state ---------- */
+var STATE={mode:'temp',sel:{k:'now'},pal:'mono',city:'islamabad',playing:null};
+var LIVE={t:{},h:{},w:{},stamp:null,ok:false};
+function nowMs(){return Date.now()}
+function curMonth(){return pkd(nowMs()).getUTCMonth()}
+function fracMonth(){var d=pkd(nowMs()),y=d.getUTCFullYear(),m=d.getUTCMonth(),dim=new Date(Date.UTC(y,m+1,0)).getUTCDate();return m+(d.getUTCDate()-1+d.getUTCHours()/24)/dim}
+function interp12(A,f){var pos=f-0.5,i0=Math.floor(pos),fr=pos-i0,a=((i0%12)+12)%12,b=(a+1)%12;return A[a]*(1-fr)+A[b]*fr}
+function stVal(s,key){
+  var sel=STATE.sel;
+  if(sel.k==='now'){if(key==='T'&&LIVE.ok&&LIVE.t[s.id]!=null)return LIVE.t[s.id];return interp12(s[key],fracMonth())}
+  if(sel.k==='month')return s[key][sel.m];
+  var se=SEA.filter(function(x){return x.id===sel.id})[0];return mean(se.m.map(function(m){return s[key][m]}));
+}
+function selMonths(){var sel=STATE.sel;if(sel.k==='now')return [curMonth()];if(sel.k==='month')return [sel.m];return SEA.filter(function(x){return x.id===sel.id})[0].m}
+function selLabel(){
+  var sel=STATE.sel;
+  if(sel.k==='now'){var d=pkd(nowMs());return 'Today, '+d.getUTCDate()+' '+MON[d.getUTCMonth()]+' '+d.getUTCFullYear()+(LIVE.ok&&STATE.mode==='temp'?' · live observations':' · climate normal')}
+  if(sel.k==='month')return MONL[sel.m]+' average';
+  var se=SEA.filter(function(x){return x.id===sel.id})[0];return se.n+' average ('+se.m.map(function(m){return MON[m]}).join(', ')+')';
+}
+
+/* ---------- map modes ---------- */
+var RAMPS={
+ mono:[[0,[10,10,10]],[1,[255,255,255]]],
+ thermal:[[0,[16,30,92]],[.2,[31,111,178]],[.4,[127,209,200]],[.55,[240,240,232]],[.72,[245,195,107]],[.88,[226,87,47]],[1,[140,15,31]]],
+ rain:[[0,[8,12,30]],[.4,[30,90,160]],[.7,[110,190,220]],[1,[245,250,255]]]
+};
+function rampCol(t,name){
+  t=clamp(t,0,1);var s=RAMPS[name];
+  for(var i=1;i<s.length;i++){if(t<=s[i][0]){var a=s[i-1],b=s[i],f=(t-a[0])/(b[0]-a[0]);return [a[1][0]+(b[1][0]-a[1][0])*f,a[1][1]+(b[1][1]-a[1][1])*f,a[1][2]+(b[1][2]-a[1][2])*f]}}
+  return s[s.length-1][1];
+}
+var MODES={
+ temp:{n:'Temperature',s:'mean air, terrain-corrected',unit:'°C',t:function(v){return (v+15)/55},ticks:[-10,0,10,20,30,40],band:function(v){return Math.floor(v/5)},ramp:'thermal',fmt:function(v){return v.toFixed(1)+' °C'}},
+ rain:{n:'Rainfall',s:'mm per month',unit:'mm',t:function(v){return Math.sqrt(Math.max(v,0)/320)},ticks:[0,25,50,100,200,300],band:function(v){return Math.floor(Math.sqrt(Math.max(v,0))/3)},ramp:'rain',fmt:function(v){return Math.round(v)+' mm/month'}},
+ anom:{n:'Against the annual mean',s:'warmer or colder than average',unit:'°C',t:function(v){return (v+18)/36},ticks:[-15,-10,-5,0,5,10,15],band:function(v){return Math.floor(v/4)},ramp:'thermal',fmt:function(v){return (v>0?'+':'')+v.toFixed(1)+' °C'}},
+ swing:{n:'Annual swing',s:'hottest minus coldest month',unit:'°C',t:function(v){return v/40},ticks:[0,10,20,30,40],band:function(v){return Math.floor(v/5)},ramp:'thermal',fmt:function(v){return v.toFixed(1)+' °C'},noTime:true},
+ zone:{n:'Climate zones',s:'Köppen, modelled',noTime:true}
+};
+var CUR={F:null,mode:'temp'};
+var OFF=document.createElement('canvas');OFF.width=GW;OFF.height=GH;var offx=OFF.getContext('2d');
+function computeField(){
+  var m=STATE.mode,F;
+  if(m==='temp'||m==='anom'){
+    F=tempField(ST.map(function(s){return stVal(s,'T')}));
+    if(m==='anom'){for(var k=0;k<NIN;k++){var i=IN[k];F[i]-=TA[i]}}
+  }else if(m==='rain'){F=interp(ST.map(function(s){return stVal(s,'P')}));for(var k2=0;k2<NIN;k2++){var i2=IN[k2];if(F[i2]<0)F[i2]=0}}
+  else if(m==='swing')F=SW;
+  else F=ZN;
+  return F;
+}
+function paletteName(){var md=MODES[STATE.mode];if(STATE.pal==='mono')return 'mono';return md.ramp}
+function buildImage(){
+  var F=CUR.F,md=MODES[STATE.mode],img=offx.createImageData(GW,GH),d=img.data,pn=paletteName();
+  for(var k=0;k<NIN;k++){
+    var i=IN[k],o=i*4,r,g,b;
+    if(STATE.mode==='zone'){var c=ZONES[F[i]];r=c.c[0];g=c.c[1];b=c.c[2]}
+    else{var cc=rampCol(md.t(F[i]),pn);r=cc[0];g=cc[1];b=cc[2];
+      var bi=md.band(F[i]),x=i%GW,edge=false;
+      if(x<GW-1&&MASK[i+1]&&md.band(F[i+1])!==bi)edge=true;
+      if(i+GW<GW*GH&&MASK[i+GW]&&md.band(F[i+GW])!==bi)edge=true;
+      if(edge){var lum=(r+g+b)/3,mix=lum>140?0.55:0.38,tr=lum>140?0:255;r+=(tr-r)*mix;g+=(tr-g)*mix;b+=(tr-b)*mix}
+    }
+    d[o]=r;d[o+1]=g;d[o+2]=b;d[o+3]=255;
+  }
+  offx.putImageData(img,0,0);
+}
+var cvs=$('#pkMap'),ctx=cvs.getContext('2d'),frame=$('#pkFrame');
+function outlinePath(W,H){ctx.beginPath();OUT.forEach(function(p,i){var x=nx(p[0])*W,y=ny(p[1])*H;if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y)});ctx.closePath()}
+function drawGrid(W,H){
+  ctx.save();ctx.strokeStyle='rgba(255,255,255,.07)';ctx.lineWidth=1;ctx.fillStyle='rgba(255,255,255,.35)';ctx.font='10px "JetBrains Mono",monospace';
+  for(var lo=62;lo<=77;lo+=2){var x=nx(lo)*W;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();ctx.textAlign='center';ctx.fillText(lo+'°E',x,H-6)}
+  for(var la=24;la<=36;la+=2){var y=ny(la)*H;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();ctx.textAlign='left';ctx.fillText(la+'°N',6,y-4)}
+  ctx.fillStyle='rgba(255,255,255,.22)';ctx.font='italic 12px "Space Grotesk",sans-serif';ctx.textAlign='center';
+  [['Afghanistan',65.4,33.6],['Iran',61.5,27.6],['India',76.2,30.3],['China',77.0,36.9],['Arabian Sea',65.2,23.9]].forEach(function(l){ctx.fillText(l[0],nx(l[1])*W,ny(l[2])*H)});
+  ctx.restore();
+}
+function render(){
+  var W=frame.clientWidth,H=frame.clientHeight;if(!W||!H)return;
+  var dpr=Math.min(2,window.devicePixelRatio||1);
+  cvs.width=Math.round(W*dpr);cvs.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+  drawGrid(W,H);
+  CUR.F=computeField();CUR.mode=STATE.mode;
+  buildImage();
+  ctx.save();outlinePath(W,H);ctx.clip();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(OFF,0,0,W,H);ctx.restore();
+  outlinePath(W,H);ctx.lineWidth=1.4;ctx.strokeStyle='rgba(255,255,255,.9)';ctx.lineJoin='round';ctx.stroke();
+  placePins();updateLegend();updateTitles();updateRange();
+}
+function updateTitles(){
+  var md=MODES[STATE.mode];$('#pkMapT').textContent=md.n;
+  $('#pkMapS').textContent=md.noTime?md.s:selLabel();
+}
+function updateRange(){
+  var md=MODES[STATE.mode],el=$('#pkRange');
+  if(STATE.mode==='zone'){el.textContent='';return}
+  var mn=1e9,mx=-1e9,F=CUR.F;for(var k=0;k<NIN;k++){var v=F[IN[k]];if(v<mn)mn=v;if(v>mx)mx=v}
+  el.textContent='On the map: '+md.fmt(mn)+' to '+md.fmt(mx);
+}
+function updateLegend(){
+  var md=MODES[STATE.mode],bar=$('#pkLegBar'),tk=$('#pkTicks'),zn=$('#pkZones');
+  $('#pkLegT').textContent=STATE.mode==='zone'?'Climate zones':md.n+' ('+md.unit+')';
+  if(STATE.mode==='zone'){
+    bar.style.display='none';tk.style.display='none';zn.hidden=false;
+    zn.innerHTML=ZONES.slice(1).map(function(z){return '<div><i style="background:rgb('+z.c.join(',')+')"></i>'+z.n+'</div>'}).join('');
+    $('#pkPal').parentNode.style.display='none';return;
+  }
+  bar.style.display='block';tk.style.display='block';zn.hidden=true;$('#pkPal').parentNode.style.display='';
+  var c=bar.getContext('2d'),pn=paletteName(),dom=STATE.mode;
+  var inv=function(tt){ // t -> value
+    if(dom==='temp')return tt*55-15;if(dom==='rain')return tt*tt*320;if(dom==='anom')return tt*36-18;return tt*40};
+  var img=c.createImageData(256,1);
+  for(var x=0;x<256;x++){var col=rampCol(x/255,pn);img.data[x*4]=col[0];img.data[x*4+1]=col[1];img.data[x*4+2]=col[2];img.data[x*4+3]=255}
+  for(var y=0;y<10;y++)c.putImageData(img,0,y);
+  tk.innerHTML=md.ticks.map(function(v){var t=clamp(md.t(v),0,1);return '<span style="left:'+(t*100)+'%">'+(v>0&&STATE.mode==='anom'?'+':'')+v+'</span>'}).join('');
+}
+
+/* ---------- pins, probe ---------- */
+function placePins(){
+  var box=$('#pkPins');
+  if(!box.children.length){
+    ST.forEach(function(s){
+      var b=document.createElement('button');b.className='pk-pin'+(s.lab?' lab':'');b.dataset.id=s.id;b.setAttribute('aria-label',s.n);
+      b.innerHTML='<i></i><span>'+s.n+'</span>';
+      b.addEventListener('click',function(){setCity(s.id)});
+      b.style.left=(nx(s.lo)*100)+'%';b.style.top=(ny(s.la)*100)+'%';box.appendChild(b);
+    });
+  }
+  $$('.pk-pin').forEach(function(b){b.setAttribute('aria-current',b.dataset.id===STATE.city?'true':'false')});
+}
+var cross=$('#pkCross'),probe=$('#pkProbe');
+function probeAt(ev){
+  var r=frame.getBoundingClientRect(),px=(ev.clientX-r.left)/r.width,py=(ev.clientY-r.top)/r.height;
+  var gx=Math.floor(px*GW),gy=Math.floor(py*GH);
+  if(gx<0||gy<0||gx>=GW||gy>=GH||!MASK[gy*GW+gx]){cross.style.display='none';return}
+  var i=gy*GW+gx,lo=LON0+px*(LON1-LON0),la=LAT1-py*(LAT1-LAT0),md=MODES[CUR.mode];
+  cross.style.display='block';cross.style.left=(px*100)+'%';cross.style.top=(py*100)+'%';
+  var rows=[['Position',la.toFixed(2)+'° N, '+lo.toFixed(2)+'° E'],['Terrain height',Math.round(ELEV[i])+' m']];
+  if(CUR.mode==='zone')rows.push(['Zone',ZONES[ZN[i]].n]);
+  else rows.push([md.n,md.fmt(CUR.F[i])]);
+  if(CUR.mode!=='zone'&&CUR.mode!=='swing'){rows.push(['Zone',ZONES[ZN[i]].n])}
+  probe.innerHTML=rows.map(function(r){return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>'}).join('');
+}
+frame.addEventListener('pointermove',probeAt);
+frame.addEventListener('pointerleave',function(){cross.style.display='none'});
+
+/* ---------- controls ---------- */
+function buildControls(){
+  var modes=$('#pkModes');
+  Object.keys(MODES).forEach(function(k){
+    var b=document.createElement('button');b.className='pk-mode';b.dataset.mode=k;b.setAttribute('aria-pressed',k===STATE.mode?'true':'false');
+    b.innerHTML='<b>'+MODES[k].n+'</b><small>'+MODES[k].s+'</small>';
+    b.addEventListener('click',function(){STATE.mode=k;syncControls();render()});modes.appendChild(b);
+  });
+  var mo=$('#pkMonths');
+  MON.forEach(function(n,i){
+    var b=document.createElement('button');b.className='pk-chip';b.dataset.m=i;b.textContent=n;b.setAttribute('aria-pressed','false');
+    b.addEventListener('click',function(){stopPlay();STATE.sel={k:'month',m:i};syncControls();render()});mo.appendChild(b);
+  });
+  var q=$('#pkQuick');
+  var nb=document.createElement('button');nb.className='pk-chip';nb.dataset.q='now';nb.textContent='Today';nb.setAttribute('aria-pressed','false');
+  nb.addEventListener('click',function(){stopPlay();STATE.sel={k:'now'};syncControls();render()});q.appendChild(nb);
+  var pb=document.createElement('button');pb.className='pk-chip';pb.id='pkPlay';pb.textContent='Play the year';pb.setAttribute('aria-pressed','false');
+  pb.addEventListener('click',togglePlay);q.appendChild(pb);
+  $('#pkPal').addEventListener('click',function(){STATE.pal=STATE.pal==='mono'?'color':'mono';syncControls();render();drawMulti()});
+}
+function syncControls(){
+  $$('#pkModes .pk-mode').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.mode===STATE.mode?'true':'false')});
+  var sel=STATE.sel;
+  $$('#pkMonths .pk-chip').forEach(function(b){b.setAttribute('aria-pressed',(sel.k==='month'&&+b.dataset.m===sel.m)?'true':'false')});
+  $('#pkQuick [data-q="now"]').setAttribute('aria-pressed',sel.k==='now'?'true':'false');
+  $('#pkTimeGrp').classList.toggle('pk-dim',!!MODES[STATE.mode].noTime);
+  $('#pkPal').setAttribute('aria-pressed',STATE.pal==='color'?'true':'false');
+  $('#pkPal').textContent=STATE.pal==='color'?'Colour scale on':'Colour scale';
+  $$('.pk-season').forEach(function(b){b.setAttribute('aria-pressed',(sel.k==='season'&&sel.id===b.dataset.id)?'true':'false')});
+  $$('.pk-mini').forEach(function(b){b.setAttribute('aria-pressed',(sel.k==='month'&&+b.dataset.m===sel.m)?'true':'false')});
+  drawClimo();
+}
+function goAtlas(){var el=document.getElementById('pkAtlasSec');if(el&&el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'start'})}
+function togglePlay(){
+  if(STATE.playing){stopPlay();return}
+  if(MODES[STATE.mode].noTime)STATE.mode='temp';
+  var m=STATE.sel.k==='month'?STATE.sel.m:curMonth();
+  STATE.playing=setInterval(function(){m=(m+1)%12;STATE.sel={k:'month',m:m};syncControls();render()},1100);
+  var b=$('#pkPlay');b.textContent='Pause';b.setAttribute('aria-pressed','true');
+  STATE.sel={k:'month',m:m};syncControls();render();
+}
+function stopPlay(){if(STATE.playing){clearInterval(STATE.playing);STATE.playing=null;var b=$('#pkPlay');if(b){b.textContent='Play the year';b.setAttribute('aria-pressed','false')}}}
+
+/* ---------- city card + climograph ---------- */
+function city(id){id=id||STATE.city;return ST.filter(function(s){return s.id===id})[0]}
+function setCity(id){STATE.city=id;$('#pkCitySel').value=id;$('#pkSkySel').value=id;placePins();drawClimo();updateCityStats();updateSky();updateIss(true);}
+function fillSelects(){
+  var opts=ST.slice().sort(function(a,b){return a.n<b.n?-1:1}).map(function(s){return '<option value="'+s.id+'">'+s.n+'</option>'}).join('');
+  var a=$('#pkCitySel'),b=$('#pkSkySel');a.innerHTML=opts;b.innerHTML=opts;a.value=b.value=STATE.city;
+  a.addEventListener('change',function(){setCity(a.value)});b.addEventListener('change',function(){setCity(b.value)});
+}
+function updateCityStats(){
+  var s=city(),now=stVal(s,'T'),ann=mean(s.P).toFixed(0),pt=s.P.reduce(function(a,b){return a+b},0);
+  var hot=s.T.indexOf(Math.max.apply(null,s.T)),cold=s.T.indexOf(Math.min.apply(null,s.T));
+  var live=LIVE.ok&&LIVE.t[s.id]!=null&&STATE.sel.k==='now';
+  $('#pkCityStats').innerHTML='<div>'+(live?'Now':(STATE.sel.k==='now'?'Typical today':'Selected period'))+'<b class="mono">'+now.toFixed(1)+' °C</b></div><div>Elevation<b class="mono">'+s.el.toLocaleString()+' m</b></div><div>Rain a year<b class="mono">'+pt+' mm</b></div>';
+  var extra='Hottest month '+MON[hot]+' ('+s.T[hot].toFixed(1)+' °C), coldest '+MON[cold]+' ('+s.T[cold].toFixed(1)+' °C).';
+  if(live&&LIVE.h[s.id]!=null)extra+=' Humidity '+Math.round(LIVE.h[s.id])+'%, wind '+Math.round(LIVE.w[s.id])+' km/h.';
+  $('#pkCityNote').textContent=extra;
+}
+function hiDpi(c,w,h){var dpr=Math.min(2,window.devicePixelRatio||1);c.width=Math.round(w*dpr);c.height=Math.round(h*dpr);var x=c.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);return x}
+function drawClimo(){
+  var c=$('#pkClimo'),w=c.clientWidth,h=170;if(!w)return;
+  var x=hiDpi(c,w,h),s=city(),pl=30,pr=34,pt=10,pb=22,pw=w-pl-pr,ph=h-pt-pb;
+  var tmin=Math.min(0,Math.min.apply(null,s.T))-2,tmax=Math.max.apply(null,s.T)+3,pmax=Math.max(60,Math.max.apply(null,s.P))*1.1;
+  var months=selMonths();
+  x.clearRect(0,0,w,h);x.font='10px "JetBrains Mono",monospace';
+  s.P.forEach(function(p,i){var bw=pw/12,bh=p/pmax*ph;x.fillStyle=months.indexOf(i)>-1?'rgba(255,255,255,.55)':'rgba(255,255,255,.2)';x.fillRect(pl+i*bw+3,pt+ph-bh,bw-6,bh)});
+  var zy=pt+ph*(tmax/(tmax-tmin));x.strokeStyle='rgba(255,255,255,.25)';x.setLineDash([3,3]);x.beginPath();x.moveTo(pl,zy);x.lineTo(pl+pw,zy);x.stroke();x.setLineDash([]);
+  x.strokeStyle='#fff';x.lineWidth=1.8;x.beginPath();
+  s.T.forEach(function(t,i){var px=pl+(i+.5)*pw/12,py=pt+ph*(tmax-t)/(tmax-tmin);if(i)x.lineTo(px,py);else x.moveTo(px,py)});x.stroke();
+  s.T.forEach(function(t,i){var px=pl+(i+.5)*pw/12,py=pt+ph*(tmax-t)/(tmax-tmin);x.fillStyle=months.indexOf(i)>-1?'#fff':'#000';x.strokeStyle='#fff';x.lineWidth=1.4;x.beginPath();x.arc(px,py,months.indexOf(i)>-1?4:2.5,0,7);x.fill();x.stroke()});
+  x.fillStyle='rgba(255,255,255,.55)';x.textAlign='center';
+  MON.forEach(function(n,i){x.fillText(n[0],pl+(i+.5)*pw/12,h-6)});
+  x.textAlign='right';x.fillText(Math.round(tmax)+'°',pl-5,pt+8);x.fillText(Math.round(tmin)+'°',pl-5,pt+ph);
+  x.textAlign='left';x.fillText(Math.round(pmax)+' mm',pl+pw+4,pt+8);
+}
+
+/* ---------- seasons section ---------- */
+function buildSeasons(){
+  var box=$('#pkSeasons'),cm=curMonth();
+  SEA.forEach(function(se){
+    var st=seaStats(se),b=document.createElement('button');b.className='pk-season'+(se.m.indexOf(cm)>-1?' now':'');b.dataset.id=se.id;b.setAttribute('aria-pressed','false');
+    b.innerHTML='<h3>'+se.n+'</h3><span class="m">'+se.m.map(function(m){return MON[m]}).join(', ')+'</span><div class="st mono"><div>Plains<b>'+st.pt.toFixed(0)+' °C</b></div><div>Highlands<b>'+st.ht.toFixed(0)+' °C</b></div><div>Plains rain<b>'+st.pr.toFixed(0)+' mm/mo</b></div></div><p>'+se.d+'</p>';
+    b.addEventListener('click',function(){stopPlay();STATE.sel={k:'season',id:se.id};if(MODES[STATE.mode].noTime)STATE.mode='temp';syncControls();render();goAtlas()});
+    box.appendChild(b);
+  });
+  var mu=$('#pkMulti');
+  for(var m=0;m<12;m++){
+    (function(m){
+      var b=document.createElement('button');b.className='pk-mini';b.dataset.m=m;b.setAttribute('aria-pressed','false');b.setAttribute('aria-label',MONL[m]+' temperature map');
+      var c=document.createElement('canvas');c.width=GW/2;c.height=GH/2;b.appendChild(c);var sp=document.createElement('span');sp.textContent=MONL[m];b.appendChild(sp);
+      b.addEventListener('click',function(){stopPlay();STATE.sel={k:'month',m:m};STATE.mode='temp';syncControls();render();goAtlas()});
+      mu.appendChild(b);
+    })(m);
+  }
+  drawMulti();
+}
+function drawMulti(){
+  var pn=STATE.pal==='mono'?'mono':'thermal';
+  $$('.pk-mini').forEach(function(b){
+    var m=+b.dataset.m,c=$('canvas',b),x=c.getContext('2d'),w=c.width,h=c.height,img=x.createImageData(w,h);
+    for(var y=0;y<h;y++)for(var xx=0;xx<w;xx++){
+      var i=(y*2)*GW+(xx*2);if(!MASK[i])continue;var col=rampCol(MODES.temp.t(TM[m][i]),pn),o=(y*w+xx)*4;img.data[o]=col[0];img.data[o+1]=col[1];img.data[o+2]=col[2];img.data[o+3]=255;
+    }
+    x.putImageData(img,0,0);
+  });
+}
+function drawYear(){
+  var c=$('#pkYear'),w=c.clientWidth,h=260;if(!w)return;var x=hiDpi(c,w,h);
+  var list=[['jacobabad','Jacobabad',[]],['lahore','Lahore',[]],['karachi','Karachi',[7,4]],['quetta','Quetta',[2,3]],['skardu','Skardu',[]]];
+  var shades=['#ffffff','#cfcfcf','#cfcfcf','#9a9a9a','#9a9a9a'];
+  var pl=34,pr=88,pt=10,pb=24,pw=w-pl-pr,ph=h-pt-pb,tmin=-5,tmax=40;
+  x.clearRect(0,0,w,h);x.font='11px "JetBrains Mono",monospace';
+  for(var t=0;t<=40;t+=10){var y=pt+ph*(tmax-t)/(tmax-tmin);x.strokeStyle='rgba(255,255,255,.1)';x.beginPath();x.moveTo(pl,y);x.lineTo(pl+pw,y);x.stroke();x.fillStyle='rgba(255,255,255,.5)';x.textAlign='right';x.fillText(t+'°',pl-6,y+4)}
+  x.textAlign='center';MON.forEach(function(n,i){x.fillStyle='rgba(255,255,255,.5)';x.fillText(n,pl+(i+.5)*pw/12,h-6)});
+  var cm=fracMonth(),nxp=pl+cm/12*pw;x.strokeStyle='rgba(255,255,255,.5)';x.setLineDash([2,4]);x.beginPath();x.moveTo(nxp,pt);x.lineTo(nxp,pt+ph);x.stroke();x.setLineDash([]);
+  list.forEach(function(it,k){
+    var s=city(it[0]);x.strokeStyle=shades[k];x.lineWidth=k===0?2:1.6;x.setLineDash(it[2]);x.beginPath();
+    for(var i=0;i<=12;i++){var v=interp12(s.T,i+.5),px=pl+i*pw/12,py=pt+ph*(tmax-v)/(tmax-tmin);if(i)x.lineTo(px,py);else x.moveTo(px,py)}
+    x.stroke();x.setLineDash([]);
+    var ly=pt+ph*(tmax-interp12(s.T,12.5))/(tmax-tmin);x.fillStyle=shades[k];x.textAlign='left';x.fillText(it[1],pl+pw+8,ly+4);
+  });
+}
+
+/* ---------- astronomy ---------- */
+function jdOf(ms){return ms/86400000+2440587.5}
+function sunCalc(ms){
+  var jd=jdOf(ms),T=(jd-2451545)/36525,L0=(280.46646+T*(36000.76983+T*0.0003032))%360,M=357.52911+T*(35999.05029-0.0001537*T),e=0.016708634-T*(0.000042037+0.0000001267*T),Mr=rad(M);
+  var C=Math.sin(Mr)*(1.914602-T*(0.004817+0.000014*T))+Math.sin(2*Mr)*(0.019993-0.000101*T)+Math.sin(3*Mr)*0.000289;
+  var om=125.04-1934.136*T,lam=L0+C-0.00569-0.00478*Math.sin(rad(om));
+  var eps0=23+(26+(21.448-T*(46.815+T*(0.00059-T*0.001813)))/60)/60,eps=eps0+0.00256*Math.cos(rad(om));
+  var decl=Math.asin(Math.sin(rad(eps))*Math.sin(rad(lam))),y=Math.pow(Math.tan(rad(eps)/2),2),L0r=rad(L0);
+  var eq=4*deg(y*Math.sin(2*L0r)-2*e*Math.sin(Mr)+4*e*y*Math.sin(Mr)*Math.cos(2*L0r)-0.5*y*y*Math.sin(4*L0r)-1.25*e*e*Math.sin(2*Mr));
+  return {decl:decl,eq:eq};
+}
+function sunPos(ms,la,lo){
+  var sc=sunCalc(ms),d=new Date(ms),um=d.getUTCHours()*60+d.getUTCMinutes()+d.getUTCSeconds()/60;
+  var tst=((um+sc.eq+4*lo)%1440+1440)%1440,ha=rad(tst/4-180),lat=rad(la);
+  var alt=Math.asin(Math.sin(lat)*Math.sin(sc.decl)+Math.cos(lat)*Math.cos(sc.decl)*Math.cos(ha));
+  var az=deg(Math.atan2(Math.sin(ha),Math.cos(ha)*Math.sin(lat)-Math.tan(sc.decl)*Math.cos(lat)))+180;
+  return {alt:deg(alt),az:(az+360)%360};
+}
+function sunTimes(ms,la,lo){
+  var d=pkd(ms),noonMs=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate(),12),sc=sunCalc(noonMs),lat=rad(la);
+  var noon=720-4*lo-sc.eq,cosH=Math.cos(rad(90.833))/(Math.cos(lat)*Math.cos(sc.decl))-Math.tan(lat)*Math.tan(sc.decl);
+  if(cosH>1||cosH<-1)return {noon:noon};
+  var H=deg(Math.acos(cosH));return {noon:noon,rise:noon-4*H,set:noon+4*H,len:8*H};
+}
+function lstHours(ms,lo){var d=jdOf(ms)-2451545,g=280.46061837+360.98564736629*d;return (((g+lo)%360)+360)%360/15}
+function hms(h){var s=Math.floor(h*3600);return pad(Math.floor(s/3600)%24)+':'+pad(Math.floor(s/60)%60)+':'+pad(s%60)}
+function moonState(ms){
+  var T=(jdOf(ms)-2451545)/36525;
+  var D=(297.8501921+445267.1114034*T-0.0018819*T*T)%360,M=(357.5291092+35999.0502909*T)%360,Mp=(134.9633964+477198.8675055*T+0.0087414*T*T)%360;
+  var corr=6.289*Math.sin(rad(Mp))-2.100*Math.sin(rad(M))+1.274*Math.sin(rad(2*D-Mp))+0.658*Math.sin(rad(2*D))+0.214*Math.sin(rad(2*Mp))+0.110*Math.sin(rad(D));
+  var eps=(((D+corr)%360)+360)%360;
+  return {eps:eps,ill:(1-Math.cos(rad(eps)))/2,age:eps/360*29.530589};
+}
+function moonName(eps){
+  if(eps<6||eps>354)return 'New moon';if(eps<84)return 'Waxing crescent';if(eps<96)return 'First quarter';if(eps<174)return 'Waxing gibbous';
+  if(eps<186)return 'Full moon';if(eps<264)return 'Waning gibbous';if(eps<276)return 'Last quarter';return 'Waning crescent';
+}
+function phaseMs(k){
+  var T=k/1236.85,jde=2451550.09766+29.530588861*k+0.00015437*T*T-0.00000015*T*T*T+0.00000000073*T*T*T*T,E=1-0.002516*T-0.0000074*T*T;
+  var M=rad(2.5534+29.1053567*k-0.0000014*T*T-0.00000011*T*T*T),Mp=rad(201.5643+385.81693528*k+0.0107582*T*T+0.00001238*T*T*T-0.000000058*T*T*T*T),F=rad(160.7108+390.67050284*k-0.0016118*T*T-0.00000227*T*T*T+0.000000011*T*T*T*T);
+  var full=(k%1)!==0,c;
+  if(!full)c=-0.4072*Math.sin(Mp)+0.17241*E*Math.sin(M)+0.01608*Math.sin(2*Mp)+0.01039*Math.sin(2*F)+0.00739*E*Math.sin(Mp-M)-0.00514*E*Math.sin(Mp+M)+0.00208*E*E*Math.sin(2*M)-0.00111*Math.sin(Mp-2*F)-0.00057*Math.sin(Mp+2*F)+0.00056*E*Math.sin(2*Mp+M)-0.00042*Math.sin(3*Mp)+0.00042*E*Math.sin(M+2*F)+0.00038*E*Math.sin(M-2*F)-0.00024*E*Math.sin(2*Mp-M);
+  else c=-0.40614*Math.sin(Mp)+0.17302*E*Math.sin(M)+0.01614*Math.sin(2*Mp)+0.01043*Math.sin(2*F)+0.00734*E*Math.sin(Mp-M)-0.00515*E*Math.sin(Mp+M)+0.00209*E*E*Math.sin(2*M)-0.00111*Math.sin(Mp-2*F)-0.00057*Math.sin(Mp+2*F)+0.00056*E*Math.sin(2*Mp+M)-0.00042*Math.sin(3*Mp)+0.00042*E*Math.sin(M+2*F)+0.00038*E*Math.sin(M-2*F)-0.00024*E*Math.sin(2*Mp-M);
+  return (jde+c-2440587.5)*86400000;
+}
+function moonPhasesBetween(a,b){
+  var k0=Math.floor((new Date(a).getUTCFullYear()+ (new Date(a).getUTCMonth())/12-2000)*12.3685)-1,out=[];
+  for(var k=k0;k<k0+Math.ceil((b-a)/(29.53*864e5))*1+4;k+=0.5){var t=phaseMs(k);if(t>=a&&t<=b)out.push({ms:t,full:(k%1)!==0})}
+  return out;
+}
+function drawMoon(){
+  var c=$('#pkMoon'),x=c.getContext('2d'),w=c.width,r=w/2-4,ms=nowMs(),st=moonState(ms),e=rad(st.eps),sx=Math.sin(e),sz=-Math.cos(e);
+  var img=x.createImageData(w,w);
+  for(var py=0;py<w;py++)for(var pxx=0;pxx<w;pxx++){
+    var nxx=(pxx+.5-w/2)/r,nyy=(py+.5-w/2)/r,d2=nxx*nxx+nyy*nyy,o=(py*w+pxx)*4;
+    if(d2>1){img.data[o+3]=0;continue}
+    var z=Math.sqrt(1-d2),lit=Math.max(0,nxx*sx+z*sz),v=Math.round(26+lit*215);
+    img.data[o]=v;img.data[o+1]=v;img.data[o+2]=v;img.data[o+3]=255;
+  }
+  x.clearRect(0,0,w,w);x.putImageData(img,0,0);x.strokeStyle='rgba(255,255,255,.35)';x.lineWidth=1.5;x.beginPath();x.arc(w/2,w/2,r,0,7);x.stroke();
+  $('#pkMoonIll').textContent=(st.ill*100).toFixed(0)+'%';$('#pkMoonName').textContent=moonName(st.eps);
+  $('#pkMoonAge').textContent=st.age.toFixed(1)+' days';
+  var ph=moonPhasesBetween(ms,ms+40*864e5).sort(function(a,b){return a.ms-b.ms}),nf=ph.filter(function(p){return p.full})[0],nn=ph.filter(function(p){return !p.full})[0],nxt=ph[0];
+  if(nxt){$('#pkMoonNext').textContent=(nxt.full?'Full ':'New ')+'· '+fmtDate(nxt.ms,'d')}
+  if(nf)$('#pkMoonFull').textContent=fmtDate(nf.ms,'m').replace(', ',' ');
+  if(nn)$('#pkMoonNew').textContent=fmtDate(nn.ms,'m').replace(', ',' ');
+}
+function updateSky(){
+  var s=city(),ms=nowMs(),sp=sunPos(ms,s.la,s.lo),stt=sunTimes(ms,s.la,s.lo);
+  $('#pkSkyCoord').textContent=s.la.toFixed(2)+'° N, '+s.lo.toFixed(2)+'° E, '+s.el+' m';
+  $('#pkObs').textContent=s.n;
+  $('#pkLst').textContent=hms(lstHours(ms,s.lo));
+  $('#pkAlt').textContent=sp.alt.toFixed(1)+'°';$('#pkAz').textContent=sp.az.toFixed(0)+'°';
+  var state=sp.alt>0?'Daylight':sp.alt>-6?'Civil twilight':sp.alt>-12?'Nautical twilight':sp.alt>-18?'Astronomical twilight':'Night';
+  $('#pkSunState').textContent=state;
+  if(stt.rise!=null){var off=300;$('#pkRise').textContent=fmtHM(stt.rise+off);$('#pkSet').textContent=fmtHM(stt.set+off);$('#pkLen').textContent=Math.floor(stt.len/60)+'h '+pad(Math.round(stt.len%60))+'m'}
+  $('#pkNoon').textContent=fmtHM(stt.noon+300);
+}
+function drawSunPath(){
+  var c=$('#pkSunPath'),w=c.clientWidth,h=150;if(!w)return;var x=hiDpi(c,w,h),s=city(),ms=nowMs();
+  var d=pkd(ms),start=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate())-PK,pl=26,pr=8,pt=8,pb=20,pw=w-pl-pr,ph=h-pt-pb,amin=-30,amax=90;
+  x.clearRect(0,0,w,h);x.font='10px "JetBrains Mono",monospace';
+  var hy=pt+ph*(amax-0)/(amax-amin);x.strokeStyle='rgba(255,255,255,.3)';x.setLineDash([3,3]);x.beginPath();x.moveTo(pl,hy);x.lineTo(pl+pw,hy);x.stroke();x.setLineDash([]);
+  x.fillStyle='rgba(255,255,255,.5)';x.textAlign='right';x.fillText('0°',pl-4,hy+3);x.fillText('90°',pl-4,pt+8);
+  x.textAlign='center';[0,6,12,18,24].forEach(function(hh){x.fillText(pad(hh%24),pl+hh/24*pw,h-5)});
+  x.strokeStyle='#fff';x.lineWidth=1.8;x.beginPath();
+  for(var m=0;m<=1440;m+=10){var a=sunPos(start+m*60000,s.la,s.lo).alt,px=pl+m/1440*pw,py=pt+ph*(amax-clamp(a,amin,amax))/(amax-amin);if(m)x.lineTo(px,py);else x.moveTo(px,py)}
+  x.stroke();
+  var nm=(ms-start)/60000,na=sunPos(ms,s.la,s.lo).alt,nxp=pl+nm/1440*pw,nyp=pt+ph*(amax-clamp(na,amin,amax))/(amax-amin);
+  x.fillStyle='#fff';x.beginPath();x.arc(nxp,nyp,5,0,7);x.fill();x.strokeStyle='rgba(255,255,255,.3)';x.lineWidth=6;x.beginPath();x.arc(nxp,nyp,7,0,7);x.stroke();
+}
+
+/* ---------- ISS ---------- */
+var ISS={ok:false,lat:0,lon:0,alt:420,vel:27600,vis:'',t:0,model:true};
+function issModel(t){
+  var dt=(t-Date.UTC(2026,0,1))/1000,n=2*Math.PI/(92.9*60),u=n*dt,inc=rad(51.64);
+  var lat=Math.asin(Math.sin(inc)*Math.sin(u)),lonI=Math.atan2(Math.cos(inc)*Math.sin(u),Math.cos(u)),lon=deg(lonI-7.2921159e-5*dt);
+  return {lat:deg(lat),lon:wrapLon(lon)};
+}
+function wrapLon(l){return (((l+180)%360)+360)%360-180}
+function hav(la1,lo1,la2,lo2){var R=6371,dla=rad(la2-la1),dlo=rad(lo2-lo1),a=Math.sin(dla/2)*Math.sin(dla/2)+Math.cos(rad(la1))*Math.cos(rad(la2))*Math.sin(dlo/2)*Math.sin(dlo/2);return 2*R*Math.asin(Math.sqrt(a))}
+function jget(url,ms){return new Promise(function(res,rej){var ctl=typeof AbortController!=='undefined'?new AbortController():null,tm=setTimeout(function(){if(ctl)ctl.abort();rej(new Error('timeout'))},ms||7000);
+  fetch(url,ctl?{signal:ctl.signal}:{}).then(function(r){clearTimeout(tm);if(!r.ok)throw new Error(r.status);return r.json()}).then(res,function(e){clearTimeout(tm);rej(e)})})}
+function pollIss(){
+  jget('https://api.wheretheiss.at/v1/satellites/25544',6000).then(function(d){
+    ISS={ok:true,model:false,lat:d.latitude,lon:d.longitude,alt:d.altitude,vel:d.velocity,vis:d.visibility,t:nowMs()};updateIss(true);
+  }).catch(function(){ISS.ok=false;ISS.model=true;updateIss(true)});
+}
+function updateIss(force){
+  var s=city(),p;
+  if(ISS.ok&&nowMs()-ISS.t<30000){var m=issModel(ISS.t),m2=issModel(nowMs());p={lat:clamp(ISS.lat+(m2.lat-m.lat),-90,90),lon:wrapLon(ISS.lon+wrapLon(m2.lon-m.lon))}}
+  else{p=issModel(nowMs());ISS.alt=420;ISS.vel=27580}
+  var live=ISS.ok&&nowMs()-ISS.t<30000;
+  $('#pkIssSrc').textContent=live?'Live feed':'Illustrative orbit';
+  $('#pkIssLat').textContent=p.lat.toFixed(2)+'°';$('#pkIssLon').textContent=p.lon.toFixed(2)+'°';
+  $('#pkIssAlt').textContent=Math.round(ISS.alt)+' km';$('#pkIssVel').textContent=Math.round(ISS.vel).toLocaleString()+' km/h';
+  var dist=hav(p.lat,p.lon,s.la,s.lo),cang=dist/6371,hh=ISS.alt,Rr=6371,el=deg(Math.atan2(Math.cos(cang)-Rr/(Rr+hh),Math.sin(cang)));
+  $('#pkIssDist').textContent=Math.round(dist).toLocaleString()+' km';
+  $('#pkIssEl').textContent=el>0?'above horizon, '+el.toFixed(0)+'°':'below horizon';
+  $('#pkIssNote').textContent=live?(ISS.vis?'Sunlight status: '+ISS.vis+'.':''):'The live feed is not reachable from here, so the dot shows a modelled orbit that is not the real station position. It switches to real data automatically where the feed loads.';
+  drawIssMap(p);
+}
+function drawIssMap(p){
+  var c=$('#pkIssMap'),w=c.clientWidth,h=Math.round(w/2);if(!w)return;c.style.height=h+'px';var x=hiDpi(c,w,h);
+  function X(lo){return (lo+180)/360*w}function Y(la){return (90-la)/180*h}
+  x.clearRect(0,0,w,h);x.strokeStyle='rgba(255,255,255,.1)';x.lineWidth=1;
+  for(var lo=-180;lo<=180;lo+=30){x.beginPath();x.moveTo(X(lo),0);x.lineTo(X(lo),h);x.stroke()}
+  for(var la=-60;la<=60;la+=30){x.beginPath();x.moveTo(0,Y(la));x.lineTo(w,Y(la));x.stroke()}
+  x.strokeStyle='rgba(255,255,255,.3)';x.beginPath();x.moveTo(0,Y(0));x.lineTo(w,Y(0));x.stroke();
+  x.fillStyle='rgba(255,255,255,.28)';x.strokeStyle='#fff';x.lineWidth=1;x.beginPath();
+  OUT.forEach(function(q,i){var a=X(q[0]),b=Y(q[1]);if(i)x.lineTo(a,b);else x.moveTo(a,b)});x.closePath();x.fill();x.stroke();
+  var t0=nowMs(),prev=null;
+  for(var k=-50;k<=70;k+=1){
+    var m=issModel(t0+k*60000);
+    var m0=issModel(t0),off=ISS.ok?{la:p.lat-m0.lat,lo:p.lon-m0.lon}:{la:0,lo:0};
+    var la2=clamp(m.lat+off.la,-90,90),lo2=wrapLon(m.lon+off.lo);
+    if(prev&&Math.abs(lo2-prev.lo)<180){x.strokeStyle=k<=0?'rgba(255,255,255,.65)':'rgba(255,255,255,.3)';x.setLineDash(k<=0?[]:[3,3]);x.lineWidth=1.4;x.beginPath();x.moveTo(X(prev.lo),Y(prev.la));x.lineTo(X(lo2),Y(la2));x.stroke();x.setLineDash([])}
+    prev={la:la2,lo:lo2};
+  }
+  var s=city();x.fillStyle='#fff';x.beginPath();x.arc(X(s.lo),Y(s.la),2.5,0,7);x.fill();
+  x.fillStyle='#000';x.strokeStyle='#fff';x.lineWidth=2;x.beginPath();x.arc(X(p.lon),Y(p.lat),5,0,7);x.fill();x.stroke();
+  x.strokeStyle='rgba(255,255,255,.25)';x.lineWidth=6;x.beginPath();x.arc(X(p.lon),Y(p.lat),8,0,7);x.stroke();
+}
+
+/* ---------- events ---------- */
+var EV=[];
+function E(t,p,type,title,desc,when){var ms=Date.parse(t);EV.push({ms:ms,p:p,type:type,title:title,desc:desc,when:when||''})}
+/* spaceflight history */
+E('1957-10-04T12:00:00Z','d','mission','Sputnik 1 launches','The first artificial satellite starts the space age.');
+E('1960-04-01T12:00:00Z','d','climate','TIROS-1, the first weather satellite','Television pictures of cloud cover begin satellite meteorology.');
+E('1961-04-12T12:00:00Z','d','mission','Yuri Gagarin orbits Earth','Vostok 1 carries the first human to space.');
+E('1961-09-16T12:00:00Z','d','pk','Pakistan\'s space programme begins','The space science wing that later became SUPARCO is established.');
+E('1962-06-07T12:00:00Z','d','pk','Rehbar-1 sounding rocket','Pakistan launches its first sounding rocket from Sonmiani, Balochistan.');
+E('1969-07-20T20:17:00Z','m','mission','Apollo 11 lands on the Moon','Armstrong and Aldrin make the first crewed lunar landing.');
+E('1972-07-23T12:00:00Z','d','climate','Landsat 1 launches','The first Earth resources satellite starts a continuous record of land change.');
+E('1977-09-05T12:00:00Z','d','mission','Voyager 1 launches','It is now the most distant human-made object.');
+E('1981-04-12T12:00:00Z','d','mission','First Space Shuttle flight','Columbia flies STS-1.');
+E('1990-04-24T12:00:00Z','d','mission','Hubble Space Telescope launched','Deployed from Space Shuttle Discovery.');
+E('1990-07-16T12:00:00Z','d','pk','Badr-1, Pakistan\'s first satellite','Launched on a Chinese Long March from Xichang.');
+E('1998-11-20T12:00:00Z','d','mission','First ISS module launched','Zarya begins construction of the International Space Station.');
+E('2010-05-26T12:00:00Z','d','climate','53.5 °C at Mohenjo-daro','A reported reading among the highest ever recorded in Asia.');
+E('2010-07-29T12:00:00Z','d','climate','Super floods begin','Monsoon floods inundate roughly a fifth of the country over the following weeks.');
+E('2011-08-11T12:00:00Z','d','pk','PakSat-1R launched','A communications satellite launched from Xichang.');
+E('2015-06-20T12:00:00Z','d','climate','Karachi heatwave','Temperatures near 45 °C with high humidity cause over a thousand deaths.');
+E('2015-07-14T12:00:00Z','d','mission','New Horizons flies past Pluto','The first close look at Pluto and its moons.');
+E('2018-07-09T12:00:00Z','d','pk','PRSS-1 and PakTES-1A launched','Pakistan\'s first remote sensing satellite and a technology demonstrator.');
+E('2019-04-10T12:00:00Z','d','sky','First image of a black hole','The Event Horizon Telescope shows M87*.');
+E('2021-12-25T12:00:00Z','d','mission','James Webb Space Telescope launched','Ariane 5 sends Webb toward the Sun-Earth L2 point.');
+E('2022-07-12T12:00:00Z','d','sky','Webb releases its first images','The deep field and spectra begin a new era of infrared astronomy.');
+E('2022-08-25T12:00:00Z','d','climate','2022 floods at their height','Roughly a third of Pakistan was affected by the monsoon floods of that summer.');
+E('2023-08-23T12:00:00Z','d','mission','Chandrayaan-3 lands near the lunar south pole','India becomes the fourth country to land on the Moon.');
+E('2024-05-03T12:00:00Z','d','pk','ICUBE-Q heads to the Moon','Pakistan\'s cubesat rides on China\'s Chang\'e-6 mission.');
+E('2024-05-30T12:00:00Z','d','pk','PakSat-MM1 launched','A multi-mission communications satellite launched from Xichang.');
+E('2025-01-17T12:00:00Z','d','pk','PRSC-EO1 launched','Pakistan\'s first indigenously built Earth observation satellite.');
+E('2025-02-28T12:00:00Z','d','pk','Astronaut agreement signed','SUPARCO and the China Manned Space Agency agree to fly a Pakistani astronaut.');
+E('2025-07-30T12:00:00Z','d','climate','NISAR launches','The NASA-ISRO radar satellite begins tracking land, ice and crop change.');
+E('2025-07-31T12:00:00Z','d','pk','KS-1 remote sensing satellite launched','Joins Pakistan\'s growing Earth observation fleet.');
+E('2025-08-15T12:00:00Z','d','climate','Khyber Pakhtunkhwa flash floods','Cloudburst floods in Buner and nearby districts kill hundreds, followed by river floods in Punjab.');
+E('2025-10-19T12:00:00Z','d','pk','HS-1 hyperspectral satellite launched','Pakistan\'s first hyperspectral imager, from Jiuquan.');
+E('2026-04-01T22:35:00Z','d','mission','Artemis II launches','Four astronauts begin the first crewed lunar flyby since Apollo.');
+E('2026-04-11T00:07:00Z','m','mission','Artemis II splashes down','Orion returns to the Pacific after about ten days around the Moon.');
+E('2026-04-22T12:00:00Z','d','pk','Two Pakistani astronaut candidates named','Khurram Daud and Muhammad Zeeshan Ali begin training in China.');
+E('2026-05-24T15:08:00Z','m','mission','Shenzhou-23 launches to Tiangong','Prepares the way for the next crew change, which is planned to carry Pakistan\'s astronaut.');
+E('2026-08-12T17:46:00Z','d','sky','Total solar eclipse over Greenland, Iceland and Spain','The path of totality crosses the Arctic and northern Spain.');
+E('2026-08-12T12:00:00Z','d','sky','Perseid meteor shower peaks','A new Moon gives dark skies for the peak.');
+E('2026-08-15T12:00:00Z','d','sky','Venus at greatest eastern elongation','The planet sits at its widest angle from the Sun in the evening sky.');
+E('2026-08-28T04:13:00Z','d','sky','Partial lunar eclipse','The Moon passes through part of Earth\'s shadow at full moon.');
+E('2026-09-23T00:05:00Z','m','climate','September equinox','Day and night are equal; autumn begins astronomically in the north.');
+E('2026-09-26T12:00:00Z','d','sky','Neptune at opposition','Closest and brightest for the year.');
+/* ahead */
+E('2026-10-04T12:00:00Z','d','sky','Saturn at opposition','Saturn is closest to Earth and visible all night.');
+E('2026-10-21T12:00:00Z','d','sky','Orionid meteor shower peaks','Debris from Halley\'s Comet streaks across the pre-dawn sky.');
+E('2026-11-30T00:00:00Z','w','pk','First Pakistani astronaut flies to Tiangong','Shenzhou-24 is expected to carry one of Pakistan\'s two candidates for about a week. The exact date has not been published.','Target window October to November 2026, date to be confirmed');
+E('2026-11-05T12:00:00Z','d','sky','Southern Taurid meteor shower peaks','Slow, bright fireballs are common.');
+E('2026-11-17T12:00:00Z','d','sky','Leonid meteor shower peaks','Best after midnight.');
+E('2026-11-25T12:00:00Z','d','sky','Uranus at opposition','Visible with binoculars from a dark site.');
+E('2026-12-01T00:00:00Z','d','climate','Meteorological winter begins','Cold, dry spells and fog return to the plains.');
+E('2026-12-14T02:00:00Z','d','sky','Geminid meteor shower peaks','Usually the strongest shower of the year.');
+E('2026-12-21T20:50:00Z','d','climate','December solstice','The shortest day in the northern hemisphere.');
+E('2027-01-04T12:00:00Z','d','sky','Quadrantid meteor shower peaks','A sharp, short peak.');
+E('2027-02-06T12:00:00Z','d','sky','Annular solar eclipse','A ring of fire crosses southern South America and the Atlantic.');
+E('2027-02-19T12:00:00Z','d','sky','Mars at opposition','Mars is at its closest and brightest for this cycle.');
+E('2027-03-01T00:00:00Z','d','climate','Meteorological spring begins','Rapid warming and unsettled weather.');
+E('2027-03-20T12:00:00Z','d','climate','March equinox','Equal day and night.');
+E('2027-06-21T12:00:00Z','d','climate','June solstice','The longest day, at the height of the pre-monsoon heat.');
+E('2027-08-02T12:00:00Z','d','sky','Total solar eclipse','The path runs from Spain across North Africa to the Middle East and Somalia, with a long totality.');
+/* calculated moon phases */
+(function(){
+  var a=Date.UTC(2026,0,1),b=Date.UTC(2027,5,30);
+  moonPhasesBetween(a,b).forEach(function(p){EV.push({ms:p.ms,p:'m',type:'moon',title:p.full?'Full moon':'New moon',desc:'Calculated phase time.',when:''})});
+})();
+EV.sort(function(a,b){return b.ms-a.ms});
+var TYPES=[['all','All'],['pk','Pakistan'],['sky','Sky'],['moon','Moon'],['mission','Spaceflight'],['climate','Climate'],['launch','Launches']];
+var TYPENAME={pk:'Pakistan space',sky:'Sky',moon:'Moon',mission:'Spaceflight',climate:'Climate and calendar',launch:'Launch feed'};
+var FILT={time:'all',type:'all',showAll:false},ROWS=[];
+
+function human(days){days=Math.abs(days);if(days<60)return days+(days===1?' day':' days');if(days<730)return Math.round(days/30.44)+' months';var y=days/365.25;return (y<10?y.toFixed(1):Math.round(y))+' years'}
+function dayNum(ms){return Math.floor((ms+PK)/864e5)}
+function clock(ms){var s=Math.max(0,Math.floor(ms/1000)),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),sec=s%60;return (d?d+'d ':'')+pad(h)+':'+pad(m)+':'+pad(sec)}
+function relText(ev,now){
+  var diff=ev.ms-now;
+  if(ev.p==='w')return diff>0?ev.when:'target window has passed, check the latest news';
+  var dd=dayNum(ev.ms)-dayNum(now);
+  if(ev.p==='d'){if(dd===0)return 'today';if(dd===1)return 'tomorrow';if(dd===-1)return 'yesterday';return dd>0?'in '+human(dd):human(dd)+' ago'}
+  if(Math.abs(diff)<2*864e5)return diff>0?'in '+clock(diff):clock(-diff)+' ago';
+  return dd>0?'in '+human(dd):human(dd)+' ago';
+}
+function buildFilters(){
+  var ft=$('#pkFTime'),fy=$('#pkFType');
+  [['all','All time'],['fut','Ahead'],['pst','Past']].forEach(function(t){var b=document.createElement('button');b.className='pk-chip';b.textContent=t[1];b.dataset.v=t[0];b.setAttribute('aria-pressed',t[0]===FILT.time?'true':'false');b.addEventListener('click',function(){FILT.time=t[0];FILT.showAll=false;buildFilters.sync();renderFeed()});ft.appendChild(b)});
+  TYPES.forEach(function(t){var b=document.createElement('button');b.className='pk-chip';b.textContent=t[1];b.dataset.v=t[0];b.setAttribute('aria-pressed',t[0]===FILT.type?'true':'false');b.addEventListener('click',function(){FILT.type=t[0];FILT.showAll=false;buildFilters.sync();renderFeed()});fy.appendChild(b)});
+  $('#pkMore').addEventListener('click',function(){FILT.showAll=!FILT.showAll;renderFeed()});
+}
+buildFilters.sync=function(){$$('#pkFTime .pk-chip').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.v===FILT.time?'true':'false')});$$('#pkFType .pk-chip').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.v===FILT.type?'true':'false')})};
+function renderFeed(){
+  var feed=$('#pkFeed'),now=nowMs();feed.innerHTML='';ROWS=[];
+  var list=EV.filter(function(e){
+    if(FILT.type!=='all'&&e.type!==FILT.type)return false;
+    var fut=e.ms>now;if(FILT.time==='fut'&&!fut)return false;if(FILT.time==='pst'&&fut)return false;return true;
+  });
+  var fut=list.filter(function(e){return e.ms>now}),pst=list.filter(function(e){return e.ms<=now}),LIM=14,hidden=0;
+  function row(e){
+    var r=document.createElement('div'),isF=e.ms>now;r.className='pk-ev '+(isF?'fut':'pst');
+    r.innerHTML='<div class="when mono">'+(e.p==='w'?'Late 2026':fmtDate(e.ms,e.p))+'</div><div class="what"><b></b><span></span></div><div class="rel mono"></div>';
+    $('b',r).textContent=e.title;$('span',r).textContent=e.desc;
+    var rel=$('.rel',r),ty=document.createElement('span');ty.className='ty';ty.style.fontFamily="'Space Grotesk',sans-serif";ty.textContent=TYPENAME[e.type]||'';
+    $('.what',r).appendChild(ty);
+    feed.appendChild(r);ROWS.push({ev:e,el:rel});
+  }
+  fut.forEach(row);
+  var nl=document.createElement('div');nl.className='pk-nowline mono';nl.id='pkNowLine';feed.appendChild(nl);
+  var shown=FILT.showAll?pst:pst.slice(0,LIM);hidden=pst.length-shown.length;shown.forEach(row);
+  var more=$('#pkMore');more.hidden=pst.length<=LIM;more.textContent=FILT.showAll?'Show fewer':'Show '+hidden+' earlier events';
+  if(!list.length){feed.innerHTML='<p class="pk-note" style="padding:18px 0">No events match these filters.</p>'}
+  tickFeed();
+}
+function tickFeed(){
+  var now=nowMs();
+  ROWS.forEach(function(r){r.el.textContent=relText(r.ev,now)});
+  var nl=$('#pkNowLine');if(nl)nl.textContent='Now, '+fmtDate(now,'m');
+  var core=EV.filter(function(e){return e.type!=='moon'&&e.p!=='w'});
+  var nxt=core.filter(function(e){return e.ms>now}).sort(function(a,b){return a.ms-b.ms})[0];
+  var lst=core.filter(function(e){return e.ms<=now}).sort(function(a,b){return b.ms-a.ms})[0];
+  if(nxt){$('#pkNxT').textContent=nxt.title;$('#pkNxC').textContent=clock(nxt.ms-now);$('#pkNxD').textContent=fmtDate(nxt.ms,nxt.p)+(nxt.p==='d'?' (date precision)':'')}
+  if(lst){$('#pkLsT').textContent=lst.title;$('#pkLsC').textContent=clock(now-lst.ms)+' ago';$('#pkLsD').textContent=fmtDate(lst.ms,lst.p)}
+  var pk=EV.filter(function(e){return e.type==='pk'&&(e.ms>now||e.p==='w')}).sort(function(a,b){return a.ms-b.ms})[0];
+  if(pk){$('#pkPkT').textContent=pk.title;$('#pkPkC').textContent=pk.p==='w'?(pk.ms>now?'Date to be confirmed':'Window has passed'):clock(pk.ms-now);$('#pkPkD').textContent=pk.p==='w'?pk.when:fmtDate(pk.ms,pk.p)}
+  else{$('#pkPkT').textContent='No future milestone listed';$('#pkPkC').textContent='--';$('#pkPkD').textContent=''}
+}
+function loadLaunches(){
+  var ok=0,tot=2;
+  function ingest(res,tag){
+    (res.results||[]).forEach(function(r){
+      var t=r.net||r.window_start;if(!t)return;var ms=Date.parse(t);if(isNaN(ms))return;
+      var prov=r.lsp_name||(r.launch_service_provider&&r.launch_service_provider.name)||'';
+      var loc=r.location_name||(r.pad&&r.pad.location&&r.pad.location.name)||'';
+      var st=r.status&&r.status.name?r.status.name:'';
+      EV.push({ms:ms,p:'m',type:'launch',title:r.name||'Launch',desc:[prov,loc,st].filter(Boolean).join(', '),when:''});
+    });
+  }
+  function done(){
+    tot--;if(tot===0){
+      EV.sort(function(a,b){return b.ms-a.ms});renderFeed();
+      $('#pkFeedNote').textContent=ok?'Launch feed: connected to Launch Library 2.':'Launch feed: not reachable from this page, so only the curated list and calculated moon phases are shown.';
+    }
+  }
+  jget('https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=8&mode=list',8000).then(function(r){ok++;ingest(r)}).catch(function(){}).then(done);
+  jget('https://ll.thespacedevs.com/2.2.0/launch/previous/?limit=6&mode=list',8000).then(function(r){ok++;ingest(r)}).catch(function(){}).then(done);
+}
+
+/* ---------- live weather ---------- */
+function loadWeather(){
+  var la=ST.map(function(s){return s.la}).join(','),lo=ST.map(function(s){return s.lo}).join(',');
+  jget('https://api.open-meteo.com/v1/forecast?latitude='+la+'&longitude='+lo+'&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=auto',9000).then(function(r){
+    var arr=Array.isArray(r)?r:[r],n=0;
+    arr.forEach(function(o,i){if(o&&o.current&&typeof o.current.temperature_2m==='number'&&ST[i]){LIVE.t[ST[i].id]=o.current.temperature_2m;LIVE.h[ST[i].id]=o.current.relative_humidity_2m;LIVE.w[ST[i].id]=o.current.wind_speed_10m;n++}});
+    LIVE.ok=n>10;LIVE.stamp=new Date();
+  }).catch(function(){LIVE.ok=false}).then(function(){
+    var dot=$('#pkWxDot'),txt=$('#pkWxTxt');
+    if(LIVE.ok){dot.className='pk-dot on';txt.textContent='Live observations from Open-Meteo, updated '+pad(pkd(LIVE.stamp.getTime()).getUTCHours())+':'+pad(pkd(LIVE.stamp.getTime()).getUTCMinutes())+' PKT'}
+    else{dot.className='pk-dot';txt.textContent='Live weather unreachable here, showing climate normals for today'}
+    render();updateCityStats();
+  });
+}
+
+/* ---------- clock + loop ---------- */
+function tickClock(){
+  var ms=nowMs(),d=pkd(ms);
+  $('#pkTime').textContent=pad(d.getUTCHours())+':'+pad(d.getUTCMinutes())+':'+pad(d.getUTCSeconds());
+  $('#pkDate').textContent=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getUTCDay()]+', '+d.getUTCDate()+' '+MONL[d.getUTCMonth()]+' '+d.getUTCFullYear();
+  var u=new Date(ms);$('#pkUtc').textContent=pad(u.getUTCHours())+':'+pad(u.getUTCMinutes())+':'+pad(u.getUTCSeconds());
+  $('#pkJd').textContent=jdOf(ms).toFixed(4);
+  $('#pkLst').textContent=hms(lstHours(ms,city().lo));
+  tickFeed();
+}
+var sec=0;
+function loop(){
+  tickClock();sec++;
+  if(sec%5===0){updateSky();updateIss()}
+  if(sec%30===0){drawSunPath();drawMoon()}
+}
+
+/* ---------- init ---------- */
+fillSelects();buildControls();buildSeasons();buildFilters();
+syncControls();render();updateCityStats();updateSky();drawSunPath();drawMoon();drawYear();updateIss(true);renderFeed();tickClock();
+setInterval(loop,1000);
+loadWeather();setInterval(loadWeather,15*60*1000);
+pollIss();setInterval(pollIss,6000);
+loadLaunches();
+var lastW=frame.clientWidth;
+function onResize(){var w=frame.clientWidth;render();drawClimo();drawSunPath();drawYear();updateIss(true);lastW=w}
+var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(onResize,120)});
+if(window.ResizeObserver){new ResizeObserver(function(){if(frame.clientWidth!==lastW){clearTimeout(rt);rt=setTimeout(onResize,80)}}).observe(frame)}
+})();
+</script>
