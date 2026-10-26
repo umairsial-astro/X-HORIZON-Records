@@ -1,0 +1,4825 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X Horizon — Review &amp; Rating System</title>
+<meta name="description" content="X Horizon review and rating system with Firebase review approval, search-bar console unlock, and X Horizon loading theme.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root{
+  --bg:#000;
+  --panel:rgba(255,255,255,.045);
+  --panel2:rgba(255,255,255,.065);
+  --solid:#070707;
+  --solid2:#111;
+  --text:#fff;
+  --soft:#cfcfcf;
+  --muted:#969696;
+  --line:rgba(255,255,255,.10);
+  --line2:rgba(255,255,255,.16);
+  --gold:#facc15;
+  --max:1180px;
+  --display:'Inter',Arial,Helvetica,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+
+*{box-sizing:border-box}
+
+html{
+  background:#000;
+  color:#fff;
+  scroll-behavior:smooth;
+  overflow-x:hidden
+}
+
+body{
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family:var(--display);
+  overflow-x:hidden;
+  line-height:1.5
+}
+
+body.xh-loading{overflow:hidden}
+
+body.xh-loading .xh-live-bg,
+body.xh-loading .xh-review-page{
+  opacity:0;
+  visibility:hidden
+}
+
+body.xh-ready .xh-live-bg,
+body.xh-ready .xh-review-page{
+  opacity:1;
+  visibility:visible;
+  transition:opacity .35s var(--ease)
+}
+
+button,input,select,textarea{
+  font-family:inherit;
+  border:0;
+  outline:0
+}
+
+button{cursor:pointer}
+
+a{
+  color:inherit;
+  text-decoration:none
+}
+
+.xh-review-page{
+  position:relative;
+  min-height:100vh;
+  background:#000;
+  color:#fff;
+  isolation:isolate;
+  overflow:hidden
+}
+
+.xh-shell{
+  width:min(var(--max),calc(100% - 40px));
+  margin:0 auto
+}
+
+/* Loading system */
+.xh-loader{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:grid;
+  place-items:center;
+  z-index:99999;
+  transition:opacity .65s var(--ease),visibility .65s var(--ease)
+}
+
+.xh-loader.done{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none
+}
+
+.xh-load-mark{
+  position:relative;
+  width:min(310px,82vw);
+  height:118px;
+  display:grid;
+  place-items:center;
+  overflow:hidden
+}
+
+.xh-load-x{
+  position:absolute;
+  left:42px;
+  top:6px;
+  font-size:96px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:-.12em;
+  color:#fff;
+  z-index:2;
+  text-shadow:0 0 26px rgba(255,255,255,.18)
+}
+
+.xh-load-word{
+  position:absolute;
+  left:112px;
+  top:45px;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:.2em;
+  color:#eee;
+  opacity:.18;
+  animation:xhWordBlink 1.95s steps(2,end) infinite,
+             xhWordSolid .22s ease 1.95s forwards;
+  z-index:3
+}
+
+.xh-load-line{
+  position:absolute;
+  left:42px;
+  bottom:10px;
+  width:222px;
+  height:4px;
+  border-radius:99px;
+  background:#161616;
+  overflow:hidden
+}
+
+.xh-load-fill{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#ffffff,#d8d8d8);
+  border-radius:99px;
+  transition:width 2.15s var(--ease)
+}
+
+.xh-loader.loading .xh-load-fill{width:100%}
+
+@keyframes xhWordBlink{
+  0%,100%{opacity:.16}
+  50%{opacity:.68}
+}
+
+@keyframes xhWordSolid{
+  to{opacity:1}
+}
+
+/* Live black space background */
+.xh-live-bg{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  background:#000;
+  overflow:hidden;
+  pointer-events:none
+}
+
+.xh-live-bg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    radial-gradient(circle,rgba(255,255,255,.46) 0 1px,transparent 1.5px),
+    radial-gradient(circle,rgba(255,255,255,.24) 0 1px,transparent 1.5px);
+  background-size:150px 150px,230px 230px;
+  background-position:20px 40px,95px 12px;
+  opacity:.30;
+  animation:xhStarDrift 46s linear infinite
+}
+
+.xh-glow{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(50px);
+  background:radial-gradient(circle,rgba(255,255,255,.09),transparent 70%)
+}
+
+.xh-g1{
+  width:560px;
+  height:560px;
+  top:-180px;
+  left:-140px;
+  animation:xhDriftA 38s ease-in-out infinite
+}
+
+.xh-g2{
+  width:480px;
+  height:480px;
+  bottom:-160px;
+  right:-100px;
+  animation:xhDriftB 44s ease-in-out infinite
+}
+
+.xh-g3{
+  width:420px;
+  height:420px;
+  top:40%;
+  left:50%;
+  animation:xhDriftC 50s ease-in-out infinite
+}
+
+@keyframes xhDriftA{
+  0%,100%{transform:translate(0,0)}
+  50%{transform:translate(70px,50px)}
+}
+
+@keyframes xhDriftB{
+  0%,100%{transform:translate(0,0)}
+  50%{transform:translate(-60px,-46px)}
+}
+
+@keyframes xhDriftC{
+  0%,100%{transform:translate(-50%,0)}
+  50%{transform:translate(-50%,40px)}
+}
+
+@keyframes xhStarDrift{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-150px,150px,0)}
+}
+
+.xh-review-main{
+  position:relative;
+  z-index:1;
+  background:transparent
+}
+
+.xh-hero{
+  position:relative;
+  min-height:100vh;
+  padding:108px 20px 76px;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  overflow:hidden;
+  background:#000
+}
+
+.xh-hero-bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.28),rgba(0,0,0,.64) 68%,#000 100%),
+    url('https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=90&w=2400&auto=format&fit=crop')
+    center/cover no-repeat;
+  filter:brightness(.82) saturate(1.02) contrast(1.04);
+  transform:scale(1.01)
+}
+
+.xh-hero::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:2px;
+  z-index:3;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.86),transparent);
+  box-shadow:0 0 30px rgba(255,255,255,.45);
+  pointer-events:none
+}
+
+.xh-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:
+    radial-gradient(circle at 50% 48%,rgba(0,0,0,.04) 0 24%,rgba(0,0,0,.45) 72%,#000 100%);
+  pointer-events:none
+}
+
+.xh-hero-content{
+  position:relative;
+  z-index:4;
+  width:min(720px,calc(100% - 34px));
+  padding:48px 0 42px;
+  transform:translateY(-16px);
+  display:flex;
+  flex-direction:column;
+  align-items:center
+}
+
+.xh-title{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:16px;
+  margin:0;
+  font-family:var(--display);
+  font-size:clamp(31px,4.7vw,56px);
+  line-height:1;
+  letter-spacing:.01em;
+  font-weight:500;
+  color:#cfcfcf
+}
+
+.xh-title span{
+  display:inline-block;
+  font-size:clamp(56px,8.5vw,92px);
+  font-weight:700;
+  line-height:.9;
+  letter-spacing:-.02em;
+  color:#fff
+}
+
+.xh-hero-line{
+  margin:18px 0 0;
+  color:#cfcfcf;
+  font-size:clamp(14px,1.48vw,18px);
+  line-height:1.7;
+  letter-spacing:.30em;
+  text-transform:uppercase;
+  font-weight:400;
+  max-width:640px
+}
+
+.xh-hero-actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:26px
+}
+
+.xh-rating-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  margin-top:28px;
+  padding:14px 18px;
+  border-radius:14px;
+  background:rgba(255,255,255,.045);
+  backdrop-filter:blur(12px)
+}
+
+.xh-rating-pill .big{
+  font-size:30px;
+  font-weight:700;
+  color:var(--gold);
+  line-height:1
+}
+
+.xh-rating-pill .label{
+  text-align:left;
+  font-size:12px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#fff
+}
+
+.xh-rating-pill .sub{
+  text-align:left;
+  margin-top:3px;
+  font-size:12px;
+  color:#bdbdbd
+}
+
+.xh-btn,.xh-small-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:50px;
+  border-radius:12px;
+  background:#fff;
+  color:#000;
+  padding:0 26px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.03em;
+  transition:transform .25s var(--ease),background .25s var(--ease),color .25s var(--ease)
+}
+
+.xh-btn:hover,.xh-small-btn:hover{
+  background:#e7e7e7;
+  color:#000;
+  transform:scale(1.035)
+}
+
+.xh-btn.secondary{
+  background:rgba(255,255,255,.045);
+  color:#fff;
+  backdrop-filter:blur(10px)
+}
+
+.xh-btn.secondary:hover{
+  background:rgba(255,255,255,.075);
+  color:#fff
+}
+
+.xh-hero-actions .xh-btn,
+.xh-hero-actions .xh-btn:visited,
+.xh-hero-actions .xh-btn:hover,
+.xh-hero-actions .xh-btn:focus,
+.xh-hero-actions .xh-btn:active{
+  color:#000 !important;
+  text-decoration:none !important
+}
+
+.xh-hero-actions .xh-btn.secondary,
+.xh-hero-actions .xh-btn.secondary:visited,
+.xh-hero-actions .xh-btn.secondary:hover,
+.xh-hero-actions .xh-btn.secondary:focus,
+.xh-hero-actions .xh-btn.secondary:active{
+  color:#fff !important;
+  text-decoration:none !important
+}
+
+.xh-hero-actions .xh-btn i{color:currentColor !important}
+
+.xh-section{
+  position:relative;
+  padding:68px 0;
+  background:transparent
+}
+
+.xh-head{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:24px;
+  margin-bottom:28px
+}
+
+.xh-head h2{
+  font-family:var(--display);
+  margin:0;
+  font-size:clamp(26px,3.4vw,38px);
+  letter-spacing:-.02em;
+  line-height:1.1;
+  font-weight:600
+}
+
+.xh-head p{
+  margin:0;
+  max-width:560px;
+  color:#cfcfcf;
+  font-size:14px;
+  line-height:1.65
+}
+
+.xh-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(255,255,255,.045);
+  border-radius:999px;
+  padding:8px 11px;
+  color:#dcdcdc;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  margin-bottom:12px
+}
+
+.xh-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#dcdcdc;
+  box-shadow:0 0 14px rgba(255,255,255,.24)
+}
+
+.xh-kicker i,
+.xh-btn i,
+.xh-submit i,
+.xh-small-btn i,
+.xh-vote-btn i,
+.xh-comments-toggle i,
+.xh-comments-title i,
+.xh-mini-btn i,
+.xh-console-close i,
+.xh-popup-ok i{
+  font-size:.95em;
+  line-height:1
+}
+
+.xh-panel,
+.xh-stats-card,
+.xh-reviews-card,
+.xh-review-console,
+.xh-submit-box{
+  background:rgba(255,255,255,.045);
+  border-radius:22px;
+  backdrop-filter:blur(12px)
+}
+
+.xh-panel{padding:24px}
+
+.xh-form-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px
+}
+
+.xh-field-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px
+}
+
+.xh-name-row{
+  width:100%;
+  display:block
+}
+
+.xh-identity-field{
+  display:flex;
+  align-items:center;
+  gap:12px
+}
+
+.xh-form-avatar{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+  overflow:hidden;
+  background:#fff;
+  color:#000;
+  font-size:14px;
+  font-weight:700
+}
+
+.xh-form-avatar img,
+.xh-avatar img,
+.xh-comment-avatar img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover
+}
+
+.xh-input[readonly],
+.xh-comment-name[readonly]{
+  cursor:default;
+  opacity:1
+}
+
+.xh-label{
+  display:block;
+  margin:0 0 9px;
+  color:#f1f1f1;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase
+}
+
+.xh-stars{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  padding:13px 15px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:14px;
+  background:rgba(255,255,255,.055);
+  backdrop-filter:blur(14px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)
+}
+
+.xh-star{
+  appearance:none;
+  background:transparent;
+  color:rgba(255,255,255,.24);
+  font-size:31px;
+  line-height:1;
+  transition:color .16s ease,transform .16s ease,text-shadow .16s ease
+}
+
+.xh-star.lit{
+  color:var(--gold);
+  text-shadow:0 0 15px rgba(250,204,21,.24)
+}
+
+.xh-star:hover{
+  transform:translateY(-2px) scale(1.08)
+}
+
+.xh-star-label{
+  min-height:20px;
+  margin-top:9px;
+  color:#d7d7d7;
+  font-size:13px
+}
+
+.xh-input,
+.xh-textarea,
+.xh-search-input,
+.xh-sort{
+  width:100%;
+  color:#fff !important;
+  background:rgba(255,255,255,.055) !important;
+  border:1px solid rgba(255,255,255,.13) !important;
+  border-radius:12px !important;
+  outline:none !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(14px) !important
+}
+
+.xh-input{
+  height:52px;
+  padding:0 16px;
+  font-size:15px
+}
+
+.xh-textarea{
+  min-height:136px;
+  resize:vertical;
+  padding:15px 16px;
+  font-size:15px;
+  line-height:1.5
+}
+
+.xh-input::placeholder,
+.xh-textarea::placeholder,
+.xh-search-input::placeholder{
+  color:rgba(255,255,255,.56)
+}
+
+.xh-input:focus,
+.xh-textarea:focus,
+.xh-search-input:focus,
+.xh-sort:focus{
+  background:rgba(255,255,255,.085) !important;
+  border-color:rgba(255,255,255,.28) !important
+}
+
+.xh-submit{
+  width:100%;
+  min-height:54px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border-radius:12px;
+  background:#fff;
+  color:#000;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.04em;
+  cursor:pointer;
+  transition:transform .25s var(--ease),background .25s var(--ease)
+}
+
+.xh-submit:hover{
+  background:#e7e7e7;
+  transform:scale(1.015)
+}
+
+.xh-submit:disabled{
+  cursor:not-allowed;
+  opacity:.65;
+  transform:none
+}
+
+.xh-stats-card{
+  display:grid;
+  grid-template-columns:minmax(160px,230px) 1fr;
+  gap:28px;
+  align-items:center;
+  padding:24px
+}
+
+.xh-big-avg{
+  color:var(--gold);
+  font-size:52px;
+  line-height:1;
+  font-weight:700;
+  letter-spacing:-.04em
+}
+
+.xh-avg-lbl{
+  margin-top:7px;
+  color:#bdbdbd;
+  font-size:13px
+}
+
+.xh-stats-right{
+  display:grid;
+  gap:11px
+}
+
+.xh-bar-row{
+  display:grid;
+  grid-template-columns:26px 1fr 30px;
+  align-items:center;
+  gap:11px
+}
+
+.xh-bar-lbl{
+  color:#e7e7e7;
+  font-size:12px;
+  font-weight:700;
+  text-align:right
+}
+
+.xh-bar-track{
+  height:8px;
+  overflow:hidden;
+  border-radius:999px;
+  background:rgba(255,255,255,.10)
+}
+
+.xh-bar-fill{
+  height:100%;
+  width:0%;
+  border-radius:999px;
+  background:#fff;
+  transition:width .35s ease
+}
+
+.xh-bar-cnt{
+  color:#bdbdbd;
+  font-size:12px;
+  text-align:left
+}
+
+.xh-reviews-card{padding:24px}
+
+.xh-review-toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  margin-bottom:22px;
+  flex-wrap:wrap
+}
+
+.xh-review-note{
+  max-width:620px;
+  color:#cfcfcf;
+  font-size:13px;
+  line-height:1.65
+}
+
+.xh-filter-row{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:wrap
+}
+
+.xh-search-box{
+  display:flex;
+  align-items:center;
+  background:rgba(255,255,255,.045);
+  border-radius:14px;
+  padding:6px;
+  backdrop-filter:blur(12px)
+}
+
+.xh-search-input{
+  width:250px;
+  height:42px;
+  padding:0 13px;
+  font-size:13px;
+  font-weight:500;
+  background:rgba(255,255,255,.055) !important
+}
+
+.xh-sort{
+  width:auto;
+  min-width:150px;
+  height:54px;
+  padding:0 14px;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  appearance:auto
+}
+
+.xh-sort option,
+.xh-input option{
+  background:#080808;
+  color:#fff
+}
+
+.xh-review-list,
+.xh-pending-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px
+}
+
+.xh-review-console{
+  display:none;
+  margin:0 0 22px;
+  padding:20px
+}
+
+body.review-console-on .xh-review-console{
+  display:block
+}
+
+.xh-console-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:16px
+}
+
+.xh-console-title{
+  margin:0;
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase
+}
+
+.xh-console-note{
+  margin:7px 0 0;
+  color:#bdbdbd;
+  font-size:12px;
+  line-height:1.55
+}
+
+.xh-console-meta{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end
+}
+
+.xh-console-count{
+  min-height:34px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 12px;
+  border-radius:999px;
+  background:#000;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase
+}
+
+.xh-console-close{
+  min-height:38px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:0 14px;
+  border-radius:999px;
+  background:#000;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  transition:transform .2s ease,background .2s ease
+}
+
+.xh-console-close:hover{
+  background:#171717;
+  transform:translateY(-2px)
+}
+
+.xh-pending-item,
+.xh-review-item{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  padding:18px;
+  border-radius:18px;
+  background:#070707;
+  overflow:hidden;
+  transition:transform .25s var(--ease),background .25s var(--ease)
+}
+
+.xh-pending-item{
+  min-height:196px;
+  gap:11px
+}
+
+.xh-review-item{
+  min-height:218px
+}
+
+.xh-review-item::before{
+  content:"";
+  position:absolute;
+  inset:auto 0 0 0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.86),transparent);
+  opacity:.6
+}
+
+.xh-review-item:hover,
+.xh-pending-item:hover{
+  transform:translateY(-4px) scale(1.01);
+  background:#111
+}
+
+.xh-review-top,
+.xh-pending-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:15px
+}
+
+.xh-review-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0
+}
+
+.xh-avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+  overflow:hidden;
+  background:#fff;
+  color:#000;
+  font-size:13px;
+  font-weight:700
+}
+
+.xh-review-name,
+.xh-pending-name{
+  overflow:hidden;
+  color:#fff;
+  font-size:14px;
+  font-weight:700;
+  text-overflow:ellipsis;
+  white-space:nowrap
+}
+
+.xh-pending-name{
+  white-space:normal;
+  line-height:1.35
+}
+
+.xh-review-date,
+.xh-pending-date{
+  margin-top:4px;
+  color:#8f8f8f;
+  font-size:12px
+}
+
+.xh-review-stars,
+.xh-pending-stars{
+  flex:0 0 auto;
+  color:var(--gold);
+  font-size:14px;
+  letter-spacing:1px;
+  white-space:nowrap
+}
+
+.xh-review-text,
+.xh-pending-text{
+  color:#cfcfcf;
+  font-size:14px;
+  line-height:1.75;
+  word-break:break-word
+}
+
+.xh-review-meta,
+.xh-pending-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:0 0 12px
+}
+
+.xh-chip{
+  display:inline-flex;
+  align-items:center;
+  min-height:26px;
+  padding:0 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.075);
+  color:#e7e7e7;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.02em
+}
+
+.xh-pending-public{
+  grid-column:1/-1;
+  margin-top:4px;
+  padding:14px 16px;
+  border-radius:16px;
+  background:rgba(255,255,255,.045);
+  color:#dcdcdc;
+  font-size:13px;
+  line-height:1.55;
+  text-align:center;
+  backdrop-filter:blur(12px)
+}
+
+.xh-pending-public b{color:#fff}
+
+.xh-review-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.08)
+}
+
+.xh-vote-btn{
+  min-height:36px;
+  border-radius:999px;
+  background:rgba(255,255,255,.075);
+  color:#fff;
+  padding:0 12px;
+  font-size:12px;
+  font-weight:700;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:transform .2s var(--ease),background .2s var(--ease)
+}
+
+.xh-vote-btn:hover{
+  background:rgba(255,255,255,.13);
+  transform:translateY(-2px)
+}
+
+.xh-vote-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+  transform:none
+}
+
+.xh-vote-btn span{
+  color:#fff;
+  opacity:.9
+}
+
+.xh-comments{
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.08)
+}
+
+.xh-comments-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:0;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase
+}
+
+.xh-comments-toggle{
+  min-height:34px;
+  border-radius:999px;
+  background:rgba(255,255,255,.075);
+  color:#fff;
+  padding:0 12px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:transform .2s var(--ease),background .2s var(--ease)
+}
+
+.xh-comments-toggle:hover{
+  background:rgba(255,255,255,.13);
+  transform:translateY(-2px)
+}
+
+.xh-comments-body{
+  display:none;
+  margin-top:10px
+}
+
+.xh-comments.open .xh-comments-body{
+  display:block
+}
+
+.xh-comment-list{
+  display:grid;
+  gap:8px;
+  margin-bottom:11px
+}
+
+.xh-comment-item{
+  padding:10px 11px;
+  border-radius:13px;
+  background:rgba(255,255,255,.055);
+  color:#d7d7d7
+}
+
+.xh-comment-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:4px
+}
+
+.xh-comment-author-wrap{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-width:0
+}
+
+.xh-comment-avatar{
+  width:25px;
+  height:25px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+  overflow:hidden;
+  background:#fff;
+  color:#000;
+  font-size:8px;
+  font-weight:700
+}
+
+.xh-comment-author{
+  overflow:hidden;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  text-overflow:ellipsis;
+  white-space:nowrap
+}
+
+.xh-comment-date{
+  color:#9d9d9d;
+  font-size:11px;
+  white-space:nowrap
+}
+
+.xh-comment-text{
+  font-size:12px;
+  line-height:1.55;
+  word-break:break-word
+}
+
+.xh-comment-empty{
+  padding:9px 0;
+  color:#a9a9a9;
+  font-size:12px
+}
+
+.xh-comment-form{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:9px;
+  align-items:stretch;
+  padding:10px;
+  border-radius:15px;
+  background:rgba(255,255,255,.035)
+}
+
+.xh-comment-name,
+.xh-comment-textarea{
+  width:100%;
+  color:#fff !important;
+  background:rgba(255,255,255,.055) !important;
+  border:1px solid rgba(255,255,255,.13) !important;
+  border-radius:12px !important;
+  outline:none !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(14px) !important;
+  font-family:inherit
+}
+
+.xh-comment-name{
+  height:42px;
+  padding:0 12px;
+  font-size:13px
+}
+
+.xh-comment-textarea{
+  min-height:74px;
+  max-height:130px;
+  resize:vertical;
+  padding:11px 12px;
+  font-size:13px;
+  line-height:1.45
+}
+
+.xh-comment-name::placeholder,
+.xh-comment-textarea::placeholder{
+  color:rgba(255,255,255,.54)
+}
+
+.xh-comment-submit{
+  width:100%;
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  border-radius:12px;
+  background:#fff;
+  color:#000;
+  padding:0 14px;
+  font-size:12px;
+  font-weight:700;
+  white-space:nowrap;
+  transition:transform .2s var(--ease),background .2s var(--ease)
+}
+
+.xh-comment-submit:hover{
+  background:#e7e7e7;
+  transform:translateY(-2px)
+}
+
+.xh-comment-submit:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+  transform:none
+}
+
+.xh-pending-detail{
+  margin-top:8px;
+  padding:10px 11px;
+  border-radius:12px;
+  background:rgba(255,255,255,.055);
+  color:#d7d7d7;
+  font-size:12px;
+  line-height:1.55
+}
+
+.xh-pending-detail b{color:#fff}
+
+.xh-pending-text{
+  flex:1;
+  font-size:13px;
+  line-height:1.65
+}
+
+.xh-pending-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px
+}
+
+.xh-mini-btn{
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  border-radius:10px;
+  color:#fff;
+  background:#141414;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:transform .16s ease,background .16s ease,color .16s ease
+}
+
+.xh-mini-btn:hover{transform:translateY(-2px)}
+
+.xh-approve{
+  background:#fff;
+  color:#000
+}
+
+.xh-approve:hover{
+  background:#e7e7e7;
+  color:#000
+}
+
+.xh-reject:hover{background:#202020}
+
+.xh-empty{
+  grid-column:1/-1;
+  padding:32px 18px;
+  border-radius:18px;
+  color:#bdbdbd;
+  text-align:center;
+  font-size:14px;
+  background:#070707
+}
+
+.xh-submit-popup{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(14px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .25s ease,visibility .25s ease
+}
+
+.xh-submit-popup.on{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto
+}
+
+.xh-submit-box{
+  position:relative;
+  width:min(450px,100%);
+  padding:34px 28px 27px;
+  text-align:center;
+  transform:translateY(12px) scale(.98);
+  transition:transform .25s ease
+}
+
+.xh-submit-popup.on .xh-submit-box{
+  transform:translateY(0) scale(1)
+}
+
+.xh-popup-close{
+  position:absolute;
+  display:grid;
+  place-items:center;
+  top:14px;
+  right:14px;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#000;
+  color:#fff;
+  font-size:22px;
+  line-height:1;
+  transition:background .2s ease,transform .2s ease
+}
+
+.xh-popup-close:hover{
+  background:#171717;
+  transform:rotate(90deg)
+}
+
+.xh-submit-icon{
+  width:68px;
+  height:68px;
+  margin:0 auto 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#fff;
+  color:#000;
+  font-size:30px;
+  font-weight:700
+}
+
+.xh-submit-icon.error{
+  background:#fff;
+  color:#000
+}
+
+.xh-submit-icon.success{
+  background:#fff;
+  color:#000
+}
+
+.xh-submit-title{
+  margin:0 0 10px;
+  color:#fff;
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:-.02em
+}
+
+.xh-submit-text{
+  margin:0 auto 22px;
+  max-width:350px;
+  color:#cfcfcf;
+  font-size:14px;
+  line-height:1.65
+}
+
+.xh-popup-ok{
+  width:100%;
+  max-width:220px;
+  border-radius:12px;
+  padding:13px 18px;
+  background:#fff;
+  color:#000;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.04em;
+  cursor:pointer;
+  transition:transform .2s ease,background .2s ease
+}
+
+.xh-popup-ok:hover{
+  background:#e7e7e7;
+  transform:translateY(-2px)
+}
+
+.xh-toast{
+  position:fixed;
+  left:50%;
+  bottom:22px;
+  z-index:9999;
+  transform:translateX(-50%) translateY(20px);
+  max-width:min(420px,calc(100% - 44px));
+  padding:12px 15px;
+  border-radius:12px;
+  background:#111;
+  color:#fff;
+  font-size:13px;
+  line-height:1.45;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s var(--ease),transform .25s var(--ease)
+}
+
+.xh-toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0)
+}
+
+.xh-reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity .75s var(--ease),transform .75s var(--ease)
+}
+
+.xh-reveal.visible{
+  opacity:1;
+  transform:translateY(0)
+}
+
+@media(max-width:1040px){
+  .xh-review-list,
+  .xh-pending-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+}
+
+@media(max-width:760px){
+
+  .xh-field-grid{
+    grid-template-columns:1fr
+  }
+
+  .xh-shell{
+    width:min(100% - 24px,var(--max))
+  }
+
+  .xh-hero{
+    padding:96px 14px 64px
+  }
+
+  .xh-hero-content{
+    width:min(100%,calc(100% - 10px));
+    padding:42px 0 36px;
+    transform:translateY(-10px)
+  }
+
+  .xh-title{
+    gap:10px;
+    font-size:clamp(26px,8vw,42px)
+  }
+
+  .xh-title span{
+    font-size:clamp(48px,16vw,76px)
+  }
+
+  .xh-hero-line{
+    font-size:12px;
+    letter-spacing:.16em
+  }
+
+  .xh-section{
+    padding:50px 0
+  }
+
+  .xh-head{
+    display:block
+  }
+
+  .xh-head p{
+    margin-top:12px
+  }
+
+  .xh-panel,
+  .xh-stats-card,
+  .xh-reviews-card{
+    border-radius:18px;
+    padding:18px
+  }
+
+  .xh-stars{
+    justify-content:space-between;
+    gap:4px;
+    padding:12px
+  }
+
+  .xh-star{
+    font-size:29px
+  }
+
+  .xh-stats-card{
+    grid-template-columns:1fr;
+    gap:20px
+  }
+
+  .xh-review-toolbar{
+    align-items:stretch
+  }
+
+  .xh-filter-row,
+  .xh-search-box,
+  .xh-search-input,
+  .xh-search-button,
+  .xh-sort{
+    width:100%;
+    min-width:0
+  }
+
+  .xh-search-box{
+    flex-direction:column;
+    align-items:stretch
+  }
+
+  .xh-review-list,
+  .xh-pending-grid{
+    grid-template-columns:1fr
+  }
+
+  .xh-console-header{
+    flex-direction:column
+  }
+
+  .xh-console-meta{
+    width:100%;
+    justify-content:space-between
+  }
+
+  .xh-pending-actions{
+    grid-template-columns:1fr
+  }
+
+  .xh-comment-form{
+    grid-template-columns:1fr
+  }
+}
+
+@media(max-width:440px){
+  .xh-review-top,
+  .xh-pending-top{
+    flex-direction:column
+  }
+
+  .xh-review-stars,
+  .xh-pending-stars{
+    align-self:flex-start
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .xh-live-bg::before,
+  .xh-glow,
+  .xh-load-word{
+    animation:none !important
+  }
+
+  .xh-load-fill{
+    transition:none !important;
+    width:100% !important
+  }
+}
+</style>
+
+
+
+
+<div class="xh-loader" id="xhLoader" aria-hidden="true">
+  <div class="xh-load-mark">
+    <div class="xh-load-x">X</div>
+    <div class="xh-load-word">HORIZON</div>
+    <div class="xh-load-line">
+      <span class="xh-load-fill" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>
+
+<div class="xh-live-bg" aria-hidden="true">
+  <span class="xh-glow xh-g1"></span>
+  <span class="xh-glow xh-g2"></span>
+  <span class="xh-glow xh-g3"></span>
+</div>
+
+<div class="xh-review-page" id="xhReviewPage">
+
+  <main class="xh-review-main">
+
+    <section class="xh-hero" id="home">
+
+      <div class="xh-hero-bg"></div>
+
+      <div class="xh-hero-content">
+
+        <h1 class="xh-title">
+          <span>X</span> Horizon
+        </h1>
+
+        <p class="xh-hero-line">
+          Rate &amp; Review The Space Learning Experience
+        </p>
+
+        <div class="xh-hero-actions">
+
+          <a class="xh-btn" href="#leave-review">
+            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+            Leave Review
+          </a>
+
+          <a class="xh-btn secondary" href="#posted-reviews">
+            <i class="fa-regular fa-comments" aria-hidden="true"></i>
+            Posted Reviews
+          </a>
+
+        </div>
+
+        <div class="xh-rating-pill" aria-live="polite">
+
+          <div class="big" id="heroAvg">—</div>
+
+          <div>
+            <div class="label">Average community rating</div>
+            <div class="sub" id="heroCount">No approved reviews yet</div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="xh-section" id="leave-review">
+
+      <div class="xh-shell">
+
+        <div class="xh-head xh-reveal">
+
+          <div>
+
+            <div class="xh-kicker">
+              <i class="fa-solid fa-satellite-dish" aria-hidden="true"></i>
+              Community Signal
+            </div>
+
+            <h2>Leave a Review</h2>
+
+          </div>
+
+          <p>
+            Your review is submitted for approval before appearing publicly.
+          </p>
+
+        </div>
+
+
+        <div class="xh-panel xh-reveal">
+
+          <div class="xh-form-grid">
+
+            <div>
+
+              <label class="xh-label">Your rating</label>
+
+              <div class="xh-stars" id="starInput" role="group" aria-label="Select star rating">
+
+                <button class="xh-star" data-v="1" aria-label="1 star" type="button">★</button>
+                <button class="xh-star" data-v="2" aria-label="2 stars" type="button">★</button>
+                <button class="xh-star" data-v="3" aria-label="3 stars" type="button">★</button>
+                <button class="xh-star" data-v="4" aria-label="4 stars" type="button">★</button>
+                <button class="xh-star" data-v="5" aria-label="5 stars" type="button">★</button>
+
+              </div>
+
+              <div class="xh-star-label" id="starLabel">
+                Select your rating
+              </div>
+
+            </div>
+
+
+            <div class="xh-name-row">
+
+              <label class="xh-label" for="inpName">Name</label>
+
+              <div class="xh-identity-field">
+
+                <div class="xh-form-avatar" id="odooFormAvatar" aria-hidden="true">
+                  —
+                </div>
+
+                <input class="xh-input" id="inpName" placeholder="Sign in to X Horizon" maxlength="60" readonly="" aria-readonly="true" required="">
+
+              </div>
+
+            </div>
+
+
+            <div>
+
+              <label class="xh-label" for="inpFeature">
+                Feature you like most
+              </label>
+
+              <select class="xh-input" id="inpFeature">
+
+                <option value="Learning Paths">Learning Paths</option>
+                <option value="Visual Collections">Visual Collections</option>
+                <option value="Simulations">Simulations</option>
+                <option value="Sky / Observation Tools">Sky / Observation Tools</option>
+                <option value="Gravity Simulator">Gravity Simulator</option>
+                <option value="Courses">Courses</option>
+                <option value="Research Archive">Research Archive</option>
+                <option value="Dark Space Theme">Dark Space Theme</option>
+                <option value="Community Reviews">Community Reviews</option>
+                <option value="Other">Other</option>
+
+              </select>
+
+            </div>
+
+
+            <div>
+
+              <label class="xh-label" for="inpText">Review</label>
+
+              <textarea class="xh-textarea" id="inpText" placeholder="Write your experience with X Horizon..." maxlength="700"></textarea>
+
+            </div>
+
+
+            <div>
+
+              <label class="xh-label" for="inpTrouble">
+                What made you troubled?
+              </label>
+
+              <textarea class="xh-textarea" id="inpTrouble" placeholder="Optional — describe what made you troubled, confusing, slow, broken, or hard to use." maxlength="500"></textarea>
+
+            </div>
+
+
+            <button class="xh-submit" id="submitBtn" type="button">
+              <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+              Submit Review
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="xh-section" id="rating-breakdown">
+
+      <div class="xh-shell">
+
+        <div class="xh-head xh-reveal">
+
+          <div>
+
+            <div class="xh-kicker">
+              <i class="fa-solid fa-chart-simple" aria-hidden="true"></i>
+              Rating Data
+            </div>
+
+            <h2>Rating Breakdown</h2>
+
+          </div>
+
+          <p>
+            Approved reviews are counted in the public rating summary.
+          </p>
+
+        </div>
+
+
+        <div class="xh-stats-card xh-reveal">
+
+          <div>
+
+            <div class="xh-big-avg" id="sumAvg">—</div>
+
+            <div class="xh-avg-lbl" id="sumCount">
+              0 reviews
+            </div>
+
+          </div>
+
+
+          <div class="xh-stats-right" id="bars">
+
+            <div class="xh-bar-row" data-s="5">
+              <span class="xh-bar-lbl">5</span>
+              <div class="xh-bar-track">
+                <div class="xh-bar-fill"></div>
+              </div>
+              <span class="xh-bar-cnt">0</span>
+            </div>
+
+            <div class="xh-bar-row" data-s="4">
+              <span class="xh-bar-lbl">4</span>
+              <div class="xh-bar-track">
+                <div class="xh-bar-fill"></div>
+              </div>
+              <span class="xh-bar-cnt">0</span>
+            </div>
+
+            <div class="xh-bar-row" data-s="3">
+              <span class="xh-bar-lbl">3</span>
+              <div class="xh-bar-track">
+                <div class="xh-bar-fill"></div>
+              </div>
+              <span class="xh-bar-cnt">0</span>
+            </div>
+
+            <div class="xh-bar-row" data-s="2">
+              <span class="xh-bar-lbl">2</span>
+              <div class="xh-bar-track">
+                <div class="xh-bar-fill"></div>
+              </div>
+              <span class="xh-bar-cnt">0</span>
+            </div>
+
+            <div class="xh-bar-row" data-s="1">
+              <span class="xh-bar-lbl">1</span>
+              <div class="xh-bar-track">
+                <div class="xh-bar-fill"></div>
+              </div>
+              <span class="xh-bar-cnt">0</span>
+            </div>
+
+          </div>
+
+
+          <div class="xh-pending-public" id="pendingPublicCount">
+            <b>0</b> reviews waiting confirmation.
+            Pending ratings are not included in the public average.
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="xh-section" id="posted-reviews">
+
+      <div class="xh-shell">
+
+        <div class="xh-head xh-reveal">
+
+          <div>
+
+            <div class="xh-kicker">
+              <i class="fa-regular fa-message" aria-hidden="true"></i>
+              Public Reviews
+            </div>
+
+            <h2>Posted Reviews</h2>
+
+          </div>
+
+          <p>
+            Use the search bar to find public reviews by name, feature, or review text.
+          </p>
+
+        </div>
+
+
+        <div class="xh-reviews-card xh-reveal">
+
+          <div class="xh-review-toolbar">
+
+            <div class="xh-review-note">
+              Approved reviews appear below in a clean X Horizon layout.
+            </div>
+
+            <div class="xh-filter-row">
+
+              <div class="xh-search-box">
+
+                <input class="xh-search-input" id="reviewSearch" placeholder="Search reviews" autocomplete="off">
+
+              </div>
+
+
+              <select class="xh-sort" id="starFilter">
+
+                <option value="all">All Stars</option>
+                <option value="5">5 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="2">2 Stars</option>
+                <option value="1">1 Star</option>
+
+              </select>
+
+
+              <select class="xh-sort" id="sortMode">
+
+                <option value="newest">Newest First</option>
+                <option value="highest">Highest Rated</option>
+                <option value="lowest">Lowest Rated</option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <div class="xh-review-console" id="reviewConsole">
+
+            <div class="xh-console-header">
+
+              <div>
+
+                <div class="xh-console-title">
+                  Review Console
+                </div>
+
+                <p class="xh-console-note">
+                  Pending reviews appear here for approval and moderation.
+                </p>
+
+              </div>
+
+
+              <div class="xh-console-meta">
+
+                <span class="xh-console-count" id="pendingCount">
+                  0 pending
+                </span>
+
+                <button class="xh-console-close" id="consoleLockBtn" type="button" aria-label="Lock review console">
+                  <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                  Lock
+                </button>
+
+              </div>
+
+            </div>
+
+
+            <div class="xh-pending-grid" id="pendingList">
+              <div class="xh-empty">
+                No pending reviews.
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="xh-review-list" id="reviewsList">
+
+            <div class="xh-empty">
+              No approved reviews yet — be the first explorer!
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<div class="xh-submit-popup" id="submitPopup" role="dialog" aria-modal="true" aria-labelledby="submitPopupTitle">
+
+  <div class="xh-submit-box">
+
+    <button class="xh-popup-close" type="button" id="submitPopupClose" aria-label="Close message">
+      ×
+    </button>
+
+    <div class="xh-submit-icon success" id="submitPopupIcon">
+      <i class="fa-solid fa-check" aria-hidden="true"></i>
+    </div>
+
+    <h3 class="xh-submit-title" id="submitPopupTitle">
+      Review submitted
+    </h3>
+
+    <p class="xh-submit-text" id="submitPopupText">
+      Your review has been submitted and will be published after confirmation.
+      This pending system keeps the community clean by stopping spam,
+      abusive language, and bad words before they appear publicly.
+    </p>
+
+    <button class="xh-popup-ok" type="button" id="submitPopupOk">
+      <i class="fa-solid fa-check" aria-hidden="true"></i>
+      OK
+    </button>
+
+  </div>
+
+</div>
+
+
+<div class="xh-toast" id="xhToast">
+  Done
+</div>
+
+
+<script type="module">
+
+import {
+  initializeApp,
+  getApps
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
+import {
+  getAuth,
+  signInWithCustomToken,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+import {
+  getFunctions,
+  httpsCallable
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  onSnapshot,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  increment
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js"; 
+ 
+ 
+const fallbackFirebaseConfig = { 
+ 
+  apiKey: "AIzaSyAHcR5KPQcn4bCAnRHRVvshwge65ilqFjs", 
+ 
+  authDomain: "astro-x-08.firebaseapp.com", 
+ 
+  projectId: "astro-x-08", 
+ 
+  storageBucket: "astro-x-08.firebasestorage.app", 
+ 
+  messagingSenderId: "707443922110", 
+ 
+  appId: "1:707443922110:web:ed5c454960051092edfaef", 
+ 
+  measurementId: "G-4S9NDS5V92" 
+ 
+}; 
+ 
+ 
+const firebaseConfig = 
+  window.XHORIZON_FIREBASE_CONFIG || 
+  window.XHorizonFirebaseConfig || 
+  fallbackFirebaseConfig; 
+ 
+ 
+function configured(cfg){ 
+ 
+  return cfg && 
+    cfg.apiKey && 
+    !String(cfg.apiKey).includes("YOUR_") && 
+    cfg.projectId && 
+    !String(cfg.projectId).includes("YOUR_"); 
+ 
+} 
+ 
+ 
+let app = null; 
+let auth = null; 
+let functions = null; 
+let db = null; 
+ 
+ 
+try{ 
+ 
+  if(configured(firebaseConfig)){ 
+ 
+    app = 
+      getApps().length 
+        ? getApps()[0] 
+        : initializeApp(firebaseConfig); 
+ 
+    auth = getAuth(app); 
+ 
+    functions = getFunctions(app); 
+ 
+    db = getFirestore(app); 
+ 
+  } 
+ 
+}catch(error){ 
+ 
+  console.error( 
+    "Firebase initialization failed:", 
+    error 
+  ); 
+ 
+} 
+ 
+ 
+if(configured(firebaseConfig) && !window.XHorizonAdmin){ 
+ 
+  window.XHorizonAdmin = { 
+ 
+    async unlock(key, done){ 
+ 
+      const cleanKey = 
+        String(key || "").trim(); 
+ 
+      if(!cleanKey || !auth || !functions) 
+        return false; 
+ 
+      try{ 
+ 
+        const verifyAdminKey = 
+          httpsCallable( 
+            functions, 
+            "verifyAdminKey" 
+          ); 
+ 
+        const result = 
+          await verifyAdminKey({ 
+            key: cleanKey 
+          }); 
+ 
+        const data = 
+          result && result.data 
+            ? result.data 
+            : {}; 
+ 
+        const customToken = 
+          data.token || 
+          data.customToken || 
+          data.firebaseToken || 
+          ""; 
+ 
+        if(customToken) 
+          await signInWithCustomToken( 
+            auth, 
+            customToken 
+          ); 
+ 
+        const user = 
+          auth.currentUser; 
+ 
+        if(!user) 
+          return false; 
+ 
+        const tokenResult = 
+          await user.getIdTokenResult(true); 
+ 
+        const allowed = 
+          tokenResult && 
+          tokenResult.claims && 
+          tokenResult.claims.admin === true; 
+ 
+        if(allowed){ 
+ 
+          document.body.classList.add( 
+            "review-console-on" 
+          ); 
+ 
+          if(typeof done === "function") 
+            done(); 
+ 
+          return true; 
+ 
+        } 
+ 
+        return false; 
+ 
+      }catch(error){ 
+ 
+        console.error( 
+          "X Horizon unlock failed:", 
+          error 
+        ); 
+ 
+        return false; 
+ 
+      } 
+ 
+    } 
+ 
+  }; 
+ 
+} 
+ 
+ 
+const LABELS = [ 
+  "", 
+  "Terrible", 
+  "Poor", 
+  "Okay", 
+  "Good", 
+  "Excellent" 
+]; 
+ 
+ 
+let selectedStars = 0; 
+let reviews = []; 
+let pendingReviews = []; 
+let reviewComments = {}; 
+let openComments = new Set(); 
+ 
+let unsubscribePending = null; 
+let unsubscribeComments = null; 
+ 
+let consoleOpen = false; 
+ 
+ 
+const ODOO_USER = { 
+  loaded:false, 
+  uid:0, 
+  partnerId:0, 
+  name:"", 
+  avatar:"" 
+}; 
+ 
+ 
+let odooIdentityReady = 
+  Promise.resolve(false); 
+ 
+ 
+const $ = ( 
+  s, 
+  r = document 
+) => r.querySelector(s); 
+ 
+ 
+const $$ = ( 
+  s, 
+  r = document 
+) => Array.from( 
+  r.querySelectorAll(s) 
+); 
+ 
+ 
+async function odooJsonRpc( 
+  url, 
+  params = {} 
+){ 
+ 
+  const response = 
+    await fetch( 
+      url, 
+      { 
+        method:"POST", 
+        credentials:"same-origin", 
+        headers:{ 
+          "Content-Type": 
+            "application/json" 
+        }, 
+        body:JSON.stringify({ 
+          jsonrpc:"2.0", 
+          method:"call", 
+          params, 
+          id:Date.now() 
+        }) 
+      } 
+    ); 
+ 
+  if(!response.ok) 
+    throw new Error( 
+      `Odoo request failed (${response.status})` 
+    ); 
+ 
+  const payload = 
+    await response.json(); 
+ 
+  if(payload.error){ 
+ 
+    throw new Error( 
+      payload.error?.data?.message || 
+      payload.error?.message || 
+      "Odoo request failed" 
+    ); 
+ 
+  } 
+ 
+  return payload.result; 
+ 
+} 
+ 
+ 
+async function imageToDataUrl(url){ 
+ 
+  try{ 
+ 
+    const response = 
+      await fetch( 
+        url, 
+        { 
+          credentials:"same-origin", 
+          cache:"no-store" 
+        } 
+      ); 
+ 
+    if(!response.ok) 
+      return ""; 
+ 
+    const blob = 
+      await response.blob(); 
+ 
+    if(!blob.type.startsWith("image/")) 
+      return ""; 
+ 
+    return await new Promise(resolve => { 
+ 
+      const reader = 
+        new FileReader(); 
+ 
+      reader.onload = () => 
+        resolve( 
+          typeof reader.result === "string" 
+            ? reader.result 
+            : "" 
+        ); 
+ 
+      reader.onerror = () => 
+        resolve(""); 
+ 
+      reader.readAsDataURL(blob); 
+ 
+    }); 
+ 
+  }catch(error){ 
+ 
+    console.warn( 
+      "X Horizon profile picture could not be loaded:", 
+      error 
+    ); 
+ 
+    return ""; 
+ 
+  } 
+ 
+} 
+ 
+ 
+async function loadOdooIdentity(){ 
+ 
+  try{ 
+ 
+    const session = 
+      await odooJsonRpc( 
+        "/web/session/get_session_info", 
+        {} 
+      ); 
+ 
+    const uid = 
+      Number( 
+        session?.uid || 
+        session?.user_id || 
+        0 
+      ); 
+ 
+    if(!uid) 
+      throw new Error( 
+        "No logged-in X Horizon user" 
+      ); 
+ 
+ 
+    let name = 
+      String( 
+        session?.name || 
+        session?.username || 
+        "" 
+      ).trim(); 
+ 
+ 
+    let partnerId = 
+      Array.isArray(session?.partner_id) 
+        ? Number( 
+            session.partner_id[0] || 0 
+          ) 
+        : Number( 
+            session?.partner_id || 0 
+          ); 
+ 
+ 
+    if(!name || !partnerId){ 
+ 
+      const rows = 
+        await odooJsonRpc( 
+          "/web/dataset/call_kw/res.users/read", 
+          { 
+            model:"res.users", 
+            method:"read", 
+            args:[ 
+              [uid], 
+              ["name","partner_id"] 
+            ], 
+            kwargs:{} 
+          } 
+        ); 
+ 
+      const user = 
+        Array.isArray(rows) 
+          ? rows[0] 
+          : null; 
+ 
+      name = 
+        String( 
+          user?.name || 
+          name || 
+          "" 
+        ).trim(); 
+ 
+      partnerId = 
+        Array.isArray(user?.partner_id) 
+          ? Number( 
+              user.partner_id[0] || 
+              partnerId || 
+              0 
+            ) 
+          : Number( 
+              user?.partner_id || 
+              partnerId || 
+              0 
+            ); 
+ 
+    } 
+ 
+ 
+    if(!name || !partnerId) 
+      throw new Error( 
+        "X Horizon identity is incomplete" 
+      ); 
+ 
+ 
+    const avatarUrl = 
+      `/web/image/res.partner/${partnerId}/image_128`; 
+ 
+    const avatar = 
+      await imageToDataUrl( 
+        avatarUrl 
+      ); 
+ 
+ 
+    ODOO_USER.loaded = true; 
+    ODOO_USER.uid = uid; 
+    ODOO_USER.partnerId = partnerId; 
+    ODOO_USER.name = name; 
+    ODOO_USER.avatar = 
+      avatar || avatarUrl; 
+ 
+ 
+    const nameInput = 
+      $("#inpName"); 
+ 
+    const formAvatar = 
+      $("#odooFormAvatar"); 
+ 
+ 
+    if(nameInput) 
+      nameInput.value = name; 
+ 
+ 
+    if(formAvatar){ 
+ 
+      formAvatar.innerHTML = 
+        ODOO_USER.avatar 
+          ? `<img src="${escAttr(ODOO_USER.avatar)}" alt="">` 
+          : esc(getInitials(name)); 
+ 
+    } 
+ 
+ 
+    renderReviews(); 
+ 
+    return true; 
+ 
+ 
+  }catch(error){ 
+ 
+    console.warn( 
+      "X Horizon user identity unavailable:", 
+      error 
+    ); 
+ 
+    ODOO_USER.loaded = false; 
+ 
+ 
+    const nameInput = 
+      $("#inpName"); 
+ 
+    const formAvatar = 
+      $("#odooFormAvatar"); 
+ 
+ 
+    if(nameInput){ 
+ 
+      nameInput.value = ""; 
+ 
+      nameInput.placeholder = 
+        "Sign in to X Horizon"; 
+ 
+    } 
+ 
+ 
+    if(formAvatar) 
+      formAvatar.textContent = "—"; 
+ 
+ 
+    return false; 
+ 
+  } 
+ 
+} 
+ 
+ 
+function startLoader(){ 
+ 
+  const l = $("#xhLoader"); 
+ 
+  if(!l) 
+    return hideLoader(); 
+ 
+  requestAnimationFrame(() => 
+    l.classList.add("loading") 
+  ); 
+ 
+} 
+ 
+ 
+function hideLoader(){ 
+ 
+  const l = 
+    $("#xhLoader"); 
+ 
+  document.body.classList.remove( 
+    "xh-loading" 
+  ); 
+ 
+  document.body.classList.add( 
+    "xh-ready" 
+  ); 
+ 
+  if(l) 
+    l.classList.add("done"); 
+ 
+} 
+ 
+ 
+document.addEventListener( 
+  "DOMContentLoaded", 
+  () => { 
+ 
+    startLoader(); 
+ 
+    setTimeout( 
+      hideLoader, 
+      2350 
+    ); 
+ 
+  } 
+); 
+ 
+ 
+setTimeout( 
+  hideLoader, 
+  4200 
+); 
+ 
+ 
+const toastEl = 
+  $("#xhToast"); 
+ 
+ 
+function toast(msg){ 
+ 
+  if(!toastEl) 
+    return; 
+ 
+  toastEl.textContent = msg; 
+ 
+  toastEl.classList.add("show"); 
+ 
+  setTimeout( 
+    () => 
+      toastEl.classList.remove("show"), 
+    1800 
+  ); 
+ 
+} 
+ 
+ 
+const revealObs = 
+  new IntersectionObserver( 
+    entries => 
+      entries.forEach(e => { 
+ 
+        if(e.isIntersecting){ 
+ 
+          e.target.classList.add( 
+            "visible" 
+          ); 
+ 
+          revealObs.unobserve( 
+            e.target 
+          ); 
+ 
+        } 
+ 
+      }), 
+    { 
+      threshold:.12, 
+      rootMargin: 
+        "0px 0px -40px 0px" 
+    } 
+  ); 
+ 
+ 
+$$(".xh-reveal").forEach( 
+  el => 
+    revealObs.observe(el) 
+); 
+ 
+ 
+function esc(s){ 
+ 
+  return String(s ?? "") 
+    .replace(/&/g,"&amp;") 
+    .replace(/</g,"&lt;") 
+    .replace(/>/g,"&gt;") 
+    .replace(/"/g,"&quot;") 
+    .replace(/'/g,"&#39;"); 
+ 
+} 
+ 
+ 
+function escAttr(s){ 
+ 
+  return esc(s); 
+ 
+} 
+ 
+ 
+function getMillis(value){ 
+ 
+  return value && 
+    typeof value.toMillis === "function" 
+      ? value.toMillis() 
+      : 0; 
+ 
+} 
+ 
+ 
+function getVotedReviews(){ 
+
+  try{ 
+
+    return JSON.parse( 
+      localStorage.getItem( 
+        "astrox_voted_reviews" 
+      ) || "{}" 
+    ); 
+
+  }catch(error){ 
+
+    return {}; 
+
+  } 
+
+} 
+ 
+ 
+function getVotedType(id){ 
+
+  return getVotedReviews()[String(id)] || null; 
+
+} 
+ 
+ 
+function markVoted(id, type){ 
+
+  const voted = 
+    getVotedReviews(); 
+
+  voted[String(id)] = type; 
+
+  localStorage.setItem( 
+    "astrox_voted_reviews", 
+    JSON.stringify(voted) 
+  ); 
+
+} 
+ 
+ 
+function getInitials(name){ 
+ 
+  const parts = 
+    String( 
+      name || 
+      "Anonymous Explorer" 
+    ) 
+    .trim() 
+    .split(/\s+/) 
+    .filter(Boolean); 
+ 
+ 
+  if(parts.length >= 2){ 
+ 
+    return ( 
+      parts[0][0] + 
+      parts[1][0] 
+    ).toUpperCase(); 
+ 
+  } 
+ 
+ 
+  return String( 
+    parts[0] || 
+    "AE" 
+  ) 
+  .substring(0,2) 
+  .toUpperCase(); 
+ 
+} 
+ 
+ 
+function avatarMarkup(record){ 
+ 
+  const avatar = 
+    String( 
+      record?.avatar || "" 
+    ).trim(); 
+ 
+ 
+  return avatar 
+    ? `<img src="${escAttr(avatar)}" alt="">` 
+    : esc( 
+        getInitials(record?.name) 
+      ); 
+ 
+} 
+ 
+ 
+function starIcons(count){ 
+ 
+  const safeCount = 
+    Math.max( 
+      0, 
+      Math.min( 
+        5, 
+        Number(count || 0) 
+      ) 
+    ); 
+ 
+ 
+  return ( 
+    "★".repeat(safeCount) + 
+    "☆".repeat(5 - safeCount) 
+  ); 
+ 
+} 
+ 
+ 
+function litStars(n){ 
+ 
+  $$(".xh-star").forEach( 
+    b => 
+      b.classList.toggle( 
+        "lit", 
+        Number(b.dataset.v) <= n 
+      ) 
+  ); 
+ 
+} 
+ 
+ 
+$$(".xh-star").forEach(b => { 
+ 
+  b.addEventListener( 
+    "mouseenter", 
+    () => 
+      litStars( 
+        Number(b.dataset.v) 
+      ) 
+  ); 
+ 
+ 
+  b.addEventListener( 
+    "mouseleave", 
+    () => 
+      litStars(selectedStars) 
+  ); 
+ 
+ 
+  b.addEventListener( 
+    "click", 
+    () => { 
+ 
+      selectedStars = 
+        Number(b.dataset.v); 
+ 
+      litStars(selectedStars); 
+ 
+      $("#starLabel").textContent = 
+        LABELS[selectedStars]; 
+ 
+    } 
+  ); 
+ 
+}); 
+ 
+ 
+function showSubmitPopup( 
+  title, 
+  message, 
+  type = "success" 
+){ 
+ 
+  const p = 
+    $("#submitPopup"); 
+ 
+  const icon = 
+    $("#submitPopupIcon"); 
+ 
+  const isError = 
+    type === "error"; 
+ 
+ 
+  $("#submitPopupTitle").textContent = 
+    title; 
+ 
+  $("#submitPopupText").textContent = 
+    message; 
+ 
+ 
+  if(icon){ 
+ 
+    icon.classList.toggle( 
+      "error", 
+      isError 
+    ); 
+ 
+    icon.classList.toggle( 
+      "success", 
+      !isError 
+    ); 
+ 
+ 
+    icon.innerHTML = 
+      isError 
+        ? '<i class="fa-solid fa-xmark" aria-hidden="true"></i>' 
+        : '<i class="fa-solid fa-check" aria-hidden="true"></i>'; 
+ 
+  } 
+ 
+ 
+  if(p) 
+    p.classList.add("on"); 
+ 
+} 
+ 
+ 
+function closeSubmitPopup(){ 
+ 
+  const p = 
+    $("#submitPopup"); 
+ 
+  if(p) 
+    p.classList.remove("on"); 
+ 
+} 
+ 
+ 
+$("#submitPopupClose") 
+  .addEventListener( 
+    "click", 
+    closeSubmitPopup 
+  ); 
+ 
+ 
+$("#submitPopupOk") 
+  .addEventListener( 
+    "click", 
+    closeSubmitPopup 
+  ); 
+ 
+ 
+document.addEventListener( 
+  "keydown", 
+  e => { 
+ 
+    if(e.key === "Escape") 
+      closeSubmitPopup(); 
+ 
+  } 
+); 
+ 
+ 
+async function submitReview(){ 
+ 
+  if(!db){ 
+ 
+    showSubmitPopup( 
+      "Firebase not ready", 
+      "Review storage is not configured yet.", 
+      "error" 
+    ); 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  await odooIdentityReady; 
+ 
+ 
+  if(!ODOO_USER.loaded){ 
+ 
+    showSubmitPopup( 
+      "X Horizon login required", 
+      "Please sign in to your X Horizon account before submitting a review.", 
+      "error" 
+    ); 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  const last = 
+    localStorage.getItem( 
+      "astrox_last_review_time" 
+    ); 
+ 
+ 
+  const now = 
+    Date.now(); 
+ 
+ 
+  if( 
+    last && 
+    now - Number(last) < 86400000 
+  ){ 
+ 
+    showSubmitPopup( 
+      "Review already submitted", 
+      "You already submitted a review recently. Please try again later.", 
+      "error" 
+    ); 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  const name = 
+    ODOO_USER.name; 
+ 
+ 
+  const favoriteFeature = 
+    $("#inpFeature") 
+      .value 
+      .trim() || 
+    "Learning Paths"; 
+ 
+ 
+  const text = 
+    $("#inpText") 
+      .value 
+      .trim(); 
+ 
+ 
+  const trouble = 
+    $("#inpTrouble") 
+      .value 
+      .trim(); 
+ 
+ 
+  if(!selectedStars){ 
+ 
+    showSubmitPopup( 
+      "Rating required", 
+      "Please select a star rating before submitting your review.", 
+      "error" 
+    ); 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  if(!name){ 
+ 
+    showSubmitPopup( 
+      "Name required", 
+      "Please enter your name before submitting your review.", 
+      "error" 
+    ); 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  if(!text){ 
+ 
+    showSubmitPopup( 
+      "Review required", 
+      "Please write your experience before submitting your review.", 
+      "error" 
+    ); 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  const btn = 
+    $("#submitBtn"); 
+ 
+ 
+  btn.disabled = true; 
+ 
+  btn.innerHTML = 
+    '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Submitting...'; 
+ 
+ 
+  try{ 
+ 
+    await addDoc( 
+      collection( 
+        db, 
+        "astrox_reviews" 
+      ), 
+      { 
+        name, 
+        avatar:ODOO_USER.avatar, 
+        odooUid:ODOO_USER.uid, 
+        odooPartnerId:ODOO_USER.partnerId, 
+        favoriteFeature, 
+        text, 
+        trouble, 
+        stars:selectedStars, 
+        likes:0, 
+        dislikes:0, 
+        commentCount:0, 
+        status:"pending", 
+        moderationStatus:"needs_review", 
+        moderationNote: 
+          "Manual confirmation helps filter spam, abusive language, and bad words before public display.", 
+        source:"xhorizon_review_form", 
+        date:new Date() 
+          .toLocaleDateString( 
+            "en-US", 
+            { 
+              month:"short", 
+              day:"numeric", 
+              year:"numeric" 
+            } 
+          ), 
+        createdAt:serverTimestamp() 
+      } 
+    ); 
+ 
+ 
+    localStorage.setItem( 
+      "astrox_last_review_time", 
+      String(now) 
+    ); 
+ 
+ 
+    $("#inpText").value = ""; 
+ 
+    $("#inpTrouble").value = ""; 
+ 
+    $("#inpFeature").value = 
+      "Learning Paths"; 
+ 
+ 
+    selectedStars = 0; 
+ 
+    litStars(0); 
+ 
+    $("#starLabel").textContent = 
+      "Select your rating"; 
+ 
+ 
+    showSubmitPopup( 
+      "Review submitted", 
+      "Your review has been submitted successfully. It will be published after confirmation. This pending system keeps the community clean and helps avoid spam, abusive language, and bad words.", 
+      "success" 
+    ); 
+ 
+ 
+  }catch(error){ 
+ 
+    console.error(error); 
+ 
+    showSubmitPopup( 
+      "Review not saved", 
+      "The review could not be saved. Check Firebase rules and try again.", 
+      "error" 
+    ); 
+ 
+ 
+  }finally{ 
+ 
+    btn.disabled = false; 
+ 
+    btn.innerHTML = 
+      '<i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Submit Review'; 
+ 
+  } 
+ 
+} 
+ 
+ 
+$("#submitBtn") 
+  .addEventListener( 
+    "click", 
+    submitReview 
+  ); 
+ 
+ 
+function loadReviews(){ 
+ 
+  if(!db){ 
+ 
+    renderReviews(); 
+ 
+    renderStats(); 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  const q = 
+    query( 
+      collection( 
+        db, 
+        "astrox_reviews" 
+      ), 
+      where( 
+        "status", 
+        "==", 
+        "approved" 
+      ) 
+    ); 
+ 
+ 
+  onSnapshot( 
+    q, 
+    snapshot => { 
+ 
+      reviews = []; 
+ 
+      snapshot.forEach(d => { 
+ 
+        reviews.push({ 
+          _id:d.id, 
+          ...d.data() 
+        }); 
+ 
+      }); 
+ 
+ 
+      renderReviews(); 
+ 
+      renderStats(); 
+ 
+    }, 
+    error => { 
+ 
+      console.error(error); 
+ 
+      toast( 
+        "Could not load reviews." 
+      ); 
+ 
+    } 
+  ); 
+ 
+} 
+ 
+ 
+function loadPendingReviews(){ 
+ 
+  if( 
+    !db || 
+    unsubscribePending 
+  ) 
+    return; 
+ 
+ 
+  const q = 
+    query( 
+      collection( 
+        db, 
+        "astrox_reviews" 
+      ), 
+      where( 
+        "status", 
+        "==", 
+        "pending" 
+      ) 
+    ); 
+ 
+ 
+  unsubscribePending = 
+    onSnapshot( 
+      q, 
+      snapshot => { 
+ 
+        pendingReviews = []; 
+ 
+        snapshot.forEach(d => { 
+ 
+          pendingReviews.push({ 
+            _id:d.id, 
+            ...d.data() 
+          }); 
+ 
+        }); 
+ 
+ 
+        renderPendingReviews(); 
+ 
+        updatePendingCount(); 
+ 
+      }, 
+      error => { 
+ 
+        console.error(error); 
+ 
+        updatePendingCount(); 
+ 
+        if(consoleOpen) 
+          toast( 
+            "Could not load review queue." 
+          ); 
+ 
+      } 
+    ); 
+ 
+} 
+ 
+ 
+function loadComments(){ 
+ 
+  if( 
+    !db || 
+    unsubscribeComments 
+  ) 
+    return; 
+ 
+ 
+  const q = 
+    query( 
+      collection( 
+        db, 
+        "astrox_review_comments" 
+      ), 
+      where( 
+        "status", 
+        "==", 
+        "public" 
+      ), 
+      where( 
+        "hidden", 
+        "==", 
+        false 
+      ) 
+    ); 
+ 
+ 
+  unsubscribeComments = 
+    onSnapshot( 
+      q, 
+      snapshot => { 
+ 
+        reviewComments = {}; 
+ 
+ 
+        snapshot.forEach(d => { 
+ 
+          const data = { 
+            _id:d.id, 
+            ...d.data() 
+          }; 
+ 
+ 
+          const reviewId = 
+            String( 
+              data.reviewId || "" 
+            ); 
+ 
+ 
+          if(!reviewId) 
+            return; 
+ 
+ 
+          if(!reviewComments[reviewId]) 
+            reviewComments[reviewId] = []; 
+ 
+ 
+          reviewComments[reviewId] 
+            .push(data); 
+ 
+        }); 
+ 
+ 
+        Object.keys( 
+          reviewComments 
+        ).forEach(id => { 
+ 
+          reviewComments[id].sort( 
+            (a,b) => 
+              getMillis(a.createdAt) - 
+              getMillis(b.createdAt) 
+          ); 
+ 
+        }); 
+ 
+ 
+        renderReviews(); 
+ 
+      }, 
+      error => { 
+ 
+        console.error(error); 
+ 
+        toast( 
+          "Could not load comments. Check comment read rules/query." 
+        ); 
+ 
+      } 
+    ); 
+ 
+} 
+ 
+ 
+function renderCommentItems( 
+  reviewId 
+){ 
+ 
+  const list = 
+    reviewComments[reviewId] || []; 
+ 
+ 
+  if(!list.length) 
+    return ` 
+      <div class="xh-comment-empty"> 
+        No comments yet. 
+      </div> 
+    `; 
+ 
+ 
+  return ` 
+    <div class="xh-comment-list"> 
+ 
+      ${list.map(c => ` 
+ 
+        <div class="xh-comment-item"> 
+ 
+          <div class="xh-comment-top"> 
+ 
+            <span class="xh-comment-author-wrap"> 
+ 
+              <span class="xh-comment-avatar"> 
+                ${avatarMarkup(c)} 
+              </span> 
+ 
+              <span class="xh-comment-author"> 
+                ${esc(c.name || "Visitor")} 
+              </span> 
+ 
+            </span> 
+ 
+            <span class="xh-comment-date"> 
+              ${esc(c.date || "")} 
+            </span> 
+ 
+          </div> 
+ 
+          <div class="xh-comment-text"> 
+            ${esc(c.text || "")} 
+          </div> 
+ 
+        </div> 
+ 
+      `).join("")} 
+ 
+    </div> 
+  `; 
+ 
+} 
+ 
+ 
+function getSearchTerm(){ 
+ 
+  return ( 
+    $("#reviewSearch")?.value || 
+    "" 
+  ) 
+  .trim() 
+  .toLowerCase(); 
+ 
+} 
+ 
+ 
+function renderReviews(){ 
+ 
+  const el = 
+    $("#reviewsList"); 
+ 
+ 
+  const mode = 
+    $("#sortMode")?.value || 
+    "newest"; 
+ 
+ 
+  const starMode = 
+    $("#starFilter")?.value || 
+    "all"; 
+ 
+ 
+  const term = 
+    getSearchTerm(); 
+ 
+ 
+  let list = 
+    [...reviews]; 
+ 
+ 
+  if(starMode !== "all"){ 
+ 
+    list = 
+      list.filter( 
+        r => 
+          String( 
+            r.stars || "" 
+          ) === starMode 
+      ); 
+ 
+  } 
+ 
+ 
+  if(term){ 
+ 
+    list = 
+      list.filter( 
+        r => 
+          [ 
+            r.name, 
+            r.text, 
+            r.favoriteFeature, 
+            r.trouble 
+          ] 
+          .some( 
+            v => 
+              String(v || "") 
+                .toLowerCase() 
+                .includes(term) 
+          ) 
+      ); 
+ 
+  } 
+ 
+ 
+  if(mode === "highest"){ 
+ 
+    list.sort( 
+      (a,b) => 
+        (b.stars || 0) - 
+        (a.stars || 0) 
+    ); 
+ 
+  }else if(mode === "lowest"){ 
+ 
+    list.sort( 
+      (a,b) => 
+        (a.stars || 0) - 
+        (b.stars || 0) 
+    ); 
+ 
+  }else{ 
+ 
+    list.sort( 
+      (a,b) => 
+        getMillis(b.createdAt) - 
+        getMillis(a.createdAt) 
+    ); 
+ 
+  } 
+ 
+ 
+  if(!list.length){ 
+ 
+    el.innerHTML = 
+      '<div class="xh-empty">No matching approved reviews found.</div>'; 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  el.innerHTML = 
+    list.map(r => { 
+ 
+      const reviewId = 
+        String( 
+          r._id || "" 
+        ); 
+ 
+ 
+      const comments = 
+        reviewComments[reviewId] || 
+        []; 
+ 
+ 
+      const votedType = 
+        getVotedType(reviewId); 
+ 
+ 
+      return ` 
+ 
+        <article 
+          class="xh-review-item" 
+          data-review-id="${escAttr(reviewId)}" 
+        > 
+ 
+          <div class="xh-review-top"> 
+ 
+            <div class="xh-review-head"> 
+ 
+              <div class="xh-avatar"> 
+                ${avatarMarkup(r)} 
+              </div> 
+ 
+              <div> 
+ 
+                <div class="xh-review-name"> 
+                  ${esc( 
+                    r.name || 
+                    "Anonymous Explorer" 
+                  )} 
+                </div> 
+ 
+                <div class="xh-review-date"> 
+                  ${esc(r.date || "")} 
+                </div> 
+ 
+              </div> 
+ 
+            </div> 
+ 
+            <div class="xh-review-stars"> 
+              ${starIcons(r.stars || 0)} 
+            </div> 
+ 
+          </div> 
+ 
+ 
+          <div class="xh-review-meta"> 
+ 
+            ${ 
+              r.favoriteFeature 
+                ? ` 
+                  <span class="xh-chip"> 
+                    ${esc(r.favoriteFeature)} 
+                  </span> 
+                ` 
+                : "" 
+            } 
+ 
+          </div> 
+ 
+ 
+          <div class="xh-review-text"> 
+            ${esc(r.text || "")} 
+          </div> 
+ 
+ 
+          <div 
+            class="xh-review-actions" 
+            aria-label="Review reactions" 
+          > 
+ 
+            <button 
+              class="xh-vote-btn" 
+              type="button" 
+              data-vote="like" 
+              data-review-id="${escAttr(reviewId)}" 
+              ${votedType ? "disabled" : ""} 
+            > 
+ 
+              <i 
+                class="fa-solid fa-thumbs-up" 
+                aria-hidden="true" 
+              ></i> 
+ 
+              Like 
+ 
+              <span> 
+                ${Number(r.likes || 0)} 
+              </span> 
+ 
+            </button> 
+ 
+ 
+            <button 
+              class="xh-vote-btn" 
+              type="button" 
+              data-vote="dislike" 
+              data-review-id="${escAttr(reviewId)}" 
+              ${votedType ? "disabled" : ""} 
+            > 
+ 
+              <i 
+                class="fa-solid fa-thumbs-down" 
+                aria-hidden="true" 
+              ></i> 
+ 
+              Dislike 
+ 
+              <span> 
+                ${Number(r.dislikes || 0)} 
+              </span> 
+ 
+            </button> 
+ 
+          </div> 
+ 
+ 
+          <div 
+            class="xh-comments ${openComments.has(reviewId) ? "open" : ""}" 
+            data-comments-wrap="${escAttr(reviewId)}" 
+          > 
+ 
+            <div class="xh-comments-title"> 
+ 
+              <span> 
+ 
+                <i 
+                  class="fa-regular fa-comments" 
+                  aria-hidden="true" 
+                ></i> 
+ 
+                Comments 
+ 
+                <span> 
+                  ${comments.length} 
+                </span> 
+ 
+              </span> 
+ 
+ 
+              <button 
+                class="xh-comments-toggle" 
+                type="button" 
+                data-comments-toggle 
+                data-review-id="${escAttr(reviewId)}" 
+                aria-expanded="${openComments.has(reviewId) ? "true" : "false"}" 
+              > 
+ 
+                <i 
+                  class="fa-solid ${ 
+                    openComments.has(reviewId) 
+                      ? "fa-chevron-up" 
+                      : "fa-chevron-down" 
+                  }" 
+                  aria-hidden="true" 
+                ></i> 
+ 
+                ${ 
+                  openComments.has(reviewId) 
+                    ? "Hide" 
+                    : "Show" 
+                } 
+ 
+              </button> 
+ 
+            </div> 
+ 
+ 
+            <div class="xh-comments-body"> 
+ 
+              ${renderCommentItems(reviewId)} 
+ 
+ 
+              <div class="xh-comment-form"> 
+ 
+                <input 
+                  class="xh-comment-name" 
+                  data-comment-name 
+                  value="${escAttr(ODOO_USER.name)}" 
+                  placeholder="Sign in to X Horizon" 
+                  maxlength="60" 
+                  readonly 
+                  aria-readonly="true" 
+                > 
+ 
+ 
+                <textarea 
+                  class="xh-comment-textarea" 
+                  data-comment-text 
+                  placeholder="Write a public comment" 
+                  maxlength="350" 
+                ></textarea> 
+ 
+ 
+                <button 
+                  class="xh-comment-submit" 
+                  type="button" 
+                  data-comment-submit 
+                  data-review-id="${escAttr(reviewId)}" 
+                > 
+ 
+                  <i 
+                    class="fa-solid fa-paper-plane" 
+                    aria-hidden="true" 
+                  ></i> 
+ 
+                  Post 
+ 
+                </button> 
+ 
+              </div> 
+ 
+            </div> 
+ 
+          </div> 
+ 
+        </article> 
+ 
+      `; 
+ 
+    }).join(""); 
+ 
+} 
+ 
+ 
+function renderStats(){ 
+ 
+  const total = 
+    reviews.length; 
+ 
+ 
+  const avg = 
+    total 
+      ? reviews.reduce( 
+          (s,r) => 
+            s + (r.stars || 0), 
+          0 
+        ) / total 
+      : 0; 
+ 
+ 
+  const avgStr = 
+    total 
+      ? avg.toFixed(1) 
+      : "—"; 
+ 
+ 
+  $("#heroAvg").textContent = 
+    total 
+      ? avgStr + " ★" 
+      : "—"; 
+ 
+ 
+  $("#heroCount").textContent = 
+    total 
+      ? `Based on ${total} approved review${total !== 1 ? "s" : ""}` 
+      : "No approved reviews yet"; 
+ 
+ 
+  $("#sumAvg").textContent = 
+    avgStr; 
+ 
+ 
+  $("#sumCount").textContent = 
+    total 
+      ? `${total} approved review${total !== 1 ? "s" : ""}` 
+      : "0 reviews"; 
+ 
+ 
+  for(let s = 1; s <= 5; s++){ 
+ 
+    const cnt = 
+      reviews.filter( 
+        r => 
+          r.stars === s 
+      ).length; 
+ 
+ 
+    const pct = 
+      total 
+        ? Math.round( 
+            (cnt / total) * 100 
+          ) 
+        : 0; 
+ 
+ 
+    const row = 
+      $( 
+        `.xh-bar-row[data-s="${s}"]` 
+      ); 
+ 
+ 
+    if(row){ 
+ 
+      row.querySelector( 
+        ".xh-bar-fill" 
+      ).style.width = 
+        pct + "%"; 
+ 
+ 
+      row.querySelector( 
+        ".xh-bar-cnt" 
+      ).textContent = 
+        cnt; 
+ 
+    } 
+ 
+  } 
+ 
+} 
+ 
+ 
+function openReviewConsole(){ 
+ 
+  consoleOpen = true; 
+ 
+  document.body.classList.add( 
+    "review-console-on" 
+  ); 
+ 
+  loadPendingReviews(); 
+ 
+  renderPendingReviews(); 
+ 
+  updatePendingCount(); 
+ 
+  toast( 
+    "Review console opened." 
+  ); 
+ 
+} 
+ 
+ 
+async function closeReviewConsole(){ 
+ 
+  consoleOpen = false; 
+ 
+  document.body.classList.remove( 
+    "review-console-on" 
+  ); 
+ 
+  $("#reviewSearch").value = ""; 
+ 
+  renderReviews(); 
+ 
+  renderPendingReviews(); 
+ 
+  updatePendingCount(); 
+ 
+ 
+  try{ 
+ 
+    if( 
+      auth && 
+      auth.currentUser 
+    ){ 
+ 
+      await signOut(auth); 
+ 
+    } 
+ 
+  }catch(error){ 
+ 
+    console.error(error); 
+ 
+  } 
+ 
+ 
+  toast( 
+    "Review console locked." 
+  ); 
+ 
+} 
+ 
+ 
+function updatePendingCount(){ 
+ 
+  const count = 
+    pendingReviews.length; 
+ 
+ 
+  const el = 
+    $("#pendingCount"); 
+ 
+ 
+  const publicEl = 
+    $("#pendingPublicCount"); 
+ 
+ 
+  if(el) 
+    el.textContent = 
+      `${count} pending`; 
+ 
+ 
+  if(publicEl){ 
+ 
+    publicEl.innerHTML = 
+      `<b>${count}</b> review${count !== 1 ? "s" : ""} waiting confirmation. Pending ratings are not included in the public average.`; 
+ 
+  } 
+ 
+} 
+ 
+ 
+function renderPendingReviews(){ 
+ 
+  const el = 
+    $("#pendingList"); 
+ 
+ 
+  if(!el) 
+    return; 
+ 
+ 
+  if(!consoleOpen){ 
+ 
+    el.innerHTML = 
+      '<div class="xh-empty">Queue locked.</div>'; 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  const list = 
+    [...pendingReviews] 
+      .sort( 
+        (a,b) => 
+          getMillis(b.createdAt) - 
+          getMillis(a.createdAt) 
+      ); 
+ 
+ 
+  if(!list.length){ 
+ 
+    el.innerHTML = 
+      '<div class="xh-empty">No pending reviews.</div>'; 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  el.innerHTML = 
+    list.map(r => ` 
+ 
+      <article class="xh-pending-item"> 
+ 
+        <div class="xh-pending-top"> 
+ 
+          <div class="xh-review-head"> 
+ 
+            <div class="xh-avatar"> 
+              ${avatarMarkup(r)} 
+            </div> 
+ 
+            <div> 
+ 
+              <div class="xh-pending-name"> 
+                ${esc( 
+                  r.name || 
+                  "Anonymous Explorer" 
+                )} 
+              </div> 
+ 
+              <div class="xh-pending-date"> 
+                ${esc(r.date || "")} 
+              </div> 
+ 
+            </div> 
+ 
+          </div> 
+ 
+ 
+          <div class="xh-pending-stars"> 
+            ${starIcons(r.stars || 0)} 
+          </div> 
+ 
+        </div> 
+ 
+ 
+        <div class="xh-pending-meta"> 
+ 
+          ${ 
+            r.favoriteFeature 
+              ? ` 
+                <span class="xh-chip"> 
+                  ${esc(r.favoriteFeature)} 
+                </span> 
+              ` 
+              : "" 
+          } 
+ 
+        </div> 
+ 
+ 
+        <div class="xh-pending-text"> 
+          ${esc(r.text || "")} 
+        </div> 
+ 
+ 
+        ${ 
+          r.trouble 
+            ? ` 
+              <div class="xh-pending-detail"> 
+                <b>Trouble:</b> 
+                ${esc(r.trouble)} 
+              </div> 
+            ` 
+            : "" 
+        } 
+ 
+ 
+        <div class="xh-pending-actions"> 
+ 
+          <button 
+            class="xh-mini-btn xh-approve" 
+            type="button" 
+            data-review-action="approved" 
+            data-review-id="${escAttr(r._id)}" 
+          > 
+ 
+            <i 
+              class="fa-solid fa-check" 
+              aria-hidden="true" 
+            ></i> 
+ 
+            Approve 
+ 
+          </button> 
+ 
+ 
+          <button 
+            class="xh-mini-btn xh-reject" 
+            type="button" 
+            data-review-action="rejected" 
+            data-review-id="${escAttr(r._id)}" 
+          > 
+ 
+            <i 
+              class="fa-solid fa-xmark" 
+              aria-hidden="true" 
+            ></i> 
+ 
+            Reject 
+ 
+          </button> 
+ 
+        </div> 
+ 
+      </article> 
+ 
+    `).join(""); 
+ 
+} 
+ 
+ 
+async function setReviewStatus( 
+  id, 
+  status 
+){ 
+ 
+  if( 
+    !consoleOpen || 
+    !id || 
+    !db 
+  ) 
+    return; 
+ 
+ 
+  try{ 
+ 
+    await updateDoc( 
+      doc( 
+        db, 
+        "astrox_reviews", 
+        id 
+      ), 
+      { 
+        status, 
+ 
+        moderationStatus: 
+          status === "approved" 
+            ? "approved" 
+            : "rejected", 
+ 
+        moderationNote: 
+          status === "approved" 
+            ? "Approved for public display." 
+            : "Rejected during manual confirmation.", 
+ 
+        reviewedBy: 
+          auth && 
+          auth.currentUser 
+            ? auth.currentUser.uid 
+            : "admin", 
+ 
+        reviewedAt: 
+          serverTimestamp() 
+ 
+      } 
+    ); 
+ 
+ 
+    toast( 
+      status === "approved" 
+        ? "Review approved." 
+        : "Review rejected." 
+    ); 
+ 
+ 
+  }catch(error){ 
+ 
+    console.error(error); 
+ 
+    toast( 
+      "Action failed. Check Firestore update rules." 
+    ); 
+ 
+  } 
+ 
+} 
+ 
+ 
+/* 
+ * FIXED: 
+ * Like and Dislike are now limited to one vote per review, per browser. 
+ * The choice is remembered in localStorage so repeat clicks (or a page 
+ * reload) do not send another increment to Firestore. 
+ */ 
+async function voteReview( 
+  id, 
+  type 
+){ 
+ 
+  if( 
+    !db || 
+    !id || 
+    !["like","dislike"].includes(type) 
+  ) 
+    return; 
+ 
+ 
+  if(getVotedType(id)){ 
+ 
+    toast( 
+      "You already reacted to this review." 
+    ); 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  try{ 
+ 
+    await updateDoc( 
+      doc( 
+        db, 
+        "astrox_reviews", 
+        id 
+      ), 
+      { 
+        [ 
+          type === "like" 
+            ? "likes" 
+            : "dislikes" 
+        ]: 
+          increment(1) 
+      } 
+    ); 
+ 
+ 
+    markVoted(id, type); 
+ 
+    renderReviews(); 
+ 
+ 
+    toast( 
+      type === "like" 
+        ? "Review liked." 
+        : "Review disliked." 
+    ); 
+ 
+ 
+  }catch(error){ 
+ 
+    console.error(error); 
+ 
+    toast( 
+      "Reaction failed. Check Firestore update rules." 
+    ); 
+ 
+  } 
+ 
+} 
+ 
+ 
+async function submitComment( 
+  reviewId, 
+  article 
+){ 
+ 
+  if( 
+    !db || 
+    !reviewId || 
+    !article 
+  ) 
+    return; 
+ 
+ 
+  await odooIdentityReady; 
+ 
+ 
+  if(!ODOO_USER.loaded){ 
+ 
+    toast( 
+      "Sign in to X Horizon to comment." 
+    ); 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  const nameEl = 
+    article.querySelector( 
+      "[data-comment-name]" 
+    ); 
+ 
+ 
+  const textEl = 
+    article.querySelector( 
+      "[data-comment-text]" 
+    ); 
+ 
+ 
+  const btn = 
+    article.querySelector( 
+      "[data-comment-submit]" 
+    ); 
+ 
+ 
+  const name = 
+    ODOO_USER.name; 
+ 
+ 
+  const text = 
+    ( 
+      textEl?.value || 
+      "" 
+    ).trim(); 
+ 
+ 
+  if(!name){ 
+ 
+    toast( 
+      "Enter your name to comment." 
+    ); 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  if(!text){ 
+ 
+    toast( 
+      "Write a comment first." 
+    ); 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  if(btn){ 
+ 
+    btn.disabled = true; 
+ 
+    btn.innerHTML = 
+      '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Posting'; 
+ 
+  } 
+ 
+ 
+  try{ 
+ 
+    await addDoc( 
+      collection( 
+        db, 
+        "astrox_review_comments" 
+      ), 
+      { 
+        reviewId, 
+        name, 
+        avatar:ODOO_USER.avatar, 
+        odooUid:ODOO_USER.uid, 
+        odooPartnerId:ODOO_USER.partnerId, 
+        text, 
+        status:"public", 
+        source:"xhorizon_review_comment", 
+        hidden:false, 
+        reportedCount:0, 
+        date:new Date() 
+          .toLocaleDateString( 
+            "en-US", 
+            { 
+              month:"short", 
+              day:"numeric", 
+              year:"numeric" 
+            } 
+          ), 
+        createdAt: 
+          serverTimestamp() 
+      } 
+    ); 
+ 
+ 
+    try{ 
+ 
+      await updateDoc( 
+        doc( 
+          db, 
+          "astrox_reviews", 
+          reviewId 
+        ), 
+        { 
+          commentCount: 
+            increment(1) 
+        } 
+      ); 
+ 
+    }catch(countError){ 
+ 
+      console.warn( 
+        "Comment saved, but commentCount update was blocked:", 
+        countError 
+      ); 
+ 
+    } 
+ 
+ 
+    openComments.add( 
+      String(reviewId) 
+    ); 
+ 
+ 
+    if(nameEl) 
+      nameEl.value = 
+        ODOO_USER.name; 
+ 
+ 
+    if(textEl) 
+      textEl.value = ""; 
+ 
+ 
+    toast( 
+      "Comment posted publicly." 
+    ); 
+ 
+ 
+  }catch(error){ 
+ 
+    console.error(error); 
+ 
+    toast( 
+      "Comment failed. Check Firestore rules." 
+    ); 
+ 
+ 
+  }finally{ 
+ 
+    if(btn){ 
+ 
+      btn.disabled = false; 
+ 
+      btn.innerHTML = 
+        '<i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Post'; 
+ 
+    } 
+ 
+  } 
+ 
+} 
+ 
+ 
+document.addEventListener( 
+  "click", 
+  e => { 
+ 
+    const adminBtn = 
+      e.target.closest( 
+        "[data-review-action]" 
+      ); 
+ 
+ 
+    if(adminBtn){ 
+ 
+      setReviewStatus( 
+        adminBtn.dataset.reviewId, 
+        adminBtn.dataset.reviewAction 
+      ); 
+ 
+      return; 
+ 
+    } 
+ 
+ 
+    const voteBtn = 
+      e.target.closest( 
+        "[data-vote]" 
+      ); 
+ 
+ 
+    if(voteBtn){ 
+ 
+      voteReview( 
+        voteBtn.dataset.reviewId, 
+        voteBtn.dataset.vote 
+      ); 
+ 
+      return; 
+ 
+    } 
+ 
+ 
+    const toggleBtn = 
+      e.target.closest( 
+        "[data-comments-toggle]" 
+      ); 
+ 
+ 
+    if(toggleBtn){ 
+ 
+      const id = 
+        String( 
+          toggleBtn.dataset.reviewId || 
+          "" 
+        ); 
+ 
+ 
+      if(openComments.has(id)) 
+        openComments.delete(id); 
+      else 
+        openComments.add(id); 
+ 
+ 
+      renderReviews(); 
+ 
+      return; 
+ 
+    } 
+ 
+ 
+    const commentBtn = 
+      e.target.closest( 
+        "[data-comment-submit]" 
+      ); 
+ 
+ 
+    if(commentBtn){ 
+ 
+      submitComment( 
+        commentBtn.dataset.reviewId, 
+        commentBtn.closest( 
+          ".xh-review-item" 
+        ) 
+      ); 
+ 
+    } 
+ 
+  } 
+); 
+ 
+ 
+function waitForUnlockSystem(){ 
+ 
+  return new Promise(resolve => { 
+ 
+    if( 
+      window.XHorizonAdmin && 
+      typeof window.XHorizonAdmin.unlock === 
+        "function" 
+    ){ 
+ 
+      return resolve( 
+        window.XHorizonAdmin 
+      ); 
+ 
+    } 
+ 
+ 
+    let tries = 0; 
+ 
+ 
+    const timer = 
+      setInterval( 
+        () => { 
+ 
+          tries++; 
+ 
+ 
+          if( 
+            window.XHorizonAdmin && 
+            typeof window.XHorizonAdmin.unlock === 
+              "function" 
+          ){ 
+ 
+            clearInterval(timer); 
+ 
+            resolve( 
+              window.XHorizonAdmin 
+            ); 
+ 
+          }else if( 
+            tries > 12 
+          ){ 
+ 
+            clearInterval(timer); 
+ 
+            resolve(null); 
+ 
+          } 
+ 
+        }, 
+        120 
+      ); 
+ 
+  }); 
+ 
+} 
+ 
+ 
+async function handleReviewSearchSubmit(){ 
+ 
+  const input = 
+    $("#reviewSearch"); 
+ 
+ 
+  const value = 
+    input.value.trim(); 
+ 
+ 
+  if(!value){ 
+ 
+    renderReviews(); 
+ 
+    return; 
+ 
+  } 
+ 
+ 
+  input.disabled = true; 
+ 
+ 
+  try{ 
+ 
+    const bridge = 
+      await waitForUnlockSystem(); 
+ 
+ 
+    if( 
+      bridge && 
+      typeof bridge.unlock === 
+        "function" 
+    ){ 
+ 
+      let callbackDone = false; 
+ 
+ 
+      const ok = 
+        await Promise.resolve( 
+          bridge.unlock( 
+            value, 
+            () => { 
+ 
+              callbackDone = true; 
+ 
+              openReviewConsole(); 
+ 
+            } 
+          ) 
+        ); 
+ 
+ 
+      if(ok){ 
+ 
+        if(!callbackDone) 
+          openReviewConsole(); 
+ 
+ 
+        input.value = ""; 
+ 
+        renderReviews(); 
+ 
+        return; 
+ 
+      } 
+ 
+    } 
+ 
+  }catch(error){ 
+ 
+    console.error( 
+      "X Horizon unlock failed:", 
+      error 
+    ); 
+ 
+  }finally{ 
+ 
+    input.disabled = false; 
+ 
+  } 
+ 
+ 
+  renderReviews(); 
+ 
+} 
+ 
+ 
+$("#reviewSearch") 
+  .addEventListener( 
+    "keydown", 
+    e => { 
+ 
+      if(e.key === "Enter"){ 
+ 
+        e.preventDefault(); 
+ 
+        handleReviewSearchSubmit(); 
+ 
+      } 
+ 
+    } 
+  ); 
+ 
+ 
+$("#reviewSearch") 
+  .addEventListener( 
+    "input", 
+    renderReviews 
+  ); 
+ 
+ 
+$("#starFilter") 
+  .addEventListener( 
+    "change", 
+    renderReviews 
+  ); 
+ 
+ 
+$("#sortMode") 
+  .addEventListener( 
+    "change", 
+    renderReviews 
+  ); 
+ 
+ 
+$("#consoleLockBtn") 
+  .addEventListener( 
+    "click", 
+    closeReviewConsole 
+  ); 
+ 
+ 
+if(auth){ 
+ 
+  onAuthStateChanged( 
+    auth, 
+    async function(user){ 
+ 
+      if(!user) 
+        return; 
+ 
+ 
+      try{ 
+ 
+        const tokenResult = 
+          await user.getIdTokenResult( 
+            true 
+          ); 
+ 
+ 
+        if( 
+          tokenResult && 
+          tokenResult.claims && 
+          tokenResult.claims.admin === true 
+        ){ 
+ 
+          consoleOpen = true; 
+ 
+          document.body.classList.add( 
+            "review-console-on" 
+          ); 
+ 
+          loadPendingReviews(); 
+ 
+          renderPendingReviews(); 
+ 
+        } 
+ 
+      }catch(error){ 
+ 
+        console.error( 
+          "State check failed:", 
+          error 
+        ); 
+ 
+      } 
+ 
+    } 
+  ); 
+ 
+} 
+ 
+ 
+odooIdentityReady = 
+  loadOdooIdentity(); 
+ 
+ 
+loadReviews(); 
+ 
+loadPendingReviews(); 
+ 
+loadComments(); 
+ 
+renderReviews(); 
+ 
+renderStats(); 
+ 
+renderPendingReviews(); 
+ 
+updatePendingCount(); 
+ 
+</script>
