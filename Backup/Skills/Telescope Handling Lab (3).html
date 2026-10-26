@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Telescope Handling Lab</title>
+<style>
+:root{--bg:#000;--card:#0e0e0e;--line:#2a2a2a;--fg:#f3f3f3;--mut:#9a9a9a;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 "Helvetica Neue",Arial,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+section{padding:64px 0;border-top:1px solid var(--line)}
+h1{font:400 clamp(44px,9vw,96px)/1 Georgia,"Times New Roman",serif;letter-spacing:-.02em;margin:0 0 20px}
+h2{font:400 clamp(28px,4vw,40px)/1.15 Georgia,"Times New Roman",serif;margin:0 0 8px}
+h3{font-size:16px;margin:0 0 6px}
+.lead{color:var(--mut);max-width:60ch;margin:0}
+.hero{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:center;padding:72px 0 56px}
+.hero nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.hero nav a{color:var(--fg);text-decoration:none;border:1px solid var(--line);padding:7px 14px;border-radius:99px;font-size:14px}
+.hero nav a:hover{border-color:var(--fg)}
+.score{text-align:center}
+.score svg{width:min(260px,70vw);height:auto}
+.score .n{font:400 56px Georgia,serif;fill:var(--fg)}
+.score p{margin:8px 0 0;color:var(--mut)}
+.grid{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;margin-top:28px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+@media(max-width:800px){.hero,.grid,.grid3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;min-width:0}
+.scroll{overflow-x:auto}
+label{display:block;font-size:14px;color:var(--mut);margin:14px 0 4px}
+label b{color:var(--fg);font-weight:600;float:right}
+input[type=range]{width:100%;accent-color:#fff}
+select,input[type=number]{width:100%;background:#000;color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:9px;font:inherit}
+button{background:var(--fg);color:#000;border:0;border-radius:6px;padding:8px 14px;font:inherit;font-size:14px;cursor:pointer}
+button.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+button.ghost:hover{border-color:var(--fg)}
+:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.out{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.big{font:400 34px Georgia,serif}
+.tag{display:inline-block;border:1px solid var(--fg);border-radius:99px;padding:2px 12px;font-size:13px}
+.tag.ok{background:var(--fg);color:#000}
+svg text{font-family:inherit}
+.hs{cursor:pointer}
+.hs circle{fill:#000;stroke:var(--fg);stroke-width:2}
+.hs:hover circle,.hs.on circle{fill:var(--fg)}
+.hs:focus-visible circle{stroke-width:4}
+.chk label{display:flex;gap:10px;align-items:flex-start;color:var(--fg);font-size:15px;margin:10px 0;cursor:pointer}
+.chk input{margin-top:5px;accent-color:#fff}
+.bar{height:3px;background:var(--line);border-radius:3px;margin:8px 0 4px}
+.bar i{display:block;height:100%;background:var(--fg);border-radius:3px;width:0;transition:width .3s}
+table{width:100%;border-collapse:collapse;font-size:15px;min-width:560px}
+th,td{text-align:left;padding:11px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--mut);font-weight:400}
+.warn{border-left:3px solid var(--fg);padding-left:14px;margin-top:20px;color:var(--mut)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stats div{border:1px solid var(--line);border-radius:8px;padding:10px}
+.stats b{display:block;font:400 22px Georgia,serif}
+.stats span{color:var(--mut);font-size:13px}
+body{background:radial-gradient(1100px 520px at 75% -8%,#202020,#000 62%) fixed,#000}
+.card{background:linear-gradient(160deg,#171717,#080808);box-shadow:inset 0 1px 0 #ffffff1a,0 24px 48px -28px #000;transition:border-color .25s}
+.card:hover{border-color:#505050}
+.score svg{filter:drop-shadow(0 0 22px #ffffff26)}
+.eq{font:italic 17px Georgia,serif;background:#000;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-top:14px}
+.eq small{display:block;color:var(--mut);font:13px/1.5 "Helvetica Neue",Arial,sans-serif}
+.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:24px}
+.dash div{border:1px solid var(--line);border-radius:8px;padding:12px;background:#0a0a0a}
+.dash span,.dash small{color:var(--mut);font-size:13px;display:block}.dash b{font:400 26px Georgia,serif}
+.dash i{display:block;height:3px;background:var(--fg);margin:6px 0;border-radius:3px;transition:width .6s}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:5px 13px;font-size:13px;color:var(--mut);margin:0 6px 6px 0}
+.badge.on{background:var(--fg);color:#000;box-shadow:0 0 16px #ffffff40}
+.c1 circle{stroke-dasharray:4 3}.c2 circle{stroke-width:5}.c3 circle{stroke-dasharray:1 3;stroke-linecap:round}
+.hs.on circle{animation:pl 1.6s ease-in-out infinite}@keyframes pl{50%{r:15}}
+#beam{transform-origin:200px 75px;transition:transform .4s}
+details.card{padding:0}details summary{cursor:pointer;font-weight:600;list-style:none;padding:16px 20px}
+details summary::after{content:"+";float:right}details[open] summary::after{content:"\2212"}
+details div{padding:0 20px 18px;color:var(--mut)}details b{color:var(--fg)}
+.card ul{margin:8px 0 0;padding-left:18px;color:var(--mut)}
+button{min-height:40px;transition:transform .15s}button:active{transform:scale(.97)}
+@media(prefers-reduced-motion:reduce){.hs.on circle{animation:none}}
+footer{border-top:1px solid var(--line);padding:32px 0;color:var(--mut);font-size:14px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<p class="warn" role="note" style="margin:24px 0 0"><b style="color:var(--fg)">Solar safety.</b> Never point a telescope, finder, camera, binoculars or any optical instrument at the Sun unless a certified solar filter is correctly installed over the front aperture. Follow your manufacturer's manual where it differs from this lab.</p>
+<header class="hero">
+  <div>
+    <h1>Telescope handling</h1>
+    <p class="lead">Most damage to a telescope happens while it is being moved, balanced or put away. Learn the anatomy, practise the routines, and watch your field-readiness score climb as you finish each lab.</p>
+    <nav aria-label="Sections"><a href="#anatomy">Anatomy</a><a href="#safety">Safe handling</a><a href="#balance">Balance</a><a href="#collimation">Collimation</a><a href="#cooldown">Cooldown</a><a href="#optics">Optics</a><a href="#observe">Observe</a><a href="#procedure">Procedure</a><a href="#mistakes">Mistakes</a><a href="#quiz">Quiz</a><a href="#ref">Reference</a><a href="#care">Care log</a></nav>
+  </div>
+  <div class="score" aria-live="polite">
+    <svg viewBox="0 0 140 140" role="img" aria-label="Field readiness score">
+      <circle cx="70" cy="70" r="52" fill="none" stroke="#2a2a2a" stroke-width="6"/>
+      <circle id="ring" cx="70" cy="70" r="52" fill="none" stroke="#f3f3f3" stroke-width="6" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" transform="rotate(-90 70 70)" style="transition:stroke-dashoffset .6s"/>
+      <text id="sc" class="n" x="70" y="80" text-anchor="middle" font-size="40">0</text>
+    </svg>
+    <p><b id="scl">Getting started</b><br>Safety 20, handling 15, quiz 15, balance, collimation, optics and cooldown, observation, maintenance 10 each</p>
+  </div>
+</header>
+
+<section id="dash">
+  <h2>Readiness breakdown</h2>
+  <p class="lead">Every point is earned inside the labs below. Levels describe practice completed, not expertise: safety is the safe handling checklist, handling is the field procedure, optics includes the cooldown estimator.</p>
+  <div class="dash" id="dsh"></div>
+  <div id="bdg" style="margin-top:20px" aria-label="Achievements"></div>
+</section>
+
+<section id="anatomy">
+  <h2>Know where to hold it</h2>
+  <p class="lead">Select a part to see what it can take and how to handle it.</p>
+  <div class="grid">
+    <div class="card scroll">
+      <svg id="anat" viewBox="0 0 600 380" style="width:100%;min-width:420px;height:auto" role="group" aria-label="Newtonian reflector on an equatorial mount">
+        <g fill="none" stroke="#f3f3f3" stroke-width="2.5" stroke-linecap="round">
+          <line x1="300" y1="255" x2="230" y2="362"/><line x1="300" y1="255" x2="300" y2="368"/><line x1="300" y1="255" x2="370" y2="362"/><ellipse cx="300" cy="308" rx="44" ry="7" fill="#0e0e0e"/>
+          <line x1="190" y1="372" x2="410" y2="372" stroke="#2a2a2a"/>
+          <line x1="292" y1="228" x2="212" y2="284"/>
+          <rect x="268" y="225" width="64" height="32" rx="5" fill="#0e0e0e"/>
+          <g transform="rotate(-38 330 200)">
+            <rect x="330" y="180" width="220" height="40" rx="6" fill="#0e0e0e"/>
+            <rect x="450" y="166" width="22" height="14" fill="#000"/>
+            <rect x="380" y="168" width="44" height="10" fill="#000"/>
+            <line x1="334" y1="180" x2="334" y2="220"/><rect x="392" y="176" width="9" height="48" rx="2" fill="#000"/><rect x="456" y="150" width="10" height="16" fill="#000"/>
+          </g>
+          <rect x="178" y="276" width="52" height="28" rx="4" fill="#0e0e0e" transform="rotate(-36 204 290)"/>
+        </g>
+      </svg>
+    </div>
+    <div class="card" aria-live="polite"><h3 id="at">Optical tube</h3><p id="ad" class="lead"></p><p class="out lead" style="font-size:13px">Outline style shows the type: solid is safe to hold, dashed is do not hold, thick is sensitive, dotted is maintenance. Use Tab and Enter on the diagram.</p></div>
+  </div>
+</section>
+
+<section id="safety">
+  <h2>Safe handling routine</h2>
+  <p class="lead">Tick each step as you do it at the telescope. Progress is saved in this browser.</p>
+  <div class="grid3 chk" id="chk"></div>
+  <p class="warn">Never point any telescope, finder or camera near the Sun without a certified solar filter fitted over the front of the instrument. Eye damage is instant and permanent.</p>
+</section>
+
+<section id="balance">
+  <h2>Balance lab</h2>
+  <p class="lead">An unbalanced mount strains the gears and drifts during tracking. Slide the counterweight until the beam sits level, then add a camera and balance again.</p>
+  <div class="grid">
+    <div class="card"><svg viewBox="0 0 400 150" style="width:100%;height:auto" role="img" aria-label="RA axis balance beam">
+      <g id="beam"><line x1="30" y1="75" x2="370" y2="75" stroke="#f3f3f3" stroke-width="3"/><circle id="cw" cx="130" cy="75" r="14" fill="#f3f3f3"/><rect id="tb" x="203" y="65" width="120" height="20" rx="4" fill="#0e0e0e" stroke="#f3f3f3" stroke-width="2"/><rect id="pl" x="250" y="59" width="26" height="6" fill="#f3f3f3"/><circle id="com" cx="200" cy="75" r="5" fill="#000" stroke="#f3f3f3" stroke-width="2"/></g>
+      <polygon points="200,75 184,125 216,125" fill="#000" stroke="#f3f3f3" stroke-width="2"/><text x="30" y="24" fill="#9a9a9a" font-size="11">Counterweight side</text><text x="370" y="24" fill="#9a9a9a" font-size="11" text-anchor="end">Tube side</text><text x="200" y="142" fill="#f3f3f3" font-size="11" text-anchor="middle">RA axis, circle is the centre of mass</text>
+    </svg>
+    <div class="out" aria-live="polite"><span id="bs" class="tag">Checking</span> <span id="bt" class="lead"></span></div><div class="eq" id="bq"></div></div>
+    <div class="card">
+      <label for="bc">Counterweight distance <b id="bcv"></b></label><input id="bc" type="range" min="4" max="32" step="0.5" value="10">
+      <label for="bp">Camera and accessories <b id="bpv"></b></label><input id="bp" type="range" min="0" max="3" step="0.1" value="0">
+      <p class="lead" style="margin-top:16px;font-size:14px">Counterweight 4.5 kg, tube 6.5 kg with the centre of mass 14 cm from the axis. Real balance also needs the Dec axis and the tube sliding in its rings.</p>
+    </div>
+  </div>
+</section>
+
+<section id="collimation">
+  <h2>Collimation lab</h2>
+  <p class="lead">Looking down the focuser at a Newtonian, you want every circle sharing one centre. Your scope starts out knocked off by a hidden amount. Use the secondary and primary adjusters to centre it.</p>
+  <div class="grid">
+    <div class="card"><svg viewBox="0 0 300 300" style="width:100%;max-width:380px;display:block;margin:0 auto" role="img" aria-label="View through the focuser">
+      <circle cx="150" cy="150" r="140" fill="#000" stroke="#f3f3f3" stroke-width="2"/>
+      <circle id="cp" r="100" fill="#161616" stroke="#f3f3f3" stroke-width="1.5"/>
+      <circle id="cs" r="48" fill="#000" stroke="#f3f3f3" stroke-width="1.5"/>
+      <circle id="cd" r="9" fill="none" stroke="#f3f3f3" stroke-width="2"/>
+      <path d="M144 150h12M150 144v12" stroke="#9a9a9a"/>
+    </svg></div>
+    <div class="card">
+      <label for="sx">Secondary tilt left / right <b id="sxv"></b></label><input id="sx" type="range" min="-10" max="10" step="0.1" value="0">
+      <label for="sy">Secondary tilt up / down <b id="syv"></b></label><input id="sy" type="range" min="-10" max="10" step="0.1" value="0">
+      <label for="px">Primary knobs left / right <b id="pxv"></b></label><input id="px" type="range" min="-10" max="10" step="0.1" value="0">
+      <label for="py">Primary knobs up / down <b id="pyv"></b></label><input id="py" type="range" min="-10" max="10" step="0.1" value="0">
+      <div class="out" aria-live="polite"><div class="big" id="cq">0%</div><span id="cs2" class="tag">Off centre</span></div>
+      <button class="ghost" id="cr" style="margin-top:14px">New random misalignment</button>
+      <div class="eq">What you are changing<small>The secondary tilt aims the focuser's view at the middle of the primary. The primary knobs tilt the mirror so the reflection of the secondary sits at the centre of the view. When the focuser, secondary, primary and centre mark share one centre, the optical axis is aligned.</small></div>
+    </div>
+  </div>
+</section>
+
+<section id="cooldown">
+  <h2>Cooldown estimator</h2>
+  <p class="lead">Warm optics make shimmering air inside the tube and soft images. Estimate how long to leave the scope outside before you start observing.</p>
+  <div class="grid">
+    <div class="card">
+      <label for="ct">Telescope type</label><select id="ct"><option value="22">Newtonian or Dobsonian</option><option value="30">Schmidt-Cassegrain or Maksutov</option><option value="8">Refractor</option></select>
+      <label for="ca">Aperture in mm</label><input id="ca" type="number" min="50" max="600" value="200">
+      <label for="ci">Indoor temperature in °C</label><input id="ci" type="number" min="-30" max="45" value="22">
+      <label for="co">Outdoor temperature in °C</label><input id="co" type="number" min="-30" max="45" value="8">
+      <label for="ch">Outdoor humidity in %</label><input id="ch" type="number" min="5" max="100" value="70">
+    </div>
+    <div class="card" aria-live="polite"><div class="big" id="cm">0 min</div><p class="lead" id="cn"></p><p class="lead" style="font-size:13px">This is a simple estimate, not a measurement. Real cooldown depends on telescope design, aperture, temperature difference, airflow, wind, insulation and observing conditions. The curve assumes the optics settle exponentially toward the outdoor temperature.</p><svg id="cv" viewBox="0 0 300 110" style="width:100%;height:auto;margin-top:12px" role="img" aria-label="Optics temperature over time"></svg><div class="out"><span id="dt" class="tag">Dew check</span> <span class="lead" id="dn"></span></div></div>
+  </div>
+</section>
+
+<section id="optics">
+  <h2>Optics and eyepiece planner</h2>
+  <p class="lead">See what your telescope and eyepiece can really deliver, and what fits inside the field of view.</p>
+  <div class="grid">
+    <div class="card">
+      <label for="oa">Aperture in mm</label><input id="oa" type="number" min="30" max="1000" value="200">
+      <label for="of">Telescope focal length in mm</label><input id="of" type="number" min="100" max="6000" value="1200">
+      <label for="oe">Eyepiece focal length in mm</label><input id="oe" type="number" min="2" max="60" value="25">
+      <label for="ow">Eyepiece apparent field in °</label><input id="ow" type="number" min="30" max="110" value="68">
+      <label for="ob">Barlow</label><select id="ob"><option value="1">None</option><option value="2">2× Barlow</option><option value="3">3× Barlow</option></select>
+    </div>
+    <div class="card"><div class="stats" id="os"></div><div class="out"><span id="ov3" class="tag"></span> <span class="lead" id="on"></span></div><div class="eq" id="oq"></div>
+      <svg id="ofv" viewBox="0 0 300 260" style="width:100%;height:auto;margin-top:12px" role="img" aria-label="Field of view compared with sky objects"></svg></div>
+  </div>
+</section>
+
+<section id="observe">
+  <h2>Observation simulator</h2>
+  <p class="lead">Choose a target and an eyepiece setup. Numbers are calculated; the eyepiece picture is an illustration of what to expect, not a photograph or an exact simulation. It assumes a 60° eyepiece.</p>
+  <div class="grid">
+    <div class="card">
+      <label for="xt">Target</label><select id="xt"></select>
+      <label for="xa">Aperture in mm</label><input id="xa" type="number" min="30" max="1000" value="200">
+      <label for="xf">Telescope focal length in mm</label><input id="xf" type="number" min="100" max="6000" value="1200">
+      <label for="xe">Eyepiece focal length in mm</label><input id="xe" type="number" min="2" max="60" value="10">
+      <label for="xb">Barlow</label><select id="xb"><option value="1">None</option><option value="2">2× Barlow</option><option value="3">3× Barlow</option></select>
+      <label for="xc">Observing conditions</label><select id="xc"><option value="1">Dark, steady sky</option><option value=".7">Average suburban sky</option><option value=".4">Bright city sky or poor seeing</option></select>
+    </div>
+    <div class="card"><canvas id="xv" width="320" height="320" role="img" aria-label="Illustrated eyepiece view" style="width:100%;max-width:340px;display:block;margin:0 auto"></canvas>
+      <div class="stats" id="xs" style="margin-top:14px"></div>
+      <div class="out"><span id="xd" class="tag"></span> <span class="lead" id="xn"></span></div></div>
+  </div>
+</section>
+
+<section id="procedure">
+  <h2>Field procedure</h2>
+  <p class="lead">Work through a full session one step at a time. Progress is saved in this browser.</p>
+  <div class="card" style="margin-top:28px"><div class="bar"><i id="pb"></i></div><small class="lead" id="pt"></small>
+    <h3 id="ph" style="font:400 26px Georgia,serif;margin:14px 0 6px"></h3><p class="lead" id="pd"></p><p class="warn" id="pw"></p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="ghost" id="pp">Previous</button><button id="pc">I completed this step</button><button class="ghost" id="px2">Reset procedure</button></div></div>
+</section>
+
+<section id="mistakes">
+  <h2>Common mistakes</h2>
+  <p class="lead">Open each one to see why it hurts and what to do instead.</p>
+  <div class="grid3" id="mk"></div>
+</section>
+
+<section id="ref">
+  <h2>Quick reference</h2>
+  <div class="grid3">
+    <div class="card"><h3>Before observing</h3><ul><li>Tripod secure</li><li>Mount secure</li><li>Counterweight secure</li><li>Telescope balanced</li><li>Finder aligned</li><li>Optics checked</li><li>Dew checked</li></ul></div>
+    <div class="card"><h3>During observing</h3><ul><li>Do not force the mount</li><li>Protect the optics</li><li>Watch the cables</li><li>Monitor dew</li><li>Never observe the Sun without proper solar protection</li></ul></div>
+    <div class="card"><h3>After observing</h3><ul><li>Cap the optics</li><li>Remove accessories</li><li>Secure the mount</li><li>Let cold gear warm up safely</li><li>Store dry</li></ul></div>
+  </div>
+  <p class="warn">Never point a telescope, finder, camera, binoculars or any optical instrument at the Sun unless a certified solar filter is correctly installed over the front aperture.</p>
+</section>
+
+<section id="quiz">
+  <h2>Handling check</h2>
+  <p class="lead">Six real situations. Your best score counts toward your readiness.</p>
+  <div class="card" style="margin-top:28px"><div id="qz"></div><button id="qb">Check answers</button> <button class="ghost" id="qt">Retry</button> <span class="tag" id="qr" style="margin-left:10px">Not checked</span><p class="lead" id="qs" style="margin-top:12px"></p></div>
+</section>
+
+<section id="care">
+  <h2>Care log</h2>
+  <p class="lead">Log each job when you do it. Due dates are working intervals for typical home use; check your manual for specifics.</p>
+  <div class="card scroll" style="margin-top:28px"><table><thead><tr><th>Task</th><th>Every</th><th>Last done</th><th>Status</th><th></th></tr></thead><tbody id="log"></tbody></table></div>
+</section>
+
+</div>
+<footer><div class="wrap">Estimates and routines are general guidance. Follow your telescope manual where it differs.</div></footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let S={c:{},bal:0,col:0,cool:0,opt:0,q:0,qb:0,p:[],obs:[],log:[]};
+try{Object.assign(S,JSON.parse(localStorage.getItem('thl')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('thl',JSON.stringify(S))}catch(e){}};
+
+/* Anatomy */
+const P=[
+['Optical tube',503,70,'Hold the tube by its body or rings, never by the open end. Keep the dust cap on whenever you carry or park it.'],
+['Focuser',418,100,'It is rated for eyepiece weight only. Rack it fully in before moving the scope and never lift the telescope by it.'],
+['Finder scope',369,133,'Align it in daylight on a distant landmark, then lock the thumbscrews. A knock will shift it, so recheck at the start of each session.'],
+['Primary mirror',346,188,'Never touch the coating. Remove dust with a bulb blower and wash only when it is visibly dirty, typically once every year or two.'],
+['Mount head',300,241,'Clutches are brakes, not handles. Loosen to slew by hand, and lock them before you let go of the tube.'],
+['Counterweight',205,290,'Fit the counterweight before the tube and remove it after. Always tighten the safety stop at the end of the shaft.'],
+['Tripod',300,330,'Extend the thick leg sections first, spread the legs fully and tighten the braces. Use spiked feet on grass and rubber on hard floors.'],
+['Eyepiece',407,86,'Insert it fully and tighten the thumbscrew only enough to hold it. Keep both caps on whenever it is out of the telescope.'],
+['Tube rings and dovetail',382,159,'The rings clamp the tube and the dovetail locks it to the mount. Tighten both fully and keep a hand on the tube until the saddle is secure.'],
+['Dec axis',322,220,'Loosen its clutch to move the tube north or south or to balance it, then lock it again. Never force it against a locked clutch.'],
+['RA axis',278,243,'This axis follows the sky. Release the clutch only to slew or balance, and keep a hand on the tube while it is free.'],
+['Accessory tray',300,306,'Keep eyepieces, caps and tools here. Do not overload it and never rest the tube on it.']];
+const C=['Safe to hold','Do not hold','Sensitive component','Maintenance component'];
+const X={'Optical tube':[0,'Grab the open end or touch the inside.'],'Focuser':[1,'Lift or carry the telescope by it.'],'Finder scope':[3,'Use it as a handle or leave its screws loose.'],'Primary mirror':[2,'Touch or wipe the coated surface.'],'Mount head':[0,'Force the clutches or hold it by cables.'],'Counterweight':[3,'Leave the stop screw loose or let the weight drop.'],'Tripod':[0,'Leave leg locks or braces loose.'],'Eyepiece':[2,'Touch the lenses with your fingers.'],'Tube rings and dovetail':[3,'Leave the clamps loose while the tube is unsupported.'],'Dec axis':[3,'Force it past the clutch.'],'RA axis':[3,'Slew it with the clutch locked.'],'Accessory tray':[0,'Overload it or store the tube on it.']};
+P.forEach((p,i)=>{const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('class','hs c'+X[p[0]][0]);g.setAttribute('tabindex','0');g.setAttribute('role','button');g.setAttribute('aria-label',p[0]);g.innerHTML=`<circle cx="${p[1]}" cy="${p[2]}" r="11"/>`;
+g.onclick=()=>sel(i);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();sel(i)}};$('#anat').appendChild(g)});
+function sel(i){$$('.hs').forEach((g,j)=>g.classList.toggle('on',i===j));const x=X[P[i][0]];$('#at').textContent=P[i][0];$('#ad').innerHTML=`<span class="tag">${C[x[0]]}</span><br><br><b style="color:var(--fg)">Technique.</b> ${P[i][3]}<br><br><b style="color:var(--fg)">Do not.</b> ${x[1]}`}
+sel(0);
+
+/* Checklist */
+const G={'Setting up':['Carry the tube and mount head separately','Level the tripod and lock every leg','Fix the mount head before loading the tube','Fit the counterweight before the tube','Balance both axes with the clutches loose','Align the finder in daylight with the cap on'],
+'Observing':['Fit a certified solar filter before any daytime Sun view','Hold the tube body, never the focuser or finder','Lock the clutches before changing eyepieces','Leave cables slack for the whole sweep of the sky'],
+'Packing away':['Cap the tube and eyepieces first','Wipe dew from the outside with a microfiber cloth','Return the mount to its home position','Let cold gear warm up in its case before opening it','Store the tube capped, in a dry place']};
+const keys=[];let html='';
+for(const[k,v]of Object.entries(G)){html+=`<div class="card"><h3>${k}</h3><div class="bar"><i id="b-${k[0]}${k.length}"></i></div><small class="lead" id="t-${k[0]}${k.length}"></small>`;
+v.forEach((t,i)=>{const id=k+i;keys.push(id);html+=`<label><input type="checkbox" data-k="${id}" ${S.c[id]?'checked':''}><span>${t}</span></label>`});html+='</div>'}
+$('#chk').innerHTML=html;
+$$('#chk input').forEach(c=>c.onchange=()=>{S.c[c.dataset.k]=c.checked;save();render()});
+
+/* Balance */
+function balance(touch){
+const cw=+$('#bc').value,pl=+$('#bp').value,I=4.5*cw-(6.5+pl)*14,ang=Math.max(-18,Math.min(18,-I/6)),ok=Math.abs(I)<4;
+$('#bcv').textContent=cw+' cm';$('#bpv').textContent=pl.toFixed(1)+' kg';
+$('#beam').style.transform=`rotate(${ang}deg)`;
+$('#cw').setAttribute('cx',200-cw*4.5);$('#pl').setAttribute('height',pl*4+0.01);$('#pl').setAttribute('y',65-pl*4);
+$('#bs').textContent=ok?'Balanced':'Out of balance';$('#bs').className='tag'+(ok?' ok':'');
+$('#bt').textContent=ok?'Neutral torque ('+I.toFixed(1)+' kg·cm). The axis will hold still when released.':(I>0?'Counterweight side drops by '+I.toFixed(0)+' kg·cm. Move the weight closer to the axis.':'Tube side drops by '+(-I).toFixed(0)+' kg·cm. Move the weight further out.');
+$('#com').setAttribute('cx',200-I/(11+pl)*4.5);
+$('#bq').innerHTML=`Torque = force × distance from the axis<small>Counterweight: 4.5 kg × ${cw} cm = ${(4.5*cw).toFixed(0)} kg·cm<br>Tube side: ${(6.5+pl).toFixed(1)} kg × 14 cm = ${((6.5+pl)*14).toFixed(0)} kg·cm<br>Net torque: ${I.toFixed(1)} kg·cm. The mount turns toward the side with more torque, so it only holds still when the two match.</small>`;
+if(ok&&touch&&!S.bal){S.bal=1;save();render()}}
+['bc','bp'].forEach(i=>$('#'+i).oninput=()=>balance(1));balance(0);
+
+/* Collimation */
+let T,rnd=()=>(Math.random()*12-6);
+function reset(){T=[rnd(),rnd(),rnd(),rnd()];['sx','sy','px','py'].forEach(i=>$('#'+i).value=0);coll(0)}
+function coll(touch){
+const v=['sx','sy','px','py'].map(i=>{const x=+$('#'+i).value;$('#'+i+'v').textContent=x.toFixed(1);return x});
+const a=[v[0]-T[0],v[1]-T[1]],b=[v[2]-T[2],v[3]-T[3]],k=3.5;
+$('#cs').setAttribute('cx',150+a[0]*k);$('#cs').setAttribute('cy',150+a[1]*k);
+$('#cp').setAttribute('cx',150+(b[0]-a[0]*.5)*k);$('#cp').setAttribute('cy',150+(b[1]-a[1]*.5)*k);
+$('#cd').setAttribute('cx',150+b[0]*k);$('#cd').setAttribute('cy',150+b[1]*k);
+const e=Math.hypot(...a)+Math.hypot(...b),q=Math.max(0,Math.round(100-e*7)),ok=e<1.2;
+$('#cq').textContent=q+'% aligned';$('#cs2').textContent=ok?'Collimated':'Off centre';$('#cs2').className='tag'+(ok?' ok':'');
+if(ok&&touch&&!S.col){S.col=1;save();render()}}
+['sx','sy','px','py'].forEach(i=>$('#'+i).oninput=()=>coll(1));
+$('#cr').onclick=reset;reset();
+
+/* Cooldown */
+function cool(touch){
+const b=+$('#ct').value,ap=+$('#ca').value||0,d=Math.abs((+$('#ci').value)-(+$('#co').value));
+const m=d<2?0:Math.min(180,Math.round(b*(ap/100)*Math.pow(d/10,.6)));
+const t=new Date(Date.now()+m*6e4).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+$('#cm').textContent=m+' min';
+$('#cn').textContent=m===0?'The temperature gap is small, so the scope is ready almost immediately.':`Set the scope outside now and it should be ready around ${t}. A ${d} °C gap is cooling a ${ap} mm aperture. Open dust caps and keep the tube out of the wind to speed it up.`;
+const ti=+$('#ci').value,to=+$('#co').value,h=Math.min(100,Math.max(5,+$('#ch').value||50)),tau=Math.max(m,8)/3,tm=Math.max(m*2,30);
+const lo=Math.min(ti,to)-1,hi=Math.max(ti,to)+1,X=t=>10+t/tm*280,Y=v=>100-(v-lo)/(hi-lo)*90;
+let pts='';for(let i=0;i<=40;i++){const t=tm*i/40;pts+=(i?'L':'M')+X(t).toFixed(1)+' '+Y(to+(ti-to)*Math.exp(-t/tau)).toFixed(1)}
+$('#cv').innerHTML=`<path d="${pts}" fill="none" stroke="#f3f3f3" stroke-width="2"/><line x1="10" x2="290" y1="${Y(to)}" y2="${Y(to)}" stroke="#9a9a9a" stroke-dasharray="4 4"/><line x1="${X(m)}" x2="${X(m)}" y1="10" y2="100" stroke="#f3f3f3" stroke-dasharray="2 3"/><text x="14" y="${Math.max(18,Y(to)-5)}" fill="#9a9a9a" font-size="9">outdoor ${to}°C</text><text x="${Math.min(X(m)+4,250)}" y="20" fill="#f3f3f3" font-size="9">ready</text>`;
+const g=Math.log(h/100)+17.62*to/(243.12+to),td=243.12*g/(17.62-g),mg=to-3-td;
+$('#dt').textContent=mg<0?'Dew likely':mg<3?'Watch for dew':'Low dew risk';$('#dt').className='tag'+(mg>=3?' ok':'');
+$('#dn').textContent=`Dew point is ${td.toFixed(1)} °C. Optics can radiate to about 3 °C below the air, so `+(mg<0?'they can fall below it. Fit a dew shield or heater band before you start.':mg<3?'it will be close. Use a dew shield and check the corrector or eyepieces now and then.':'condensation is unlikely tonight.');
+if(touch&&m>0&&!S.cool){S.cool=1;save();render()}}
+['ct','ca','ci','co','ch'].forEach(i=>$('#'+i).oninput=()=>cool(1));cool(0);
+
+/* Optics */
+function optics(touch){
+const ap=+$('#oa').value||1,fl=(+$('#of').value||1)*(+$('#ob').value),ep=+$('#oe').value||1,af=+$('#ow').value||1;
+const M=fl/ep,ex=ep/(fl/ap),fov=af/M,sc=120/Math.max(fov,3.2),R=fov/2*sc;
+$('#os').innerHTML=[['Magnification',M.toFixed(0)+'×'],['Focal ratio','f/'+(fl/ap).toFixed(1)],['Exit pupil',ex.toFixed(1)+' mm'],['True field',fov.toFixed(2)+'°'],['Resolution limit',(116/ap).toFixed(2)+'″'],['Faintest star','mag '+(7.5+5*Math.log10(ap/10)).toFixed(1)],['Light vs naked eye',((ap/7)**2).toFixed(0)+'×'],['Useful range',(ap/7).toFixed(0)+'× to '+(ap*2)+'×']].map(([a,b])=>`<div><b>${b}</b><span>${a}</span></div>`).join('');
+const bad=M>ap*2||ex>7;$('#ov3').textContent=M>ap*2?'Empty magnification':ex>7?'Too low':'In range';$('#ov3').className='tag'+(bad?'':' ok');
+$('#on').textContent=M>ap*2?'Past twice the aperture in mm, the image gets dim and soft with no extra detail.':ex>7?'The exit pupil is wider than your eye can use, so some light is wasted.':ex>=2?'A good fit for deep-sky objects and wide fields.':ex>=1?'A good all-round power for the Moon, clusters and planets.':'Best for planets and the Moon, and it needs steady air.';
+let s=`<circle cx="150" cy="125" r="${R.toFixed(1)}" fill="#161616" stroke="#f3f3f3" stroke-width="3"/>`;
+[['Moon',.52,-.9],['Orion Nebula',1,-.4],['Pleiades',2,.1],['Andromeda',3,.6]].forEach(([n,d,a])=>{const r=d/2*sc;s+=`<circle cx="150" cy="125" r="${r.toFixed(1)}" fill="none" stroke="#9a9a9a" stroke-dasharray="3 3"/><text x="${(150+r*Math.cos(a)+3).toFixed(1)}" y="${(125-r*Math.sin(a)).toFixed(1)}" fill="#9a9a9a" font-size="9">${n}</text>`});
+$('#ofv').innerHTML=s+`<text x="150" y="252" text-anchor="middle" fill="#f3f3f3" font-size="11">Your field: ${fov.toFixed(2)}°</text>`;
+$('#oq').innerHTML=`Magnification = telescope focal length ÷ eyepiece focal length<small>${fl.toFixed(0)} ÷ ${ep} = ${M.toFixed(0)}×</small><br>Exit pupil = eyepiece focal length ÷ focal ratio<small>${ep} ÷ ${(fl/ap).toFixed(1)} = ${ex.toFixed(1)} mm</small><br>True field ≈ apparent field ÷ magnification<small>${af} ÷ ${M.toFixed(0)} = ${fov.toFixed(2)}°. Numbers are calculated. The diagram is an illustration drawn to scale against your true field.</small>`;
+if(touch&&!S.opt){S.opt=1;save();render()}}
+['oa','of','oe','ow','ob'].forEach(i=>$('#'+i).oninput=()=>optics(1));optics(0);
+
+/* Quiz */
+const Q=[['You are loading an equatorial mount. What goes on first?',['The tube, then the counterweight','The counterweight, then the tube','Whichever is lighter'],1,'Fit the counterweight first so the mount never swings tube-heavy, and take the tube off before the weight.'],
+['A friend lifts the scope by the focuser. What is wrong with that?',['Nothing, it is the strongest part','It is rated for eyepiece weight only and can be strained or knocked out of line','It will make dew form'],1,'Lift by the tube body or rings and rack the focuser in first.'],
+['The scope is at 22 °C and it is 5 °C outside. When should you start observing?',['Straight away','After the cooldown time, often 30 to 60 minutes for a mid-size scope','Only after midnight'],1,'Warm optics create tube currents that blur the image until they match the air.'],
+['There is a light dusting on the primary mirror. What do you do?',['Wipe it with a cloth','Spray glass cleaner','Leave it unless it is heavy, then use a bulb blower'],2,'Light dust barely affects the view, and wiping scratches the coating.'],
+['In the focuser view the circles are off-centre. What does that mean?',['The scope needs collimating','The eyepiece is faulty','The tripod is unlevel'],0,'Off-centre circles mean the secondary and primary mirrors need adjusting.'],
+['The counterweight stop screw is loose and you want to tilt the mount. What first?',['Nothing, friction will hold it','Tighten the safety stop so the weight cannot slide off the shaft','Remove only the tube'],1,'A sliding weight can drop on feet or hit the tripod and mount.'],
+['You loosen the RA clutch and the tube suddenly swings down. What does that tell you?',['The counterweight is too far out','The counterweight torque is too small for the tube side','The tripod is too tall'],1,'Tube torque exceeded counterweight torque. Hold the tube, then move the weight outward or add weight.','Balance'],
+['The counterweight starts sliding down the shaft. What first?',['Step back and let it fall','Support the tube and weight, then tighten the stop screw and recheck balance','Loosen the Dec clutch'],1,'Support the load first, then secure the stop. Never let a weight drop.','Safety'],
+['Dew forms on the corrector or front lens. What is best?',['Wipe it with your shirt','Use a dew shield or gentle warm dry airflow and wait','Spray cleaner on it'],1,'Rubbing wet optics drags grit across the coating.','Dew'],
+['The finder no longer matches the main scope. What do you do?',['Replace it','Realign it on a distant daytime landmark and lock the screws','Ignore it'],1,'Brackets shift with knocks and temperature changes.','Handling'],
+['The image turns soft at very high power on a steady night. Most likely cause?',['You passed the useful magnification limit for the aperture','The mirror is wet','The finder is off'],0,'Beyond about twice the aperture in mm you gain no real detail.','Optics'],
+['You bring a cold telescope into a warm room. Safest approach?',['Uncap everything so it can breathe','Keep it capped in its case until it warms','Wipe the optics immediately'],1,'Warm moist air condenses on cold surfaces, so keep it closed.','Cooldown'],
+['A guest wants a quick look at the Sun through your scope. What do you say?',['A second is fine','Not without a certified solar filter correctly fitted over the front aperture','Use the finder instead'],1,'Unfiltered sunlight can cause instant, permanent eye damage.','Safety'],
+['Stars drift quickly out of the eyepiece after setup. Likely cause?',['Poor polar alignment, a loose clutch or poor balance','The Moon is up','A low focal ratio'],0,'Tracking drift usually comes from alignment, clutch or balance problems.','Mount'],
+['You touch the primary mirror with a fingertip. What now?',['Rub it with a tissue','Do not wipe it. Follow the manual for cleaning only if it affects the view','Use glass cleaner'],1,'Wiping can scratch the coating, and light marks barely affect the image.','Care'],
+['A long eyepiece gives an exit pupil over 7 mm. What is the downside?',['The image is brighter','Some light is wasted because your eye cannot use it','The field is smaller'],1,'A dark-adapted pupil opens to roughly 5 to 7 mm.','Optics']];
+$('#qz').innerHTML=Q.map((x,i)=>`<fieldset style="border:0;padding:0;margin:0 0 22px"><legend style="margin-bottom:6px">${x[0]}</legend>${x[1].map((o,j)=>`<label style="display:flex;gap:10px;color:var(--fg);margin:6px 0"><input type="radio" name="q${i}" value="${j}" style="accent-color:#fff"><span>${o}</span></label>`).join('')}<small class="lead" id="qf${i}"></small></fieldset>`).join('');
+$('#qb').onclick=()=>{let n=0,cat={},wr=[];Q.forEach((x,i)=>{const v=document.querySelector(`input[name=q${i}]:checked`),ok=v&&+v.value===x[2];if(ok)n++;const k=x[4]||'Handling';(cat[k]=cat[k]||[0,0])[1]++;if(ok)cat[k][0]++;else wr.push(i+1);$('#qf'+i).textContent=(v?(ok?'Correct. ':'Not quite. '):'No answer. ')+x[3]});const pc=n/Q.length;if(pc>(S.qb||0)){S.qb=pc;save()}$('#qr').textContent=`${n} of ${Q.length}, ${Math.round(pc*100)}% accuracy, best ${Math.round(S.qb*100)}%`;$('#qr').className='tag'+(pc>=.8?' ok':'');
+$('#qs').textContent='By topic: '+Object.entries(cat).map(([k,v])=>k+' '+v[0]+'/'+v[1]).join(', ')+(wr.length?'. Review question'+(wr.length>1?'s ':' ')+wr.join(', ')+'.':'. No mistakes.');render()};
+$('#qt').onclick=()=>{$$('#qz input').forEach(r=>r.checked=false);$$('#qz small').forEach(s=>s.textContent='');$('#qr').textContent='Not checked';$('#qr').className='tag';$('#qs').textContent=''};
+
+/* Observation simulator */
+const XT=[['Moon',.52,'moon',0,'Craters, dark maria and ridges along the terminator.',60,'Fine rilles and small craters in steady air.'],
+['Jupiter',.0117,'jup',1,'Two dark equatorial belts and the four Galilean moons.',100,'Belt detail and the Great Red Spot when it faces us.'],
+['Saturn',.0111,'sat',1,'The ring system and the planet disc.',80,'The Cassini Division in steady air.'],
+['Mars',.004,'mars',2,'A small disc. Dark markings and a polar cap show only near opposition.',150,'Surface markings at close approach.'],
+['Orion Nebula',1.1,'m42',0,'A glowing cloud around the four Trapezium stars.',50,'Wispy extensions under dark skies.'],
+['Pleiades',2,'ple',0,'A bright cluster of blue-white stars.',20,'Faint nebulosity needs a very dark sky.'],
+['Andromeda Galaxy',3,'and',1,'A bright oval core with a faint halo.',30,'A hint of dust lanes under dark skies.'],
+['Albireo double star (35″)',.0097,'dbl',1,'Two stars with contrasting colours.',40,''],
+['Tight double star (1.2″)',.00033,'dbl',2,'A close pair that tests the resolution limit.',200,'']];
+$('#xt').innerHTML=XT.map((t,i)=>`<option value="${i}">${t[0]}</option>`).join('');
+const rng=s=>()=>(s=s*16807%2147483647)/2147483647;
+const glow=(c,x,y,r,a)=>{const g=c.createRadialGradient(x,y,0,x,y,Math.max(r,.5));g.addColorStop(0,`rgba(255,255,255,${a})`);g.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=g;c.beginPath();c.arc(x,y,Math.max(r,.5),0,7);c.fill()};
+function sim(touch){
+const t=XT[+$('#xt').value],ap=+$('#xa').value||1,fl=(+$('#xf').value||1)*(+$('#xb').value),ep=+$('#xe').value||1,cd=+$('#xc').value;
+const M=fl/ep,ex=ep/(fl/ap),fov=60/M,pd=300/fov,r=t[1]/2*pd,type=t[2],dbl=type==='dbl';
+let v,lab,why=t[4];
+if(dbl){const lim=Math.max(116/ap,3-2*cd),sep=t[1]*3600;v=lim<=sep?1:0;lab=v?'Split into two stars':'Not resolved';why+=v?'':' Try more aperture or steadier air.'}
+else if(type==='moon'){v=1;lab='Bright and clear'}
+else if(['jup','sat','mars'].includes(type)){v=cd*(M>=100?1:.6);lab=M<60?'Tiny disc':v>.6?'Clearly visible':'Visible but soft';if(M>=t[5]&&cd>=.7)why+=' '+t[6]}
+else{v=cd*Math.min(1,ap/120)*(ex>7||ex<.5?.6:1);lab=v>.6?'Clearly visible':v>.35?'Faint':'Barely visible';if(M>=t[5]&&cd>=.7)why+=' '+t[6]}
+const dif=Math.min(3,t[3]+(cd<.5?1:0)+(!dbl&&type!=='moon'&&M<t[5]/2?1:0)),dl=['Easy','Moderate','Challenging','Very hard'][dif];
+const c=$('#xv').getContext('2d'),R=rng(7);c.clearRect(0,0,320,320);c.save();c.translate(160,160);c.beginPath();c.arc(0,0,150,0,7);c.fillStyle='#030303';c.fill();c.clip();
+for(let i=0;i<20+60*cd*Math.min(1,ap/150);i++)glow(c,(R()-.5)*300,(R()-.5)*300,2.5,.2+R()*.6);
+const A=Math.min(1,.2+.7*(v||.3));
+if(type==='moon'){const g=c.createLinearGradient(-r,0,r,0);g.addColorStop(0,'#ddd');g.addColorStop(1,'#333');c.fillStyle=g;c.beginPath();c.arc(0,0,r,0,7);c.fill();for(let i=0;i<16;i++){const a=R()*6.3,d=Math.sqrt(R())*r*.9;c.fillStyle='rgba(0,0,0,.22)';c.beginPath();c.arc(Math.cos(a)*d,Math.sin(a)*d,r*(.03+.08*R()),0,7);c.fill()}}
+else if(type==='jup'||type==='mars'){c.save();c.beginPath();c.arc(0,0,Math.max(r,1.5),0,7);c.clip();c.fillStyle=type==='jup'?'#c8c8c8':'#a0a0a0';c.fillRect(-r,-r,2*r,2*r);c.fillStyle='rgba(0,0,0,.25)';(type==='jup'?[-.5,.15,.55]:[-.2,.3]).forEach(y=>c.fillRect(-r,y*r-r*.07,2*r,r*.16));c.restore();if(type==='jup')[-6,-3,4,8].forEach(k=>glow(c,k*r*.9,(R()-.5)*r*.1,2,.9));else glow(c,0,-r*.9,r*.25,.8)}
+else if(type==='sat'){c.rotate(-.35);c.strokeStyle='rgba(225,225,225,.7)';c.lineWidth=Math.max(1,r*.16);c.beginPath();c.ellipse(0,0,r,r*.28,0,0,7);c.stroke();c.fillStyle='#bbb';c.beginPath();c.arc(0,0,Math.max(r*.45,1.2),0,7);c.fill();c.beginPath();c.ellipse(0,0,r,r*.28,0,0,3.14);c.stroke()}
+else if(type==='m42'){glow(c,0,0,r*.9,A*.5);glow(c,-r*.35,-r*.2,r*.6,A*.5);glow(c,r*.3,r*.15,r*.5,A*.4);[[0,0],[3,2],[-3,3],[1,-3]].forEach(p=>glow(c,p[0]*r*.02,p[1]*r*.02,3,1))}
+else if(type==='ple'){glow(c,0,0,r,A*.1);for(let i=0;i<8;i++)glow(c,(R()-.5)*r*1.5,(R()-.5)*r*1.5,5+R()*4,1)}
+else if(type==='and'){c.save();c.rotate(.6);c.scale(1,.35);glow(c,0,0,r,A*.8);c.restore();glow(c,0,0,r*.12+3,A+.2)}
+else{const s=t[1]*pd,bl=3+(1-cd)*5;if(v){glow(c,-s/2,0,bl,1);glow(c,s/2,0,bl*.7,.8)}else{c.save();c.scale(1.5,1);glow(c,0,0,bl*1.3,1);c.restore()}}
+c.restore();c.strokeStyle='#555';c.lineWidth=3;c.beginPath();c.arc(160,160,150,0,7);c.stroke();
+const sz=t[1]>=.05?(t[1]).toFixed(2)+'°':(t[1]*3600).toFixed(1)+'″';
+$('#xs').innerHTML=[['Magnification',M.toFixed(0)+'×'],['Exit pupil',ex.toFixed(1)+' mm'],['Field of view',fov.toFixed(2)+'°'],['Target size',sz],['Visibility',lab],['Difficulty',dl]].map(([a,b])=>`<div><b>${b}</b><span>${a}</span></div>`).join('');
+$('#xd').textContent=lab;$('#xd').className='tag'+(v>.6?' ok':'');
+$('#xn').textContent=why+(t[1]>fov?' The target is larger than this field, so only part of it fits.':'');
+if(touch&&v>.35&&!S.obs.includes(t[0])){S.obs.push(t[0]);save();render()}}
+['xt','xa','xf','xe','xb','xc'].forEach(i=>$('#'+i).oninput=()=>sim(1));sim(0);
+
+/* Field procedure */
+const PS=[['Transport equipment','Carry the tube, mount head, tripod and counterweights separately with the optics capped.','Never carry the telescope by the focuser.'],
+['Set the tripod','Extend the legs, spread them fully, tighten the braces and level the head.','Check every leg lock before you release the weight.'],
+['Install the mount','Seat the mount head, tighten the fixing bolt and point the RA axis roughly at the pole.','Hold the head with both hands until it is bolted down.'],
+['Install the counterweight','Slide the weights onto the shaft and fit the safety stop at the end.','Tighten the stop screw. A sliding weight can injure you and damage the mount.'],
+['Install the telescope','With the clutches locked, seat the dovetail in the saddle and tighten it before letting go.','Keep a hand on the tube until the saddle clamp is tight.'],
+['Balance the RA axis','Loosen the RA clutch, hold the tube and slide the counterweight until it stays still when released.','Keep fingers clear of the gap as the tube swings.'],
+['Balance the Dec axis','Loosen the Dec clutch with the tube horizontal and slide it in its rings until it stays level.','Hold the tube while the ring clamps are loose.'],
+['Attach the finder','Fit the finder in its bracket and align it on a distant daytime landmark, then lock it.','Never use a finder near the Sun.'],
+['Check the optics','Remove the cap and look for dew, dust or knocks. Check collimation in the focuser view.','Do not touch mirror or lens surfaces.'],
+['Perform alignment','Align the mount to the pole or to bright stars as your manufacturer describes.','Follow the manual for your mount, because procedures differ.'],
+['Select an eyepiece','Start with the longest focal length for a wide, forgiving view.','Lock the clutches before swapping eyepieces.'],
+['Begin observation','Centre the target in the finder, then the eyepiece, then focus gently.','Never point at the Sun without a certified solar filter correctly fitted over the front aperture.'],
+['Monitor dew','Check optics and eyepieces now and then, and use a dew shield or heater band if needed.','Do not rub wet optics with a cloth.'],
+['Finish observation','Park the mount, lock the clutches and cap the optics.','Cover the front of the tube first.'],
+['Pack equipment','Remove accessories, then the tube, then the counterweight, then the mount.','Take the tube off before the counterweight.'],
+['Store safely','Let cold gear warm in its case before opening, then store it capped and dry.','Opening cold gear in a warm room causes condensation on the optics.']];
+let sp=Math.max(0,PS.findIndex((_,i)=>!S.p.includes(i)));
+function proc(){const d=S.p.includes(sp);$('#pb').style.width=S.p.length/PS.length*100+'%';$('#pt').textContent=`Step ${sp+1} of ${PS.length}, ${S.p.length} completed`+(S.p.length===PS.length?'. Procedure complete':'');$('#ph').textContent=PS[sp][0]+(d?' (done)':'');$('#pd').textContent=PS[sp][1];$('#pw').textContent=PS[sp][2];$('#pc').textContent=d?'Completed':'I completed this step';$('#pp').disabled=sp===0}
+$('#pc').onclick=()=>{if(!S.p.includes(sp))S.p.push(sp);save();if(sp<PS.length-1)sp++;proc();render()};
+$('#pp').onclick=()=>{if(sp>0){sp--;proc()}};
+$('#px2').onclick=()=>{S.p=[];sp=0;save();proc();render()};proc();
+
+/* Common mistakes */
+$('#mk').innerHTML=[['Lifting by the focuser','The focuser is built for eyepieces, not the tube weight, so it can crack, slip or knock mirrors out of line.','Hold the tube body or rings, with the focuser racked in.'],
+['Carrying tube and mount together','The weight and awkward balance make drops and knocks likely.','Carry the tube, mount head, counterweights and tripod separately when practical.'],
+['Removing the counterweight first','The mount can swing tube-heavy, damaging gears and hands.','Take the tube off first, then the counterweight. Fit them in reverse order.'],
+['Forcing a locked mount','Forcing clutches strips gears and bends shafts.','Loosen the clutch, move by hand, then lock it again.'],
+['Touching optical coatings','Skin oils etch coatings and marks are hard to remove.','Handle by the housing or edges and never touch a surface.'],
+['Wiping a mirror with a cloth','Dust grit scratches coatings permanently.','Blow off loose dust with a bulb blower, and clean only when truly needed, following the manual.'],
+['Observing the Sun without a certified filter','Focused sunlight can cause instant, permanent blindness and burn equipment.','Never do it without a certified solar filter correctly fitted over the front aperture, used as its maker instructs.'],
+['Opening cold equipment indoors at once','Warm moist air condenses on cold optics.','Keep it capped in its case until it reaches room temperature.'],
+['Leaving optics exposed to dust','Dust and moisture build up and scatter more light over time.','Cap the tube and eyepieces whenever you are not observing.'],
+['Ignoring dew','Dew clouds optics and can run into the tube.','Use a dew shield, check optics regularly and warm gently if needed.']].map(m=>`<details class="card"><summary>${m[0]}</summary><div><b>Why it hurts.</b> ${m[1]}<br><br><b>Do this instead.</b> ${m[2]}</div></details>`).join('');
+
+/* Care log */
+const J=[['Check collimation',30],['Clean dust off optics with a blower',60],['Charge the power pack',30],['Tighten tripod and mount bolts',90],['Clean eyepieces',90],['Lubricate focuser and mount',180]];
+const day=864e5,iso=d=>new Date(d).toISOString().slice(0,10);
+function logUI(){
+$('#log').innerHTML=J.map(([t,n],i)=>{const e=S.log.filter(x=>x.t===t).map(x=>x.d).sort().pop();
+let st='Not logged yet';if(e){const left=Math.round((new Date(e).getTime()+n*day-Date.now())/day);st=left<0?`Overdue by ${-left} d`:`Due in ${left} d`}
+return `<tr><td>${t}</td><td>${n} d</td><td>${e||'Never'}</td><td>${st}</td><td><button class="ghost" data-i="${i}">Log done today</button></td></tr>`}).join('');
+$$('#log button').forEach(b=>b.onclick=()=>{S.log.push({t:J[b.dataset.i][0],d:iso(Date.now())});save();render()})}
+
+/* Score */
+function render(){
+let done=0;for(const[k,v]of Object.entries(G)){const n=v.filter((_,i)=>S.c[k+i]).length;done+=n;const id=k[0]+k.length;$('#b-'+id).style.width=(n/v.length*100)+'%';$('#t-'+id).textContent=n+' of '+v.length+' done'}
+const D=[['Safety',done/keys.length,20],['Handling',S.p.length/PS.length,15],['Balance',S.bal?1:0,10],['Collimation',S.col?1:0,10],['Optics',(S.opt?.5:0)+(S.cool?.5:0),10],['Observation',Math.min(S.obs.length/3,1),10],['Maintenance',Math.min(new Set(S.log.map(x=>x.t)).size/3,1),10],['Quiz',S.qb||0,15]];
+const sc=Math.round(D.reduce((a,[,v,w])=>a+v*w,0));
+$('#dsh').innerHTML=D.map(([n,v,w])=>`<div><span>${n}</span><b>${Math.round(v*100)}%</b><i style="width:${v*100}%"></i><small>${(v*w).toFixed(1)} of ${w} points</small></div>`).join('');
+$('#bdg').innerHTML=[['First setup',S.p.length>=5],['Safe handler',done===keys.length],['Balance complete',!!S.bal],['Collimation complete',!!S.col],['Optics ready',!!S.opt&&!!S.cool],['Observation ready',S.obs.length>=3],['Maintenance logged',S.log.length>0],['Field procedure complete',S.p.length===PS.length]].map(([n,o])=>`<span class="badge${o?' on':''}">${n}</span>`).join('');
+$('#sc').textContent=sc;$('#ring').setAttribute('stroke-dashoffset',326.7*(1-sc/100));
+$('#scl').textContent=sc<25?'Getting Started':sc<55?'Developing':sc<85?'Field Ready':'Advanced Practice';
+logUI()}
+render();
+</script>
+</body>
+</html>

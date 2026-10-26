@@ -1,0 +1,2312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Satellite Operations — X Horizon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  .sat-ops, .sat-ops *{ box-sizing:border-box; }
+  .sat-ops{
+    --bg:#07070a;
+    --bg-raise:#0e0f12;
+    --surface:#131519;
+    --surface-2:#191c21;
+    --border:#25282e;
+    --border-soft:#1b1e23;
+    --text:#f1efe9;
+    --text-dim:#9a9c9c;
+    --text-faint:#67696c;
+    --green:#54b07a;
+    --green-glow:rgba(84,176,122,.28);
+    --amber:#c99a4d;
+    --red:#c15f57;
+    --blue:#5a8fc9;
+    --font-display:'Space Grotesk', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-body:'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono:'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .sat-ops a{ color:inherit; }
+  .sat-ops ::selection{ background:var(--green-glow); color:var(--text); }
+  .sat-ops :focus-visible{ outline:2px solid var(--green); outline-offset:3px; }
+  .sat-ops button{ font-family:inherit; }
+  .sat-ops table{ width:100%; }
+
+  .sat-wrap{ max-width:1120px; margin:0 auto; padding:0 28px; }
+  @media (max-width:640px){ .sat-wrap{ padding:0 18px; } }
+
+  .sat-ops h1,.sat-ops h2,.sat-ops h3,.sat-ops h4{ font-family:var(--font-display); font-weight:600; letter-spacing:-0.01em; margin:0; }
+  .sat-ops p{ margin:0; color:var(--text-dim); }
+  .sat-ops .sat-eyebrow{ font-family:var(--font-mono); font-size:12.5px; color:var(--text-faint); letter-spacing:.02em; }
+
+  /* ---------- top strip / quicknav ---------- */
+  .sat-quicknav{ position:sticky; top:0; z-index:40; background:rgba(7,7,10,.9); backdrop-filter:blur(10px); border-bottom:1px solid var(--border-soft); }
+  .sat-quicknav .sat-wrap{ display:flex; align-items:center; gap:18px; height:52px; overflow-x:auto; scrollbar-width:none; }
+  .sat-quicknav .sat-wrap::-webkit-scrollbar{ display:none; }
+  .sat-quicknav .sat-brand{ font-family:var(--font-mono); font-size:12.5px; color:var(--text); white-space:nowrap; display:flex; align-items:center; gap:8px; flex:none; }
+  .sat-quicknav .sat-dot{ width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green-glow); flex:none; }
+  .sat-quicknav nav{ display:flex; gap:16px; }
+  .sat-quicknav nav a{ font-size:12.5px; color:var(--text-dim); text-decoration:none; white-space:nowrap; transition:color .15s; }
+  .sat-quicknav nav a:hover{ color:var(--text); }
+  .sat-quicknav .sat-nav-actions{ margin-left:auto; display:flex; gap:8px; flex:none; }
+  .sat-icon-btn{ background:transparent; border:1px solid var(--border); color:var(--text-dim); font-family:var(--font-mono); font-size:11px; padding:6px 10px; border-radius:3px; cursor:pointer; white-space:nowrap; }
+  .sat-icon-btn:hover{ color:var(--text); border-color:var(--text-dim); }
+
+  /* ---------- learning mode strip ---------- */
+  .sat-mode-strip{ border-bottom:1px solid var(--border-soft); background:var(--bg-raise); }
+  .sat-mode-strip .sat-wrap{ display:flex; align-items:center; gap:14px; padding:12px 28px; flex-wrap:wrap; }
+  .sat-mode-label{ font-family:var(--font-mono); font-size:11px; color:var(--text-faint); }
+  .sat-mode-group{ display:flex; gap:2px; background:var(--surface); border:1px solid var(--border); border-radius:4px; padding:2px; }
+  .sat-mode-btn{ background:transparent; border:none; color:var(--text-dim); font-size:12px; padding:6px 12px; border-radius:3px; cursor:pointer; }
+  .sat-mode-btn[aria-pressed="true"]{ background:var(--surface-2); color:var(--text); }
+  .sat-mode-hint{ font-size:12px; color:var(--text-faint); }
+
+  /* ---------- generic sections ---------- */
+  .sat-section{ padding:72px 0; border-bottom:1px solid var(--border-soft); }
+  .sat-section-head{ max-width:64ch; margin-bottom:36px; }
+  .sat-section-head h2{ font-size:clamp(24px,3vw,32px); margin-top:10px; }
+  .sat-section-head p{ margin-top:12px; font-size:15px; }
+
+  /* ---------- hero ---------- */
+  .sat-hero{ padding:76px 0 56px; border-bottom:1px solid var(--border-soft); }
+  .sat-hero-grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-items:center; }
+  @media (max-width:860px){ .sat-hero-grid{ grid-template-columns:1fr; gap:40px; } }
+  .sat-hero h1{ font-size:clamp(34px,5vw,52px); line-height:1.05; margin:14px 0 18px; }
+  .sat-hero .sat-lede{ font-size:16.5px; max-width:46ch; color:var(--text-dim); }
+  .sat-hero-actions{ display:flex; gap:12px; margin-top:28px; flex-wrap:wrap; }
+  .sat-btn{ font-family:var(--font-body); font-size:14px; font-weight:600; padding:11px 18px; border-radius:3px; cursor:pointer; border:1px solid var(--border); transition:border-color .15s, background .15s; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
+  .sat-btn-solid{ background:var(--text); color:#0a0a0a; border-color:var(--text); }
+  .sat-btn-solid:hover{ background:#d9d7cf; }
+  .sat-btn-ghost{ background:transparent; color:var(--text); }
+  .sat-btn-ghost:hover{ border-color:var(--text-dim); }
+  .sat-btn:disabled{ opacity:.4; cursor:not-allowed; }
+  .sat-btn-sm{ font-size:12.5px; padding:7px 12px; }
+
+  .sat-scope{ background:var(--bg-raise); border:1px solid var(--border); border-radius:4px; overflow:hidden; }
+  .sat-scope-head{ display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid var(--border-soft); gap:10px; flex-wrap:wrap; }
+  .sat-scope-head .sat-eyebrow{ display:flex; align-items:center; gap:8px; }
+  .sat-badge{ font-family:var(--font-mono); font-size:10px; padding:2px 7px; border-radius:2px; letter-spacing:.04em; white-space:nowrap; border:1px solid transparent; }
+  .sat-badge-sim{ background:rgba(201,154,77,.14); color:var(--amber); border-color:rgba(201,154,77,.3); }
+  .sat-badge-example{ background:rgba(90,143,201,.14); color:var(--blue); border-color:rgba(90,143,201,.32); }
+  .sat-badge-user{ background:rgba(84,176,122,.14); color:var(--green); border-color:rgba(84,176,122,.3); }
+  .sat-badge-calc{ background:rgba(255,255,255,.06); color:var(--text-dim); border-color:var(--border); }
+  .sat-badge-live{ background:rgba(84,176,122,.2); color:var(--green); border-color:var(--green); }
+  .sat-badge-off{ background:rgba(193,95,87,.14); color:var(--red); border-color:rgba(193,95,87,.32); }
+  .sat-orbit-viz{ display:block; width:100%; height:auto; }
+  .sat-telemetry-rows{ display:grid; grid-template-columns:1fr 1fr; gap:0; border-top:1px solid var(--border-soft); }
+  .sat-telemetry-cell{ padding:12px 16px; border-right:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft); }
+  .sat-telemetry-cell:nth-child(2n){ border-right:none; }
+  .sat-telemetry-cell .sat-tlabel{ font-size:11px; color:var(--text-faint); }
+  .sat-telemetry-cell .sat-tval{ font-family:var(--font-mono); font-size:18px; color:var(--text); margin-top:3px; }
+  .sat-telemetry-cell .sat-tval span{ font-size:12px; color:var(--text-faint); }
+
+  /* ---------- subsystem / orbit / ops cards ---------- */
+  .sat-grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border-soft); border:1px solid var(--border-soft); }
+  @media (max-width:860px){ .sat-grid-4{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:480px){ .sat-grid-4{ grid-template-columns:1fr; } }
+  .sat-sub-card{ background:var(--bg); padding:22px 20px; }
+  .sat-sub-card svg{ width:26px; height:26px; color:var(--text-dim); margin-bottom:16px; }
+  .sat-sub-card h3{ font-size:15px; margin-bottom:8px; }
+  .sat-sub-card p{ font-size:13.5px; }
+
+  .sat-orbit-classes{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border-soft); border:1px solid var(--border-soft); margin-top:8px; }
+  @media (max-width:860px){ .sat-orbit-classes{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:480px){ .sat-orbit-classes{ grid-template-columns:1fr; } }
+  .sat-orbit-card{ background:var(--bg); padding:20px; display:flex; flex-direction:column; gap:10px; }
+  .sat-orbit-card .sat-oc-name{ font-family:var(--font-display); font-size:16px; }
+  .sat-orbit-card .sat-oc-alt{ font-family:var(--font-mono); font-size:12px; color:var(--green); }
+  .sat-orbit-card p{ font-size:13px; }
+  .sat-orbit-diagram{ display:block; width:100%; height:auto; margin:28px 0 0; }
+
+  .sat-two-col{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
+  @media (max-width:860px){ .sat-two-col{ grid-template-columns:1fr; gap:32px; } }
+  .sat-two-col p{ font-size:14.5px; }
+  .sat-two-col p + p{ margin-top:12px; }
+
+  /* ---------- labs (shared shell) ---------- */
+  .sat-lab{ background:var(--bg-raise); border:1px solid var(--border); border-radius:4px; overflow:hidden; }
+  .sat-lab-head{ padding:20px 24px; border-bottom:1px solid var(--border-soft); display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+  .sat-lab-head h3{ font-size:17px; }
+  .sat-lab-body{ display:grid; grid-template-columns:320px 1fr; }
+  @media (max-width:780px){ .sat-lab-body{ grid-template-columns:1fr; } }
+  .sat-lab-controls{ padding:22px 24px; border-right:1px solid var(--border-soft); display:flex; flex-direction:column; gap:16px; }
+  @media (max-width:780px){ .sat-lab-controls{ border-right:none; border-bottom:1px solid var(--border-soft); } }
+  .sat-field{ display:flex; flex-direction:column; gap:6px; }
+  .sat-field label{ font-size:12px; color:var(--text-dim); display:flex; justify-content:space-between; gap:8px; }
+  .sat-field label .sat-fval{ font-family:var(--font-mono); color:var(--text); white-space:nowrap; }
+  .sat-field input[type="range"]{ width:100%; accent-color:var(--green); }
+  .sat-field select, .sat-field input[type="number"], .sat-field input[type="text"], .sat-field textarea{
+    background:var(--surface); border:1px solid var(--border); color:var(--text);
+    font-family:var(--font-mono); font-size:12.5px; padding:8px 10px; border-radius:3px; width:100%; resize:vertical;
+  }
+  .sat-field select:focus, .sat-field input:focus, .sat-field textarea:focus{ border-color:var(--green); }
+  .sat-preset-row{ display:flex; gap:6px; flex-wrap:wrap; }
+  .sat-chip{ font-family:var(--font-mono); font-size:11px; padding:5px 9px; border:1px solid var(--border); border-radius:20px; background:transparent; color:var(--text-dim); cursor:pointer; }
+  .sat-chip:hover{ border-color:var(--text-dim); color:var(--text); }
+  .sat-chip[aria-pressed="true"]{ border-color:var(--green); color:var(--green); }
+  .sat-run-btn{ margin-top:4px; }
+  .sat-lab-output{ padding:22px 24px; min-width:0; }
+  .sat-canvas-wrap{ position:relative; border:1px solid var(--border-soft); border-radius:3px; overflow:hidden; background:#050506; }
+  .sat-canvas-wrap canvas{ display:block; width:100%; height:auto; }
+  .sat-caption{ font-size:11.5px; color:var(--text-faint); margin-top:8px; }
+  .sat-caption sub{ font-size:9px; }
+
+  .sat-pass-table{ width:100%; border-collapse:collapse; margin-top:18px; font-size:13px; display:block; overflow-x:auto; }
+  .sat-pass-table th{ text-align:left; font-family:var(--font-mono); font-weight:500; font-size:11px; color:var(--text-faint); padding:6px 10px; border-bottom:1px solid var(--border); white-space:nowrap; }
+  .sat-pass-table td{ padding:9px 10px; border-bottom:1px solid var(--border-soft); font-family:var(--font-mono); font-size:12.5px; white-space:nowrap; }
+  .sat-pass-table tr:hover td{ background:var(--surface); }
+  .sat-quality-dot{ display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; flex:none; }
+
+  .sat-readout-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--border-soft); border:1px solid var(--border-soft); margin-top:18px; }
+  @media (max-width:420px){ .sat-readout-grid{ grid-template-columns:1fr; } }
+  .sat-readout{ background:var(--bg-raise); padding:14px 16px; }
+  .sat-readout .sat-tlabel{ font-size:11px; color:var(--text-faint); }
+  .sat-readout .sat-tval{ font-family:var(--font-mono); font-size:19px; margin-top:4px; }
+  .sat-margin-banner{ margin-top:16px; padding:14px 16px; border-radius:3px; font-family:var(--font-mono); font-size:13px; display:flex; align-items:center; gap:10px; border:1px solid var(--border); flex-wrap:wrap; }
+
+  .sat-freq-table{ border-collapse:collapse; margin-top:8px; display:block; overflow-x:auto; }
+  .sat-freq-table th{ text-align:left; font-family:var(--font-mono); font-size:11px; color:var(--text-faint); font-weight:500; padding:10px 12px; border-bottom:1px solid var(--border); white-space:nowrap; }
+  .sat-freq-table td{ padding:12px; border-bottom:1px solid var(--border-soft); font-size:13.5px; }
+  .sat-freq-table td:first-child{ font-family:var(--font-mono); color:var(--green); white-space:nowrap; }
+
+  .sat-ops-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border-soft); border:1px solid var(--border-soft); margin-top:8px; }
+  @media (max-width:860px){ .sat-ops-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .sat-ops-grid{ grid-template-columns:1fr; } }
+  .sat-ops-card{ background:var(--bg); padding:22px 20px; }
+  .sat-ops-card .sat-status{ display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10.5px; color:var(--text-faint); margin-bottom:12px; }
+  .sat-ops-card h3{ font-size:15px; margin-bottom:8px; }
+  .sat-ops-card p{ font-size:13.5px; }
+
+  .sat-case-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:8px; }
+  @media (max-width:760px){ .sat-case-grid{ grid-template-columns:1fr; } }
+  .sat-case-card{ border:1px solid var(--border); border-radius:4px; padding:20px; }
+  .sat-case-card h3{ font-size:16px; margin-bottom:2px; }
+  .sat-case-card .sat-case-tag{ font-family:var(--font-mono); font-size:10.5px; color:var(--green); margin-bottom:12px; display:block; }
+  .sat-case-card dl{ margin:0 0 12px; display:grid; grid-template-columns:auto 1fr; gap:4px 10px; }
+  .sat-case-card dt{ font-size:11px; color:var(--text-faint); }
+  .sat-case-card dd{ margin:0; font-family:var(--font-mono); font-size:11.5px; text-align:right; }
+  .sat-case-detail{ margin-top:10px; padding-top:10px; border-top:1px solid var(--border-soft); }
+  .sat-case-detail dt{ font-family:var(--font-mono); font-size:10.5px; color:var(--text-faint); margin-top:8px; }
+  .sat-case-detail dt:first-child{ margin-top:0; }
+  .sat-case-detail dd{ margin:3px 0 0; font-size:12.5px; color:var(--text-dim); font-family:var(--font-body); text-align:left; }
+
+  .sat-gloss-search{ margin-bottom:20px; max-width:340px; background:var(--surface); border:1px solid var(--border); color:var(--text); font-family:var(--font-mono); font-size:13px; padding:9px 12px; border-radius:3px; }
+  .sat-gloss-list{ display:grid; grid-template-columns:1fr 1fr; gap:0 40px; }
+  @media (max-width:700px){ .sat-gloss-list{ grid-template-columns:1fr; } }
+  .sat-gloss-item{ padding:14px 0; border-bottom:1px solid var(--border-soft); }
+  .sat-gloss-item dt{ font-family:var(--font-mono); font-size:13px; color:var(--text); margin-bottom:4px; }
+  .sat-gloss-item dd{ margin:0; font-size:13px; color:var(--text-dim); }
+  .sat-gloss-item.sat-hide{ display:none; }
+
+  /* ---------- equation cards ---------- */
+  .sat-eq-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border-soft); border:1px solid var(--border-soft); margin-top:8px; }
+  @media (max-width:860px){ .sat-eq-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .sat-eq-grid{ grid-template-columns:1fr; } }
+  .sat-eq-card{ background:var(--bg); padding:20px; }
+  .sat-eq-card h3{ font-size:13.5px; margin-bottom:10px; }
+  .sat-eq-card .sat-eq-formula{ font-family:var(--font-mono); font-size:16px; color:var(--green); padding:10px 0; border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft); margin-bottom:10px; }
+  .sat-eq-card .sat-eq-vars{ font-size:12px; }
+  .sat-eq-card .sat-eq-vars div{ margin-bottom:3px; }
+  .sat-eq-card .sat-eq-vars b{ font-family:var(--font-mono); color:var(--text); font-weight:500; }
+  .sat-eq-card details{ margin-top:10px; }
+  .sat-eq-card summary{ font-size:11.5px; color:var(--text-faint); cursor:pointer; }
+  .sat-eq-card .sat-eq-example{ font-size:12px; margin-top:8px; font-family:var(--font-mono); color:var(--text-dim); }
+
+  /* ---------- timeline ---------- */
+  .sat-timeline{ margin-top:8px; border-top:1px solid var(--border-soft); }
+  .sat-tl-item{ border-bottom:1px solid var(--border-soft); }
+  .sat-tl-btn{ width:100%; text-align:left; background:transparent; border:none; color:var(--text); padding:18px 4px; display:flex; align-items:center; gap:16px; cursor:pointer; font-family:var(--font-body); }
+  .sat-tl-idx{ font-family:var(--font-mono); font-size:11px; color:var(--text-faint); width:24px; flex:none; }
+  .sat-tl-name{ font-size:15px; flex:1; }
+  .sat-tl-chevron{ color:var(--text-faint); transition:transform .15s; flex:none; }
+  .sat-tl-btn[aria-expanded="true"] .sat-tl-chevron{ transform:rotate(90deg); }
+  .sat-tl-panel{ display:none; padding:0 4px 20px 40px; font-size:13.5px; color:var(--text-dim); max-width:66ch; }
+  .sat-tl-panel.sat-open{ display:block; }
+
+  /* ---------- telemetry dashboard ---------- */
+  .sat-tm-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border-soft); border:1px solid var(--border-soft); }
+  @media (max-width:860px){ .sat-tm-grid{ grid-template-columns:repeat(2,1fr); } }
+  .sat-tm-cell{ background:var(--bg-raise); padding:16px; }
+  .sat-tm-cell .sat-tlabel{ font-size:10.5px; color:var(--text-faint); display:flex; justify-content:space-between; }
+  .sat-tm-cell .sat-tval{ font-family:var(--font-mono); font-size:20px; margin-top:6px; }
+  .sat-tm-cell .sat-tval span{ font-size:11px; color:var(--text-faint); }
+  .sat-tm-bar{ height:3px; background:var(--surface-2); border-radius:2px; margin-top:8px; overflow:hidden; }
+  .sat-tm-bar i{ display:block; height:100%; background:var(--green); }
+
+  /* ---------- mission ops simulator ---------- */
+  .sat-sim-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media (max-width:860px){ .sat-sim-grid{ grid-template-columns:1fr; } }
+  .sat-sim-panel{ border:1px solid var(--border); border-radius:4px; padding:20px; background:var(--bg-raise); }
+  .sat-sim-panel h4{ font-size:13px; margin-bottom:14px; }
+  .sat-sim-log{ margin-top:16px; display:flex; flex-direction:column; gap:8px; max-height:260px; overflow-y:auto; }
+  .sat-sim-log-entry{ font-size:12.5px; padding:10px 12px; border-radius:3px; border:1px solid var(--border); }
+  .sat-sim-log-entry.sat-good{ border-color:rgba(84,176,122,.35); background:rgba(84,176,122,.06); }
+  .sat-sim-log-entry.sat-bad{ border-color:rgba(193,95,87,.35); background:rgba(193,95,87,.06); }
+  .sat-sim-actions{ display:flex; flex-direction:column; gap:8px; }
+  .sat-sim-action-btn{ text-align:left; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:10px 14px; border-radius:3px; cursor:pointer; font-size:13px; }
+  .sat-sim-action-btn:hover{ border-color:var(--text-dim); }
+
+  /* ---------- commanding lab ---------- */
+  .sat-cmd-palette{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+  .sat-cmd-chip{ font-family:var(--font-mono); font-size:12px; padding:8px 12px; border:1px solid var(--border); border-radius:3px; background:var(--surface); color:var(--text-dim); cursor:pointer; }
+  .sat-cmd-chip:hover{ color:var(--text); border-color:var(--text-dim); }
+  .sat-cmd-sequence{ min-height:64px; border:1px dashed var(--border); border-radius:4px; padding:12px; display:flex; flex-direction:column; gap:8px; }
+  .sat-cmd-step{ display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--border); border-radius:3px; padding:9px 12px; font-size:13px; }
+  .sat-cmd-step .sat-cmd-num{ font-family:var(--font-mono); font-size:11px; color:var(--text-faint); }
+  .sat-cmd-step button{ margin-left:auto; background:transparent; border:none; color:var(--text-faint); cursor:pointer; font-size:16px; line-height:1; }
+  .sat-cmd-step.sat-cmd-err{ border-color:rgba(193,95,87,.45); }
+  .sat-cmd-empty{ color:var(--text-faint); font-size:12.5px; }
+  .sat-cmd-feedback{ margin-top:14px; font-size:13px; }
+
+  /* ---------- conjunction ---------- */
+  .sat-conj-readouts{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border-soft); border:1px solid var(--border-soft); margin-top:16px; }
+  @media (max-width:560px){ .sat-conj-readouts{ grid-template-columns:1fr; } }
+  .sat-conj-readouts .sat-readout{ background:var(--bg-raise); }
+
+  /* ---------- references ---------- */
+  .sat-ref-list{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border-soft); border:1px solid var(--border-soft); margin-top:8px; }
+  @media (max-width:700px){ .sat-ref-list{ grid-template-columns:1fr; } }
+  .sat-ref-item{ background:var(--bg); padding:16px 18px; display:flex; flex-direction:column; gap:4px; text-decoration:none; }
+  .sat-ref-item:hover{ background:var(--bg-raise); }
+  .sat-ref-item .sat-ref-name{ font-size:14px; color:var(--text); }
+  .sat-ref-item .sat-ref-desc{ font-size:12px; color:var(--text-faint); }
+
+  /* ---------- source modal ---------- */
+  .sat-modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:100; display:none; align-items:center; justify-content:center; padding:24px; }
+  .sat-modal-backdrop.sat-open{ display:flex; }
+  .sat-modal{ background:var(--bg-raise); border:1px solid var(--border); border-radius:6px; width:min(920px,100%); max-height:86vh; display:flex; flex-direction:column; }
+  .sat-modal-head{ display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--border-soft); }
+  .sat-modal-tabs{ display:flex; gap:6px; }
+  .sat-modal-tab{ background:transparent; border:1px solid var(--border); color:var(--text-dim); font-family:var(--font-mono); font-size:11.5px; padding:6px 12px; border-radius:3px; cursor:pointer; }
+  .sat-modal-tab[aria-selected="true"]{ color:var(--text); border-color:var(--text-dim); background:var(--surface); }
+  .sat-modal-actions{ display:flex; gap:8px; }
+  .sat-modal-body{ overflow:auto; padding:0; }
+  .sat-modal-body pre{ margin:0; padding:18px; font-family:var(--font-mono); font-size:12px; line-height:1.6; color:var(--text-dim); white-space:pre-wrap; word-break:break-word; }
+  .sat-modal-body pre.sat-hide{ display:none; }
+
+  /* ---------- footer ---------- */
+  .sat-footer .sat-wrap{ padding:44px 28px 60px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .sat-footer .sat-tag{ font-family:var(--font-display); font-size:15px; }
+  .sat-footer .sat-back{ font-size:13px; color:var(--text-dim); text-decoration:none; border:1px solid var(--border); padding:8px 14px; border-radius:3px; }
+  .sat-footer .sat-back:hover{ color:var(--text); border-color:var(--text-dim); }
+
+  /* ---------- learning-mode visibility ---------- */
+  .sat-ops[data-mode="explore"] .sat-eng-only,
+  .sat-ops[data-mode="explore"] .sat-ops-only{ display:none; }
+  .sat-ops[data-mode="engineering"] .sat-ops-only{ display:none; }
+  .sat-ops[data-mode="operations"] .sat-eng-only{ display:none; }
+
+  .sat-visually-hidden{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
+
+  @media (prefers-reduced-motion: reduce){
+    .sat-ops *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="sat-ops" id="satOpsRoot" data-mode="explore">
+
+  <div class="sat-quicknav">
+    <div class="sat-wrap">
+      <div class="sat-brand"><span class="sat-dot"></span>X HORIZON — SATELLITE OPS</div>
+      <nav id="satQuickNav">
+        <a href="#anatomy">Anatomy</a>
+        <a href="#orbits">Orbits</a>
+        <a href="#orbit-data">Orbit Data</a>
+        <a href="#pass-predictor">Pass Predictor</a>
+        <a href="#ground-track">Ground Track</a>
+        <a href="#pass-geometry">Pass Geometry</a>
+        <a href="#doppler">Doppler</a>
+        <a href="#link-budget">Link Budget</a>
+        <a href="#ops-concepts">Ops</a>
+        <a href="#mission-sim">Sim</a>
+        <a href="#commanding">Commanding</a>
+        <a href="#conjunction">Conjunction</a>
+        <a href="#case-studies">Cases</a>
+        <a href="#glossary">Glossary</a>
+        <a href="#references">References</a>
+      </nav>
+      <div class="sat-nav-actions">
+        <button class="sat-icon-btn" id="satViewSourceBtn" type="button">&lt;/&gt; View source</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sat-mode-strip">
+    <div class="sat-wrap">
+      <span class="sat-mode-label">LEARNING MODE</span>
+      <div class="sat-mode-group" role="group" aria-label="Learning mode">
+        <button class="sat-mode-btn" data-mode="explore" aria-pressed="true" type="button">Explore</button>
+        <button class="sat-mode-btn" data-mode="engineering" aria-pressed="false" type="button">Engineering</button>
+        <button class="sat-mode-btn" data-mode="operations" aria-pressed="false" type="button">Operations</button>
+      </div>
+      <span class="sat-mode-hint" id="satModeHint">Plain-language explanations, no equations.</span>
+    </div>
+  </div>
+
+  <!-- ===================== HERO ===================== -->
+  <header class="sat-hero">
+    <div class="sat-wrap sat-hero-grid">
+      <div>
+        <div class="sat-eyebrow">SKILL / SATELLITE OPERATIONS</div>
+        <h1>Getting a spacecraft to orbit is the easy part. Running it for ten years is the job.</h1>
+        <p class="sat-lede">Satellite operations is the discipline of keeping a spacecraft alive, pointed, powered, and useful — from the first signal after separation to the last maneuver before it burns up. This page covers the subsystems, the ground infrastructure, and a working lab bench: real TLE/SGP4 propagation, ground tracks, pass geometry, Doppler, and link budgets.</p>
+        <div class="sat-hero-actions">
+          <a href="#orbit-data" class="sat-btn sat-btn-solid">Load a satellite</a>
+          <a href="#anatomy" class="sat-btn sat-btn-ghost">Start with the basics</a>
+        </div>
+      </div>
+
+      <div class="sat-scope">
+        <div class="sat-scope-head">
+          <div class="sat-eyebrow">ORBIT MONITOR <span class="sat-badge sat-badge-sim">SIMULATED</span></div>
+          <div class="sat-eyebrow" id="satHeroClock">T+00:00:00</div>
+        </div>
+        <svg class="sat-orbit-viz" viewBox="0 0 400 210" id="satHeroOrbit" aria-hidden="true">
+          <circle cx="200" cy="150" r="46" fill="none" stroke="#25282e" stroke-width="1"></circle>
+          <ellipse cx="200" cy="118" rx="150" ry="46" fill="none" stroke="#25282e" stroke-width="1"></ellipse>
+          <circle id="satHeroSat" cx="350" cy="118" r="4" fill="#54b07a"></circle>
+          <path id="satHeroTrail" fill="none" stroke="#54b07a" stroke-width="1" stroke-opacity="0.35"></path>
+        </svg>
+        <div class="sat-telemetry-rows">
+          <div class="sat-telemetry-cell"><div class="sat-tlabel">Altitude</div><div class="sat-tval" id="tAlt">—</div></div>
+          <div class="sat-telemetry-cell"><div class="sat-tlabel">Velocity</div><div class="sat-tval" id="tVel">—</div></div>
+          <div class="sat-telemetry-cell"><div class="sat-tlabel">Battery</div><div class="sat-tval" id="tBatt">—</div></div>
+          <div class="sat-telemetry-cell"><div class="sat-tlabel">Signal</div><div class="sat-tval" id="tSig">—</div></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== ANATOMY ===================== -->
+  <section class="sat-section" id="anatomy">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">ANATOMY OF A SATELLITE</div>
+        <h2>Eight subsystems, one spacecraft</h2>
+        <p>Every satellite, from a 1U CubeSat to a multi-tonne GEO comsat, is built from the same functional blocks. The payload does the mission's actual job; everything else exists to keep the payload alive and pointed the right way.</p>
+      </div>
+      <div class="sat-grid-4">
+        <div class="sat-sub-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" stroke-linejoin="round"/></svg>
+          <h3>Power (EPS)</h3>
+          <p>Solar arrays, batteries, and regulation. Every other subsystem draws its power budget from here — miss it and nothing else matters.</p>
+        </div>
+        <div class="sat-sub-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3h6l2 4-2 4H6l4-4-4-4z"/><path d="M12 11v10M8 21h8"/></svg>
+          <h3>Propulsion</h3>
+          <p>Thrusters for orbit-raising, station-keeping, and deorbit. Many small satellites fly without any and simply decay.</p>
+        </div>
+        <div class="sat-sub-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M22 12h-4M6 12H2M19 5l-2.8 2.8M7.8 16.2 5 19M19 19l-2.8-2.8M7.8 7.8 5 5"/></svg>
+          <h3>ADCS</h3>
+          <p>Attitude determination and control: reaction wheels, magnetorquers, star trackers, gyros. Decides which way the satellite is facing.</p>
+        </div>
+        <div class="sat-sub-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 9h4M4 15h4M16 9h4M16 15h4M9 4v4M15 4v4M9 16v4M15 16v4"/></svg>
+          <h3>Thermal</h3>
+          <p>Radiators, heaters, and coatings that keep electronics inside their operating range through sun and eclipse.</p>
+        </div>
+        <div class="sat-sub-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>
+          <h3>C&amp;DH</h3>
+          <p>Command and data handling — the onboard computer. Runs the flight software, timestamps data, executes stored commands.</p>
+        </div>
+        <div class="sat-sub-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20V10M12 10a6 6 0 0 1 6-6M12 10a6 6 0 0 0-6-6M6 4a10 10 0 0 1 12 0"/><circle cx="12" cy="21" r="1"/></svg>
+          <h3>Communications</h3>
+          <p>Uplink for commands, downlink for telemetry and payload data. Bandwidth here often limits the whole mission's output.</p>
+        </div>
+        <div class="sat-sub-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="14" height="10" rx="1"/><path d="M17 10l4-2v8l-4-2z"/></svg>
+          <h3>Payload</h3>
+          <p>The reason the satellite exists — an imager, a comms relay, a science instrument. Everything above is overhead in service of this.</p>
+        </div>
+        <div class="sat-sub-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16v16H4z"/><path d="M4 12h16M12 4v16"/></svg>
+          <h3>Structure</h3>
+          <p>The bus that holds it all together and survives launch loads — vibration, acoustics, and shock — without shaking anything loose.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ORBIT CLASSES ===================== -->
+  <section class="sat-section" id="orbits">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">ORBIT CLASSES</div>
+        <h2>Altitude decides the job</h2>
+        <p>Where you put a satellite determines what it can see, how often it sees it, how long it lasts, and how much it costs to talk to. Operators pick an orbit for the mission, then design everything else around it.</p>
+      </div>
+      <div class="sat-orbit-classes">
+        <div class="sat-orbit-card">
+          <span class="sat-oc-name">LEO</span>
+          <span class="sat-oc-alt">160 – 2,000 km · 90–120 min period</span>
+          <p>Earth observation, imaging, and broadband constellations (Starlink, ISS). Close enough for low latency and detail, but any one satellite is only overhead for minutes at a time.</p>
+        </div>
+        <div class="sat-orbit-card">
+          <span class="sat-oc-name">MEO</span>
+          <span class="sat-oc-alt">2,000 – 35,786 km · 2–12 hr period</span>
+          <p>Navigation constellations — GPS, Galileo, GLONASS. A middle ground: fewer satellites needed for global coverage than LEO, less delay than GEO.</p>
+        </div>
+        <div class="sat-orbit-card">
+          <span class="sat-oc-name">GEO</span>
+          <span class="sat-oc-alt">35,786 km · 23h56m period</span>
+          <p>Matches Earth's rotation, so the satellite holds one spot in the sky. Used for weather (GOES), broadcast TV, and comms where a fixed ground antenna matters more than low latency.</p>
+        </div>
+        <div class="sat-orbit-card">
+          <span class="sat-oc-name">SSO</span>
+          <span class="sat-oc-alt">600 – 800 km · ~98° inclination</span>
+          <p>A sun-synchronous LEO tuned so the satellite crosses every latitude at the same local solar time — consistent lighting for imaging satellites, orbit after orbit.</p>
+        </div>
+      </div>
+      <svg class="sat-orbit-diagram" viewBox="0 0 900 260" role="img" aria-label="Relative orbit altitudes to scale">
+        <circle cx="60" cy="230" r="14" fill="#131519" stroke="#25282e"></circle>
+        <circle cx="60" cy="230" r="34" fill="none" stroke="#25282e" stroke-dasharray="2 4"></circle>
+        <circle cx="60" cy="230" r="60" fill="none" stroke="#54b07a" stroke-opacity=".55"></circle>
+        <circle cx="60" cy="230" r="130" fill="none" stroke="#c99a4d" stroke-opacity=".55"></circle>
+        <circle cx="60" cy="230" r="230" fill="none" stroke="#9a9c9c" stroke-opacity=".4"></circle>
+        <text x="128" y="164" font-family="IBM Plex Mono" font-size="10" fill="#54b07a">LEO ~2,000km</text>
+        <text x="196" y="94" font-family="IBM Plex Mono" font-size="10" fill="#c99a4d">MEO ~20,200km (GPS)</text>
+        <text x="296" y="12" font-family="IBM Plex Mono" font-size="10" fill="#9a9c9c">GEO 35,786km</text>
+      </svg>
+      <p class="sat-caption">Rings drawn to scale relative to Earth's radius (inner filled circle). GEO sits roughly 5.6 Earth radii out — far enough that one satellite can see a third of the planet at once.</p>
+    </div>
+  </section>
+
+  <!-- ===================== GROUND SEGMENT ===================== -->
+  <section class="sat-section" id="ground-segment">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">GROUND SEGMENT &amp; TT&amp;C</div>
+        <h2>The half of the mission that never leaves Earth</h2>
+      </div>
+      <div class="sat-two-col">
+        <div>
+          <p><strong style="color:var(--text)">Telemetry, tracking &amp; command (TT&amp;C)</strong> is the operational link between mission control and the spacecraft. Telemetry flows down — subsystem health, sensor readings, event logs. Commands flow up — mode changes, maneuver plans, software patches.</p>
+          <p>A LEO satellite is usually visible from any single ground station for only a few minutes per pass, several times a day. Operators either build a network of stations spread around the globe, lease time on a shared network, or accept that most of the orbit happens with no one listening — storing data onboard until the next contact.</p>
+          <p>Between contacts, the spacecraft runs autonomously against a stored command sequence and its own fault-protection logic. If something goes wrong with no ground station in view, the satellite has to detect it, react safely, and wait — see the Mission Operations Simulator below for exactly that scenario.</p>
+        </div>
+        <div>
+          <p><strong style="color:var(--text)">A contact, step by step:</strong></p>
+          <p>1. Acquisition of signal (AOS) — the satellite rises above the station's elevation mask, usually 5–10°.<br>
+          2. Antenna tracks the pass, following azimuth and elevation as the satellite crosses the sky.<br>
+          3. Stored telemetry and payload data downlink; new commands and ephemeris uplink.<br>
+          4. Loss of signal (LOS) as the satellite drops below the mask on the other side.</p>
+          <p>Everything useful has to happen inside that window — which is exactly what the labs below calculate.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ORBIT DATA ===================== -->
+  <section class="sat-section" id="orbit-data">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">ORBIT DATA</div>
+        <h2>Pick a satellite, or bring your own</h2>
+        <p>Every lab below — pass predictor, ground track, pass geometry, and Doppler — reads from the orbit loaded here. Choose one of five built-in examples, or paste a real two-line element set (TLE) for any object.</p>
+      </div>
+
+      <div class="sat-lab">
+        <div class="sat-lab-head">
+          <h3>Active orbit</h3>
+          <span class="sat-eyebrow" id="satEngineStatus">CHECKING SGP4 ENGINE…</span>
+        </div>
+        <div class="sat-lab-body">
+          <div class="sat-lab-controls">
+            <div class="sat-field">
+              <label for="satSelect">Satellite</label>
+              <select id="satSelect">
+                <option value="iss">ISS (ZARYA) — historical example</option>
+                <option value="leo">Generic LEO — illustrative example</option>
+                <option value="sso">Generic sun-synchronous — illustrative example</option>
+                <option value="meo">Generic MEO / GPS-class — illustrative example</option>
+                <option value="geo">Generic GEO — illustrative example</option>
+                <option value="custom">Custom — paste a TLE below</option>
+              </select>
+            </div>
+            <div class="sat-field">
+              <label for="satTleInput">TLE (two lines) <span class="sat-fval" id="satTleStatus"></span></label>
+              <textarea id="satTleInput" rows="3" spellcheck="false" placeholder="1 25544U 98067A   ...&#10;2 25544  51.6433 ..."></textarea>
+            </div>
+            <button class="sat-btn sat-btn-ghost sat-btn-sm" id="satTleValidate" type="button">Parse &amp; validate TLE</button>
+            <p class="sat-caption">No live tracking feed is connected in this standalone file. Built-in satellites are clearly labeled example data — the ISS set is a real historical TLE (dated, not current); the LEO/SSO/MEO/GEO sets are illustrative orbits, not tied to a specific tracked object. Paste your own current TLE from a public catalog for up-to-date results.</p>
+          </div>
+          <div class="sat-lab-output">
+            <div class="sat-readout-grid" id="satOrbitReadout">
+              <div class="sat-readout"><div class="sat-tlabel">Object</div><div class="sat-tval" id="odName">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Data source</div><div class="sat-tval" id="odSource">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Epoch (UTC)</div><div class="sat-tval" id="odEpoch">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Inclination</div><div class="sat-tval" id="odInc">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">RAAN</div><div class="sat-tval" id="odRaan">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Eccentricity</div><div class="sat-tval" id="odEcc">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Argument of perigee</div><div class="sat-tval" id="odArgp">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Mean anomaly</div><div class="sat-tval" id="odMa">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Mean motion</div><div class="sat-tval" id="odMm">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Approx. altitude</div><div class="sat-tval" id="odAlt">—</div></div>
+            </div>
+            <div class="sat-margin-banner" id="satParseMsg" style="border-color:var(--border);">Load a satellite or paste a TLE to see parsed elements.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PASS PREDICTOR ===================== -->
+  <section class="sat-section" id="pass-predictor">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">LAB 01</div>
+        <h2>Pass predictor</h2>
+        <p>Contact windows for the active orbit above, from a ground station you choose. Uses real SGP4 propagation when the engine is available, and falls back to a simplified circular two-body model otherwise — the badge below always says which one is running.</p>
+      </div>
+
+      <div class="sat-lab">
+        <div class="sat-lab-head">
+          <h3>Ground station contact windows</h3>
+          <span class="sat-eyebrow" id="ppEngineBadge">—</span>
+        </div>
+        <div class="sat-lab-body">
+          <div class="sat-lab-controls">
+            <div class="sat-field">
+              <label>Ground station latitude <span class="sat-fval" id="gsLatVal">34.0°</span></label>
+              <input type="range" id="gsLat" min="-70" max="78" step="0.1" value="34.0">
+            </div>
+            <div class="sat-field">
+              <label>Ground station longitude <span class="sat-fval" id="gsLonVal">73.1°</span></label>
+              <input type="range" id="gsLon" min="-180" max="180" step="0.1" value="73.1">
+            </div>
+            <div class="sat-preset-row" id="gsPresets">
+              <button class="sat-chip" data-lat="34.0" data-lon="73.1" type="button">Abbottabad</button>
+              <button class="sat-chip" data-lat="78.2" data-lon="15.4" type="button">Svalbard</button>
+              <button class="sat-chip" data-lat="38.9" data-lon="-77.0" type="button">Washington DC</button>
+              <button class="sat-chip" data-lat="-33.9" data-lon="151.2" type="button">Sydney</button>
+            </div>
+            <div class="sat-field sat-eng-only">
+              <label>Custom orbit altitude <span class="sat-fval" id="ppAltVal">500 km</span></label>
+              <input type="range" id="ppAlt" min="300" max="2000" step="10" value="500">
+            </div>
+            <div class="sat-field sat-eng-only">
+              <label>Custom orbit inclination <span class="sat-fval" id="ppIncVal">51.6°</span></label>
+              <input type="range" id="ppInc" min="0" max="98" step="0.1" value="51.6">
+            </div>
+            <div class="sat-field">
+              <label>Elevation mask <span class="sat-fval" id="ppMaskVal">10°</span></label>
+              <input type="range" id="ppMask" min="0" max="30" step="1" value="10">
+            </div>
+            <div class="sat-field">
+              <label>Search window <span class="sat-fval" id="ppWinVal">24 h</span></label>
+              <input type="range" id="ppWin" min="6" max="48" step="1" value="24">
+            </div>
+            <button class="sat-btn sat-btn-solid sat-run-btn" id="ppRun" type="button">Predict passes</button>
+          </div>
+          <div class="sat-lab-output">
+            <div class="sat-canvas-wrap">
+              <canvas id="ppCanvas" width="900" height="420" role="img" aria-label="Ground track plot"></canvas>
+            </div>
+            <p class="sat-caption" id="ppCaption">Green trace = visible above the elevation mask · grey trace = below the horizon or masked. Grid lines every 30° lon/lat.</p>
+            <table class="sat-pass-table" id="ppTable">
+              <thead><tr><th>AOS (T+)</th><th>Duration</th><th>Max elevation</th><th>Azimuth at max</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GROUND TRACK ===================== -->
+  <section class="sat-section" id="ground-track">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">LAB 02</div>
+        <h2>Ground track</h2>
+        <p>Watch the active orbit's subpoint move across the Earth in simulated time — ascending passes (heading north) drawn solid, descending passes dashed, with the ground station and current position marked live.</p>
+      </div>
+      <div class="sat-lab">
+        <div class="sat-lab-head">
+          <h3>Live ground track</h3>
+          <div class="sat-preset-row">
+            <button class="sat-chip" id="gtPlay" type="button" aria-pressed="false">▶ Play</button>
+            <button class="sat-chip" data-speed="1" type="button" aria-pressed="true">1×</button>
+            <button class="sat-chip" data-speed="10" type="button">10×</button>
+            <button class="sat-chip" data-speed="100" type="button">100×</button>
+            <button class="sat-chip" data-speed="1000" type="button">1000×</button>
+            <button class="sat-chip" id="gtZoomIn" type="button">Zoom +</button>
+            <button class="sat-chip" id="gtZoomOut" type="button">Zoom −</button>
+            <button class="sat-chip" id="gtReset" type="button">Reset</button>
+          </div>
+        </div>
+        <div class="sat-lab-output" style="padding-top:20px;">
+          <div class="sat-canvas-wrap">
+            <canvas id="gtCanvas" width="900" height="450" role="img" aria-label="Animated ground track"></canvas>
+          </div>
+          <div class="sat-readout-grid">
+            <div class="sat-readout"><div class="sat-tlabel">Simulated time</div><div class="sat-tval" id="gtClock">—</div></div>
+            <div class="sat-readout"><div class="sat-tlabel">Sub-satellite point</div><div class="sat-tval" id="gtLatLon">—</div></div>
+            <div class="sat-readout"><div class="sat-tlabel">Altitude</div><div class="sat-tval" id="gtAlt">—</div></div>
+            <div class="sat-readout"><div class="sat-tlabel">Direction</div><div class="sat-tval" id="gtDir">—</div></div>
+          </div>
+          <p class="sat-caption">Time starts at the current moment and advances at the selected multiplier while playing. Paused by default to avoid unnecessary background computation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PASS GEOMETRY ===================== -->
+  <section class="sat-section" id="pass-geometry">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">LAB 03</div>
+        <h2>Pass geometry</h2>
+        <p>The next pass over the ground station set in the Pass Predictor above, plotted as elevation and azimuth against time — the same curves a real antenna-pointing program would follow.</p>
+      </div>
+      <div class="sat-lab">
+        <div class="sat-lab-head">
+          <h3>Elevation &amp; azimuth vs. time</h3>
+          <button class="sat-btn sat-btn-ghost sat-btn-sm" id="pgRun" type="button">Find next pass</button>
+        </div>
+        <div class="sat-lab-output" style="padding-top:20px;">
+          <div class="sat-canvas-wrap">
+            <canvas id="pgCanvas" width="900" height="360" role="img" aria-label="Elevation and azimuth vs time"></canvas>
+          </div>
+          <div class="sat-readout-grid">
+            <div class="sat-readout"><div class="sat-tlabel">AOS</div><div class="sat-tval" id="pgAos">—</div></div>
+            <div class="sat-readout"><div class="sat-tlabel">Max elevation</div><div class="sat-tval" id="pgMax">—</div></div>
+            <div class="sat-readout"><div class="sat-tlabel">LOS</div><div class="sat-tval" id="pgLos">—</div></div>
+            <div class="sat-readout"><div class="sat-tlabel">Range at max el.</div><div class="sat-tval" id="pgRange">—</div></div>
+          </div>
+          <p class="sat-caption">Green line = elevation (left axis, 0–90°) · amber line = azimuth (right axis, 0–360°). Markers show AOS, maximum elevation, and LOS.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DOPPLER ===================== -->
+  <section class="sat-section" id="doppler">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">LAB 04</div>
+        <h2>Doppler analysis</h2>
+        <p>LEO satellites move at roughly 7.5 km/s — fast enough that the received frequency measurably rises on approach and falls on the way out. This uses the same pass just computed and a numerical range-rate, not a table lookup.</p>
+      </div>
+      <div class="sat-lab">
+        <div class="sat-lab-body">
+          <div class="sat-lab-controls">
+            <div class="sat-field">
+              <label>Transmit frequency <span class="sat-fval" id="dopFVal">435.0 MHz</span></label>
+              <input type="range" id="dopF" min="130" max="30000" step="1" value="435">
+            </div>
+            <button class="sat-btn sat-btn-solid sat-btn-sm" id="dopRun" type="button">Compute shift over pass</button>
+            <p class="sat-caption">Δf = f₀·(v<sub>r</sub>/c), where v<sub>r</sub> is the numerically-differentiated range rate between ground station and satellite (negative while closing). Ionospheric and tropospheric effects are not modeled.</p>
+          </div>
+          <div class="sat-lab-output">
+            <div class="sat-canvas-wrap">
+              <canvas id="dopCanvas" width="900" height="260" role="img" aria-label="Doppler shift vs time"></canvas>
+            </div>
+            <div class="sat-readout-grid">
+              <div class="sat-readout"><div class="sat-tlabel">Max approach shift</div><div class="sat-tval" id="dopPos">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">At closest approach</div><div class="sat-tval" id="dopZero">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Max recede shift</div><div class="sat-tval" id="dopNeg">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Total swing</div><div class="sat-tval" id="dopSwing">—</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== LINK BUDGET ===================== -->
+  <section class="sat-section" id="link-budget">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">LAB 05</div>
+        <h2>Link budget calculator</h2>
+        <p>Every RF link is an accounting exercise: how much power leaves the transmitter, how much survives the distance and hardware losses, and whether what's left clears the noise floor with room to spare.</p>
+      </div>
+
+      <div class="sat-lab">
+        <div class="sat-lab-head">
+          <h3>Downlink margin</h3>
+          <span class="sat-eyebrow">EIRP · FSPL · LOSSES · THERMAL NOISE</span>
+        </div>
+        <div class="sat-lab-body">
+          <div class="sat-lab-controls">
+            <div class="sat-field">
+              <label>Band</label>
+              <select id="lbBand">
+                <option value="137">VHF · 137 MHz (beacon)</option>
+                <option value="435" selected>UHF · 435 MHz (TT&amp;C)</option>
+                <option value="2200">S-band · 2.2 GHz</option>
+                <option value="8400">X-band · 8.4 GHz</option>
+                <option value="14000">Ku-band · 14 GHz</option>
+                <option value="26000">Ka-band · 26 GHz</option>
+              </select>
+            </div>
+            <div class="sat-field">
+              <label>Altitude <span class="sat-fval" id="lbAltVal">500 km</span></label>
+              <input type="range" id="lbAlt" min="300" max="40000" step="10" value="500">
+            </div>
+            <div class="sat-field">
+              <label>Elevation angle <span class="sat-fval" id="lbElVal">10°</span></label>
+              <input type="range" id="lbEl" min="1" max="90" step="1" value="10">
+            </div>
+            <div class="sat-field">
+              <label>Tx power <span class="sat-fval" id="lbPtVal">5 W</span></label>
+              <input type="range" id="lbPt" min="0.1" max="100" step="0.1" value="5">
+            </div>
+            <div class="sat-field">
+              <label>Tx antenna gain <span class="sat-fval" id="lbGtVal">2 dBi</span></label>
+              <input type="range" id="lbGt" min="0" max="40" step="0.5" value="2">
+            </div>
+            <div class="sat-field">
+              <label>Rx antenna gain <span class="sat-fval" id="lbGrVal">15 dBi</span></label>
+              <input type="range" id="lbGr" min="0" max="60" step="0.5" value="15">
+            </div>
+            <div class="sat-field">
+              <label>System noise temp <span class="sat-fval" id="lbTVal">300 K</span></label>
+              <input type="range" id="lbT" min="50" max="600" step="10" value="300">
+            </div>
+            <div class="sat-field">
+              <label>Channel bandwidth <span class="sat-fval" id="lbBVal">9.6 kHz</span></label>
+              <input type="range" id="lbB" min="1000" max="10000000" step="1000" value="9600">
+            </div>
+            <div class="sat-field">
+              <label>Data rate (for E<sub>b</sub>/N₀) <span class="sat-fval" id="lbRbVal">4.8 kbps</span></label>
+              <input type="range" id="lbRb" min="100" max="5000000" step="100" value="4800">
+            </div>
+            <div class="sat-field">
+              <label>Required C/N <span class="sat-fval" id="lbReqVal">10 dB</span></label>
+              <input type="range" id="lbReq" min="0" max="20" step="0.5" value="10">
+            </div>
+            <details>
+              <summary class="sat-caption" style="cursor:pointer;">Additional losses &amp; gains</summary>
+              <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px;">
+                <div class="sat-field"><label>Tx cable loss <span class="sat-fval" id="lbLtcVal">0.5 dB</span></label><input type="range" id="lbLtc" min="0" max="5" step="0.1" value="0.5"></div>
+                <div class="sat-field"><label>Tx pointing loss <span class="sat-fval" id="lbLtpVal">0.5 dB</span></label><input type="range" id="lbLtp" min="0" max="5" step="0.1" value="0.5"></div>
+                <div class="sat-field"><label>Polarization loss <span class="sat-fval" id="lbLpolVal">0.3 dB</span></label><input type="range" id="lbLpol" min="0" max="3" step="0.1" value="0.3"></div>
+                <div class="sat-field"><label>Atmospheric loss <span class="sat-fval" id="lbLatmVal">0.5 dB</span></label><input type="range" id="lbLatm" min="0" max="4" step="0.1" value="0.5"></div>
+                <div class="sat-field"><label>Rain loss <span class="sat-fval" id="lbLrainVal">0.0 dB</span></label><input type="range" id="lbLrain" min="0" max="10" step="0.1" value="0"></div>
+                <div class="sat-field"><label>Rx cable loss <span class="sat-fval" id="lbLrcVal">0.5 dB</span></label><input type="range" id="lbLrc" min="0" max="5" step="0.1" value="0.5"></div>
+                <div class="sat-field"><label>Implementation loss <span class="sat-fval" id="lbLimpVal">1.0 dB</span></label><input type="range" id="lbLimp" min="0" max="4" step="0.1" value="1.0"></div>
+                <div class="sat-field"><label>Coding gain <span class="sat-fval" id="lbCgVal">2.0 dB</span></label><input type="range" id="lbCg" min="0" max="10" step="0.1" value="2.0"></div>
+              </div>
+            </details>
+          </div>
+          <div class="sat-lab-output">
+            <svg id="lbChain" viewBox="0 0 900 90" style="width:100%;height:auto;margin-bottom:16px;" aria-hidden="true"></svg>
+            <div class="sat-readout-grid">
+              <div class="sat-readout"><div class="sat-tlabel">Slant range</div><div class="sat-tval" id="lbRange">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">EIRP</div><div class="sat-tval" id="lbEirp">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Free-space path loss</div><div class="sat-tval" id="lbFspl">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Total path + hardware loss</div><div class="sat-tval" id="lbTotalLoss">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Received power</div><div class="sat-tval" id="lbPr">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Noise floor</div><div class="sat-tval" id="lbN">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">C/N</div><div class="sat-tval" id="lbCN">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">E<sub>b</sub>/N₀</div><div class="sat-tval" id="lbEbNo">—</div></div>
+            </div>
+            <div class="sat-margin-banner" id="lbMargin">—</div>
+            <p class="sat-caption">FSPL = 20·log₁₀(d<sub>km</sub>) + 20·log₁₀(f<sub>MHz</sub>) + 32.44 · N = kTB · E<sub>b</sub>/N₀ = C/N + 10·log₁₀(B/R<sub>b</sub>). This is an engineering approximation — a certified link budget adds antenna-pattern detail, exact rain-fade statistics for the region, and interference margin.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FREQUENCY BANDS ===================== -->
+  <section class="sat-section">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">REFERENCE</div>
+        <h2>Frequency bands in use</h2>
+      </div>
+      <table class="sat-freq-table">
+        <thead><tr><th>Band</th><th>Typical range</th><th>Common use</th><th>Trade-off</th></tr></thead>
+        <tbody>
+          <tr><td>VHF</td><td>130–150 MHz</td><td>Beacons, amateur radio, early CubeSats</td><td>Cheap, forgiving hardware; very little bandwidth</td></tr>
+          <tr><td>UHF</td><td>400–450 MHz</td><td>TT&amp;C, small-sat command &amp; telemetry</td><td>Reliable through weather; still low data rate</td></tr>
+          <tr><td>S-band</td><td>2–4 GHz</td><td>TT&amp;C on larger missions, some payload data</td><td>Good balance of rate and robustness</td></tr>
+          <tr><td>X-band</td><td>8–12 GHz</td><td>Earth-observation payload downlink</td><td>High rate; needs pointed dish antennas</td></tr>
+          <tr><td>Ku-band</td><td>12–18 GHz</td><td>Broadcast, VSAT, GEO comms</td><td>Mature ecosystem; rain fade starts to matter</td></tr>
+          <tr><td>Ka-band</td><td>26–40 GHz</td><td>High-throughput broadband (Starlink, HTS)</td><td>Huge bandwidth; rain and pointing very sensitive</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== OPS CONCEPTS ===================== -->
+  <section class="sat-section" id="ops-concepts">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">MISSION OPERATIONS</div>
+        <h2>What an operator actually does, day to day</h2>
+      </div>
+      <div class="sat-ops-grid">
+        <div class="sat-ops-card">
+          <span class="sat-status"><span class="sat-quality-dot" style="background:var(--green)"></span>ROUTINE</span>
+          <h3>Contact scheduling</h3>
+          <p>Booking ground-station time against every satellite's predicted passes, prioritizing when stations or antennas are shared across a fleet.</p>
+        </div>
+        <div class="sat-ops-card">
+          <span class="sat-status"><span class="sat-quality-dot" style="background:var(--green)"></span>ROUTINE</span>
+          <h3>Commanding &amp; telemetry review</h3>
+          <p>Building and validating command sequences before uplink, then confirming they executed correctly from the telemetry that comes back — try it yourself in the Commanding Lab below.</p>
+        </div>
+        <div class="sat-ops-card">
+          <span class="sat-status"><span class="sat-quality-dot" style="background:var(--amber)"></span>SCHEDULED</span>
+          <h3>Station-keeping</h3>
+          <p>Small, regular burns to counter perturbations — atmospheric drag in LEO, lunar/solar gravity and solar pressure in GEO — that would otherwise drift the satellite out of its assigned slot.</p>
+        </div>
+        <div class="sat-ops-card">
+          <span class="sat-status"><span class="sat-quality-dot" style="background:var(--amber)"></span>SCHEDULED</span>
+          <h3>Conjunction assessment</h3>
+          <p>Screening the catalog of tracked objects for close approaches and planning a collision-avoidance maneuver when the probability crosses a threshold — modeled in the Conjunction Assessment lab below.</p>
+        </div>
+        <div class="sat-ops-card">
+          <span class="sat-status"><span class="sat-quality-dot" style="background:var(--red)"></span>REACTIVE</span>
+          <h3>Anomaly resolution</h3>
+          <p>Diagnosing an unexpected safe-mode entry, power dropout, or attitude fault from limited telemetry, then commanding a recovery — often against the clock of the next pass.</p>
+        </div>
+        <div class="sat-ops-card">
+          <span class="sat-status"><span class="sat-quality-dot" style="background:var(--text-faint)"></span>END OF MISSION</span>
+          <h3>End-of-life &amp; deorbit</h3>
+          <p>Passivating batteries and tanks, and either lowering a LEO satellite's orbit to reenter within international guidelines or boosting a GEO satellite to a graveyard orbit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MISSION TIMELINE ===================== -->
+  <section class="sat-section">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">MISSION LIFECYCLE</div>
+        <h2>Mission timeline</h2>
+        <p>What operators are actually doing at each stage, from launch to disposal.</p>
+      </div>
+      <div class="sat-timeline" id="satTimeline">
+        <div class="sat-tl-item">
+          <button class="sat-tl-btn" aria-expanded="false" type="button"><span class="sat-tl-idx">01</span><span class="sat-tl-name">Launch</span><svg class="sat-tl-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          <div class="sat-tl-panel">Operators are largely spectators during ascent — the launch provider owns this phase. The mission team's job is to be ready to receive the first signal within seconds of separation, wherever in the world that first pass happens to occur.</div>
+        </div>
+        <div class="sat-tl-item">
+          <button class="sat-tl-btn" aria-expanded="false" type="button"><span class="sat-tl-idx">02</span><span class="sat-tl-name">Separation</span><svg class="sat-tl-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          <div class="sat-tl-panel">The spacecraft leaves the launch vehicle and, on most missions, boots into a conservative default state — antennas may still be stowed, solar arrays may not be deployed. The very first telemetry confirms the vehicle survived launch loads.</div>
+        </div>
+        <div class="sat-tl-item">
+          <button class="sat-tl-btn" aria-expanded="false" type="button"><span class="sat-tl-idx">03</span><span class="sat-tl-name">LEOP</span><svg class="sat-tl-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          <div class="sat-tl-panel">Launch and Early Orbit Phase — the highest-intensity period of the whole mission. Deploy solar arrays and antennas, establish stable attitude control, confirm every subsystem in sequence. Round-the-clock shifts are normal here; a fault this early has the least margin for error.</div>
+        </div>
+        <div class="sat-tl-item">
+          <button class="sat-tl-btn" aria-expanded="false" type="button"><span class="sat-tl-idx">04</span><span class="sat-tl-name">Commissioning</span><svg class="sat-tl-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          <div class="sat-tl-panel">With the bus stable, the payload is switched on and calibrated — first light for an imager, first lock for a navigation payload. Performance is compared against ground-test predictions before the mission is declared operational.</div>
+        </div>
+        <div class="sat-tl-item">
+          <button class="sat-tl-btn" aria-expanded="false" type="button"><span class="sat-tl-idx">05</span><span class="sat-tl-name">Nominal operations</span><svg class="sat-tl-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          <div class="sat-tl-panel">The routine years: scheduled contacts, payload tasking, telemetry trending, and periodic software updates. Most of a satellite's operational life is spent here, and the goal is for it to be uneventful.</div>
+        </div>
+        <div class="sat-tl-item">
+          <button class="sat-tl-btn" aria-expanded="false" type="button"><span class="sat-tl-idx">06</span><span class="sat-tl-name">Station-keeping</span><svg class="sat-tl-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          <div class="sat-tl-panel">Interleaved with nominal operations for as long as propellant allows: small planned burns that correct the slow drift caused by drag, gravity anomalies, and radiation pressure, keeping the satellite in its assigned slot or ground track.</div>
+        </div>
+        <div class="sat-tl-item">
+          <button class="sat-tl-btn" aria-expanded="false" type="button"><span class="sat-tl-idx">07</span><span class="sat-tl-name">Anomaly response</span><svg class="sat-tl-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          <div class="sat-tl-panel">Not scheduled, but not rare either — every long-lived spacecraft eventually trips a fault protection response. Operators reconstruct what happened from stored telemetry, form a hypothesis, and recover conservatively rather than quickly.</div>
+        </div>
+        <div class="sat-tl-item">
+          <button class="sat-tl-btn" aria-expanded="false" type="button"><span class="sat-tl-idx">08</span><span class="sat-tl-name">End of mission</span><svg class="sat-tl-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          <div class="sat-tl-panel">Triggered by propellant depletion, a subsystem failure with no workaround, or simply the planned end of the mission. Operators plan disposal while there's still enough control authority left to execute it safely.</div>
+        </div>
+        <div class="sat-tl-item">
+          <button class="sat-tl-btn" aria-expanded="false" type="button"><span class="sat-tl-idx">09</span><span class="sat-tl-name">Disposal</span><svg class="sat-tl-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          <div class="sat-tl-panel">Batteries and tanks are passivated to prevent a future explosion, and the satellite is either lowered to reenter within international 25-year guidelines (LEO) or raised to a graveyard orbit a few hundred kilometers above GEO.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TELEMETRY PANEL ===================== -->
+  <section class="sat-section" id="telemetry">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">SPACECRAFT TELEMETRY <span class="sat-badge sat-badge-sim">SIMULATED</span></div>
+        <h2>Live telemetry dashboard</h2>
+        <p>A representative bus telemetry set, drifting gently within nominal ranges. Not connected to any real spacecraft — this is the same kind of display an operator watches during a pass, built for orientation, not for the diagnostic exercise below.</p>
+      </div>
+      <div class="sat-tm-grid" id="satTelemetryGrid">
+        <div class="sat-tm-cell"><div class="sat-tlabel">Bus voltage</div><div class="sat-tval" id="tmBusV">—</div><div class="sat-tm-bar"><i id="tmBusVBar"></i></div></div>
+        <div class="sat-tm-cell"><div class="sat-tlabel">Battery SOC</div><div class="sat-tval" id="tmSoc">—</div><div class="sat-tm-bar"><i id="tmSocBar"></i></div></div>
+        <div class="sat-tm-cell"><div class="sat-tlabel">Solar array current</div><div class="sat-tval" id="tmSolar">—</div><div class="sat-tm-bar"><i id="tmSolarBar"></i></div></div>
+        <div class="sat-tm-cell"><div class="sat-tlabel">Bus temperature</div><div class="sat-tval" id="tmTemp">—</div><div class="sat-tm-bar"><i id="tmTempBar"></i></div></div>
+        <div class="sat-tm-cell"><div class="sat-tlabel">Attitude error</div><div class="sat-tval" id="tmAtt">—</div><div class="sat-tm-bar"><i id="tmAttBar"></i></div></div>
+        <div class="sat-tm-cell"><div class="sat-tlabel">Reaction wheel speed</div><div class="sat-tval" id="tmRw">—</div><div class="sat-tm-bar"><i id="tmRwBar"></i></div></div>
+        <div class="sat-tm-cell"><div class="sat-tlabel">Comms state</div><div class="sat-tval" id="tmComms">—</div></div>
+        <div class="sat-tm-cell"><div class="sat-tlabel">Signal strength</div><div class="sat-tval" id="tmSignal">—</div><div class="sat-tm-bar"><i id="tmSignalBar"></i></div></div>
+        <div class="sat-tm-cell"><div class="sat-tlabel">Payload state</div><div class="sat-tval" id="tmPayload">—</div></div>
+        <div class="sat-tm-cell"><div class="sat-tlabel">Fault state</div><div class="sat-tval" id="tmFault">—</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MISSION OPS SIMULATOR ===================== -->
+  <section class="sat-section" id="mission-sim">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">DIAGNOSTIC EXERCISE <span class="sat-badge sat-badge-sim">SIMULATED SCENARIO</span></div>
+        <h2>Mission operations simulator</h2>
+        <p>A spacecraft has just entered safe mode. You have one pass to figure out why before deciding what to do. This is a fixed, hand-built scenario with reasoned feedback — not an AI diagnosing anything.</p>
+      </div>
+      <div class="sat-sim-grid">
+        <div class="sat-sim-panel">
+          <h4>SAFE-MODE TELEMETRY SNAPSHOT</h4>
+          <div class="sat-readout-grid" style="margin-top:0;">
+            <div class="sat-readout"><div class="sat-tlabel">Battery voltage</div><div class="sat-tval">27.1 V<span> (nominal 28–32 V)</span></div></div>
+            <div class="sat-readout"><div class="sat-tlabel">Solar array current</div><div class="sat-tval">0.2 A<span> (nominal 2–4 A, sunlit)</span></div></div>
+            <div class="sat-readout"><div class="sat-tlabel">Attitude error</div><div class="sat-tval">41°<span> (safe-mode threshold: 15°)</span></div></div>
+            <div class="sat-readout"><div class="sat-tlabel">Bus temperature</div><div class="sat-tval">+4°C<span> (nominal +10 to +35°C)</span></div></div>
+            <div class="sat-readout"><div class="sat-tlabel">Reaction wheel #2</div><div class="sat-tval">0 RPM<span> (was 3,200 RPM)</span></div></div>
+            <div class="sat-readout"><div class="sat-tlabel">Comms state</div><div class="sat-tval">Omni, low rate</div></div>
+          </div>
+          <p class="sat-caption" style="margin-top:14px;">Event log (most recent first): <em>T-2m — Reaction wheel #2 current spike, then zero speed. T-1m50s — Attitude error exceeded 15° threshold. T-1m45s — Safe-mode entry: sun-pointing, omni antenna.</em></p>
+        </div>
+        <div class="sat-sim-panel">
+          <h4>DIAGNOSTIC ACTIONS</h4>
+          <div class="sat-sim-actions" id="simActions">
+            <button class="sat-sim-action-btn" data-action="power">Inspect power telemetry</button>
+            <button class="sat-sim-action-btn" data-action="attitude">Inspect attitude telemetry</button>
+            <button class="sat-sim-action-btn" data-action="thermal">Check thermal state</button>
+            <button class="sat-sim-action-btn" data-action="log">Review event log order</button>
+            <button class="sat-sim-action-btn" data-action="command">Attempt to command out of safe mode now</button>
+            <button class="sat-sim-action-btn" data-action="wait">Wait for next pass, gather more data first</button>
+          </div>
+          <div class="sat-sim-log" id="simLog"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== COMMANDING LAB ===================== -->
+  <section class="sat-section" id="commanding">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">COMMANDING LAB</div>
+        <h2>Build a command sequence</h2>
+        <p>Click steps in order to build an observation sequence. Some orderings are invalid for real operational reasons — the validator below explains exactly which rule was broken.</p>
+      </div>
+      <div class="sat-lab">
+        <div class="sat-lab-output" style="border-right:none;">
+          <p class="sat-caption" style="margin-bottom:12px;">Available steps:</p>
+          <div class="sat-cmd-palette" id="cmdPalette">
+            <button class="sat-cmd-chip" data-cmd="check_mode" type="button">Check spacecraft mode</button>
+            <button class="sat-cmd-chip" data-cmd="confirm_power" type="button">Confirm power state</button>
+            <button class="sat-cmd-chip" data-cmd="enable_payload" type="button">Enable payload</button>
+            <button class="sat-cmd-chip" data-cmd="point" type="button">Point spacecraft</button>
+            <button class="sat-cmd-chip" data-cmd="start_obs" type="button">Start observation</button>
+            <button class="sat-cmd-chip" data-cmd="record" type="button">Record data</button>
+            <button class="sat-cmd-chip" data-cmd="downlink" type="button">Downlink data</button>
+            <button class="sat-cmd-chip" data-cmd="return_nominal" type="button">Return to nominal mode</button>
+          </div>
+          <p class="sat-caption" style="margin:16px 0 8px;">Your sequence:</p>
+          <div class="sat-cmd-sequence" id="cmdSequence">
+            <span class="sat-cmd-empty">Click steps above to add them here, in order.</span>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:14px;">
+            <button class="sat-btn sat-btn-solid sat-btn-sm" id="cmdValidate" type="button">Validate sequence</button>
+            <button class="sat-btn sat-btn-ghost sat-btn-sm" id="cmdClear" type="button">Clear</button>
+          </div>
+          <div class="sat-cmd-feedback" id="cmdFeedback"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONJUNCTION ASSESSMENT ===================== -->
+  <section class="sat-section" id="conjunction">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">CONJUNCTION ASSESSMENT <span class="sat-badge sat-badge-sim">EDUCATIONAL MODEL</span></div>
+        <h2>Conjunction assessment &amp; collision avoidance</h2>
+        <p>A simplified two-object model: your spacecraft and a nearby tracked object on a slowly converging path. Not real tracking data — the numbers below are for teaching the shape of the problem, not for any actual decision.</p>
+      </div>
+      <div class="sat-lab">
+        <div class="sat-lab-body">
+          <div class="sat-lab-controls">
+            <div class="sat-field">
+              <label>Time to closest approach <span class="sat-fval" id="conjTcaVal">14.0 h</span></label>
+              <input type="range" id="conjTca" min="1" max="48" step="0.5" value="14">
+            </div>
+            <div class="sat-field">
+              <label>Current miss distance <span class="sat-fval" id="conjMissVal">1200 m</span></label>
+              <input type="range" id="conjMiss" min="20" max="5000" step="10" value="1200">
+            </div>
+            <div class="sat-field">
+              <label>Relative velocity <span class="sat-fval" id="conjVelVal">10.0 km/s</span></label>
+              <input type="range" id="conjVel" min="1" max="15" step="0.1" value="10">
+            </div>
+            <div class="sat-field">
+              <label>Planned maneuver (radial Δv) <span class="sat-fval" id="conjDvVal">0 cm/s</span></label>
+              <input type="range" id="conjDv" min="0" max="20" step="0.5" value="0">
+            </div>
+            <p class="sat-caption">The maneuver is modeled as a simple radial displacement growing linearly over the time before closest approach — illustrative, not a real covariance-based conjunction calculation.</p>
+          </div>
+          <div class="sat-lab-output">
+            <div class="sat-canvas-wrap">
+              <canvas id="conjCanvas" width="900" height="280" role="img" aria-label="Conjunction geometry"></canvas>
+            </div>
+            <div class="sat-conj-readouts">
+              <div class="sat-readout"><div class="sat-tlabel">Miss distance without maneuver</div><div class="sat-tval" id="conjBaseline">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Miss distance with maneuver</div><div class="sat-tval" id="conjResult">—</div></div>
+              <div class="sat-readout"><div class="sat-tlabel">Risk category</div><div class="sat-tval" id="conjRisk">—</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CASE STUDIES ===================== -->
+  <section class="sat-section" id="case-studies">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">CASE STUDIES</div>
+        <h2>Four missions, four sets of trade-offs</h2>
+        <p>Approximate, educational figures — not live mission data.</p>
+      </div>
+      <div class="sat-case-grid">
+        <div class="sat-case-card">
+          <span class="sat-case-tag">CREWED / LEO</span>
+          <h3>ISS</h3>
+          <dl>
+            <dt>Altitude</dt><dd>~400–420 km</dd>
+            <dt>Period</dt><dd>~92.7 min</dd>
+            <dt>Inclination</dt><dd>51.6°</dd>
+          </dl>
+          <dl class="sat-case-detail">
+            <dt>Mission purpose</dt><dd>Continuously crewed microgravity research platform and technology testbed.</dd>
+            <dt>Operational challenge</dt><dd>Drag at this altitude is strong enough that the station needs periodic reboosts, using either visiting-vehicle thrusters or its own propulsion.</dd>
+            <dt>Communications challenge</dt><dd>Relies on a mix of direct-to-ground S/Ku-band and the TDRS relay network for near-continuous coverage rather than waiting for ground-station passes.</dd>
+            <dt>Attitude / control</dt><dd>Large, flexible solar arrays and a crewed structure make attitude control a balance between pointing accuracy and structural loads.</dd>
+            <dt>Operational lesson</dt><dd>The busiest, most trafficked orbit also has the highest conjunction workload — screening and maneuver planning is a constant background task.</dd>
+          </dl>
+        </div>
+        <div class="sat-case-card">
+          <span class="sat-case-tag">BROADBAND / LEO</span>
+          <h3>Starlink</h3>
+          <dl>
+            <dt>Altitude</dt><dd>~340–570 km</dd>
+            <dt>Constellation</dt><dd>Thousands of satellites</dd>
+            <dt>Band</dt><dd>Ku / Ka</dd>
+          </dl>
+          <dl class="sat-case-detail">
+            <dt>Mission purpose</dt><dd>Global broadband internet from a very large low-orbit constellation.</dd>
+            <dt>Operational challenge</dt><dd>Operations happen at fleet scale — individual-satellite intervention doesn't scale to thousands of spacecraft, so station-keeping and collision avoidance run as automated policy.</dd>
+            <dt>Communications challenge</dt><dd>Phased-array, electronically-steered antennas replace mechanical gimbals so each satellite can serve many ground terminals as it crosses the sky.</dd>
+            <dt>Attitude / control</dt><dd>Precise, continuous pointing is required simultaneously for the sun (power), Earth (payload), and orbital velocity vector (drag minimization).</dd>
+            <dt>Operational lesson</dt><dd>At megaconstellation scale, the operations problem shifts from "keep this satellite healthy" to "keep the fleet's aggregate behavior safe and predictable."</dd>
+          </dl>
+        </div>
+        <div class="sat-case-card">
+          <span class="sat-case-tag">NAVIGATION / MEO</span>
+          <h3>GPS</h3>
+          <dl>
+            <dt>Altitude</dt><dd>~20,200 km</dd>
+            <dt>Period</dt><dd>~11h58m</dd>
+            <dt>Planes</dt><dd>6, evenly spaced</dd>
+          </dl>
+          <dl class="sat-case-detail">
+            <dt>Mission purpose</dt><dd>Global positioning, navigation, and timing via a well-tested constellation geometry.</dd>
+            <dt>Operational challenge</dt><dd>Every satellite carries atomic clocks that must be monitored and corrected continuously — clock error translates directly into position error for every user on the ground.</dd>
+            <dt>Communications challenge</dt><dd>A sparse, dedicated ground-station network uploads precise orbit and clock corrections rather than handling high-volume data.</dd>
+            <dt>Attitude / control</dt><dd>Antenna arrays must stay Earth-pointed through eclipse seasons, when the sun-Earth-satellite geometry makes attitude control noticeably harder.</dd>
+            <dt>Operational lesson</dt><dd>The orbit geometry itself — not any single satellite's capability — is what guarantees four-satellite visibility from anywhere on Earth.</dd>
+          </dl>
+        </div>
+        <div class="sat-case-card">
+          <span class="sat-case-tag">WEATHER / GEO</span>
+          <h3>GOES</h3>
+          <dl>
+            <dt>Altitude</dt><dd>~35,786 km</dd>
+            <dt>Period</dt><dd>~23h56m</dd>
+            <dt>Coverage</dt><dd>Fixed disk view</dd>
+          </dl>
+          <dl class="sat-case-detail">
+            <dt>Mission purpose</dt><dd>Continuous weather imaging over a fixed third of the planet.</dd>
+            <dt>Operational challenge</dt><dd>Station-keeping must hold both longitude and inclination tightly — drift in either degrades the fixed-disk view that the whole mission depends on.</dd>
+            <dt>Communications challenge</dt><dd>High-rate imagery downlink runs continuously to a dedicated ground segment rather than in short discrete passes, since the satellite never sets.</dd>
+            <dt>Attitude / control</dt><dd>Extremely fine, stable pointing is required so imagery lines up correctly frame to frame — any residual jitter shows up directly as a blurred image.</dd>
+            <dt>Operational lesson</dt><dd>GEO trades orbital variety for view continuity — the entire mission concept only works because the satellite holds still relative to the ground.</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== EQUATION CARDS ===================== -->
+  <section class="sat-section">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">EQUATION REFERENCE</div>
+        <h2>The six equations that come up constantly</h2>
+      </div>
+      <div class="sat-eq-grid">
+        <div class="sat-eq-card">
+          <h3>Orbital velocity (circular)</h3>
+          <div class="sat-eq-formula">v = √(μ/r)</div>
+          <div class="sat-eq-vars">
+            <div><b>v</b> — speed, km/s</div>
+            <div><b>μ</b> — Earth's gravitational parameter, 398,600.4 km³/s²</div>
+            <div><b>r</b> — orbit radius from Earth's center, km</div>
+          </div>
+          <details><summary>Worked example</summary><div class="sat-eq-example">r = 6,371 + 500 = 6,871 km → v = √(398600.4 / 6871) ≈ 7.61 km/s</div></details>
+        </div>
+        <div class="sat-eq-card">
+          <h3>Orbital period</h3>
+          <div class="sat-eq-formula">T = 2π√(a³/μ)</div>
+          <div class="sat-eq-vars">
+            <div><b>T</b> — period, seconds</div>
+            <div><b>a</b> — semi-major axis, km (= r for circular orbits)</div>
+            <div><b>μ</b> — gravitational parameter, km³/s²</div>
+          </div>
+          <details><summary>Worked example</summary><div class="sat-eq-example">a = 6,871 km → T ≈ 5,676 s ≈ 94.6 min</div></details>
+        </div>
+        <div class="sat-eq-card">
+          <h3>Free-space path loss</h3>
+          <div class="sat-eq-formula">FSPL = 20log₁₀(d) + 20log₁₀(f) + 32.44</div>
+          <div class="sat-eq-vars">
+            <div><b>FSPL</b> — loss, dB</div>
+            <div><b>d</b> — distance, km</div>
+            <div><b>f</b> — frequency, MHz</div>
+          </div>
+          <details><summary>Worked example</summary><div class="sat-eq-example">d = 1,700 km, f = 435 MHz → FSPL ≈ 149.7 dB</div></details>
+        </div>
+        <div class="sat-eq-card">
+          <h3>Thermal noise power</h3>
+          <div class="sat-eq-formula">N = kTB</div>
+          <div class="sat-eq-vars">
+            <div><b>N</b> — noise power, W</div>
+            <div><b>k</b> — Boltzmann's constant, 1.38×10⁻²³ J/K</div>
+            <div><b>T</b> — system noise temperature, K</div>
+            <div><b>B</b> — bandwidth, Hz</div>
+          </div>
+          <details><summary>Worked example</summary><div class="sat-eq-example">T = 300 K, B = 9.6 kHz → N ≈ 4.0×10⁻¹⁷ W ≈ −134 dBm</div></details>
+        </div>
+        <div class="sat-eq-card">
+          <h3>Doppler shift</h3>
+          <div class="sat-eq-formula">Δf = f₀(v<sub>r</sub>/c)</div>
+          <div class="sat-eq-vars">
+            <div><b>Δf</b> — frequency shift, Hz</div>
+            <div><b>f₀</b> — transmitted frequency, Hz</div>
+            <div><b>v<sub>r</sub></b> — radial (line-of-sight) velocity, m/s — negative while closing</div>
+            <div><b>c</b> — speed of light, 3×10⁸ m/s</div>
+          </div>
+          <details><summary>Worked example</summary><div class="sat-eq-example">f₀ = 435 MHz, v<sub>r</sub> = −7 km/s → Δf ≈ +10.2 kHz (received frequency higher)</div></details>
+        </div>
+        <div class="sat-eq-card">
+          <h3>Link margin</h3>
+          <div class="sat-eq-formula">Margin = (C/N)<sub>available</sub> − (C/N)<sub>required</sub></div>
+          <div class="sat-eq-vars">
+            <div><b>Margin</b> — dB above (or below) the threshold needed for the link to close</div>
+            <div><b>(C/N)<sub>required</sub></b> — set by the modulation and coding scheme's target bit-error rate</div>
+          </div>
+          <details><summary>Worked example</summary><div class="sat-eq-example">Available 22 dB, required 10 dB → margin = +12 dB, comfortably positive</div></details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GLOSSARY ===================== -->
+  <section class="sat-section" id="glossary">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">GLOSSARY</div>
+        <h2>Terms that come up constantly</h2>
+      </div>
+      <input type="text" id="glossSearch" class="sat-gloss-search" placeholder="Filter terms…">
+      <dl class="sat-gloss-list" id="glossList">
+        <div class="sat-gloss-item"><dt>AOS / LOS</dt><dd>Acquisition of signal / loss of signal — the start and end of a ground-station contact.</dd></div>
+        <div class="sat-gloss-item"><dt>TLE</dt><dd>Two-line element set — a compact, standard text format encoding a satellite's orbit at a given epoch.</dd></div>
+        <div class="sat-gloss-item"><dt>OMM</dt><dd>Orbit Mean-Elements Message — a structured (XML/JSON/KVN) successor to the TLE format carrying the same kind of mean orbital elements.</dd></div>
+        <div class="sat-gloss-item"><dt>SGP4</dt><dd>The standard propagator used with TLEs, including drag and major perturbations — more accurate than two-body over time.</dd></div>
+        <div class="sat-gloss-item"><dt>TT&amp;C</dt><dd>Telemetry, tracking &amp; command — the operational radio link between mission control and the spacecraft.</dd></div>
+        <div class="sat-gloss-item"><dt>Apogee / perigee</dt><dd>The highest and lowest points of an orbit around Earth.</dd></div>
+        <div class="sat-gloss-item"><dt>Inclination</dt><dd>The tilt of an orbital plane relative to Earth's equator, in degrees.</dd></div>
+        <div class="sat-gloss-item"><dt>RAAN</dt><dd>Right ascension of the ascending node — where an orbit crosses the equator going north, measured in inertial space.</dd></div>
+        <div class="sat-gloss-item"><dt>Ground track</dt><dd>The path traced on Earth's surface directly beneath a satellite as it orbits.</dd></div>
+        <div class="sat-gloss-item"><dt>Nadir / zenith</dt><dd>Straight down toward Earth's center, and straight up away from it.</dd></div>
+        <div class="sat-gloss-item"><dt>Slant range</dt><dd>The straight-line distance from a ground station to a satellite — always longer than the altitude except directly overhead.</dd></div>
+        <div class="sat-gloss-item"><dt>Doppler shift</dt><dd>The frequency shift caused by relative motion between satellite and ground station — significant enough in LEO that receivers must track it.</dd></div>
+        <div class="sat-gloss-item"><dt>Link budget</dt><dd>The full accounting of gains and losses in a radio link, from transmitter power to receiver noise floor.</dd></div>
+        <div class="sat-gloss-item"><dt>EIRP</dt><dd>Effective isotropic radiated power — transmit power combined with antenna gain and feed losses, as if radiated equally in all directions.</dd></div>
+        <div class="sat-gloss-item"><dt>FSPL</dt><dd>Free-space path loss — signal attenuation from distance alone, before atmosphere or hardware losses.</dd></div>
+        <div class="sat-gloss-item"><dt>C/N</dt><dd>Carrier-to-noise ratio — how far the received signal sits above the noise floor.</dd></div>
+        <div class="sat-gloss-item"><dt>Eb/N0</dt><dd>Energy per bit over noise density — the metric that actually predicts bit-error rate for a given modulation.</dd></div>
+        <div class="sat-gloss-item"><dt>Station-keeping</dt><dd>Small periodic maneuvers that hold a satellite in its assigned orbital slot against perturbations.</dd></div>
+        <div class="sat-gloss-item"><dt>Conjunction assessment</dt><dd>Screening for close approaches with other tracked objects and deciding whether to maneuver.</dd></div>
+        <div class="sat-gloss-item"><dt>TCA</dt><dd>Time of closest approach — the moment two tracked objects reach minimum separation in a conjunction event.</dd></div>
+        <div class="sat-gloss-item"><dt>Delta-v</dt><dd>The change in velocity a maneuver requires — the fundamental "fuel currency" of spaceflight.</dd></div>
+        <div class="sat-gloss-item"><dt>Bus</dt><dd>The spacecraft platform — structure, power, propulsion, ADCS, C&amp;DH — that carries the payload.</dd></div>
+        <div class="sat-gloss-item"><dt>Uplink / downlink</dt><dd>Radio traffic going up to the satellite (commands) and down to Earth (telemetry, data).</dd></div>
+        <div class="sat-gloss-item"><dt>Sun-synchronous orbit</dt><dd>A LEO inclination tuned so the satellite crosses each latitude at a consistent local solar time.</dd></div>
+        <div class="sat-gloss-item"><dt>Geostationary</dt><dd>A circular, equatorial GEO orbit where the satellite appears fixed over one point on Earth.</dd></div>
+        <div class="sat-gloss-item"><dt>ADCS</dt><dd>Attitude determination and control system — sensors and actuators that point the spacecraft.</dd></div>
+        <div class="sat-gloss-item"><dt>EPS</dt><dd>Electrical power system — solar arrays, batteries, and power regulation.</dd></div>
+        <div class="sat-gloss-item"><dt>Safe mode</dt><dd>A minimal, power- and pointing-conservative fallback state the spacecraft enters automatically when it detects a serious fault.</dd></div>
+        <div class="sat-gloss-item"><dt>Anomaly</dt><dd>Any unplanned deviation from expected spacecraft behavior — the trigger for an ops investigation.</dd></div>
+        <div class="sat-gloss-item"><dt>LEOP</dt><dd>Launch and Early Orbit Phase — the intensive first days of a mission spent deploying and checking out the spacecraft.</dd></div>
+        <div class="sat-gloss-item"><dt>Command sequence</dt><dd>An ordered list of commands, often validated against spacecraft state constraints before being uplinked.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===================== REFERENCES ===================== -->
+  <section class="sat-section" id="references">
+    <div class="sat-wrap">
+      <div class="sat-section-head">
+        <div class="sat-eyebrow">TECHNICAL REFERENCES</div>
+        <h2>Where this page's material comes from</h2>
+      </div>
+      <div class="sat-ref-list">
+        <a class="sat-ref-item" href="https://celestrak.org/" target="_blank" rel="noopener noreferrer"><span class="sat-ref-name">CelesTrak</span><span class="sat-ref-desc">Public TLE catalog and orbital-mechanics reference maintained by Dr. T.S. Kelso</span></a>
+        <a class="sat-ref-item" href="https://ntrs.nasa.gov/citations/19800014958" target="_blank" rel="noopener noreferrer"><span class="sat-ref-name">Spacetrack Report No. 3</span><span class="sat-ref-desc">The original SGP4/SDP4 model specification</span></a>
+        <a class="sat-ref-item" href="https://www.itu.int/en/ITU-R/space/Pages/default.aspx" target="_blank" rel="noopener noreferrer"><span class="sat-ref-name">ITU Radiocommunication Sector</span><span class="sat-ref-desc">International frequency allocation and coordination for satellite services</span></a>
+        <a class="sat-ref-item" href="https://www.nasa.gov/reference/satellite-communications/" target="_blank" rel="noopener noreferrer"><span class="sat-ref-name">NASA — Satellite Communications</span><span class="sat-ref-desc">Overview of TT&amp;C and satellite communications fundamentals</span></a>
+        <a class="sat-ref-item" href="https://www.space-track.org/" target="_blank" rel="noopener noreferrer"><span class="sat-ref-name">Space-Track.org</span><span class="sat-ref-desc">Official U.S. Space Force catalog of tracked orbital objects and conjunction data</span></a>
+        <a class="sat-ref-item" href="https://www.esa.int/Space_Safety/Space_Debris/ESA_s_Space_Environment_Report" target="_blank" rel="noopener noreferrer"><span class="sat-ref-name">ESA Space Environment Report</span><span class="sat-ref-desc">Debris population, conjunction, and end-of-life disposal guidance</span></a>
+      </div>
+      <p class="sat-caption" style="margin-top:16px;">External links open in a new tab. This page does not fetch data from them automatically.</p>
+    </div>
+  </section>
+
+  <footer class="sat-footer">
+    <div class="sat-wrap">
+      <span class="sat-tag">Keep looking up.</span>
+      <a href="/skills" class="sat-back">← Back to Skills</a>
+    </div>
+  </footer>
+
+  <!-- ===================== SOURCE MODAL ===================== -->
+  <div class="sat-modal-backdrop" id="satModalBackdrop">
+    <div class="sat-modal" role="dialog" aria-modal="true" aria-labelledby="satModalTitle">
+      <div class="sat-modal-head">
+        <div class="sat-modal-tabs" role="tablist">
+          <button class="sat-modal-tab" data-tab="html" role="tab" aria-selected="true" type="button">HTML</button>
+          <button class="sat-modal-tab" data-tab="css" role="tab" aria-selected="false" type="button">CSS</button>
+          <button class="sat-modal-tab" data-tab="js" role="tab" aria-selected="false" type="button">JavaScript</button>
+        </div>
+        <div class="sat-modal-actions">
+          <button class="sat-icon-btn" id="satCopyBtn" type="button">Copy</button>
+          <button class="sat-icon-btn" id="satCloseBtn" type="button" aria-label="Close">✕ Close</button>
+        </div>
+      </div>
+      <div class="sat-modal-body">
+        <pre id="satSrcHtml"></pre>
+        <pre id="satSrcCss" class="sat-hide"></pre>
+        <pre id="satSrcJs" class="sat-hide"></pre>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script id="satOpsScript">
+(function(){
+'use strict';
+var root = document.getElementById('satOpsRoot');
+var D2R = Math.PI/180, R2D = 180/Math.PI;
+var Re = 6371, mu = 398600.4418, omegaE = 2*Math.PI/86164.0905;
+var C_KMS = 299792.458;
+
+/* ================= TLE parsing & checksum ================= */
+function tleChecksum(line){
+  var sum = 0;
+  for (var i=0;i<line.length;i++){
+    var ch = line[i];
+    if (ch >= '0' && ch <= '9') sum += parseInt(ch,10);
+    else if (ch === '-') sum += 1;
+  }
+  return sum % 10;
+}
+function parseTLE(l1, l2){
+  l1 = (l1||'').replace(/\r/g,'').trim();
+  l2 = (l2||'').replace(/\r/g,'').trim();
+  var errors = [];
+  if(l1.length < 69) errors.push('Line 1 too short ('+l1.length+' chars, need 69).');
+  if(l2.length < 69) errors.push('Line 2 too short ('+l2.length+' chars, need 69).');
+  if(errors.length) return {ok:false, errors:errors};
+  if(l1[0] !== '1') errors.push('Line 1 must start with "1".');
+  if(l2[0] !== '2') errors.push('Line 2 must start with "2".');
+  var cs1 = parseInt(l1[68],10), cs2 = parseInt(l2[68],10);
+  var calc1 = tleChecksum(l1.slice(0,68)), calc2 = tleChecksum(l2.slice(0,68));
+  if(cs1 !== calc1) errors.push('Line 1 checksum mismatch (expected '+calc1+', found '+cs1+').');
+  if(cs2 !== calc2) errors.push('Line 2 checksum mismatch (expected '+calc2+', found '+cs2+').');
+  if(errors.length) return {ok:false, errors:errors};
+  var noradId = l1.slice(2,7).trim();
+  var epochYY = parseInt(l1.slice(18,20),10);
+  var epochDay = parseFloat(l1.slice(20,32));
+  var fullYear = epochYY < 57 ? 2000+epochYY : 1900+epochYY;
+  var jan1 = Date.UTC(fullYear,0,1);
+  var epochDate = new Date(jan1 + (epochDay-1)*86400000);
+  var inc = parseFloat(l2.slice(8,16));
+  var raan = parseFloat(l2.slice(17,25));
+  var ecc = parseFloat('0.'+l2.slice(26,33).trim());
+  var argp = parseFloat(l2.slice(34,42));
+  var ma = parseFloat(l2.slice(43,51));
+  var mm = parseFloat(l2.slice(52,63));
+  return {ok:true, noradId:noradId, epochDate:epochDate, inc:inc, raan:raan, ecc:ecc, argp:argp, ma:ma, mm:mm, l1:l1, l2:l2};
+}
+
+/* ================= built-in example orbits ================= */
+var EXAMPLES = {
+  iss: { name:'ISS (ZARYA)', badge:'example', note:'Real historical TLE — dated, not current.',
+    l1:'1 25544U 98067A   19156.50900463  .00003075  00000-0  59442-4 0  9992',
+    l2:'2 25544  51.6433  59.2583 0008217  16.4489 347.6017 15.51174618173442' },
+  leo: { name:'Generic LEO satellite', badge:'example', note:'Illustrative orbit, not a tracked object.',
+    l1:'1 90001U 24001A   25024.50000000 .00000000  00000-0  00000-0 0    1 9',
+    l2:'2 90001  53.0000 120.0000 0004000  90.0000 270.0000 15.05490646 10006' },
+  sso: { name:'Generic sun-synchronous satellite', badge:'example', note:'Illustrative orbit, not a tracked object.',
+    l1:'1 90002U 24002A   25024.50000000 .00000000  00000-0  00000-0 0    1 1',
+    l2:'2 90002  97.6000  45.0000 0012000  60.0000 300.0000 14.56345101 20008' },
+  meo: { name:'Generic MEO / GPS-class satellite', badge:'example', note:'Illustrative orbit, not a tracked object.',
+    l1:'1 90003U 24003A   25024.50000000 .00000000  00000-0  00000-0 0    1 3',
+    l2:'2 90003  55.0000 200.0000 0080000  30.0000 150.0000  2.00588648  1005' },
+  geo: { name:'Generic GEO satellite', badge:'example', note:'Illustrative orbit, not a tracked object.',
+    l1:'1 90004U 24004A   25024.50000000 .00000000  00000-0  00000-0 0    1 5',
+    l2:'2 90004   0.0500  80.0000 0002000   0.0000 180.0000  1.00273907   503' }
+};
+
+/* ================= SGP4 engine (satellite.js via CDN, with fallback) ================= */
+var sgp4Available = false;
+function setEngineBadges(){
+  var statusEl = root.querySelector('#satEngineStatus');
+  var badgeEl = root.querySelector('#ppEngineBadge');
+  if(sgp4Available){
+    statusEl.innerHTML = '<span class="sat-badge sat-badge-live">SGP4 ENGINE LOADED</span> real TLE propagation active';
+    badgeEl.innerHTML = '<span class="sat-badge sat-badge-live">SGP4</span>';
+  } else {
+    statusEl.innerHTML = '<span class="sat-badge sat-badge-off">SGP4 UNAVAILABLE</span> using simplified two-body model';
+    badgeEl.innerHTML = '<span class="sat-badge sat-badge-sim">SIMPLIFIED MODEL</span>';
+  }
+}
+(function loadSgp4(){
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/satellite.js@4.1.3/dist/satellite.min.js';
+  s.onload = function(){
+    sgp4Available = (typeof window.satellite !== 'undefined' && typeof window.satellite.twoline2satrec === 'function');
+    setEngineBadges();
+  };
+  s.onerror = function(){ sgp4Available = false; setEngineBadges(); };
+  document.head.appendChild(s);
+  setEngineBadges();
+  setTimeout(function(){ if(typeof window.satellite==='undefined'){ sgp4Available=false; setEngineBadges(); } }, 4000);
+})();
+
+/* ================= shared orbit state & propagation ================= */
+var Orbit = { mode:'simplified', satrec:null,
+  simple:{ altKm:500, incDeg:51.6, lonAN0Deg:0, epochMs:Date.now() },
+  meta:{ name:'—', source:'—' } };
+var GS = { lat:34.0, lon:73.1, mask:10 };
+
+function applyParsedOrbit(parsed, name, sourceLabel){
+  Orbit.meta = { name:name, source:sourceLabel, epoch:parsed.epochDate, inc:parsed.inc, raan:parsed.raan, ecc:parsed.ecc, argp:parsed.argp, ma:parsed.ma, mm:parsed.mm };
+  if(sgp4Available){
+    try{
+      Orbit.satrec = window.satellite.twoline2satrec(parsed.l1, parsed.l2);
+      Orbit.mode = 'sgp4';
+    }catch(e){
+      Orbit.mode = 'simplified';
+      deriveSimplifiedFromElements(parsed);
+    }
+  } else {
+    Orbit.mode = 'simplified';
+    deriveSimplifiedFromElements(parsed);
+  }
+  document.dispatchEvent(new CustomEvent('satOrbitChanged'));
+}
+function deriveSimplifiedFromElements(parsed){
+  var n = parsed.mm * 2*Math.PI/86400;
+  var a = Math.pow(mu/(n*n), 1/3);
+  Orbit.simple = { altKm: a-Re, incDeg: parsed.inc, lonAN0Deg: parsed.raan, epochMs: parsed.epochDate.getTime() };
+}
+function applyCustomSimplified(altKm, incDeg){
+  Orbit.mode = 'simplified';
+  Orbit.satrec = null;
+  Orbit.simple = { altKm:altKm, incDeg:incDeg, lonAN0Deg:0, epochMs:Date.now() };
+  Orbit.meta = { name:'Custom (simplified)', source:'user-set altitude/inclination, no TLE' };
+  document.dispatchEvent(new CustomEvent('satOrbitChanged'));
+}
+function getOrbitStateAt(date){
+  if(Orbit.mode==='sgp4' && Orbit.satrec && window.satellite){
+    var pv = window.satellite.propagate(Orbit.satrec, date);
+    if(!pv || !pv.position) return null;
+    var gmst = window.satellite.gstime(date);
+    var ecef = window.satellite.eciToEcf(pv.position, gmst);
+    var gd = window.satellite.eciToGeodetic(pv.position, gmst);
+    return { lat: window.satellite.degreesLat(gd.latitude), lon: window.satellite.degreesLong(gd.longitude), altKm: gd.height, ecef: ecef };
+  }
+  var h = Orbit.simple.altKm, inc = Orbit.simple.incDeg*D2R;
+  var r = Re+h;
+  var n = Math.sqrt(mu/Math.pow(r,3));
+  var t = (date.getTime() - Orbit.simple.epochMs)/1000;
+  var u = n*t;
+  var X = r*Math.cos(u), Ytmp = r*Math.sin(u);
+  var Y = Ytmp*Math.cos(inc), Z = Ytmp*Math.sin(inc);
+  var theta = omegaE*(date.getTime()/1000);
+  var lonShift = (Orbit.simple.lonAN0Deg*D2R) - theta;
+  var Xecef = X*Math.cos(lonShift) - Y*Math.sin(lonShift);
+  var Yecef = X*Math.sin(lonShift) + Y*Math.cos(lonShift);
+  var Zecef = Z;
+  var r3 = Math.sqrt(Xecef*Xecef+Yecef*Yecef+Zecef*Zecef);
+  return { lat: Math.asin(Zecef/r3)*R2D, lon: Math.atan2(Yecef,Xecef)*R2D, altKm: h, ecef:{x:Xecef,y:Yecef,z:Zecef} };
+}
+function geodeticToEcef(latDeg,lonDeg){
+  var lat=latDeg*D2R, lon=lonDeg*D2R;
+  return { x:Re*Math.cos(lat)*Math.cos(lon), y:Re*Math.cos(lat)*Math.sin(lon), z:Re*Math.sin(lat) };
+}
+function lookAngles(gsLatDeg,gsLonDeg,ecef){
+  var gsLat=gsLatDeg*D2R, gsLon=gsLonDeg*D2R;
+  var g = geodeticToEcef(gsLatDeg,gsLonDeg);
+  var dx=ecef.x-g.x, dy=ecef.y-g.y, dz=ecef.z-g.z;
+  var e = -Math.sin(gsLon)*dx + Math.cos(gsLon)*dy;
+  var n = -Math.sin(gsLat)*Math.cos(gsLon)*dx - Math.sin(gsLat)*Math.sin(gsLon)*dy + Math.cos(gsLat)*dz;
+  var u = Math.cos(gsLat)*Math.cos(gsLon)*dx + Math.cos(gsLat)*Math.sin(gsLon)*dy + Math.sin(gsLat)*dz;
+  var range = Math.sqrt(e*e+n*n+u*u);
+  var el = Math.asin(u/range)*R2D;
+  var az = Math.atan2(e,n)*R2D; if(az<0) az+=360;
+  return { range:range, el:el, az:az };
+}
+function computePassWindow(gsLat,gsLon,maskDeg,startDate,windowHours,stepSec){
+  var steps = Math.floor(windowHours*3600/stepSec);
+  var samples=[], passes=[]; var inPass=false, cur=null;
+  for(var k=0;k<=steps;k++){
+    var t = new Date(startDate.getTime()+k*stepSec*1000);
+    var st = getOrbitStateAt(t);
+    if(!st) continue;
+    var la = lookAngles(gsLat,gsLon,st.ecef);
+    samples.push({ t:t, lat:st.lat, lon:st.lon, el:la.el, az:la.az, range:la.range });
+    if(la.el>maskDeg && !inPass){ inPass=true; cur={startIdx:samples.length-1, maxEl:la.el, maxAz:la.az}; }
+    if(inPass && la.el>cur.maxEl){ cur.maxEl=la.el; cur.maxAz=la.az; }
+    if(inPass && la.el<=maskDeg){ inPass=false; cur.endIdx=samples.length-1; passes.push(cur); cur=null; }
+  }
+  return { samples:samples, passes:passes };
+}
+function slantRangeFromElevation(h, elDeg){
+  var el = elDeg*D2R;
+  return -Re*Math.sin(el) + Math.sqrt(Math.pow(Re*Math.sin(el),2) + h*h + 2*h*Re);
+}
+
+/* ================= hero live telemetry (simulated) ================= */
+(function(){
+  var t0 = performance.now();
+  var altBase = 408, velBase = 7.66;
+  var elClock = root.querySelector('#satHeroClock');
+  var elAlt = root.querySelector('#tAlt'), elVel = root.querySelector('#tVel');
+  var elBatt = root.querySelector('#tBatt'), elSig = root.querySelector('#tSig');
+  var sat = root.querySelector('#satHeroSat'), trail = root.querySelector('#satHeroTrail');
+  var pts = []; var period = 90;
+  function fmtClock(s){
+    var h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=Math.floor(s%60);
+    function pad(n){ return (n<10?'0':'')+n; }
+    return 'T+'+pad(h)+':'+pad(m)+':'+pad(sec);
+  }
+  function tick(now){
+    var elapsed=(now-t0)/1000;
+    var frac=(elapsed%period)/period, ang=frac*2*Math.PI;
+    var cx=200, cy=118, rx=150, ry=46;
+    var x=cx+rx*Math.cos(ang), y=cy+ry*Math.sin(ang);
+    sat.setAttribute('cx', x.toFixed(1)); sat.setAttribute('cy', y.toFixed(1));
+    pts.push(x.toFixed(1)+','+y.toFixed(1)); if(pts.length>140) pts.shift();
+    trail.setAttribute('d','M'+pts.join(' L'));
+    elClock.textContent=fmtClock(elapsed);
+    elAlt.innerHTML=(altBase+Math.sin(elapsed*0.4)*1.2).toFixed(1)+'<span> km</span>';
+    elVel.innerHTML=(velBase+Math.sin(elapsed*0.4+1)*0.01).toFixed(2)+'<span> km/s</span>';
+    elBatt.innerHTML=(78+Math.sin(elapsed*0.15)*6).toFixed(0)+'<span> %</span>';
+    var sigBars=2+Math.round((Math.sin(elapsed*0.5)+1)*1.4);
+    elSig.innerHTML='▮'.repeat(Math.max(1,sigBars))+'▯'.repeat(Math.max(0,5-sigBars))+'<span> demo</span>';
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* ================= learning mode toggle ================= */
+(function(){
+  var btns = root.querySelectorAll('.sat-mode-btn');
+  var hint = root.querySelector('#satModeHint');
+  var hints = {
+    explore: 'Plain-language explanations, no equations.',
+    engineering: 'Equations, parameters, and technical detail shown throughout.',
+    operations: 'Framed around operator decisions and mission-control reasoning.'
+  };
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var mode = b.dataset.mode;
+      root.setAttribute('data-mode', mode);
+      btns.forEach(function(x){ x.setAttribute('aria-pressed', x===b ? 'true':'false'); });
+      hint.textContent = hints[mode];
+    });
+  });
+})();
+
+/* ================= glossary filter ================= */
+(function(){
+  var input = root.querySelector('#glossSearch');
+  var items = root.querySelectorAll('.sat-gloss-item');
+  input.addEventListener('input', function(){
+    var q = input.value.trim().toLowerCase();
+    items.forEach(function(it){
+      var text = it.textContent.toLowerCase();
+      it.classList.toggle('sat-hide', q.length>0 && text.indexOf(q)===-1);
+    });
+  });
+})();
+
+/* ================= mission timeline (expand/collapse) ================= */
+(function(){
+  root.querySelectorAll('#satTimeline .sat-tl-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var panel = btn.parentElement.querySelector('.sat-tl-panel');
+      var open = btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded', open?'false':'true');
+      panel.classList.toggle('sat-open', !open);
+    });
+  });
+})();
+
+/* ================= shared canvas helpers ================= */
+function drawGraticule(ctx,w,h){
+  ctx.fillStyle = '#050506'; ctx.fillRect(0,0,w,h);
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1;
+  for(var lon=-180; lon<=180; lon+=30){
+    var x=(lon+180)/360*w;
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke();
+  }
+  for(var lat=-90; lat<=90; lat+=30){
+    var y=(90-lat)/180*h;
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke();
+  }
+  ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+  ctx.beginPath(); ctx.moveTo(0,h/2); ctx.lineTo(w,h/2); ctx.stroke();
+}
+function geoToXY(lat,lon,w,h){ return [ (lon+180)/360*w, (90-lat)/180*h ]; }
+function drawGSMarker(ctx,lat,lon,w,h,color){
+  var p = geoToXY(lat,lon,w,h);
+  ctx.strokeStyle = color||'#c99a4d'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(p[0]-7,p[1]); ctx.lineTo(p[0]+7,p[1]); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(p[0],p[1]-7); ctx.lineTo(p[0],p[1]+7); ctx.stroke();
+  ctx.beginPath(); ctx.arc(p[0],p[1],10,0,2*Math.PI); ctx.stroke();
+}
+function fmtDur(sec){ var m=Math.floor(sec/60), s=Math.round(sec%60); return m+'m '+(s<10?'0':'')+s+'s'; }
+function fmtTPlus(sec){ var h=Math.floor(sec/3600), m=Math.round((sec%3600)/60); return h+'h '+(m<10?'0':'')+m+'m'; }
+function fmtClockTime(d){ return d.toISOString().slice(11,19)+' UTC'; }
+
+/* ================= Orbit Data panel ================= */
+(function(){
+  var sel = root.querySelector('#satSelect');
+  var tleInput = root.querySelector('#satTleInput');
+  var tleStatus = root.querySelector('#satTleStatus');
+  var validateBtn = root.querySelector('#satTleValidate');
+  var parseMsg = root.querySelector('#satParseMsg');
+  var out = {
+    name: root.querySelector('#odName'), source: root.querySelector('#odSource'),
+    epoch: root.querySelector('#odEpoch'), inc: root.querySelector('#odInc'),
+    raan: root.querySelector('#odRaan'), ecc: root.querySelector('#odEcc'),
+    argp: root.querySelector('#odArgp'), ma: root.querySelector('#odMa'),
+    mm: root.querySelector('#odMm'), alt: root.querySelector('#odAlt')
+  };
+
+  function renderMeta(){
+    var m = Orbit.meta;
+    out.name.textContent = m.name || '—';
+    out.source.textContent = m.source || '—';
+    if(m.epoch){
+      out.epoch.textContent = m.epoch.toISOString().replace('T',' ').slice(0,19);
+      out.inc.textContent = m.inc.toFixed(4)+'°';
+      out.raan.textContent = m.raan.toFixed(4)+'°';
+      out.ecc.textContent = m.ecc.toFixed(7);
+      out.argp.textContent = m.argp.toFixed(4)+'°';
+      out.ma.textContent = m.ma.toFixed(4)+'°';
+      out.mm.textContent = m.mm.toFixed(6)+' rev/day';
+      var n = m.mm*2*Math.PI/86400;
+      var a = Math.pow(mu/(n*n),1/3);
+      out.alt.textContent = (a-Re).toFixed(0)+' km';
+    } else {
+      out.epoch.textContent='—'; out.inc.textContent='—'; out.raan.textContent='—';
+      out.ecc.textContent='—'; out.argp.textContent='—'; out.ma.textContent='—'; out.mm.textContent='—';
+      out.alt.textContent = Orbit.simple.altKm.toFixed(0)+' km (approx.)';
+    }
+  }
+
+  function loadPreset(key){
+    var ex = EXAMPLES[key];
+    tleInput.value = ex.l1+'\n'+ex.l2;
+    var parsed = parseTLE(ex.l1, ex.l2);
+    applyParsedOrbit(parsed, ex.name, ex.note+' Source: built into this page, not fetched.');
+    tleStatus.innerHTML = '<span class="sat-badge sat-badge-example">EXAMPLE DATA</span>';
+    parseMsg.style.borderColor = 'var(--border)';
+    parseMsg.innerHTML = '<span class="sat-quality-dot" style="background:var(--blue)"></span>Loaded '+ex.name+' — '+ex.note;
+    renderMeta();
+  }
+
+  sel.addEventListener('change', function(){
+    if(sel.value === 'custom'){
+      tleInput.value = '';
+      tleStatus.innerHTML = '';
+      parseMsg.innerHTML = 'Paste a TLE and click "Parse &amp; validate", or use the custom altitude/inclination sliders in Engineering mode in the Pass Predictor below.';
+      applyCustomSimplified(500, 51.6);
+      renderMeta();
+    } else {
+      loadPreset(sel.value);
+    }
+  });
+
+  validateBtn.addEventListener('click', function(){
+    var lines = tleInput.value.split('\n').map(function(l){return l;}).filter(function(l){return l.trim().length>0;});
+    if(lines.length < 2){
+      parseMsg.style.borderColor = 'var(--red)';
+      parseMsg.innerHTML = '<span class="sat-quality-dot" style="background:var(--red)"></span>Paste both TLE lines (line starting with "1 ..." and line starting with "2 ...").';
+      return;
+    }
+    var parsed = parseTLE(lines[0], lines[1]);
+    if(!parsed.ok){
+      tleStatus.innerHTML = '<span class="sat-badge sat-badge-off">INVALID</span>';
+      parseMsg.style.borderColor = 'var(--red)';
+      parseMsg.innerHTML = '<span class="sat-quality-dot" style="background:var(--red)"></span>'+parsed.errors.join(' ');
+      return;
+    }
+    tleStatus.innerHTML = '<span class="sat-badge sat-badge-user">USER PROVIDED</span>';
+    applyParsedOrbit(parsed, 'User-provided TLE (NORAD '+parsed.noradId+')', 'Pasted by you into this page.');
+    parseMsg.style.borderColor = 'var(--green)';
+    parseMsg.innerHTML = '<span class="sat-quality-dot" style="background:var(--green)"></span>Valid TLE parsed and loaded as the active orbit.';
+    renderMeta();
+  });
+
+  document.addEventListener('satOrbitChanged', renderMeta);
+  loadPreset('iss');
+})();
+
+/* ================= Pass Predictor ================= */
+(function(){
+  var gsLatR=root.querySelector('#gsLat'), gsLonR=root.querySelector('#gsLon');
+  var gsLatV=root.querySelector('#gsLatVal'), gsLonV=root.querySelector('#gsLonVal');
+  var altR=root.querySelector('#ppAlt'), incR=root.querySelector('#ppInc');
+  var altV=root.querySelector('#ppAltVal'), incV=root.querySelector('#ppIncVal');
+  var maskR=root.querySelector('#ppMask'), winR=root.querySelector('#ppWin');
+  var maskV=root.querySelector('#ppMaskVal'), winV=root.querySelector('#ppWinVal');
+  var runBtn=root.querySelector('#ppRun');
+  var canvas=root.querySelector('#ppCanvas'); var ctx=canvas.getContext('2d');
+  var tbody=root.querySelector('#ppTable tbody');
+
+  function syncGS(){
+    gsLatV.textContent=parseFloat(gsLatR.value).toFixed(1)+'°';
+    gsLonV.textContent=parseFloat(gsLonR.value).toFixed(1)+'°';
+    GS.lat=parseFloat(gsLatR.value); GS.lon=parseFloat(gsLonR.value); GS.mask=parseFloat(maskR.value);
+  }
+  function syncCustom(){
+    altV.textContent=altR.value+' km'; incV.textContent=parseFloat(incR.value).toFixed(1)+'°';
+    maskV.textContent=maskR.value+'°'; winV.textContent=winR.value+' h';
+    GS.mask=parseFloat(maskR.value);
+    if(root.querySelector('#satSelect').value==='custom' && Orbit.mode==='simplified' && !Orbit.meta.epoch){
+      applyCustomSimplified(parseFloat(altR.value), parseFloat(incR.value));
+    }
+  }
+  [gsLatR,gsLonR].forEach(function(el){ el.addEventListener('input', syncGS); });
+  [altR,incR,maskR,winR].forEach(function(el){ el.addEventListener('input', syncCustom); });
+  syncGS(); syncCustom();
+
+  root.querySelectorAll('#gsPresets .sat-chip').forEach(function(btn){
+    btn.addEventListener('click', function(){ gsLatR.value=btn.dataset.lat; gsLonR.value=btn.dataset.lon; syncGS(); });
+  });
+
+  function draw(result){
+    var w=canvas.width, h=canvas.height;
+    drawGraticule(ctx,w,h);
+    var track=result.samples;
+    ctx.lineWidth=1.6;
+    for(var k=1;k<track.length;k++){
+      var a=track[k-1], b=track[k];
+      if(Math.abs(a.lon-b.lon)>180) continue;
+      var pA=geoToXY(a.lat,a.lon,w,h), pB=geoToXY(b.lat,b.lon,w,h);
+      ctx.strokeStyle = b.el>GS.mask ? '#54b07a' : 'rgba(255,255,255,0.22)';
+      ctx.beginPath(); ctx.moveTo(pA[0],pA[1]); ctx.lineTo(pB[0],pB[1]); ctx.stroke();
+    }
+    drawGSMarker(ctx, GS.lat, GS.lon, w, h);
+  }
+
+  function run(){
+    var win = parseFloat(winR.value);
+    var startDate = new Date();
+    var stepSec = Math.max(5, Math.round(win*3600/2200));
+    var result = computePassWindow(GS.lat, GS.lon, GS.mask, startDate, win, stepSec);
+    draw(result);
+    tbody.innerHTML='';
+    if(result.passes.length===0){
+      var tr=document.createElement('tr');
+      tr.innerHTML='<td colspan="4" style="color:var(--text-faint)">No passes above the mask angle in this window — try a lower mask or a different station.</td>';
+      tbody.appendChild(tr);
+    } else {
+      result.passes.slice(0,10).forEach(function(p){
+        var s0=result.samples[p.startIdx], s1=result.samples[p.endIdx];
+        var startSec=(s0.t-startDate)/1000, durSec=(s1.t-s0.t)/1000;
+        var tr=document.createElement('tr');
+        var quality = p.maxEl>50?'#54b07a':(p.maxEl>20?'#c99a4d':'#67696c');
+        tr.innerHTML='<td>'+fmtTPlus(startSec)+'</td><td>'+fmtDur(durSec)+'</td>'+
+          '<td><span class="sat-quality-dot" style="background:'+quality+'"></span>'+p.maxEl.toFixed(1)+'°</td>'+
+          '<td>'+p.maxAz.toFixed(0)+'°</td>';
+        tbody.appendChild(tr);
+      });
+    }
+  }
+  runBtn.addEventListener('click', run);
+  document.addEventListener('satOrbitChanged', run);
+  setTimeout(run, 300);
+})();
+
+/* ================= Ground Track (animated) ================= */
+(function(){
+  var canvas=root.querySelector('#gtCanvas'); var ctx=canvas.getContext('2d');
+  var playBtn=root.querySelector('#gtPlay');
+  var speedChips=root.querySelectorAll('#ground-track [data-speed]');
+  var zoomInBtn=root.querySelector('#gtZoomIn'), zoomOutBtn=root.querySelector('#gtZoomOut'), resetBtn=root.querySelector('#gtReset');
+  var clockEl=root.querySelector('#gtClock'), latlonEl=root.querySelector('#gtLatLon'), altEl=root.querySelector('#gtAlt'), dirEl=root.querySelector('#gtDir');
+
+  var playing=false, speed=1, zoom=1;
+  var simTime = new Date();
+  var trail=[]; var lastReal=null; var rafId=null; var lastLat=null;
+
+  function draw(){
+    var w=canvas.width, h=canvas.height;
+    ctx.save();
+    drawGraticule(ctx,w,h);
+    ctx.restore();
+    ctx.strokeStyle='rgba(84,176,122,0.6)'; ctx.lineWidth=1.6;
+    for(var i=1;i<trail.length;i++){
+      var a=trail[i-1], b=trail[i];
+      if(Math.abs(a.lon-b.lon)>180) continue;
+      var pA=geoToXY(a.lat,a.lon,w,h), pB=geoToXY(b.lat,b.lon,w,h);
+      ctx.setLineDash(b.desc ? [4,4] : []);
+      ctx.beginPath(); ctx.moveTo(pA[0],pA[1]); ctx.lineTo(pB[0],pB[1]); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    drawGSMarker(ctx, GS.lat, GS.lon, w, h);
+    var cur = trail[trail.length-1];
+    if(cur){
+      var p = geoToXY(cur.lat,cur.lon,w,h);
+      ctx.fillStyle='#54b07a';
+      ctx.beginPath(); ctx.arc(p[0],p[1],5,0,2*Math.PI); ctx.fill();
+      ctx.strokeStyle='rgba(84,176,122,0.35)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.arc(p[0],p[1],10,0,2*Math.PI); ctx.stroke();
+    }
+  }
+  function sampleAt(date){
+    var st = getOrbitStateAt(date);
+    if(!st) return;
+    var desc = lastLat!==null && st.lat<lastLat;
+    lastLat = st.lat;
+    trail.push({lat:st.lat, lon:st.lon, desc:desc, alt:st.altKm});
+    if(trail.length>500) trail.shift();
+    clockEl.textContent = fmtClockTime(date)+' ('+date.toISOString().slice(0,10)+')';
+    latlonEl.textContent = st.lat.toFixed(2)+'°, '+st.lon.toFixed(2)+'°';
+    altEl.textContent = st.altKm.toFixed(0)+' km';
+    dirEl.textContent = desc ? 'Descending (southbound)' : 'Ascending (northbound)';
+  }
+  function loop(now){
+    if(!playing) return;
+    if(lastReal===null) lastReal=now;
+    var dtReal=(now-lastReal)/1000; lastReal=now;
+    simTime = new Date(simTime.getTime() + dtReal*speed*1000);
+    sampleAt(simTime);
+    draw();
+    rafId = requestAnimationFrame(loop);
+  }
+  playBtn.addEventListener('click', function(){
+    playing = !playing;
+    playBtn.textContent = playing ? '⏸ Pause' : '▶ Play';
+    playBtn.setAttribute('aria-pressed', playing?'true':'false');
+    lastReal=null;
+    if(playing) rafId=requestAnimationFrame(loop);
+  });
+  speedChips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+      speed=parseFloat(chip.dataset.speed);
+      speedChips.forEach(function(c){ c.setAttribute('aria-pressed', c===chip?'true':'false'); });
+    });
+  });
+  zoomInBtn.addEventListener('click', function(){ zoom=Math.min(4,zoom*1.4); canvas.style.transform='scale('+zoom+')'; canvas.style.transformOrigin='center'; });
+  zoomOutBtn.addEventListener('click', function(){ zoom=Math.max(1,zoom/1.4); canvas.style.transform='scale('+zoom+')'; canvas.style.transformOrigin='center'; });
+  resetBtn.addEventListener('click', function(){
+    playing=false; playBtn.textContent='▶ Play'; playBtn.setAttribute('aria-pressed','false');
+    zoom=1; canvas.style.transform='scale(1)'; simTime=new Date(); trail=[]; lastLat=null;
+    sampleAt(simTime); draw();
+  });
+  document.addEventListener('satOrbitChanged', function(){ trail=[]; lastLat=null; simTime=new Date(); sampleAt(simTime); draw(); });
+  document.addEventListener('visibilitychange', function(){ if(document.hidden){ playing=false; playBtn.textContent='▶ Play'; playBtn.setAttribute('aria-pressed','false'); } });
+
+  sampleAt(simTime); draw();
+})();
+
+/* ================= Pass Geometry ================= */
+var lastGeometrySamples = null; // shared with Doppler lab
+(function(){
+  var runBtn=root.querySelector('#pgRun');
+  var canvas=root.querySelector('#pgCanvas'); var ctx=canvas.getContext('2d');
+  var aosEl=root.querySelector('#pgAos'), maxEl=root.querySelector('#pgMax'), losEl=root.querySelector('#pgLos'), rangeEl=root.querySelector('#pgRange');
+
+  function findNextPass(){
+    var startDate=new Date();
+    for(var winH of [6,24,48,72]){
+      var stepSec = Math.max(5, Math.round(winH*3600/2600));
+      var result = computePassWindow(GS.lat, GS.lon, GS.mask, startDate, winH, stepSec);
+      if(result.passes.length>0) return { pass: result.passes[0], samples: result.samples };
+    }
+    return null;
+  }
+
+  function draw(samples, pass){
+    var w=canvas.width, h=canvas.height;
+    ctx.fillStyle='#050506'; ctx.fillRect(0,0,w,h);
+    var s0=pass.startIdx, s1=pass.endIdx;
+    var passSamples = samples.slice(s0, s1+1);
+    var t0 = passSamples[0].t.getTime(), t1 = passSamples[passSamples.length-1].t.getTime();
+    var padL=40, padR=40, padT=16, padB=28;
+    var plotW=w-padL-padR, plotH=h-padT-padB;
+    function xOf(t){ return padL + (t-t0)/(t1-t0)*plotW; }
+    function yElOf(el){ return padT + (1-el/90)*plotH; }
+    function yAzOf(az){ return padT + (1-az/360)*plotH; }
+    ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
+    for(var g=0; g<=90; g+=30){ var y=yElOf(g); ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(w-padR,y); ctx.stroke();
+      ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.font='10px IBM Plex Mono'; ctx.fillText(g+'°', 8, y+3); }
+    ctx.strokeStyle='#54b07a'; ctx.lineWidth=2; ctx.beginPath();
+    passSamples.forEach(function(s,i){ var x=xOf(s.t.getTime()), y=yElOf(s.el); if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); });
+    ctx.stroke();
+    ctx.strokeStyle='#c99a4d'; ctx.lineWidth=1.4; ctx.beginPath();
+    passSamples.forEach(function(s,i){ var x=xOf(s.t.getTime()), y=yAzOf(s.az); if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); });
+    ctx.stroke();
+    function marker(idx,label,color){
+      var s=samples[idx]; var x=xOf(s.t.getTime()), y=yElOf(s.el);
+      ctx.fillStyle=color; ctx.beginPath(); ctx.arc(x,y,4,0,2*Math.PI); ctx.fill();
+      ctx.fillStyle='#f1efe9'; ctx.font='10px IBM Plex Mono'; ctx.fillText(label, x+6, y-6);
+    }
+    marker(s0,'AOS','#5a8fc9');
+    var maxIdx=s0; for(var i=s0;i<=s1;i++){ if(samples[i].el>samples[maxIdx].el) maxIdx=i; }
+    marker(maxIdx,'MAX EL','#54b07a');
+    marker(s1,'LOS','#c15f57');
+    return {maxIdx:maxIdx};
+  }
+
+  function run(){
+    var found = findNextPass();
+    if(!found){
+      ctx.fillStyle='#050506'; ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='#67696c'; ctx.font='13px Inter'; ctx.fillText('No pass found in the next 72 hours for this ground station.', 20, canvas.height/2);
+      aosEl.textContent=maxEl.textContent=losEl.textContent=rangeEl.textContent='—';
+      lastGeometrySamples=null;
+      return;
+    }
+    var m = draw(found.samples, found.pass);
+    var s0=found.samples[found.pass.startIdx], s1=found.samples[found.pass.endIdx], sm=found.samples[m.maxIdx];
+    var now=new Date();
+    aosEl.textContent = fmtTPlus((s0.t-now)/1000);
+    maxEl.textContent = sm.el.toFixed(1)+'°';
+    losEl.textContent = fmtTPlus((s1.t-now)/1000);
+    rangeEl.textContent = sm.range.toFixed(0)+' km';
+    lastGeometrySamples = { samples: found.samples, pass: found.pass };
+  }
+  runBtn.addEventListener('click', run);
+  document.addEventListener('satOrbitChanged', function(){ lastGeometrySamples=null; });
+  setTimeout(run, 400);
+})();
+
+/* ================= Doppler Analysis ================= */
+(function(){
+  var fR=root.querySelector('#dopF'), fV=root.querySelector('#dopFVal');
+  var runBtn=root.querySelector('#dopRun');
+  var canvas=root.querySelector('#dopCanvas'); var ctx=canvas.getContext('2d');
+  var posEl=root.querySelector('#dopPos'), zeroEl=root.querySelector('#dopZero'), negEl=root.querySelector('#dopNeg'), swingEl=root.querySelector('#dopSwing');
+
+  fR.addEventListener('input', function(){ fV.textContent=parseFloat(fR.value).toFixed(1)+' MHz'; });
+
+  function compute(){
+    if(!lastGeometrySamples){
+      ctx.fillStyle='#050506'; ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='#67696c'; ctx.font='13px Inter'; ctx.fillText('Run Pass Geometry above first to establish a pass to analyze.', 20, canvas.height/2);
+      posEl.textContent=zeroEl.textContent=negEl.textContent=swingEl.textContent='—';
+      return;
+    }
+    var f0 = parseFloat(fR.value)*1e6;
+    var samples = lastGeometrySamples.samples.slice(lastGeometrySamples.pass.startIdx, lastGeometrySamples.pass.endIdx+1);
+    var shifts=[];
+    for(var i=1;i<samples.length;i++){
+      var dt=(samples[i].t-samples[i-1].t)/1000;
+      var dRangeKm = samples[i].range-samples[i-1].range;
+      var vrMs = (dRangeKm/dt)*1000;
+      var df = -f0*(vrMs/(C_KMS*1000));
+      shifts.push({ t: samples[i].t, df: df });
+    }
+    var w=canvas.width, h=canvas.height;
+    ctx.fillStyle='#050506'; ctx.fillRect(0,0,w,h);
+    var maxAbs = Math.max.apply(null, shifts.map(function(s){return Math.abs(s.df);})) || 1;
+    var padL=56,padR=16,padT=16,padB=24;
+    var plotW=w-padL-padR, plotH=h-padT-padB;
+    var t0=shifts[0].t.getTime(), t1=shifts[shifts.length-1].t.getTime();
+    function xOf(t){ return padL+(t-t0)/(t1-t0)*plotW; }
+    function yOf(df){ return padT+plotH/2 - (df/maxAbs)*(plotH/2*0.9); }
+    ctx.strokeStyle='rgba(255,255,255,0.15)'; ctx.beginPath(); ctx.moveTo(padL,padT+plotH/2); ctx.lineTo(w-padR,padT+plotH/2); ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='10px IBM Plex Mono';
+    ctx.fillText('+'+(maxAbs/1000).toFixed(1)+' kHz', 4, padT+8);
+    ctx.fillText('-'+(maxAbs/1000).toFixed(1)+' kHz', 4, padT+plotH-2);
+    ctx.fillText('0', 4, padT+plotH/2+3);
+    ctx.strokeStyle='#54b07a'; ctx.lineWidth=2; ctx.beginPath();
+    shifts.forEach(function(s,i){ var x=xOf(s.t.getTime()), y=yOf(s.df); if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); });
+    ctx.stroke();
+    var maxPos=Math.max.apply(null, shifts.map(function(s){return s.df;}));
+    var maxNeg=Math.min.apply(null, shifts.map(function(s){return s.df;}));
+    var zeroCross = shifts.reduce(function(best,s){ return Math.abs(s.df)<Math.abs(best.df)?s:best; }, shifts[0]);
+    posEl.textContent='+'+(maxPos/1000).toFixed(2)+' kHz';
+    negEl.textContent=(maxNeg/1000).toFixed(2)+' kHz';
+    zeroEl.textContent=(zeroCross.df/1000).toFixed(3)+' kHz';
+    swingEl.textContent=((maxPos-maxNeg)/1000).toFixed(2)+' kHz';
+  }
+  runBtn.addEventListener('click', compute);
+})();
+
+/* ================= Link Budget (upgraded) ================= */
+(function(){
+  var ids=['lbBand','lbAlt','lbEl','lbPt','lbGt','lbGr','lbT','lbB','lbRb','lbReq','lbLtc','lbLtp','lbLpol','lbLatm','lbLrain','lbLrc','lbLimp','lbCg'];
+  var el={}; ids.forEach(function(id){ el[id]=root.querySelector('#'+id); });
+  var valIds=['lbAltVal','lbElVal','lbPtVal','lbGtVal','lbGrVal','lbTVal','lbBVal','lbRbVal','lbReqVal','lbLtcVal','lbLtpVal','lbLpolVal','lbLatmVal','lbLrainVal','lbLrcVal','lbLimpVal','lbCgVal'];
+  var val={}; valIds.forEach(function(id){ val[id]=root.querySelector('#'+id); });
+  var out={ range:root.querySelector('#lbRange'), eirp:root.querySelector('#lbEirp'), fspl:root.querySelector('#lbFspl'),
+    totalLoss:root.querySelector('#lbTotalLoss'), pr:root.querySelector('#lbPr'), n:root.querySelector('#lbN'),
+    cn:root.querySelector('#lbCN'), ebno:root.querySelector('#lbEbNo'), margin:root.querySelector('#lbMargin') };
+  var chainSvg = root.querySelector('#lbChain');
+
+  function fmtHz(hz){ if(hz>=1e6) return (hz/1e6).toFixed(hz>=10e6?0:2)+' MHz'; return (hz/1e3).toFixed(1)+' kHz'; }
+  function fmtRate(bps){ if(bps>=1e6) return (bps/1e6).toFixed(2)+' Mbps'; if(bps>=1e3) return (bps/1e3).toFixed(1)+' kbps'; return bps+' bps'; }
+
+  function drawChain(labels){
+    var boxes=['Tx power','Tx antenna','Path + atm.\nloss','Rx antenna','Receiver','Usable link'];
+    var n=boxes.length, w=900, h=90, bw=132, gap=(w-n*bw)/(n+1);
+    var svg='';
+    for(var i=0;i<n;i++){
+      var x=gap+i*(bw+gap);
+      svg+='<rect x="'+x+'" y="24" width="'+bw+'" height="46" rx="3" fill="#131519" stroke="#25282e"/>';
+      svg+='<text x="'+(x+bw/2)+'" y="44" text-anchor="middle" font-family="Inter" font-size="11" fill="#f1efe9">'+boxes[i]+'</text>';
+      svg+='<text x="'+(x+bw/2)+'" y="59" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#54b07a">'+(labels[i]||'')+'</text>';
+      if(i<n-1){
+        var ax=x+bw, ax2=x+bw+gap;
+        svg+='<line x1="'+ax+'" y1="47" x2="'+ax2+'" y2="47" stroke="#67696c" stroke-width="1.4"/>';
+        svg+='<polygon points="'+ax2+',47 '+(ax2-6)+',43 '+(ax2-6)+',51" fill="#67696c"/>';
+      }
+    }
+    chainSvg.innerHTML=svg;
+  }
+
+  function calc(){
+    val.lbAltVal.textContent=el.lbAlt.value+' km';
+    val.lbElVal.textContent=el.lbEl.value+'°';
+    val.lbPtVal.textContent=parseFloat(el.lbPt.value).toFixed(1)+' W';
+    val.lbGtVal.textContent=el.lbGt.value+' dBi';
+    val.lbGrVal.textContent=el.lbGr.value+' dBi';
+    val.lbTVal.textContent=el.lbT.value+' K';
+    val.lbBVal.textContent=fmtHz(parseFloat(el.lbB.value));
+    val.lbRbVal.textContent=fmtRate(parseFloat(el.lbRb.value));
+    val.lbReqVal.textContent=el.lbReq.value+' dB';
+    val.lbLtcVal.textContent=el.lbLtc.value+' dB';
+    val.lbLtpVal.textContent=el.lbLtp.value+' dB';
+    val.lbLpolVal.textContent=el.lbLpol.value+' dB';
+    val.lbLatmVal.textContent=el.lbLatm.value+' dB';
+    val.lbLrainVal.textContent=el.lbLrain.value+' dB';
+    val.lbLrcVal.textContent=el.lbLrc.value+' dB';
+    val.lbLimpVal.textContent=el.lbLimp.value+' dB';
+    val.lbCgVal.textContent=el.lbCg.value+' dB';
+
+    var fMHz=parseFloat(el.lbBand.value), h=parseFloat(el.lbAlt.value), elevDeg=parseFloat(el.lbEl.value);
+    var ptW=parseFloat(el.lbPt.value), gt=parseFloat(el.lbGt.value), gr=parseFloat(el.lbGr.value);
+    var tK=parseFloat(el.lbT.value), bHz=parseFloat(el.lbB.value), rb=parseFloat(el.lbRb.value), reqCN=parseFloat(el.lbReq.value);
+    var ltc=parseFloat(el.lbLtc.value), ltp=parseFloat(el.lbLtp.value), lpol=parseFloat(el.lbLpol.value);
+    var latm=parseFloat(el.lbLatm.value), lrain=parseFloat(el.lbLrain.value), lrc=parseFloat(el.lbLrc.value);
+    var limp=parseFloat(el.lbLimp.value), cg=parseFloat(el.lbCg.value);
+
+    var d=slantRangeFromElevation(h, elevDeg);
+    var fspl=20*Math.log10(d)+20*Math.log10(fMHz)+32.44;
+    var ptDbm=10*Math.log10(ptW*1000);
+    var eirp=ptDbm+gt-ltc-ltp;
+    var totalLoss=fspl+lpol+latm+lrain;
+    var prDbm=eirp-totalLoss+gr-lrc-limp+cg;
+    var kB=1.380649e-23;
+    var nW=kB*tK*bHz;
+    var nDbm=10*Math.log10(nW*1000);
+    var cn=prDbm-nDbm;
+    var ebno=cn+10*Math.log10(bHz/rb);
+    var margin=cn-reqCN;
+
+    out.range.textContent=d.toFixed(0)+' km';
+    out.eirp.textContent=eirp.toFixed(1)+' dBm';
+    out.fspl.textContent=fspl.toFixed(1)+' dB';
+    out.totalLoss.textContent=totalLoss.toFixed(1)+' dB';
+    out.pr.textContent=prDbm.toFixed(1)+' dBm';
+    out.n.textContent=nDbm.toFixed(1)+' dBm';
+    out.cn.textContent=cn.toFixed(1)+' dB';
+    out.ebno.textContent=ebno.toFixed(1)+' dB';
+
+    var color,label;
+    if(margin>3){ color='#54b07a'; label='Positive margin — healthy'; }
+    else if(margin>=0){ color='#c99a4d'; label='Marginal — little room for fades'; }
+    else { color='#c15f57'; label='Insufficient — required C/N not met'; }
+    out.margin.style.borderColor=color;
+    out.margin.innerHTML='<span class="sat-quality-dot" style="background:'+color+'"></span>C/N = '+cn.toFixed(1)+' dB · margin '+(margin>=0?'+':'')+margin.toFixed(1)+' dB — '+label;
+
+    drawChain([ptDbm.toFixed(0)+' dBm', '+'+gt+' dBi', '−'+totalLoss.toFixed(0)+' dB', '+'+gr+' dBi', prDbm.toFixed(0)+' dBm', cn.toFixed(0)+' dB C/N']);
+  }
+  ids.forEach(function(id){ el[id].addEventListener('input', calc); });
+  el.lbBand.addEventListener('change', calc);
+  calc();
+})();
+
+/* ================= Telemetry Dashboard (simulated) ================= */
+(function(){
+  var busV=root.querySelector('#tmBusV'), busVBar=root.querySelector('#tmBusVBar');
+  var soc=root.querySelector('#tmSoc'), socBar=root.querySelector('#tmSocBar');
+  var solar=root.querySelector('#tmSolar'), solarBar=root.querySelector('#tmSolarBar');
+  var temp=root.querySelector('#tmTemp'), tempBar=root.querySelector('#tmTempBar');
+  var att=root.querySelector('#tmAtt'), attBar=root.querySelector('#tmAttBar');
+  var rw=root.querySelector('#tmRw'), rwBar=root.querySelector('#tmRwBar');
+  var comms=root.querySelector('#tmComms'), signal=root.querySelector('#tmSignal'), signalBar=root.querySelector('#tmSignalBar');
+  var payload=root.querySelector('#tmPayload'), fault=root.querySelector('#tmFault');
+  var t0=performance.now();
+  function tick(now){
+    var t=(now-t0)/1000;
+    var v=28.4+Math.sin(t*0.1)*0.6; busV.innerHTML=v.toFixed(2)+'<span> V</span>'; busVBar.style.width=((v-24)/(34-24)*100).toFixed(0)+'%';
+    var s=86+Math.sin(t*0.05)*6; soc.innerHTML=s.toFixed(0)+'<span> %</span>'; socBar.style.width=s.toFixed(0)+'%';
+    var sc=2.6+Math.sin(t*0.2)*0.5; solar.innerHTML=sc.toFixed(2)+'<span> A</span>'; solarBar.style.width=((sc)/4*100).toFixed(0)+'%';
+    var tp=18+Math.sin(t*0.07)*5; temp.innerHTML=(tp>=0?'+':'')+tp.toFixed(1)+'<span> °C</span>'; tempBar.style.width=((tp+20)/(50)*100).toFixed(0)+'%';
+    var ae=0.6+Math.abs(Math.sin(t*0.3))*0.5; att.innerHTML=ae.toFixed(2)+'<span> °</span>'; attBar.style.width=(100-ae/2*100).toFixed(0)+'%';
+    var rws=3200+Math.sin(t*0.15)*150; rw.innerHTML=rws.toFixed(0)+'<span> RPM</span>'; rwBar.style.width=((rws)/6000*100).toFixed(0)+'%';
+    comms.textContent='Nominal, S-band';
+    var sig=62+Math.sin(t*0.4)*20; signal.innerHTML=sig.toFixed(0)+'<span> % SNR margin</span>'; signalBar.style.width=sig.toFixed(0)+'%';
+    payload.textContent='Standby';
+    fault.innerHTML='<span class="sat-quality-dot" style="background:var(--green)"></span>None';
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* ================= Mission Operations Simulator ================= */
+(function(){
+  var log = root.querySelector('#simLog');
+  var actions = root.querySelectorAll('#simActions .sat-sim-action-btn');
+  var solved = false;
+  var feedback = {
+    power: { good:false, text:'Battery is at 27.1 V (below the 28–32 V nominal band) and solar current is only 0.2 A — well under the 2–4 A expected in sunlight. This is a real symptom, but on its own it doesn\'t explain why safe mode triggered — it looks more like a consequence than the root cause.' },
+    attitude: { good:true, text:'Attitude error hit 41°, well past the 15° safe-mode threshold, and it happened right after reaction wheel #2 dropped to 0 RPM. That ordering — wheel failure, then attitude error, then safe-mode entry — points to a wheel fault as the trigger. Off-sun pointing after the fault would also explain the low solar current above.' },
+    thermal: { good:false, text:'Bus temperature (+4°C) is on the cold side of nominal but not alarming by itself, and cold temperatures are an expected side effect of losing sun-pointing, not a likely root cause.' },
+    log: { good:true, text:'The event log shows the reaction wheel #2 fault came first, the attitude error second, and safe-mode entry last. Reconstructing that order is exactly how a real anomaly review starts — it confirms the wheel is upstream of everything else you\'re seeing.' },
+    command: { good:false, text:'Commanding out of safe mode immediately, before you know why the wheel failed, risks repeating whatever caused the fault — possibly with the spacecraft in a worse attitude than it started in. Real operations teams almost never do this on the first pass.' },
+    wait: { good:true, text:'Reasonable, but not free — every orbit spent in safe mode is an orbit of degraded power and no payload data. The better move here is what you just did with the attitude and log actions: use the data you already have to form a hypothesis before the next pass.' }
+  };
+  function addEntry(text, good){
+    var div=document.createElement('div');
+    div.className='sat-sim-log-entry '+(good?'sat-good':'sat-bad');
+    div.textContent=text;
+    log.appendChild(div);
+    log.scrollTop=log.scrollHeight;
+  }
+  actions.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var f = feedback[btn.dataset.action];
+      addEntry(f.text, f.good);
+      if(btn.dataset.action==='attitude') solved = true;
+    });
+  });
+})();
+
+/* ================= Commanding Lab ================= */
+(function(){
+  var palette = root.querySelectorAll('#cmdPalette .sat-cmd-chip');
+  var seqEl = root.querySelector('#cmdSequence');
+  var validateBtn = root.querySelector('#cmdValidate');
+  var clearBtn = root.querySelector('#cmdClear');
+  var feedbackEl = root.querySelector('#cmdFeedback');
+  var labels = {
+    check_mode:'Check spacecraft mode', confirm_power:'Confirm power state', enable_payload:'Enable payload',
+    point:'Point spacecraft', start_obs:'Start observation', record:'Record data',
+    downlink:'Downlink data', return_nominal:'Return to nominal mode'
+  };
+  var sequence = [];
+
+  function render(){
+    if(sequence.length===0){ seqEl.innerHTML='<span class="sat-cmd-empty">Click steps above to add them here, in order.</span>'; return; }
+    seqEl.innerHTML='';
+    sequence.forEach(function(cmd, i){
+      var div=document.createElement('div');
+      div.className='sat-cmd-step';
+      div.innerHTML='<span class="sat-cmd-num">'+(i+1)+'</span><span>'+labels[cmd]+'</span><button type="button" aria-label="Remove step" data-i="'+i+'">×</button>';
+      seqEl.appendChild(div);
+    });
+    seqEl.querySelectorAll('button[data-i]').forEach(function(btn){
+      btn.addEventListener('click', function(){ sequence.splice(parseInt(btn.dataset.i,10),1); render(); feedbackEl.innerHTML=''; });
+    });
+  }
+  palette.forEach(function(chip){
+    chip.addEventListener('click', function(){ sequence.push(chip.dataset.cmd); render(); feedbackEl.innerHTML=''; });
+  });
+  clearBtn.addEventListener('click', function(){ sequence=[]; render(); feedbackEl.innerHTML=''; });
+
+  function validate(){
+    var errors=[];
+    var idx = {};
+    sequence.forEach(function(cmd,i){ if(!(cmd in idx)) idx[cmd]=i; });
+    function before(a,b){ return (a in idx) && (b in idx) && idx[a]<idx[b]; }
+    if(idx.enable_payload!==undefined && !(idx.check_mode!==undefined && before('check_mode','enable_payload'))){
+      errors.push('Payload cannot be enabled before confirming the spacecraft is out of safe mode — add "Check spacecraft mode" first.');
+    }
+    if(idx.enable_payload!==undefined && !(idx.confirm_power!==undefined && before('confirm_power','enable_payload'))){
+      errors.push('High-power payload operation needs a confirmed adequate battery state first — add "Confirm power state" before "Enable payload".');
+    }
+    if(idx.start_obs!==undefined && !(idx.point!==undefined && before('point','start_obs'))){
+      errors.push('Pointing-dependent operations need a valid attitude first — add "Point spacecraft" before "Start observation".');
+    }
+    if(idx.start_obs!==undefined && !(idx.enable_payload!==undefined && before('enable_payload','start_obs'))){
+      errors.push('The payload must be enabled before starting an observation.');
+    }
+    if(idx.record!==undefined && !(idx.start_obs!==undefined && before('start_obs','record'))){
+      errors.push('There is nothing to record before the observation has started.');
+    }
+    if(idx.downlink!==undefined && !(idx.record!==undefined && before('record','downlink'))){
+      errors.push('Downlink comes after data has been recorded, not before.');
+    }
+    if(sequence.length>0 && sequence[sequence.length-1]!=='return_nominal'){
+      errors.push('Good practice: end the sequence by returning to nominal mode.');
+    }
+    seqEl.querySelectorAll('.sat-cmd-step').forEach(function(el){ el.classList.remove('sat-cmd-err'); });
+    if(errors.length===0){
+      feedbackEl.innerHTML='<span class="sat-badge sat-badge-live">VALID</span> This sequence respects mode, power, and pointing dependencies.';
+    } else {
+      feedbackEl.innerHTML='<span class="sat-badge sat-badge-off">'+errors.length+' ISSUE'+(errors.length>1?'S':'')+'</span><ul style="margin:8px 0 0 18px;padding:0;">'+errors.map(function(e){return '<li style="margin-bottom:4px;">'+e+'</li>';}).join('')+'</ul>';
+    }
+  }
+  validateBtn.addEventListener('click', validate);
+  render();
+})();
+
+/* ================= Conjunction Assessment ================= */
+(function(){
+  var tcaR=root.querySelector('#conjTca'), missR=root.querySelector('#conjMiss'), velR=root.querySelector('#conjVel'), dvR=root.querySelector('#conjDv');
+  var tcaV=root.querySelector('#conjTcaVal'), missV=root.querySelector('#conjMissVal'), velV=root.querySelector('#conjVelVal'), dvV=root.querySelector('#conjDvVal');
+  var canvas=root.querySelector('#conjCanvas'); var ctx=canvas.getContext('2d');
+  var baselineEl=root.querySelector('#conjBaseline'), resultEl=root.querySelector('#conjResult'), riskEl=root.querySelector('#conjRisk');
+
+  function calc(){
+    var tcaH=parseFloat(tcaR.value), missM=parseFloat(missR.value), velKms=parseFloat(velR.value), dvCms=parseFloat(dvR.value);
+    tcaV.textContent=tcaH.toFixed(1)+' h'; missV.textContent=missM.toFixed(0)+' m'; velV.textContent=velKms.toFixed(1)+' km/s'; dvV.textContent=dvCms.toFixed(1)+' cm/s';
+
+    var displacement = (dvCms/100) * (tcaH*3600); // m, simple linear growth model
+    var newMiss = Math.sqrt(missM*missM + displacement*displacement);
+
+    var w=canvas.width, h=canvas.height;
+    ctx.fillStyle='#050506'; ctx.fillRect(0,0,w,h);
+    var cx=w*0.3, cy=h/2;
+    ctx.fillStyle='#f1efe9'; ctx.beginPath(); ctx.arc(cx,cy,6,0,2*Math.PI); ctx.fill();
+    ctx.font='11px IBM Plex Mono'; ctx.fillStyle='#9a9c9c'; ctx.fillText('Your spacecraft', cx-38, cy+22);
+    var scale = Math.min(220/Math.max(newMiss,missM,1), 0.3);
+    var ox = cx + w*0.32, oy0 = cy - missM*scale;
+    ctx.strokeStyle='#c15f57'; ctx.lineWidth=1.4; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.arc(cx,cy, Math.hypot(w*0.32, missM*scale), Math.atan2(-missM*scale, w*0.32)-0.15, Math.atan2(-missM*scale, w*0.32)+0.15); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#c15f57'; ctx.beginPath(); ctx.arc(ox, oy0, 5, 0, 2*Math.PI); ctx.fill();
+    ctx.fillStyle='#9a9c9c'; ctx.fillText('Without maneuver: '+missM.toFixed(0)+' m miss', ox-90, oy0-14);
+
+    if(dvCms>0){
+      var oy1 = cy - newMiss*scale;
+      ctx.fillStyle='#54b07a'; ctx.beginPath(); ctx.arc(ox, oy1, 5, 0, 2*Math.PI); ctx.fill();
+      ctx.fillStyle='#54b07a'; ctx.fillText('With maneuver: '+newMiss.toFixed(0)+' m miss', ox-90, oy1-14<10?oy1+20:oy1-14);
+      ctx.strokeStyle='rgba(255,255,255,0.15)'; ctx.beginPath(); ctx.moveTo(ox,oy0); ctx.lineTo(ox,oy1); ctx.stroke();
+    }
+    ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(ox,cy); ctx.stroke();
+
+    baselineEl.textContent = missM.toFixed(0)+' m';
+    resultEl.textContent = dvCms>0 ? newMiss.toFixed(0)+' m' : '— (no maneuver planned)';
+    var riskDist = dvCms>0 ? newMiss : missM;
+    var color, label;
+    if(riskDist<200){ color='#c15f57'; label='High — maneuver recommended'; }
+    else if(riskDist<1000){ color='#c99a4d'; label='Moderate — continue tracking'; }
+    else { color='#54b07a'; label='Low'; }
+    riskEl.innerHTML='<span class="sat-quality-dot" style="background:'+color+'"></span>'+label;
+  }
+  [tcaR,missR,velR,dvR].forEach(function(elx){ elx.addEventListener('input', calc); });
+  calc();
+})();
+
+/* ================= View Source modal ================= */
+(function(){
+  var openBtn = root.parentElement.querySelector('#satViewSourceBtn') || document.getElementById('satViewSourceBtn');
+  var backdrop = document.getElementById('satModalBackdrop');
+  var closeBtn = document.getElementById('satCloseBtn');
+  var copyBtn = document.getElementById('satCopyBtn');
+  var tabs = backdrop.querySelectorAll('.sat-modal-tab');
+  var panes = { html: document.getElementById('satSrcHtml'), css: document.getElementById('satSrcCss'), js: document.getElementById('satSrcJs') };
+  var populated = false;
+  var lastFocused = null;
+
+  function populate(){
+    if(populated) return;
+    panes.html.textContent = document.documentElement.outerHTML;
+    var styleTag = document.querySelector('style');
+    panes.css.textContent = styleTag ? styleTag.textContent : '/* stylesheet not found */';
+    var scriptTag = document.getElementById('satOpsScript');
+    panes.js.textContent = scriptTag ? scriptTag.textContent : '/* script not found */';
+    populated = true;
+  }
+  function open(){
+    populate();
+    backdrop.classList.add('sat-open');
+    lastFocused = document.activeElement;
+    closeBtn.focus();
+    document.addEventListener('keydown', onKey);
+  }
+  function close(){
+    backdrop.classList.remove('sat-open');
+    document.removeEventListener('keydown', onKey);
+    if(lastFocused) lastFocused.focus();
+  }
+  function onKey(e){ if(e.key==='Escape') close(); }
+  function selectTab(name){
+    tabs.forEach(function(t){ t.setAttribute('aria-selected', t.dataset.tab===name ? 'true':'false'); });
+    Object.keys(panes).forEach(function(k){ panes[k].classList.toggle('sat-hide', k!==name); });
+  }
+  tabs.forEach(function(t){ t.addEventListener('click', function(){ selectTab(t.dataset.tab); }); });
+  if(openBtn) openBtn.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', function(e){ if(e.target===backdrop) close(); });
+  copyBtn.addEventListener('click', function(){
+    var active = 'html';
+    tabs.forEach(function(t){ if(t.getAttribute('aria-selected')==='true') active=t.dataset.tab; });
+    var text = panes[active].textContent;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent='Copied ✓'; setTimeout(function(){ copyBtn.textContent='Copy'; },1500);
+      }).catch(function(){ fallbackCopy(text); });
+    } else { fallbackCopy(text); }
+  });
+  function fallbackCopy(text){
+    var ta=document.createElement('textarea');
+    ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); copyBtn.textContent='Copied ✓'; }catch(e){ copyBtn.textContent='Copy failed'; }
+    document.body.removeChild(ta);
+    setTimeout(function(){ copyBtn.textContent='Copy'; },1500);
+  }
+})();
+
+})();
+</script>
+</body>
+</html>

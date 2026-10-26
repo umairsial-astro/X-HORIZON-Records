@@ -1,0 +1,438 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Skills Behind Every Stargazer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070707;
+    --panel:#121212;
+    --panel-edge:#1b1b1b;
+    --white:#ffffff;
+    --grey:#9a9a9a;
+    --grey-dim:#6b6b6b;
+    --radius:20px;
+  }
+
+  *{box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--white);
+    font-family:'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Space Grotesk', 'Inter', sans-serif;
+    margin:0;
+  }
+
+  /* ---------- Hero ---------- */
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:0 8vw;
+    overflow:hidden;
+  }
+
+  .hero-stars{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+  }
+
+  .star{
+    position:absolute;
+    background:#ffffff;
+    border-radius:50%;
+  }
+
+  @keyframes twinkle{
+    0%, 100%{ opacity:.15; }
+    50%{ opacity:1; }
+  }
+
+  .hero-content{
+    position:relative;
+    z-index:2;
+    max-width:740px;
+  }
+
+  .hero h1{
+    font-size:clamp(2.4rem, 6vw, 4.6rem);
+    line-height:1.06;
+    letter-spacing:-0.02em;
+    font-weight:700;
+    margin-bottom:24px;
+  }
+
+  .hero p{
+    font-size:1.15rem;
+    line-height:1.65;
+    color:var(--grey);
+    max-width:540px;
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:44px;
+    left:8vw;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--grey-dim);
+    font-size:.85rem;
+    text-decoration:none;
+  }
+
+  .scroll-cue svg{
+    width:16px;
+    height:16px;
+    stroke:var(--grey-dim);
+    fill:none;
+    stroke-width:1.6;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    animation:bob 1.8s ease-in-out infinite;
+  }
+
+  @keyframes bob{
+    0%, 100%{ transform:translateY(0); }
+    50%{ transform:translateY(6px); }
+  }
+
+  /* ---------- Skills section ---------- */
+
+  .skills{
+    padding:120px 8vw 140px;
+    max-width:1280px;
+    margin:0 auto;
+  }
+
+  .section-head{
+    max-width:600px;
+    margin-bottom:64px;
+  }
+
+  .section-head h2{
+    font-size:clamp(1.8rem, 3vw, 2.5rem);
+    font-weight:700;
+    letter-spacing:-0.01em;
+    margin-bottom:16px;
+  }
+
+  .section-head p{
+    color:var(--grey);
+    font-size:1.05rem;
+    line-height:1.6;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    align-items:stretch;
+    gap:24px;
+    width:100%;
+  }
+
+  .card-link{
+    display:flex;
+    flex-direction:column;
+    flex:1;
+    min-width:0;
+    min-height:0;
+    color:inherit !important;
+    text-decoration:none !important;
+    outline-offset:4px;
+  }
+  .card-link:link,.card-link:visited,.card-link:hover,.card-link:active,
+  .card-link:focus,.card-link:focus-visible{
+    color:inherit !important;
+    text-decoration:none !important;
+  }
+  .card-link h3,.card-link p,.card-link span{text-decoration:none!important;}
+  .card{
+    background:var(--panel);
+    border-radius:var(--radius);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+    min-height:520px;
+    height:100%;
+    transition:transform .3s ease;
+  }
+
+  .card:hover{
+    transform:translateY(-6px);
+  }
+
+  .card-visual{
+     height:220px;
+     flex:none;
+     position:relative;
+     overflow:hidden;
+     background:var(--panel-edge);
+  }
+  .card-visual img{
+     display:block;
+     width:100%;
+     height:100%;
+     object-fit:cover;
+     transition:transform .45s ease, opacity .3s ease;
+     opacity:.92;
+  }
+  .card:hover .card-visual img{transform:scale(1.045);opacity:1}
+  .card-visual::after{
+     content:"";
+     position:absolute;
+     inset:45% 0 0;
+     background:linear-gradient(transparent,rgba(18,18,18,.42));
+     pointer-events:none;
+  }
+
+  .card-content{
+    flex:1;
+    padding:24px 24px 22px;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    min-width:0;
+  }
+
+  .card-content h3{
+    font-size:1.25rem;
+    font-weight:700;
+    margin-bottom:10px;
+  }
+
+  .card-content p{
+    color:var(--grey);
+    font-size:.93rem;
+    line-height:1.55;
+    margin:0 0 20px;
+    flex-grow:1;
+  }
+
+  .card-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    text-decoration:none !important;
+    width:100%;
+    min-height:48px;
+    flex:none;
+    background:#ffffff !important;
+    color:#080808 !important;
+    border:1px solid #ffffff;
+    padding:14px 12px;
+    font-family:'Inter', sans-serif;
+    font-weight:700;
+    font-size:.92rem;
+    line-height:1.35;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background .2s ease, border-color .2s ease, color .2s ease;
+  }
+  .card-link:hover .card-btn,
+  .card-link:focus-visible .card-btn,
+  .card-btn:hover,
+  .card-btn:focus-visible{
+    background:#e7e7e7 !important;
+    border-color:#e7e7e7 !important;
+    color:#080808 !important;
+    text-decoration:none !important;
+  }
+
+  .card-btn:focus-visible{
+    outline:2px solid #ffffff;
+    outline-offset:3px;
+  }
+
+  /* ---------- Footer ---------- */
+
+  footer{
+    text-align:center;
+    color:var(--grey-dim);
+    font-size:.9rem;
+    padding:0 20px 70px;
+  }
+
+  @media (max-width:1024px){
+    .grid{grid-template-columns:repeat(2, minmax(0, 1fr));}
+  }
+  @media (max-width:640px){
+    .grid{grid-template-columns:minmax(0, 1fr);gap:20px;}
+    .card{height:auto;min-height:0;}
+    .card-visual{height:210px;min-height:210px;}
+    .card-content{padding:22px;}
+    .hero{padding:0 6vw;min-height:82vh;}
+    .skills{padding:76px 6vw 90px;}
+    .section-head{margin-bottom:36px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .star{ animation:none !important; }
+    .scroll-cue svg{ animation:none; }
+    html{ scroll-behavior:auto; }
+  }
+</style>
+
+
+
+  <section class="hero">
+    <div class="hero-stars" id="heroStars"></div>
+    <div class="hero-content">
+      <h1>The skills behind every stargazer</h1>
+      <p>Loving the night sky is the easy part. Turning that curiosity into real astronomical work takes a specific toolkit — here's what to learn first.</p>
+    </div>
+    <a class="scroll-cue" href="#skills">
+      See the skills
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+    </a>
+  </section>
+
+  <main class="skills" id="skills">
+    <div class="section-head">
+      <h2>Nine skills, one sky</h2>
+      <p>They aren't ranked, and you don't need all nine to start. Together, though, they cover most of what separates admiring the sky from actually studying it.</p>
+    </div>
+
+    <div class="grid">
+      <article class="card">
+        <a class="card-link" href="https://xhorizon.odoo.com/rocket-lab" aria-label="Open Rocket Lab">
+          <div class="card-visual"><img src="https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&w=1200&q=85" alt="Rocket launch vehicle lifting off" loading="lazy" decoding="async"></div>
+          <div class="card-content">
+            <h3>Rocket Lab</h3>
+            <p>Explore rocket systems, launch technology and the engineering that carries payloads from Earth into space.</p>
+            <span class="card-btn">Open Rocket Lab</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="card">
+        <a class="card-link" href="https://xhorizon.odoo.com/telescope-handling" aria-label="Open Telescope Handling">
+          <div class="card-visual"><img src="https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?auto=format&fit=crop&w=1200&q=85" alt="Telescope set up for astronomical observation" loading="lazy" decoding="async"></div>
+          <div class="card-content">
+            <h3>Telescope Handling</h3>
+            <p>Learn telescope anatomy, safe handling, balancing, collimation, optics and practical observing routines.</p>
+            <span class="card-btn">Open Telescope Handling</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="card">
+        <a class="card-link" href="https://xhorizon.odoo.com/astrophotography" aria-label="Open Astrophotography">
+          <div class="card-visual"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1200&q=85" alt="Deep space photographed through a telescope" loading="lazy" decoding="async"></div>
+          <div class="card-content">
+            <h3>Astrophotography</h3>
+            <p>Learn astrophotography theory, calculate exposure and image scale, explore signal-to-noise, and plan imaging sessions.</p>
+            <span class="card-btn">Open Astrophotography</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="card">
+        <a class="card-link" href="https://xhorizon.odoo.com/space-data-handling" aria-label="Open Space Data Analysis">
+          <div class="card-visual"><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=85" alt="Earth and digital data visualization" loading="lazy" decoding="async"></div>
+          <div class="card-content">
+            <h3>Space Data Analysis</h3>
+            <p>Move raw spacecraft observations, telemetry, imagery and spectra through cleaning, calibration, processing and analysis.</p>
+            <span class="card-btn">Open Space Data Analysis</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="card">
+        <a class="card-link" href="https://xhorizon.odoo.com/python-learning" aria-label="Open Python for Space Science">
+          <div class="card-visual"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=85" alt="Computer hardware and scientific programming" loading="lazy" decoding="async"></div>
+          <div class="card-content">
+            <h3>Python for Space Science</h3>
+            <p>Learn Python through scientific computing, astronomy calculations, coding practice and space-science projects.</p>
+            <span class="card-btn">Open Python for Space Science</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="card">
+        <a class="card-link" href="https://xhorizon.odoo.com/satellite-operations" aria-label="Open Satellite Operations">
+          <div class="card-visual"><img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1200&q=85" alt="Earth seen from orbit" loading="lazy" decoding="async"></div>
+          <div class="card-content">
+            <h3>Satellite Operations</h3>
+            <p>Explore satellite operations, spacecraft status, orbital passes, telemetry and the procedures used to operate space systems.</p>
+            <span class="card-btn">Open Satellite Operations</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="card">
+        <a class="card-link" href="https://xhorizon.odoo.com/orbital-mechanics" aria-label="Open Orbital Mechanics">
+          <div class="card-visual"><img src="https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&w=1200&q=85" alt="Planet and orbital space scene" loading="lazy" decoding="async"></div>
+          <div class="card-content">
+            <h3>Orbital Mechanics</h3>
+            <p>Understand the mathematics of orbital motion, trajectories, transfers and the calculations behind space missions.</p>
+            <span class="card-btn">Open Orbital Mechanics</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="card">
+        <a class="card-link" href="https://xhorizon.odoo.com/scientific-writing" aria-label="Open Scientific Writing">
+          <div class="card-visual"><img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=85" alt="Notebook and writing tools" loading="lazy" decoding="async"></div>
+          <div class="card-content">
+            <h3>Scientific Writing</h3>
+            <p>Build clear scientific explanations and reports, structure evidence, and communicate research so others can understand and evaluate it.</p>
+            <span class="card-btn">Open Scientific Writing</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="card">
+        <a class="card-link" href="https://xhorizon.odoo.com/mathematics" aria-label="Open Mathematics">
+          <div class="card-visual"><img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1200&q=85" alt="Mathematical equations and geometric forms" loading="lazy" decoding="async"></div>
+          <div class="card-content">
+            <h3>Mathematics</h3>
+            <p>Strengthen the mathematical tools used across space science, including functions, calculus, equations and quantitative problem-solving.</p>
+            <span class="card-btn">Open Mathematics</span>
+          </div>
+        </a>
+      </article>
+
+    </div>
+  </main>
+
+  <footer>Keep looking up.</footer>
+
+  <script>
+    const starsContainer = document.getElementById('heroStars');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const STAR_COUNT = 140;
+
+    for (let i = 0; i < STAR_COUNT; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = Math.random() * 2 + 1;
+      star.style.width = size + 'px';
+      star.style.height = size + 'px';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.opacity = (Math.random() * 0.6 + 0.2).toFixed(2);
+      if (!reduceMotion) {
+        const duration = (2 + Math.random() * 3).toFixed(2);
+        const delay = (Math.random() * 3).toFixed(2);
+        star.style.animation = `twinkle ${duration}s ease-in-out ${delay}s infinite`;
+      }
+      starsContainer.appendChild(star);
+    }
+  </script>

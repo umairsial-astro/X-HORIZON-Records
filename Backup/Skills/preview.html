@@ -1,0 +1,2678 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rocket Lab — Vehicle Design &amp; Launch Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#f2f3f3; --ink-2:#b9bdc0; --ink-3:#7d8387; --ink-4:#4d5256;
+  --bg:#000000; --bg-1:#08090a; --bg-2:#0e1011; --bg-3:#15181a; --bg-4:#1d2124;
+  --line:#23282c; --line-2:#31373c; --hair:#181c1f;
+  --white:#ffffff;
+  --ok:#9fb89a; --warn:#d6b06a; --bad:#c9695e; --info:#8fa5b5;
+  --burn:#e8935a;
+  --r:3px;
+  --f-ui:"Saira Semi Condensed",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: light){:root:not([data-theme="light"]){}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--f-ui);font-size:15px;line-height:1.45;
+  overflow:hidden;
+  font-variant-numeric:tabular-nums;
+}
+@media (max-width:900px){body{overflow:auto}}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:none;cursor:pointer}
+:focus-visible{outline:1.5px solid var(--white);outline-offset:2px}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:var(--bg-1)}
+::-webkit-scrollbar-thumb{background:var(--bg-4);border:2px solid var(--bg-1)}
+::-webkit-scrollbar-thumb:hover{background:#2c3238}
+.mono{font-family:var(--f-mono)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* ---------- frame ---------- */
+#app{display:flex;flex-direction:column;height:100dvh;min-height:100dvh}
+header.bar{
+  display:flex;align-items:stretch;gap:0;border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,#0c0e0f,#000);flex:0 0 auto;
+}
+.brand{display:flex;align-items:center;gap:10px;padding:0 16px;border-right:1px solid var(--line)}
+.brand .mk{width:22px;height:22px;flex:0 0 auto}
+.brand b{font-weight:600;font-size:17px;letter-spacing:.06em}
+.brand span{color:var(--ink-3);font-size:12px;letter-spacing:.14em;font-family:var(--f-mono)}
+nav.views{display:flex}
+nav.views button{
+  padding:12px 18px;font-size:14px;letter-spacing:.08em;color:var(--ink-3);
+  border-right:1px solid var(--hair);position:relative;transition:color .12s,background .12s;
+}
+nav.views button:hover{color:var(--ink);background:var(--bg-2)}
+nav.views button[aria-selected="true"]{color:var(--white);background:var(--bg-2)}
+nav.views button[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--white)}
+.bar-right{margin-left:auto;display:flex;align-items:center;gap:0}
+.clock{
+  padding:0 14px;font-family:var(--f-mono);font-size:15px;letter-spacing:.04em;
+  border-left:1px solid var(--line);display:flex;align-items:center;height:100%;color:var(--ink-2)
+}
+.clock b{color:var(--white);font-weight:500}
+.iconbtn{padding:0 13px;height:100%;border-left:1px solid var(--line);color:var(--ink-3);display:flex;align-items:center;font-size:13px;letter-spacing:.06em}
+.iconbtn:hover{color:var(--white);background:var(--bg-2)}
+
+main{flex:1 1 auto;min-height:0;position:relative}
+.view{position:absolute;inset:0;display:none}
+.view.on{display:flex}
+
+/* ---------- panels ---------- */
+.col{display:flex;flex-direction:column;min-width:0;min-height:0}
+.panel{background:var(--bg-1);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.panel.right{border-right:none;border-left:1px solid var(--line)}
+.phead{
+  display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);
+  font-size:12.5px;letter-spacing:.16em;color:var(--ink-3);font-family:var(--f-mono);
+  background:var(--bg-2);flex:0 0 auto;
+}
+.phead .sp{margin-left:auto;display:flex;gap:6px;letter-spacing:0}
+.pbody{overflow:auto;flex:1 1 auto;min-height:0;overscroll-behavior:contain}
+.section{border-bottom:1px solid var(--hair);padding:12px}
+.section h4{margin:0 0 9px;font-size:13px;font-weight:500;letter-spacing:.1em;color:var(--ink-2)}
+
+/* ---------- controls ---------- */
+.field{display:flex;align-items:center;gap:8px;margin:0 0 8px}
+.field label{flex:0 0 auto;width:96px;font-size:13px;color:var(--ink-3)}
+.field.w label{width:120px}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;flex:1;height:2px;background:var(--bg-4);border-radius:2px;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--white);border:none;cursor:grab}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--white);border:none}
+select,input[type=text],input[type=number]{
+  background:var(--bg-3);border:1px solid var(--line);border-radius:var(--r);padding:5px 8px;
+  font-size:13.5px;flex:1;min-width:0;font-family:var(--f-mono)
+}
+select:hover{border-color:var(--line-2)}
+.val{font-family:var(--f-mono);font-size:12.5px;color:var(--ink);min-width:62px;text-align:right}
+.btn{
+  border:1px solid var(--line-2);background:var(--bg-3);padding:7px 12px;border-radius:var(--r);
+  font-size:13.5px;letter-spacing:.04em;color:var(--ink-2);transition:.12s;
+}
+.btn:hover{background:var(--bg-4);color:var(--white);border-color:#454c52}
+.btn.primary{background:var(--white);color:#000;border-color:var(--white);font-weight:600}
+.btn.primary:hover{background:#d8dadb}
+.btn.danger:hover{color:var(--bad);border-color:var(--bad)}
+.btn.sm{padding:3px 8px;font-size:12px}
+.btn[disabled]{opacity:.35;pointer-events:none}
+.seg{display:flex;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.seg button{flex:1;padding:6px 4px;font-size:12.5px;color:var(--ink-3);border-right:1px solid var(--line)}
+.seg button:last-child{border-right:none}
+.seg button[aria-pressed="true"]{background:var(--bg-4);color:var(--white)}
+.chip{
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;padding:2px 7px;border:1px solid var(--line-2);
+  border-radius:20px;color:var(--ink-3);white-space:nowrap
+}
+.chip.ok{color:var(--ok);border-color:#3b4a38}
+.chip.warn{color:var(--warn);border-color:#4d4227}
+.chip.bad{color:var(--bad);border-color:#4f2e2a}
+.tog{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);cursor:pointer;margin-bottom:7px}
+.tog input{appearance:none;width:30px;height:16px;border-radius:12px;background:var(--bg-4);position:relative;transition:.15s;cursor:pointer;flex:0 0 auto}
+.tog input::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--ink-3);transition:.15s}
+.tog input:checked{background:#3c444a}
+.tog input:checked::after{left:16px;background:var(--white)}
+
+/* ---------- catalog ---------- */
+.cat-tabs{display:flex;flex-wrap:wrap;border-bottom:1px solid var(--line);background:var(--bg-2);flex:0 0 auto}
+.cat-tabs button{padding:7px 10px;font-size:12.5px;color:var(--ink-3);border-right:1px solid var(--hair)}
+.cat-tabs button[aria-pressed="true"]{color:var(--white);background:var(--bg-3)}
+.search{padding:8px 10px;border-bottom:1px solid var(--hair)}
+.search input{width:100%;flex:none}
+.part{
+  display:grid;grid-template-columns:34px 1fr auto;gap:9px;padding:9px 11px;border-bottom:1px solid var(--hair);
+  cursor:pointer;align-items:center;transition:background .1s;
+}
+.part:hover{background:var(--bg-2)}
+.part canvas{width:34px;height:34px;border-radius:2px;background:#000}
+.part .nm{font-size:13.5px;line-height:1.25;color:var(--ink)}
+.part .sub{font-size:11.5px;color:var(--ink-4);font-family:var(--f-mono);letter-spacing:.02em}
+.part .add{font-size:17px;color:var(--ink-4);padding:0 4px}
+.part:hover .add{color:var(--white)}
+.part.dis{opacity:.4}
+
+/* ---------- stage strip ---------- */
+.stack{flex:0 0 268px;border-right:1px solid var(--line);background:var(--bg-1);display:flex;flex-direction:column;min-height:0}
+.stage{border-bottom:1px solid var(--line);}
+.stage-h{display:flex;align-items:center;gap:7px;padding:7px 10px;background:var(--bg-2);cursor:pointer;border-left:2px solid transparent}
+.stage.sel .stage-h{border-left-color:var(--white);background:var(--bg-3)}
+.stage-h .t{font-size:13px;letter-spacing:.06em}
+.stage-h .dv{margin-left:auto;font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3)}
+.stage-parts{}
+.pitem{display:flex;align-items:center;gap:8px;padding:6px 10px 6px 14px;border-top:1px solid var(--hair);font-size:12.5px}
+.pitem .q{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);width:26px}
+.pitem .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink-2)}
+.pitem .x{color:var(--ink-4);font-size:14px;padding:0 3px}
+.pitem .x:hover{color:var(--bad)}
+.pitem button.qb{color:var(--ink-4);padding:0 4px;font-family:var(--f-mono)}
+.pitem button.qb:hover{color:var(--white)}
+.empty{padding:12px 14px;font-size:12.5px;color:var(--ink-4);font-style:italic}
+
+/* ---------- viewport ---------- */
+.stagearea{flex:1;position:relative;background:
+  radial-gradient(ellipse at 50% 40%, #101314 0%, #050506 60%, #000 100%);min-width:0}
+.stagearea canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.vp-tools{position:absolute;top:10px;left:10px;display:flex;gap:6px;z-index:3}
+.vp-info{position:absolute;bottom:10px;left:12px;font-family:var(--f-mono);font-size:11.5px;color:var(--ink-4);z-index:3;pointer-events:none;line-height:1.7}
+.ruler{position:absolute;right:12px;top:0;bottom:0;width:70px;pointer-events:none;z-index:2}
+
+/* ---------- readout ---------- */
+.kv{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:3px 0;font-size:13px}
+.kv .k{color:var(--ink-3)}
+.kv .v{font-family:var(--f-mono);font-size:13px;color:var(--ink)}
+.kv .v.hi{color:var(--white);font-weight:500}
+.kv .v.ok{color:var(--ok)} .kv .v.warn{color:var(--warn)} .kv .v.bad{color:var(--bad)}
+.bigstat{padding:12px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--bg-2),var(--bg-1))}
+.bigstat .n{font-family:var(--f-mono);font-size:31px;font-weight:300;letter-spacing:-.01em;line-height:1;color:var(--white)}
+.bigstat .n small{font-size:14px;color:var(--ink-3);margin-left:5px;font-weight:400}
+.bigstat .l{font-size:12px;color:var(--ink-3);margin-top:4px;letter-spacing:.06em}
+.bar-track{height:5px;background:var(--bg-4);border-radius:3px;overflow:hidden;margin-top:7px;display:flex}
+.bar-track i{display:block;height:100%}
+.dvbar{display:flex;height:26px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:6px 0 4px}
+.dvbar i{display:block;height:100%;border-right:1px solid #000;position:relative;font-style:normal;
+  font-family:var(--f-mono);font-size:10px;color:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.warnbox{padding:7px 10px;border-left:2px solid var(--warn);background:#16130c;font-size:12.5px;color:#ddc99a;margin-bottom:6px;line-height:1.35}
+.warnbox.bad{border-color:var(--bad);background:#170f0e;color:#e0a79f}
+.warnbox.ok{border-color:var(--ok);background:#0e130d;color:#bdd0b8}
+.warnbox b{display:block;font-weight:600;font-size:12px;letter-spacing:.06em;margin-bottom:1px}
+
+/* ---------- launch view ---------- */
+.flightwrap{flex:1;display:flex;min-width:0}
+.flightmain{flex:1;position:relative;min-width:0;background:#000}
+#flightCv{position:absolute;inset:0;width:100%;height:100%}
+.hud{position:absolute;inset:0;pointer-events:none;z-index:2}
+.hud .tl{position:absolute;top:0;left:0;padding:12px 14px}
+.hud .tr{position:absolute;top:0;right:0;padding:12px 14px;text-align:right}
+.hud .bl{position:absolute;bottom:0;left:0;padding:12px 14px}
+.hudrow{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-2);letter-spacing:.03em;white-space:nowrap}
+.hudrow b{color:var(--white);font-weight:500}
+.hudbig{font-family:var(--f-mono);font-size:26px;color:var(--white);font-weight:300;letter-spacing:.02em;line-height:1.15}
+.controls{
+  position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;gap:10px;padding:9px 12px;
+  background:linear-gradient(0deg,rgba(0,0,0,.92),rgba(0,0,0,0));z-index:4
+}
+.events{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:230px;font-family:var(--f-mono);font-size:11.5px;z-index:3;pointer-events:none}
+.ev{display:flex;gap:8px;color:var(--ink-3);opacity:0;animation:evin .3s forwards}
+.ev b{color:var(--white);font-weight:500}
+.ev.alert b{color:var(--bad)}
+@keyframes evin{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.ev{animation:none;opacity:1}}
+.gauges{flex:0 0 232px;border-left:1px solid var(--line);background:var(--bg-1);overflow:auto}
+.gauge{border-bottom:1px solid var(--hair);padding:9px 11px}
+.gauge .gh{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-3);font-family:var(--f-mono);letter-spacing:.06em}
+.gauge .gv{font-family:var(--f-mono);font-size:18px;color:var(--white);font-weight:300}
+.gauge canvas{width:100%;height:38px;display:block;margin-top:4px}
+.tlbar{height:22px;border-top:1px solid var(--line);background:var(--bg-2);position:relative;overflow:hidden;flex:0 0 auto}
+.tlbar i{position:absolute;top:0;bottom:0;border-left:1px solid var(--line-2);font-style:normal;font-family:var(--f-mono);font-size:9.5px;color:var(--ink-4);padding-left:3px;white-space:nowrap}
+.tlbar .now{border-left:1.5px solid var(--white);z-index:2}
+
+/* ---------- analysis ---------- */
+.analysis{flex:1;overflow:auto;padding:0}
+.awrap{max-width:1180px;margin:0 auto;padding:26px 24px 70px}
+.score{display:flex;align-items:flex-start;gap:26px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:24px}
+.scoredial{flex:0 0 auto;position:relative;width:168px;height:168px}
+.scoredial canvas{width:168px;height:168px}
+.scoredial .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.scoredial .c b{font-family:var(--f-mono);font-size:44px;font-weight:300;color:var(--white);line-height:1}
+.scoredial .c span{font-size:12px;color:var(--ink-3);letter-spacing:.1em;font-family:var(--f-mono)}
+.scoretext{flex:1;min-width:260px}
+.scoretext h2{margin:0 0 6px;font-size:26px;font-weight:500;letter-spacing:.01em}
+.scoretext p{margin:0 0 14px;color:var(--ink-2);font-size:14.5px;max-width:62ch}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:1px;background:var(--line)}
+.metric{background:var(--bg-1);padding:11px 13px}
+.metric .mv{font-family:var(--f-mono);font-size:21px;color:var(--white);font-weight:300}
+.metric .ml{font-size:12px;color:var(--ink-3);margin-top:2px}
+.metric .mb{height:3px;background:var(--bg-4);margin-top:7px}
+.metric .mb i{display:block;height:100%;background:var(--white)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+table.data{width:100%;border-collapse:collapse;font-size:13px}
+table.data th{text-align:left;font-weight:500;color:var(--ink-3);font-size:11.5px;letter-spacing:.1em;
+  padding:6px 8px;border-bottom:1px solid var(--line);font-family:var(--f-mono)}
+table.data td{padding:6px 8px;border-bottom:1px solid var(--hair);font-family:var(--f-mono);font-size:12.5px;color:var(--ink-2)}
+table.data td:first-child{font-family:var(--f-ui);font-size:13.5px;color:var(--ink)}
+table.data tr:hover td{background:var(--bg-2)}
+h3.sec{font-size:15px;font-weight:500;letter-spacing:.08em;color:var(--ink-2);margin:26px 0 10px;
+  padding-bottom:6px;border-bottom:1px solid var(--line)}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:60;display:none;align-items:center;justify-content:center;padding:18px}
+.modal.on{display:flex}
+.msheet{background:var(--bg-1);border:1px solid var(--line-2);width:min(760px,100%);max-height:86vh;display:flex;flex-direction:column;border-radius:4px}
+.msheet .mh{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.msheet .mh h3{margin:0;font-size:16px;font-weight:500;letter-spacing:.04em}
+.msheet .mb2{overflow:auto;padding:16px}
+.presetgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px}
+.pcard{border:1px solid var(--line);background:var(--bg-2);padding:11px;text-align:left;border-radius:3px;transition:.12s;display:flex;gap:10px;align-items:flex-start}
+.pcard:hover{border-color:var(--white);background:var(--bg-3)}
+.pcard canvas{width:26px;height:74px;flex:0 0 auto}
+.pcard .nm{font-size:14px;color:var(--ink);line-height:1.2}
+.pcard .de{font-size:11.5px;color:var(--ink-4);font-family:var(--f-mono);margin-top:4px;line-height:1.4}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:26px;background:var(--bg-3);border:1px solid var(--line-2);
+  padding:9px 16px;border-radius:3px;font-size:13.5px;z-index:80;opacity:0;transition:opacity .2s, transform .2s;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(-4px)}
+
+/* ---------- responsive ---------- */
+.mobtabs{display:none}
+@media (max-width:1180px){ .gauges{flex-basis:186px} .stack{flex-basis:230px} }
+@media (max-width:900px){
+  body{overflow:auto}
+  #app{height:auto;min-height:100dvh}
+  main{position:static;min-height:calc(100dvh - 48px)}
+  .view{position:static;flex-direction:column}
+  .panel,.stack{border-right:none;border-bottom:1px solid var(--line);flex:0 0 auto;max-height:46vh;overflow:auto}
+  .stagearea{height:56vh;flex:0 0 auto}
+  .flightwrap{flex-direction:column}
+  .flightmain{height:58vh;flex:0 0 auto}
+  .gauges{flex:0 0 auto;border-left:none;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;max-height:none}
+  .events{max-height:26vh}
+  .brand span{display:none}
+  nav.views button{padding:12px 11px;font-size:13px}
+  .clock{font-size:12.5px;padding:0 9px}
+}
+@media (max-width:560px){
+  .panel,.stack{max-height:42vh}
+  .stagearea{height:48vh}
+  .flightmain{height:52vh}
+  .gauges{grid-template-columns:1fr}
+}
+
+/* ===== ROCKET LAB v2.0 UPGRADE ===== */
+#missionBtn{border-color:rgba(255,255,255,.22)}
+.upgrade-panel{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}
+.upgrade-card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:12px;padding:12px;min-height:72px}
+.upgrade-card .u-k{font-size:10px;letter-spacing:.12em;color:var(--ink-4);text-transform:uppercase}
+.upgrade-card .u-v{font-size:20px;font-weight:700;margin-top:7px;letter-spacing:-.03em}
+.upgrade-card .u-s{font-size:11px;color:var(--ink-3);margin-top:3px}
+.mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mission-box{border:1px solid var(--line);border-radius:12px;padding:14px;background:rgba(255,255,255,.025)}
+.mission-box h4{margin:0 0 10px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.mission-box label{display:block;font-size:11px;color:var(--ink-3);margin:8px 0 5px}
+.mission-box input,.mission-box select{width:100%;box-sizing:border-box;background:var(--bg-2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px}
+.mission-results{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.mini-stat{padding:10px;border:1px solid var(--line);border-radius:9px}.mini-stat b{display:block;font-size:16px}.mini-stat span{font-size:10px;color:var(--ink-3)}
+.telemetry-upgrade{border-top:1px solid var(--line);padding:10px 12px 14px;background:rgba(0,0,0,.12)}
+.telemetry-upgrade h4{margin:0 0 8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+#telemetryCanvas{width:100%;height:150px;display:block;border:1px solid var(--line);border-radius:10px;background:rgba(0,0,0,.18)}
+.telemetry-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:10px;color:var(--ink-3);margin-top:6px}
+.telemetry-legend b{color:var(--ink)}
+.export-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+@media(max-width:800px){.upgrade-panel{grid-template-columns:1fr 1fr}.mission-grid{grid-template-columns:1fr}.mission-results{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.upgrade-panel{grid-template-columns:1fr}.mission-results{grid-template-columns:1fr}.export-row button{flex:1}}
+body > header,
+body > .o_header,
+body > #wrapwrap > header,
+#wrapwrap > header,
+.o_main_navbar,
+.o_header_standard,
+.o_header_affix,
+header#top {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+}
+</style>
+</head>
+<body>
+<div id="app">
+<header class="bar">
+  <div class="brand">
+    <svg class="mk" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 1.5c3.2 3 4.8 7 4.8 11.2L12 22.5 7.2 12.7C7.2 8.5 8.8 4.5 12 1.5z" stroke="#fff" stroke-width="1.1"/>
+      <circle cx="12" cy="9.4" r="2.1" stroke="#fff" stroke-width="1.1"/>
+      <path d="M7.2 13.4 3.6 17.2l3 .6M16.8 13.4l3.6 3.8-3 .6" stroke="#fff" stroke-width="1.1" stroke-linejoin="round"/>
+    </svg>
+    <div><b>ROCKET LAB</b> <span id="vehName">UNTITLED-1</span></div>
+  </div>
+  <nav class="views" role="tablist">
+    <button role="tab" data-view="build" aria-selected="true">Build</button>
+    <button role="tab" data-view="launch" aria-selected="false">Launch</button>
+    <button role="tab" data-view="analysis" aria-selected="false">Analysis</button>
+  </nav>
+  <div class="bar-right">
+    <div class="clock"><span id="clockLabel">T&minus;</span>&nbsp;<b id="clock">00:00:00</b></div>
+    <button class="iconbtn" id="btnPresets">Vehicles</button>
+    <button class="iconbtn" id="btnSave">Save</button>
+    <button class="iconbtn" id="btnHelp">?</button>
+  </div>
+</header>
+
+<main>
+<!-- ============ BUILD ============ -->
+<section class="view on" id="view-build">
+  <div class="panel col" style="flex:0 0 274px">
+    <div class="phead">PARTS CATALOG <span class="sp"><span class="chip" id="catCount">0</span></span></div>
+    <div class="cat-tabs" id="catTabs"></div>
+    <div class="search"><input type="text" id="catSearch" placeholder="Search parts, e.g. methalox"></div>
+    <div class="pbody" id="catList"></div>
+  </div>
+
+  <div class="stack col">
+    <div class="phead">VEHICLE STACK
+      <span class="sp">
+        <button class="btn sm" id="btnAddStage">+ Stage</button>
+        <button class="btn sm danger" id="btnClear">Clear</button>
+      </span>
+    </div>
+    <div class="pbody" id="stackList"></div>
+    <div class="section" style="border-bottom:none;border-top:1px solid var(--line)">
+      <h4>Custom tank</h4>
+      <div class="field"><label>Propellant</label><select id="tkProp"></select></div>
+      <div class="field"><label>Diameter</label><input type="range" id="tkDia" min="0.8" max="12" step="0.1" value="3.7"><span class="val" id="tkDiaV">3.7 m</span></div>
+      <div class="field"><label>Length</label><input type="range" id="tkLen" min="1" max="60" step="0.5" value="20"><span class="val" id="tkLenV">20 m</span></div>
+      <div class="field"><label>Structure</label><select id="tkMat"></select></div>
+      <button class="btn" id="btnAddTank" style="width:100%">Add tank to selected stage</button>
+      <div class="kv" style="margin-top:7px"><span class="k">Propellant / dry</span><span class="v" id="tkOut">—</span></div>
+    </div>
+  </div>
+
+  <div class="stagearea" id="buildArea">
+    <canvas id="buildCv"></canvas>
+    <div class="vp-tools">
+      <button class="btn sm" id="btnFit">Fit</button>
+      <button class="btn sm" id="btnXray" aria-pressed="false">Cutaway</button>
+      <button class="btn sm" id="btnGrid" aria-pressed="true">Scale</button>
+    </div>
+    <div class="vp-info" id="vpInfo"></div>
+  </div>
+
+  <div class="panel right col" style="flex:0 0 288px">
+    <div class="bigstat">
+      <div class="n" id="statDv">0<small>m/s Δv</small></div>
+      <div class="l" id="statDvSub">Add an engine and tank to begin</div>
+      <div class="dvbar" id="dvBar"></div>
+    </div>
+    <div class="seg" style="margin:10px 10px 0" id="rpTabs">
+      <button aria-pressed="true" data-rp="perf">Vehicle</button>
+      <button aria-pressed="false" data-rp="mission">Mission</button>
+      <button aria-pressed="false" data-rp="env">Pad</button>
+    </div>
+    <div class="pbody" id="rpBody"></div>
+  </div>
+</section>
+
+<!-- ============ LAUNCH ============ -->
+<section class="view" id="view-launch">
+  <div class="flightwrap">
+    <div class="flightmain">
+      <canvas id="flightCv"></canvas>
+      <div class="hud">
+        <div class="tl">
+          <div class="hudbig" id="hAlt">0.00 km</div>
+          <div class="hudrow">altitude&nbsp; &nbsp;apo <b id="hApo">—</b> &nbsp;peri <b id="hPeri">—</b></div>
+          <div class="hudbig" style="margin-top:12px" id="hVel">0 m/s</div>
+          <div class="hudrow">speed&nbsp; &nbsp;Mach <b id="hMach">0.0</b> &nbsp;vert <b id="hVv">0</b></div>
+        </div>
+        <div class="tr">
+          <div class="hudrow" id="hStage">STAGE 1 · IGNITION</div>
+          <div class="hudrow">throttle <b id="hThr">100%</b></div>
+          <div class="hudrow">accel <b id="hAcc">0.0 g</b></div>
+          <div class="hudrow">q <b id="hQ">0.0 kPa</b></div>
+          <div class="hudrow">skin <b id="hTemp">15 °C</b></div>
+          <div class="hudrow">prop <b id="hProp">100%</b></div>
+          <div class="hudrow" style="margin-top:8px;color:var(--ink-4)">downrange <b id="hRange">0 km</b></div>
+        </div>
+        <div class="bl"><div class="hudrow" id="hMode">Ready for launch</div></div>
+        <div class="events" id="evLog"></div>
+      </div>
+      <div class="controls">
+        <button class="btn primary" id="btnLaunch">Launch</button>
+        <button class="btn" id="btnPause">Pause</button>
+        <button class="btn" id="btnReset">Reset</button>
+        <div class="seg" style="width:180px" id="speedSeg">
+          <button data-sp="1" aria-pressed="true">1&times;</button>
+          <button data-sp="4" aria-pressed="false">4&times;</button>
+          <button data-sp="20" aria-pressed="false">20&times;</button>
+          <button data-sp="100" aria-pressed="false">100&times;</button>
+        </div>
+        <div class="seg" style="width:150px" id="camSeg">
+          <button data-cam="chase" aria-pressed="true">Chase</button>
+          <button data-cam="pad" aria-pressed="false">Pad</button>
+          <button data-cam="orbit" aria-pressed="false">Map</button>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+          <label class="tog" style="margin:0"><input type="checkbox" id="cbAuto" checked> Autopilot</label>
+          <input type="range" id="manThr" min="0" max="100" value="100" style="width:96px" title="Manual throttle">
+        </div>
+      </div>
+      <div class="tlbar" id="tlBar"></div>
+      <div class="telemetry-upgrade">
+        <h4>Live telemetry trace</h4>
+        <canvas id="telemetryCanvas" height="150"></canvas>
+        <div class="telemetry-legend"><span><b>ALT</b> altitude</span><span><b>VEL</b> speed</span><span><b>Q</b> dynamic pressure</span><span><b>G</b> acceleration</span></div>
+      </div>
+    </div>
+    <div class="gauges" id="gauges"></div>
+  </div>
+</section>
+
+<!-- ============ ANALYSIS ============ -->
+<section class="view" id="view-analysis">
+  <div class="analysis"><div class="awrap" id="anWrap"></div><div id="upgradeAnalysis"></div></div>
+</section>
+</main>
+</div>
+
+<div class="modal" id="modal"><div class="msheet">
+  <div class="mh"><h3 id="mTitle">Title</h3><button class="btn sm" style="margin-left:auto" id="mClose">Close</button></div>
+  <div class="mb2" id="mBody"></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>
+"use strict";
+/* ============================================================
+   ROCKET LAB — vehicle design & launch simulator
+   Single file. All textures generated procedurally at runtime.
+   ============================================================ */
+const G0 = 9.80665;
+
+/* ---------------- propellants ---------------- */
+const PROP = {
+  lox_rp1:{n:"LOX / RP-1",d:1030,c:"#c9a06a",cls:"liquid",cryo:.6,cost:1.2,note:"Dense, storable fuel side. Workhorse."},
+  lox_lh2:{n:"LOX / LH2",d:360,c:"#9fc3d8",cls:"liquid",cryo:1,cost:5.6,note:"Highest chemical Isp, very low density."},
+  lox_ch4:{n:"LOX / methane",d:830,c:"#b9c9c0",cls:"liquid",cryo:.85,cost:.9,note:"Clean-burning, reuse-friendly, ISRU on Mars."},
+  n2o4_udmh:{n:"N2O4 / UDMH",d:1180,c:"#a89070",cls:"liquid",cryo:0,cost:9,note:"Hypergolic and storable. Toxic."},
+  solid:{n:"Solid (HTPB/AP)",d:1770,c:"#8a8478",cls:"solid",cryo:0,cost:3,note:"Huge thrust, no throttle, no shutdown."},
+  hydrazine:{n:"Hydrazine",d:1010,c:"#9a9ab0",cls:"liquid",cryo:0,cost:12,note:"Monopropellant for attitude and small burns."},
+  xenon:{n:"Xenon",d:1600,c:"#8e9bb8",cls:"electric",cryo:0,cost:1200,note:"Electric propulsion. Tiny thrust, enormous Isp."},
+  ntr_lh2:{n:"LH2 (nuclear)",d:71,c:"#a7b8c4",cls:"nuclear",cryo:1,cost:6,note:"Reactor-heated hydrogen. Isp ~900 s."}
+};
+/* ---------------- tank structure ---------------- */
+const MAT = {
+  alli:{n:"Aluminium-lithium",f:.052,tmax:430,cost:260,str:1.00},
+  al2219:{n:"Aluminium 2219",f:.068,tmax:420,cost:110,str:.92},
+  steel:{n:"Stainless 304L",f:.086,tmax:1150,cost:60,str:1.18},
+  carbon:{n:"Carbon composite",f:.036,tmax:620,cost:520,str:1.26},
+  isogrid:{n:"Isogrid Al + CFRP",f:.044,tmax:470,cost:390,str:1.14}
+};
+/* ---------------- parts catalog ---------------- */
+/* e=engine  t=tank  s=structure  p=payload  r=recovery  u=utility */
+const PARTS = [
+/* ---- engines: kerolox ---- */
+{id:"merlin1d",g:"e",n:"Merlin 1D+",sub:"SpaceX · kerolox gas-gen",prop:"lox_rp1",thrSL:845,thrVac:981,ispSL:283,ispVac:311,mass:470,dia:1.0,len:2.9,cost:1000,rel:.9992,thrMin:.40,gim:5,rest:3,burn:180,reuse:1,cluster:1},
+{id:"mvac",g:"e",n:"Merlin Vacuum",sub:"SpaceX · vacuum-optimised",prop:"lox_rp1",thrSL:520,thrVac:981,ispSL:210,ispVac:348,mass:490,dia:2.4,len:4.1,cost:1300,rel:.9990,thrMin:.39,gim:3,rest:5,burn:397,reuse:0,vac:1},
+{id:"f1",g:"e",n:"F-1",sub:"Rocketdyne · Saturn V first stage",prop:"lox_rp1",thrSL:6770,thrVac:7770,ispSL:263,ispVac:304,mass:8400,dia:3.7,len:5.6,cost:14000,rel:.9970,thrMin:1,gim:6,rest:1,burn:165,reuse:0},
+{id:"rd180",g:"e",n:"RD-180",sub:"NPO Energomash · staged combustion",prop:"lox_rp1",thrSL:3830,thrVac:4152,ispSL:311,ispVac:338,mass:5480,dia:3.2,len:3.6,cost:11000,rel:.9995,thrMin:.47,gim:8,rest:1,burn:270,reuse:0},
+{id:"nk33",g:"e",n:"NK-33",sub:"Kuznetsov · N1 heritage",prop:"lox_rp1",thrSL:1510,thrVac:1680,ispSL:297,ispVac:331,mass:1222,dia:1.5,len:3.7,cost:4000,rel:.9930,thrMin:.55,gim:5,rest:1,burn:140,reuse:0},
+{id:"ruthSL",g:"e",n:"Rutherford",sub:"Rocket Lab · electric turbopump",prop:"lox_rp1",thrSL:25,thrVac:26,ispSL:303,ispVac:311,mass:35,dia:.33,len:1.0,cost:80,rel:.9985,thrMin:.5,gim:5,rest:1,burn:160,reuse:0},
+{id:"ruthVac",g:"e",n:"Rutherford Vacuum",sub:"Rocket Lab · upper stage",prop:"lox_rp1",thrSL:14,thrVac:26,ispSL:180,ispVac:343,mass:38,dia:.5,len:1.3,cost:95,rel:.9985,thrMin:.5,gim:5,rest:3,burn:343,reuse:0,vac:1},
+{id:"rd107",g:"e",n:"RD-107A",sub:"Soyuz strap-on, 4 chambers",prop:"lox_rp1",thrSL:838,thrVac:1020,ispSL:263,ispVac:320,mass:1190,dia:1.9,len:2.9,cost:1500,rel:.9950,thrMin:1,gim:0,rest:1,burn:120,reuse:0},
+/* ---- engines: hydrolox ---- */
+{id:"rs25",g:"e",n:"RS-25D",sub:"Aerojet · reusable staged combustion",prop:"lox_lh2",thrSL:1860,thrVac:2279,ispSL:366,ispVac:452,mass:3527,dia:2.4,len:4.3,cost:60000,rel:.9998,thrMin:.67,gim:10,rest:1,burn:520,reuse:1},
+{id:"j2",g:"e",n:"J-2",sub:"Rocketdyne · Saturn upper stages",prop:"lox_lh2",thrSL:486,thrVac:1033,ispSL:200,ispVac:421,mass:1788,dia:2.0,len:3.4,cost:9000,rel:.9960,thrMin:1,gim:7,rest:2,burn:475,reuse:0,vac:1},
+{id:"rl10",g:"e",n:"RL10C-1",sub:"Aerojet · expander cycle",prop:"lox_lh2",thrSL:40,thrVac:106,ispSL:180,ispVac:449,mass:190,dia:1.5,len:2.2,cost:12000,rel:.9995,thrMin:.55,gim:4,rest:15,burn:1130,reuse:0,vac:1},
+{id:"vulcain",g:"e",n:"Vulcain 2.1",sub:"ArianeGroup · core stage",prop:"lox_lh2",thrSL:960,thrVac:1359,ispSL:320,ispVac:431,mass:2100,dia:2.1,len:3.6,cost:12000,rel:.9985,thrMin:.6,gim:6,rest:1,burn:540,reuse:0},
+{id:"vinci",g:"e",n:"Vinci",sub:"ArianeGroup · restartable expander",prop:"lox_lh2",thrSL:70,thrVac:180,ispSL:190,ispVac:457,mass:550,dia:2.2,len:4.2,cost:9000,rel:.9990,thrMin:.35,gim:4,rest:8,burn:900,reuse:0,vac:1},
+{id:"yf77",g:"e",n:"YF-77",sub:"CALT · Long March 5 core",prop:"lox_lh2",thrSL:510,thrVac:700,ispSL:310,ispVac:430,mass:2700,dia:2.0,len:4.0,cost:8000,rel:.9930,thrMin:1,gim:6,rest:1,burn:520,reuse:0},
+/* ---- engines: methalox ---- */
+{id:"raptor2",g:"e",n:"Raptor 2",sub:"SpaceX · full-flow staged combustion",prop:"lox_ch4",thrSL:2300,thrVac:2530,ispSL:327,ispVac:347,mass:1600,dia:1.3,len:3.1,cost:1000,rel:.9975,thrMin:.40,gim:15,rest:5,burn:400,reuse:1},
+{id:"raptorV",g:"e",n:"Raptor Vacuum",sub:"SpaceX · 2.4 m expansion bell",prop:"lox_ch4",thrSL:1400,thrVac:2640,ispSL:220,ispVac:380,mass:2000,dia:2.4,len:4.6,cost:1400,rel:.9975,thrMin:.45,gim:0,rest:5,burn:500,reuse:1,vac:1},
+{id:"be3u",g:"e",n:"BE-3U",sub:"Blue Origin · expander, LH2",prop:"lox_lh2",thrSL:320,thrVac:710,ispSL:280,ispVac:445,mass:1050,dia:2.4,len:4.2,cost:9000,rel:.9970,thrMin:.35,gim:5,rest:6,burn:600,reuse:0,vac:1},
+{id:"be4",g:"e",n:"BE-4",sub:"Blue Origin · ox-rich staged",prop:"lox_ch4",thrSL:2400,thrVac:2640,ispSL:310,ispVac:340,mass:2200,dia:1.4,len:3.5,cost:8000,rel:.9970,thrMin:.4,gim:7,rest:2,burn:330,reuse:1},
+{id:"yf100",g:"e",n:"YF-100K",sub:"AALPT · booster class",prop:"lox_rp1",thrSL:1250,thrVac:1340,ispSL:300,ispVac:335,mass:1900,dia:1.4,len:3.0,cost:3000,rel:.9960,thrMin:.6,gim:8,rest:1,burn:190,reuse:0},
+/* ---- engines: storable / in-space / exotic ---- */
+{id:"aj10",g:"e",n:"AJ10-190",sub:"Hypergolic service engine",prop:"n2o4_udmh",thrSL:12,thrVac:26,ispSL:180,ispVac:319,mass:118,dia:1.1,len:2.0,cost:2500,rel:.9990,thrMin:1,gim:6,rest:50,burn:800,reuse:0,vac:1},
+{id:"draco",g:"e",n:"SuperDraco cluster",sub:"Abort / landing, deep throttle",prop:"n2o4_udmh",thrSL:71,thrVac:73,ispSL:225,ispVac:235,mass:100,dia:.6,len:.8,cost:900,rel:.9990,thrMin:.2,gim:0,rest:99,burn:25,reuse:1},
+{id:"nerva",g:"e",n:"NERVA-class NTR",sub:"Nuclear thermal · Isp 900 s",prop:"ntr_lh2",thrSL:245,thrVac:334,ispSL:600,ispVac:900,mass:8500,dia:2.6,len:9.0,cost:120000,rel:.9900,thrMin:.5,gim:3,rest:10,burn:3600,reuse:0,vac:1,adv:1},
+{id:"nexion",g:"e",n:"NEXT-C ion array",sub:"Electric · Isp 4190 s, 7 kW",prop:"xenon",thrSL:0,thrVac:.236,ispSL:0,ispVac:4190,mass:280,dia:.8,len:.6,cost:9000,rel:.9999,thrMin:.1,gim:2,rest:999,burn:180000,reuse:0,vac:1,adv:1},
+/* ---- solid boosters (engine+tank in one) ---- */
+{id:"srb5",g:"e",n:"5-segment SRB",sub:"Solid · 631 t propellant",prop:"solid",thrSL:13600,thrVac:15000,ispSL:242,ispVac:269,mass:98000,propMass:631185,dia:3.71,len:54,cost:150000,rel:.9985,thrMin:1,gim:8,rest:1,burn:140,reuse:0,solid:1},
+{id:"gem63",g:"e",n:"GEM-63XL",sub:"Solid strap-on · 47 t",prop:"solid",thrSL:2200,thrVac:2450,ispSL:265,ispVac:280,mass:5100,propMass:47000,dia:1.6,len:22,cost:7000,rel:.9990,thrMin:1,gim:3,rest:1,burn:90,reuse:0,solid:1},
+{id:"p120c",g:"e",n:"P120C",sub:"Solid strap-on · 142 t",prop:"solid",thrSL:3150,thrVac:3800,ispSL:270,ispVac:279,mass:11000,propMass:141000,dia:3.4,len:13.5,cost:9000,rel:.9985,thrMin:1,gim:6,rest:1,burn:142,reuse:0,solid:1},
+/* ---- preset tanks ---- */
+{id:"tk_f9_1",g:"t",n:"3.7 m kerolox core",sub:"411 t prop · Al-Li",prop:"lox_rp1",propMass:411000,mass:22200,dia:3.66,len:42.6,cost:16000,mat:"alli"},
+{id:"tk_f9_2",g:"t",n:"3.7 m kerolox upper",sub:"107 t prop · Al-Li",prop:"lox_rp1",propMass:107500,mass:3900,dia:3.66,len:13.8,cost:4200,mat:"alli"},
+{id:"tk_ss",g:"t",n:"9 m stainless barrel",sub:"1200 t methalox · 304L",prop:"lox_ch4",propMass:1200000,mass:80000,dia:9,len:50,cost:9000,mat:"steel"},
+{id:"tk_sh",g:"t",n:"9 m booster barrel",sub:"3400 t methalox · 304L",prop:"lox_ch4",propMass:3400000,mass:145000,dia:9,len:69,cost:14000,mat:"steel"},
+{id:"tk_cent",g:"t",n:"Centaur V-class",sub:"20.8 t hydrolox balloon tank",prop:"lox_lh2",propMass:20830,mass:2050,dia:3.05,len:12.7,cost:5000,mat:"alli"},
+{id:"tk_s2",g:"t",n:"10 m hydrolox stage",sub:"456 t · common bulkhead",prop:"lox_lh2",propMass:456100,mass:36000,dia:10.1,len:24.9,cost:22000,mat:"al2219"},
+{id:"tk_small",g:"t",n:"1.2 m composite tank",sub:"9.2 t kerolox · CFRP",prop:"lox_rp1",propMass:9250,mass:700,dia:1.2,len:12.1,cost:900,mat:"carbon"},
+{id:"tk_kick",g:"t",n:"Kick-stage tank",sub:"1.1 t storable",prop:"n2o4_udmh",propMass:1100,mass:180,dia:1.2,len:1.4,cost:600,mat:"carbon"},
+{id:"tk_xe",g:"t",n:"Xenon feed tank",sub:"425 kg xenon, 4 kW PPU",prop:"xenon",propMass:425,mass:190,dia:1.0,len:1.2,cost:3400,mat:"carbon"},
+/* ---- structure ---- */
+{id:"nose_ogive",g:"s",n:"Ogive nose cone",sub:"Low drag · Cd 0.22",mass:400,dia:3.7,len:7,cost:300,kind:"nose",cd:.22},
+{id:"nose_sharp",g:"s",n:"Von Kármán nose",sub:"Optimal supersonic profile",mass:520,dia:3.7,len:9,cost:700,kind:"nose",cd:.18},
+{id:"fair_1m",g:"s",n:"1.2 m fairing",sub:"Small-lift · 44 kg",mass:44,dia:1.2,len:2.5,cost:300,kind:"fairing",cd:.22,jett:1},
+{id:"fair_4m",g:"s",n:"4 m fairing",sub:"Jettison at 110 km · 1.9 t",mass:1900,dia:4,len:13,cost:3000,kind:"fairing",cd:.26,jett:1},
+{id:"fair_5m",g:"s",n:"5.2 m fairing",sub:"Jettison at 110 km · 2.9 t",mass:2900,dia:5.2,len:17,cost:4500,kind:"fairing",cd:.27,jett:1},
+{id:"fair_9m",g:"s",n:"9 m chomper fairing",sub:"Reusable · integrated",mass:9000,dia:9,len:22,cost:6000,kind:"fairing",cd:.30,jett:0},
+{id:"inter",g:"s",n:"Interstage",sub:"Load path + separation",mass:1100,dia:3.7,len:6.5,cost:900,kind:"inter",cd:.05},
+{id:"adapter",g:"s",n:"Payload adapter",sub:"Clampband, 5 t class",mass:180,dia:2.6,len:1.2,cost:400,kind:"inter",cd:.02},
+{id:"tps",g:"s",n:"Ablative heat shield",sub:"PICA-X · 2400 K",mass:1400,dia:4,len:.6,cost:2600,kind:"tps",cd:.04,tmax:2400},
+{id:"tiles",g:"s",n:"Ceramic tile TPS",sub:"Reusable · 1700 K",mass:9000,dia:9,len:.2,cost:9000,kind:"tps",cd:.02,tmax:1700},
+/* ---- recovery ---- */
+{id:"gridfin",g:"r",n:"Grid fins (set of 4)",sub:"Hypersonic steering · titanium",mass:680,dia:0,len:0,cost:1200,kind:"fin"},
+{id:"legs",g:"r",n:"Landing legs (set of 4)",sub:"Carbon/alu, 1.8 t",mass:1800,dia:0,len:0,cost:1600,kind:"legs"},
+{id:"chute",g:"r",n:"Parachute pack",sub:"Descent recovery, 300 kg",mass:300,dia:0,len:0,cost:400,kind:"chute"},
+{id:"catch",g:"r",n:"Catch hardpoints",sub:"Tower recovery · no legs",mass:420,dia:0,len:0,cost:900,kind:"catch"},
+/* ---- utility ---- */
+{id:"avionics",g:"u",n:"Avionics + INS/GNSS",sub:"Triple-redundant flight computer",mass:180,dia:0,len:.4,cost:1400,kind:"avi",rel:.9999},
+{id:"rcs",g:"u",n:"RCS module",sub:"Attitude control, 60 kg prop",mass:210,dia:0,len:.5,cost:600,kind:"rcs"},
+{id:"solar",g:"u",n:"Solar array + battery",sub:"5 kW deployable",mass:340,dia:0,len:.3,cost:2200,kind:"pwr"},
+{id:"tvc",g:"u",n:"Hydraulic TVC pack",sub:"Faster gimbal, +1.5° control",mass:160,dia:0,len:.3,cost:500,kind:"tvc"},
+/* ---- payloads ---- */
+{id:"pl_cube",g:"p",n:"CubeSat 3U",sub:"5 kg · 20 g limit",mass:5,dia:.3,len:.3,cost:180,gLim:20},
+{id:"pl_small",g:"p",n:"Smallsat bus",sub:"250 kg · Earth observation",mass:250,dia:1.2,len:1.4,cost:9000,gLim:12},
+{id:"pl_comsat",g:"p",n:"GEO comsat",sub:"6.0 t · electric station-keeping",mass:6000,dia:3.2,len:6,cost:220000,gLim:8},
+{id:"pl_medsat",g:"p",n:"Medium satellite",sub:"4.2 t · GTO class",mass:4200,dia:3,len:5,cost:150000,gLim:8},
+{id:"pl_scope",g:"p",n:"Space telescope",sub:"6.2 t · 4.5 g limit, fragile",mass:6200,dia:4.5,len:10,cost:900000,gLim:4.5},
+{id:"pl_crew",g:"p",n:"Crew capsule (4)",sub:"12.5 t · 4 g abort limit",mass:12500,dia:4,len:8.1,cost:180000,gLim:4,crew:4},
+{id:"pl_orion",g:"p",n:"Deep-space capsule",sub:"26.5 t · service module",mass:26520,dia:5.0,len:11,cost:900000,gLim:4,crew:4},
+{id:"pl_station",g:"p",n:"Station module",sub:"20 t pressurised",mass:20000,dia:4.2,len:12,cost:400000,gLim:6},
+{id:"pl_lander",g:"p",n:"Lunar lander",sub:"15 t · crewed descent",mass:15000,dia:4.6,len:9,cost:600000,gLim:5},
+{id:"pl_rover",g:"p",n:"Mars rover + aeroshell",sub:"4.05 t entry mass",mass:4050,dia:4.5,len:4.5,cost:800000,gLim:6},
+{id:"pl_probe",g:"p",n:"Outer-planet probe",sub:"3.2 t · RTG powered",mass:3200,dia:3,len:5,cost:700000,gLim:6},
+{id:"pl_ballast",g:"p",n:"Mass simulator",sub:"Adjustable ballast",mass:1000,dia:2,len:2,cost:20,gLim:30,adj:1}
+];
+const PMAP = {}; PARTS.forEach(p=>PMAP[p.id]=p);
+const GROUPS=[["e","Engines"],["t","Tanks"],["s","Structure"],["r","Recovery"],["u","Systems"],["p","Payload"]];
+
+/* ---------------- worlds ---------------- */
+const BODIES = {
+  earth:{n:"Earth",mu:3.986004418e14,R:6371000,om:7.2921159e-5,rho0:1.225,H:8500,atmTop:140000,T0:288,skyDay:["#7fa6c6","#3c5a76","#0a1420"],ground:"#1b1c1a",day:86400,g:9.807,soi:9.24e8},
+  moon:{n:"Moon",mu:4.9048695e12,R:1737400,om:2.6617e-6,rho0:0,H:1,atmTop:0,T0:250,skyDay:["#000","#000","#000"],ground:"#9a958c",day:2360591,g:1.62,soi:6.6e7},
+  mars:{n:"Mars",mu:4.282837e13,R:3389500,om:7.088218e-5,rho0:.020,H:11100,atmTop:120000,T0:210,skyDay:["#c49a77","#7d5f47","#120d0a"],ground:"#9c5c35",day:88642,g:3.72,soi:5.76e8},
+  venus:{n:"Venus",mu:3.24859e14,R:6051800,om:-2.9924e-7,rho0:65,H:15900,atmTop:250000,T0:737,skyDay:["#d8b26a","#8a6a34","#241a0c"],ground:"#c09048",day:1.0087e7,g:8.87,soi:6.16e8},
+  titan:{n:"Titan",mu:8.9780e12,R:2574700,om:4.5606e-6,rho0:5.3,H:40000,atmTop:600000,T0:94,skyDay:["#c9a35a","#7a5f2e","#1b1408"],ground:"#7d6a48",day:1377684,g:1.35,soi:4.3e7},
+  europa:{n:"Europa",mu:3.2027e12,R:1560800,om:2.0478e-5,rho0:0,H:1,atmTop:0,T0:102,skyDay:["#000","#000","#000"],ground:"#cdd7de",day:306822,g:1.31,soi:9.7e6},
+  ceres:{n:"Ceres",mu:6.2629e10,R:469730,om:7.9e-5,rho0:0,H:1,atmTop:0,T0:168,skyDay:["#000","#000","#000"],ground:"#6e6a63",day:32667,g:.28,soi:7.7e7},
+  mercury:{n:"Mercury",mu:2.20329e13,R:2439700,om:1.24e-6,rho0:0,H:1,atmTop:0,T0:440,skyDay:["#000","#000","#000"],ground:"#8b857e",day:1.5e7,g:3.7,soi:1.12e8}
+};
+/* ---------------- launch sites ---------------- */
+const SITES=[
+ {id:"lc39a",n:"Kennedy LC-39A",b:"earth",lat:28.608,lon:-80.604,el:3,az:[35,120]},
+ {id:"slc40",n:"Cape Canaveral SLC-40",b:"earth",lat:28.562,lon:-80.577,el:3,az:[35,120]},
+ {id:"slc4e",n:"Vandenberg SLC-4E",b:"earth",lat:34.632,lon:-120.611,el:100,az:[158,201]},
+ {id:"boca",n:"Starbase, Texas",b:"earth",lat:25.997,lon:-97.155,el:2,az:[80,120]},
+ {id:"csg",n:"Kourou CSG",b:"earth",lat:5.236,lon:-52.775,el:10,az:[-10,100]},
+ {id:"baik",n:"Baikonur 31/6",b:"earth",lat:45.996,lon:63.564,el:90,az:[30,90]},
+ {id:"wench",n:"Wenchang LC-101",b:"earth",lat:19.614,lon:110.951,el:10,az:[30,120]},
+ {id:"sdsc",n:"Satish Dhawan SLP",b:"earth",lat:13.733,lon:80.235,el:10,az:[100,140]},
+ {id:"mahia",n:"Mahia LC-1",b:"earth",lat:-39.262,lon:177.864,el:30,az:[140,220]},
+ {id:"tane",n:"Tanegashima Y2",b:"earth",lat:30.400,lon:130.975,el:20,az:[80,120]},
+ {id:"vost",n:"Vostochny 1S",b:"earth",lat:51.884,lon:128.334,el:280,az:[30,90]},
+ {id:"kodiak",n:"Kodiak LP-3",b:"earth",lat:57.435,lon:-152.337,el:20,az:[150,220]},
+ {id:"moonbase",n:"Shackleton Base",b:"moon",lat:-89.9,lon:0,el:0,az:[0,360]},
+ {id:"marsbase",n:"Jezero Outpost",b:"mars",lat:18.44,lon:77.45,el:-2500,az:[0,360]},
+ {id:"titanbase",n:"Kraken Station",b:"titan",lat:8,lon:0,el:0,az:[0,360]},
+ {id:"europabase",n:"Conamara Camp",b:"europa",lat:9,lon:0,el:0,az:[0,360]},
+ {id:"ceresbase",n:"Occator Depot",b:"ceres",lat:19,lon:0,el:0,az:[0,360]}
+];
+/* ---------------- destinations ---------------- */
+const TARGETS=[
+ {id:"sub",n:"Suborbital 100 km",alt:100,apo:100,inc:0,extra:0,d:"Kármán line hop. No orbital insertion."},
+ {id:"leo",n:"Low Earth orbit 200 km",alt:200,apo:200,inc:28.6,extra:0,d:"Reference circular parking orbit."},
+ {id:"iss",n:"ISS orbit 420 km",alt:420,apo:420,inc:51.6,extra:0,d:"Station rendezvous inclination."},
+ {id:"sso",n:"Sun-synchronous 700 km",alt:700,apo:700,inc:98.2,extra:0,d:"Retrograde plane. Costs rotation bonus."},
+ {id:"polar",n:"Polar 500 km",alt:500,apo:500,inc:90,extra:0,d:"Full-globe coverage."},
+ {id:"meo",n:"Navigation MEO 20 200 km",alt:200,apo:20200,inc:55,extra:3900,d:"Transfer plus circularisation at MEO."},
+ {id:"gto",n:"Geostationary transfer",alt:185,apo:35786,inc:27,extra:2440,d:"Standard commercial GTO-1500."},
+ {id:"geo",n:"Geostationary 35 786 km",alt:185,apo:35786,inc:0,extra:4330,d:"Direct insertion incl. plane change."},
+ {id:"tli",n:"Trans-lunar injection",alt:185,apo:400000,inc:28.6,extra:3150,d:"C3 ≈ −1.9 km²/s²."},
+ {id:"lunar_orb",n:"Low lunar orbit",alt:185,apo:400000,inc:28.6,extra:4000,d:"TLI plus lunar orbit insertion."},
+ {id:"lunar_surf",n:"Lunar surface",alt:185,apo:400000,inc:28.6,extra:5900,d:"TLI, LOI and powered descent."},
+ {id:"tmi",n:"Trans-Mars injection",alt:200,apo:500000,inc:28.6,extra:3600,d:"Hohmann departure window."},
+ {id:"mars_surf",n:"Mars surface",alt:200,apo:500000,inc:28.6,extra:4700,d:"TMI plus aerocapture and EDL."},
+ {id:"venus",n:"Venus transfer",alt:200,apo:500000,inc:28.6,extra:3500,d:"Inner-system departure."},
+ {id:"jup",n:"Jupiter transfer",alt:200,apo:500000,inc:28.6,extra:6300,d:"Direct, no gravity assist."},
+ {id:"esc",n:"Solar escape",alt:200,apo:500000,inc:28.6,extra:8800,d:"Hyperbolic departure from Earth system."}
+];
+
+/* ---------------- reference vehicles ---------------- */
+function T(prop,propMass,mass,dia,len,n,mat){return{t:"tank",prop,propMass,mass,dia,len,n:n||"Tank",mat:mat||"alli"};}
+const PRESETS=[
+{id:"f9",n:"Falcon 9 Block 5",d:"2-stage kerolox, reusable booster",site:"slc40",tgt:"leo",
+ stages:[{ty:"core",parts:[{id:"merlin1d",q:9},{c:T("lox_rp1",411000,22200,3.66,42.6,"S1 kerolox tank","alli")},{id:"gridfin",q:1},{id:"legs",q:1}],reuse:"rtls"},
+         {ty:"upper",parts:[{id:"mvac",q:1},{c:T("lox_rp1",107500,3900,3.66,13.8,"S2 kerolox tank","alli")},{id:"inter",q:1},{id:"avionics",q:1}]},
+         {ty:"upper",parts:[{id:"fair_5m",q:1},{id:"pl_comsat",q:1}]}]},
+{id:"sat5",n:"Saturn V",d:"Apollo lunar stack, 1967–1973",site:"lc39a",tgt:"tli",
+ stages:[{ty:"core",parts:[{id:"f1",q:5},{c:T("lox_rp1",2077000,130000,10.1,42,"S-IC","al2219")}]},
+         {ty:"upper",parts:[{id:"j2",q:5},{c:T("lox_lh2",456100,36000,10.1,24.9,"S-II","al2219")},{id:"inter",q:1}]},
+         {ty:"upper",parts:[{id:"j2",q:1},{c:T("lox_lh2",109500,13500,6.6,17.8,"S-IVB","al2219")},{id:"avionics",q:1}]},
+         {ty:"upper",parts:[{id:"nose_ogive",q:1},{id:"pl_orion",q:1}]}]},
+{id:"starship",n:"Starship / Super Heavy",d:"Fully reusable methalox, 9 m",site:"boca",tgt:"leo",
+ stages:[{ty:"core",parts:[{id:"raptor2",q:33},{c:T("lox_ch4",3400000,145000,9,69,"Booster tanks","steel")},{id:"gridfin",q:1},{id:"catch",q:1}],reuse:"tower"},
+         {ty:"upper",parts:[{id:"raptor2",q:3},{id:"raptorV",q:3},{c:T("lox_ch4",1200000,100000,9,50.3,"Ship tanks","steel")},{id:"tiles",q:1},{id:"fair_9m",q:1},{id:"pl_station",q:1}],reuse:"tower"}]},
+{id:"electron",n:"Electron",d:"Small-lift carbon composite, electric pumps",site:"mahia",tgt:"leo",
+ stages:[{ty:"core",parts:[{id:"ruthSL",q:12},{c:T("lox_rp1",12900,835,1.2,15.0,"S1 CFRP tank","carbon")}]},
+         {ty:"upper",parts:[{id:"ruthVac",q:1},{c:T("lox_rp1",3400,185,1.2,4.0,"S2 CFRP tank","carbon")},{id:"avionics",q:1}]},
+         {ty:"upper",parts:[{id:"fair_1m",q:1},{id:"pl_small",q:1}]}]},
+{id:"atlas",n:"Atlas V 401",d:"RD-180 core with Centaur upper",site:"slc40",tgt:"leo",
+ stages:[{ty:"core",parts:[{id:"rd180",q:1},{c:T("lox_rp1",284089,21054,3.81,32.5,"CCB tank","al2219")}]},
+         {ty:"upper",parts:[{id:"rl10",q:1},{c:T("lox_lh2",20830,1950,3.05,12.7,"Centaur","alli")},{id:"avionics",q:1}]},
+         {ty:"upper",parts:[{id:"fair_4m",q:1},{id:"pl_medsat",q:1}]}]},
+{id:"ariane6",n:"Ariane 64",d:"Hydrolox core with four P120C boosters",site:"csg",tgt:"gto",
+ stages:[{ty:"core",parts:[{id:"vulcain",q:1},{c:T("lox_lh2",150000,14700,5.4,31,"LLPM","alli")}]},
+         {ty:"strapon",q:4,parts:[{id:"p120c",q:1}]},
+         {ty:"upper",parts:[{id:"vinci",q:1},{c:T("lox_lh2",31000,5400,5.4,9,"ULPM","alli")},{id:"inter",q:1},{id:"avionics",q:1}]},
+         {ty:"upper",parts:[{id:"fair_5m",q:1},{id:"pl_comsat",q:1}]}]},
+{id:"sls",n:"SLS Block 1",d:"Shuttle-derived, two 5-segment SRBs",site:"lc39a",tgt:"tli",
+ stages:[{ty:"core",parts:[{id:"rs25",q:4},{c:T("lox_lh2",979000,85270,8.4,64.6,"Core stage","al2219")}]},
+         {ty:"strapon",q:2,parts:[{id:"srb5",q:1}]},
+         {ty:"upper",parts:[{id:"rl10",q:1},{c:T("lox_lh2",26853,3490,5,13.7,"ICPS","alli")},{id:"inter",q:1},{id:"avionics",q:1}]},
+         {ty:"upper",parts:[{id:"pl_orion",q:1}]}]},
+{id:"ng",n:"New Glenn",d:"BE-4 methalox, reusable first stage",site:"slc40",tgt:"leo",
+ stages:[{ty:"core",parts:[{id:"be4",q:7},{c:T("lox_ch4",1050000,90000,7,58,"GS1 tanks","alli")},{id:"gridfin",q:1},{id:"legs",q:1}],reuse:"droneship"},
+         {ty:"upper",parts:[{id:"be3u",q:2},{c:T("lox_lh2",125000,13500,7,24,"GS2 tanks","alli")},{id:"inter",q:1},{id:"avionics",q:1}]},
+         {ty:"upper",parts:[{id:"fair_9m",q:1},{id:"pl_station",q:1}]}]},
+{id:"n1",n:"N1 (1969)",d:"30 first-stage engines. Study in failure modes.",site:"baik",tgt:"tli",
+ stages:[{ty:"core",parts:[{id:"nk33",q:30},{c:T("lox_rp1",1880000,168000,17,30,"Block A","al2219")}]},
+         {ty:"upper",parts:[{id:"nk33",q:8},{c:T("lox_rp1",561000,55800,10,20.5,"Block B","al2219")},{id:"inter",q:1}]},
+         {ty:"upper",parts:[{id:"nk33",q:4},{c:T("lox_rp1",188000,17400,7.6,11.5,"Block V","al2219")},{id:"avionics",q:1}]},
+         {ty:"upper",parts:[{id:"nose_ogive",q:1},{id:"pl_lander",q:1}]}]},
+{id:"ntr",n:"Nuclear transfer stack",d:"Chemical lift, NTR upper stage",site:"lc39a",tgt:"tmi",
+ stages:[{ty:"core",parts:[{id:"raptor2",q:9},{c:T("lox_ch4",900000,52000,7,55,"Booster","steel")},{id:"legs",q:1}],reuse:"rtls"},
+         {ty:"upper",parts:[{id:"nerva",q:1},{c:T("ntr_lh2",42000,11000,7,20,"LH2 drop tank","carbon")},{id:"inter",q:1},{id:"avionics",q:1},{id:"solar",q:1}]},
+         {ty:"upper",parts:[{id:"fair_5m",q:1},{id:"pl_probe",q:1}]}]}
+];
+
+/* ---------------- state ---------------- */
+const S={
+  name:"UNTITLED-1",
+  stages:[],
+  sel:0,
+  site:"slc40", tgt:"leo", body:"earth",
+  azimuth:90, windU:0, tempOff:0, pressOff:0, crossfeed:false,
+  pitchKick:1.6, pitchRate:1.0, maxQthr:true, maxGthr:true, gLimit:4.5,
+  engineOutOK:true, randomFail:false,
+  xray:false, showScale:true, auto:true, manThr:1, manualDir:null,
+  view:"build", rp:"perf",
+  catGroup:"e", catQ:""
+};
+let VEH=null, SIM=null;
+
+/* ---------------- vehicle analysis ---------------- */
+function partOf(e){ return e.c ? e.c : PMAP[e.id]; }
+function partMass(e){ const p=partOf(e); return (p.mass||0)*(e.q||1); }
+function stageMult(st){ return st.ty==="strapon" ? (st.q||1) : 1; }
+
+function analyzeStage(st){
+  const m=stageMult(st);
+  let dry=0,cost=0,len=0,dia=0,engines=[],pools={},cd=0,area=0,tanks=[],payload=0,gLim=99,crew=0,fins=0,legs=0,tps=null,fairing=null,rel=1,mats=[];
+  for(const e of st.parts){
+    const p=partOf(e), q=e.q||1;
+    if(p.t==="tank"||p.g==="t"){
+      dry+=(p.mass||0)*q; cost+=(p.cost|| (p.propMass*PROP[p.prop].cost/1000) )*q;
+      pools[p.prop]=(pools[p.prop]||0)+(p.propMass||0)*q; tanks.push(p);
+      dia=Math.max(dia,p.dia||0); len+=(p.len||0)*q; mats.push(p.mat||"alli");
+    } else if(p.g==="e"){
+      dry+=(p.mass||0)*q; cost+=(p.cost||0)*q; engines.push({p,q});
+      if(p.solid){ pools.solid=(pools.solid||0)+(p.propMass||0)*q; len+=(p.len||0); dia=Math.max(dia,p.dia||0); }
+      else { len+=(p.len||0)*0.55; dia=Math.max(dia,(p.dia||0)*Math.min(3,Math.sqrt(q))); }
+      rel*=Math.pow(p.rel||.999,q);
+    } else if(p.g==="p"){
+      dry+=(p.mass||0)*q; payload+=(p.mass||0)*q; cost+=(p.cost||0)*q;
+      gLim=Math.min(gLim,p.gLim||99); crew+=(p.crew||0)*q; dia=Math.max(dia,p.dia||0); len+=(p.len||0)*q;
+    } else {
+      dry+=(p.mass||0)*q; cost+=(p.cost||0)*q; len+=(p.len||0)*q; dia=Math.max(dia,p.dia||0);
+      if(p.kind==="fin") fins+=q; if(p.kind==="legs") legs+=q;
+      if(p.kind==="tps") tps=p; if(p.kind==="fairing") fairing=p;
+      if(p.cd) cd+=p.cd;
+    }
+  }
+  let prop=0; for(const k in pools) prop+=pools[k];
+  const matStr = mats.length? mats.reduce((a,b)=>a+MAT[b].str,0)/mats.length : 1;
+  const propCost = Object.keys(pools).reduce((a,k)=>a+pools[k]*PROP[k].cost/1000,0);
+  return {mult:m,dry:dry*m,prop:prop*m,pools,poolsM:Object.fromEntries(Object.entries(pools).map(([k,v])=>[k,v*m])),
+    engines,cost:(cost+propCost)*m,len,dia:dia||1.5,cd,tanks,payload:payload*m,gLim,crew,fins,legs,tps,fairing,rel:Math.pow(rel,m),matStr,
+    ty:st.ty||"core",reuse:st.reuse||null};
+}
+function engThrust(p,q,pa,body){
+  const p0=101325;
+  const r=Math.max(0,Math.min(1,pa/p0));
+  const t=(p.thrVac-(p.thrVac-p.thrSL)*r)*1000*q;
+  const isp=p.ispVac-(p.ispVac-p.ispSL)*r;
+  return {thr:Math.max(0,t),isp:Math.max(1,isp)};
+}
+function stageThrust(sa,pa){
+  let thr=0,flow=0;
+  for(const e of sa.engines){
+    const {thr:t,isp}=engThrust(e.p,e.q*sa.mult,pa);
+    thr+=t; flow+=(e.p.thrVac*1000*e.q*sa.mult)/(e.p.ispVac*G0);
+  }
+  return {thr,flow,isp:flow>0?thr/(flow*G0):0};
+}
+/* phase decomposition (handles parallel strap-ons) */
+function buildVehicle(){
+  const stages=S.stages.map(analyzeStage);
+  const idx=S.stages.map((s,i)=>i);
+  // attach strapons to nearest core below
+  const attach={};
+  stages.forEach((sa,i)=>{ if(sa.ty==="strapon"){ let j=i-1; while(j>=0&&stages[j].ty==="strapon")j--; attach[i]=Math.max(0,j); }});
+  const seq=idx.filter(i=>stages[i].ty!=="strapon");
+  const totalMass=stages.reduce((a,s)=>a+s.dry+s.prop,0);
+  const phases=[];
+  let jettisoned=new Set();
+  const massAbove=(active)=>{ let m=0; stages.forEach((s,i)=>{ if(!jettisoned.has(i)) m+=s.dry+s.propLeft; }); return m; };
+  stages.forEach(s=>s.propLeft=s.prop);
+  for(let k=0;k<seq.length;k++){
+    const ci=seq[k];
+    const core=stages[ci];
+    if(core.engines.length===0||core.prop<=0){ // inert stage (payload/fairing) - skip, jettison never
+      continue;
+    }
+    const straps=idx.filter(i=>attach[i]===ci&&!jettisoned.has(i));
+    let guard=0;
+    while((core.propLeft>1||straps.some(i=>stages[i].propLeft>1))&&guard++<8){
+      const active=[ci,...straps.filter(i=>stages[i].propLeft>1)];
+      if(core.propLeft<=1&&active.length===1) break;
+      let thrSL=0,thrV=0,flow=0;
+      active.forEach(i=>{ const a=stages[i]; const t1=stageThrust(a,101325),t2=stageThrust(a,0); if(a.propLeft>1){thrSL+=t1.thr;thrV+=t2.thr;flow+=t2.flow;} });
+      if(flow<=0) break;
+      // burn until someone runs dry
+      let tmin=Infinity, who=null;
+      active.forEach(i=>{const a=stages[i]; if(a.propLeft>1){ const f=stageThrust(a,0).flow; const t=a.propLeft/f; if(t<tmin){tmin=t;who=i;} }});
+      if(!isFinite(tmin)) break;
+      let m0=0; stages.forEach((s,i)=>{ if(!jettisoned.has(i)) m0+=s.dry+s.propLeft; });
+      let burned=0; active.forEach(i=>{const a=stages[i]; if(a.propLeft>1){ const f=stageThrust(a,0).flow; const b=Math.min(a.propLeft,f*tmin); a.propLeft-=b; burned+=b; }});
+      const m1=m0-burned;
+      const ispEff=thrV/(flow*G0);
+      phases.push({stages:active.slice(),core:ci,m0,m1,isp:ispEff,thrSL,thrV,flow,t:tmin,
+        twr0:thrSL/(m0*G0),twr1:thrV/(m1*G0),dv:ispEff*G0*Math.log(m0/m1)});
+      // jettison dry strapons
+      straps.forEach(i=>{ if(stages[i].propLeft<=1&&!jettisoned.has(i)) jettisoned.add(i); });
+      if(core.propLeft<=1) break;
+    }
+    jettisoned.add(ci);
+    // also drop any inert stage directly above that belongs with it? no.
+  }
+  const dv=phases.reduce((a,p)=>a+p.dv,0);
+  // payload = mass of everything that never burns above the last burning stage
+  let payload=0, plParts=[];
+  stages.forEach((s,i)=>{ if(s.payload>0){payload+=s.payload;} });
+  const cost=stages.reduce((a,s)=>a+s.cost,0);
+  const height=stages.filter(s=>s.ty!=="strapon").reduce((a,s)=>a+s.len,0);
+  const maxDia=Math.max(...stages.map(s=>s.dia),1);
+  const gross=totalMass;
+  const rel=stages.reduce((a,s)=>a*s.rel,1)*Math.pow(.9985,Math.max(0,seq.length-1))*(hasPart("avionics")?.9999:.985);
+  const gLim=Math.min(...stages.map(s=>s.gLim));
+  const crew=stages.reduce((a,s)=>a+s.crew,0);
+  const matStr=stages.length?stages.reduce((a,s)=>a+s.matStr,0)/stages.length:1;
+  return {stages,phases,dv,gross,payload,cost,height,maxDia,rel,gLim,crew,matStr,seq,attach,
+    fineness:height/maxDia, twr0:phases.length?phases[0].twr0:0, propTotal:stages.reduce((a,s)=>a+s.prop,0)};
+}
+function hasPart(id){ return S.stages.some(s=>s.parts.some(p=>p.id===id)); }
+function targetOf(){ return TARGETS.find(t=>t.id===S.tgt)||TARGETS[1]; }
+function siteOf(){ return SITES.find(s=>s.id===S.site)||SITES[0]; }
+function bodyOf(){ return BODIES[siteOf().b]; }
+/* required delta-v to orbit from a given body/site, incl. losses */
+function dvRequired(){
+  const b=bodyOf(), t=targetOf(), st=siteOf();
+  const alt=t.alt*1000, r=b.R+alt;
+  const vCirc=Math.sqrt(b.mu/r);
+  const apo=Math.max(t.apo,t.alt)*1000+b.R;
+  const a=(r+apo)/2;
+  const vPeri=Math.sqrt(b.mu*(2/r-1/a));
+  const rot=Math.abs(b.om)*b.R*Math.cos(st.lat*Math.PI/180)*Math.sin(S.azimuth*Math.PI/180);
+  // losses: gravity + drag, scaled by atmosphere and gravity
+  const atmoLoss=b.rho0>0? 180*Math.log(1+b.rho0*60/1.225)+ (b.rho0>1?450:0) :0;
+  const gravLoss=b.g*38*(b.rho0>0?1:.72);
+  const insert=t.extra>0? vCirc : vPeri;
+  const need=(t.id==="sub"? Math.sqrt(2*b.g*alt)*1.12 : insert)+gravLoss+atmoLoss-rot;
+  return {vCirc,vPeri,rot,gravLoss,atmoLoss,need:Math.max(0,need),extra:t.extra,total:Math.max(0,need)+t.extra};
+}
+
+/* ============================================================
+   ATMOSPHERE + FLIGHT DYNAMICS
+   ============================================================ */
+function atmo(h,b){
+  if(b.rho0<=0||h>b.atmTop) return {p:0,rho:0,T:b.T0,a:300};
+  if(b===BODIES.earth){
+    let T,p;
+    if(h<11000){T=288.15-.0065*h;p=101325*Math.pow(T/288.15,5.25588);}
+    else if(h<20000){T=216.65;p=22632.1*Math.exp(-9.80665*(h-11000)/(287.053*T));}
+    else if(h<32000){T=216.65+.001*(h-20000);p=5474.89*Math.pow(T/216.65,-34.1626);}
+    else if(h<47000){T=228.65+.0028*(h-32000);p=868.019*Math.pow(T/228.65,-12.2009);}
+    else if(h<51000){T=270.65;p=110.906*Math.exp(-9.80665*(h-47000)/(287.053*T));}
+    else if(h<71000){T=270.65-.0028*(h-51000);p=66.9389*Math.pow(T/270.65,12.2009);}
+    else if(h<86000){T=214.65-.002*(h-71000);p=3.95642*Math.pow(T/214.65,17.0816);}
+    else {T=186.87;p=.3734*Math.exp(-(h-86000)/6400);}
+    T+=S.tempOff; p*=(1+S.pressOff/100);
+    const rho=p/(287.053*T);
+    return {p,rho,T,a:Math.sqrt(1.4*287.053*T)};
+  }
+  const T=b.T0, rho=b.rho0*Math.exp(-h/b.H), p=rho*287*T/1.0;
+  return {p,rho,T,a:Math.sqrt(1.35*Math.max(p,1e-9)/Math.max(rho,1e-12))||250};
+}
+function cdMach(M){
+  if(M<.75) return .27;
+  if(M<1.15) return .27+(M-.75)*1.22;
+  if(M<1.5) return .76-(M-1.15)*.40;
+  if(M<5) return .62*Math.pow(M/1.5,-.34);
+  return .21;
+}
+function orbital(x,y,vx,vy,mu){
+  const r=Math.hypot(x,y), v2=vx*vx+vy*vy, v=Math.sqrt(v2);
+  const en=v2/2-mu/r, h=x*vy-y*vx;
+  const a=-mu/(2*en);
+  let e=Math.sqrt(Math.max(0,1+2*en*h*h/(mu*mu)));
+  const apo=en<0?a*(1+e):Infinity, peri=a*(1-e);
+  const vr=(x*vx+y*vy)/r;
+  let tApo=Infinity;
+  if(en<0&&a>0){
+    const n=Math.sqrt(mu/(a*a*a));
+    let cosv=e>1e-9?(h*h/(mu*r)-1)/e:0; cosv=Math.max(-1,Math.min(1,cosv));
+    let nu=Math.acos(cosv); if(vr<0) nu=2*Math.PI-nu;
+    const E=2*Math.atan2(Math.sqrt(1-e)*Math.sin(nu/2),Math.sqrt(1+e)*Math.cos(nu/2));
+    const M=E-e*Math.sin(E);
+    tApo=(Math.PI-M)/n; if(tApo<0) tApo+=2*Math.PI/n;
+  }
+  return {r,v,en,h,a,e,apo,peri,vr,tApo};
+}
+/* ============================================================
+   SIMULATION
+   ============================================================ */
+function newSim(){
+  const V=buildVehicle(); if(!V.stages.length) return null;
+  const b=bodyOf(), st=siteOf(), tg=targetOf();
+  const R=b.R+st.el;
+  const vrot=Math.abs(b.om)*b.R*Math.cos(st.lat*Math.PI/180)*Math.sin(S.azimuth*Math.PI/180);
+  const sim={
+    V,b,st,tg,t:0,x:0,y:R,vx:vrot,vy:0,R0:R,
+    prop:V.stages.map(s=>s.prop), jett:new Set(), out:new Map(),
+    seqIdx:0, core:V.seq.length?V.seq[0]:0, ignited:false, running:false, done:false, result:null,
+    throttle:1, cmdPitch:0, pitch:0, phase:"PRELAUNCH", mode:"Ready for launch",
+    q:0,mach:0,acc:0,skinT:b.T0,maxQ:0,maxG:0,maxT:0,heat:0,
+    fairing:V.stages.some(s=>s.fairing&&s.fairing.jett)?1:0,
+    events:[], tel:[], telT:0, coasting:false, mecoDone:false,
+    dvUsed:0, dvLoss:{grav:0,drag:0,steer:0}, targetAlt:tg.alt*1000, targetApo:Math.max(tg.apo,tg.alt)*1000,
+    parkApo:(tg.apo>tg.alt*1.5?tg.alt:Math.max(tg.apo,tg.alt))*1000,
+    damage:[], failed:false, plume:0, sep:0, particles:[], trail:[], gTrace:0, burnStart:null,
+    propStart:V.stages.map(s=>s.prop), stageStartT:0, lastAlt:0, dvGained:0, vPrev:vrot
+  };
+  sim.alt=0; sim.kicked=false; sim.turned=false;
+  ev(sim,"Vehicle on pad",0);
+  return sim;
+}
+function ev(sim,text,alert){ sim.events.push({t:sim.t,text,alert:!!alert}); if(sim.events.length>200)sim.events.shift(); }
+function activeStages(sim){
+  const out=[sim.core];
+  sim.V.stages.forEach((s,i)=>{ if(s.ty==="strapon"&&sim.V.attach[i]===sim.core&&!sim.jett.has(i)&&sim.prop[i]>1) out.push(i); });
+  return out.filter(i=>!sim.jett.has(i));
+}
+function currentMass(sim){
+  let m=0; sim.V.stages.forEach((s,i)=>{ if(!sim.jett.has(i)) m+=s.dry+Math.max(0,sim.prop[i]); });
+  if(!sim.fairing){ const f=sim.V.stages.find(s=>s.fairing&&s.fairing.jett); if(f) m-=f.fairing.mass; }
+  return m;
+}
+function refArea(sim){
+  let d=0; sim.V.stages.forEach((s,i)=>{ if(!sim.jett.has(i)) d=Math.max(d,s.dia); });
+  let A=Math.PI/4*d*d;
+  sim.V.stages.forEach((s,i)=>{ if(!sim.jett.has(i)&&s.ty==="strapon") A+=Math.PI/4*s.dia*s.dia*s.mult*.75; });
+  return A;
+}
+function engineCount(sim,i){
+  const s=sim.V.stages[i]; let n=0; s.engines.forEach(e=>n+=e.q*s.mult); return n;
+}
+function thrustNow(sim,pa){
+  let thr=0,flow=0,thrFull=0;
+  const act=activeStages(sim);
+  const byStage=new Map();
+  for(const i of act){
+    const s=sim.V.stages[i]; if(sim.prop[i]<=1) continue;
+    const outN=sim.out.get(i)||0;
+    for(const e of s.engines){
+      let q=e.q*s.mult; if(outN>0){ q=Math.max(0,q-outN); }
+      if(q<=0) continue;
+      const r=Math.max(0,Math.min(1,pa/101325));
+      const t=(e.p.thrVac-(e.p.thrVac-e.p.thrSL)*r)*1000*q;
+      const thr0=Math.max(0,t);
+      const canThrottle=!e.p.solid;
+      const th=canThrottle?Math.max(e.p.thrMin,sim.throttle):1;
+      thrFull+=thr0;
+      thr+=thr0*(sim.throttle<=0&&canThrottle?0:th);
+      const f=(e.p.thrVac*1000*q)/(e.p.ispVac*G0)*(sim.throttle<=0&&canThrottle?0:th);
+      flow+=f; byStage.set(i,(byStage.get(i)||0)+f);
+    }
+  }
+  return {thr,flow,thrFull,act,byStage};
+}
+function guide(sim,dt){
+  const b=sim.b, r=Math.hypot(sim.x,sim.y), h=r-sim.R0;
+  const up={x:sim.x/r,y:sim.y/r}, pro={x:sim.y/r,y:-sim.x/r};
+  const vat=Math.abs(b.om)*r*Math.cos(sim.st.lat*Math.PI/180)*Math.sin(S.azimuth*Math.PI/180);
+  const rvx=sim.vx-pro.x*vat, rvy=sim.vy-pro.y*vat;
+  const v=Math.hypot(rvx,rvy);
+  const ob=orbital(sim.x,sim.y,sim.vx,sim.vy,b.mu);
+  sim.ob=ob;
+  let pitchCmd; // degrees from vertical, positive = tilt downrange
+  const kickAlt=S.pitchKick*1000;
+  if(!S.auto && S.manualDir!=null){ pitchCmd=S.manualDir; }
+  else if(h<kickAlt){ pitchCmd=0; sim.mode="Vertical ascent"; }
+  else if(!sim.turned){
+    const twr=sim.V.twr0||1.3;
+    const base=Math.max(2.5,Math.min(15,3.2+7*(twr-1.12)));
+    pitchCmd=base*S.pitchRate;
+    sim.kicked=true; sim.mode="Pitch-over manoeuvre";
+    // hold the kick until the velocity vector itself has tilted far enough for the turn to compound
+    const vAng0=Math.atan2(rvx*pro.x+rvy*pro.y, rvx*up.x+rvy*up.y)*180/Math.PI;
+    if(vAng0>Math.max(2.5,6*S.pitchRate)||v>300||h>kickAlt*1.6+3400){ sim.turned=true; ev(sim,"Gravity turn established"); }
+  } else {
+    const vAng=Math.atan2(rvx*pro.x+rvy*pro.y, rvx*up.x+rvy*up.y)*180/Math.PI;
+    if(h<48000&&sim.q>1200){
+      // zero angle of attack, with a pitch-programme floor so low-thrust vehicles do not stay vertical
+      const f=Math.max(0,Math.min(1,(v-60)/2200));
+      const hg=Math.max(0,Math.min(1,(h-7000)/20000));
+      const thDes=Math.pow(f,.62)*82*hg*Math.max(.35,Math.min(1.8,S.pitchRate));
+      const aoaMax=sim.q>9000?5:(sim.q>2500?9:18);
+      pitchCmd=Math.min(Math.max(vAng,thDes),vAng+aoaMax);
+      sim.mode="Gravity turn · zero angle of attack";
+    }
+    else{
+      const apoAlt=ob.apo-b.R, periAlt=ob.peri-b.R;
+      const need=sim.parkApo||sim.targetApo;
+      const vH=sim.vx*pro.x+sim.vy*pro.y, vr=sim.vx*up.x+sim.vy*up.y;
+      const vAngI=Math.atan2(Math.max(1,vH),vr)*180/Math.PI;
+      let gamma;
+      if(periAlt>sim.targetAlt*.93&&sim.targetApo>need*1.4&&apoAlt<sim.targetApo*.985){
+        // high-energy injection from the parking orbit: pure prograde
+        gamma=Math.max(40,Math.min(110,vAngI));
+        sim.mode="Injection burn";
+      } else {
+        // vertical-speed steering law: hold the profile with the radial thrust component,
+        // spend everything else on horizontal acceleration
+        const g=b.mu/(r*r), cen=vH*vH/r;
+        const aAvail=Math.max(1.0,(sim.acc||.3)*G0);
+        const hErr=sim.targetAlt-h;
+        let vrWant;
+        if(apoAlt<need*.995) vrWant=Math.max(0,Math.min(2600,52*Math.max(0,g-cen)+Math.min(300,(need-apoAlt)*.004)));
+        else vrWant=Math.max(-30,Math.min(60,hErr*.05));
+        const aR=(g-cen)+Math.max(-7,Math.min(10,(vrWant-vr)*.25));
+        // when thrust cannot hold the profile, favour horizontal acceleration: building
+        // centrifugal relief recovers altitude faster than pointing the nose up
+        const snMax=(apoAlt<need*.995)?.94:(h<sim.targetAlt*.55?.80:.48);
+        const sn=Math.max(-.55,Math.min(snMax,aR/aAvail));
+        gamma=90-Math.asin(sn)*180/Math.PI;
+        sim.mode = apoAlt<need*.97 ? "Closed-loop ascent"
+                 : (periAlt<sim.targetAlt*.92 ? "Orbital insertion · raising periapsis" : "Circularising");
+      }
+      pitchCmd=gamma;
+    }
+  }
+  const rate=140*dt;
+  sim.pitch+=Math.max(-rate,Math.min(rate,pitchCmd-sim.pitch));
+  const p=sim.pitch*Math.PI/180;
+  return {x:up.x*Math.cos(p)+pro.x*Math.sin(p), y:up.y*Math.cos(p)+pro.y*Math.sin(p)};
+}
+function autoThrottle(sim,thrFull,m,pa,A,rho,vrel){
+  let th=1;
+  if(!S.auto){ th=S.manThr; }
+  else{
+    if(S.maxQthr&&sim.q>24000){ th=Math.max(.52,1-(sim.q-24000)/30000); }
+    if(S.maxGthr){ const lim=Math.min(S.gLimit,sim.V.gLim||99)*G0; if(thrFull/m>lim) th=Math.min(th,lim*m/thrFull); }
+    const ob=sim.ob;
+    if(ob&&sim.turned){
+      const apoAlt=ob.apo-sim.b.R, periAlt=ob.peri-sim.b.R;
+      if(apoAlt>=sim.targetApo*.999&&periAlt<sim.targetAlt-4000){
+        const rApo=ob.apo, vApo=Math.sqrt(sim.b.mu*(2/rApo-1/ob.a)), vCirc=Math.sqrt(sim.b.mu/rApo);
+        const dvc=Math.max(0,vCirc-vApo), burn=dvc*m/Math.max(1,thrFull);
+        const rvel=(sim.x*sim.vx+sim.y*sim.vy)/Math.max(1,Math.hypot(sim.x,sim.y));
+        const safe=periAlt>Math.max(120000,sim.targetAlt*.75)&&rvel>0;
+        if(safe&&ob.tApo>burn*.5+12&&canRestart(sim)){ sim.coasting=true; sim.mode="Coasting to apoapsis"; return 0; }
+      }
+    }
+    sim.coasting=false;
+  }
+  return Math.max(0,Math.min(1,th));
+}
+function canRestart(sim){
+  const s=sim.V.stages[sim.core];
+  return s.engines.every(e=>(e.p.rest||1)>1);
+}
+function step(sim,dt){
+  const b=sim.b;
+  const r=Math.hypot(sim.x,sim.y); const h=r-sim.R0; sim.alt=h;
+  const A=atmo(Math.max(0,h),b);
+  const area=refArea(sim);
+  const up={x:sim.x/r,y:sim.y/r}, pro={x:sim.y/r,y:-sim.x/r};
+  const vatm=Math.abs(b.om)*r*Math.cos(sim.st.lat*Math.PI/180)*Math.sin(S.azimuth*Math.PI/180)+S.windU;
+  const vrx=sim.vx-pro.x*vatm, vry=sim.vy-pro.y*vatm;
+  const vrel=Math.hypot(vrx,vry);
+  sim.mach=vrel/Math.max(1,A.a);
+  sim.q=.5*A.rho*vrel*vrel;
+  sim.maxQ=Math.max(sim.maxQ,sim.q);
+  const dir=guide(sim,dt);
+  const t0=thrustNow(sim,A.p);
+  const m=Math.max(1,currentMass(sim));
+  sim.throttle=sim.ignited?autoThrottle(sim,t0.thrFull,m,A.p,area,A.rho,vrel)*Math.min(1,.35+sim.t/0.9):0;
+  const T=thrustNow(sim,A.p);
+  // drag
+  let Cd=cdMach(sim.mach);
+  if(sim.fairing===0) Cd*=.94;
+  const D=.5*A.rho*vrel*vrel*Cd*area;
+  const ax=(T.thr*dir.x-(vrel>0?D*vrx/vrel:0))/m-b.mu*sim.x/(r*r*r);
+  const ay=(T.thr*dir.y-(vrel>0?D*vry/vrel:0))/m-b.mu*sim.y/(r*r*r);
+  // losses bookkeeping
+  const gLossRate=b.mu/(r*r)*Math.abs(up.x*(sim.vx/Math.max(1,Math.hypot(sim.vx,sim.vy)))+up.y*(sim.vy/Math.max(1,Math.hypot(sim.vx,sim.vy))));
+  sim.dvLoss.grav+=gLossRate*dt; sim.dvLoss.drag+=D/m*dt;
+  sim.acc=Math.hypot(ax+b.mu*sim.x/(r*r*r),ay+b.mu*sim.y/(r*r*r))/G0;
+  sim.maxG=Math.max(sim.maxG,sim.acc);
+  sim.vx+=ax*dt; sim.vy+=ay*dt; sim.x+=sim.vx*dt; sim.y+=sim.vy*dt; sim.t+=dt;
+  // propellant burn
+  if(T.flow>0){
+    const act=T.act;
+    // each stage burns what its own engines consume
+    let deficit=0;
+    for(const [i,f] of (T.byStage||new Map())){
+      const want=f*dt, have=Math.max(0,sim.prop[i]);
+      const take=Math.min(have,want);
+      sim.prop[i]=have-take; deficit+=want-take;
+    }
+    if(S.crossfeed&&deficit>0){
+      // strap-ons feed the core: draw the shortfall from any attached booster that still has propellant
+      const straps=act.filter(i=>sim.V.stages[i].ty==="strapon"&&sim.prop[i]>1);
+      for(const i of straps){ const take=Math.min(sim.prop[i],deficit); sim.prop[i]-=take; deficit-=take; if(deficit<=0)break; }
+    }
+    sim.dvUsed+=T.thr/m*dt;
+    sim.plume=Math.min(1,sim.plume+dt*3);
+  } else sim.plume=Math.max(0,sim.plume-dt*2.2);
+  // heating (Sutton-Graves, 0.5 m effective nose radius)
+  const qdot=1.83e-4*Math.sqrt(Math.max(0,A.rho)/.5)*Math.pow(vrel,3);
+  sim.heat=qdot;
+  const eq=5.67e-8*.85*(Math.pow(sim.skinT,4)-Math.pow(A.T||90,4));
+  sim.skinT+=(qdot-eq)/34000*dt;
+  sim.skinT=Math.max(A.T||90,sim.skinT);
+  sim.maxT=Math.max(sim.maxT,sim.skinT);
+  checkEvents(sim,dt,A);
+  // telemetry
+  sim.telT+=dt;
+  if(sim.telT>=.4){ sim.telT=0;
+    const ob=sim.ob||orbital(sim.x,sim.y,sim.vx,sim.vy,b.mu);
+    sim.tel.push({t:sim.t,h,v:Math.hypot(sim.vx,sim.vy),q:sim.q,a:sim.acc,m,th:sim.throttle,
+      T:sim.skinT,apo:ob.apo-b.R,peri:ob.peri-b.R,thr:T.thr,rng:Math.abs(Math.atan2(sim.x,sim.y))*b.R});
+    if(sim.tel.length>4000) sim.tel.shift();
+  }
+  if(sim.trail.length===0||Math.hypot(sim.x-sim.trail[sim.trail.length-1].x,sim.y-sim.trail[sim.trail.length-1].y)>Math.max(600,sim.alt*.02))
+    { sim.trail.push({x:sim.x,y:sim.y}); if(sim.trail.length>900)sim.trail.shift(); }
+}
+function checkEvents(sim,dt,A){
+  const b=sim.b;
+  // liftoff
+  if(sim.ignited&&sim.alt>1&&!sim.lifted){ sim.lifted=true; ev(sim,"Liftoff"); }
+  // max-q callout
+  if(!sim.maxQcall&&sim.q<sim.maxQ*.86&&sim.maxQ>14000&&sim.mach>1.05){ sim.maxQcall=true; ev(sim,"Max Q · "+(sim.maxQ/1000).toFixed(1)+" kPa"); }
+  // structural
+  const qLim=62000*(sim.V.matStr||1);
+  if(sim.q>qLim&&!sim.failed){ fail(sim,"Structural failure at "+(sim.q/1000).toFixed(0)+" kPa dynamic pressure"); }
+  // thermal
+  let tmax=1150; const tp=sim.V.stages.find(s=>s.tps); if(tp) tmax=tp.tps.tmax;
+  if(sim.skinT>tmax&&!sim.failed){
+    if(sim.fairing===1){ sim.fairing=0; sim.damage.push("Fairing burn-through"); ev(sim,"Fairing thermal failure",1); }
+    else fail(sim,"Thermal failure · skin reached "+Math.round(sim.skinT)+" K");
+  }
+  // g-limit on payload
+  if(sim.acc>(sim.V.gLim||99)&&!sim.damage.includes("Payload over-g")){ sim.damage.push("Payload over-g"); ev(sim,"Payload acceleration limit exceeded",1); }
+  // random engine failure
+  if(S.randomFail&&sim.ignited&&!sim.failed){
+    for(const i of activeStages(sim)){
+      const s=sim.V.stages[i];
+      for(const e of s.engines){
+        const n=e.q*s.mult, pf=(1-(e.p.rel||.999))/Math.max(20,e.p.burn)*n*dt*14;
+        if(Math.random()<pf){
+          const cur=(sim.out.get(i)||0)+1; sim.out.set(i,cur);
+          ev(sim,"Engine out · stage "+(i+1)+" ("+cur+" of "+n+")",1);
+          sim.damage.push("Engine out on stage "+(i+1));
+          if(cur>=n||(!S.engineOutOK)) fail(sim,"Propulsion loss on stage "+(i+1));
+        }
+      }
+    }
+  }
+  // fairing jettison
+  if(sim.fairing===1&&sim.alt>110000&&sim.q<200){ sim.fairing=0; ev(sim,"Fairing jettison"); sim.sep=1; }
+  // staging
+  const act=activeStages(sim);
+  sim.V.stages.forEach((s,i)=>{
+    if(s.ty==="strapon"&&!sim.jett.has(i)&&sim.V.attach[i]===sim.core&&sim.prop[i]<=1&&sim.ignited){
+      sim.jett.add(i); ev(sim,"Booster separation"); sim.sep=1;
+    }
+  });
+  if(sim.ignited&&sim.prop[sim.core]<=1&&!sim.done){
+    const nxt=sim.V.seq.filter(i=>i>sim.core&&sim.V.stages[i].engines.length&&sim.V.stages[i].prop>0);
+    if(nxt.length){
+      ev(sim,"MECO · stage "+(sim.core+1)+" separation"); sim.jett.add(sim.core);
+      sim.core=nxt[0]; sim.sep=1; sim.throttle=1; sim.pitchHold=true;
+      ev(sim,"Stage "+(sim.core+1)+" ignition");
+    } else if(!sim.mecoDone){ sim.mecoDone=true; ev(sim,"Propellant depleted"); }
+  }
+  // outcome
+  const ob=sim.ob||orbital(sim.x,sim.y,sim.vx,sim.vy,b.mu);
+  const periAlt=ob.peri-b.R, apoAlt=ob.apo-b.R;
+  if(!sim.done&&sim.tg.id!=="sub"&&periAlt>Math.min(sim.targetAlt*.90,sim.targetAlt-12000)&&apoAlt>sim.targetApo*.93&&sim.alt>70000){
+    finish(sim,true,"Orbit achieved");
+  }
+  if(!sim.done&&sim.tg.id==="sub"&&sim.alt>sim.targetAlt&&sim.ob&&sim.ob.vr<0){ finish(sim,true,"Apogee reached above target altitude"); }
+  if(!sim.done&&sim.alt<-30&&sim.t>6){ finish(sim,false,"Vehicle impacted the surface"); }
+  if(!sim.done&&sim.t>2800){ finish(sim,false,"Flight terminated · target orbit not reached"); }
+  // out of propellant and not where we needed to be: end the flight instead of drifting forever
+  if(!sim.done&&sim.mecoDone){
+    sim.dry=(sim.dry||0)+dt;
+    if(sim.dry>25){
+      if(periAlt>Math.min(120000,sim.targetAlt*.6)) finish(sim,false,"Propellant depleted · "+Math.round(apoAlt/1000)+" x "+Math.round(periAlt/1000)+" km orbit, short of target");
+      else finish(sim,false,"Propellant depleted on a suborbital trajectory");
+    }
+  }
+  if(!sim.done&&sim.mecoDone&&sim.alt<100000&&sim.ob&&sim.ob.vr<0&&sim.t>60&&sim.tg.id!=="sub"){ /* falling back */ }
+}
+function fail(sim,why){
+  if(sim.failed) return;
+  sim.failed=true; ev(sim,why,1);
+  for(let i=0;i<180;i++){ const a=Math.random()*6.283, s=40+Math.random()*420;
+    sim.particles.push({x:sim.x,y:sim.y,vx:sim.vx+Math.cos(a)*s,vy:sim.vy+Math.sin(a)*s,l:1+Math.random()*2.5,life:1}); }
+  finish(sim,false,why);
+}
+function finish(sim,ok,why){
+  if(sim.done) return;
+  sim.done=true; sim.running=false;
+  const b=sim.b, ob=orbital(sim.x,sim.y,sim.vx,sim.vy,b.mu);
+  const left=sim.V.stages.reduce((a,s,i)=>a+(sim.jett.has(i)?0:Math.max(0,sim.prop[i])),0);
+  const m=currentMass(sim);
+  const s=sim.V.stages[sim.core];
+  let ispV=350; if(s&&s.engines.length){ const tt=stageThrust(s,0); ispV=tt.isp||350; }
+  const dvLeft=left>1? ispV*G0*Math.log(m/Math.max(1,m-left)) : 0;
+  sim.result={ok,why,apo:ob.apo-b.R,peri:ob.peri-b.R,e:ob.e,inc:S.azimuth,
+    dvLeft,left,mass:m,payload:sim.V.payload,maxQ:sim.maxQ,maxG:sim.maxG,maxT:sim.maxT,
+    t:sim.t,damage:sim.damage.slice(),grav:sim.dvLoss.grav,drag:sim.dvLoss.drag,
+    range:Math.abs(Math.atan2(sim.x,sim.y))*b.R};
+  ev(sim,ok?"Mission success · "+why:"Mission failed · "+why,!ok);
+}
+
+/* ============================================================
+   PROCEDURAL TEXTURES  (no external images are loaded)
+   ============================================================ */
+const TEX={};
+function mkCanvas(w,h){const c=document.createElement("canvas");c.width=w;c.height=h;return c;}
+function noiseCanvas(w,h,fn){
+  const c=mkCanvas(w,h),g=c.getContext("2d"),img=g.createImageData(w,h),d=img.data;
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=(y*w+x)*4,[r,gr,b,a]=fn(x,y);d[i]=r;d[i+1]=gr;d[i+2]=b;d[i+3]=a;}
+  g.putImageData(img,0,0);return c;
+}
+function hash(x,y){const n=Math.sin(x*127.1+y*311.7)*43758.5453;return n-Math.floor(n);}
+function vnoise(x,y){
+  const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi;
+  const u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf);
+  return (hash(xi,yi)*(1-u)+hash(xi+1,yi)*u)*(1-v)+(hash(xi,yi+1)*(1-u)+hash(xi+1,yi+1)*u)*v;
+}
+function fbm(x,y,o){let s=0,a=.5,f=1;for(let i=0;i<(o||4);i++){s+=a*vnoise(x*f,y*f);f*=2;a*=.5;}return s;}
+function buildTextures(){
+  TEX.alu=noiseCanvas(128,128,(x,y)=>{const s=fbm(x*.35,y*.06,3),l=168+s*44-Math.abs(Math.sin(y*.5))*8;return [l,l+2,l+5,255];});
+  TEX.steel=noiseCanvas(128,128,(x,y)=>{const band=Math.sin(y*.09)*10,s=fbm(x*.9,y*.12,3)*26,l=150+band+s;return [l,l+4,l+9,255];});
+  TEX.white=noiseCanvas(128,128,(x,y)=>{const s=fbm(x*.25,y*.25,3)*12,p=(y%42<1||x%64<1)?-24:0,l=225+s+p;return [l,l,l-2,255];});
+  TEX.black=noiseCanvas(128,128,(x,y)=>{const s=fbm(x*.5,y*.5,4)*30,l=22+s;return [l,l+1,l+2,255];});
+  TEX.carbon=noiseCanvas(128,128,(x,y)=>{const w=((Math.floor(x/8)+Math.floor(y/8))%2)?1:0;const g=fbm(x*1.6,y*1.6,2)*18;const l=(w?46:30)+g+(x%8<1||y%8<1?6:0);return [l,l+2,l+4,255];});
+  TEX.foam=noiseCanvas(128,128,(x,y)=>{const s=fbm(x*.2,y*.2,4);return [188+s*52,96+s*54,44+s*38,255];});
+  TEX.gold=noiseCanvas(128,128,(x,y)=>{const s=fbm(x*.9,y*.35,4),c=Math.sin(x*.7+s*6)*.5+.5;return [200+c*50,158+c*60,60+c*50,255];});
+  TEX.solid=noiseCanvas(128,128,(x,y)=>{const seg=(y%40<2)?-40:0,s=fbm(x*.3,y*.3,3)*14;const l=206+s+seg;return [l,l-4,l-12,255];});
+  TEX.copper=noiseCanvas(64,64,(x,y)=>{const s=fbm(x*.8,y*.8,3)*30;return [150+s,92+s*.7,58+s*.5,255];});
+  TEX.solar=noiseCanvas(64,64,(x,y)=>{const g=(x%14<1||y%9<1)?60:0;const s=fbm(x*.6,y*.6,2)*16;return [16+g+s,26+g+s,58+g+s*1.3,255];});
+  for(const k in TEX){ TEX[k+"P"]=null; }
+}
+function pat(ctx,name){ const c=TEX[name]||TEX.alu; return ctx.createPattern(c,"repeat"); }
+
+/* cylinder shading overlay */
+function cylShade(ctx,x,w,y,h,dark){
+  const g=ctx.createLinearGradient(x,0,x+w,0);
+  g.addColorStop(0,"rgba(0,0,0,"+(dark?.86:.72)+")");
+  g.addColorStop(.18,"rgba(0,0,0,.36)");
+  g.addColorStop(.38,"rgba(255,255,255,.16)");
+  g.addColorStop(.52,"rgba(255,255,255,.05)");
+  g.addColorStop(.76,"rgba(0,0,0,.33)");
+  g.addColorStop(1,"rgba(0,0,0,"+(dark?.9:.8)+")");
+  ctx.fillStyle=g; ctx.fillRect(x,y,w,h);
+}
+function texFor(p){
+  if(!p) return "alu";
+  if(p.t==="tank"||p.g==="t"){
+    const m=p.mat||"alli";
+    if(m==="steel") return "steel";
+    if(m==="carbon") return "carbon";
+    if(PROP[p.prop]&&PROP[p.prop].cls==="solid") return "solid";
+    if(p.prop==="lox_lh2") return "foam";
+    return "alu";
+  }
+  if(p.g==="e") return p.solid?"solid":"copper";
+  if(p.g==="p") return "gold";
+  if(p.kind==="tps") return "black";
+  if(p.kind==="fairing"||p.kind==="nose") return "white";
+  return "alu";
+}
+/* ------------- vehicle geometry for drawing ------------- */
+function vehicleLayout(){
+  const V=buildVehicle(); const segs=[]; let y=0; const straps=[];
+  const order=V.seq.length?V.seq:S.stages.map((s,i)=>i);
+  const coreIdx=S.stages.map((s,i)=>i).filter(i=>(S.stages[i].ty||"core")!=="strapon");
+  coreIdx.forEach((si)=>{
+    const st=S.stages[si], sa=V.stages[si];
+    const start=y;
+    // engines
+    let eLen=0,eDia=0,eN=0,ePart=null;
+    st.parts.forEach(e=>{const p=partOf(e); if(p.g==="e"&&!p.solid){eLen=Math.max(eLen,p.len*.75);eDia=Math.max(eDia,p.dia);eN+=e.q;ePart=p;}});
+    if(eN>0) segs.push({k:"engines",y0:y,len:eLen,dia:sa.dia,n:eN,p:ePart,stage:si});
+    y+=eLen;
+    // tanks & solids
+    st.parts.forEach(e=>{const p=partOf(e);
+      if(p.t==="tank"||p.g==="t"){ for(let i=0;i<(e.q||1);i++){segs.push({k:"tank",y0:y,len:p.len,dia:p.dia,p,stage:si});y+=p.len;} }
+      else if(p.g==="e"&&p.solid){ segs.push({k:"solid",y0:y,len:p.len,dia:p.dia,p,stage:si}); y+=p.len; }
+    });
+    // structure
+    st.parts.forEach(e=>{const p=partOf(e);
+      if(p.g==="s"&&(p.kind==="inter")){segs.push({k:"inter",y0:y,len:p.len,dia:p.dia,p,stage:si});y+=p.len;}});
+    st.parts.forEach(e=>{const p=partOf(e);
+      if(p.g==="p"){segs.push({k:"payload",y0:y,len:p.len,dia:p.dia,p,stage:si});y+=p.len;}});
+    st.parts.forEach(e=>{const p=partOf(e);
+      if(p.g==="s"&&(p.kind==="fairing")){segs.push({k:"fairing",y0:y-(p.len*.8),len:p.len,dia:p.dia,p,stage:si});y=Math.max(y,y-(p.len*.8)+p.len);}
+      if(p.g==="s"&&p.kind==="nose"){segs.push({k:"nose",y0:y,len:p.len,dia:p.dia,p,stage:si});y+=p.len;}
+      if(p.g==="s"&&p.kind==="tps"){segs.push({k:"tps",y0:start,len:p.len,dia:p.dia,p,stage:si});}
+    });
+    st.parts.forEach(e=>{const p=partOf(e);
+      if(p.kind==="fin") segs.push({k:"fin",y0:start+ (y-start)*.86,len:1.4,dia:sa.dia,p,stage:si});
+      if(p.kind==="legs") segs.push({k:"legs",y0:start+eLen*.5,len:3,dia:sa.dia,p,stage:si});
+    });
+    sa.y0=start; sa.y1=y;
+  });
+  // strap-ons beside their core
+  S.stages.forEach((st,i)=>{
+    if((st.ty||"core")!=="strapon") return;
+    const ci=V.attach[i]!=null?V.attach[i]:0, base=V.stages[ci]?V.stages[ci].y0:0;
+    const sa=V.stages[i];
+    let len=0,dia=sa.dia;
+    st.parts.forEach(e=>{const p=partOf(e); len+=(p.len||0)*(e.q||1); });
+    straps.push({i,y0:base+ (sa.engines.some(e=>e.p.solid)?0:1.2),len,dia,n:st.q||1,parts:st.parts,stage:i});
+  });
+  const total=y||1;
+  return {V,segs,straps,total,maxDia:Math.max(V.maxDia,1)};
+}
+/* ------------- draw a rocket ------------- */
+function drawRocket(ctx,L,ox,oy,s,opt){
+  opt=opt||{};
+  const sim=opt.sim;
+  const flip=-1; // y up
+  const px=(m)=>m*s;
+  function body(seg,xoff,scaleD){
+    const w=px(seg.dia*(scaleD||1)), h=px(seg.len), x=ox+(xoff||0)-w/2, y=oy-px(seg.y0)-h;
+    return {w,h,x,y};
+  }
+  // strap-ons behind
+  L.straps.forEach(sp=>{
+    const n=sp.n, coreD=L.maxDia;
+    for(let k=0;k<Math.min(n,4);k++){
+      const side=(k%2===0?-1:1), rank=Math.floor(k/2);
+      const off=side*px(coreD/2+sp.dia/2)*(1+rank*.06);
+      const w=px(sp.dia),h=px(sp.len),x=ox+off-w/2,y=oy-px(sp.y0)-h;
+      if(sim&&sim.jett.has(sp.stage)) continue;
+      ctx.save();
+      // nose
+      ctx.beginPath(); ctx.moveTo(x,y+px(1.6)); ctx.lineTo(x+w/2,y-px(sp.dia*.9)); ctx.lineTo(x+w,y+px(1.6)); ctx.closePath();
+      ctx.fillStyle="#d9d9d6"; ctx.fill();
+      ctx.fillStyle=pat(ctx,"solid"); ctx.fillRect(x,y,w,h); cylShade(ctx,x,w,y,h);
+      ctx.strokeStyle="rgba(0,0,0,.6)";ctx.lineWidth=1;ctx.strokeRect(x,y,w,h);
+      // nozzle
+      ctx.beginPath();ctx.moveTo(x+w*.24,y+h);ctx.lineTo(x+w*.76,y+h);ctx.lineTo(x+w*.62,y+h+px(sp.dia*.55));ctx.lineTo(x+w*.38,y+h+px(sp.dia*.55));ctx.closePath();
+      ctx.fillStyle="#23201d";ctx.fill();
+      ctx.restore();
+    }
+  });
+  L.segs.forEach(seg=>{
+    if(sim&&sim.jett.has(seg.stage)) return;
+    if(sim&&seg.k==="fairing"&&seg.p.jett&&sim.fairing===0) return;
+    const b=body(seg);
+    ctx.save();
+    if(seg.k==="nose"||seg.k==="fairing"){
+      const w=b.w,x=b.x,y=b.y,h=b.h;
+      ctx.beginPath();
+      ctx.moveTo(x,y+h);
+      ctx.bezierCurveTo(x+w*.02,y+h*.30,x+w*.30,y+h*.03,x+w/2,y);
+      ctx.bezierCurveTo(x+w*.70,y+h*.03,x+w*.98,y+h*.30,x+w,y+h);
+      ctx.closePath();
+      ctx.fillStyle=pat(ctx,texFor(seg.p)); ctx.fill();
+      ctx.save();ctx.clip();cylShade(ctx,x,w,y,h);ctx.restore();
+      ctx.strokeStyle="rgba(0,0,0,.55)";ctx.lineWidth=1;ctx.stroke();
+      if(seg.k==="fairing"){ctx.strokeStyle="rgba(0,0,0,.45)";ctx.beginPath();ctx.moveTo(x+w/2,y);ctx.lineTo(x+w/2,y+h);ctx.stroke();}
+    } else if(seg.k==="engines"){
+      const n=Math.min(seg.n,9), w=b.w, x=b.x, y=b.y, h=b.h;
+      ctx.fillStyle="#17191a"; ctx.fillRect(x+w*.06,y,w*.88,h*.3);
+      const bw=Math.min(w/Math.max(1,Math.ceil(Math.sqrt(n))), px(seg.p?seg.p.dia:1.2));
+      const cols=Math.max(1,Math.min(n,Math.round(w/bw)));
+      for(let i=0;i<cols;i++){
+        const bx=x+w*.06+(i+.5)*(w*.88/cols)-bw/2;
+        ctx.beginPath();
+        ctx.moveTo(bx+bw*.30,y+h*.2);ctx.lineTo(bx+bw*.70,y+h*.2);
+        ctx.lineTo(bx+bw*.96,y+h);ctx.lineTo(bx+bw*.04,y+h);ctx.closePath();
+        ctx.fillStyle=pat(ctx,"copper");ctx.fill();
+        ctx.save();ctx.clip();cylShade(ctx,bx,bw,y,h,true);ctx.restore();
+        ctx.strokeStyle="rgba(0,0,0,.7)";ctx.lineWidth=1;ctx.stroke();
+      }
+      if(seg.n>cols){ctx.fillStyle="rgba(255,255,255,.55)";ctx.font="9px IBM Plex Mono";ctx.textAlign="center";
+        if(b.w>36)ctx.fillText("×"+seg.n,ox,y+h*.14);}
+    } else if(seg.k==="fin"){
+      const w=b.w,y=b.y;
+      [-1,1].forEach(sd=>{
+        ctx.fillStyle="#3a3f42";
+        ctx.fillRect(ox+sd*(w/2)-(sd<0?px(1.3):0),y,px(1.3),px(1.5));
+        ctx.strokeStyle="rgba(255,255,255,.18)";ctx.strokeRect(ox+sd*(w/2)-(sd<0?px(1.3):0),y,px(1.3),px(1.5));
+      });
+    } else if(seg.k==="legs"){
+      const w=px(seg.dia),y=oy-px(seg.y0);
+      ctx.strokeStyle="#4b5054";ctx.lineWidth=Math.max(1,px(.25));
+      [-1,1].forEach(sd=>{ctx.beginPath();ctx.moveTo(ox+sd*w*.4,y-px(2.4));ctx.lineTo(ox+sd*w*.9,y+px(.6));ctx.stroke();});
+    } else {
+      const {x,y,w,h}=b;
+      ctx.fillStyle=pat(ctx,texFor(seg.p)); ctx.fillRect(x,y,w,h);
+      cylShade(ctx,x,w,y,h,seg.k==="tps");
+      ctx.strokeStyle="rgba(0,0,0,.5)";ctx.lineWidth=1;ctx.strokeRect(x,y,w,h);
+      if(seg.k==="inter"){ctx.fillStyle="rgba(0,0,0,.25)";ctx.fillRect(x,y,w,h);}
+      // cutaway propellant
+      if(S.xray&&(seg.k==="tank"||seg.k==="solid")&&seg.p.prop){
+        const pr=PROP[seg.p.prop];
+        let frac=1;
+        if(sim){ const i=seg.stage; frac=Math.max(0,Math.min(1,sim.prop[i]/Math.max(1,sim.V.stages[i].prop))); }
+        ctx.save();ctx.globalAlpha=.85;
+        const fh=h*frac;
+        ctx.fillStyle=pr.c; ctx.fillRect(x+w*.12,y+h-fh,w*.76,fh*.58);
+        ctx.fillStyle="rgba(255,255,255,.35)";ctx.fillRect(x+w*.12,y+h-fh,w*.76,Math.min(3,fh*.1));
+        ctx.fillStyle=pr.cls==="solid"?"#4a4038":"#2b3a44"; ctx.fillRect(x+w*.12,y+h-fh+fh*.60,w*.76,fh*.40);
+        ctx.restore();
+        ctx.strokeStyle="rgba(255,255,255,.25)";ctx.strokeRect(x+w*.12,y,w*.76,h);
+      }
+      if(seg.k==="payload"&&!S.xray){ ctx.fillStyle="rgba(0,0,0,.35)";ctx.fillRect(x,y+h*.2,w,px(.3)); }
+    }
+    ctx.restore();
+  });
+  // heating glow
+  if(sim&&sim.skinT>700){
+    const a=Math.min(.75,(sim.skinT-700)/900);
+    const g=ctx.createRadialGradient(ox,oy-px(L.total),0,ox,oy-px(L.total),px(L.maxDia*2.2));
+    g.addColorStop(0,"rgba(255,140,60,"+a+")");g.addColorStop(1,"rgba(255,80,20,0)");
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(ox,oy-px(L.total),px(L.maxDia*2.2),0,6.283);ctx.fill();
+  }
+}
+
+/* ============================================================
+   BUILD VIEWPORT
+   ============================================================ */
+const bc={cv:null,ctx:null,zoom:1,panX:0,panY:0,fit:true};
+function dpr(){return Math.min(2,window.devicePixelRatio||1);}
+function sizeCanvas(cv){
+  const r=cv.getBoundingClientRect(),d=dpr();
+  if(cv.width!==Math.round(r.width*d)||cv.height!==Math.round(r.height*d)){cv.width=Math.round(r.width*d);cv.height=Math.round(r.height*d);}
+  return {w:r.width,h:r.height,d};
+}
+function drawBuild(){
+  const cv=bc.cv; if(!cv) return;
+  const {w,h,d}=sizeCanvas(cv); const ctx=cv.getContext("2d");
+  ctx.setTransform(d,0,0,d,0,0); ctx.clearRect(0,0,w,h);
+  const L=vehicleLayout(); VEH=L.V;
+  if(!S.stages.length){
+    ctx.fillStyle="#3a4045";ctx.font="14px Saira Semi Condensed";ctx.textAlign="center";
+    ctx.fillText("Add a stage, then click parts from the catalogue to build.",w/2,h/2);
+    return;
+  }
+  const pad=64;
+  let s=(h-pad*2)/Math.max(L.total,1);
+  s=Math.min(s,(w*.45)/Math.max(L.maxDia*2.2,1));
+  if(bc.fit){bc.zoom=1;bc.panX=0;bc.panY=0;}
+  s*=bc.zoom;
+  const ox=w/2+bc.panX, oy=h-pad*.8+bc.panY;
+  // ground
+  ctx.strokeStyle="#22262a";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,oy+.5);ctx.lineTo(w,oy+.5);ctx.stroke();
+  ctx.fillStyle="rgba(255,255,255,.02)";ctx.fillRect(0,oy,w,h-oy);
+  if(S.showScale){
+    // human silhouette 1.75 m
+    const hh=1.75*s;
+    if(hh>6){
+      const hx=ox-L.maxDia*s*.5-26;
+      ctx.fillStyle="#454b50";
+      ctx.beginPath();ctx.arc(hx,oy-hh*.92,hh*.08,0,6.283);ctx.fill();
+      ctx.fillRect(hx-hh*.07,oy-hh*.82,hh*.14,hh*.46);
+      ctx.fillRect(hx-hh*.06,oy-hh*.38,hh*.045,hh*.38);
+      ctx.fillRect(hx+hh*.015,oy-hh*.38,hh*.045,hh*.38);
+    }
+    // ruler
+    ctx.strokeStyle="#2a3035";ctx.fillStyle="#5a6166";ctx.font="10px IBM Plex Mono";ctx.textAlign="left";
+    const stepOpts=[1,2,5,10,20,50,100];let stp=stepOpts.find(v=>v*s>34)||100;
+    for(let m=0;m<=L.total+stp;m+=stp){
+      const y=oy-m*s; if(y<0)break;
+      ctx.beginPath();ctx.moveTo(w-72,y);ctx.lineTo(w-66,y);ctx.stroke();
+      ctx.fillText(m+" m",w-62,y+3.5);
+    }
+    ctx.beginPath();ctx.moveTo(w-72,oy);ctx.lineTo(w-72,Math.max(0,oy-L.total*s));ctx.stroke();
+  }
+  drawRocket(ctx,L,ox,oy,s,{});
+  // stage callouts
+  ctx.textAlign="right";ctx.font="11px IBM Plex Mono";
+  const cores=S.stages.map((st,i)=>i).filter(i=>(S.stages[i].ty||"core")!=="strapon");
+  cores.forEach(i=>{
+    const sa=L.V.stages[i]; if(sa.y1==null)return;
+    const y0=oy-sa.y0*s,y1=oy-sa.y1*s, lx=ox-L.maxDia*s*.62-40;
+    ctx.strokeStyle=i===S.sel?"#ffffff":"#2f353a";ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(lx,y0);ctx.lineTo(lx-8,y0);ctx.moveTo(lx,y1);ctx.lineTo(lx-8,y1);ctx.moveTo(lx-4,y0);ctx.lineTo(lx-4,y1);ctx.stroke();
+    ctx.fillStyle=i===S.sel?"#fff":"#6b7378";
+    ctx.fillText("S"+(i+1),lx-12,(y0+y1)/2-6);
+    ctx.fillText((sa.dry+sa.prop>=1000?Math.round((sa.dry+sa.prop)/1000)+" t":Math.round(sa.dry+sa.prop)+" kg"),lx-12,(y0+y1)/2+8);
+  });
+  const el=document.getElementById("vpInfo");
+  if(el) el.innerHTML="height "+L.total.toFixed(1)+" m &nbsp;·&nbsp; core Ø "+L.maxDia.toFixed(2)+" m &nbsp;·&nbsp; fineness "+(L.total/L.maxDia).toFixed(1)+
+    "<br>gross "+fmtMass(L.V.gross)+" &nbsp;·&nbsp; "+(S.xray?"cutaway":"exterior")+" view";
+}
+/* ============================================================
+   FLIGHT VIEWPORT
+   ============================================================ */
+const fc={cv:null,cam:"chase",stars:null};
+function mkStars(){ const a=[];for(let i=0;i<420;i++)a.push({x:Math.random(),y:Math.random(),m:Math.random()});return a; }
+function lerpC(a,b,t){
+  const pa=a.match(/\w\w/g).map(v=>parseInt(v,16)),pb=b.match(/\w\w/g).map(v=>parseInt(v,16));
+  return "rgb("+pa.map((v,i)=>Math.round(v+(pb[i]-v)*t)).join(",")+")";
+}
+function skyAt(b,alt){
+  const c=b.skyDay;
+  if(alt<12000) return lerpC(c[0].replace("#",""),c[1].replace("#",""),alt/12000);
+  if(alt<45000) return lerpC(c[1].replace("#",""),c[2].replace("#",""),(alt-12000)/33000);
+  return lerpC(c[2].replace("#",""),"000000",Math.min(1,(alt-45000)/45000));
+}
+function drawFlight(){
+  const cv=fc.cv; if(!cv) return;
+  const {w,h,d}=sizeCanvas(cv); const ctx=cv.getContext("2d");
+  ctx.setTransform(d,0,0,d,0,0);
+  const sim=SIM;
+  if(!sim){ ctx.fillStyle="#000";ctx.fillRect(0,0,w,h);
+    ctx.fillStyle="#3a4045";ctx.font="14px Saira Semi Condensed";ctx.textAlign="center";
+    ctx.fillText("Build a vehicle, then press Launch.",w/2,h/2); return; }
+  const b=sim.b;
+  if(!fc.stars) fc.stars=mkStars();
+  if(fc.cam==="orbit"){ drawMap(ctx,w,h,sim); return; }
+  const alt=Math.max(0,sim.alt);
+  ctx.fillStyle="#000";ctx.fillRect(0,0,w,h);
+  const sky=skyAt(b,alt);
+  const g=ctx.createLinearGradient(0,0,0,h);
+  g.addColorStop(0,alt>70000?"#000000":lerpC("000000",sky.match(/\d+/g).map(v=>(+v).toString(16).padStart(2,"0")).join(""),.55));
+  g.addColorStop(1,sky);
+  ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  // stars
+  const sa=Math.min(1,Math.max(0,(alt-18000)/40000));
+  if(sa>0.01){ ctx.save();ctx.globalAlpha=sa;
+    const th=Math.atan2(sim.x,sim.y);
+    fc.stars.forEach(st=>{ const x=((st.x+th*.12)%1+1)%1*w, y=st.y*h*.9;
+      ctx.fillStyle="rgba(255,255,255,"+(.25+st.m*.75)+")";ctx.fillRect(x,y,st.m>.9?1.6:1,st.m>.9?1.6:1);});
+    ctx.restore(); }
+  // camera
+  const th=Math.atan2(sim.x,sim.y);
+  const rot=(X,Y)=>({X:X*Math.cos(th)-Y*Math.sin(th),Y:X*Math.sin(th)+Y*Math.cos(th)});
+  const rp=rot(sim.x,sim.y);
+  let scale;
+  if(fc.cam==="pad"){ scale=Math.min(3.4,Math.max(.006,320/Math.max(60,alt+sim.V.height*3))); }
+  else { scale=Math.max(.0016,Math.min(5.5,(h*.42)/Math.max(sim.V.height*1.9,alt*.55+sim.V.height*1.4))); }
+  const camY=fc.cam==="pad"? b.R+ (h*.34)/scale : rp.Y-(h*.30)/scale;
+  const X2S=(X)=>w/2+X*scale, Y2S=(Y)=>h-(Y-camY)*scale;
+  // planet surface
+  const Rs=(b.R+sim.st.el)*scale, cyS=Y2S(0);
+  ctx.save();
+  ctx.beginPath();ctx.arc(w/2,cyS,Rs,0,6.283);
+  ctx.fillStyle=b.ground; ctx.fill();
+  ctx.clip();
+  // surface texture bands
+  for(let i=0;i<16;i++){
+    const yy=cyS-Rs+i*3.2; ctx.fillStyle="rgba(0,0,0,"+(.05+i*.02)+")";
+    ctx.fillRect(w/2-Rs,yy,Rs*2,3.2);
+  }
+  ctx.restore();
+  // atmosphere haze rim
+  if(b.rho0>0&&alt>30000){
+    const gr=ctx.createRadialGradient(w/2,cyS,Rs,w/2,cyS,Rs+b.atmTop*scale);
+    gr.addColorStop(0,"rgba(120,180,230,.40)");gr.addColorStop(.35,"rgba(60,110,170,.18)");gr.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle=gr;ctx.beginPath();ctx.arc(w/2,cyS,Rs+b.atmTop*scale,0,6.283);ctx.fill();
+  }
+  ctx.strokeStyle="rgba(255,255,255,.22)";ctx.lineWidth=1;ctx.beginPath();ctx.arc(w/2,cyS,Rs,0,6.283);ctx.stroke();
+  // pad structures
+  if(alt<2000&&scale>.02){
+    const px0=X2S(0);
+    ctx.fillStyle="#191b1c";ctx.fillRect(px0+18*scale,Y2S(b.R+sim.st.el)-60*scale,7*scale,60*scale);
+    ctx.fillStyle="#232628";ctx.fillRect(px0-40*scale,Y2S(b.R+sim.st.el)-3*scale,90*scale,4*scale);
+  }
+  // trail
+  if(sim.trail.length>1){
+    ctx.strokeStyle="rgba(255,255,255,.16)";ctx.lineWidth=1;ctx.beginPath();
+    sim.trail.forEach((p,i)=>{const q=rot(p.x,p.y);const sx=X2S(q.X),sy=Y2S(q.Y);i?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy);});
+    ctx.stroke();
+  }
+  // rocket
+  const L=fc.layout||(fc.layout=vehicleLayout());
+  const sx=X2S(rp.X), sy=Y2S(rp.Y);
+  ctx.save();
+  ctx.translate(sx,sy);
+  ctx.rotate(sim.pitch*Math.PI/180);
+  const rs=Math.max(.25,scale);
+  if(!sim.failed) drawRocket(ctx,L,0,0,rs,{sim});
+  // plume
+  const A=atmo(alt,b), pr=Math.max(0,1-A.p/101325);
+  if(sim.plume>.02&&!sim.failed){
+    const len=(18+sim.V.maxDia*10)*rs*sim.plume*(1+pr*1.7)*(sim.throttle*.6+.4);
+    const wdt=sim.V.maxDia*rs*(.55+pr*1.25);
+    const gp=ctx.createLinearGradient(0,0,0,len);
+    gp.addColorStop(0,"rgba(255,255,250,.96)");
+    gp.addColorStop(.18,"rgba(255,214,150,.85)");
+    gp.addColorStop(.5,"rgba(255,150,70,.45)");
+    gp.addColorStop(1,"rgba(255,90,30,0)");
+    ctx.beginPath();
+    ctx.moveTo(-wdt*.42,0);ctx.quadraticCurveTo(-wdt*(0.6+pr*.8),len*.55,0,len);
+    ctx.quadraticCurveTo(wdt*(0.6+pr*.8),len*.55,wdt*.42,0);ctx.closePath();
+    ctx.fillStyle=gp;ctx.fill();
+    if(pr>.5){ ctx.globalAlpha=.30;ctx.beginPath();ctx.ellipse(0,len*.42,wdt*1.5,len*.34,0,0,6.283);ctx.fillStyle="rgba(255,170,110,.5)";ctx.fill();ctx.globalAlpha=1; }
+  }
+  // mach cone / vapour
+  if(sim.mach>.92&&sim.mach<1.35&&sim.q>12000){
+    ctx.strokeStyle="rgba(255,255,255,.28)";ctx.lineWidth=1.4;
+    ctx.beginPath();ctx.ellipse(0,-sim.V.height*rs*.35,sim.V.maxDia*rs*1.5,sim.V.maxDia*rs*.6,0,0,6.283);ctx.stroke();
+  }
+  ctx.restore();
+  // pad smoke
+  if(alt<900&&sim.ignited&&scale>.05){
+    for(let i=0;i<14;i++){
+      const a0=(i/14)*6.283+sim.t;
+      const rr=(30+i*8)*scale*(1+sim.t*.4);
+      ctx.fillStyle="rgba(190,190,190,"+Math.max(0,.20-sim.t*.012)+")";
+      ctx.beginPath();ctx.arc(X2S(Math.cos(a0)*rr*2.2),Y2S(b.R+sim.st.el)-Math.abs(Math.sin(a0))*rr*.4,rr*.55,0,6.283);ctx.fill();
+    }
+  }
+  // separation flash
+  if(sim.sep>0){ ctx.save();ctx.globalAlpha=sim.sep;
+    ctx.strokeStyle="rgba(255,240,210,.9)";ctx.lineWidth=2;
+    ctx.beginPath();ctx.arc(sx,sy,(1-sim.sep)*140+12,0,6.283);ctx.stroke();ctx.restore(); }
+  // debris / explosion
+  sim.particles.forEach(p=>{const q=rot(p.x,p.y);
+    ctx.fillStyle="rgba(255,"+Math.round(120+120*p.life)+",60,"+p.life+")";
+    ctx.fillRect(X2S(q.X),Y2S(q.Y),2.4,2.4);});
+  // altitude ladder
+  ctx.font="10px IBM Plex Mono";ctx.textAlign="right";
+  for(let k=0;k<12;k++){
+    const step=alt>150000?50000:alt>30000?10000:alt>4000?1000:200;
+    const a0=Math.floor(alt/step)*step+(k-5)*step; if(a0<0)continue;
+    const yy=Y2S(b.R+sim.st.el+a0); if(yy<10||yy>h-10)continue;
+    ctx.fillStyle="rgba(255,255,255,.16)";ctx.fillRect(w-48,yy,10,1);
+    ctx.fillStyle="rgba(255,255,255,.34)";ctx.fillText(a0>=1000?(a0/1000)+"k":a0,w-52,yy+3.5);
+  }
+}
+function drawMap(ctx,w,h,sim){
+  const b=sim.b;
+  ctx.fillStyle="#000";ctx.fillRect(0,0,w,h);
+  ctx.save();ctx.globalAlpha=.7;
+  fc.stars.forEach(st=>{ctx.fillStyle="rgba(255,255,255,"+(.2+st.m*.6)+")";ctx.fillRect(st.x*w,st.y*h,1,1);});
+  ctx.restore();
+  const ob=sim.ob||orbital(sim.x,sim.y,sim.vx,sim.vy,b.mu);
+  const far=Math.max(ob.apo||b.R*1.2,Math.hypot(sim.x,sim.y),b.R*1.25);
+  const sc=Math.min(w,h)*.40/far, cx=w/2, cy=h/2;
+  // body
+  const gr=ctx.createRadialGradient(cx-b.R*sc*.3,cy-b.R*sc*.3,b.R*sc*.1,cx,cy,b.R*sc);
+  gr.addColorStop(0,"#2b3033");gr.addColorStop(1,"#0b0d0e");
+  ctx.fillStyle=gr;ctx.beginPath();ctx.arc(cx,cy,b.R*sc,0,6.283);ctx.fill();
+  ctx.strokeStyle="rgba(255,255,255,.3)";ctx.stroke();
+  if(b.rho0>0){ctx.strokeStyle="rgba(130,180,230,.30)";ctx.beginPath();ctx.arc(cx,cy,(b.R+b.atmTop)*sc,0,6.283);ctx.stroke();}
+  // target orbit
+  ctx.setLineDash([4,5]);ctx.strokeStyle="rgba(255,255,255,.26)";
+  ctx.beginPath();ctx.arc(cx,cy,(b.R+sim.targetAlt)*sc,0,6.283);ctx.stroke();ctx.setLineDash([]);
+  // current orbit ellipse
+  if(ob.e<1&&isFinite(ob.a)&&ob.a>0){
+    const a=ob.a*sc,e=ob.e,bb=a*Math.sqrt(1-e*e),c=a*e;
+    const ang=Math.atan2(sim.y,sim.x); // approximate orientation via periapsis direction
+    const nu=Math.atan2(ob.vr*ob.h/ (b.mu*ob.e||1e-9), (ob.h*ob.h/(b.mu*Math.hypot(sim.x,sim.y))-1)/(ob.e||1e-9));
+    const w0=ang-nu;
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(-w0);
+    ctx.strokeStyle=ob.peri-b.R>0?"rgba(160,220,170,.85)":"rgba(220,140,120,.85)";
+    ctx.lineWidth=1.3;ctx.beginPath();ctx.ellipse(-c,0,a,bb,0,0,6.283);ctx.stroke();ctx.restore();
+  }
+  // trail
+  ctx.strokeStyle="rgba(255,255,255,.5)";ctx.lineWidth=1;ctx.beginPath();
+  sim.trail.forEach((p,i)=>{const sx=cx+p.x*sc,sy=cy-p.y*sc;i?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy);});ctx.stroke();
+  // vehicle
+  const vx=cx+sim.x*sc,vy=cy-sim.y*sc;
+  ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(vx,vy,3.2,0,6.283);ctx.fill();
+  ctx.strokeStyle="rgba(255,255,255,.5)";ctx.beginPath();ctx.arc(vx,vy,8,0,6.283);ctx.stroke();
+  ctx.font="10px IBM Plex Mono";ctx.fillStyle="rgba(255,255,255,.65)";ctx.textAlign="left";
+  ctx.fillText("apo "+fmtKm(ob.apo-b.R)+"   peri "+fmtKm(ob.peri-b.R)+"   e "+ob.e.toFixed(3),14,h-16);
+}
+/* ---------------- sparkline gauges ---------------- */
+function spark(cv,vals,opt){
+  opt=opt||{};const {w,h,d}=sizeCanvas(cv);const ctx=cv.getContext("2d");
+  ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,w,h);
+  if(vals.length<2)return;
+  const mx=Math.max(opt.min||0,...vals),mn=Math.min(0,...vals);
+  const n=vals.length;
+  ctx.strokeStyle="rgba(255,255,255,.08)";ctx.beginPath();ctx.moveTo(0,h-1);ctx.lineTo(w,h-1);ctx.stroke();
+  ctx.beginPath();
+  vals.forEach((v,i)=>{const x=i/(n-1)*w,y=h-2-((v-mn)/Math.max(1e-9,mx-mn))*(h-4);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+  ctx.strokeStyle=opt.c||"#e9eaea";ctx.lineWidth=1.3;ctx.stroke();
+  ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();
+  ctx.fillStyle=opt.f||"rgba(255,255,255,.06)";ctx.fill();
+}
+
+/* ============================================================
+   FORMAT HELPERS
+   ============================================================ */
+const $=(s)=>document.querySelector(s), $$=(s)=>Array.from(document.querySelectorAll(s));
+function fmtMass(kg){ if(kg>=1e6)return (kg/1e6).toFixed(2)+" kt"; if(kg>=1000)return (kg/1000).toFixed(kg>=1e5?0:1)+" t"; return Math.round(kg)+" kg"; }
+function fmtKm(m){ if(!isFinite(m))return "∞"; if(Math.abs(m)>=1e6)return (m/1000).toFixed(0)+" km"; return (m/1000).toFixed(m<100000?1:0)+" km"; }
+function fmtN(n){ if(n>=1e6)return (n/1e6).toFixed(2)+" MN"; if(n>=1000)return (n/1000).toFixed(0)+" kN"; return n.toFixed(0)+" N"; }
+function fmtMoney(k){ const v=k*1000; if(v>=1e9)return "$"+(v/1e9).toFixed(2)+" B"; if(v>=1e6)return "$"+(v/1e6).toFixed(1)+" M"; return "$"+Math.round(v/1000)+" k"; }
+function fmtT(s){ const sign=s<0?"−":"+"; s=Math.abs(s); const hh=Math.floor(s/3600),mm=Math.floor(s%3600/60),ss=Math.floor(s%60);
+  return sign+String(hh).padStart(2,"0")+":"+String(mm).padStart(2,"0")+":"+String(ss).padStart(2,"0"); }
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("on"),2100); }
+
+/* ============================================================
+   CATALOG
+   ============================================================ */
+function thumb(p){
+  const c=mkCanvas(34,34),g=c.getContext("2d");
+  g.fillStyle="#0a0b0c";g.fillRect(0,0,34,34);
+  const t=texFor(p);
+  if(p.g==="e"){
+    g.fillStyle=g.createPattern(TEX.copper,"repeat");
+    g.beginPath();g.moveTo(13,6);g.lineTo(21,6);g.lineTo(27,28);g.lineTo(7,28);g.closePath();g.fill();
+    g.strokeStyle="rgba(0,0,0,.6)";g.stroke();
+    if(p.solid){g.fillStyle=g.createPattern(TEX.solid,"repeat");g.fillRect(10,3,14,22);}
+  } else if(p.g==="t"||p.t==="tank"){
+    g.fillStyle=g.createPattern(TEX[t]||TEX.alu,"repeat");g.fillRect(9,3,16,28);
+    cylShade(g,9,16,3,28);
+    if(p.prop){g.fillStyle=PROP[p.prop].c;g.fillRect(11,20,12,9);}
+  } else if(p.g==="p"){
+    g.fillStyle=g.createPattern(TEX.gold,"repeat");g.fillRect(10,9,14,16);
+    g.fillStyle=g.createPattern(TEX.solar,"repeat");g.fillRect(2,13,7,8);g.fillRect(25,13,7,8);
+  } else if(p.kind==="fairing"||p.kind==="nose"){
+    g.fillStyle="#d7d8d8";g.beginPath();g.moveTo(17,3);g.quadraticCurveTo(28,20,27,31);g.lineTo(7,31);g.quadraticCurveTo(6,20,17,3);g.fill();
+    g.strokeStyle="rgba(0,0,0,.5)";g.stroke();
+  } else {
+    g.fillStyle=g.createPattern(TEX[t]||TEX.alu,"repeat");g.fillRect(6,10,22,14);cylShade(g,6,22,10,14);
+  }
+  return c;
+}
+function partSub(p){
+  if(p.g==="e") return (p.solid?"solid · ":"")+fmtN(p.thrVac*1000)+" vac · Isp "+p.ispVac+"/"+p.ispSL+" s";
+  if(p.g==="t") return fmtMass(p.propMass)+" "+PROP[p.prop].n;
+  if(p.g==="p") return fmtMass(p.mass)+" · "+p.gLim+" g limit";
+  return fmtMass(p.mass)+(p.dia?" · Ø"+p.dia+" m":"");
+}
+function renderCatalog(){
+  const tabs=$("#catTabs");
+  if(!tabs.children.length){
+    GROUPS.forEach(([g,n])=>{ const b=document.createElement("button");b.textContent=n;b.dataset.g=g;
+      b.setAttribute("aria-pressed",g===S.catGroup); b.onclick=()=>{S.catGroup=g;renderCatalog();}; tabs.appendChild(b); });
+  }
+  $$("#catTabs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.g===S.catGroup));
+  const q=S.catQ.toLowerCase();
+  const list=PARTS.filter(p=>{
+    const inG=p.g===S.catGroup;
+    if(!q) return inG;
+    const hay=(p.n+" "+p.sub+" "+(p.prop?PROP[p.prop].n:"")+" "+p.g).toLowerCase();
+    return hay.includes(q);
+  });
+  $("#catCount").textContent=list.length;
+  const host=$("#catList"); host.innerHTML="";
+  list.forEach(p=>{
+    const d=document.createElement("div");d.className="part";
+    const c=thumb(p); d.appendChild(c);
+    const mid=document.createElement("div");
+    mid.innerHTML='<div class="nm"></div><div class="sub"></div>';
+    mid.querySelector(".nm").textContent=p.n;
+    mid.querySelector(".sub").textContent=partSub(p);
+    d.appendChild(mid);
+    const add=document.createElement("div");add.className="add";add.textContent="+";d.appendChild(add);
+    d.title=p.sub+(p.prop?"\n"+PROP[p.prop].note:"");
+    d.onclick=()=>addPart(p.id);
+    host.appendChild(d);
+  });
+}
+/* ============================================================
+   STACK EDITING
+   ============================================================ */
+function addStage(ty){
+  S.stages.push({ty:ty||"upper",parts:[],q:ty==="strapon"?2:1});
+  S.sel=S.stages.length-1; refreshAll();
+}
+function addPart(id){
+  if(!S.stages.length) addStage("core");
+  const st=S.stages[Math.min(S.sel,S.stages.length-1)];
+  const ex=st.parts.find(e=>e.id===id);
+  if(ex) ex.q=(ex.q||1)+1; else st.parts.push({id,q:1});
+  resetSim(); refreshAll();
+}
+function addCustomTank(){
+  if(!S.stages.length) addStage("core");
+  const dia=+$("#tkDia").value, len=+$("#tkLen").value, prop=$("#tkProp").value, mat=$("#tkMat").value;
+  const t=customTank(dia,len,prop,mat);
+  S.stages[Math.min(S.sel,S.stages.length-1)].parts.push({c:t,q:1});
+  resetSim(); refreshAll(); toast("Tank added: "+fmtMass(t.propMass)+" of "+PROP[prop].n);
+}
+function customTank(dia,len,prop,mat){
+  if(!PROP[prop]) prop="lox_rp1";
+  if(!MAT[mat]) mat="alli";
+  dia=Math.max(.3,+dia||1); len=Math.max(.3,+len||1);
+  const P=PROP[prop], m=MAT[mat];
+  const vol=Math.PI*Math.pow(dia/2,2)*len*.90;
+  const pm=vol*P.d;
+  const area=Math.PI*dia*len+2*Math.PI*Math.pow(dia/2,2);
+  const dry=Math.max(pm*m.f*(1+P.cryo*.22), area*7.5);
+  return {t:"tank",prop,propMass:Math.round(pm),mass:Math.round(dry),dia,len,mat,
+    n:dia.toFixed(1)+" m "+P.n+" tank",cost:Math.round(dry*m.cost/1000+pm*P.cost/1000)};
+}
+function renderStack(){
+  const host=$("#stackList"); host.innerHTML="";
+  if(!S.stages.length){ host.innerHTML='<div class="empty">No stages. Add one, or load a reference vehicle.</div>'; return; }
+  const V=VEH||buildVehicle();
+  S.stages.forEach((st,i)=>{
+    const sa=V.stages[i]||{dry:0,prop:0};
+    const d=document.createElement("div"); d.className="stage"+(i===S.sel?" sel":"");
+    const ph=V.phases.filter(p=>p.core===i||p.stages.includes(i));
+    const dv=ph.reduce((a,p)=>a+p.dv,0);
+    const h=document.createElement("div");h.className="stage-h";
+    h.innerHTML='<span class="t"></span><span class="chip"></span><span class="dv"></span>';
+    h.querySelector(".t").textContent="Stage "+(i+1);
+    const chip=h.querySelector(".chip");
+    chip.textContent=(st.ty==="strapon")?("×"+(st.q||2)+" strap-on"):(st.ty==="core"?"core":"upper");
+    h.querySelector(".dv").textContent=(dv>1?Math.round(dv)+" m/s":fmtMass(sa.dry+sa.prop));
+    h.onclick=()=>{S.sel=i;refreshAll();};
+    d.appendChild(h);
+    const pl=document.createElement("div");pl.className="stage-parts";
+    if(!st.parts.length) pl.innerHTML='<div class="empty" style="padding:6px 14px">Empty — click catalogue parts</div>';
+    st.parts.forEach((e,j)=>{
+      const p=partOf(e);
+      const row=document.createElement("div");row.className="pitem";
+      row.innerHTML='<span class="q"></span><span class="n"></span><button class="qb" title="Remove one">−</button><button class="qb" title="Add one">+</button><button class="x" title="Delete">×</button>';
+      row.querySelector(".q").textContent="×"+(e.q||1);
+      row.querySelector(".n").textContent=p.n;
+      row.title=p.n+(p.sub?" · "+p.sub:"");
+      const [minus,plus]=row.querySelectorAll(".qb");
+      minus.onclick=(ev)=>{ev.stopPropagation();e.q=Math.max(1,(e.q||1)-1);resetSim();refreshAll();};
+      plus.onclick=(ev)=>{ev.stopPropagation();e.q=(e.q||1)+1;resetSim();refreshAll();};
+      row.querySelector(".x").onclick=(ev)=>{ev.stopPropagation();st.parts.splice(j,1);resetSim();refreshAll();};
+      pl.appendChild(row);
+    });
+    const tools=document.createElement("div");tools.className="pitem";
+    tools.innerHTML='<span class="n" style="color:var(--ink-4)">stage role</span>';
+    const sel=document.createElement("select");sel.style.flex="0 0 96px";
+    [["core","Core"],["upper","Upper"],["strapon","Strap-on"]].forEach(([v,n])=>{
+      const o=document.createElement("option");o.value=v;o.textContent=n;if((st.ty||"core")===v)o.selected=true;sel.appendChild(o);});
+    sel.onchange=()=>{st.ty=sel.value;resetSim();refreshAll();};
+    sel.onclick=e=>e.stopPropagation();
+    tools.appendChild(sel);
+    if((st.ty||"core")==="strapon"){
+      const cnt=document.createElement("input");cnt.type="number";cnt.min=1;cnt.max=8;cnt.value=st.q||2;cnt.style.flex="0 0 52px";
+      cnt.onchange=()=>{st.q=Math.max(1,Math.min(8,+cnt.value||1));resetSim();refreshAll();};
+      cnt.onclick=e=>e.stopPropagation();
+      tools.appendChild(cnt);
+    }
+    const del=document.createElement("button");del.className="x";del.textContent="×";del.title="Delete stage";
+    del.onclick=(ev)=>{ev.stopPropagation();S.stages.splice(i,1);S.sel=Math.max(0,S.sel-1);resetSim();refreshAll();};
+    tools.appendChild(del);
+    pl.appendChild(tools);
+    d.appendChild(pl);
+    host.appendChild(d);
+  });
+}
+/* ============================================================
+   READOUT PANEL
+   ============================================================ */
+function warnings(V){
+  const w=[],req=dvRequired();
+  if(!S.stages.length) return w;
+  if(V.twr0<1.02) w.push(["bad","Thrust-to-weight "+V.twr0.toFixed(2),"The vehicle cannot lift off. Add engines or remove propellant."]);
+  else if(V.twr0<1.15) w.push(["warn","Low liftoff TWR "+V.twr0.toFixed(2),"Expect heavy gravity losses. Aim for 1.25–1.45."]);
+  else if(V.twr0>2.4) w.push(["warn","High liftoff TWR "+V.twr0.toFixed(2),"Wasteful in the lower atmosphere and hard on the structure."]);
+  const margin=V.dv-req.total;
+  if(V.dv>0){
+    if(margin<0) w.push(["bad","Short by "+Math.round(-margin)+" m/s","Not enough Δv for "+targetOf().n+"."]);
+    else if(margin<250) w.push(["warn","Thin margin: "+Math.round(margin)+" m/s","Under 250 m/s leaves no room for dispersions."]);
+    else w.push(["ok","Δv margin "+Math.round(margin)+" m/s","Enough for "+targetOf().n+"."]);
+  }
+  if(V.payload<=0) w.push(["warn","No payload","Add a payload, or the mission has no purpose."]);
+  V.stages.forEach((s,i)=>{
+    const st=S.stages[i];
+    const props=Object.keys(s.pools);
+    s.engines.forEach(e=>{
+      if(e.p.solid) return;
+      if(!props.includes(e.p.prop)) w.push(["bad","Stage "+(i+1)+": no "+PROP[e.p.prop].n+" tank",e.p.n+" cannot draw propellant."]);
+    });
+    if(props.length&&!s.engines.length&&s.prop>0) w.push(["warn","Stage "+(i+1)+" has propellant but no engine","Dead weight."]);
+    if(s.engines.some(e=>e.p.vac)&&i===0&&s.ty!=="strapon") w.push(["warn","Vacuum engine on the first stage","Flow separation at sea level costs thrust and shakes the nozzle."]);
+  });
+  if(V.fineness>26) w.push(["warn","Slender vehicle: "+V.fineness.toFixed(1)+":1","Bending loads and control authority become limiting above ~25:1."]);
+  if(!hasPart("avionics")) w.push(["warn","No avionics","Guidance reliability is reduced without a dedicated flight computer."]);
+  if(V.crew>0&&V.gLim<=4&&V.twr0>2.2) w.push(["warn","Crew g-limit vs. high TWR","Enable the g-limiter on the Pad tab."]);
+  return w;
+}
+function renderReadout(){
+  const V=VEH||buildVehicle(); VEH=V;
+  const req=dvRequired();
+  $("#statDv").innerHTML=Math.round(V.dv).toLocaleString()+'<small>m/s Δv</small>';
+  $("#statDvSub").textContent=S.stages.length? (fmtMass(V.payload)+" payload · "+fmtMass(V.gross)+" gross · needs "+Math.round(req.total).toLocaleString()+" m/s")
+    :"Add an engine and a tank to begin";
+  const bar=$("#dvBar");bar.innerHTML="";
+  const tot=Math.max(V.dv,req.total,1);
+  V.phases.forEach((p,i)=>{
+    const el=document.createElement("i");
+    el.style.width=(p.dv/tot*100)+"%";
+    el.style.background="hsl(0 0% "+(84-i*11)+"%)";
+    el.textContent=p.dv>tot*.09?Math.round(p.dv):"";
+    el.title="Phase "+(i+1)+": "+Math.round(p.dv)+" m/s · Isp "+p.isp.toFixed(0)+" s · "+p.t.toFixed(0)+" s burn";
+    bar.appendChild(el);
+  });
+  if(V.dv<req.total){ const el=document.createElement("i");el.style.width=((req.total-V.dv)/tot*100)+"%";
+    el.style.background="repeating-linear-gradient(135deg,#2a1f1e,#2a1f1e 4px,#1a1413 4px,#1a1413 8px)";el.title="Deficit";bar.appendChild(el); }
+  const host=$("#rpBody"); host.innerHTML="";
+  if(S.rp==="perf") rpPerf(host,V,req);
+  if(S.rp==="mission") rpMission(host,V,req);
+  if(S.rp==="env") rpEnv(host,V);
+}
+function sec(host,title){ const d=document.createElement("div");d.className="section";if(title)d.innerHTML="<h4>"+title+"</h4>";host.appendChild(d);return d; }
+function kv(d,k,v,cls){ const r=document.createElement("div");r.className="kv";
+  r.innerHTML='<span class="k"></span><span class="v '+(cls||"")+'"></span>';
+  r.querySelector(".k").textContent=k;r.querySelector(".v").textContent=v;d.appendChild(r);return r; }
+function rpPerf(host,V,req){
+  const d=sec(host,"Vehicle");
+  kv(d,"Gross mass",fmtMass(V.gross),"hi");
+  kv(d,"Propellant",fmtMass(V.propTotal));
+  kv(d,"Dry + payload",fmtMass(V.gross-V.propTotal));
+  kv(d,"Payload",fmtMass(V.payload),V.payload>0?"hi":"warn");
+  kv(d,"Payload fraction",(V.payload/Math.max(1,V.gross)*100).toFixed(2)+" %");
+  kv(d,"Height / diameter",V.height.toFixed(1)+" m / "+V.maxDia.toFixed(2)+" m");
+  kv(d,"Liftoff thrust",fmtN(V.phases.length?V.phases[0].thrSL:0));
+  kv(d,"Liftoff TWR",V.twr0.toFixed(2),V.twr0<1.05?"bad":V.twr0<1.2?"warn":"ok");
+  kv(d,"Unit cost",fmtMoney(V.cost));
+  kv(d,"Cost per kg to orbit",V.payload>0?"$"+Math.round(V.cost*1000/V.payload).toLocaleString():"—");
+  kv(d,"Reliability estimate",(V.rel*100).toFixed(2)+" %",V.rel>.97?"ok":V.rel>.93?"warn":"bad");
+  const d2=sec(host,"Burn phases");
+  V.phases.forEach((p,i)=>{
+    const r=document.createElement("div");r.className="kv";
+    r.innerHTML='<span class="k">'+(i+1)+". "+(p.stages.length>1?"S"+(p.core+1)+" + boosters":"S"+(p.core+1))+
+      '</span><span class="v">'+Math.round(p.dv)+' m/s</span>';
+    r.title="Isp "+p.isp.toFixed(0)+" s · burn "+p.t.toFixed(0)+" s · TWR "+p.twr0.toFixed(2)+"→"+p.twr1.toFixed(2);
+    d2.appendChild(r);
+    const t=document.createElement("div");t.style.cssText="font:11px/1.5 var(--f-mono);color:var(--ink-4);margin:-2px 0 6px";
+    t.textContent="Isp "+p.isp.toFixed(0)+" s · "+p.t.toFixed(0)+" s · TWR "+p.twr0.toFixed(2)+" → "+p.twr1.toFixed(2);
+    d2.appendChild(t);
+  });
+  if(!V.phases.length) d2.insertAdjacentHTML("beforeend",'<div style="color:var(--ink-4);font-size:12.5px">No burning stage yet.</div>');
+  const d3=sec(host,"Checks");
+  const ws=warnings(V);
+  if(!ws.length) d3.insertAdjacentHTML("beforeend",'<div style="color:var(--ink-4);font-size:12.5px">Nothing to flag.</div>');
+  ws.forEach(([lvl,t,b])=>{ const e=document.createElement("div");e.className="warnbox "+(lvl==="bad"?"bad":lvl==="ok"?"ok":"");
+    e.innerHTML="<b></b>"; e.querySelector("b").textContent=t; e.appendChild(document.createTextNode(b)); d3.appendChild(e); });
+}
+function rpMission(host,V,req){
+  const d=sec(host,"Destination");
+  const sel=document.createElement("select");
+  TARGETS.forEach(t=>{const o=document.createElement("option");o.value=t.id;o.textContent=t.n;if(t.id===S.tgt)o.selected=true;sel.appendChild(o);});
+  sel.onchange=()=>{S.tgt=sel.value;resetSim();refreshAll();};
+  const f=document.createElement("div");f.className="field";f.appendChild(sel);d.appendChild(f);
+  const note=document.createElement("div");note.style.cssText="font-size:12.5px;color:var(--ink-3);margin:-2px 0 8px;line-height:1.4";
+  note.textContent=targetOf().d; d.appendChild(note);
+  const fa=document.createElement("div");fa.className="field";
+  fa.innerHTML='<label>Azimuth</label><input type="range" id="azR" min="0" max="270" step="1"><span class="val" id="azV"></span>';
+  d.appendChild(fa);
+  const az=fa.querySelector("#azR"); az.value=S.azimuth; fa.querySelector("#azV").textContent=S.azimuth+"°";
+  az.oninput=()=>{S.azimuth=+az.value;fa.querySelector("#azV").textContent=S.azimuth+"°";resetSim();renderReadout();};
+  const st=siteOf();
+  const inc=Math.acos(Math.max(-1,Math.min(1,Math.cos(st.lat*Math.PI/180)*Math.sin(S.azimuth*Math.PI/180))))*180/Math.PI;
+  kv(d,"Resulting inclination",inc.toFixed(1)+"°",Math.abs(inc-targetOf().inc)<3?"ok":"warn");
+  kv(d,"Target inclination",targetOf().inc.toFixed(1)+"°");
+  kv(d,"Earth-rotation bonus",(req.rot>=0?"+":"")+Math.round(req.rot)+" m/s",req.rot>0?"ok":"warn");
+
+  const d2=sec(host,"Δv budget");
+  kv(d2,"Orbital velocity at insertion",Math.round(req.vPeri)+" m/s");
+  kv(d2,"Gravity losses",Math.round(req.gravLoss)+" m/s");
+  kv(d2,"Drag + steering",Math.round(req.atmoLoss)+" m/s");
+  kv(d2,"Rotation credit",(-Math.round(req.rot))+" m/s");
+  kv(d2,"Ascent requirement",Math.round(req.need)+" m/s","hi");
+  if(req.extra>0) kv(d2,"Departure / insertion",Math.round(req.extra)+" m/s");
+  kv(d2,"Total required",Math.round(req.total)+" m/s","hi");
+  kv(d2,"Vehicle capability",Math.round(V.dv)+" m/s","hi");
+  const m=V.dv-req.total;
+  kv(d2,"Margin",(m>=0?"+":"")+Math.round(m)+" m/s",m<0?"bad":m<250?"warn":"ok");
+
+  const d3=sec(host,"Payload capability");
+  const cap=payloadCapacity(V,req.total);
+  kv(d3,"Max payload to "+targetOf().n,cap>0?fmtMass(cap):"none","hi");
+  kv(d3,"Current payload",fmtMass(V.payload));
+  kv(d3,"Spare capacity",fmtMass(Math.max(0,cap-V.payload)));
+  const b=document.createElement("button");b.className="btn";b.style.width="100%";b.style.marginTop="6px";
+  b.textContent="Fit ballast to fill capacity";
+  b.onclick=()=>{ fitBallast(cap); };
+  d3.appendChild(b);
+
+  const d4=sec(host,"Guidance");
+  rng(d4,"Pitch-over alt",0.2,6,0.1,S.pitchKick,v=>{S.pitchKick=v;resetSim();},v=>v.toFixed(1)+" km");
+  rng(d4,"Turn rate",0.3,2.2,0.05,S.pitchRate,v=>{S.pitchRate=v;resetSim();},v=>v.toFixed(2)+"×");
+  tog(d4,"Limit acceleration",S.maxGthr,v=>{S.maxGthr=v;});
+  rng(d4,"g limit",2,8,0.1,S.gLimit,v=>{S.gLimit=v;},v=>v.toFixed(1)+" g");
+  tog(d4,"Throttle down through max Q",S.maxQthr,v=>{S.maxQthr=v;});
+  tog(d4,"Propellant crossfeed from strap-ons",S.crossfeed,v=>{S.crossfeed=v;resetSim();refreshAll();});
+}
+function rpEnv(host,V){
+  const d=sec(host,"Launch site");
+  const sel=document.createElement("select");
+  SITES.forEach(t=>{const o=document.createElement("option");o.value=t.id;o.textContent=t.n+" — "+BODIES[t.b].n;if(t.id===S.site)o.selected=true;sel.appendChild(o);});
+  sel.onchange=()=>{S.site=sel.value;resetSim();refreshAll();};
+  const f=document.createElement("div");f.className="field";f.appendChild(sel);d.appendChild(f);
+  const st=siteOf(),b=bodyOf();
+  kv(d,"Latitude",st.lat.toFixed(3)+"°");
+  kv(d,"Elevation",st.el+" m");
+  kv(d,"Permitted azimuths",st.az[0]+"° – "+st.az[1]+"°");
+  const d2=sec(host,b.n);
+  kv(d2,"Surface gravity",b.g.toFixed(2)+" m/s²");
+  kv(d2,"Radius",(b.R/1000).toFixed(0)+" km");
+  kv(d2,"Rotation period",(b.day/3600).toFixed(2)+" h");
+  kv(d2,"Equatorial speed",Math.round(Math.abs(b.om)*b.R)+" m/s");
+  kv(d2,"Surface density",b.rho0>0?b.rho0.toFixed(3)+" kg/m³":"vacuum");
+  kv(d2,"Orbital velocity at 200 km",Math.round(Math.sqrt(b.mu/(b.R+200000)))+" m/s");
+  const d3=sec(host,"Conditions");
+  rng(d3,"Temperature offset",-40,40,1,S.tempOff,v=>{S.tempOff=v;resetSim();},v=>(v>0?"+":"")+v+" K");
+  rng(d3,"Pressure offset",-8,8,.5,S.pressOff,v=>{S.pressOff=v;resetSim();},v=>(v>0?"+":"")+v+" %");
+  rng(d3,"Upper-level wind",-80,80,1,S.windU,v=>{S.windU=v;resetSim();},v=>v+" m/s");
+  const A=atmo(0,b);
+  kv(d3,"Sea-level pressure",(A.p/1000).toFixed(2)+" kPa");
+  kv(d3,"Sea-level density",A.rho.toFixed(3)+" kg/m³");
+  kv(d3,"Speed of sound",Math.round(A.a)+" m/s");
+  const d4=sec(host,"Failure model");
+  tog(d4,"Random engine failures",S.randomFail,v=>{S.randomFail=v;});
+  tog(d4,"Engine-out tolerant guidance",S.engineOutOK,v=>{S.engineOutOK=v;});
+  d4.insertAdjacentHTML("beforeend",'<div style="font-size:12px;color:var(--ink-4);line-height:1.45;margin-top:6px">Structural, thermal and acceleration limits are always simulated. Random failures sample each engine\'s published reliability.</div>');
+}
+function rng(d,label,min,max,step,val,onch,fmt){
+  const f=document.createElement("div");f.className="field w";
+  f.innerHTML='<label></label><input type="range"><span class="val"></span>';
+  f.querySelector("label").textContent=label;
+  const i=f.querySelector("input");i.min=min;i.max=max;i.step=step;i.value=val;
+  const v=f.querySelector(".val");v.textContent=fmt(val);
+  i.oninput=()=>{const x=+i.value;v.textContent=fmt(x);onch(x);};
+  d.appendChild(f);return f;
+}
+function tog(d,label,val,onch){
+  const l=document.createElement("label");l.className="tog";
+  l.innerHTML='<input type="checkbox"><span></span>';
+  l.querySelector("span").textContent=label;
+  const i=l.querySelector("input");i.checked=!!val;
+  i.onchange=()=>onch(i.checked);
+  d.appendChild(l);return l;
+}
+/* payload capability: iterate payload mass until dv == required */
+function payloadCapacity(V,need){
+  const cur=V.payload, dv=V.dv;
+  if(dv<=0) return 0;
+  // find total non-payload mass and solve numerically by scaling ballast
+  let lo=0,hi=Math.max(1000,V.gross*0.35),best=0;
+  const base=S.stages.map(s=>s.parts.slice());
+  const probe=(pm)=>{
+    const saved=JSON.stringify(S.stages);
+    S.stages.forEach(s=>{s.parts=s.parts.filter(e=>{const p=partOf(e);return p.g!=="p";});});
+    const top=S.stages[S.stages.length-1];
+    top.parts.push({c:{g:"p",n:"probe",mass:pm,dia:2,len:2,cost:0,gLim:99}});
+    const vv=buildVehicle().dv;
+    S.stages=JSON.parse(saved);
+    return vv;
+  };
+  if(!S.stages.length) return 0;
+  for(let k=0;k<26;k++){ const mid=(lo+hi)/2; const v=probe(mid); if(v>=need){best=mid;lo=mid;} else hi=mid; }
+  return best;
+}
+function fitBallast(cap){
+  const top=S.stages[S.stages.length-1];
+  const cur=VEH.payload;
+  const add=Math.max(0,cap-cur);
+  if(add<1){ toast("No spare capacity at this destination."); return; }
+  top.parts.push({c:{g:"p",n:"Ballast "+fmtMass(add),mass:Math.round(add),dia:2,len:2.2,cost:20,gLim:30}});
+  resetSim(); refreshAll(); toast("Added "+fmtMass(add)+" of ballast.");
+}
+/* ============================================================
+   GAUGES + TIMELINE
+   ============================================================ */
+const GAUGE_DEFS=[
+  {k:"h",n:"ALTITUDE",f:v=>fmtKm(v),c:"#e9eaea"},
+  {k:"v",n:"SPEED",f:v=>Math.round(v)+" m/s",c:"#cfd6da"},
+  {k:"q",n:"DYNAMIC PRESSURE",f:v=>(v/1000).toFixed(1)+" kPa",c:"#d6b06a"},
+  {k:"a",n:"ACCELERATION",f:v=>v.toFixed(2)+" g",c:"#9fb89a"},
+  {k:"thr",n:"THRUST",f:v=>fmtN(v),c:"#e8935a"},
+  {k:"m",n:"VEHICLE MASS",f:v=>fmtMass(v),c:"#8fa5b5"},
+  {k:"T",n:"SKIN TEMPERATURE",f:v=>Math.round(v)+" K",c:"#c9695e"},
+  {k:"apo",n:"APOAPSIS",f:v=>fmtKm(v),c:"#b9bdc0"},
+  {k:"peri",n:"PERIAPSIS",f:v=>fmtKm(v),c:"#7d8387"},
+  {k:"rng",n:"DOWNRANGE",f:v=>fmtKm(v),c:"#6f7a80"}
+];
+function buildGauges(){
+  const host=$("#gauges"); host.innerHTML="";
+  GAUGE_DEFS.forEach(g=>{
+    const d=document.createElement("div");d.className="gauge";
+    d.innerHTML='<div class="gh"><span>'+g.n+'</span></div><div class="gv" id="gv_'+g.k+'">—</div><canvas id="gc_'+g.k+'"></canvas>';
+    host.appendChild(d);
+  });
+}
+function updateGauges(){
+  const sim=SIM; if(!sim) return;
+  const tel=sim.tel;
+  GAUGE_DEFS.forEach(g=>{
+    const last=tel.length?tel[tel.length-1][g.k]:0;
+    const el=document.getElementById("gv_"+g.k); if(el) el.textContent=isFinite(last)?g.f(last):"—";
+    const cv=document.getElementById("gc_"+g.k);
+    if(cv) spark(cv,tel.slice(-220).map(t=>isFinite(t[g.k])?t[g.k]:0),{c:g.c});
+  });
+}
+function renderTimeline(){
+  const bar=$("#tlBar"); const sim=SIM;
+  bar.innerHTML="";
+  if(!sim) return;
+  const span=Math.max(120,sim.t*1.25);
+  sim.events.slice(-26).forEach(e=>{
+    const i=document.createElement("i");
+    i.style.left=(e.t/span*100)+"%";
+    i.textContent=e.text.length>22?e.text.slice(0,21)+"…":e.text;
+    if(e.alert) i.style.color="var(--bad)";
+    bar.appendChild(i);
+  });
+  const n=document.createElement("i");n.className="now";n.style.left=(sim.t/span*100)+"%";bar.appendChild(n);
+}
+
+/* ============================================================
+   SCORING + ANALYSIS
+   ============================================================ */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const map=(v,a,b)=>clamp((v-a)/(b-a),0,1)*10;
+function scoreVehicle(V,req,res){
+  const mr=V.dv>0?(V.dv-req.total)/Math.max(1,req.total):-1;
+  const sMargin=map(mr,-.12,.18);
+  const pf=V.payload/Math.max(1,V.gross);
+  const effPf=pf*(1+(req.extra||0)/8500);
+  const sPayload=map(effPf,.004,.042);
+  const cpk=V.payload>0?V.cost*1000/V.payload:1e6;
+  const sCost=map(-Math.log10(Math.max(600,cpk)),-Math.log10(26000),-Math.log10(1100));
+  const sRel=map(V.rel,.86,.996);
+  let reuse=0,reuseMass=0,tot=0;
+  V.stages.forEach((s,i)=>{ tot+=s.cost; if(s.reuse) reuse+=s.cost*.88; });
+  const sReuse=map(tot>0?reuse/tot:0,0,.72);
+  let sRobust=map(clamp(V.twr0,.9,2.6),1.02,1.35)*.4+map(2.6-Math.min(2.6,Math.abs(V.twr0-1.35)),1.4,2.6)*.1
+    +map(30-Math.min(30,Math.abs(V.fineness-16)),14,30)*.25+ (hasPart("avionics")?2.5:0);
+  sRobust=clamp(sRobust,0,10);
+  let sAcc=null;
+  if(res){
+    if(!res.ok) sAcc=map(0,0,1);
+    else{
+      const ea=Math.abs(res.apo-(targetOf().apo*1000))/Math.max(1,targetOf().apo*1000);
+      const ep=Math.abs(res.peri-(targetOf().alt*1000))/Math.max(1,targetOf().alt*1000);
+      sAcc=map(1-(ea+ep)/2,.72,.99);
+    }
+    sRobust=sRobust*.55+sAcc*.45;
+  }
+  const parts=[
+    {k:"Δv margin",v:sMargin,w:.18},
+    {k:"Payload fraction",v:sPayload,w:.20},
+    {k:"Cost per kilogram",v:sCost,w:.20},
+    {k:"Reliability",v:sRel,w:.17},
+    {k:"Robustness & accuracy",v:sRobust,w:.12},
+    {k:"Reusability",v:sReuse,w:.13}
+  ];
+  const total=parts.reduce((a,p)=>a+p.v*p.w,0);
+  return {total,parts,cpk,pf,mr,reuse:tot>0?reuse/tot:0};
+}
+function withStages(preset,fn){
+  const sv={st:JSON.stringify(S.stages),site:S.site,tgt:S.tgt};
+  S.stages=JSON.parse(JSON.stringify(preset.stages));
+  if(preset.site)S.site=preset.site; if(preset.tgt)S.tgt=preset.tgt;
+  let out; try{ out=fn(); } finally { S.stages=JSON.parse(sv.st); S.site=sv.site; S.tgt=sv.tgt; }
+  return out;
+}
+function verdict(x){
+  if(x>=9.3) return ["Flight-ready","This design is competitive with the best operational launch vehicles in its class."];
+  if(x>=8) return ["Strong design","Solid architecture. The remaining gains are in cost and margin, not physics."];
+  if(x>=6.5) return ["Workable","It will fly the mission, but it is paying for something — usually mass or money."];
+  if(x>=4.5) return ["Marginal","Something in the staging or propellant choice is fighting you."];
+  if(x>=2) return ["Underperforming","Check liftoff thrust, Δv margin and where the dry mass is going."];
+  return ["Not viable","The vehicle cannot reach the selected destination as configured."];
+}
+function renderAnalysis(){
+  const V=buildVehicle(); VEH=V;
+  const req=dvRequired(); const res=SIM&&SIM.result?SIM.result:null;
+  const sc=scoreVehicle(V,req,res);
+  const w=$("#anWrap"); w.innerHTML="";
+  if(!S.stages.length){ w.innerHTML='<p style="color:var(--ink-3)">Nothing to analyse yet. Build a vehicle on the Build tab, or load a reference vehicle.</p>'; return; }
+  const [vt,vd]=verdict(sc.total);
+  const head=document.createElement("div");head.className="score";
+  head.innerHTML='<div class="scoredial"><canvas id="dial" width="336" height="336"></canvas>'+
+    '<div class="c"><b>'+sc.total.toFixed(1)+'</b><span>INDEX / 10</span></div></div>'+
+    '<div class="scoretext"><h2></h2><p></p><div class="metrics" id="mets"></div></div>';
+  w.appendChild(head);
+  head.querySelector("h2").textContent=vt;
+  head.querySelector("p").textContent=vd+" "+(res?("Last flight: "+res.why+"."):"Fly the mission on the Launch tab to score guidance accuracy.");
+  const mets=head.querySelector("#mets");
+  sc.parts.forEach(p=>{
+    const d=document.createElement("div");d.className="metric";
+    d.innerHTML='<div class="mv">'+p.v.toFixed(1)+'</div><div class="ml"></div><div class="mb"><i style="width:'+(p.v*10)+'%"></i></div>';
+    d.querySelector(".ml").textContent=p.k+" · weight "+Math.round(p.w*100)+"%";
+    mets.appendChild(d);
+  });
+  drawDial(sc.total);
+
+  // key numbers
+  const g=document.createElement("div");g.className="grid2";w.appendChild(g);
+  const c1=document.createElement("div");g.appendChild(c1);
+  c1.innerHTML='<h3 class="sec">Vehicle summary</h3>';
+  c1.appendChild(tbl([["Gross liftoff mass",fmtMass(V.gross)],["Propellant",fmtMass(V.propTotal)],
+    ["Payload",fmtMass(V.payload)],["Payload fraction",(sc.pf*100).toFixed(2)+" %"],
+    ["Height",V.height.toFixed(1)+" m"],["Maximum diameter",V.maxDia.toFixed(2)+" m"],
+    ["Fineness ratio",V.fineness.toFixed(1)+":1"],["Liftoff thrust",fmtN(V.phases.length?V.phases[0].thrSL:0)],
+    ["Liftoff TWR",V.twr0.toFixed(2)],["Stages",String(V.seq.length)],
+    ["Unit cost",fmtMoney(V.cost)],["Cost per kilogram",V.payload>0?"$"+Math.round(sc.cpk).toLocaleString():"—"],
+    ["Recovered value",(sc.reuse*100).toFixed(0)+" %"],["Reliability estimate",(V.rel*100).toFixed(2)+" %"]]));
+  const c2=document.createElement("div");g.appendChild(c2);
+  c2.innerHTML='<h3 class="sec">Δv budget · '+targetOf().n+'</h3>';
+  c2.appendChild(tbl([["Insertion velocity",Math.round(req.vPeri)+" m/s"],
+    ["Gravity losses",Math.round(req.gravLoss)+" m/s"],["Aerodynamic losses",Math.round(req.atmoLoss)+" m/s"],
+    ["Rotation credit","−"+Math.round(req.rot)+" m/s"],["Ascent requirement",Math.round(req.need)+" m/s"],
+    ["Departure / insertion",Math.round(req.extra)+" m/s"],["Total required",Math.round(req.total)+" m/s"],
+    ["Vehicle Δv",Math.round(V.dv)+" m/s"],["Margin",(V.dv-req.total>=0?"+":"")+Math.round(V.dv-req.total)+" m/s"]]));
+
+  // stage table
+  w.insertAdjacentHTML("beforeend",'<h3 class="sec">Stage breakdown</h3>');
+  const rows=[];
+  S.stages.forEach((st,i)=>{
+    const sa=V.stages[i]; if(!sa) return;
+    const ph=V.phases.filter(p=>p.stages.includes(i));
+    const dv=V.phases.filter(p=>p.core===i).reduce((a,p)=>a+p.dv,0);
+    const t=sa.engines.length?stageThrust(sa,0):{thr:0,isp:0};
+    rows.push([ (st.ty==="strapon"?"Strap-on ×"+(st.q||2):"Stage "+(i+1)),
+      fmtMass(sa.dry),fmtMass(sa.prop),
+      sa.engines.map(e=>e.p.n+(e.q*sa.mult>1?" ×"+e.q*sa.mult:"")).join(", ")||"—",
+      t.isp?Math.round(t.isp)+" s":"—", t.thr?fmtN(t.thr):"—",
+      sa.prop>0?Math.round(dv)+" m/s":"—", fmtMoney(sa.cost)]);
+  });
+  w.appendChild(tbl(rows,["Element","Dry","Propellant","Propulsion","Isp vac","Thrust vac","Δv","Cost"]));
+
+  // flight results
+  if(res){
+    w.insertAdjacentHTML("beforeend",'<h3 class="sec">Flight results</h3>');
+    const g2=document.createElement("div");g2.className="grid2";w.appendChild(g2);
+    const f1=document.createElement("div");g2.appendChild(f1);
+    f1.appendChild(tbl([["Outcome",res.ok?"Success":"Failure"],["Note",res.why],
+      ["Apoapsis",fmtKm(res.apo)],["Periapsis",fmtKm(res.peri)],["Eccentricity",res.e.toFixed(4)],
+      ["Flight time",fmtT(res.t).replace("+","")],["Downrange",fmtKm(res.range)],
+      ["Δv remaining",Math.round(res.dvLeft)+" m/s"],["Propellant remaining",fmtMass(res.left)]]));
+    const f2=document.createElement("div");g2.appendChild(f2);
+    f2.appendChild(tbl([["Max dynamic pressure",(res.maxQ/1000).toFixed(1)+" kPa"],
+      ["Max acceleration",res.maxG.toFixed(2)+" g"],["Peak skin temperature",Math.round(res.maxT)+" K"],
+      ["Gravity loss (flown)",Math.round(res.grav)+" m/s"],["Drag loss (flown)",Math.round(res.drag)+" m/s"],
+      ["Anomalies",res.damage.length?res.damage.join("; "):"none"]]));
+    w.insertAdjacentHTML("beforeend",'<h3 class="sec">Flight profile</h3>');
+    const cv=document.createElement("canvas");cv.style.cssText="width:100%;height:260px;display:block;border:1px solid var(--line)";
+    w.appendChild(cv); drawProfile(cv);
+    w.insertAdjacentHTML("beforeend",'<h3 class="sec">Event log</h3>');
+    w.appendChild(tbl(SIM.events.map(e=>[fmtT(e.t),e.text]),["Mission time","Event"]));
+  }
+  // benchmark
+  w.insertAdjacentHTML("beforeend",'<h3 class="sec">Compared with reference vehicles</h3>');
+  const bench=[["This design",V.payload,sc.cpk,V.dv,sc.total]];
+  PRESETS.forEach(p=>{
+    const r=withStages(p,()=>{const vv=buildVehicle();const rq=dvRequired();return {v:vv,s:scoreVehicle(vv,rq,null)};});
+    bench.push([p.n,r.v.payload,r.s.cpk,r.v.dv,r.s.total]);
+  });
+  w.appendChild(tbl(bench.map(b=>[b[0],fmtMass(b[1]),b[2]<1e5?"$"+Math.round(b[2]).toLocaleString():"—",Math.round(b[3])+" m/s",b[4].toFixed(1)]),
+    ["Vehicle","Payload carried","Cost per kg","Δv","Index"]));
+  // advice
+  w.insertAdjacentHTML("beforeend",'<h3 class="sec">What to change next</h3>');
+  const ul=document.createElement("div");
+  advice(V,req,sc,res).forEach(a=>{
+    const d=document.createElement("div");d.className="warnbox"+(a[0]==="bad"?" bad":a[0]==="ok"?" ok":"");
+    d.innerHTML="<b></b>";d.querySelector("b").textContent=a[1];d.appendChild(document.createTextNode(a[2]));
+    ul.appendChild(d);
+  });
+  w.appendChild(ul);
+}
+function tbl(rows,head){
+  const t=document.createElement("table");t.className="data";
+  if(head){const tr=document.createElement("tr");head.forEach(h=>{const th=document.createElement("th");th.textContent=h;tr.appendChild(th);});t.appendChild(tr);}
+  rows.forEach(r=>{const tr=document.createElement("tr");r.forEach(c=>{const td=document.createElement("td");td.textContent=c;tr.appendChild(td);});t.appendChild(tr);});
+  return t;
+}
+function drawDial(v){
+  const cv=$("#dial"); if(!cv) return; const ctx=cv.getContext("2d");
+  const d=2,w=168,h=168; ctx.setTransform(d,0,0,d,0,0); ctx.clearRect(0,0,w,h);
+  const cx=w/2,cy=h/2,r=70;
+  ctx.lineWidth=9;ctx.lineCap="butt";
+  ctx.strokeStyle="#1b1f22";ctx.beginPath();ctx.arc(cx,cy,r,Math.PI*.75,Math.PI*2.25);ctx.stroke();
+  const a=Math.PI*.75+Math.PI*1.5*(v/10);
+  ctx.strokeStyle="#ffffff";ctx.beginPath();ctx.arc(cx,cy,r,Math.PI*.75,a);ctx.stroke();
+  ctx.strokeStyle="#5a6166";ctx.lineWidth=1;
+  for(let i=0;i<=10;i++){ const ang=Math.PI*.75+Math.PI*1.5*(i/10);
+    ctx.beginPath();ctx.moveTo(cx+Math.cos(ang)*(r+8),cy+Math.sin(ang)*(r+8));
+    ctx.lineTo(cx+Math.cos(ang)*(r+(i%5===0?15:11)),cy+Math.sin(ang)*(r+(i%5===0?15:11)));ctx.stroke(); }
+}
+function drawProfile(cv){
+  const r=cv.getBoundingClientRect(),d=dpr();cv.width=r.width*d;cv.height=r.height*d;
+  const ctx=cv.getContext("2d");ctx.setTransform(d,0,0,d,0,0);
+  const w=r.width,h=r.height;ctx.fillStyle="#08090a";ctx.fillRect(0,0,w,h);
+  const tel=SIM.tel; if(tel.length<2)return;
+  const T=tel[tel.length-1].t;
+  const maxH=Math.max(...tel.map(p=>p.h)),maxV=Math.max(...tel.map(p=>p.v)),maxQ=Math.max(...tel.map(p=>p.q));
+  ctx.strokeStyle="#1b1f22";ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=h-10-(h-30)*i/4;ctx.beginPath();ctx.moveTo(40,y);ctx.lineTo(w-10,y);ctx.stroke();}
+  const px=(t)=>40+(t/T)*(w-50), py=(v,m)=>h-10-(v/m)*(h-30);
+  const line=(key,max,col)=>{ctx.beginPath();tel.forEach((p,i)=>{const x=px(p.t),y=py(p[key],max);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+    ctx.strokeStyle=col;ctx.lineWidth=1.4;ctx.stroke();};
+  line("h",maxH,"#ffffff"); line("v",maxV,"#8fa5b5"); line("q",maxQ,"#d6b06a");
+  ctx.font="11px IBM Plex Mono";ctx.fillStyle="#7d8387";ctx.textAlign="left";
+  ctx.fillText("altitude "+fmtKm(maxH),46,16);
+  ctx.fillStyle="#8fa5b5";ctx.fillText("speed "+Math.round(maxV)+" m/s",46+150,16);
+  ctx.fillStyle="#d6b06a";ctx.fillText("q "+(maxQ/1000).toFixed(1)+" kPa",46+300,16);
+  ctx.fillStyle="#4d5256";ctx.textAlign="right";ctx.fillText(fmtT(T).replace("+",""),w-12,h-14);
+}
+function advice(V,req,sc,res){
+  const a=[];
+  const m=V.dv-req.total;
+  if(m<0) a.push(["bad","Add "+Math.round(-m)+" m/s","Either cut payload, add propellant to the upper stage, or move to a higher-Isp upper stage."]);
+  if(V.twr0<1.2) a.push(["warn","Liftoff thrust is tight","Aim for 1.25–1.45. Below that you burn propellant holding yourself up."]);
+  const up=V.stages[V.seq[V.seq.length-1]];
+  if(up&&up.engines.length){
+    const isp=stageThrust(up,0).isp;
+    if(isp<340) a.push(["warn","Upper-stage Isp is "+Math.round(isp)+" s","Hydrolox (RL10, Vinci) buys 100+ s here, which compounds through the whole stack."]);
+  }
+  if(sc.cpk>9000&&V.payload>0) a.push(["warn","Cost per kilogram is high","Recover the first stage, or fly a bigger payload on the same hardware."]);
+  if(sc.reuse<.05) a.push(["","Nothing is recovered","Grid fins, legs and a landing reserve on the booster return most of the vehicle cost."]);
+  if(V.rel<.96) a.push(["warn","Reliability estimate "+(V.rel*100).toFixed(1)+" %","Large engine counts multiply risk. Fewer, better engines or engine-out tolerance help."]);
+  if(res&&res.maxQ>38000) a.push(["warn","Max Q was "+(res.maxQ/1000).toFixed(0)+" kPa","Throttle down through the transonic region, or start the pitch-over earlier."]);
+  if(res&&res.maxG>5&&V.crew>0) a.push(["bad","Crew exceeded "+res.maxG.toFixed(1)+" g","Turn on the acceleration limiter and set it to 4 g."]);
+  if(res&&res.ok&&Math.abs(res.peri-targetOf().alt*1000)>25000) a.push(["warn","Insertion accuracy is loose","Adjust the pitch-over altitude and turn rate; small changes move the apoapsis a long way."]);
+  if(V.payload/Math.max(1,V.gross)<.012) a.push(["","Payload fraction is under 1.2 %","Usually staging: another stage, or a lighter tank material, buys more than a bigger engine."]);
+  if(!a.length) a.push(["ok","Nothing obvious left","The design is balanced. Try a harder destination or a heavier payload."]);
+  return a;
+}
+
+/* ============================================================
+   FLIGHT CONTROL + MAIN LOOP
+   ============================================================ */
+let speed=1,last=performance.now(),lastUI=0;
+function resetSim(){ if(SIM){SIM.running=false;} SIM=null; fc.layout=null; updateHud(); }
+function launch(){
+  if(!S.stages.length){ toast("Build a vehicle first."); return; }
+  const V=buildVehicle();
+  if(V.twr0<1.0&&bodyOf().rho0>=0){ toast("Thrust-to-weight is below 1. The vehicle will not lift off."); }
+  SIM=newSim(); if(!SIM) return;
+  fc.layout=vehicleLayout();
+  SIM.ignited=true; SIM.running=true;
+  ev(SIM,"Ignition sequence start");
+  setView("launch");
+}
+function updateHud(){
+  const sim=SIM;
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  if(!sim){ set("clock","00:00:00"); $("#clockLabel").textContent="T−";
+    ["hAlt","hVel"].forEach(i=>set(i,"—")); set("hMode","Ready for launch"); return; }
+  $("#clockLabel").textContent="T+";
+  set("clock",fmtT(sim.t).replace("+",""));
+  set("hAlt",fmtKm(sim.alt));
+  set("hVel",Math.round(Math.hypot(sim.vx,sim.vy)).toLocaleString()+" m/s");
+  const ob=sim.ob||orbital(sim.x,sim.y,sim.vx,sim.vy,sim.b.mu);
+  set("hApo",fmtKm(ob.apo-sim.b.R)); set("hPeri",fmtKm(ob.peri-sim.b.R));
+  set("hMach",sim.mach.toFixed(2));
+  const r=Math.hypot(sim.x,sim.y);
+  set("hVv",Math.round((sim.x*sim.vx+sim.y*sim.vy)/r)+" m/s");
+  set("hStage","STAGE "+(sim.core+1)+" · "+(sim.throttle>0?"BURN":"COAST"));
+  set("hThr",Math.round(sim.throttle*100)+"%");
+  set("hAcc",sim.acc.toFixed(2)+" g");
+  set("hQ",(sim.q/1000).toFixed(1)+" kPa");
+  set("hTemp",Math.round(sim.skinT)+" K");
+  const pt=sim.V.stages.reduce((a,s,i)=>a+(sim.jett.has(i)?0:Math.max(0,sim.prop[i])),0);
+  const p0=sim.V.stages.reduce((a,s,i)=>a+(sim.jett.has(i)?0:s.prop),0);
+  set("hProp",p0>0?Math.round(pt/p0*100)+"%":"0%");
+  set("hRange",fmtKm(Math.abs(Math.atan2(sim.x,sim.y))*sim.b.R));
+  set("hMode",sim.done?(sim.result&&sim.result.ok?"Mission complete — "+sim.result.why:"Flight terminated — "+sim.result.why):sim.mode);
+  const log=$("#evLog");
+  if(log){ const last6=sim.events.slice(-7);
+    if(log.dataset.n!==String(sim.events.length)){ log.dataset.n=sim.events.length; log.innerHTML="";
+      last6.forEach(e=>{const d=document.createElement("div");d.className="ev"+(e.alert?" alert":"");
+        d.innerHTML='<span>'+fmtT(e.t)+'</span><b></b>';d.querySelector("b").textContent=e.text;log.appendChild(d);}); } }
+}
+function loop(now){
+  const dtReal=Math.min(.12,(now-last)/1000); last=now;
+  if(SIM&&SIM.running&&!SIM.done){
+    let acc=dtReal*speed, steps=0;
+    const base=(SIM.alt>90000&&SIM.throttle<=0)?.5:(SIM.alt>60000?.1:.04);
+    while(acc>1e-6&&steps<6000){ const dt=Math.min(base,acc); step(SIM,dt); acc-=dt; steps++; if(SIM.done||SIM.failed)break; }
+    if(SIM.done){ renderAnalysis(); }
+  }
+  if(SIM){
+    SIM.sep=Math.max(0,SIM.sep-dtReal*2.2);
+    if(SIM.particles.length){ SIM.particles.forEach(p=>{p.life-=dtReal*.45;p.x+=p.vx*dtReal*speed;p.y+=p.vy*dtReal*speed;p.vy-=9.8*dtReal*speed;});
+      SIM.particles=SIM.particles.filter(p=>p.life>0); }
+  }
+  if(S.view==="launch"){ drawFlight(); updateHud();
+    if(now-lastUI>140){ lastUI=now; updateGauges(); renderTimeline(); } }
+  requestAnimationFrame(loop);
+}
+/* ============================================================
+   MODALS
+   ============================================================ */
+function modal(title,build){
+  $("#mTitle").textContent=title; const b=$("#mBody"); b.innerHTML=""; build(b); $("#modal").classList.add("on");
+}
+function closeModal(){ $("#modal").classList.remove("on"); }
+function presetThumb(p,cv){
+  const ctx=cv.getContext("2d"),d=dpr();cv.width=26*d;cv.height=74*d;ctx.setTransform(d,0,0,d,0,0);
+  withStages(p,()=>{ const L=vehicleLayout(); const s=Math.min(70/Math.max(L.total,1),22/Math.max(L.maxDia*1.6,1));
+    drawRocket(ctx,L,13,73,s,{}); });
+}
+function showPresets(){
+  modal("Reference vehicles",(b)=>{
+    b.insertAdjacentHTML("beforeend",'<p style="margin:0 0 14px;color:var(--ink-3);font-size:13.5px;max-width:64ch">Masses, thrust and Isp are taken from published figures. Load one, then change anything you like — the numbers update as you go.</p>');
+    const g=document.createElement("div");g.className="presetgrid";
+    PRESETS.forEach(p=>{
+      const c=document.createElement("button");c.className="pcard";
+      c.innerHTML='<canvas></canvas><div><div class="nm"></div><div class="de"></div></div>';
+      c.querySelector(".nm").textContent=p.n; c.querySelector(".de").textContent=p.d;
+      presetThumb(p,c.querySelector("canvas"));
+      c.onclick=()=>{ loadPreset(p); closeModal(); };
+      g.appendChild(c);
+    });
+    b.appendChild(g);
+    const blank=document.createElement("button");blank.className="btn";blank.style.marginTop="14px";
+    blank.textContent="Start from an empty stack";
+    blank.onclick=()=>{S.stages=[];S.name="UNTITLED-1";resetSim();refreshAll();closeModal();};
+    b.appendChild(blank);
+  });
+}
+function loadPreset(p){
+  S.stages=JSON.parse(JSON.stringify(p.stages));
+  S.site=p.site||S.site; S.tgt=p.tgt||S.tgt; S.name=p.n.toUpperCase(); S.sel=0;
+  resetSim(); refreshAll(); toast("Loaded "+p.n);
+}
+function showSave(){
+  modal("Save, load and share",(b)=>{
+    const wrap=document.createElement("div");
+    const nm=document.createElement("div");nm.className="field";
+    nm.innerHTML='<label>Design name</label><input type="text" id="svName">';
+    nm.querySelector("input").value=S.name; wrap.appendChild(nm);
+    const row=document.createElement("div");row.style.cssText="display:flex;gap:8px;margin:10px 0";
+    const bs=document.createElement("button");bs.className="btn primary";bs.textContent="Save to this browser";
+    bs.onclick=()=>{ S.name=$("#svName").value||"UNTITLED"; saveLocal(); };
+    row.appendChild(bs);
+    const be=document.createElement("button");be.className="btn";be.textContent="Copy design code";
+    be.onclick=()=>{ const t=$("#svJson"); t.select(); try{document.execCommand("copy");toast("Design code copied.");}catch(e){toast("Select the text and copy it.");} };
+    row.appendChild(be);
+    const bi=document.createElement("button");bi.className="btn";bi.textContent="Load pasted code";
+    bi.onclick=()=>{ try{ const o=JSON.parse($("#svJson").value); applyDesign(o); closeModal(); toast("Design loaded."); }catch(e){ toast("That code could not be read."); } };
+    row.appendChild(bi);
+    wrap.appendChild(row);
+    const ta=document.createElement("textarea");ta.id="svJson";ta.rows=7;
+    ta.style.cssText="width:100%;background:var(--bg-3);border:1px solid var(--line);color:var(--ink-2);font:12px var(--f-mono);padding:8px;border-radius:3px";
+    ta.value=JSON.stringify(designObj());
+    wrap.appendChild(ta);
+    const list=document.createElement("div");list.style.marginTop="16px";
+    list.innerHTML='<h4 style="font-size:13px;letter-spacing:.1em;color:var(--ink-3);margin:0 0 8px">Saved designs</h4>';
+    const saved=listLocal();
+    if(!saved.length) list.insertAdjacentHTML("beforeend",'<div style="color:var(--ink-4);font-size:13px">Nothing saved yet.</div>');
+    saved.forEach(k=>{
+      const r=document.createElement("div");r.style.cssText="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--hair)";
+      r.innerHTML='<span style="flex:1;font-size:13.5px"></span>';
+      r.querySelector("span").textContent=k;
+      const l=document.createElement("button");l.className="btn sm";l.textContent="Load";
+      l.onclick=()=>{ loadLocal(k); closeModal(); };
+      const dl=document.createElement("button");dl.className="btn sm danger";dl.textContent="Delete";
+      dl.onclick=()=>{ try{localStorage.removeItem("rl.design."+k);}catch(e){} showSave(); };
+      r.appendChild(l);r.appendChild(dl);list.appendChild(r);
+    });
+    wrap.appendChild(list);
+    b.appendChild(wrap);
+  });
+}
+function designObj(){ return {n:S.name,stages:S.stages,site:S.site,tgt:S.tgt,az:S.azimuth,kick:S.pitchKick,rate:S.pitchRate}; }
+function applyDesign(o){
+  if(!o||!o.stages) throw new Error("bad");
+  S.stages=o.stages; S.name=o.n||"UNTITLED"; S.site=o.site||S.site; S.tgt=o.tgt||S.tgt;
+  S.azimuth=o.az!=null?o.az:S.azimuth; S.pitchKick=o.kick||S.pitchKick; S.pitchRate=o.rate||S.pitchRate;
+  S.sel=0; resetSim(); refreshAll();
+}
+function saveLocal(){
+  try{ localStorage.setItem("rl.design."+S.name,JSON.stringify(designObj())); toast("Saved as “"+S.name+"”."); refreshAll(); }
+  catch(e){ toast("This browser would not store the design."); }
+}
+function listLocal(){
+  const out=[]; try{ for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i); if(k&&k.startsWith("rl.design.")) out.push(k.slice(10));} }catch(e){}
+  return out.sort();
+}
+function loadLocal(k){
+  try{ applyDesign(JSON.parse(localStorage.getItem("rl.design."+k))); toast("Loaded “"+k+"”."); }catch(e){ toast("Could not load that design."); }
+}
+function showHelp(){
+  modal("How this works",(b)=>{
+    b.innerHTML=
+    '<div style="max-width:70ch;font-size:14px;line-height:1.6;color:var(--ink-2)">'+
+    '<p style="margin-top:0">Pick parts on the left, stack them into stages, and the numbers on the right update on every change. When the Δv margin is positive for your destination, fly it.</p>'+
+    '<h4 style="color:var(--ink);margin:18px 0 6px;font-size:14px">What is simulated</h4>'+
+    '<ul style="padding-left:18px;margin:0">'+
+    '<li>Thrust and specific impulse vary with ambient pressure, so sea-level and vacuum performance differ correctly.</li>'+
+    '<li>The 1976 standard atmosphere up to 86 km for Earth; exponential models for Mars, Venus and Titan.</li>'+
+    '<li>Drag with a Mach-dependent drag coefficient, including the transonic rise near Mach 1.2.</li>'+
+    '<li>Aerodynamic heating from the Sutton-Graves relation, balanced against radiative cooling.</li>'+
+    '<li>Parallel staging with optional propellant crossfeed, sequential staging, and fairing jettison.</li>'+
+    '<li>Closed-loop pitch guidance: vertical rise, pitch-over, gravity turn, apoapsis targeting and a coast to circularise.</li>'+
+    '<li>Structural failure above the dynamic-pressure limit of the tank material, thermal failure of the skin, and payload acceleration limits.</li>'+
+    '<li>Optional random engine failures sampled from each engine\'s published reliability.</li>'+
+    '</ul>'+
+    '<h4 style="color:var(--ink);margin:18px 0 6px;font-size:14px">Rules of thumb</h4>'+
+    '<ul style="padding-left:18px;margin:0">'+
+    '<li>Liftoff thrust-to-weight of 1.25 to 1.45 is the sweet spot. Lower wastes propellant fighting gravity; higher wastes it fighting air.</li>'+
+    '<li>Upper stages care about specific impulse; first stages care about thrust and density.</li>'+
+    '<li>Launching east from near the equator is worth up to 465 m/s. Sun-synchronous orbits give that back.</li>'+
+    '<li>Every kilogram of dry mass in the upper stage costs roughly a kilogram of payload.</li>'+
+    '</ul>'+
+    '<h4 style="color:var(--ink);margin:18px 0 6px;font-size:14px">Keyboard</h4>'+
+    '<p style="margin:0"><b>Space</b> launch or pause · <b>R</b> reset · <b>1 2 3</b> switch tabs · <b>[ ]</b> time warp · <b>C</b> camera · <b>X</b> cutaway</p>'+
+    '<p style="color:var(--ink-4);font-size:12.5px;margin-top:18px">Every texture here is generated in the browser from noise functions — no images are downloaded. Figures for real hardware come from public sources and are approximations.</p>'+
+    '</div>';
+  });
+}
+/* ============================================================
+   VIEWS + REFRESH
+   ============================================================ */
+function setView(v){
+  S.view=v;
+  $$("nav.views button").forEach(b=>b.setAttribute("aria-selected",b.dataset.view===v));
+  $$(".view").forEach(s=>s.classList.toggle("on",s.id==="view-"+v));
+  if(v==="build") drawBuild();
+  if(v==="launch"){ if(!SIM){ fc.layout=vehicleLayout(); } drawFlight(); updateGauges(); }
+  if(v==="analysis") renderAnalysis();
+}
+function refreshAll(){
+  VEH=buildVehicle();
+  $("#vehName").textContent=S.name;
+  renderCatalog(); renderStack(); renderReadout();
+  if(S.view==="build") drawBuild();
+  if(S.view==="analysis") renderAnalysis();
+  updateTankOut();
+}
+function updateTankOut(){
+  const dia=+$("#tkDia").value,len=+$("#tkLen").value;
+  $("#tkDiaV").textContent=dia.toFixed(1)+" m"; $("#tkLenV").textContent=len.toFixed(1)+" m";
+  const t=customTank(dia,len,$("#tkProp").value,$("#tkMat").value);
+  $("#tkOut").textContent=fmtMass(t.propMass)+" / "+fmtMass(t.mass);
+}
+/* ============================================================
+   INIT
+   ============================================================ */
+function init(){
+  buildTextures();
+  bc.cv=$("#buildCv"); fc.cv=$("#flightCv");
+  // selects
+  const tp=$("#tkProp"); Object.keys(PROP).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=PROP[k].n;if(k==="lox_rp1")o.selected=true;tp.appendChild(o);});
+  const tm=$("#tkMat"); Object.keys(MAT).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=MAT[k].n;tm.appendChild(o);});
+  tp.onchange=updateTankOut; tm.onchange=updateTankOut;
+  $("#tkDia").oninput=updateTankOut; $("#tkLen").oninput=updateTankOut;
+  $("#btnAddTank").onclick=addCustomTank;
+  $("#btnAddStage").onclick=()=>addStage(S.stages.length?"upper":"core");
+  $("#btnClear").onclick=()=>{ S.stages=[];S.sel=0;resetSim();refreshAll(); };
+  $("#catSearch").oninput=(e)=>{S.catQ=e.target.value;renderCatalog();};
+  $("#btnFit").onclick=()=>{bc.fit=true;bc.zoom=1;bc.panX=bc.panY=0;drawBuild();};
+  $("#btnXray").onclick=(e)=>{S.xray=!S.xray;e.currentTarget.setAttribute("aria-pressed",S.xray);drawBuild();};
+  $("#btnGrid").onclick=(e)=>{S.showScale=!S.showScale;e.currentTarget.setAttribute("aria-pressed",S.showScale);drawBuild();};
+  $$("nav.views button").forEach(b=>b.onclick=()=>setView(b.dataset.view));
+  $$("#rpTabs button").forEach(b=>b.onclick=()=>{S.rp=b.dataset.rp;$$("#rpTabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderReadout();});
+  $("#btnPresets").onclick=showPresets; $("#btnSave").onclick=showSave; $("#btnHelp").onclick=showHelp;
+  $("#mClose").onclick=closeModal;
+  $("#modal").onclick=(e)=>{if(e.target.id==="modal")closeModal();};
+  $("#btnLaunch").onclick=launch;
+  $("#btnPause").onclick=()=>{ if(SIM&&!SIM.done){SIM.running=!SIM.running;$("#btnPause").textContent=SIM.running?"Pause":"Resume";} };
+  $("#btnReset").onclick=()=>{ resetSim(); $("#btnPause").textContent="Pause"; drawFlight(); };
+  $$("#speedSeg button").forEach(b=>b.onclick=()=>{speed=+b.dataset.sp;$$("#speedSeg button").forEach(x=>x.setAttribute("aria-pressed",x===b));});
+  $$("#camSeg button").forEach(b=>b.onclick=()=>{fc.cam=b.dataset.cam;$$("#camSeg button").forEach(x=>x.setAttribute("aria-pressed",x===b));});
+  $("#cbAuto").onchange=(e)=>{S.auto=e.target.checked;};
+  $("#manThr").oninput=(e)=>{S.manThr=+e.target.value/100;};
+  // build canvas interaction
+  let drag=null;
+  bc.cv.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY,px:bc.panX,py:bc.panY};bc.cv.setPointerCapture(e.pointerId);});
+  bc.cv.addEventListener("pointermove",e=>{ if(!drag)return; bc.fit=false; bc.panX=drag.px+(e.clientX-drag.x); bc.panY=drag.py+(e.clientY-drag.y); drawBuild(); });
+  bc.cv.addEventListener("pointerup",()=>drag=null);
+  bc.cv.addEventListener("wheel",e=>{e.preventDefault();bc.fit=false;bc.zoom=clamp(bc.zoom*(e.deltaY<0?1.12:.89),.25,14);drawBuild();},{passive:false});
+  window.addEventListener("resize",()=>{ if(S.view==="build")drawBuild(); if(S.view==="analysis")renderAnalysis(); });
+  document.addEventListener("keydown",e=>{
+    if(/input|textarea|select/i.test(e.target.tagName)) return;
+    if(e.code==="Space"){e.preventDefault(); if(!SIM||SIM.done) launch(); else {SIM.running=!SIM.running;$("#btnPause").textContent=SIM.running?"Pause":"Resume";}}
+    if(e.key==="r"||e.key==="R"){resetSim();drawFlight();}
+    if(e.key==="1")setView("build"); if(e.key==="2")setView("launch"); if(e.key==="3")setView("analysis");
+    if(e.key==="[")  {speed=Math.max(1,speed/4);$$("#speedSeg button").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.sp===speed));}
+    if(e.key==="]")  {speed=Math.min(100,speed*4);$$("#speedSeg button").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.sp===speed));}
+    if(e.key==="c"||e.key==="C"){ const o=["chase","pad","orbit"],i=(o.indexOf(fc.cam)+1)%3; fc.cam=o[i];
+      $$("#camSeg button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.cam===fc.cam)); }
+    if(e.key==="x"||e.key==="X"){S.xray=!S.xray;$("#btnXray").setAttribute("aria-pressed",S.xray);drawBuild();}
+    if(e.key==="Escape")closeModal();
+  });
+  buildGauges();
+  loadPreset(PRESETS[0]);
+  setView("build");
+  requestAnimationFrame(loop);
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init); else init();
+
+/* ============================================================
+   ROCKET LAB v2.0 — MISSION CONTROL / TELEMETRY UPGRADE
+   Additive layer: preserves the original simulator engine/UI.
+   ============================================================ */
+const RL2 = {hist:[], lastSample:0, max:180, missionOpen:false};
+
+function rl2fmt(x,unit=''){
+  if(!Number.isFinite(x)) return '—';
+  return Math.round(x).toLocaleString()+unit;
+}
+function rl2StageReport(V){
+  const by=new Map();
+  (V.phases||[]).forEach(ph=>{
+    const k=ph.core;
+    const x=by.get(k)||{stage:k+1,name:'Stage '+(k+1),prop:0,dry:0,dv:0,burn:0,thrust:0,isp:0};
+    x.dv+=(ph.dv||0); x.burn+=(ph.t||0); x.thrust=Math.max(x.thrust,ph.thrSL||0); x.isp=x.isp?Math.max(x.isp,ph.isp||0):(ph.isp||0);
+    x.prop+=(ph.m0||0)-(ph.m1||0); by.set(k,x);
+  });
+  return [...by.values()].sort((a,b)=>a.stage-b.stage);
+}
+function rl2MissionData(){
+  const V=buildVehicle(), req=dvRequired(), t=targetOf(), site=siteOf();
+  const margin=V.dv-req.total;
+  const wet=V.gross||0, dry=Math.max(0,wet-(V.propTotal||0));
+  const massRatio=dry>0?wet/dry:0;
+  return {V,req,t,site,margin,massRatio,stages:rl2StageReport(V)};
+}
+function rl2MissionHTML(){
+  const d=rl2MissionData();
+  return `<div class="mission-grid">
+    <div class="mission-box">
+      <h4>Mission target</h4>
+      <label>Launch site</label><select id="rl2Site">${SITES.map(x=>`<option value="${x.id}" ${x.id===S.site?'selected':''}>${x.n}</option>`).join('')}</select>
+      <label>Destination</label><select id="rl2Target">${TARGETS.map(x=>`<option value="${x.id}" ${x.id===S.tgt?'selected':''}>${x.n}</option>`).join('')}</select>
+      <label>Payload mass (planning only)</label><input id="rl2Payload" type="number" min="0" step="1" value="${Math.round(d.V.payload||0)}">
+      <div class="mission-results">
+        <div class="mini-stat"><b>${rl2fmt(d.req.total)} m/s</b><span>required Δv</span></div>
+        <div class="mini-stat"><b>${rl2fmt(d.V.dv)} m/s</b><span>vehicle Δv</span></div>
+        <div class="mini-stat"><b>${d.margin>=0?'+':''}${rl2fmt(d.margin)} m/s</b><span>margin</span></div>
+      </div>
+    </div>
+    <div class="mission-box">
+      <h4>Engineering summary</h4>
+      <div class="kv"><span class="k">Gross mass</span><span class="v">${fmtMass(d.V.gross)}</span></div>
+      <div class="kv"><span class="k">Dry mass</span><span class="v">${fmtMass(dryMassForRL2(d.V))}</span></div>
+      <div class="kv"><span class="k">Propellant</span><span class="v">${fmtMass(d.V.propTotal)}</span></div>
+      <div class="kv"><span class="k">Mass ratio</span><span class="v">${d.massRatio.toFixed(2)} : 1</span></div>
+      <div class="kv"><span class="k">Liftoff TWR</span><span class="v">${d.V.twr0.toFixed(2)}</span></div>
+      <div class="kv"><span class="k">Reliability</span><span class="v">${(d.V.rel*100).toFixed(1)} %</span></div>
+      <div class="kv"><span class="k">Target orbit</span><span class="v">${d.t.alt.toLocaleString()} km</span></div>
+      <div class="export-row"><button class="btn sm" id="rl2Export">Export JSON</button><button class="btn sm" id="rl2Import">Import JSON</button><button class="btn sm" id="rl2Copy">Copy mission data</button></div>
+      <input id="rl2File" type="file" accept="application/json" hidden>
+    </div>
+  </div>
+  <div class="mission-box" style="margin-top:12px">
+    <h4>Stage budget</h4>
+    <div class="tablewrap"><table><thead><tr><th>Stage</th><th>Propellant</th><th>Δv</th><th>Burn</th><th>Thrust</th><th>Isp</th></tr></thead><tbody>
+    ${d.stages.map(x=>`<tr><td>${x.stage} · ${x.name}</td><td>${fmtMass(x.prop||0)}</td><td>${rl2fmt(x.dv)} m/s</td><td>${Number(x.burn||0).toFixed(1)} s</td><td>${fmtN(x.thrust||0)}</td><td>${Number(x.isp||0).toFixed(0)} s</td></tr>`).join('')||'<tr><td colspan="6">No stages built.</td></tr>'}
+    </tbody></table></div>
+  </div>`;
+}
+function dryMassForRL2(V){ return Math.max(0,(V.gross||0)-(V.propTotal||0)); }
+function openMissionControl(){
+  const wrap=document.createElement('div'); wrap.innerHTML=rl2MissionHTML();
+  modal('Mission Control · Engineering Planner',b=>{b.appendChild(wrap);});
+  const site=document.getElementById('rl2Site'), target=document.getElementById('rl2Target');
+  site.onchange=()=>{S.site=site.value; resetSim(); refreshAll(); openMissionControl();};
+  target.onchange=()=>{S.tgt=target.value; resetSim(); refreshAll(); openMissionControl();};
+  document.getElementById('rl2Export').onclick=()=>{
+    const d=rl2MissionData(); const payload={version:'Rocket Lab 2.0',name:S.name,site:S.site,target:S.tgt,stages:S.stages,mission:{requiredDv:d.req.total,vehicleDv:d.V.dv,margin:d.margin,payload:d.V.payload}};
+    const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'})); a.download=(S.name||'rocket-mission').replace(/[^a-z0-9_-]+/gi,'_')+'.json'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  };
+  document.getElementById('rl2Copy').onclick=async()=>{try{await navigator.clipboard.writeText(JSON.stringify(rl2MissionData(),null,2));toast('Mission data copied.');}catch(e){toast('Clipboard unavailable. Use Export JSON.');}};
+  document.getElementById('rl2Import').onclick=()=>document.getElementById('rl2File').click();
+  document.getElementById('rl2File').onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x.stages))throw Error('Invalid mission file');S.name=x.name||S.name;S.site=x.site||S.site;S.tgt=x.target||S.tgt;S.stages=x.stages;resetSim();refreshAll();closeModal();toast('Mission imported.');}catch(err){toast('Import failed: invalid JSON.');}};r.readAsText(f);};
+}
+function drawTelemetry(){
+  const cv=document.getElementById('telemetryCanvas'); if(!cv)return;
+  const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1,w=Math.max(260,r.width),h=150;
+  cv.width=Math.round(w*d);cv.height=Math.round(h*d);const c=cv.getContext('2d');c.setTransform(d,0,0,d,0,0);
+  c.clearRect(0,0,w,h); c.strokeStyle='rgba(255,255,255,.08)'; c.lineWidth=1;
+  for(let i=1;i<5;i++){const y=i*h/5;c.beginPath();c.moveTo(0,y);c.lineTo(w,y);c.stroke();}
+  if(RL2.hist.length<2)return;
+  const series=[['alt',v=>Math.max(0,v)/1000],['vel',v=>Math.max(0,v)],['q',v=>Math.max(0,v)/1000],['g',v=>Math.max(0,v)]];
+  const maxes=[Math.max(1,...RL2.hist.map(x=>x.alt/1000)),Math.max(1,...RL2.hist.map(x=>x.vel)),Math.max(1,...RL2.hist.map(x=>x.q/1000)),Math.max(1,...RL2.hist.map(x=>x.g))];
+  series.forEach((ser,j)=>{const vals=RL2.hist.map(x=>ser[1](x[ser[0]]));const mx=maxes[j];c.beginPath();vals.forEach((v,i)=>{const x=i*(w-8)/(vals.length-1)+4,y=h-5-(v/mx)*(h-10);i?c.lineTo(x,y):c.moveTo(x,y);});c.strokeStyle=`hsl(${j*82+35} 80% 62%)`;c.lineWidth=j===0?2:1;c.stroke();});
+}
+function sampleTelemetry(){
+  const s=SIM;if(!s)return;
+  const vel=Math.hypot(s.vx||0,s.vy||0), g=(s.acc||0)/G0;
+  RL2.hist.push({t:s.t||0,alt:s.alt||0,vel,q:s.q||0,g}); if(RL2.hist.length>RL2.max)RL2.hist.shift(); drawTelemetry();
+}
+function renderRL2Analysis(){
+  const d=rl2MissionData(); const host=document.getElementById('upgradeAnalysis'); if(!host)return;
+  host.innerHTML=`<div class="upgrade-panel">
+    <div class="upgrade-card"><div class="u-k">Δv margin</div><div class="u-v">${d.margin>=0?'+':''}${rl2fmt(d.margin)} m/s</div><div class="u-s">vehicle vs mission requirement</div></div>
+    <div class="upgrade-card"><div class="u-k">Mass ratio</div><div class="u-v">${d.massRatio.toFixed(2)} : 1</div><div class="u-s">gross / dry mass</div></div>
+    <div class="upgrade-card"><div class="u-k">Propellant fraction</div><div class="u-v">${((d.V.propTotal/Math.max(1,d.V.gross))*100).toFixed(1)}%</div><div class="u-s">of liftoff mass</div></div>
+    <div class="upgrade-card"><div class="u-k">Target</div><div class="u-v">${d.t.alt.toLocaleString()} km</div><div class="u-s">${d.t.n}</div></div>
+  </div>`;
+}
+function rl2Hook(){
+  const oldSetView=window.setView; window.setView=function(v){oldSetView(v);if(v==='analysis')setTimeout(renderRL2Analysis,0);if(v==='launch')setTimeout(drawTelemetry,0);};
+  const oldLaunch=window.launch; window.launch=function(){RL2.hist=[];oldLaunch();};
+  const oldReset=window.resetSim; window.resetSim=function(){RL2.hist=[];oldReset();drawTelemetry();};
+  const oldLoop=window.loop;
+  // Sampling is intentionally independent of the physics integrator.
+  setInterval(()=>{if(SIM&&SIM.running)sampleTelemetry();},250);
+  document.getElementById('missionBtn').onclick=openMissionControl;
+  window.addEventListener('resize',drawTelemetry);
+}
+setTimeout(rl2Hook,0);
+
+</script>
+</body>
+</html>

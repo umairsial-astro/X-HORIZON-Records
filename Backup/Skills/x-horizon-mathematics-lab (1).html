@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" style="color-scheme: dark;"><head><!-- frame-runtime --><script>window.__FRAME_PREAMBLE={"v":1,"cred":"cookie","capabilities":{"artifact":"artifact.Kiow93e4.js","assets":"assets.DOAjpBS9.js","comments":"comments.DrhK3r8W.js","db":"db.zFlAA4qL.js","downloads":"downloads.axDW2QAi.js","embed":"embed.DcZf-TSv.js","endpoints":"endpoints.BPfoKaE1.js","mcp":"mcp.C8qKIFvQ.js","network":"network.B5UA9Su4.js","permissions":"permissions.DWFFeHI0.js","room":"room.BF1j0KPr.js","sample":"sample.C7KQQdQj.js","self":"artifact.Kiow93e4.js","user":"user.CCh6oTS_.js"},"transforms":"_transforms.CkRgqq9F.js","comments":"_comments.DUaNQZcg.js","translate":"_translate.DqxC5ek1.js","ldx":"_ldx.CqNtBrkk.js"}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         </script><script>(function(){"use strict";function sr(t){return t==="cookie"||t==="query"?t:void 0}var Kn=3e5;function ir(t,e){try{const r=t("navigation")[0],n=[r.responseStart,r.redirectEnd-r.redirectStart,r.domContentLoadedEventStart,e(),r.connectEnd-r.domainLookupStart,r.responseStart-r.requestStart];r.requestStart>0||(n.length=4);for(let a=0;a<n.length;a++)if(n[a]>=0&&n[a]<=3e5)n[a]=n[a]|0;else{if(a<4)return;n.length=4}return n}catch{return}}var lr=["light","dark","system"],cr=/^[A-Za-z0-9_-]{1,64}$/,St=/^[a-zA-Z_:][a-zA-Z0-9_:.-]{0,127}$/,ur=new Set(["class","hidden","value","checked","style","title","alt","placeholder","lang","dir","role","tabindex","disabled","readonly","contenteditable","open","colspan","rowspan"]);function fr(t){const e=t.toLowerCase();return e.startsWith("data-")||e.startsWith("aria-")||ur.has(e)}var At="data-ldx-props";function dr(t,e){if(e.toLowerCase()===At)return!0;const r=t.getAttribute(At);if(r===null)return!1;try{const n=JSON.parse(r);if(n===null||typeof n!="object"||Array.isArray(n))return!0;const a=e.toLowerCase();return Object.keys(n).some(s=>s.toLowerCase()===a)}catch{return!0}}var Gn="http://www.w3.org/1999/xhtml",hr="http://www.w3.org/2000/svg",pr=new Set(["script","style","iframe","noscript","noframes","noembed","xmp","plaintext","template","title","textarea","object","embed"]),mr=new Set(["script","style"]);function vr(t){const e=t.localName.toLowerCase();return t.namespaceURI==="http://www.w3.org/1999/xhtml"?!pr.has(e):t.namespaceURI===hr?!mr.has(e):!1}function Ve(t,e){return t===e||(t===160||t===32)&&(e===160||e===32)}function _r(t,e){const r=t.length,n=e.length;let a=0;for(;a<r&&a<n&&Ve(t.charCodeAt(a),e.charCodeAt(a));)a++;let s=0;for(;s<r-a&&s<n-a&&Ve(t.charCodeAt(r-1-s),e.charCodeAt(n-1-s));)s++;return{p:a,s}}function yr(t,e){const r=t.firstChild;if(t.childNodes.length!==1||r===null||r.nodeType!==Node.TEXT_NODE){t.textContent=e;return}const n=r.data,a=n.length,s=e.length,{p:c,s:d}=_r(n,e);c===a&&d===0&&a===s||r.replaceData(c,a-c-d,e.slice(c,s-d));const O=r.data,w=t.ownerDocument.getSelection?.()??null,b=w!==null&&w.rangeCount>0&&(w.anchorNode===r||w.focusNode===r)?{anchor:w.anchorNode,anchorOffset:w.anchorOffset,focus:w.focusNode,focusOffset:w.focusOffset}:null;let m=-1,R=-1;for(let h=0;h<O.length&&h<e.length;h++){const p=O.charCodeAt(h),D=e.charCodeAt(h);p!==D&&Ve(p,D)&&(m<0&&(m=h),R=h)}const M=m>=0;if(M&&r.replaceData(m,R-m+1,e.slice(m,R+1)),M&&b!==null&&b.anchor!==null&&b.focus!==null)try{w.setBaseAndExtent(b.anchor,b.anchorOffset,b.focus,b.focusOffset)}catch{}}var gr=new Set(["html","head","body","frameset"]);function wr(t){return t.namespaceURI==="http://www.w3.org/1999/xhtml"&&gr.has(t.localName)}function br(t){if(t===null||typeof t!="object")return!1;const e=t;if(typeof e.target!="string"||!cr.test(e.target)||e.text!==void 0&&typeof e.text!="string")return!1;if(e.attrsSet!==void 0){if(e.attrsSet===null||typeof e.attrsSet!="object")return!1;for(const[r,n]of Object.entries(e.attrsSet))if(!St.test(r)||typeof n!="string")return!1}if(e.attrsRemoved!==void 0){if(!Array.isArray(e.attrsRemoved))return!1;for(const r of e.attrsRemoved)if(typeof r!="string"||!St.test(r))return!1}return!0}function Er(t,e){if(t===null||typeof t!="object")return!1;const{seq:r,elements:n}=t;if(typeof r!="number"||!Number.isSafeInteger(r)||!Array.isArray(n)||n.length===0||n.length>64)return!1;for(let a=0;a<n.length;a++)if(!e(n[a]))return!1;return!0}function Sr(t){return t===null||typeof t!="object"?!1:Er(t.__frame_patch,br)}function Ar(t){if(t===null||typeof t!="object")return!1;const e=t.__frame_init;return e!==null&&typeof e=="object"}function kr(t){return t!==null&&typeof t=="object"&&t.__frame_size_poke===!0}function Rr(t){if(t===null||typeof t!="object")return!1;const e=t.__frame_host_visible;return e!==null&&typeof e=="object"&&typeof e.visible=="boolean"}function Tr(t){if(t===null||typeof t!="object")return!1;const e=t.__frame_theme;if(e===null||typeof e!="object")return!1;const r=e.theme;return typeof r=="string"&&lr.includes(r)}var Lr=["ok","empty","snapshot_error","snapshot_timeout","unclonable","oversize","unavailable","restore_error","withheld"],Or=["TypeError","RangeError","ReferenceError","SyntaxError","DataCloneError","QuotaExceededError","AbortError","TimeoutError","SecurityError","Error","other"];function Mr(t){return typeof t=="string"&&Or.includes(t)?t:"other"}var Pr=Object.freeze({until:null,now:!1}),Nr="__claude_hot",Cr="__claude_hot_in",jr=/^__claude_hot(?:_in)?(?::|$)/,kt=/^[0-9a-z]{1,32}$/,Xe=t=>t===void 0?Nr:"__claude_hot:"+t,be=t=>t===void 0?Cr:"__claude_hot_in:"+t;function Fr(t,e){const r=[];for(let n=0;n<t.length;n++){const a=t.key(n);a!==null&&a!==e&&jr.test(a)&&r.push(a)}for(const n of r)t.removeItem(n)}function Ir(t){let e=null;try{e=q(JSON.parse(t)?.hot)}catch{return null}return e===null||typeof e.k!="string"||!kt.test(e.k)?null:le(e.g)?{k:e.k,g:e.g}:{k:e.k}}var zn=262144,Dr=3e3,xr=5e3,Rt=/^[a-z0-9._:-]{1,64}$/,Hr=["none","hot-restart","hard-reload"],qr=["asset","doc","added","removed"],Br=1500,Ur=/^[0-9a-f]{64}$/;function q(t){return t!==null&&typeof t=="object"?t:null}function le(t){return typeof t=="number"&&Number.isInteger(t)&&t>=0&&t<2**31}function Tt(t){return t===void 0||typeof t=="number"&&Number.isFinite(t)}function Kr(t){return t===void 0||typeof t=="string"&&Rt.test(t)}function Lt(t){const e=q(t);return e!==null&&(e.until===null||typeof e.until=="number"&&Number.isFinite(e.until))&&typeof e.now=="boolean"}function Ye(t){const e=q(t);return e!==null&&typeof e.ver=="string"&&e.ver.length<=128&&Tt(e.seq)&&typeof e.handoff=="string"&&Lr.includes(e.handoff)&&Kr(e.note)}function Gr(t){const e=q(t);return e!==null&&le(e.gen)&&(e.phase==="final"||e.phase==="pending")&&(e.from===null||Ye(e.from))}function zr(t){const e=q(t);return e!==null&&e.kv===1&&le(e.gen)&&Ye(e.from)&&Object.hasOwn(e,"data")}function $r(t){const e=q(t);return e!==null&&e.__frame_hot_snapshot===!0&&le(e.gen)&&typeof e.timeoutMs=="number"&&e.timeoutMs>=0&&e.timeoutMs<=6e4&&(e.handoff===void 0||typeof e.handoff=="boolean")&&(e.deadline===void 0||Lt(e.deadline))&&Tt(e.seq)&&(e.note===void 0||typeof e.note=="string")&&(e.key===void 0||typeof e.key=="string")}function Wr(t){const e=q(t);return e!==null&&e.__frame_hot_start===!0&&le(e.gen)&&Ye(e.from)}function Vr(t){return typeof t=="string"&&t.length>=1&&t.length<=128}function Ot(t){return q(t)!==null&&!Array.isArray(t)}function Xr(t){const e=q(t);return e!==null&&e.__frame_cap_grant===!0&&typeof e.cap=="string"&&Vr(e.ver)&&(e.grant===void 0||Ot(e.grant))&&(e.budgets===void 0||Ot(e.budgets)&&Object.values(e.budgets).every(Number.isFinite))&&(e.brokerGen===void 0||le(e.brokerGen))}function Yr(t){const e=q(t);return e!==null&&e.__frame_cap_rewired===!0&&(e.caps===void 0||Array.isArray(e.caps)&&e.caps.every(r=>typeof r=="string"))&&(e.brokerGen===void 0||le(e.brokerGen))}function Mt(t){const e=q(t);return e!==null&&typeof e.ver=="string"&&e.ver.length<=128&&Number.isFinite(e.seq)}function Pt(t){if(t==null||typeof t=="string")return!0;const e=q(t);return e!==null&&typeof e.doc=="string"&&typeof e.profile=="string"}function Jr(t){const e=q(t);return e!==null&&typeof e.path=="string"&&qr.includes(e.kind)&&Pt(e.from)&&Pt(e.to)}function Zr(t){return t===null?null:Object.freeze(t.filter(Jr))}function Qr(t){const e=q(t);return e!==null&&e.__frame_hot_update===!0&&Number.isFinite(e.id)&&Mt(e.from)&&Mt(e.to)&&(e.changed===null||Array.isArray(e.changed))&&Hr.includes(e.required)&&Lt(e.deadline)&&typeof e.verdictTimeoutMs=="number"&&e.verdictTimeoutMs>=0&&e.verdictTimeoutMs<=6e4&&(e.preflight===void 0||typeof e.preflight=="string"&&Ur.test(e.preflight))}var ce=/^[\w.-]+\.js$/;function en(t,e,r){return r?"inert":typeof e=="string"&&ce.test(e)?t?[e]:"inert":t?"inert":"framed"}var Nt=Object.freeze({[Symbol("claude.hot.restart")]:!0});function Ct(t,e){let r;try{r=t??sessionStorage}catch{return null}const n=Xe(e?.k),a=be(e?.k);let s=null;try{s=r.getItem(n)}catch{}try{r.removeItem(n)}catch{}try{Fr(r,a)}catch{}let c=null;if(s!==null&&!(e!==null&&e.g===void 0))try{const d=JSON.parse(s);zr(d)&&(e===null||d.gen===e.g)&&(c=d)}catch{}if(c===null)try{r.removeItem(a)}catch{}return c}function jt(){const t=/^\/_f\/([^/]{1,128})\//.exec(location.pathname);return t?t[1]:""}var tn=/^[^/\\?#]{1,128}$/,Ft=t=>tn.test(t)&&t!=="."&&t!=="..";function It(t,e,r){const n=new URL(t),a="/_f/"+e+"/";if(!e||!n.pathname.startsWith(a)||!Ft(r))return null;const s=n.search.slice(1).split("&").filter(c=>!/^__frame_t(?:=|$)/.test(c)).join("&");return n.origin+"/_f/"+r+"/"+n.pathname.slice(a.length)+(s?"?"+s:"")+n.hash}var Fe="{}";function Ee(t){if(!t)return null;const e={ver:t.ver,handoff:t.handoff};return t.seq!==void 0&&(e.seq=t.seq),t.note!==void 0&&(e.note=t.note),e}function Dt(t,e){return t!==null&&t.note===void 0&&e?.note!==void 0?{...t,note:e.note}:t}function xt(t){const e=t?.k;return e!==null&&typeof e=="object"?e:void 0}function rn(t,e,r,n=null){const a=setTimeout,s=clearTimeout,c=queueMicrotask,d=performance.now.bind(performance),O=new TextEncoder;let w=null,b=null;try{w=history,b=w.replaceState.bind(w)}catch{}const m=(...o)=>{try{console.warn(...o)}catch{}};let R=jt(),M=null;try{M=sessionStorage}catch{}const h={storage:M,fetch:typeof fetch=="function"?fetch.bind(globalThis):null,entry:location.origin+location.pathname+location.search,ver:R,key:n?.k};let p=n?.k;const D=typeof requestAnimationFrame=="function"?requestAnimationFrame:o=>a(()=>o(d()),16);let _=e?.data??{},C=Ee(e?.from),P=e?.gen??0,x=e!==null,W=!1,J=!1,X=null,Te=!1;const Le=new AbortController;let Oe=null,H=null,me=null,qe=!1,oe=()=>{};const l=new Promise(o=>{oe=o});let v=!1,E=!1,I=!1,j,L=null,K=!1,Me=!1,Z=!1,Be=!1,ae=!1,de=!1;const Pe=o=>{for(const u of[Xe(o),be(o)])try{M?.removeItem(u)}catch{}},V=(o,u)=>{try{u!==null&&r.post(o,u)}catch{}},se=()=>ae||=Z&&(H===null||Be),B=()=>{const o={__frame_hot:!0,ready:H!==null,accept:me!==null,demand:!0};de=!ae,de&&(o.booting=!0),v&&(o.readData=!0),I&&(o.threw=!0),L?.assess&&(o.preflight=!0),V(o,X)};let ve=!1,Ne=!1,ie=!1,Ce=!1;const i=()=>{ve||!Te||ie||(ve=!0,V({__frame_reveal_hold:!0},"*"))},g=()=>new Promise(o=>{let u,f=0;const S=F=>{if(u===void 0)u=F;else if(F!==u||++f>=8){o();return}try{D(S)}catch{o()}};try{D(S)}catch{o()}}),y=()=>{ie=!0,V({__frame_reveal_ready:!0},"*")},k=o=>{Ne||(Ne=!0,o.then(u=>{if(u===!1)return;let f=null;try{f=L?.settle?.()??null}catch{}return(f===null?g():new Promise(S=>{a(S,50),Promise.resolve(f).then(S,S)}).then(g)).then(y)}))},Q=()=>{if(Ce||!ie)return;Ce=!0;const o=()=>{try{L?.afterReveal?.()}catch{}};o(),g().then(()=>{o(),y()})},G=(o=!1)=>{if(qe||H===null||!x||!J)return;qe=!0;const u=H,f=_;c(()=>{let S;try{S=u(f)}catch(U){throw oe(!1),U}let F=!1;try{F=typeof S?.then=="function"}catch{}if(!F){oe(!0);return}Promise.resolve(S).then(()=>oe(!0),U=>{oe(!1),c(()=>{throw U})})}),k(o?l:r.dcl.then(()=>l))},ee=o=>typeof o=="string"&&Rt.test(o)?o:void 0,dt=o=>{const u={__frame_hot_restart:!0},f=ee(o?.note);f!==void 0&&(u.note=f),o?.required==="hard-reload"&&(u.required="hard-reload"),V(u,X)},Zt=Object.freeze({get data(){return J||(E=!0),!x&&!v&&(v=!0,J&&B()),_},get from(){return C},get gen(){return P},signal:Le.signal,snapshot(o){typeof o=="function"&&(Oe=o)},ready(o){typeof o!="function"||H!==null||(H=o,i(),B(),W&&V({__frame_hot_ready:!0,gen:P},X),G())},accept(o){typeof o=="function"&&(me=o,B())},restart(o){const u={note:o?.note,required:o?.required};if(J){dt(u);return}const f=j;j={note:ee(f?.note)??u.note,required:f?.required==="hard-reload"||u.required==="hard-reload"?"hard-reload":void 0}}});let Ue=null,Qt=()=>{};const Fn=new Promise(o=>{Qt=o});let In=null;const er=()=>In??=r.dcl.then(()=>{let o=!1;try{o=Ue!==null&&Ue.expect()}catch{}if(!o)return;const u=Ue.maxMs;return new Promise(f=>{Fn.then(f),a(f,u)})}),tr=()=>{if(!K||Me||L===null)return;Me=!0;const o=L;er().then(()=>{try{ie||o.afterStart(xt(e),!1)}catch{}})},rr=o=>{e!==null&&E&&(v=!0),_={},C=null,P=0;try{M?.removeItem(be(n?.k))}catch{}e!==null&&!o&&k(r.dcl.then(()=>H!==null?l:void 0))},Dn=()=>{K=!0,k(er().then(()=>H!==null?l:void 0)),tr()};try{addEventListener("error",()=>{I||H!==null||(I=!0,B())})}catch{}const nr=()=>{a(()=>{!ae&&se()&&de&&B()},0)};try{Z=document.readyState==="complete",Z||addEventListener("load",()=>{Z=!0,nr()},{once:!0})}catch{Z=!0}se(),l.then(()=>{Be=!0,nr()});let he=-1,ht,pt,je=!0,mt=!1,vt,Ke=null;const _t=o=>{const u=Ke===null;Ke=je&&o[0]!=="withheld"?o:["withheld",o[1],Fe];let f=o[0];if(je&&f!=="withheld"){const F={ver:R,handoff:f};ht!==void 0&&(F.seq=ht),pt!==void 0&&(F.note=pt);try{if(M===null)throw new Error("no storage");M.setItem(Xe(p),'{"kv":1,"gen":'+he+',"from":'+JSON.stringify(F)+(vt!==void 0?',"k":'+JSON.stringify(vt):"")+',"data":'+(f==="ok"?o[2]:Fe)+"}")}catch{f="unavailable"}}else{f="withheld",Pe(p);try{L?.release?.()}catch{}}const S={__frame_hot_snapshotted:!0,gen:he,handoff:f,bytes:o[1]};o[3]!==void 0&&(S.errName=o[3]),V(S,X),u&&(f==="snapshot_error"||f==="unclonable"||f==="oversize")&&m("claude.hot: snapshot",f,o[3])},_e=o=>{try{return Mr(o?.name)}catch{return"other"}},ye=(o,u,f=0)=>_t(u===void 0?[o,f,Fe]:[o,f,Fe,_e(u)]),xn=o=>{if(o.gen<=he)return;const u=he>=0;if(he=o.gen,ht=o.seq,pt=ee(o.note),typeof o.key=="string"&&kt.test(o.key)&&o.key!==p&&(Pe(p),p=o.key),je&&=o.handoff!==!1,u){Ke!==null?_t(Ke):mt&&V({__frame_hot_held:!0,gen:he},X);return}Le.abort();const f=Object.freeze({handoff:je,timeoutMs:o.timeoutMs,deadline:o.deadline??Pr}),S=Oe,F=()=>{if(je)try{vt=L?.capture()}catch{}if(S===null){ye("empty");return}let T=!1;const z=a(()=>{T||(T=!0,ye("snapshot_timeout"))},Math.max(0,f.timeoutMs));Promise.resolve().then(()=>S(f)).then(ge=>{if(T)return;T=!0,s(z);let re;try{re=JSON.stringify(ge)}catch(yt){ye("unclonable",yt);return}if(typeof re!="string"){ye("unclonable");return}let ne=re.length;try{ne=O.encode(re).length}catch{}if(ne>262144){ye("oversize",void 0,ne);return}_t(["ok",ne,re])},ge=>{T||(T=!0,s(z),ye("snapshot_error",ge))})};let U=null;try{U=L?.holdForIme()??null}catch{}if(U===null)F();else{mt=!0,V({__frame_hot_held:!0,gen:he},X);const T=()=>{mt=!1,F()};U.then(T,T)}},Hn=o=>{if(!W||x||H===null||o.gen!==P)return;let u=null;try{u=Ct(M,n&&{k:n.k,g:o.gen})}catch{}if(u!==null&&u.gen!==o.gen){u=null;try{M?.removeItem(be(n?.k))}catch{}}_=u?.data??{},C=Dt(Ee(u?.from??o.from),Ee(o.from)),u!==null&&(P=u.gen),x=!0,W=!1;const f=xt(u);l.then(S=>{try{S&&L?.afterStart(f,!0)}catch{}}),G(!0)};let Ge=0;const qn=o=>{const u=me;if(u===null||o.id<=Ge)return;Ge=o.id;const f=L?.assess;if(o.preflight===void 0||f===void 0){or(o,u);return}let S=!1;const F=z=>{S||(S=!0,s(T),o.id===Ge&&or(o,u,z))},U=()=>F(f.timeout(o)),T=a(U,Br+100);f.run(o,window).then(F,U)},or=(o,u,f)=>{let S,F=!1,U=!1,T,z,ge=null;const re=A=>{if(U)return!1;if(T!==void 0&&T!==A)return m(`claude.hot: u.${A}() ignored - u.${T}() was called first`),!1;const te=T===void 0;return T=A,te},ne=A=>{T="restart",m(`claude.hot: ${A} - restarting`)},yt=()=>{if(!re("adopt")||o.id!==Ge)return;const A=o.to.ver;if(ze.required!=="none"){ne(`u.adopt() needs required 'none', it is '${ze.required}'`);return}if(!Ft(A)){ne("u.adopt() cannot address this version");return}if(!R||A===R)return;const te=R,Y=h.entry;let $e="",wt,we=null,We;try{$e=location.href,wt=w.state,we=It($e,te,A),we!==null&&(b(wt,"",we),location.pathname.startsWith("/_f/"+A+"/")?we=location.href:We="navigate event canceled")}catch(Et){We=_e(Et)}if(We!==void 0){z="adopt_failed",ne(`adopt_failed ${We}; URL not changed`);return}we===null?(z="adopt_skipped",m(`claude.hot: adopt_skipped - page already left /_f/${te}/; URL not changed, update still applied`)):z="adopted",R=h.ver=A;try{h.entry=It(Y,te,A)??Y}catch{}const bt=we;ge=()=>{if(R===A){if(bt!==null)try{if(location.href!==bt)m("claude.hot: adopt_revert_skipped - update not applied; URL left where the page navigated");else{if(b(wt,"",$e),location.href!==$e){m("claude.hot: adopt_revert_failed navigate event canceled - URL still at the new version");return}z="adopt_reverted",m("claude.hot: adopt_reverted - adopt() was called but the handler threw; URL restored")}}catch(Et){m(`claude.hot: adopt_revert_failed ${_e(Et)} - URL still at the new version`);return}R=h.ver=te,h.entry=Y,bt===null&&(z=void 0)}}},ze=Object.freeze({from:{ver:o.from.ver,seq:o.from.seq},to:{ver:o.to.ver,seq:o.to.seq},changed:Zr(o.changed),required:o.required,deadline:o.deadline,adopt:yt,defer(){return re("defer")&&ze.deadline.now&&ne("u.defer() past the deadline"),Nt},restart(A){return re("restart"),T==="restart"&&!U&&(S??=ee(A?.note),F||=A?.required==="hard-reload"),Nt},...f?.update}),Bn=(A,te)=>{U=!0,A==="threw"?(ge?.(),S??=_e(te).toLowerCase()):T===void 0&&m(A==="timeout"?"claude.hot: accept handler did not answer in time - restarting":"claude.hot: accept handler settled without defer/restart/adopt - restarting");const Y={__frame_hot_verdict:!0,id:o.id};Y.verdict=A==="threw"||T===void 0||T==="restart"?"restart":T==="adopt"?"applied":"deferred",Y.verdict==="restart"&&(F&&(Y.required="hard-reload"),S!==void 0&&(Y.note=S)),z!==void 0&&(Y.verdict==="applied"||z!=="adopted")&&(Y.adopt=z),V(Object.assign(Y,f?.verdict),X)};let ar=!1;const gt=(A,te)=>ar?!1:(ar=!0,s(Un),Bn(A,te),!0),Un=a(()=>gt("timeout"),o.verdictTimeoutMs);Promise.resolve().then(()=>u(ze)).then(()=>gt("settled"),A=>{!gt("threw",A)&&T==="adopt"&&dt({note:_e(A).toLowerCase()}),m("claude.hot: accept",_e(A))})};try{t.hot===void 0&&Object.defineProperty(t,"hot",{value:Zt,writable:!1,configurable:!1,enumerable:!1})}catch{}return{hot:Zt,boot:h,afterConnect(){Te=!0,(e!==null||H!==null)&&i()},onInit(o,u){X=u,J=!0;const f=Gr(o)?o:null;f?.phase==="final"&&e!==null&&e.gen===f.gen?(x=!0,C=Dt(C,Ee(f.from)),Dn()):(W=f?.phase==="pending",rr(W),x=!W,P=f?.gen??0,C=Ee(f?.from)),B(),de&&a(()=>{ae||(ae=!0,B())},xr),W&&H!==null&&V({__frame_hot_ready:!0,gen:P},u),j!==void 0&&(dt(j),j=void 0),G()},onNoInit(){J=!0,rr(!1),x=!0,G()},onShell(o){return o?.__frame_revealed===!0?(Q(),!1):$r(o)?(xn(o),!0):Wr(o)?(Hn(o),!0):Qr(o)?(qn(o),!0):!1},attachExtras(o){L=o,tr(),o.assess&&B()},inSlot:()=>be(p),hydration(o,u){Ue??={expect:o,maxMs:u}},hydrated(){Qt()},carried(){return x?_:{}},presented:()=>ie}}var $n="frame_ldx_runtime",nn="frame_ldx_build",Wn="script#an-form",on=256;function Ht(t,e,r){for(const n of t)r(n)&&t.delete(n);t.size>=on&&!t.has(e)&&t.delete(t.values().next().value),t.add(e)}function Je(t,e,r){try{const n=t[e];if(typeof n!="function")return;t[e]=function(...a){const s=n.apply(this,a);try{r(this)}catch{}return s}}catch{}}var Ze;function an(){if(Ze)return Ze;const t={media:new Set,contexts:new Set,onStart:null,onPause:null};Ze=t;const e=window.HTMLMediaElement?.prototype;e&&(Je(e,"play",a=>{Ht(t.media,a,s=>s.paused),t.onStart?.(a)}),Je(e,"pause",a=>t.onPause?.(a)));const r=window.AudioContext,n=window.AudioNode?.prototype;return r&&n&&Je(n,"connect",a=>{const s=a.context;s instanceof r&&(Ht(t.contexts,s,c=>c.state==="closed"),t.onStart?.(s))}),t}function sn(t){let e=window;for(let r=0;e.parent&&e.parent!==e&&r<8;r++)if(e=e.parent,t(e))return!0;return!1}function ln(){let t=null;const e=()=>t??parent,r=n=>t?n===t:sn(a=>a===n);return{post(n,a){if(t){e().postMessage(n,a);return}let s=parent;for(let c=0;c<8&&(s.postMessage(n,a),!(!s.parent||s.parent===s));c++)s=s.parent},on(n){const a=s=>{const c=s.source;r(c)&&n(s.data,s.origin,s.isTrusted,()=>{t??=c})};return addEventListener("message",a),()=>removeEventListener("message",a)},port:n=>({post(a,s){if(s?.activation){e().postMessage(a,{targetOrigin:n,includeUserActivation:!0});return}if(s?.transfer){e().postMessage(a,n,s.transfer);return}e().postMessage(a,n)},on(a,s){const c=d=>{r(d.source)&&d.origin===n&&a(d.data,d)};return addEventListener("message",c,s),()=>removeEventListener("message",c,s)}})}}function cn(){const t={post:()=>{},on:()=>()=>{}};return{...t,port:()=>t}}var un=500,fn=2e4,dn="data-token-reads",hn="data-frame-refused-watch",pn="data-frame-unsupported",mn=/(?:^|\s)stylesheet(?:\s|$)/i;function vn(t,e){let r="";if(t instanceof HTMLScriptElement?r=t.src:t instanceof HTMLLinkElement&&mn.test(t.rel)&&(r=t.href),!r)return null;try{const n=new URL(r);return n.origin===location.origin&&n.pathname.startsWith(e)?n.origin+n.pathname:null}catch{return null}}function _n(t,e,r){if(!t||e!=="query")return;const n="/_f/"+t+"/";document.documentElement.setAttribute(hn,"");const a=location.href,s=fetch,c=setTimeout,d={method:"HEAD",cache:"no-store",credentials:"same-origin"},O=h=>h.ok||h.status===304;let w=!1,b=!1;const m=()=>removeEventListener("error",M,!0),R=async h=>{const p=await s(h,d);if(O(p))b=!0;else if(p.status===403){const D=await s(a,d);if(O(D)){const _=(await s(h,d)).status;_===403?(b=!0,document.documentElement.setAttribute(pn,""),r()):_<500&&(b=!0)}else D.status>=400&&D.status<500&&(b=!0)}},M=h=>{if(b||w)return;if(document.documentElement.hasAttribute(dn)){b=!0,m();return}const p=vn(h.target,n);p&&(w=!0,c(()=>{R(p).catch(()=>{}).finally(()=>{w=!1,b&&m()})},un))};addEventListener("error",M,!0),addEventListener("load",m,{once:!0}),c(m,fn)}var Qe="__frame_scroll",yn=150,gn=310,wn=160,bn=3e4;function En(){let t=0,e=!1,r=!1,n=!1,a=0,s=null;const c=_=>{try{sessionStorage.setItem(Qe,JSON.stringify({y:_}))}catch{}},d=()=>{if(clearTimeout(t),s===null)return;const _=s;s=null,c(_)},O=()=>{if(e){e=!1;return}r=!0,s=scrollY,clearTimeout(t),t=setTimeout(d,yn)};try{addEventListener("scroll",O,{passive:!0}),addEventListener("pagehide",d)}catch{}const w=()=>{let _;try{_=sessionStorage.getItem(Qe)}catch{return null}if(_===null)return null;let C;try{C=JSON.parse(_)}catch{C=null}const P=C?.y;if(!(typeof P=="number"&&Number.isFinite(P)&&P>=0)){try{sessionStorage.removeItem(Qe)}catch{}return null}return P};let b=!1;const m=_=>{try{const C=scrollY;scrollTo({top:_,left:0,behavior:"instant"}),a=_,n=!0,clearTimeout(t),s=null,c(_);const P=scrollY;P!==C&&(e=!0),P!==_&&!b&&(b=!0,addEventListener("load",()=>{try{if(scrollY===P){const x=w();m(x!==null?x:a)}}catch{}},{once:!0}))}catch{}},R=()=>{try{return!!location.hash}catch{return!0}};let M=!1;const h=()=>{try{if(M||innerWidth>gn||innerHeight>wn)return;M=!0;const _=Date.now(),C=()=>{try{removeEventListener("resize",C)}catch{}if(Date.now()-_>bn||r||R())return;const P=w();m(P!==null?P:a)};addEventListener("resize",C)}catch{}};let p=!1,D=!1;return{restore(){if(p||(p=!0,R()))return;const _=w();_!==null&&(m(_),h())},promoted(){if(D||(D=!0,R()))return;const _=w();_!==null?(m(_),h()):n&&m(a)}}}function Sn(t,e,r,n){let a=null;try{a=window.trustedTypes?.createPolicy("frame-runtime",{createScriptURL:O=>O})??null}catch{}const s=window.Worker,c=s?.prototype,d=Object.freeze({Worker:s,workerOn:c?.addEventListener,workerPost:c?.postMessage,workerTerminate:c?.terminate,fetch:window.fetch.bind(window),preventDefault:Event.prototype.preventDefault,now:Date.now,policy:a,origins:e});r(t).then(O=>O?.bootTopLevel?O.bootTopLevel(d,n):n.settle()).catch(()=>n.settle())}var Vn="modulepreload",Xn=function(t){return"/"+t},Yn={},An=function(e,r,n){let a=Promise.resolve();function s(c){const d=new Event("vite:preloadError",{cancelable:!0});if(d.payload=c,window.dispatchEvent(d),!d.defaultPrevented)throw c}return a.then(c=>{for(const d of c||[])d.status==="rejected"&&s(d.reason);return e().catch(s)})},kn=window===top,qt=Object.getOwnPropertyDescriptor(window,"claude"),Ie=en(kn,window.__FRAME_PREAMBLE?.topLevel,qt?.writable===!1),et=typeof Ie=="object"&&Ie[0],N=et?cn():ln();(function(){const t=Object.defineProperty,e=globalThis,r=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let n=0;for(let a=0;a<r.length;a++){const s=r[a];try{t(e,s,{value:void 0,writable:!1,configurable:!1})}catch{try{delete e[s]}catch{}try{t(e,s,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof e[s]=="function"&&n++}if(n&&Ie==="framed")try{N.post({__frame_rtc_lockdown_failed:n},"*")}catch{}})();var Bt=1e4,Rn=2e3,tt=2e3,rt=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function Ut(t){for(const e of rt)if(e.endsWith(":*"))try{const r=new URL(t);if(`${r.protocol}//${r.hostname}:*`===e)return!0}catch{}else if(t===e)return!0;return!1}var Se=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),Ae=window.__FRAME_PREAMBLE?.transforms,nt=window.__FRAME_PREAMBLE?.comments,ot=window.__FRAME_PREAMBLE?.translate,ke=window.__FRAME_PREAMBLE?.ldx,at=sr(window.__FRAME_PREAMBLE?.cred);function Kt(t){return An(()=>import("/_runtime/"+t),void 0)}var Re=new Set,Gt=setTimeout,Tn=fetch,Ln=AbortController,On=800+800*Math.random(),Mn=3e3,De=null,zt=new Map;function Pn(t,e){let r=zt.get(t);return r||zt.set(t,r=Nn(t,e)),r}function Nn(t,e){if(De?.has(t))return Promise.resolve("csp");if(navigator.onLine===!1)return Promise.resolve("offline");const r=new Ln;let n=!1;return Gt(()=>{n=!0,r.abort()},Mn),Tn("/_runtime/"+t,{signal:r.signal}).then(a=>(r.abort(),a.ok?/javascript/i.test(a.headers.get("content-type")??"")?e instanceof Error&&/:\d+:\d+\)?$/m.test(e.stack??"")?"eval":"served":"mime":"http"),()=>n?"timeout":De?.has(t)?"csp":"net")}function ue(t){if(!De){const e=De=new Set;try{document.addEventListener("securitypolicyviolation",r=>{const n=/\/_runtime\/([^/?#]+)/.exec(r.blockedURI);n&&r.disposition!=="report"&&e.add(n[1])})}catch{}}return Kt(t).catch(()=>new Promise(e=>Gt(e,On)).then(()=>Kt(t+"?r=1")).then(e=>(e!==void 0&&Re.add(t),e)))}function $t(t,e,r){return{contract:t.contract,changes:new Set(t.changes??[]),flags:new Set(t.flags??[]),capabilities:t.capabilities??{},capBudgets:t.capBudgets??{},brokerGen:t.brokerGen,transforms:new Map,shellOrigin:e,shell:r,mount:ft,hooks:xe,pipe:()=>({wrap:(n,a)=>(...s)=>{try{return a(...s)}catch(c){return Promise.reject(c)}}})}}var pe=null,$=null;function Wt(t,e,r){try{Object.defineProperty(t,e,{value:r,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(t,e,{value:r,writable:!1,configurable:!0,enumerable:!0})}catch{}}}var st=!1,xe={editBefore:null,edit:null};function Cn(t,e,r=!1){const n=[];let a;if(r)try{xe.editBefore?.(t)}catch{}for(const s of t.elements){const c=document.querySelector(`[data-id="${s.target}"]`);if(!c){a=s.target;break}if([...Object.keys(s.attrsSet??{}),...s.attrsRemoved??[]].some(d=>!fr(d)||dr(c,d))){a=s.target;break}if(s.text!==void 0&&(!vr(c)||wr(c))){a=s.target;break}for(const[d,O]of Object.entries(s.attrsSet??{}))if(!Xt(c,d)){try{c.setAttribute(d,O)}catch{}Vt(c,d,O)}for(const d of s.attrsRemoved??[])Xt(c,d)||(c.removeAttribute(d),Vt(c,d,null));typeof s.text=="string"&&yr(c,s.text),n.push(s.target)}if(r)try{xe.edit?.(t.seq,n,a)}catch{}if(a!==void 0){N.post({__frame_patch_miss:{seq:t.seq}},e);return}try{document.dispatchEvent(new CustomEvent("claude:edit",{detail:{seq:t.seq,targets:n}}))}catch{}}function Vt(t,e,r){if(!(t instanceof HTMLInputElement))return;const n=e.toLowerCase();n==="checked"?t.checked=r!==null:n==="value"&&t.type!=="file"&&(t.value=r??"")}function Xt(t,e){const r=e.toLowerCase(),n=t;return r==="data-id"||(r==="value"||r==="checked")&&(n.__artifactSecret===!0||/^(password|hidden|file)$/.test(n.type??"")||/(^|\s)(cc-|one-time-code|current-password|new-password)/i.test(`${t.getAttribute("autocomplete")??""} ${n.autocomplete??""}`))}function Yt(t){const e=document.documentElement;t==="light"||t==="dark"?(e.dataset.theme=t,e.style.colorScheme=t,st=!0):st&&(delete e.dataset.theme,e.style.colorScheme="",st=!1)}var fe=new Map,it=null;function lt(){let t;const e={u:new Promise(r=>{t=r}),r:r=>{e.done=!0,t(r)},done:!1,nulled:!1};return e}function He(t,e){t.nulled=!0,t.ver=e,t.r(null)}function ct(t,e){for(const[r,n]of fe)n.done||(e&&n.asked?e(r,n):He(n,t))}var jn=Object.freeze(Object.assign(Object.create(null),{call:Function.prototype.call,apply:Function.prototype.apply,bind:Function.prototype.bind})),ut=!1,ft=(t,e)=>{let r=fe.get(t);if(r?.nulled&&ut)r=lt(),fe.set(t,r);else if(!r||r.done){r?.nulled&&$&&N.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:t,phase:"install"}},$);return}const n=typeof e=="function"?Object.setPrototypeOf(e,jn):Object.assign(Object.create(null),e);typeof n.then=="function"&&delete n.then,r.want=void 0,r.r(Object.freeze(n))};function Jt(){const t=qt?.value??{};Wt(window,"claude",t);for(const e of Object.keys(Se)){if(t[e]!==void 0){Wt(t,e,t[e]);continue}fe.set(e,lt())}if(t.use===void 0){const e=r=>{if(typeof r!="string"||!Object.hasOwn(Se,r))return Promise.resolve(null);let n=fe.get(r);return n?(it&&(n.nulled||n.want!==void 0)&&(n=it(r,n)),n.asked=!0,n.u):Promise.resolve(t[r]??null)};try{Object.defineProperty(t,"use",{value:e,writable:!0,configurable:!0,enumerable:!1})}catch{}}return t}if(Ie==="framed"){let t;const e=Ae&&ce.test(Ae)?ue(Ae).catch(l=>{t={f:Ae,e:l}}):Promise.resolve(void 0),r=l=>{if(l.type==="auxclick"&&l.button!==1)return;const v=l.target,E=v&&v.closest?v.closest("a[href],area[href]"):null;if(!E)return;const I=E.getAttribute("href");if(!I)return;let j;try{j=new URL(I,document.baseURI)}catch{return}if((j.protocol==="http:"||j.protocol==="https:")&&j.origin!==location.origin){l.preventDefault();const L=(E.getAttribute("target")??"").toLowerCase(),K=l.type==="auxclick"||l.metaKey||l.ctrlKey||l.shiftKey||l.altKey||!["","_self","_top","_parent"].includes(L);N.post({__frame_nav:!0,url:j.href,newTab:K},"*")}};addEventListener("click",r,!0),addEventListener("auxclick",r,!0);const n={},a=l=>{l.isTrusted&&(n.pointer=!0)},s=l=>{l.isTrusted&&(n.click=!0)};addEventListener("pointermove",a,{capture:!0,passive:!0}),addEventListener("click",s,{capture:!0,passive:!0});const c={cb:null};addEventListener("keydown",l=>c.cb?.(l),!0);const d={cb:null};addEventListener("keydown",l=>d.cb?.(l));const O=an();e.then(l=>l?.installEscapeForward?.(c,v=>{$&&N.post(v,$)})),e.then(l=>{try{l?.installFocusKeep?.()}catch{}}),e.then(l=>{if(!l?.wireNav)return;const v=N.port("*");l.wireNav(v),removeEventListener("click",r,!0),removeEventListener("auxclick",r,!0),removeEventListener("pointermove",a,!0),removeEventListener("click",s,!0),l.wireEngagement?.(n,v,O)});let w=null;try{w=En()}catch{}const b=document.readyState==="loading"?new Promise(l=>document.addEventListener("DOMContentLoaded",()=>l(),{once:!0})):Promise.resolve();let m=null,R=null;try{R=Ir(window.name),m=Ct(null,R)}catch{}const M=Jt();let h=null;try{h=rn(M,m,{post:(l,v)=>N.post(l,v),dcl:b},R)}catch{}e.then(l=>{try{h&&l?.installHotExtras?.(h)}catch{}});let p=null;const D=()=>Array.isArray(p?.flags)&&p.flags.includes("frame_ldx_runtime")&&!!ke&&ce.test(ke)&&document.querySelector("script#an-form")!==null;try{h?.hydration(D,Dr)}catch{}let _=null,C=0;const P=N.on((l,v,E,I)=>{Ut(v)&&Ar(l)&&(I(),p=l.__frame_init,$=v,P(),clearTimeout(C),_?.())});if(at)for(const l of rt)try{l.endsWith(":*")||N.post({__frame_cred:at},l)}catch{}N.post({__frame_connect:!0},"*");try{h?.afterConnect()}catch{}const x=setTimeout,W=clearTimeout;let J=()=>NaN,X=()=>[];try{J=performance.now.bind(performance),X=performance.getEntriesByType.bind(performance)}catch{}let Te=0;const Le=()=>{try{N.post({__frame_alive:!0},"*")}catch{}Te=x(Le,Rn)},Oe=()=>W(Te);Le(),addEventListener("load",Oe,{once:!0});const H=new Promise(l=>{_=l,C=setTimeout(()=>{P(),l()},Bt)}),me=new WeakSet;addEventListener("error",l=>{l.target&&me.add(l.target)},!0);try{_n(jt(),at,()=>{e.then(l=>{try{l?.drawRefusedNotice?.()}catch{}})})}catch{}const qe=()=>{let l=[];try{l=[...document.querySelectorAll("link[rel~=stylesheet]:not([rel~=alternate])")].filter(E=>!E.sheet&&!E.disabled&&!me.has(E)&&E.getAttribute("href")&&URL.canParse(E.href)&&(!E.media||matchMedia(E.media).matches))}catch{}let v=l.length;return v===0?Promise.resolve():new Promise(E=>{try{const I=tt-J(),j=x(E,I>0?I<tt?I:tt:0),L=()=>{--v===0&&(W(j),E())};for(const K of l)K.addEventListener("load",L,{once:!0}),K.addEventListener("error",L,{once:!0})}catch{E()}})};b.then(()=>{try{w?.restore()}catch{}}),Promise.all([H,b,e]).then(([,,l])=>{if(p?.hostOverlays!==!0||!$)return;let v=!1;try{v=l?.declaresCover?.()===!0}catch{}N.post({__frame_layout:{cover:v}},$)});const oe={cb:null};N.on((l,v)=>{if(Ut(v)&&kr(l)){try{w?.promoted()}catch{}oe.cb?.()}}),H.then(async()=>{if(!p||!$){ct();try{h?.onNoInit()}catch{}return}if(Yt(p.theme),p.hostVisible===!1&&e.then(i=>i?.applyHostVisible?.(!1,O)),p.hostKeys!==void 0){const i=$,g=p.hostKeys;e.then(y=>y?.installHostKeyForward?.(d,g,k=>N.post(k,i)))}try{h?.onInit(p.hot,$)}catch{}const l=$,v=N.port(l),E=(i,g)=>N.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:i,phase:g}},l),I=(i,g,y)=>{new Promise(k=>k(Pn(g,y))).then(k=>E(i,k),()=>E(i))},j=i=>N.post({__frame_cap_recovered:{cap:i}},l);let L=p.brokerGen;const K=()=>h?.boot.ver??"",Me=K(),Z=(i,g)=>{const y=K();W(g.t),g.want=y,g.t=x(()=>{g.done||He(g,y)},Bt),N.post({__frame_cap_want:!0,cap:i,ver:y},l)},Be=(i,g)=>{const y=fe.get(i.cap),k=Se[i.cap];if(!g||!y||y.done||y.want!==i.ver||!ce.test(k))return;if(W(y.t),y.want=void 0,L=i.brokerGen??L,i.ver!==K()){Z(i.cap,y);return}if(!i.grant||i.cap==="network"){He(y,i.ver);return}const Q=pe,G=pe={...Q,capabilities:{...Q.capabilities,[i.cap]:i.grant},capBudgets:{...Q.capBudgets,[i.cap]:{...Q.capBudgets[i.cap],...i.budgets}}};ue(k).then(ee=>{Re.has(k)&&j(i.cap),G.brokerGen=L,ut=!0;try{ee?.install?.(G)}catch{E(i.cap,"install")}finally{ut=!1}},ee=>I(i.cap,k,ee)).then(()=>{y.done||He(y,i.ver)})};let ae=!1,de=!1;N.on((i,g,y)=>{if(g!==l)return;try{if(h?.onShell(i))return}catch{}if(Tr(i)&&Yt(i.__frame_theme.theme),Xr(i)&&Be(i,y),y&&Yr(i)&&(L=i.brokerGen??L),Rr(i)){const G=i.__frame_host_visible.visible;e.then(ee=>ee?.applyHostVisible?.(G,O))}Sr(i)&&Cn(i.__frame_patch,l,y);const k=i?.__fc_mode;k&&typeof k=="object"&&!ae&&nt&&ce.test(nt)&&(ae=!0,ue(nt).then(G=>G.install?.(l,k.on===!0,v)).catch(()=>{}));const Q=i?.__ft_cmd;Q&&typeof Q=="object"&&!de&&ot&&ce.test(ot)&&(de=!0,ue(ot).then(G=>G.install?.(l,Q,v)).catch(()=>{}))});const Pe=Object.keys(p.capabilities??{}).filter(i=>Object.hasOwn(Se,i)).map(i=>[i,Se[i]]).filter(i=>typeof i[1]=="string"&&ce.test(i[1])),V=await Promise.allSettled(Pe.map(([,i])=>ue(i))),se=await e,B=l;if(se?.buildBoot||(t?I("_transforms",t.f,t.e):E("_transforms")),se?.buildBoot)try{pe=se.buildBoot(p,se.TRANSFORMS??{},{shellOrigin:B,mount:ft,hooks:xe,shell:v},i=>N.post({__frame_cap_telemetry:i},B))}catch{E("_transforms","install"),pe=$t(p,B,v)}else pe=$t(p,B,v);se?.buildBoot&&Re.has(Ae??"")&&j("_transforms");const ve=pe;ve.brokerGen=L,V.forEach((i,g)=>{const[y,k]=Pe[g];if(i.status!=="fulfilled"){I(y,k,i.reason);return}Re.has(k)&&j(y);try{i.value?.install?.(ve)}catch{E(y,"install")}});const Ne=p.capWants===!0;Ne&&(it=(i,g)=>{const y=K();if(!y)return g;if(!g.nulled)return g.want!==y&&Z(i,g),g;if(y===g.ver)return g;const k=lt();return fe.set(i,k),Z(i,k),k}),ct(Me,Ne&&K()!==Me?Z:void 0),await b,await qe(),Oe();const ie=ir(X,J);N.post(ie?{__frame_ready:!0,nav:ie}:{__frame_ready:!0},$),e.then(i=>{i?.installSizeReporter?.(B,oe,v),i?.installPaintReporter?.(v)});let Ce=!1;try{Ce=D()}catch{}ke&&Ce?ue(ke).then(i=>i?.boot?.({shellOrigin:l,build:ve.flags.has(nn),hot:h?.hot??null,carried:h?.carried(),presented:()=>h?.presented()??!0})).catch(()=>!1).then(i=>{h?.hydrated(),i!==!0?E("_ldx"):Re.has(ke)&&j("_ldx")}):h?.hydrated()})}else et&&(Jt(),Sn(et,rt,ue,{settle:ct,mount:ft}))})();</script><!-- /frame-runtime -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mathematics — X Horizon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400&amp;family=IBM+Plex+Sans:wght@400;500&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060605; --ink:#f4f2ec; --ink-dim:#9b9a93;
+    --line:rgba(244,242,236,0.16); --line-soft:rgba(244,242,236,0.06);
+    --serif:'Fraunces',Georgia,'Times New Roman',serif;
+    --sans:'IBM Plex Sans',-apple-system,Segoe UI,Arial,sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); -webkit-font-smoothing:antialiased; line-height:1.6;}
+  a{color:inherit;} button,select,input{font:inherit;}
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px;}
+
+  header.bar{display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 24px; border-bottom:1px solid var(--line-soft); flex-wrap:wrap;}
+  .mark{font-family:var(--mono); font-size:13px; letter-spacing:0.02em; color:var(--ink-dim);}
+  .mark b{color:var(--ink); font-weight:500;}
+  .dl-btn{background:transparent; border:1px solid var(--line); color:var(--ink); padding:8px 14px; font-family:var(--mono); font-size:12.5px; cursor:pointer; border-radius:0;}
+  .dl-btn:hover{border-color:var(--ink);}
+  .dl-btn:focus-visible{outline:2px solid var(--ink); outline-offset:3px;}
+
+  .hero{position:relative; padding:80px 24px 0; text-align:center; overflow:hidden;
+    background-image:radial-gradient(circle, rgba(244,242,236,0.07) 1px, transparent 1px); background-size:26px 26px; background-position:center 0;}
+  .hero::after{content:""; position:absolute; inset:0; top:0; height:420px; background:radial-gradient(ellipse at center, transparent 30%, var(--bg) 88%); pointer-events:none;}
+  .hero-inner{position:relative;}
+  .eyebrow{font-family:var(--mono); font-size:13px; color:var(--ink-dim);}
+  h1{font-family:var(--serif); font-weight:400; font-size:clamp(44px,8vw,76px); margin:14px 0 16px; line-height:0.98; letter-spacing:-0.01em;}
+  .sub{font-family:var(--serif); font-style:italic; font-size:clamp(16px,2.1vw,20px); max-width:520px; margin:0 auto 40px; line-height:1.5;}
+
+  .hero-lab{position:relative; max-width:600px; margin:0 auto; text-align:left; padding-bottom:64px;}
+  .hero-lab .lab-label{text-align:center; margin-bottom:14px;}
+  .hero-lab select{background:var(--bg); border:1px solid var(--line); color:var(--ink); padding:8px 12px; font-family:var(--mono); font-size:13px;}
+
+  .index-head{padding:8px 24px 8px; border-top:1px solid var(--line-soft);}
+  .index-head p{color:var(--ink-dim); font-size:15px; max-width:560px; margin:0;}
+
+  .list{padding:8px 24px 40px;}
+  details{border-bottom:1px solid var(--line);}
+  details:first-of-type{border-top:1px solid var(--line);}
+  summary{list-style:none; cursor:pointer; padding:22px 0; display:flex; align-items:baseline; gap:16px;}
+  summary::-webkit-details-marker{display:none;}
+  summary:focus-visible{outline:2px solid var(--ink); outline-offset:4px;}
+  .num{font-family:var(--mono); font-size:14px; color:var(--ink-dim); width:16px; flex:none;}
+  .row-title{font-family:var(--serif); font-size:clamp(19px,3vw,23px); font-weight:400; flex:1 1 auto;}
+  .tag{font-family:var(--sans); font-size:12.5px; color:var(--ink-dim); flex:none; padding-top:3px;}
+  .chev{flex:none; width:14px; height:14px; position:relative; margin-top:6px;}
+  .chev::before,.chev::after{content:""; position:absolute; background:var(--ink-dim); border-radius:1px;}
+  .chev::before{width:14px; height:1.4px; top:6px;}
+  .chev::after{width:1.4px; height:14px; left:6px; transition:transform .18s ease;}
+  details[open] .chev::after{transform:scaleY(0);}
+  @media (prefers-reduced-motion:reduce){ details[open] .chev::after{transition:none;} }
+
+  .row-body{padding:0 0 32px 32px; max-width:640px;}
+  .row-body > p{margin:0 0 14px; font-size:15.5px;}
+  .formula{font-family:var(--mono); font-size:14.5px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:13px 0; margin:0 0 14px; overflow-x:auto; white-space:nowrap;}
+  .applied{font-size:14.5px; color:var(--ink-dim); margin:0 0 6px;}
+  .applied strong{color:var(--ink); font-weight:500;}
+
+  .section-label{font-family:var(--mono); font-size:12px; color:var(--ink-dim); letter-spacing:0.02em; margin:26px 0 10px;}
+  .lecture p{font-size:14.5px; margin:0 0 10px;}
+  .lecture strong{color:var(--ink); font-weight:500;}
+
+  .lab-wrap{margin:6px 0 20px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:16px 0;}
+  .lab-wrap canvas{width:100%; height:auto; display:block; margin-bottom:10px;}
+  .lab-controls{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:2px;}
+  .lab-controls label{display:flex; align-items:center; gap:8px; flex:1 1 200px; font-family:var(--mono); font-size:12.5px; color:var(--ink-dim);}
+  .lab-controls input[type=range]{flex:1; accent-color:var(--ink); background:transparent;}
+  .lab-controls .v{color:var(--ink); min-width:48px; text-align:right; font-family:var(--mono); font-size:12.5px;}
+  .lab-btn{background:transparent; border:1px solid var(--ink); color:var(--ink); padding:7px 14px; font-size:12.5px; cursor:pointer; margin-right:8px;}
+  .lab-btn:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
+  .lab-readout{font-family:var(--mono); font-size:13px; color:var(--ink); margin:8px 0 0;}
+
+  .quiz{margin:0 0 18px;}
+  .quiz-q{font-size:14.5px; margin:0 0 10px;}
+  .quiz-opt{display:block; width:100%; text-align:left; background:transparent; border:1px solid var(--line); color:var(--ink); padding:9px 12px; font-size:14px; margin-bottom:7px; cursor:pointer; border-radius:0;}
+  .quiz-opt:hover:not(:disabled){border-color:var(--ink);}
+  .quiz-opt:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
+  .quiz-opt.correct{border-color:var(--ink); background:rgba(244,242,236,0.08);}
+  .quiz-opt.incorrect{opacity:0.5; text-decoration:line-through;}
+  .quiz-feedback{font-size:13.5px; color:var(--ink-dim); margin:6px 0 0;}
+
+  .practice{margin:0 0 6px;}
+  .practice-q{font-size:14.5px; margin:0 0 12px;}
+  .practice-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px;}
+  .practice-input{background:transparent; border:none; border-bottom:1px solid var(--line); color:var(--ink); font-family:var(--mono); font-size:15px; padding:6px 2px; width:110px;}
+  .practice-input:focus{outline:none; border-bottom-color:var(--ink);}
+  .practice-check{background:transparent; border:1px solid var(--ink); color:var(--ink); padding:8px 16px; font-size:13.5px; cursor:pointer; border-radius:0;}
+  .practice-feedback{font-size:13.5px; margin:2px 0 8px;}
+  .practice-feedback.ok{color:var(--ink);}
+  .practice-feedback.no{color:var(--ink-dim);}
+  details.solution{border:none; margin-top:2px;}
+  details.solution summary{padding:6px 0; font-size:13px; color:var(--ink-dim); display:inline-flex; gap:6px;}
+  .sol-text{font-size:14px; color:var(--ink-dim); padding:0 0 8px 0; display:none;}
+  details.solution[open] + .sol-text{display:block;}
+
+  footer{padding:44px 24px 64px; border-top:1px solid var(--line-soft); text-align:center; color:var(--ink-dim); font-size:13.5px;}
+
+  .status-badge{font-family:var(--mono); font-size:11px; color:var(--ink-dim); border:1px solid var(--line); padding:3px 9px; flex:none; align-self:center;}
+  .status-badge[data-state="mastered"]{color:var(--ink); border-color:var(--ink);}
+
+  .dash{padding:0 24px; border-top:1px solid var(--line-soft);}
+  .dash-inner{padding:40px 0;}
+  .dash-bar{height:7px; background:rgba(244,242,236,0.08); margin:16px 0 8px; overflow:hidden;}
+  .dash-bar-fill{height:100%; background:var(--ink); width:0%; transition:width .35s ease;}
+  .dash-pct{font-family:var(--mono); font-size:13px; color:var(--ink-dim); margin:0 0 24px;}
+  .dash-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:18px; margin-bottom:20px;}
+  .dash-stat{border-top:1px solid var(--line); padding-top:10px;}
+  .dash-stat .n{display:block; font-family:var(--serif); font-size:27px; color:var(--ink); line-height:1.1;}
+  .dash-stat .l{display:block; font-family:var(--mono); font-size:11px; color:var(--ink-dim); margin-top:5px;}
+  #resetProgressBtn{margin:0;}
+
+  .levels{padding:0 24px; border-top:1px solid var(--line-soft);}
+  .levels-inner{padding:32px 0;}
+  .level-row{display:flex; flex-wrap:wrap; gap:8px 18px; align-items:baseline; padding:14px 0; border-bottom:1px solid var(--line-soft);}
+  .level-row:last-child{border-bottom:none;}
+  .level-tag{font-family:var(--mono); font-size:12.5px; color:var(--ink-dim); flex:0 0 220px;}
+  .level-topics{font-size:14.5px; display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center;}
+  .lt{background:none; border:none; color:inherit; font:inherit; padding:0; cursor:pointer; font-size:14.5px;}
+  .lt:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
+  .lt[data-status="mastered"]{color:var(--ink);}
+  .lt[data-status="mastered"]::before{content:"✓ ";}
+  .lt[data-status="checked"]::before, .lt[data-status="practicing"]::before, .lt[data-status="learning"]::before{content:"→ ";}
+  .lt[data-status="introduced"]{color:var(--ink-dim);}
+  .lt[data-status="introduced"]::before{content:"○ ";}
+  .level-arrow{color:var(--ink-dim); font-size:13px;}
+  .level-locked .level-topics{color:var(--ink-dim); font-size:14px;}
+
+  .mastery{margin-top:4px;}
+  .mastery-q{margin-bottom:16px;}
+  .mastery-q p{font-size:14.5px; margin:0 0 8px;}
+  .mastery-opt{display:block; width:100%; text-align:left; background:transparent; border:1px solid var(--line); color:var(--ink); padding:8px 12px; font-size:13.5px; margin-bottom:6px; cursor:pointer; border-radius:0;}
+  .mastery-opt:hover:not(:disabled){border-color:var(--ink);}
+  .mastery-opt:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
+  .mastery-opt.selected{border-color:var(--ink); background:rgba(244,242,236,0.06);}
+  .mastery-opt.correct{border-color:var(--ink); background:rgba(244,242,236,0.1);}
+  .mastery-opt.incorrect{opacity:0.5; text-decoration:line-through;}
+  .mastery-result{font-size:14px; margin-top:6px;}
+  .mastery-result.ok{color:var(--ink);}
+  .mastery-result.no{color:var(--ink-dim);}
+  .mastery-note{font-weight:400; color:var(--ink-dim);}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <span class="mark"><b>X Horizon</b> · Skill Library</span>
+  <span style="display:flex; gap:8px; flex-wrap:wrap;">
+    <button class="dl-btn" id="downloadGuideBtn" type="button">Download study guide</button>
+    <button class="dl-btn" id="downloadPageBtn" type="button">Download this page (.html)</button>
+  </span>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Advanced skill track — space-science study system</div>
+    <h1>Mathematics</h1>
+    <p class="sub">Every orbit, every signal, every measurement eventually reduces to an equation.</p>
+  </div>
+  <div class="hero-lab">
+    <p class="lab-label" style="text-align:center;">Try it — plot a function live</p>
+    <div class="lab-controls" style="justify-content:center;">
+      <select id="hero-fn">
+        <option value="sin">y = A · sin(Bx)</option>
+        <option value="cos">y = A · cos(Bx)</option>
+        <option value="quad">y = A · (x/B)²</option>
+        <option value="exp">y = A · e^(−x/B)</option>
+        <option value="gauss">y = A · e^(−x²/2B²)</option>
+      </select>
+      <label>A<input type="range" id="hero-A" min="0.2" max="3" step="0.1" value="1.5"><span class="v" id="hero-A-v">1.5</span></label>
+      <label>B<input type="range" id="hero-B" min="0.2" max="3" step="0.1" value="1"><span class="v" id="hero-B-v">1.0</span></label>
+    </div>
+    <canvas id="c-hero" width="560" height="230"></canvas>
+  </div>
+</section>
+
+<section class="dash">
+  <div class="wrap dash-inner">
+    <p class="section-label" style="margin-top:0;">Study dashboard</p>
+    <div class="dash-bar"><div class="dash-bar-fill" id="dashBarFill" style="width: 0%;"></div></div>
+    <p class="dash-pct" id="dashPct">0% of the track mastered</p>
+    <div class="dash-grid">
+      <div class="dash-stat"><span class="n" id="dashCompleted">1/8</span><span class="l">Topics opened</span></div>
+      <div class="dash-stat"><span class="n" id="dashMastered">0/8</span><span class="l">Topics mastered</span></div>
+      <div class="dash-stat"><span class="n" id="dashQuiz">0</span><span class="l">Quiz questions answered</span></div>
+      <div class="dash-stat"><span class="n" id="dashPractice">0</span><span class="l">Practice problems attempted</span></div>
+      <div class="dash-stat"><span class="n" id="dashStreak">1</span><span class="l">Day study streak</span></div>
+      <div class="dash-stat"><span class="n" id="dashTime">0m</span><span class="l">Total study time</span></div>
+    </div>
+    <button class="lab-btn" id="resetProgressBtn" type="button">Reset progress</button>
+  </div>
+</section>
+
+<section class="levels">
+  <div class="wrap levels-inner">
+    <p class="section-label" style="margin-top:0;">Learning path</p>
+    <div class="level-row">
+      <span class="level-tag">Level 01 — Foundations</span>
+      <span class="level-topics"><button type="button" class="lt" data-topic="trig" data-status="learning">Algebra &amp; Trigonometry</button><span class="level-arrow">→</span><button type="button" class="lt" data-topic="vec" data-status="introduced">Vectors &amp; Coordinate Geometry</button></span>
+    </div>
+    <div class="level-row">
+      <span class="level-tag">Level 02 — Core mathematics</span>
+      <span class="level-topics"><button type="button" class="lt" data-topic="calc" data-status="introduced">Calculus</button><span class="level-arrow">→</span><button type="button" class="lt" data-topic="lin" data-status="introduced">Linear Algebra</button></span>
+    </div>
+    <div class="level-row">
+      <span class="level-tag">Level 03 — University mathematics</span>
+      <span class="level-topics"><button type="button" class="lt" data-topic="ode" data-status="introduced">Differential Equations</button><span class="level-arrow">→</span><button type="button" class="lt" data-topic="stat" data-status="introduced">Probability &amp; Statistics</button></span>
+    </div>
+    <div class="level-row">
+      <span class="level-tag">Level 04 — Space-science mathematics</span>
+      <span class="level-topics"><button type="button" class="lt" data-topic="newton" data-status="introduced">Numerical Methods</button><span class="level-arrow">→</span><button type="button" class="lt" data-topic="euler" data-status="introduced">Complex Numbers &amp; Fourier Analysis</button></span>
+    </div>
+    <div class="level-row level-locked">
+      <span class="level-tag">Level 05 — Research preparation</span>
+      <span class="level-topics">Mission problems &amp; the space-science application track — unlocks once all 8 topics are mastered, coming in a future build.</span>
+    </div>
+  </div>
+</section>
+
+<div class="index-head">
+  <div class="wrap" style="padding:0;">
+    <p>Foundational through advanced. Every topic pairs a lecture with a live visualization, a quick check, a practice problem, and a 5-question mastery test — your progress is tracked in the dashboard above.</p>
+  </div>
+</div>
+
+<div class="wrap list">
+
+<details open="" data-topic="trig">
+<summary><span class="num">1</span><span class="row-title">Algebra &amp; Trigonometry</span><span class="tag">Foundational</span><span class="status-badge" data-topic="trig" data-state="learning">Learning</span><span class="chev"></span></summary>
+<div class="row-body">
+  <p class="section-label">Lecture</p>
+  <div class="lecture">
+    <p><strong>Core idea.</strong> Algebra solves for an unknown hidden inside a relationship; trigonometry attaches real angles and periodic motion to that relationship.</p>
+    <p><strong>Why it matters.</strong> Almost every space-science formula is an algebraic rearrangement of a physical law, and almost every angle — a bearing, an inclination, a phase — needs trigonometry to use.</p>
+  </div>
+
+  <p class="section-label">Try it — right triangle solver</p>
+  <div class="lab-wrap">
+    <canvas id="c-trig" width="520" height="200"></canvas>
+    <div class="lab-controls">
+      <label>Angle θ<input type="range" id="trig-theta" min="5" max="85" step="1" value="40"><span class="v" id="trig-theta-v">40°</span></label>
+    </div>
+    <p class="lab-readout" id="trig-out">sin θ = 0.643&nbsp;&nbsp;&nbsp;cos θ = 0.766&nbsp;&nbsp;&nbsp;tan θ = 0.839</p>
+  </div>
+
+  <div class="formula">c² = a² + b² − 2ab · cos(C)</div>
+  <p class="applied"><strong>Where it shows up:</strong> triangulating a spacecraft's position from two ground-station bearings.</p>
+
+  <p class="section-label">Quick check</p>
+  <div class="quiz">
+    <p class="quiz-q">A right triangle has legs 3 and 4. What is the hypotenuse?</p>
+    <button class="quiz-opt" data-correct="true" data-explain="3-4-5 is the classic Pythagorean triple: 3² + 4² = 5².">5</button>
+    <button class="quiz-opt" data-correct="false" data-explain="Close, but 6² = 36 ≠ 3² + 4² = 25.">6</button>
+    <button class="quiz-opt" data-correct="false" data-explain="7² = 49, too large for legs of 3 and 4.">7</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+  <div class="quiz">
+    <p class="quiz-q">As θ increases toward 90° in the diagram above, the opposite side:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="sin(θ) grows toward 1 as θ approaches 90°, so the opposite side approaches the full hypotenuse.">Grows toward the hypotenuse's length</button>
+    <button class="quiz-opt" data-correct="false" data-explain="It's the adjacent side that shrinks toward zero, not the opposite side.">Shrinks toward zero</button>
+    <button class="quiz-opt" data-correct="false" data-explain="Only the right angle itself stays fixed at 90°.">Stays fixed</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+
+  <p class="section-label">Practice</p>
+  <div class="practice" data-answer="69" data-tolerance="2">
+    <p class="practice-q">A radar station sees a satellite at a horizontal distance of 120&nbsp;km and an elevation angle of 30°. What is the satellite's altitude in km? <em>(altitude = distance × tan(angle))</em></p>
+    <div class="practice-row"><input class="practice-input" type="text" inputmode="decimal" placeholder="km"><button class="practice-check" type="button">Check answer</button></div>
+    <p class="practice-feedback" hidden=""></p>
+    <details class="solution"><summary>Show solution</summary></details>
+    <p class="sol-text">120 × tan(30°) = 120 × 0.577 ≈ 69&nbsp;km.</p>
+  </div>
+  <p class="section-label">Mastery test <span class="mastery-note">— 5 questions, need 4/5 (80%) to master this topic</span></p>
+  <div class="mastery" data-topic="trig">
+    <div class="mastery-q">
+      <p>sin²θ + cos²θ equals:</p>
+      <button class="mastery-opt" data-correct="true">1</button>
+      <button class="mastery-opt" data-correct="false">0</button>
+      <button class="mastery-opt" data-correct="false">θ</button>
+      <button class="mastery-opt" data-correct="false">Undefined</button>
+    </div>
+    <div class="mastery-q">
+      <p>The Law of Cosines reduces to the Pythagorean theorem when angle C is:</p>
+      <button class="mastery-opt" data-correct="true">90°</button>
+      <button class="mastery-opt" data-correct="false">0°</button>
+      <button class="mastery-opt" data-correct="false">45°</button>
+      <button class="mastery-opt" data-correct="false">180°</button>
+    </div>
+    <div class="mastery-q">
+      <p>If tan θ = 1 and θ is in the first quadrant, θ equals:</p>
+      <button class="mastery-opt" data-correct="true">45°</button>
+      <button class="mastery-opt" data-correct="false">30°</button>
+      <button class="mastery-opt" data-correct="false">60°</button>
+      <button class="mastery-opt" data-correct="false">90°</button>
+    </div>
+    <div class="mastery-q">
+      <p>A bearing with a 200 km horizontal distance and a 30° elevation gives an altitude of about:</p>
+      <button class="mastery-opt" data-correct="true">115 km</button>
+      <button class="mastery-opt" data-correct="false">200 km</button>
+      <button class="mastery-opt" data-correct="false">58 km</button>
+      <button class="mastery-opt" data-correct="false">346 km</button>
+    </div>
+    <div class="mastery-q">
+      <p>cos(0°) equals:</p>
+      <button class="mastery-opt" data-correct="true">1</button>
+      <button class="mastery-opt" data-correct="false">0</button>
+      <button class="mastery-opt" data-correct="false">−1</button>
+      <button class="mastery-opt" data-correct="false">Undefined</button>
+    </div>
+    <button class="mastery-submit lab-btn" type="button">Submit mastery test</button>
+    <button class="mastery-retry lab-btn" type="button" hidden="">Retry</button>
+    <p class="mastery-result" hidden=""></p>
+  </div>
+</div>
+</details>
+
+<details data-topic="vec">
+<summary><span class="num">2</span><span class="row-title">Vectors &amp; Coordinate Geometry</span><span class="tag">Foundational</span><span class="status-badge" data-topic="vec" data-state="introduced">Not started</span><span class="chev"></span></summary>
+<div class="row-body">
+  <p class="section-label">Lecture</p>
+  <div class="lecture">
+    <p><strong>Core idea.</strong> A vector packages direction and magnitude together; the dot product extracts the angle between two of them.</p>
+    <p><strong>Why it matters.</strong> Every position, velocity, and pointing direction in space science is a vector, and most mission problems start by choosing the right coordinate frame.</p>
+  </div>
+
+  <p class="section-label">Try it — vector sum &amp; dot product</p>
+  <div class="lab-wrap">
+    <canvas id="c-vec" width="520" height="200"></canvas>
+    <div class="lab-controls">
+      <label>Angle of A<input type="range" id="vec-theta" min="0" max="360" step="1" value="50"><span class="v" id="vec-theta-v">50°</span></label>
+    </div>
+    <p class="lab-readout" id="vec-out">A·B = 10.78&nbsp;&nbsp;&nbsp;angle between A and B = 31.6°</p>
+  </div>
+
+  <div class="formula">|r| = √(x² + y² + z²)&nbsp;&nbsp;&nbsp;a·b = |a||b| cos θ</div>
+  <p class="applied"><strong>Where it shows up:</strong> converting a satellite's position between Earth-fixed and inertial frames.</p>
+
+  <p class="section-label">Quick check</p>
+  <div class="quiz">
+    <p class="quiz-q">What is the magnitude of the vector (3, 4)?</p>
+    <button class="quiz-opt" data-correct="true" data-explain="√(3² + 4²) = √25 = 5.">5</button>
+    <button class="quiz-opt" data-correct="false" data-explain="That's the sum of the components, not the magnitude.">7</button>
+    <button class="quiz-opt" data-correct="false" data-explain="Too small — check the Pythagorean sum.">1</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+  <div class="quiz">
+    <p class="quiz-q">In the diagram above, when A and B are perpendicular, A·B is:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="cos(90°) = 0, so the dot product vanishes exactly when vectors are perpendicular.">0</button>
+    <button class="quiz-opt" data-correct="false" data-explain="That would require the vectors to point the same way.">Equal to |A||B|</button>
+    <button class="quiz-opt" data-correct="false" data-explain="The dot product is always a defined number.">Undefined</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+
+  <p class="section-label">Practice</p>
+  <div class="practice" data-answer="10" data-tolerance="0.2">
+    <p class="practice-q">Vector A = (6, 8). What is |A|?</p>
+    <div class="practice-row"><input class="practice-input" type="text" inputmode="decimal" placeholder="magnitude"><button class="practice-check" type="button">Check answer</button></div>
+    <p class="practice-feedback" hidden=""></p>
+    <details class="solution"><summary>Show solution</summary></details>
+    <p class="sol-text">√(6² + 8²) = √100 = 10.</p>
+  </div>
+  <p class="section-label">Mastery test <span class="mastery-note">— 5 questions, need 4/5 (80%) to master this topic</span></p>
+  <div class="mastery" data-topic="vec">
+    <div class="mastery-q">
+      <p>The dot product of (1,0) and (0,1) is:</p>
+      <button class="mastery-opt" data-correct="true">0</button>
+      <button class="mastery-opt" data-correct="false">1</button>
+      <button class="mastery-opt" data-correct="false">−1</button>
+      <button class="mastery-opt" data-correct="false">Undefined</button>
+    </div>
+    <div class="mastery-q">
+      <p>The magnitude of (0,5) is:</p>
+      <button class="mastery-opt" data-correct="true">5</button>
+      <button class="mastery-opt" data-correct="false">0</button>
+      <button class="mastery-opt" data-correct="false">25</button>
+      <button class="mastery-opt" data-correct="false">10</button>
+    </div>
+    <div class="mastery-q">
+      <p>Two vectors pointing in exactly the same direction have an angle between them of:</p>
+      <button class="mastery-opt" data-correct="true">0°</button>
+      <button class="mastery-opt" data-correct="false">90°</button>
+      <button class="mastery-opt" data-correct="false">180°</button>
+      <button class="mastery-opt" data-correct="false">45°</button>
+    </div>
+    <div class="mastery-q">
+      <p>The magnitude of (5,12) is:</p>
+      <button class="mastery-opt" data-correct="true">13</button>
+      <button class="mastery-opt" data-correct="false">17</button>
+      <button class="mastery-opt" data-correct="false">7</button>
+      <button class="mastery-opt" data-correct="false">60</button>
+    </div>
+    <div class="mastery-q">
+      <p>Converting a satellite's position between coordinate frames typically requires:</p>
+      <button class="mastery-opt" data-correct="true">A rotation transform</button>
+      <button class="mastery-opt" data-correct="false">Addition only</button>
+      <button class="mastery-opt" data-correct="false">No transform at all</button>
+      <button class="mastery-opt" data-correct="false">Division by mass</button>
+    </div>
+    <button class="mastery-submit lab-btn" type="button">Submit mastery test</button>
+    <button class="mastery-retry lab-btn" type="button" hidden="">Retry</button>
+    <p class="mastery-result" hidden=""></p>
+  </div>
+</div>
+</details>
+
+<details data-topic="calc">
+<summary><span class="num">3</span><span class="row-title">Calculus</span><span class="tag">Intermediate</span><span class="status-badge" data-topic="calc" data-state="introduced">Not started</span><span class="chev"></span></summary>
+<div class="row-body">
+  <p class="section-label">Lecture</p>
+  <div class="lecture">
+    <p><strong>Core idea.</strong> The derivative measures instantaneous rate of change — the slope of the tangent at a single point.</p>
+    <p><strong>Why it matters.</strong> Velocity is the derivative of position, acceleration the derivative of velocity — reversing that with integration recovers speed and distance from sensor data.</p>
+  </div>
+
+  <p class="section-label">Try it — the tangent line</p>
+  <div class="lab-wrap">
+    <canvas id="c-calc" width="520" height="200"></canvas>
+    <div class="lab-controls">
+      <label>Point x₀ on f(x)=x²<input type="range" id="calc-x0" min="-3" max="3" step="0.1" value="1"><span class="v" id="calc-x0-v">1.0</span></label>
+    </div>
+    <p class="lab-readout" id="calc-out">f(x₀) = 1.00&nbsp;&nbsp;&nbsp;slope f′(x₀) = 2x₀ = 2.00</p>
+  </div>
+
+  <div class="formula">v(t) = dr/dt&nbsp;&nbsp;&nbsp;Δv = ∫ a(t) dt</div>
+  <p class="applied"><strong>Where it shows up:</strong> deriving a rocket's velocity curve from its measured acceleration during ascent.</p>
+
+  <p class="section-label">Quick check</p>
+  <div class="quiz">
+    <p class="quiz-q">For f(x) = x², the slope of the tangent line at x₀ is:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="The derivative of x² is 2x, so the tangent slope at x₀ is exactly 2x₀ — watch it change as you drag the slider above.">2x₀</button>
+    <button class="quiz-opt" data-correct="false" data-explain="That's f(x₀) itself, not its derivative.">x₀²</button>
+    <button class="quiz-opt" data-correct="false" data-explain="The slope depends on x₀ — it isn't constant.">1</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+  <div class="quiz">
+    <p class="quiz-q">∫ 2t dt equals:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="Power rule: the integral of tⁿ is tⁿ⁺¹/(n+1), so ∫2t dt = t².">t² + C</button>
+    <button class="quiz-opt" data-correct="false" data-explain="That's the derivative of t², not the integral of 2t.">2 + C</button>
+    <button class="quiz-opt" data-correct="false" data-explain="Missing the exponent from the power rule.">t + C</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+
+  <p class="section-label">Practice</p>
+  <div class="practice" data-answer="50" data-tolerance="1">
+    <p class="practice-q">If a(t) = 4t and the object starts at rest, what is its velocity at t = 5&nbsp;s? <em>(v = ∫4t dt = 2t²)</em></p>
+    <div class="practice-row"><input class="practice-input" type="text" inputmode="decimal" placeholder="m/s"><button class="practice-check" type="button">Check answer</button></div>
+    <p class="practice-feedback" hidden=""></p>
+    <details class="solution"><summary>Show solution</summary></details>
+    <p class="sol-text">v(t) = 2t², so v(5) = 2 × 25 = 50&nbsp;m/s.</p>
+  </div>
+  <p class="section-label">Mastery test <span class="mastery-note">— 5 questions, need 4/5 (80%) to master this topic</span></p>
+  <div class="mastery" data-topic="calc">
+    <div class="mastery-q">
+      <p>The derivative of x³ is:</p>
+      <button class="mastery-opt" data-correct="true">3x²</button>
+      <button class="mastery-opt" data-correct="false">x²</button>
+      <button class="mastery-opt" data-correct="false">3x</button>
+      <button class="mastery-opt" data-correct="false">x⁴/4</button>
+    </div>
+    <div class="mastery-q">
+      <p>∫ 3 dx equals:</p>
+      <button class="mastery-opt" data-correct="true">3x + C</button>
+      <button class="mastery-opt" data-correct="false">3 + C</button>
+      <button class="mastery-opt" data-correct="false">x³ + C</button>
+      <button class="mastery-opt" data-correct="false">3/x + C</button>
+    </div>
+    <div class="mastery-q">
+      <p>If v(t) = t² is velocity, acceleration a(t) is:</p>
+      <button class="mastery-opt" data-correct="true">2t</button>
+      <button class="mastery-opt" data-correct="false">t²</button>
+      <button class="mastery-opt" data-correct="false">t³/3</button>
+      <button class="mastery-opt" data-correct="false">2</button>
+    </div>
+    <div class="mastery-q">
+      <p>The derivative of a constant is:</p>
+      <button class="mastery-opt" data-correct="true">0</button>
+      <button class="mastery-opt" data-correct="false">1</button>
+      <button class="mastery-opt" data-correct="false">The constant itself</button>
+      <button class="mastery-opt" data-correct="false">Undefined</button>
+    </div>
+    <div class="mastery-q">
+      <p>∫₀² 2t dt equals:</p>
+      <button class="mastery-opt" data-correct="true">4</button>
+      <button class="mastery-opt" data-correct="false">2</button>
+      <button class="mastery-opt" data-correct="false">8</button>
+      <button class="mastery-opt" data-correct="false">1</button>
+    </div>
+    <button class="mastery-submit lab-btn" type="button">Submit mastery test</button>
+    <button class="mastery-retry lab-btn" type="button" hidden="">Retry</button>
+    <p class="mastery-result" hidden=""></p>
+  </div>
+</div>
+</details>
+
+<details data-topic="lin">
+<summary><span class="num">4</span><span class="row-title">Linear Algebra</span><span class="tag">Intermediate</span><span class="status-badge" data-topic="lin" data-state="introduced">Not started</span><span class="chev"></span></summary>
+<div class="row-body">
+  <p class="section-label">Lecture</p>
+  <div class="lecture">
+    <p><strong>Core idea.</strong> A rotation matrix turns a vector's direction while leaving its length untouched.</p>
+    <p><strong>Why it matters.</strong> Rotating sensor readings between reference frames, and finding a spacecraft's stable spin axes, both come down to matrix arithmetic.</p>
+  </div>
+
+  <p class="section-label">Try it — rotation matrix</p>
+  <div class="lab-wrap">
+    <canvas id="c-lin" width="520" height="200"></canvas>
+    <div class="lab-controls">
+      <label>Angle θ<input type="range" id="lin-theta" min="0" max="360" step="1" value="45"><span class="v" id="lin-theta-v">45°</span></label>
+    </div>
+    <p class="lab-readout" id="lin-out">R(θ)·(1,0) = (0.707, 0.707)</p>
+  </div>
+
+  <div class="formula">R(θ) rotation matrix&nbsp;&nbsp;&nbsp;A v = λ v</div>
+  <p class="applied"><strong>Where it shows up:</strong> attitude determination — rotating a sensor's readings into the spacecraft's inertial frame.</p>
+
+  <p class="section-label">Quick check</p>
+  <div class="quiz">
+    <p class="quiz-q">Multiplying a vector by a rotation matrix changes its:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="A pure rotation preserves length — the dashed and solid vectors above are always the same length.">Direction, not its magnitude</button>
+    <button class="quiz-opt" data-correct="false" data-explain="Rotation alone never stretches or shrinks a vector.">Magnitude, not its direction</button>
+    <button class="quiz-opt" data-correct="false" data-explain="A rotation matrix always changes something — the direction.">Neither</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+  <div class="quiz">
+    <p class="quiz-q">An eigenvector v of matrix A satisfies:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="This is the defining eigenvalue equation: A only scales v, by factor λ.">A v = λ v</button>
+    <button class="quiz-opt" data-correct="false" data-explain="That would make v a null vector of A, a different concept.">A v = 0</button>
+    <button class="quiz-opt" data-correct="false" data-explain="A matrix and a vector are different kinds of objects.">A = v</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+
+  <p class="section-label">Practice</p>
+  <div class="practice" data-answer="1" data-tolerance="0.1">
+    <p class="practice-q">Rotating the vector (1, 0) by 90° counter-clockwise gives a new vector. What is its y-component?</p>
+    <div class="practice-row"><input class="practice-input" type="text" inputmode="decimal" placeholder="y"><button class="practice-check" type="button">Check answer</button></div>
+    <p class="practice-feedback" hidden=""></p>
+    <details class="solution"><summary>Show solution</summary></details>
+    <p class="sol-text">A 90° rotation sends (1, 0) to (0, 1), so the y-component is 1.</p>
+  </div>
+  <p class="section-label">Mastery test <span class="mastery-note">— 5 questions, need 4/5 (80%) to master this topic</span></p>
+  <div class="mastery" data-topic="lin">
+    <div class="mastery-q">
+      <p>A 2D rotation by 0° leaves a vector:</p>
+      <button class="mastery-opt" data-correct="true">Unchanged</button>
+      <button class="mastery-opt" data-correct="false">Reversed</button>
+      <button class="mastery-opt" data-correct="false">Doubled</button>
+      <button class="mastery-opt" data-correct="false">Zeroed</button>
+    </div>
+    <div class="mastery-q">
+      <p>In A v = λ v, λ is called the:</p>
+      <button class="mastery-opt" data-correct="true">Eigenvalue</button>
+      <button class="mastery-opt" data-correct="false">Determinant</button>
+      <button class="mastery-opt" data-correct="false">Trace</button>
+      <button class="mastery-opt" data-correct="false">Rank</button>
+    </div>
+    <div class="mastery-q">
+      <p>Rotating (0,1) by 90° counter-clockwise gives:</p>
+      <button class="mastery-opt" data-correct="true">(−1, 0)</button>
+      <button class="mastery-opt" data-correct="false">(1, 0)</button>
+      <button class="mastery-opt" data-correct="false">(0, −1)</button>
+      <button class="mastery-opt" data-correct="false">(1, 1)</button>
+    </div>
+    <div class="mastery-q">
+      <p>A rotation matrix preserves a vector's:</p>
+      <button class="mastery-opt" data-correct="true">Length</button>
+      <button class="mastery-opt" data-correct="false">Direction</button>
+      <button class="mastery-opt" data-correct="false">Both direction and length</button>
+      <button class="mastery-opt" data-correct="false">Neither</button>
+    </div>
+    <div class="mastery-q">
+      <p>The identity matrix rotates a vector by:</p>
+      <button class="mastery-opt" data-correct="true">0°</button>
+      <button class="mastery-opt" data-correct="false">90°</button>
+      <button class="mastery-opt" data-correct="false">180°</button>
+      <button class="mastery-opt" data-correct="false">270°</button>
+    </div>
+    <button class="mastery-submit lab-btn" type="button">Submit mastery test</button>
+    <button class="mastery-retry lab-btn" type="button" hidden="">Retry</button>
+    <p class="mastery-result" hidden=""></p>
+  </div>
+</div>
+</details>
+
+<details data-topic="ode">
+<summary><span class="num">5</span><span class="row-title">Differential Equations</span><span class="tag">Advanced</span><span class="status-badge" data-topic="ode" data-state="introduced">Not started</span><span class="chev"></span></summary>
+<div class="row-body">
+  <p class="section-label">Lecture</p>
+  <div class="lecture">
+    <p><strong>Core idea.</strong> A differential equation ties a quantity to its own rate of change, and solving it predicts its entire future.</p>
+    <p><strong>Why it matters.</strong> Orbital decay, drag, and oscillation are all defined by how a quantity changes moment to moment, not by a fixed formula for its position.</p>
+  </div>
+
+  <p class="section-label">Try it — orbital decay curve</p>
+  <div class="lab-wrap">
+    <canvas id="c-ode" width="520" height="200"></canvas>
+    <div class="lab-controls">
+      <label>Decay constant τ (days)<input type="range" id="ode-tau" min="20" max="300" step="5" value="100"><span class="v" id="ode-tau-v">100</span></label>
+    </div>
+    <p class="lab-readout" id="ode-out">h(100 days) = 184 km&nbsp;&nbsp;&nbsp;(started at 500 km)</p>
+  </div>
+
+  <div class="formula">d²r/dt² = −(GM / r³) r&nbsp;&nbsp;&nbsp;h(t) = h₀ e^(−t/τ)</div>
+  <p class="applied"><strong>Where it shows up:</strong> modeling how a low-orbit satellite's altitude decays under atmospheric drag.</p>
+
+  <p class="section-label">Quick check</p>
+  <div class="quiz">
+    <p class="quiz-q">Dragging τ smaller in the graph above makes the satellite's altitude:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="A smaller τ means the exponential decays faster — the satellite loses altitude sooner.">Decay faster</button>
+    <button class="quiz-opt" data-correct="false" data-explain="Smaller τ speeds up the decay, it doesn't slow it.">Decay more slowly</button>
+    <button class="quiz-opt" data-correct="false" data-explain="τ directly controls the decay rate in this model.">Stay constant</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+  <div class="quiz">
+    <p class="quiz-q">The exponential decay equation dy/dt = −ky has solution:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="This is the standard solution to first-order exponential decay.">y = y₀ e^(−kt)</button>
+    <button class="quiz-opt" data-correct="false" data-explain="That's linear growth, not exponential decay.">y = y₀ + kt</button>
+    <button class="quiz-opt" data-correct="false" data-explain="That describes oscillation, not decay.">y = y₀ sin(kt)</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+
+  <p class="section-label">Practice</p>
+  <div class="practice" data-answer="184" data-tolerance="5">
+    <p class="practice-q">A satellite's altitude decays as h(t) = h₀ e^(−t/τ). If h₀ = 500&nbsp;km and τ = 100&nbsp;days, what is h at t = 100&nbsp;days, in km?</p>
+    <div class="practice-row"><input class="practice-input" type="text" inputmode="decimal" placeholder="km"><button class="practice-check" type="button">Check answer</button></div>
+    <p class="practice-feedback" hidden=""></p>
+    <details class="solution"><summary>Show solution</summary></details>
+    <p class="sol-text">At t = τ, h = h₀ e⁻¹ = 500 × 0.368 ≈ 184&nbsp;km.</p>
+  </div>
+  <p class="section-label">Mastery test <span class="mastery-note">— 5 questions, need 4/5 (80%) to master this topic</span></p>
+  <div class="mastery" data-topic="ode">
+    <div class="mastery-q">
+      <p>In h(t) = h₀e^(−t/τ), a larger τ means the decay is:</p>
+      <button class="mastery-opt" data-correct="true">Slower</button>
+      <button class="mastery-opt" data-correct="false">Faster</button>
+      <button class="mastery-opt" data-correct="false">Unchanged</button>
+      <button class="mastery-opt" data-correct="false">Reversed</button>
+    </div>
+    <div class="mastery-q">
+      <p>At t = τ, h(t)/h₀ is approximately:</p>
+      <button class="mastery-opt" data-correct="true">0.37</button>
+      <button class="mastery-opt" data-correct="false">0.5</button>
+      <button class="mastery-opt" data-correct="false">0.1</button>
+      <button class="mastery-opt" data-correct="false">0.63</button>
+    </div>
+    <div class="mastery-q">
+      <p>The two-body equation of motion is an example of a:</p>
+      <button class="mastery-opt" data-correct="true">Second-order differential equation</button>
+      <button class="mastery-opt" data-correct="false">Linear algebra equation</button>
+      <button class="mastery-opt" data-correct="false">Probability distribution</button>
+      <button class="mastery-opt" data-correct="false">Trigonometric identity</button>
+    </div>
+    <div class="mastery-q">
+      <p>If dy/dt = ky with k &gt; 0, y:</p>
+      <button class="mastery-opt" data-correct="true">Grows exponentially</button>
+      <button class="mastery-opt" data-correct="false">Decays exponentially</button>
+      <button class="mastery-opt" data-correct="false">Stays constant</button>
+      <button class="mastery-opt" data-correct="false">Oscillates</button>
+    </div>
+    <div class="mastery-q">
+      <p>Atmospheric drag on a low-orbit satellite tends to:</p>
+      <button class="mastery-opt" data-correct="true">Lower its orbit over time</button>
+      <button class="mastery-opt" data-correct="false">Raise its orbit</button>
+      <button class="mastery-opt" data-correct="false">Have no effect</button>
+      <button class="mastery-opt" data-correct="false">Reverse its direction</button>
+    </div>
+    <button class="mastery-submit lab-btn" type="button">Submit mastery test</button>
+    <button class="mastery-retry lab-btn" type="button" hidden="">Retry</button>
+    <p class="mastery-result" hidden=""></p>
+  </div>
+</div>
+</details>
+
+<details data-topic="stat">
+<summary><span class="num">6</span><span class="row-title">Probability &amp; Statistics</span><span class="tag">Advanced</span><span class="status-badge" data-topic="stat" data-state="introduced">Not started</span><span class="chev"></span></summary>
+<div class="row-body">
+  <p class="section-label">Lecture</p>
+  <div class="lecture">
+    <p><strong>Core idea.</strong> Probability models the shape of uncertainty in a measurement; statistics reads that shape back out of real, noisy data.</p>
+    <p><strong>Why it matters.</strong> No telescope reading is exact — every photometric result is a real measurement dressed in noise that statistics has to remove.</p>
+  </div>
+
+  <p class="section-label">Try it — the Gaussian curve</p>
+  <div class="lab-wrap">
+    <canvas id="c-stat" width="520" height="200"></canvas>
+    <div class="lab-controls">
+      <label>Mean μ<input type="range" id="stat-mu" min="-2" max="2" step="0.1" value="0"><span class="v" id="stat-mu-v">0.0</span></label>
+      <label>Spread σ<input type="range" id="stat-sigma" min="0.3" max="2.5" step="0.1" value="1"><span class="v" id="stat-sigma-v">1.0</span></label>
+    </div>
+    <p class="lab-readout" id="stat-out">peak at x = μ = 0.0&nbsp;&nbsp;&nbsp;shaded band = μ ± σ (≈68% of the area)</p>
+  </div>
+
+  <div class="formula">f(x) = (1 / σ√(2π)) · e^(−(x−μ)² / 2σ²)</div>
+  <p class="applied"><strong>Where it shows up:</strong> estimating a star's true brightness from repeated, noisy photometric readings.</p>
+
+  <p class="section-label">Quick check</p>
+  <div class="quiz">
+    <p class="quiz-q">Increasing σ in the graph above makes the curve:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="A larger σ spreads the same probability over a wider range, flattening the peak.">Wider and flatter</button>
+    <button class="quiz-opt" data-correct="false" data-explain="A larger σ spreads the curve out — it doesn't sharpen it.">Narrower and taller</button>
+    <button class="quiz-opt" data-correct="false" data-explain="σ directly reshapes the curve's spread.">Unchanged</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+  <div class="quiz">
+    <p class="quiz-q">In a Gaussian distribution, roughly what percentage of data falls within 1σ of the mean?</p>
+    <button class="quiz-opt" data-correct="true" data-explain="This is the well-known 68-95-99.7 rule for normal distributions.">68%</button>
+    <button class="quiz-opt" data-correct="false" data-explain="95% falls within 2σ, not 1σ.">95%</button>
+    <button class="quiz-opt" data-correct="false" data-explain="50% falls within roughly two-thirds of a σ, not exactly 1σ.">50%</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+
+  <p class="section-label">Practice</p>
+  <div class="practice" data-answer="4" data-tolerance="0.05">
+    <p class="practice-q">Five brightness readings: 4.0, 4.1, 3.9, 4.0, 4.0. What is their mean?</p>
+    <div class="practice-row"><input class="practice-input" type="text" inputmode="decimal" placeholder="mag"><button class="practice-check" type="button">Check answer</button></div>
+    <p class="practice-feedback" hidden=""></p>
+    <details class="solution"><summary>Show solution</summary></details>
+    <p class="sol-text">(4.0 + 4.1 + 3.9 + 4.0 + 4.0) / 5 = 20.0 / 5 = 4.0.</p>
+  </div>
+  <p class="section-label">Mastery test <span class="mastery-note">— 5 questions, need 4/5 (80%) to master this topic</span></p>
+  <div class="mastery" data-topic="stat">
+    <div class="mastery-q">
+      <p>A larger σ makes a Gaussian curve:</p>
+      <button class="mastery-opt" data-correct="true">Wider and flatter</button>
+      <button class="mastery-opt" data-correct="false">Narrower and taller</button>
+      <button class="mastery-opt" data-correct="false">Unchanged</button>
+      <button class="mastery-opt" data-correct="false">Negative</button>
+    </div>
+    <div class="mastery-q">
+      <p>The mean of 2, 4, 6 is:</p>
+      <button class="mastery-opt" data-correct="true">4</button>
+      <button class="mastery-opt" data-correct="false">3</button>
+      <button class="mastery-opt" data-correct="false">6</button>
+      <button class="mastery-opt" data-correct="false">12</button>
+    </div>
+    <div class="mastery-q">
+      <p>Roughly what percentage of Gaussian data lies within 2σ of the mean?</p>
+      <button class="mastery-opt" data-correct="true">95%</button>
+      <button class="mastery-opt" data-correct="false">68%</button>
+      <button class="mastery-opt" data-correct="false">50%</button>
+      <button class="mastery-opt" data-correct="false">99.7%</button>
+    </div>
+    <div class="mastery-q">
+      <p>Standard deviation is measured in:</p>
+      <button class="mastery-opt" data-correct="true">The same units as the data</button>
+      <button class="mastery-opt" data-correct="false">Squared units, always</button>
+      <button class="mastery-opt" data-correct="false">Percent, always</button>
+      <button class="mastery-opt" data-correct="false">No units</button>
+    </div>
+    <div class="mastery-q">
+      <p>Repeated noisy measurements are best summarized by:</p>
+      <button class="mastery-opt" data-correct="true">Mean and standard deviation</button>
+      <button class="mastery-opt" data-correct="false">A single reading</button>
+      <button class="mastery-opt" data-correct="false">The largest value</button>
+      <button class="mastery-opt" data-correct="false">The smallest value</button>
+    </div>
+    <button class="mastery-submit lab-btn" type="button">Submit mastery test</button>
+    <button class="mastery-retry lab-btn" type="button" hidden="">Retry</button>
+    <p class="mastery-result" hidden=""></p>
+  </div>
+</div>
+</details>
+
+<details data-topic="newton">
+<summary><span class="num">7</span><span class="row-title">Numerical Methods</span><span class="tag">Advanced</span><span class="status-badge" data-topic="newton" data-state="introduced">Not started</span><span class="chev"></span></summary>
+<div class="row-body">
+  <p class="section-label">Lecture</p>
+  <div class="lecture">
+    <p><strong>Core idea.</strong> When an equation can't be solved exactly, numerical methods trade an exact answer for an approximate one, refined step by step.</p>
+    <p><strong>Why it matters.</strong> Mission trajectories and orbit propagation rarely have closed-form solutions, so mission software leans on numerical methods instead.</p>
+  </div>
+
+  <p class="section-label">Try it — Newton-Raphson, step by step</p>
+  <div class="lab-wrap">
+    <canvas id="c-newton" width="520" height="200"></canvas>
+    <div class="lab-controls">
+      <button class="lab-btn" id="newton-step" type="button">Step forward</button>
+      <button class="lab-btn" id="newton-reset" type="button">Reset</button>
+    </div>
+    <p class="lab-readout" id="newton-out">iteration 0&nbsp;&nbsp;&nbsp;x_0 = 1.000000&nbsp;&nbsp;&nbsp;√2 = 1.414214</p>
+  </div>
+
+  <div class="formula">x_(n+1) = x_n − f(x_n) / f'(x_n)</div>
+  <p class="applied"><strong>Where it shows up:</strong> propagating a probe's trajectory forward when the equations of motion can't be solved by hand.</p>
+
+  <p class="section-label">Quick check</p>
+  <div class="quiz">
+    <p class="quiz-q">Each Newton-Raphson iteration uses:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="Newton-Raphson uses the function's value and its slope (derivative) at each step — that's the tangent line you just stepped through.">The function and its derivative</button>
+    <button class="quiz-opt" data-correct="false" data-explain="Using only the function value describes a different, slower method.">Only the function value</button>
+    <button class="quiz-opt" data-correct="false" data-explain="Newton-Raphson is deterministic, not random.">A random guess</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+  <div class="quiz">
+    <p class="quiz-q">As you kept stepping above, the x-value:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="Each tangent-line step lands closer to the true root, √2 ≈ 1.41421.">Converged toward the root of f</button>
+    <button class="quiz-opt" data-correct="false" data-explain="Newton-Raphson steps shrink as they approach the root — they don't grow.">Diverged further away</button>
+    <button class="quiz-opt" data-correct="false" data-explain="Each step recomputes a new value from the previous one.">Stayed exactly the same</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+
+  <p class="section-label">Practice</p>
+  <div class="practice" data-answer="1.5" data-tolerance="0.05">
+    <p class="practice-q">Using Newton-Raphson on f(x) = x² − 2, starting at x₀ = 1, what is x₁? <em>(x₁ = x₀ − f(x₀)/f'(x₀))</em></p>
+    <div class="practice-row"><input class="practice-input" type="text" inputmode="decimal" placeholder="x₁"><button class="practice-check" type="button">Check answer</button></div>
+    <p class="practice-feedback" hidden=""></p>
+    <details class="solution"><summary>Show solution</summary></details>
+    <p class="sol-text">f(1) = −1, f'(1) = 2, so x₁ = 1 − (−1/2) = 1.5.</p>
+  </div>
+  <p class="section-label">Mastery test <span class="mastery-note">— 5 questions, need 4/5 (80%) to master this topic</span></p>
+  <div class="mastery" data-topic="newton">
+    <div class="mastery-q">
+      <p>Newton-Raphson can fail to converge if the initial guess is:</p>
+      <button class="mastery-opt" data-correct="true">Far from the root or near a flat slope</button>
+      <button class="mastery-opt" data-correct="false">Exactly at the root</button>
+      <button class="mastery-opt" data-correct="false">A positive number</button>
+      <button class="mastery-opt" data-correct="false">An integer</button>
+    </div>
+    <div class="mastery-q">
+      <p>f(x) = x² − 2 has a root near:</p>
+      <button class="mastery-opt" data-correct="true">1.414</button>
+      <button class="mastery-opt" data-correct="false">1.0</button>
+      <button class="mastery-opt" data-correct="false">2.0</button>
+      <button class="mastery-opt" data-correct="false">0.5</button>
+    </div>
+    <div class="mastery-q">
+      <p>RK4 tends to beat Euler's method mainly because it:</p>
+      <button class="mastery-opt" data-correct="true">Samples the slope at multiple points per step</button>
+      <button class="mastery-opt" data-correct="false">Takes bigger steps</button>
+      <button class="mastery-opt" data-correct="false">Ignores the derivative</button>
+      <button class="mastery-opt" data-correct="false">Uses random sampling</button>
+    </div>
+    <div class="mastery-q">
+      <p>Numerical methods are used when an equation:</p>
+      <button class="mastery-opt" data-correct="true">Has no closed-form solution</button>
+      <button class="mastery-opt" data-correct="false">Is trivial to solve by hand</button>
+      <button class="mastery-opt" data-correct="false">Has no variables</button>
+      <button class="mastery-opt" data-correct="false">Is always linear</button>
+    </div>
+    <div class="mastery-q">
+      <p>Each Newton-Raphson step uses:</p>
+      <button class="mastery-opt" data-correct="true">The function value and its derivative</button>
+      <button class="mastery-opt" data-correct="false">Only the function value</button>
+      <button class="mastery-opt" data-correct="false">Only a guess</button>
+      <button class="mastery-opt" data-correct="false">The second derivative only</button>
+    </div>
+    <button class="mastery-submit lab-btn" type="button">Submit mastery test</button>
+    <button class="mastery-retry lab-btn" type="button" hidden="">Retry</button>
+    <p class="mastery-result" hidden=""></p>
+  </div>
+</div>
+</details>
+
+<details data-topic="euler">
+<summary><span class="num">8</span><span class="row-title">Complex Numbers &amp; Fourier Analysis</span><span class="tag">Advanced</span><span class="status-badge" data-topic="euler" data-state="introduced">Not started</span><span class="chev"></span></summary>
+<div class="row-body">
+  <p class="section-label">Lecture</p>
+  <div class="lecture">
+    <p><strong>Core idea.</strong> A complex number packages a rotation and a magnitude into one object, and Euler's formula ties that rotation to sine and cosine.</p>
+    <p><strong>Why it matters.</strong> Any periodic signal — starlight, a radio pulse — can be rebuilt from a sum of rotating complex exponentials, which is exactly what a Fourier transform finds.</p>
+  </div>
+
+  <p class="section-label">Try it — Euler's formula on the unit circle</p>
+  <div class="lab-wrap">
+    <canvas id="c-euler" width="520" height="200"></canvas>
+    <div class="lab-controls">
+      <label>Angle θ<input type="range" id="euler-theta" min="0" max="360" step="1" value="60"><span class="v" id="euler-theta-v">60°</span></label>
+    </div>
+    <p class="lab-readout" id="euler-out">cos θ = 0.500&nbsp;&nbsp;&nbsp;sin θ = 0.866&nbsp;&nbsp;&nbsp;e^(iθ) = 0.50 + 0.87i</p>
+  </div>
+
+  <div class="formula">e^(iθ) = cos θ + i sin θ</div>
+  <p class="applied"><strong>Where it shows up:</strong> separating a pulsar's true signal from background noise in radio telescope data.</p>
+
+  <p class="section-label">Quick check</p>
+  <div class="quiz">
+    <p class="quiz-q">Euler's formula e^(iθ) equals:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="This is Euler's formula exactly — it's what the point above traces as θ sweeps around the circle.">cos θ + i sin θ</button>
+    <button class="quiz-opt" data-correct="false" data-explain="The real and imaginary parts are swapped here.">sin θ + i cos θ</button>
+    <button class="quiz-opt" data-correct="false" data-explain="That's missing the trigonometric parts entirely.">i · θ</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+  <div class="quiz">
+    <p class="quiz-q">A Fourier transform converts a signal from:</p>
+    <button class="quiz-opt" data-correct="true" data-explain="It re-expresses a signal as the frequencies that make it up.">Time domain to frequency domain</button>
+    <button class="quiz-opt" data-correct="false" data-explain="That's the reverse of what a forward Fourier transform does.">Frequency domain to time only</button>
+    <button class="quiz-opt" data-correct="false" data-explain="Position and velocity aren't what a Fourier transform relates.">Position to velocity</button>
+    <p class="quiz-feedback" hidden=""></p>
+  </div>
+
+  <p class="section-label">Practice</p>
+  <div class="practice" data-answer="0.5" data-tolerance="0.02">
+    <p class="practice-q">Using Euler's formula, what is the real part of e^(i·60°)?</p>
+    <div class="practice-row"><input class="practice-input" type="text" inputmode="decimal" placeholder="value"><button class="practice-check" type="button">Check answer</button></div>
+    <p class="practice-feedback" hidden=""></p>
+    <details class="solution"><summary>Show solution</summary></details>
+    <p class="sol-text">The real part of e^(iθ) is cos θ, and cos(60°) = 0.5.</p>
+  </div>
+  <p class="section-label">Mastery test <span class="mastery-note">— 5 questions, need 4/5 (80%) to master this topic</span></p>
+  <div class="mastery" data-topic="euler">
+    <div class="mastery-q">
+      <p>e^(i·0) equals:</p>
+      <button class="mastery-opt" data-correct="true">1</button>
+      <button class="mastery-opt" data-correct="false">i</button>
+      <button class="mastery-opt" data-correct="false">−1</button>
+      <button class="mastery-opt" data-correct="false">0</button>
+    </div>
+    <div class="mastery-q">
+      <p>The imaginary part of e^(iθ) is:</p>
+      <button class="mastery-opt" data-correct="true">sin θ</button>
+      <button class="mastery-opt" data-correct="false">cos θ</button>
+      <button class="mastery-opt" data-correct="false">θ</button>
+      <button class="mastery-opt" data-correct="false">1</button>
+    </div>
+    <div class="mastery-q">
+      <p>A Fourier transform decomposes a signal into:</p>
+      <button class="mastery-opt" data-correct="true">Its component frequencies</button>
+      <button class="mastery-opt" data-correct="false">Its color</button>
+      <button class="mastery-opt" data-correct="false">Its length</button>
+      <button class="mastery-opt" data-correct="false">Its file size</button>
+    </div>
+    <div class="mastery-q">
+      <p>The magnitude |e^(iθ)| is always:</p>
+      <button class="mastery-opt" data-correct="true">1</button>
+      <button class="mastery-opt" data-correct="false">θ</button>
+      <button class="mastery-opt" data-correct="false">0</button>
+      <button class="mastery-opt" data-correct="false">Infinite</button>
+    </div>
+    <div class="mastery-q">
+      <p>e^(i·90°) equals:</p>
+      <button class="mastery-opt" data-correct="true">i</button>
+      <button class="mastery-opt" data-correct="false">1</button>
+      <button class="mastery-opt" data-correct="false">−1</button>
+      <button class="mastery-opt" data-correct="false">−i</button>
+    </div>
+    <button class="mastery-submit lab-btn" type="button">Submit mastery test</button>
+    <button class="mastery-retry lab-btn" type="button" hidden="">Retry</button>
+    <p class="mastery-result" hidden=""></p>
+  </div>
+</div>
+</details>
+
+</div>
+
+<footer>Part of the X Horizon skill library.</footer>
+
+<script>
+(function(){
+  var INK='#f4f2ec', DIM='#9b9a93';
+
+  function grid(ctx,W,H,ox,oy,step){
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='rgba(244,242,236,0.06)'; ctx.lineWidth=1;
+    for(var x=ox%step; x<W; x+=step){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for(var y=oy%step; y<H; y+=step){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    ctx.strokeStyle='rgba(244,242,236,0.32)'; ctx.lineWidth=1.2;
+    ctx.beginPath(); ctx.moveTo(0,oy); ctx.lineTo(W,oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox,0); ctx.lineTo(ox,H); ctx.stroke();
+  }
+  function arrow(ctx,x1,y1,x2,y2,color,dashed){
+    ctx.save();
+    ctx.strokeStyle=color; ctx.fillStyle=color; ctx.lineWidth=2;
+    if(dashed) ctx.setLineDash([5,4]);
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    ctx.setLineDash([]);
+    var ang=Math.atan2(y2-y1,x2-x1), hs=8;
+    ctx.beginPath();
+    ctx.moveTo(x2,y2);
+    ctx.lineTo(x2-hs*Math.cos(ang-Math.PI/6), y2-hs*Math.sin(ang-Math.PI/6));
+    ctx.lineTo(x2-hs*Math.cos(ang+Math.PI/6), y2-hs*Math.sin(ang+Math.PI/6));
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  function curve(ctx,pts,color,width){
+    ctx.strokeStyle=color; ctx.lineWidth=width||2; ctx.beginPath();
+    pts.forEach(function(p,i){ if(i===0) ctx.moveTo(p[0],p[1]); else ctx.lineTo(p[0],p[1]); });
+    ctx.stroke();
+  }
+  function dot(ctx,x,y,r,color){ ctx.fillStyle=color; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); }
+  function label(ctx,text,x,y,color,size){ ctx.fillStyle=color||INK; ctx.font=(size||13)+'px IBM Plex Mono, monospace'; ctx.fillText(text,x,y); }
+  function val(id){ return parseFloat(document.getElementById(id).value); }
+  function setV(id,text){ document.getElementById(id+'-v').textContent=text; }
+  function out(id,html){ var el=document.getElementById(id); if(el) el.innerHTML=html; }
+
+  /* --- hero grapher --- */
+  function drawHero(){
+    var c=document.getElementById('c-hero'), ctx=c.getContext('2d'), W=c.width,H=c.height, ox=W/2, oy=H/2, scale=28;
+    var fn=document.getElementById('hero-fn').value, A=val('hero-A'), B=val('hero-B');
+    setV('hero-A',A.toFixed(1)); setV('hero-B',B.toFixed(1));
+    grid(ctx,W,H,ox,oy,28);
+    var pts=[];
+    for(var px=0; px<=W; px+=2){
+      var x=(px-ox)/scale, y;
+      if(fn==='sin') y=A*Math.sin(B*x);
+      else if(fn==='cos') y=A*Math.cos(B*x);
+      else if(fn==='quad') y=A*Math.pow(x/Math.max(B,0.2),2)*0.5;
+      else if(fn==='exp'){ if(x<0) continue; y=A*Math.exp(-x/(B*1.6)); }
+      else { y=A*Math.exp(-(x*x)/(2*Math.pow(B*1.4,2))); }
+      pts.push([px, oy - y*scale]);
+    }
+    curve(ctx,pts,INK,2.2);
+  }
+  ['hero-fn','hero-A','hero-B'].forEach(function(id){ document.getElementById(id).addEventListener('input',drawHero); document.getElementById(id).addEventListener('change',drawHero); });
+  drawHero();
+
+  /* --- 1: trig triangle --- */
+  function drawTrig(){
+    var c=document.getElementById('c-trig'), ctx=c.getContext('2d'), W=c.width,H=c.height;
+    var theta=val('trig-theta'); setV('trig-theta',theta+'°');
+    ctx.clearRect(0,0,W,H);
+    var ox=70, oy=H-40, hyp=150, rad=theta*Math.PI/180;
+    var ax=ox+hyp*Math.cos(rad), ay=oy-hyp*Math.sin(rad);
+    ctx.strokeStyle=INK; ctx.lineWidth=2.2;
+    curve(ctx,[[ox,oy],[ax,ay]],INK,2.2);
+    curve(ctx,[[ox,oy],[ax,oy]],DIM,1.6);
+    curve(ctx,[[ax,oy],[ax,ay]],DIM,1.6);
+    ctx.fillStyle='rgba(244,242,236,0.5)';
+    ctx.fillRect(ax-10,oy-10,10,10);
+    dot(ctx,ox,oy,3,INK);
+    label(ctx,'θ',ox+22,oy-10,INK,14);
+    label(ctx,'adjacent = cos θ',ox+20,oy+24,DIM,12);
+    label(ctx,'opposite = sin θ',ax+10,(oy+ay)/2,DIM,12);
+    label(ctx,'hyp = 1',(ox+ax)/2-10,(oy+ay)/2-14,DIM,12);
+    out('trig-out','sin θ = '+Math.sin(rad).toFixed(3)+'&nbsp;&nbsp;&nbsp;cos θ = '+Math.cos(rad).toFixed(3)+'&nbsp;&nbsp;&nbsp;tan θ = '+Math.tan(rad).toFixed(3));
+  }
+  document.getElementById('trig-theta').addEventListener('input',drawTrig); drawTrig();
+
+  /* --- 2: vectors --- */
+  function drawVec(){
+    var c=document.getElementById('c-vec'), ctx=c.getContext('2d'), W=c.width,H=c.height, ox=W/2, oy=H/2, scale=22;
+    var theta=val('vec-theta'); setV('vec-theta',theta+'°');
+    grid(ctx,W,H,ox,oy,22);
+    var rad=theta*Math.PI/180, Amag=4, A=[Amag*Math.cos(rad), Amag*Math.sin(rad)], B=[3,1];
+    var sum=[A[0]+B[0],A[1]+B[1]];
+    arrow(ctx,ox,oy,ox+B[0]*scale,oy-B[1]*scale,DIM,false);
+    arrow(ctx,ox,oy,ox+A[0]*scale,oy-A[1]*scale,INK,false);
+    arrow(ctx,ox,oy,ox+sum[0]*scale,oy-sum[1]*scale,'rgba(244,242,236,0.55)',true);
+    label(ctx,'A',ox+A[0]*scale+6,oy-A[1]*scale-4,INK,13);
+    label(ctx,'B',ox+B[0]*scale+6,oy-B[1]*scale-4,DIM,13);
+    label(ctx,'A+B',ox+sum[0]*scale+6,oy-sum[1]*scale-4,'rgba(244,242,236,0.7)',13);
+    var dotp=A[0]*B[0]+A[1]*B[1];
+    var angleBetween=Math.acos(dotp/(Amag*Math.sqrt(10)))*180/Math.PI;
+    out('vec-out','A·B = '+dotp.toFixed(2)+'&nbsp;&nbsp;&nbsp;angle between A and B = '+angleBetween.toFixed(1)+'°');
+  }
+  document.getElementById('vec-theta').addEventListener('input',drawVec); drawVec();
+
+  /* --- 3: calculus tangent --- */
+  function drawCalc(){
+    var c=document.getElementById('c-calc'), ctx=c.getContext('2d'), W=c.width,H=c.height, ox=W/2, oy=H-24, scale=48;
+    var x0=val('calc-x0'); setV('calc-x0',x0.toFixed(1));
+    grid(ctx,W,H,ox,oy,48);
+    var pts=[];
+    for(var px=0; px<=W; px+=3){ var x=(px-ox)/scale; pts.push([px, oy - (x*x)*scale]); }
+    curve(ctx,pts,DIM,2);
+    var y0=x0*x0, slope=2*x0;
+    var x1=x0-1.6, x2=x0+1.6, y1=y0+slope*(x1-x0), y2=y0+slope*(x2-x0);
+    curve(ctx,[[ox+x1*scale,oy-y1*scale],[ox+x2*scale,oy-y2*scale]],INK,2.2);
+    dot(ctx,ox+x0*scale,oy-y0*scale,4.5,INK);
+    out('calc-out','f(x₀) = '+y0.toFixed(2)+'&nbsp;&nbsp;&nbsp;slope f\u2032(x₀) = 2x₀ = '+slope.toFixed(2));
+  }
+  document.getElementById('calc-x0').addEventListener('input',drawCalc); drawCalc();
+
+  /* --- 4: linear algebra rotation --- */
+  function drawLin(){
+    var c=document.getElementById('c-lin'), ctx=c.getContext('2d'), W=c.width,H=c.height, ox=W/2, oy=H/2, scale=70;
+    var theta=val('lin-theta'); setV('lin-theta',theta+'°');
+    grid(ctx,W,H,ox,oy,35);
+    ctx.strokeStyle='rgba(244,242,236,0.18)'; ctx.beginPath(); ctx.arc(ox,oy,scale,0,Math.PI*2); ctx.stroke();
+    var rad=theta*Math.PI/180;
+    arrow(ctx,ox,oy,ox+scale,oy,DIM,true);
+    arrow(ctx,ox,oy,ox+scale*Math.cos(rad),oy-scale*Math.sin(rad),INK,false);
+    out('lin-out','R(θ)·(1,0) = ('+Math.cos(rad).toFixed(3)+', '+Math.sin(rad).toFixed(3)+')');
+  }
+  document.getElementById('lin-theta').addEventListener('input',drawLin); drawLin();
+
+  /* --- 5: ODE decay --- */
+  function drawOde(){
+    var c=document.getElementById('c-ode'), ctx=c.getContext('2d'), W=c.width,H=c.height, ox=40, oy=H-24;
+    var tau=val('ode-tau'); setV('ode-tau',tau);
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='rgba(244,242,236,0.32)'; ctx.lineWidth=1.2;
+    ctx.beginPath(); ctx.moveTo(ox,oy); ctx.lineTo(W-10,oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox,10); ctx.lineTo(ox,oy); ctx.stroke();
+    var h0=500, tmax=400, xscale=(W-ox-10)/tmax, yscale=(oy-16)/h0;
+    var pts=[];
+    for(var t=0; t<=tmax; t+=2){ pts.push([ox+t*xscale, oy - h0*Math.exp(-t/tau)*yscale]); }
+    curve(ctx,pts,INK,2.2);
+    var hAt100=h0*Math.exp(-100/tau);
+    dot(ctx,ox+100*xscale, oy-hAt100*yscale, 4, 'rgba(244,242,236,0.8)');
+    label(ctx,'t (days)',W-70,oy-8,DIM,12);
+    label(ctx,'h (km)',ox+6,20,DIM,12);
+    out('ode-out','h(100 days) = '+hAt100.toFixed(0)+' km&nbsp;&nbsp;&nbsp;(started at 500 km)');
+  }
+  document.getElementById('ode-tau').addEventListener('input',drawOde); drawOde();
+
+  /* --- 6: gaussian --- */
+  function drawStat(){
+    var c=document.getElementById('c-stat'), ctx=c.getContext('2d'), W=c.width,H=c.height, ox=W/2, oy=H-20, scale=55;
+    var mu=val('stat-mu'), sigma=val('stat-sigma'); setV('stat-mu',mu.toFixed(1)); setV('stat-sigma',sigma.toFixed(1));
+    grid(ctx,W,H,ox,oy,55);
+    function f(x){ return Math.exp(-Math.pow(x-mu,2)/(2*sigma*sigma)); }
+    var pts=[];
+    for(var px=0; px<=W; px+=2){ var x=(px-ox)/scale; pts.push([px, oy - f(x)*(oy-14)]); }
+    ctx.fillStyle='rgba(244,242,236,0.08)';
+    ctx.beginPath(); ctx.moveTo(ox+(mu-sigma)*scale, oy);
+    for(var px2=(mu-sigma)*scale+ox; px2<=(mu+sigma)*scale+ox; px2+=2){ var xx=(px2-ox)/scale; ctx.lineTo(px2, oy - f(xx)*(oy-14)); }
+    ctx.lineTo(ox+(mu+sigma)*scale, oy); ctx.closePath(); ctx.fill();
+    curve(ctx,pts,INK,2.2);
+    out('stat-out','peak at x = μ = '+mu.toFixed(1)+'&nbsp;&nbsp;&nbsp;shaded band = μ ± σ (≈68% of the area)');
+  }
+  ['stat-mu','stat-sigma'].forEach(function(id){ document.getElementById(id).addEventListener('input',drawStat); });
+  drawStat();
+
+  /* --- 7: newton-raphson --- */
+  var newtonX=1, newtonIter=0, newtonHist=[1];
+  function f7(x){ return x*x-2; } function fp7(x){ return 2*x; }
+  function drawNewton(){
+    var c=document.getElementById('c-newton'), ctx=c.getContext('2d'), W=c.width,H=c.height, ox=W/2, oy=H/2, scale=90;
+    grid(ctx,W,H,ox,oy,45);
+    var pts=[];
+    for(var px=0; px<=W; px+=3){ var x=(px-ox)/scale; pts.push([px, oy - f7(x)*scale*0.4]); }
+    curve(ctx,pts,DIM,2);
+    newtonHist.forEach(function(xn,i){
+      dot(ctx, ox+xn*scale, oy - f7(xn)*scale*0.4, i===newtonHist.length-1?4.5:3, i===newtonHist.length-1?INK:'rgba(244,242,236,0.4)');
+    });
+    var xn=newtonX, slope=fp7(xn), y0=f7(xn);
+    var x1=xn-1, x2=xn+1, y1=y0+slope*(x1-xn), y2=y0+slope*(x2-xn);
+    curve(ctx,[[ox+x1*scale,oy-y1*scale*0.4],[ox+x2*scale,oy-y2*scale*0.4]],'rgba(244,242,236,0.55)',1.6);
+    out('newton-out','iteration '+newtonIter+'&nbsp;&nbsp;&nbsp;x_'+newtonIter+' = '+newtonX.toFixed(6)+'&nbsp;&nbsp;&nbsp;√2 = 1.414214');
+  }
+  document.getElementById('newton-step').addEventListener('click',function(){
+    if(newtonIter>=6) return;
+    newtonX = newtonX - f7(newtonX)/fp7(newtonX);
+    newtonIter++; newtonHist.push(newtonX); drawNewton();
+  });
+  document.getElementById('newton-reset').addEventListener('click',function(){ newtonX=1; newtonIter=0; newtonHist=[1]; drawNewton(); });
+  drawNewton();
+
+  /* --- 8: euler circle --- */
+  function drawEuler(){
+    var c=document.getElementById('c-euler'), ctx=c.getContext('2d'), W=c.width,H=c.height, ox=W/2, oy=H/2, scale=75;
+    var theta=val('euler-theta'); setV('euler-theta',theta+'°');
+    grid(ctx,W,H,ox,oy,37.5);
+    ctx.strokeStyle='rgba(244,242,236,0.22)'; ctx.beginPath(); ctx.arc(ox,oy,scale,0,Math.PI*2); ctx.stroke();
+    var rad=theta*Math.PI/180, x=Math.cos(rad), y=Math.sin(rad);
+    arrow(ctx,ox,oy,ox+x*scale,oy-y*scale,INK,false);
+    curve(ctx,[[ox+x*scale,oy],[ox+x*scale,oy-y*scale]],DIM,1.4);
+    curve(ctx,[[ox,oy],[ox+x*scale,oy]],DIM,1.4);
+    out('euler-out','cos θ = '+x.toFixed(3)+'&nbsp;&nbsp;&nbsp;sin θ = '+y.toFixed(3)+'&nbsp;&nbsp;&nbsp;e^(iθ) = '+x.toFixed(2)+' + '+y.toFixed(2)+'i');
+  }
+  document.getElementById('euler-theta').addEventListener('input',drawEuler); drawEuler();
+
+  /* --- progress system (localStorage) --- */
+  var TOPIC_KEYS=['trig','vec','calc','lin','ode','stat','newton','euler'];
+  var STATUS_LABEL={introduced:'Not started',learning:'Learning',practicing:'Practicing',checked:'Checked',mastered:'Mastered'};
+
+  function defaultProgress(){
+    var topics={};
+    TOPIC_KEYS.forEach(function(k){ topics[k]={opened:false,quizTotal:0,quizCorrect:0,practiceAttempts:0,practiceCorrect:0,masteryScore:null,masteryAttempts:0}; });
+    return {topics:topics, streak:0, lastStudyDate:null, totalStudySeconds:0};
+  }
+  function loadProgress(){
+    try{
+      var raw=localStorage.getItem('xhMathProgress');
+      if(!raw) return defaultProgress();
+      var p=JSON.parse(raw);
+      var d=defaultProgress();
+      TOPIC_KEYS.forEach(function(k){ p.topics[k]=Object.assign(d.topics[k], p.topics && p.topics[k] ? p.topics[k] : {}); });
+      p.streak=p.streak||0; p.lastStudyDate=p.lastStudyDate||null; p.totalStudySeconds=p.totalStudySeconds||0;
+      return p;
+    }catch(e){ return defaultProgress(); }
+  }
+  function saveProgress(){ try{ localStorage.setItem('xhMathProgress', JSON.stringify(PROGRESS)); }catch(e){} }
+  function todayStr(){ return new Date().toISOString().slice(0,10); }
+  function touchStudyDay(){
+    var t=todayStr();
+    if(PROGRESS.lastStudyDate===t) return;
+    if(PROGRESS.lastStudyDate){
+      var diffDays=Math.round((new Date(t)-new Date(PROGRESS.lastStudyDate))/86400000);
+      PROGRESS.streak = diffDays===1 ? (PROGRESS.streak+1) : 1;
+    } else { PROGRESS.streak=1; }
+    PROGRESS.lastStudyDate=t; saveProgress();
+  }
+  function computeStatus(t){
+    if(t.masteryScore!=null && t.masteryScore>=0.8) return 'mastered';
+    if(t.quizTotal>0) return 'checked';
+    if(t.practiceAttempts>0) return 'practicing';
+    if(t.opened) return 'learning';
+    return 'introduced';
+  }
+  function fmtTime(sec){
+    var h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60);
+    return h>0 ? (h+'h '+m+'m') : (m+'m');
+  }
+  function updateTopicBadge(key){
+    var st=computeStatus(PROGRESS.topics[key]);
+    document.querySelectorAll('.status-badge[data-topic="'+key+'"]').forEach(function(b){ b.textContent=STATUS_LABEL[st]; b.dataset.state=st; });
+    document.querySelectorAll('.lt[data-topic="'+key+'"]').forEach(function(l){ l.dataset.status=st; });
+  }
+  function updateDashboard(){
+    var opened=0, mastered=0, quizTotal=0, practiceTotal=0;
+    TOPIC_KEYS.forEach(function(k){
+      var t=PROGRESS.topics[k];
+      if(t.opened) opened++;
+      if(computeStatus(t)==='mastered') mastered++;
+      quizTotal+=t.quizTotal||0; practiceTotal+=t.practiceAttempts||0;
+      updateTopicBadge(k);
+    });
+    var pct=Math.round(mastered/TOPIC_KEYS.length*100);
+    document.getElementById('dashBarFill').style.width=pct+'%';
+    document.getElementById('dashPct').textContent=pct+'% of the track mastered';
+    document.getElementById('dashCompleted').textContent=opened+'/'+TOPIC_KEYS.length;
+    document.getElementById('dashMastered').textContent=mastered+'/'+TOPIC_KEYS.length;
+    document.getElementById('dashQuiz').textContent=quizTotal;
+    document.getElementById('dashPractice').textContent=practiceTotal;
+    document.getElementById('dashStreak').textContent=PROGRESS.streak||0;
+    document.getElementById('dashTime').textContent=fmtTime(PROGRESS.totalStudySeconds||0);
+  }
+
+  var PROGRESS=loadProgress();
+  touchStudyDay();
+  setInterval(function(){
+    if(document.visibilityState==='visible'){ PROGRESS.totalStudySeconds=(PROGRESS.totalStudySeconds||0)+10; saveProgress(); updateDashboard(); }
+  },10000);
+
+  document.querySelectorAll('details[data-topic]').forEach(function(d){
+    d.addEventListener('toggle',function(){
+      if(d.open){
+        var key=d.dataset.topic;
+        if(!PROGRESS.topics[key].opened){ PROGRESS.topics[key].opened=true; }
+        touchStudyDay(); saveProgress(); updateDashboard();
+      }
+    });
+  });
+
+  document.querySelectorAll('.lt[data-topic]').forEach(function(l){
+    l.addEventListener('click',function(){
+      var d=document.querySelector('details[data-topic="'+l.dataset.topic+'"]');
+      if(d){ d.open=true; d.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+
+  var resetBtn=document.getElementById('resetProgressBtn');
+  var resetArmed=false, resetTimer=null;
+  resetBtn.addEventListener('click',function(){
+    if(!resetArmed){
+      resetArmed=true; resetBtn.textContent='Click again to confirm reset';
+      resetTimer=setTimeout(function(){ resetArmed=false; resetBtn.textContent='Reset progress'; },4000);
+      return;
+    }
+    clearTimeout(resetTimer); resetArmed=false; resetBtn.textContent='Reset progress';
+    PROGRESS=defaultProgress(); saveProgress(); updateDashboard();
+    document.querySelectorAll('.quiz.answered').forEach(function(q){
+      q.classList.remove('answered');
+      q.querySelectorAll('.quiz-opt').forEach(function(o){ o.disabled=false; o.classList.remove('correct','incorrect'); });
+      q.querySelector('.quiz-feedback').hidden=true;
+    });
+    document.querySelectorAll('.practice-feedback').forEach(function(f){ f.hidden=true; });
+    document.querySelectorAll('.mastery.submitted').forEach(function(m){
+      m.classList.remove('submitted');
+      m.querySelectorAll('.mastery-opt').forEach(function(o){ o.disabled=false; o.classList.remove('selected','correct','incorrect'); });
+      m.querySelector('.mastery-submit').hidden=false;
+      m.querySelector('.mastery-retry').hidden=true;
+      m.querySelector('.mastery-result').hidden=true;
+    });
+  });
+
+  /* --- quiz + practice (now feeding the progress system) --- */
+  Array.prototype.slice.call(document.querySelectorAll('.quiz')).forEach(function(q){
+    var options=Array.prototype.slice.call(q.querySelectorAll('.quiz-opt'));
+    var fb=q.querySelector('.quiz-feedback');
+    options.forEach(function(btn){
+      btn.addEventListener('click',function(){
+        if(q.classList.contains('answered')) return;
+        q.classList.add('answered');
+        options.forEach(function(o){ o.disabled=true; if(o.dataset.correct==='true') o.classList.add('correct'); });
+        if(btn.dataset.correct!=='true') btn.classList.add('incorrect');
+        fb.textContent=btn.dataset.explain; fb.hidden=false;
+        var topicEl=q.closest('details[data-topic]');
+        if(topicEl){
+          var td=PROGRESS.topics[topicEl.dataset.topic];
+          td.quizTotal=(td.quizTotal||0)+1;
+          if(btn.dataset.correct==='true') td.quizCorrect=(td.quizCorrect||0)+1;
+          saveProgress(); updateDashboard();
+        }
+      });
+    });
+  });
+  Array.prototype.slice.call(document.querySelectorAll('.practice')).forEach(function(p){
+    var input=p.querySelector('.practice-input'), btn=p.querySelector('.practice-check'), fb=p.querySelector('.practice-feedback');
+    var answer=parseFloat(p.dataset.answer), tol=parseFloat(p.dataset.tolerance||'0.1');
+    btn.addEventListener('click',function(){
+      var v=parseFloat(input.value);
+      if(isNaN(v)){ fb.textContent='Enter a number first.'; fb.className='practice-feedback no'; fb.hidden=false; return; }
+      var ok=Math.abs(v-answer)<=tol;
+      fb.textContent = ok ? '✓ Correct.' : 'Not quite — check the solution below.';
+      fb.className='practice-feedback '+(ok?'ok':'no'); fb.hidden=false;
+      var topicEl=p.closest('details[data-topic]');
+      if(topicEl){
+        var td=PROGRESS.topics[topicEl.dataset.topic];
+        td.practiceAttempts=(td.practiceAttempts||0)+1;
+        if(ok) td.practiceCorrect=(td.practiceCorrect||0)+1;
+        saveProgress(); updateDashboard();
+      }
+    });
+    input.addEventListener('keydown',function(e){ if(e.key==='Enter') btn.click(); });
+  });
+
+  /* --- mastery tests --- */
+  Array.prototype.slice.call(document.querySelectorAll('.mastery')).forEach(function(m){
+    var topic=m.dataset.topic;
+    var qs=Array.prototype.slice.call(m.querySelectorAll('.mastery-q'));
+    var submitBtn=m.querySelector('.mastery-submit'), retryBtn=m.querySelector('.mastery-retry'), result=m.querySelector('.mastery-result');
+    qs.forEach(function(q){
+      var opts=Array.prototype.slice.call(q.querySelectorAll('.mastery-opt'));
+      opts.forEach(function(o){
+        o.addEventListener('click',function(){
+          if(m.classList.contains('submitted')) return;
+          opts.forEach(function(x){ x.classList.remove('selected'); });
+          o.classList.add('selected');
+        });
+      });
+    });
+    submitBtn.addEventListener('click',function(){
+      var answered=qs.every(function(q){ return q.querySelector('.mastery-opt.selected'); });
+      if(!answered){ result.textContent='Answer all 5 questions first.'; result.className='mastery-result no'; result.hidden=false; return; }
+      var correct=0;
+      qs.forEach(function(q){
+        var sel=q.querySelector('.mastery-opt.selected');
+        var opts=Array.prototype.slice.call(q.querySelectorAll('.mastery-opt'));
+        opts.forEach(function(o){ o.disabled=true; if(o.dataset.correct==='true') o.classList.add('correct'); });
+        if(sel && sel.dataset.correct==='true') correct++; else if(sel) sel.classList.add('incorrect');
+      });
+      var score=correct/qs.length;
+      PROGRESS.topics[topic].masteryScore=score;
+      PROGRESS.topics[topic].masteryAttempts=(PROGRESS.topics[topic].masteryAttempts||0)+1;
+      saveProgress();
+      m.classList.add('submitted'); submitBtn.hidden=true; retryBtn.hidden=false;
+      result.className='mastery-result '+(score>=0.8?'ok':'no');
+      result.textContent=(score>=0.8?'✓ Mastered — ':'Not yet — ')+correct+'/'+qs.length+' correct ('+Math.round(score*100)+'%).'+(score>=0.8?'':' Review the topic above and try again.');
+      result.hidden=false;
+      updateTopicBadge(topic); updateDashboard();
+    });
+    retryBtn.addEventListener('click',function(){
+      m.classList.remove('submitted');
+      qs.forEach(function(q){ q.querySelectorAll('.mastery-opt').forEach(function(o){ o.disabled=false; o.classList.remove('selected','correct','incorrect'); }); });
+      submitBtn.hidden=false; retryBtn.hidden=true; result.hidden=true;
+    });
+  });
+
+  updateDashboard();
+
+  /* --- download --- */
+  var guideText=[
+    "X HORIZON — MATHEMATICS STUDY GUIDE","",
+    "1. Algebra & Trigonometry (Foundational)","c^2 = a^2 + b^2 - 2ab*cos(C)","Used for triangulating a position from two bearings.","",
+    "2. Vectors & Coordinate Geometry (Foundational)","|r| = sqrt(x^2+y^2+z^2)   a.b = |a||b|cos(theta)","Used for converting between coordinate frames.","",
+    "3. Calculus (Intermediate)","v(t) = dr/dt   dv = integral of a(t) dt","Used for deriving velocity from measured acceleration.","",
+    "4. Linear Algebra (Intermediate)","R(theta) rotation matrix   A v = lambda v","Used for attitude determination and frame rotation.","",
+    "5. Differential Equations (Advanced)","d2r/dt2 = -(GM/r^3) r    h(t) = h0 * e^(-t/tau)","Used for modeling orbital decay and orbital motion.","",
+    "6. Probability & Statistics (Advanced)","f(x) = (1/(sigma*sqrt(2*pi))) * e^(-(x-mu)^2/(2*sigma^2))","Used for estimating true values from noisy measurements.","",
+    "7. Numerical Methods (Advanced)","x(n+1) = x(n) - f(x(n))/f'(x(n))","Used for propagating trajectories with no closed-form solution.","",
+    "8. Complex Numbers & Fourier Analysis (Advanced)","e^(i*theta) = cos(theta) + i*sin(theta)","Used for extracting frequencies from noisy signals.","",
+    "-- X Horizon Skill Library --"
+  ].join("\n");
+  var guideBtn=document.getElementById('downloadGuideBtn');
+  var pageBtn=document.getElementById('downloadPageBtn');
+  (async function initDownload(){
+    try{
+      if(!window.claude || !window.claude.use){ guideBtn.hidden=true; pageBtn.hidden=true; return; }
+      var downloads=await window.claude.use('downloads');
+      if(!downloads){ guideBtn.hidden=true; pageBtn.hidden=true; return; }
+      guideBtn.addEventListener('click',async function(){
+        try{ await downloads.save({filename:'x-horizon-mathematics-study-guide.txt', data:guideText}); }catch(e){}
+      });
+      pageBtn.addEventListener('click',async function(){
+        try{
+          var html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+          await downloads.save({filename:'x-horizon-mathematics-lab.html', data:html});
+        }catch(e){}
+      });
+    }catch(e){ guideBtn.hidden=true; pageBtn.hidden=true; }
+  })();
+})();
+</script>
+
+
+
+</body></html>

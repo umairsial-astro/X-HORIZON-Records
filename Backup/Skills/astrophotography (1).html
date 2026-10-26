@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X HORIZON — Astrophotography Lab</title>
+<style id="mainStyle">
+:root{--bg:#07070a;--bg2:#0d0e12;--panel:#0f1013;--line:#232428;--text:#f0f0ee;--dim:#96979c;--gold:#c9a24c;--gold-d:#8a7233;--danger:#c96a4c}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.5}
+h1,h2,h3{font-weight:600;letter-spacing:.03em}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+header{position:sticky;top:0;z-index:50;background:rgba(7,7,10,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column}
+.brand b{letter-spacing:.18em;font-size:14px}
+.brand span{font-size:10px;color:var(--dim);letter-spacing:.08em}
+nav{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;letter-spacing:.05em}
+nav a{color:var(--dim);text-decoration:none;padding:4px 2px;border-bottom:1px solid transparent}
+nav a:hover{color:var(--text);border-color:var(--gold)}
+.modes{display:flex;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.modes button{background:transparent;color:var(--dim);border:none;padding:6px 10px;font-size:11px;letter-spacing:.08em}
+.modes button.active{background:var(--gold);color:#0a0a0a}
+.hero{position:relative;border-bottom:1px solid var(--line);overflow:hidden;min-height:70vh;display:flex;align-items:flex-end}
+#stars{position:absolute;inset:0;width:100%;height:100%}
+.nebula{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 20%,rgba(120,90,150,.10),transparent 55%),radial-gradient(ellipse at 20% 70%,rgba(80,110,140,.08),transparent 50%)}
+.scope{position:absolute;right:6%;bottom:0;width:230px;opacity:.9}
+.hero-inner{position:relative;padding:70px 0 50px;width:100%}
+.eyebrow{color:var(--gold);font-size:12px;letter-spacing:.25em}
+.hero h1{font-size:clamp(28px,5vw,54px);margin:8px 0 6px}
+.hero p{color:var(--dim);max-width:560px;font-size:15px}
+.cta-row{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:11px 18px;font-size:12px;letter-spacing:.1em;border-radius:2px}
+.btn:hover{border-color:var(--gold)}
+.btn.gold{background:var(--gold);color:#0a0a0a;border-color:var(--gold)}
+section{padding:60px 0;border-bottom:1px solid var(--line)}
+.section-head{margin-bottom:26px}
+.section-head .eyebrow{display:block;margin-bottom:6px}
+.section-head p{color:var(--dim);font-size:14px;max-width:640px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:18px}
+.grid{display:grid;gap:14px}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.grid.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.acc{border:1px solid var(--line);border-radius:3px;margin-bottom:8px;overflow:hidden}
+.acc summary{padding:14px 16px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.05em;background:var(--panel)}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary:after{content:'+';color:var(--gold);font-size:16px}
+.acc[open] summary:after{content:'–'}
+.acc-body{padding:0 16px 16px;color:var(--dim);font-size:13.5px}
+.acc-body ul{margin:6px 0;padding-left:18px}
+label{display:block;font-size:11px;color:var(--dim);letter-spacing:.06em;margin-bottom:4px}
+input,select{width:100%;background:#08090b;border:1px solid var(--line);color:var(--text);padding:8px 10px;border-radius:2px;font-size:13px;margin-bottom:12px}
+.field{display:flex;flex-direction:column}
+.result{border-top:1px dashed var(--line);margin-top:6px;padding-top:12px;font-size:13px}
+.result b{color:var(--gold)}
+.tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.tabs button{background:var(--panel);border:1px solid var(--line);color:var(--dim);padding:8px 14px;font-size:11.5px;letter-spacing:.08em;border-radius:2px}
+.tabs button.active{color:var(--text);border-color:var(--gold)}
+.tabpane{display:none}
+.tabpane.active{display:block}
+.fov-box{border:1px solid var(--line);background:#08090b;height:220px;position:relative;display:flex;align-items:center;justify-content:center;margin-top:12px}
+.fov-rect{border:1px solid var(--gold);background:rgba(201,162,76,.06)}
+.badge{display:inline-block;font-size:10.5px;letter-spacing:.08em;padding:3px 8px;border:1px solid var(--gold-d);color:var(--gold);border-radius:2px}
+.bortle-scale{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
+.bortle-scale button{width:34px;height:34px;border:1px solid var(--line);background:var(--panel);color:var(--dim);font-size:12px;border-radius:2px}
+.bortle-scale button.active{border-color:var(--gold);color:var(--gold)}
+.sky-canvas{width:100%;border:1px solid var(--line);background:#000;display:block}
+.checklist label{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--text);padding:8px 0;border-bottom:1px solid var(--line)}
+.checklist input{width:auto;margin:0}
+.progressbar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin:10px 0 18px}
+.progressbar i{display:block;height:100%;background:var(--gold);width:0%}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{border:1px solid var(--line);padding:8px;text-align:left}
+th{color:var(--gold);font-weight:500;font-size:11px;letter-spacing:.06em}
+.rowbtn{background:transparent;border:1px solid var(--line);color:var(--dim);padding:4px 8px;font-size:11px;border-radius:2px;margin-right:4px}
+.small{font-size:11.5px;color:var(--dim)}
+.adv-only{display:none}
+body.adv .adv-only{display:block}
+body.adv .adv-only-inline{display:inline}
+.formula{font-family:Consolas,monospace;color:var(--gold);font-size:14px;margin:6px 0}
+footer{padding:30px 0;text-align:center;color:var(--dim);font-size:11.5px}
+.snr-canvases{display:flex;gap:14px;flex-wrap:wrap}
+.snr-canvases canvas{border:1px solid var(--line);background:#000}
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0}
+.flow .node{border:1px solid var(--line);background:#08090b;padding:10px 14px;font-size:11.5px;letter-spacing:.05em;border-radius:2px}
+.flow .arrow{color:var(--gold)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.stat{border:1px solid var(--line);background:#08090b;padding:12px;border-radius:2px}
+.stat b{display:block;font-size:20px;color:var(--gold)}
+.stat span{font-size:10.5px;color:var(--dim);letter-spacing:.06em}
+.badge.sim{border-color:#4c78c9;color:#8fb0e0}
+.badge.calc{border-color:#4cc98a;color:#8fe0b0}
+.notice{border:1px solid var(--danger);color:#e0a08f;padding:10px 12px;font-size:12.5px;border-radius:2px;margin:10px 0}
+.slider-row{margin-bottom:14px}
+.slider-row output{color:var(--gold);font-size:12px}
+input[type=range]{width:100%;accent-color:var(--gold);background:transparent;margin-bottom:4px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--line);width:min(920px,100%);max-height:86vh;display:flex;flex-direction:column;border-radius:3px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.modal-body{overflow:auto;padding:0}
+.codebox{margin:0;padding:14px 16px;font-family:Consolas,monospace;font-size:11.5px;color:#d8d8d4;white-space:pre-wrap;word-break:break-word;counter-reset:line}
+.rowbtn.gold{border-color:var(--gold);color:var(--gold)}
+</style>
+</head>
+<body>
+<header>
+ <div class="wrap topbar">
+  <div class="brand"><b>X HORIZON</b><span>EXPLORE NATURE BEYOND THE HORIZON</span></div>
+  <nav>
+   <a href="#learn">Learn</a><a href="#equipment">Equipment</a><a href="#calc">Calculators</a><a href="#snr">SNR / Stacking</a>
+   <a href="#pollution">Light Pollution</a><a href="#skycond">Sky Conditions</a><a href="#planner">Target Planner</a><a href="#filters">Filters</a>
+   <a href="#calibration">Calibration</a><a href="#workflow">Workflow</a><a href="#log">Session Log</a><a href="#knowledge">Knowledge</a><a href="#formulas">Formulas</a><a href="#" id="navSrc">Source</a>
+  </nav>
+  <div class="modes" role="group" aria-label="Detail level">
+   <button data-mode="beg" class="active">BEGINNER</button>
+   <button data-mode="int">INTERMEDIATE</button>
+   <button data-mode="adv">ADVANCED</button>
+  </div>
+ </div>
+</header>
+
+<div class="hero" id="top">
+ <canvas id="stars"></canvas>
+ <div class="nebula"></div>
+ <svg class="scope" viewBox="0 0 200 260" aria-hidden="true">
+  <line x1="100" y1="230" x2="60" y2="80" stroke="#cfcfcf" stroke-width="10" transform="rotate(-18 100 230)"/>
+  <rect x="55" y="70" width="10" height="10" fill="#cfcfcf" transform="rotate(-18 100 230)"/>
+  <line x1="70" y1="230" x2="130" y2="230" stroke="#8a8a8a" stroke-width="6"/>
+  <line x1="100" y1="230" x2="70" y2="255" stroke="#8a8a8a" stroke-width="5"/>
+  <line x1="100" y1="230" x2="130" y2="255" stroke="#8a8a8a" stroke-width="5"/>
+  <line x1="100" y1="230" x2="100" y2="258" stroke="#8a8a8a" stroke-width="5"/>
+ </svg>
+ <div class="wrap hero-inner">
+  <span class="eyebrow">ASTROPHOTOGRAPHY LAB</span>
+  <h1>Capture the Universe. Understand the Light. Build the Image.</h1>
+  <p>An advanced, interactive workspace for learning astrophotography theory, running exposure and sampling calculations, simulating signal‑to‑noise behavior, and planning real imaging sessions.</p>
+  <div class="cta-row">
+   <a href="#learn" class="btn gold">LEARN</a>
+   <a href="#planner" class="btn">PLAN A SESSION</a>
+   <a href="#calc" class="btn">OPEN IMAGING LAB</a>
+  </div>
+ </div>
+</div>
+
+<main class="wrap">
+
+<section id="learn">
+ <div class="section-head"><span class="eyebrow">01 — LEARNING PATH</span><h2>Six Levels, One Discipline</h2><p>Expand each level to review the concepts it covers.</p></div>
+ <div id="levels"></div>
+</section>
+
+<section id="equipment">
+ <div class="section-head"><span class="eyebrow">02 — EQUIPMENT BUILDER</span><h2>Telescope → Optical Element → Camera</h2><p>Build an imaging chain and see the resulting optical configuration update live.</p></div>
+ <div class="flow">
+  <div class="node">TELESCOPE</div><div class="arrow">→</div><div class="node">REDUCER / BARLOW</div><div class="arrow">→</div><div class="node">CAMERA</div>
+ </div>
+ <div class="panel grid g2">
+  <div>
+   <div class="field"><label>Telescope aperture (mm)</label><input id="eq_ap" type="number" value="130"></div>
+   <div class="field"><label>Telescope focal length (mm)</label><input id="eq_fl" type="number" value="910"></div>
+   <div class="field"><label>Reducer / Barlow factor</label>
+    <select id="eq_mult"><option value="1">None (1×)</option><option value="0.8">0.8× Reducer</option><option value="0.63">0.63× Reducer</option><option value="2">2× Barlow</option><option value="5">5× Barlow</option></select>
+   </div>
+   <div class="field"><label>Sensor width (mm)</label><input id="eq_w" type="number" value="23.5"></div>
+   <div class="field"><label>Sensor height (mm)</label><input id="eq_h" type="number" value="15.6"></div>
+   <div class="field"><label>Pixel size (µm)</label><input id="eq_px" type="number" value="3.76"></div>
+  </div>
+  <div class="result" id="eq_out"></div>
+ </div>
+</section>
+
+<section id="calc">
+ <div class="section-head"><span class="eyebrow">03 — CALCULATOR LAB</span><h2>Exposure · Field of View · Image Scale</h2><p>Real optical relationships computed from your equipment inputs.</p></div>
+ <div class="tabs" role="tablist">
+  <button class="active" data-tab="exp">EXPOSURE</button>
+  <button data-tab="fov">FIELD OF VIEW</button>
+  <button data-tab="scale">IMAGE SCALE</button>
+ </div>
+
+ <div class="tabpane active" id="pane-exp">
+  <div class="panel grid g2">
+   <div>
+    <div class="field"><label>Aperture (mm)</label><input id="e_ap" type="number" value="130"></div>
+    <div class="field"><label>Focal length (mm)</label><input id="e_fl" type="number" value="910"></div>
+    <div class="field"><label>ISO / gain</label><input id="e_iso" type="number" value="800"></div>
+    <div class="field"><label>Exposure per light (seconds)</label><input id="e_exp" type="number" value="180"></div>
+    <div class="field"><label>Number of lights</label><input id="e_n" type="number" value="40"></div>
+    <div class="field adv-only"><label>Dark frames</label><input id="e_dark" type="number" value="30"></div>
+    <div class="field adv-only"><label>Flat frames</label><input id="e_flat" type="number" value="20"></div>
+    <div class="field adv-only"><label>Bias frames</label><input id="e_bias" type="number" value="30"></div>
+    <div class="field adv-only"><label>Dithering every N frames</label><input id="e_dith" type="number" value="4"></div>
+    <div class="field adv-only"><label>Overhead per light (seconds)</label><input id="e_over" type="number" value="12"></div>
+   </div>
+   <div class="result" id="e_out"></div>
+  </div>
+  <p class="small adv-only" style="margin-top:10px">F‑number = focal length ÷ aperture. Doubling exposure count improves stacked SNR by √2, not 2×. Overhead covers download, dither settle and autofocus pauses.</p>
+ </div>
+
+ <div class="tabpane" id="pane-fov">
+  <div class="panel grid g2">
+   <div>
+    <div class="field"><label>Telescope focal length (mm)</label><input id="f_fl" type="number" value="910"></div>
+    <div class="field"><label>Sensor width (mm)</label><input id="f_w" type="number" value="23.5"></div>
+    <div class="field"><label>Sensor height (mm)</label><input id="f_h" type="number" value="15.6"></div>
+    <div class="result" id="f_out"></div>
+   </div>
+   <div class="fov-box"><div id="f_rect" class="fov-rect"></div></div>
+  </div>
+ </div>
+
+ <div class="tabpane" id="pane-scale">
+  <div class="panel grid g2">
+   <div>
+    <div class="field"><label>Pixel size (µm)</label><input id="s_px" type="number" value="3.76"></div>
+    <div class="field"><label>Focal length (mm)</label><input id="s_fl" type="number" value="910"></div>
+   </div>
+   <div class="result" id="s_out"></div>
+  </div>
+  <p class="small">Undersampled &lt; ~1.0"/px reasonable ranges vary · Reasonably sampled ~1.0–2.5"/px · Oversampled &gt; ~2.5"/px — these bands are rough guides only; local seeing, tracking and optics change what actually resolves well.</p>
+ </div>
+</section>
+
+<section id="snr">
+ <div class="section-head"><span class="eyebrow">04 — SIGNAL &amp; STACKING</span><h2>Why More Frames Means Less Noise</h2><p>SNR improves roughly with the square root of the number of independent frames (SNR ∝ √N).</p></div>
+ <div class="panel">
+  <label for="snr_n">Number of frames: <span id="snr_nval">10</span></label>
+  <input id="snr_n" type="range" min="1" max="100" value="10">
+  <div class="snr-canvases">
+   <div><canvas id="rawCanvas" width="260" height="200"></canvas><p class="small">Single raw frame</p></div>
+   <div><canvas id="stackCanvas" width="260" height="200"></canvas><p class="small">Stacked result</p></div>
+  </div>
+  <div class="result"><span class="badge sim" id="snr_badge">SIMULATION</span><br>Estimated relative SNR gain: <b id="snr_val">×3.2</b> vs a single sub-exposure.</div>
+ </div>
+</section>
+
+<section id="pollution">
+ <div class="section-head"><span class="eyebrow">05 — LIGHT POLLUTION LAB</span><h2>The Bortle Scale</h2><p>Higher Bortle class = brighter sky background, fewer visible stars, lower contrast on faint targets. Real results also depend on transparency, moonlight, optics and target altitude.</p></div>
+ <div class="panel">
+  <div class="bortle-scale" id="bortleBtns"></div>
+  <canvas id="skyCanvas" class="sky-canvas" width="900" height="220"></canvas>
+  <p class="result" id="bortleInfo"></p>
+ </div>
+</section>
+
+<section id="skycond">
+ <div class="section-head"><span class="eyebrow">05 — SKY CONDITION LAB</span><h2>Moon, Altitude &amp; Transparency</h2><p>An educational estimate of imaging difficulty — not a weather forecast. Real conditions vary by night, site and equipment.</p></div>
+ <div class="panel">
+  <div class="slider-row"><label>Moon illumination: <output id="sc_moon_v">30%</output></label><input id="sc_moon" type="range" min="0" max="100" value="30"></div>
+  <div class="slider-row"><label>Moon altitude (°): <output id="sc_moonalt_v">20°</output></label><input id="sc_moonalt" type="range" min="-10" max="90" value="20"></div>
+  <div class="slider-row"><label>Target altitude (°): <output id="sc_targetalt_v">55°</output></label><input id="sc_targetalt" type="range" min="0" max="90" value="55"></div>
+  <div class="slider-row"><label>Transparency (1 poor – 5 excellent): <output id="sc_trans_v">3</output></label><input id="sc_trans" type="range" min="1" max="5" value="3"></div>
+  <div class="slider-row"><label>Seeing (1 poor – 5 excellent): <output id="sc_seeing_v">3</output></label><input id="sc_seeing" type="range" min="1" max="5" value="3"></div>
+  <div class="result" id="sc_out"></div>
+ </div>
+</section>
+
+<section id="planner">
+ <div class="section-head"><span class="eyebrow">07 — TARGET PLANNER</span><h2>Build a Session Plan</h2><p>Generates an estimated planning summary — not real-time astronomical visibility data.</p></div>
+ <div class="panel grid g2">
+  <div>
+   <div class="field"><label>Target name</label><input id="p_name" value="M31 — Andromeda Galaxy"></div>
+   <div class="field"><label>Category</label>
+    <select id="p_cat"><option>Galaxy</option><option>Nebula</option><option>Star Cluster</option><option>Planetary Nebula</option><option>Milky Way</option><option>Lunar</option><option>Solar</option><option>Planetary</option></select>
+   </div>
+   <div class="field"><label>Focal length (mm)</label><input id="p_fl" type="number" value="910"></div>
+   <div class="field"><label>Bortle class</label><input id="p_bortle" type="number" min="1" max="9" value="5"></div>
+   <div class="field"><label>Available imaging time (hours)</label><input id="p_hours" type="number" value="3"></div>
+   <button class="btn gold" id="p_go">GENERATE PLAN</button>
+  </div>
+  <div class="result" id="p_out"><span class="badge">ESTIMATE ONLY</span></div>
+ </div>
+</section>
+
+<section id="filters">
+ <div class="section-head"><span class="eyebrow">08 — FILTERS &amp; SPECTRUM</span><h2>Broadband vs Narrowband</h2><p>Actual transmission curves differ by manufacturer and model — this is conceptual. Click a filter for details.</p></div>
+ <canvas id="filterCanvas" width="900" height="180" class="sky-canvas"></canvas>
+ <div class="grid g3" id="filterCards" style="margin-top:14px"></div>
+ <table style="margin-top:16px">
+  <tr><th></th><th>RGB / Broadband</th><th>Narrowband (Ha/OIII/SII)</th></tr>
+  <tr><td>Bandwidth</td><td>Wide (~100nm)</td><td>Narrow (3–7nm typical)</td></tr>
+  <tr><td>Light pollution response</td><td>Sensitive to skyglow</td><td>Rejects most broadband skyglow</td></tr>
+  <tr><td>Best for</td><td>Galaxies, star clusters, natural color</td><td>Emission nebulae (SHO/HOO palettes)</td></tr>
+  <tr><td>Capture complexity</td><td>Simpler, faster</td><td>Longer subs, more sessions</td></tr>
+ </table>
+ <div class="notice">Solar imaging: never point a telescope or camera at the Sun without a properly installed, certified solar filter designed for that optical system.</div>
+</section>
+
+<section id="calibration">
+ <div class="section-head"><span class="eyebrow">09 — CALIBRATION LAB</span><h2>Lights, Darks, Flats &amp; Bias</h2><p>Explore how each calibration frame type contributes to a clean final image.</p></div>
+ <div class="panel grid g2">
+  <div>
+   <div class="field"><label>Light frames</label><input id="cl_light" type="number" value="40"></div>
+   <div class="field"><label>Dark frames</label><input id="cl_dark" type="number" value="30"></div>
+   <div class="field"><label>Flat frames</label><input id="cl_flat" type="number" value="20"></div>
+   <div class="field"><label>Bias frames</label><input id="cl_bias" type="number" value="30"></div>
+  </div>
+  <div id="cl_cards" class="grid"></div>
+ </div>
+ <div class="flow" id="cl_flow"></div>
+</section>
+
+<section id="workflow">
+ <div class="section-head"><span class="eyebrow">10 — WORKFLOW BUILDER</span><h2>Planning → Export</h2><p>Progress is saved locally in your browser.</p></div>
+ <div class="progressbar"><i id="wf_bar"></i></div>
+ <div class="checklist" id="wf_list"></div>
+</section>
+
+<section id="log">
+ <div class="section-head"><span class="eyebrow">11 — SESSION LOG</span><h2>Your Imaging Sessions</h2><p>Stored locally on this device via localStorage. Nothing leaves your browser.</p></div>
+ <div class="stats" id="log_stats"></div>
+ <div class="panel">
+  <input id="log_search" placeholder="Search sessions by target or date...">
+  <div class="cta-row" style="margin:0 0 16px">
+   <button class="btn" id="log_csv">EXPORT CSV</button>
+   <button class="btn" id="log_json">EXPORT JSON</button>
+   <label class="btn" style="margin:0;display:inline-block">IMPORT JSON<input id="log_import" type="file" accept="application/json" style="display:none"></label>
+   <button class="btn" id="log_clear">CLEAR ALL</button>
+  </div>
+  <div class="grid g3">
+   <div class="field"><label>Date</label><input id="l_date" type="date"></div>
+   <div class="field"><label>Target</label><input id="l_target"></div>
+   <div class="field"><label>Location</label><input id="l_loc"></div>
+   <div class="field"><label>Telescope</label><input id="l_scope"></div>
+   <div class="field"><label>Camera</label><input id="l_cam"></div>
+   <div class="field"><label>Mount</label><input id="l_mount"></div>
+   <div class="field"><label>Filter</label><input id="l_filter"></div>
+   <div class="field"><label>Exposure (s)</label><input id="l_exp" type="number"></div>
+   <div class="field"><label>Frames</label><input id="l_frames" type="number"></div>
+   <div class="field"><label>Bortle</label><input id="l_bortle" type="number" min="1" max="9"></div>
+   <div class="field"><label>Seeing</label><input id="l_seeing"></div>
+   <div class="field"><label>Transparency</label><input id="l_trans"></div>
+  </div>
+  <div class="field"><label>Notes</label><input id="l_notes"></div>
+  <button class="btn gold" id="l_add">ADD SESSION</button>
+  <div style="overflow-x:auto;margin-top:16px">
+  <table id="log_table"><thead><tr><th>Date</th><th>Target</th><th>Scope</th><th>Camera</th><th>Exp×N</th><th>Integration</th><th>Bortle</th><th></th></tr></thead><tbody></tbody></table>
+  </div>
+ </div>
+</section>
+
+<section id="knowledge">
+ <div class="section-head"><span class="eyebrow">12 — KNOWLEDGE CARDS</span><h2>Core Concepts</h2></div>
+ <div id="cards"></div>
+</section>
+
+<section id="formulas">
+ <div class="section-head"><span class="eyebrow">13 — FORMULA REFERENCE</span><h2>Working Equations</h2></div>
+ <div class="panel">
+  <div class="formula">FOV (deg) ≈ 57.3 × sensor dimension (mm) / focal length (mm)</div>
+  <p class="small">Sensor dimension and focal length in the same units; result is an approximation valid for small angles.</p>
+  <div class="formula">Image scale ("/px) = 206.265 × pixel size (µm) / focal length (mm)</div>
+  <p class="small">206.265 converts the small-angle radian ratio to arcseconds.</p>
+  <div class="formula">f/# = focal length / aperture</div>
+  <p class="small">Both in the same length unit (mm).</p>
+  <div class="formula">Total integration = exposure per sub × number of subs</div>
+  <div class="formula">SNR ∝ √N</div>
+  <p class="small">N = number of stacked independent sub-exposures, assuming similar noise characteristics per sub.</p>
+ </div>
+</section>
+
+</main>
+
+<footer>X HORIZON — Astrophotography Lab · Educational simulation. Values are estimates, not observatory-grade measurements. <button id="viewSrc" class="rowbtn gold">VIEW SOURCE</button></footer>
+
+<div class="modal-overlay" id="srcModal" role="dialog" aria-modal="true" aria-label="Source Code Lab">
+ <div class="modal">
+  <div class="modal-head">
+   <div class="tabs" style="margin:0" id="srcTabs">
+    <button class="active" data-src="html">HTML</button><button data-src="css">CSS</button><button data-src="js">JAVASCRIPT</button>
+   </div>
+   <div>
+    <button class="rowbtn gold" id="srcCopy">COPY</button>
+    <button class="rowbtn" id="srcClose" aria-label="Close source viewer">CLOSE ✕</button>
+   </div>
+  </div>
+  <div class="modal-body"><pre class="codebox" id="srcCode"></pre></div>
+ </div>
+</div>
+
+<script id="mainScript">
+// ---------- Hero starfield ----------
+(function(){
+ var c=document.getElementById('stars'),ctx=c.getContext('2d'),stars=[];
+ function size(){c.width=c.parentElement.offsetWidth;c.height=c.parentElement.offsetHeight;
+  stars=[];for(var i=0;i<180;i++){stars.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.3+.2,p:Math.random()*Math.PI*2});}}
+ size();window.addEventListener('resize',size);
+ var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ function draw(t){ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle='#e9e9e6';
+  stars.forEach(function(s){var a=reduced?.7:.4+.5*Math.abs(Math.sin(t/1600+s.p));ctx.globalAlpha=a;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,7);ctx.fill();});
+  ctx.globalAlpha=1;requestAnimationFrame(draw);}
+ requestAnimationFrame(draw);
+})();
+
+// ---------- Mode switch ----------
+document.querySelectorAll('.modes button').forEach(function(b){
+ b.addEventListener('click',function(){document.querySelectorAll('.modes button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  document.body.classList.toggle('adv',b.dataset.mode==='adv');
+  document.body.classList.toggle('int',b.dataset.mode==='int');});
+});
+
+// ---------- Learning path ----------
+var levels=[
+["LEVEL 01 — FOUNDATIONS",["What is astrophotography?","Light and photons","Exposure","Aperture","Focal length","F-number","ISO","Sensor size","Pixel size","Field of view"]],
+["LEVEL 02 — EQUIPMENT",["DSLR","Mirrorless","Dedicated astronomy cameras","Telescope types","Mounts","Tripods","Filters","Guide cameras","Reducers","Barlow lenses","Dew heaters","Focusing systems"]],
+["LEVEL 03 — DEEP-SKY IMAGING",["Nebulae","Galaxies","Star clusters","Planetary nebulae","Supernova remnants"]],
+["LEVEL 04 — CAPTURE TECHNIQUE",["Single exposure","Multiple exposures","Calibration frames","Dithering","Guiding","Polar alignment","Autofocus","Meridian flip"]],
+["LEVEL 05 — IMAGE PROCESSING",["Calibration","Stacking","Background extraction","Noise reduction","Color calibration","Stretching","Star reduction","Deconvolution","Sharpening"]],
+["LEVEL 06 — ADVANCED",["Narrowband imaging","SHO / HOO workflows","Photometric concepts","Signal-to-noise optimization","Dynamic range","Sampling","Atmospheric seeing","Light pollution","Remote imaging"]]];
+document.getElementById('levels').innerHTML=levels.map(function(l){
+ return '<details class="acc"><summary>'+l[0]+'</summary><div class="acc-body"><ul>'+l[1].map(x=>'<li>'+x+'</li>').join('')+'</ul></div></details>';
+}).join('');
+
+// ---------- Tabs ----------
+document.querySelectorAll('.tabs button').forEach(function(b){
+ b.addEventListener('click',function(){var g=b.parentElement;g.querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  g.parentElement.querySelectorAll('.tabpane').forEach(x=>x.classList.remove('active'));
+  document.getElementById('pane-'+b.dataset.tab).classList.add('active');});
+});
+
+// ---------- Exposure calc ----------
+function fmtHM(sec){var h=Math.floor(sec/3600),m=Math.round((sec%3600)/60);return h+'h '+m+'m';}
+function calcExp(){
+ var ap=+e_ap.value||1,fl=+e_fl.value||1,exp=+e_exp.value||0,n=+e_n.value||0;
+ var dark=+e_dark.value||0,flat=+e_flat.value||0,bias=+e_bias.value||0,dith=+e_dith.value||0,over=+e_over.value||0;
+ var fnum=(fl/ap).toFixed(1);
+ var integration=exp*n;
+ var sessionTime=integration+over*n;
+ var calCount=dark+flat+bias;
+ e_out.innerHTML='<span class="badge calc">CALCULATED</span><br>F-number: <b>f/'+fnum+'</b><br>'+
+ 'Total integration time: <b>'+fmtHM(integration)+'</b> ('+n+' × '+exp+'s)<br>'+
+ 'Estimated total session time: <b>'+fmtHM(sessionTime)+'</b> (integration + overhead)<br>'+
+ 'Calibration frames needed: <b>'+calCount+'</b> (darks '+dark+' + flats '+flat+' + bias '+bias+')<br>'+
+ (dith>0?'Dithering every <b>'+dith+'</b> lights ('+Math.ceil(n/dith)+' dither events)<br>':'')+
+ 'Approx. SNR gain from stacking: <b>×'+Math.sqrt(n||1).toFixed(2)+'</b>';
+}
+[e_ap,e_fl,e_iso,e_exp,e_n,e_dark,e_flat,e_bias,e_dith,e_over].forEach(el=>el&&el.addEventListener('input',calcExp));calcExp();
+
+// ---------- FOV calc ----------
+function calcFov(){
+ var fl=+f_fl.value,w=+f_w.value,h=+f_h.value;
+ var fovW=57.3*w/fl,fovH=57.3*h/fl;
+ var diag=Math.sqrt(fovW*fovW+fovH*fovH);
+ function fmt(d){return d<(1/60)? (d*3600).toFixed(0)+'"' : d<1? (d*60).toFixed(1)+"'" : d.toFixed(2)+'°';}
+ f_out.innerHTML='<span class="badge calc">CALCULATED</span><br>Horizontal FOV: <b>'+fmt(fovW)+'</b><br>Vertical FOV: <b>'+fmt(fovH)+'</b><br>Diagonal FOV: <b>'+fmt(diag)+'</b>';
+ var box=document.querySelector('.fov-box'),bw=box.clientWidth-20,bh=box.clientHeight-20;
+ var ratio=w/h,rw,rh;
+ if(bw/bh>ratio){rh=bh;rw=bh*ratio;}else{rw=bw;rh=bw/ratio;}
+ f_rect.style.width=rw+'px';f_rect.style.height=rh+'px';
+}
+[f_fl,f_w,f_h].forEach(el=>el.addEventListener('input',calcFov));window.addEventListener('resize',calcFov);calcFov();
+
+// ---------- Equipment builder ----------
+function calcEquipment(){
+ var ap=+eq_ap.value||1,fl=+eq_fl.value||1,mult=+eq_mult.value||1,w=+eq_w.value||1,h=+eq_h.value||1,px=+eq_px.value||1;
+ var effFl=fl*mult;var fnum=(effFl/ap).toFixed(1);
+ var fovW=57.3*w/effFl,fovH=57.3*h/effFl,diag=Math.sqrt(fovW*fovW+fovH*fovH);
+ var scale=206.265*px/effFl;
+ function fmt(d){return d<(1/60)?(d*3600).toFixed(0)+'"':d<1?(d*60).toFixed(1)+"'":d.toFixed(2)+'°';}
+ eq_out.innerHTML='<span class="badge calc">CALCULATED</span><br>Effective focal length: <b>'+effFl.toFixed(0)+'mm</b><br>'+
+ 'Focal ratio: <b>f/'+fnum+'</b><br>Horizontal FOV: <b>'+fmt(fovW)+'</b> · Vertical FOV: <b>'+fmt(fovH)+'</b> · Diagonal: <b>'+fmt(diag)+'</b><br>'+
+ 'Image scale: <b>'+scale.toFixed(2)+'"/pixel</b> ('+(scale<1?'undersampled':scale<=2.5?'reasonably sampled':'oversampled')+')';
+}
+[eq_ap,eq_fl,eq_mult,eq_w,eq_h,eq_px].forEach(el=>el.addEventListener('input',calcEquipment));calcEquipment();
+
+// ---------- Image scale ----------
+function calcScale(){
+ var px=+s_px.value,fl=+s_fl.value;var scale=206.265*px/fl;
+ var cls=scale<1?'Undersampled':scale<=2.5?'Reasonably sampled':'Oversampled';
+ s_out.innerHTML='<span class="badge calc">CALCULATED</span><br>Image scale: <b>'+scale.toFixed(2)+'"/pixel</b><br>Classification: <b>'+cls+'</b><br><span class="small">Sampling relative to typical seeing — not a fixed rule.</span>';
+}
+[s_px,s_fl].forEach(el=>el.addEventListener('input',calcScale));calcScale();
+
+// ---------- SNR / stacking simulator ----------
+function makeFrame(w,h){var d=[];for(var i=0;i<w*h;i++){var v=20+Math.random()*35;d.push(v);}return d;}
+function paintFrame(canvas,data,w,h,stars){
+ var ctx=canvas.getContext('2d');var img=ctx.createImageData(w,h);
+ for(var i=0;i<w*h;i++){var v=Math.min(255,data[i]);img.data[i*4]=v*0.75;img.data[i*4+1]=v*0.78;img.data[i*4+2]=v*0.9;img.data[i*4+3]=255;}
+ ctx.putImageData(img,0,0);
+ ctx.save();ctx.scale(canvas.width/w,canvas.height/h);
+ stars.forEach(function(s){ctx.globalAlpha=Math.min(1,s.b);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,7);ctx.fill();});
+ ctx.restore();ctx.globalAlpha=1;
+}
+var W=65,H=50,STARCT=25;
+var starSeeds=[];for(var i=0;i<STARCT;i++){starSeeds.push({x:Math.random()*W,y:Math.random()*H,base:1+Math.random()*2.5});}
+function runSnr(){
+ var n=+snr_n.value;snr_nval.textContent=n;
+ var raw=makeFrame(W,H);var rawStars=starSeeds.map(s=>({x:s.x,y:s.y,r:s.base*.5,b:.5+Math.random()*.5}));
+ paintFrame(rawCanvas,raw,W,H,rawStars);
+ var acc=new Array(W*H).fill(0);
+ for(var k=0;k<n;k++){var f=makeFrame(W,H);for(var i=0;i<f.length;i++)acc[i]+=f[i];}
+ var avg=acc.map(v=>v/n);
+ // reduce noise variance visually by pulling toward mean
+ var mean=avg.reduce((a,b)=>a+b,0)/avg.length;
+ var stacked=avg.map(v=>mean+(v-mean)/Math.sqrt(n));
+ var stackStars=starSeeds.map(s=>({x:s.x,y:s.y,r:s.base*.5,b:Math.min(1,.6+Math.log(n+1)/6)}));
+ paintFrame(stackCanvas,stacked,W,H,stackStars);
+ snr_val.textContent='×'+Math.sqrt(n).toFixed(2);
+ document.getElementById('snr_badge').className='badge sim';
+}
+snr_n.addEventListener('input',runSnr);runSnr();
+
+// ---------- Light pollution / Bortle ----------
+var bortleData=[
+ {b:1,label:'Excellent dark sky',stars:'~7000+ visible',sky:8},
+ {b:2,label:'Typical dark sky',stars:'~4000',sky:20},
+ {b:3,label:'Rural sky',stars:'~2500',sky:34},
+ {b:4,label:'Rural/suburban transition',stars:'~1500',sky:48},
+ {b:5,label:'Suburban sky',stars:'~500',sky:66},
+ {b:6,label:'Bright suburban',stars:'~200',sky:84},
+ {b:7,label:'Suburban/urban transition',stars:'~100',sky:104},
+ {b:8,label:'City sky',stars:'~50',sky:130},
+ {b:9,label:'Inner-city sky',stars:'<25',sky:160}];
+document.getElementById('bortleBtns').innerHTML=bortleData.map(d=>'<button data-b="'+d.b+'">'+d.b+'</button>').join('');
+function drawSky(b){
+ var d=bortleData[b-1];var c=skyCanvas,ctx=c.getContext('2d');
+ ctx.fillStyle='rgb('+(d.sky*.4)+','+(d.sky*.45)+','+(d.sky*.6+10)+')';ctx.fillRect(0,0,c.width,c.height);
+ ctx.fillStyle='rgba(140,170,200,'+(0.12-d.sky/1200)+')';ctx.beginPath();ctx.ellipse(c.width*.35,c.height*.5,140,60,0,0,7);ctx.fill();
+ var count=Math.max(6,220-b*22);
+ for(var i=0;i<count;i++){ctx.globalAlpha=Math.random()*0.8+0.2;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(Math.random()*c.width,Math.random()*c.height,Math.random()*1.4+.3,0,7);ctx.fill();}
+ ctx.globalAlpha=1;
+ bortleInfo.innerHTML='<span class="badge sim">SIMULATION</span><br><b>Bortle '+d.b+'</b> — '+d.label+'. Roughly '+d.stars+' naked-eye stars. Faint nebula contrast drops sharply as sky brightness increases.';
+}
+document.getElementById('bortleBtns').addEventListener('click',function(e){
+ if(e.target.tagName!=='BUTTON')return;
+ document.querySelectorAll('#bortleBtns button').forEach(x=>x.classList.remove('active'));e.target.classList.add('active');
+ drawSky(+e.target.dataset.b);
+});
+document.querySelector('#bortleBtns button').classList.add('active');drawSky(1);
+
+// ---------- Target planner ----------
+p_go.addEventListener('click',function(){
+ var cat=p_cat.value,fl=+p_fl.value,bortle=+p_bortle.value,hours=+p_hours.value,name=p_name.value||'target';
+ var strategy={'Galaxy':'Broadband RGB/LRGB, moderate subs (120–300s), moon-sensitive.',
+ 'Nebula':'Consider narrowband (Ha/OIII) especially above Bortle 5.',
+ 'Star Cluster':'Shorter subs; avoid star saturation and bloating.',
+ 'Planetary Nebula':'Longer focal length, careful sampling; Ha/OIII useful.',
+ 'Milky Way':'Wide lens, tracked, moderate ISO, star-and-landscape blend.',
+ 'Lunar':'Short exposures, high frame-rate for lucky imaging/stacking.',
+ 'Solar':'Certified solar filter mandatory; short exposures only.',
+ 'Planetary':'High focal ratio, high frame rate video, stack best frames.'}[cat];
+ var subExp=(cat==='Lunar'||cat==='Planetary')?'1/100–1/500s (video)':(bortle>=6?'60–120s':'180–300s');
+ p_out.innerHTML='<span class="badge">ESTIMATE ONLY</span><div class="result">Target: <b>'+name+'</b> ('+cat+')<br>'+
+ 'Approx. framing at '+fl+'mm: use the FOV calculator above with your sensor size.<br>'+
+ 'Recommended strategy: '+strategy+'<br>'+
+ 'Suggested sub-exposure: <b>'+subExp+'</b><br>'+
+ 'Calibration reminder: capture darks, flats and bias for this session.<br>'+
+ 'Integration goal for '+hours+'h available: aim to complete full calibration sets before the session ends.</div>';
+});
+
+// ---------- Filter transmission (conceptual) ----------
+(function(){
+ var c=filterCanvas,ctx=c.getContext('2d');
+ var curves=[{name:'L',color:'#dddddd',peak:400,width:300},{name:'R',color:'#c96a4c',peak:620,width:80},
+ {name:'G',color:'#7ec96a',peak:530,width:70},{name:'B',color:'#6a8ec9',peak:460,width:70},
+ {name:'Ha',color:'#c94c4c',peak:656,width:6},{name:'OIII',color:'#4cc9b0',peak:501,width:6},{name:'SII',color:'#c9a24c',peak:672,width:6}];
+ function nm2x(nm){return (nm-380)/(700-380)*c.width;}
+ ctx.strokeStyle='#232428';ctx.beginPath();ctx.moveTo(0,c.height-20);ctx.lineTo(c.width,c.height-20);ctx.stroke();
+ curves.forEach(function(cv){
+  ctx.strokeStyle=cv.color;ctx.beginPath();
+  for(var x=0;x<c.width;x++){var nm=380+(x/c.width)*(700-380);
+   var t=Math.exp(-Math.pow((nm-cv.peak)/cv.width,2));var y=c.height-20-t*(c.height-40);
+   x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+  ctx.stroke();ctx.fillStyle=cv.color;ctx.font='11px sans-serif';ctx.fillText(cv.name,nm2x(cv.peak)-8,c.height-4);
+ });
+ var info={L:['400–700nm (visible)','Luminance / overall brightness','All broadband targets','Broadband'],
+  R:['~600–700nm','Red channel color data','Galaxies, star color','Broadband'],
+  G:['~500–570nm','Green channel color data','Galaxies, star color','Broadband'],
+  B:['~400–500nm','Blue channel color data','Galaxies, reflection nebulae','Broadband'],
+  Ha:['~656nm','Hydrogen-alpha emission','Emission nebulae, SNRs','Narrowband'],
+  OIII:['~501nm','Doubly-ionized oxygen emission','Planetary nebulae, some emission nebulae','Narrowband'],
+  SII:['~672nm','Singly-ionized sulfur emission','SHO palette structure','Narrowband']};
+ document.getElementById('filterCards').innerHTML=curves.map(cv=>{var i=info[cv.name];
+  return '<div class="panel"><b style="color:'+cv.color+'">'+cv.name+'</b><div class="small">'+i[0]+'<br>'+i[1]+'<br>Common for: '+i[2]+'<br><span class="badge" style="margin-top:4px">'+i[3].toUpperCase()+'</span></div></div>';
+ }).join('');
+})();
+
+// ---------- Sky condition lab ----------
+function calcSky(){
+ var moon=+sc_moon.value,moonAlt=+sc_moonalt.value,targetAlt=+sc_targetalt.value,trans=+sc_trans.value,seeing=+sc_seeing.value;
+ sc_moon_v.textContent=moon+'%';sc_moonalt_v.textContent=moonAlt+'°';sc_targetalt_v.textContent=targetAlt+'°';sc_trans_v.textContent=trans;sc_seeing_v.textContent=seeing;
+ var moonPenalty=(moon/100)*Math.max(0,Math.min(1,(moonAlt+10)/100))*40;
+ var altPenalty=targetAlt<30?(30-targetAlt)*1.2:0;
+ var condBonus=((5-trans)+(5-seeing))*8;
+ var difficulty=Math.max(0,Math.min(100,moonPenalty+altPenalty+condBonus));
+ var label=difficulty<30?'Favorable':difficulty<60?'Moderate':'Challenging';
+ sc_out.innerHTML='<span class="badge">ESTIMATE</span><br>Imaging difficulty: <b>'+difficulty.toFixed(0)+'/100 — '+label+'</b><br>'+
+ '<span class="small">Higher moon illumination/altitude, low target altitude, poor transparency and poor seeing all raise this score. Actual results depend on the specific night and target.</span>';
+}
+[sc_moon,sc_moonalt,sc_targetalt,sc_trans,sc_seeing].forEach(el=>el.addEventListener('input',calcSky));calcSky();
+
+// ---------- Calibration lab ----------
+function calcCalibration(){
+ var light=+cl_light.value||0,dark=+cl_dark.value||0,flat=+cl_flat.value||0,bias=+cl_bias.value||0;
+ var info=[['LIGHT',light,'Actual astronomical exposure containing signal + noise + sky background.'],
+ ['DARK',dark,'Measures thermal signal and read-noise pattern at matching exposure/temperature.'],
+ ['FLAT',flat,'Corrects vignetting and dust-shadow variations across the sensor.'],
+ ['BIAS',bias,'Measures the camera electronic readout offset (zero-length exposure).']];
+ cl_cards.innerHTML=info.map(i=>'<div class="panel"><b style="color:var(--gold)">'+i[0]+'</b><div class="small">Count: '+i[1]+'<br>'+i[2]+'</div></div>').join('');
+ cl_flow.innerHTML=['LIGHT ('+light+')','DARK ('+dark+')','FLAT ('+flat+')','BIAS ('+bias+')'].map(t=>'<div class="node">'+t+'</div>').join('<div class="arrow">+</div>')+
+ '<div class="arrow">→</div><div class="node">CALIBRATION</div><div class="arrow">→</div><div class="node">STACKING</div><div class="arrow">→</div><div class="node">PROCESSING</div><div class="arrow">→</div><div class="node">FINAL IMAGE</div>';
+}
+[cl_light,cl_dark,cl_flat,cl_bias].forEach(el=>el.addEventListener('input',calcCalibration));calcCalibration();
+
+// ---------- Workflow builder (localStorage) ----------
+var wfSteps=['Planning','Polar Alignment','Focus','Capture','Calibration','Registration','Stacking','Processing','Export'];
+var wfState=JSON.parse(localStorage.getItem('xh_workflow')||'{}');
+function renderWf(){
+ wf_list.innerHTML=wfSteps.map(function(s,i){
+  var checked=wfState[i]?'checked':'';
+  return '<label><input type="checkbox" data-i="'+i+'" '+checked+'> '+s+'</label>';
+ }).join('');
+ var done=wfSteps.filter((s,i)=>wfState[i]).length;
+ wf_bar.style.width=(done/wfSteps.length*100)+'%';
+}
+wf_list.addEventListener('change',function(e){
+ if(e.target.type!=='checkbox')return;
+ wfState[e.target.dataset.i]=e.target.checked;localStorage.setItem('xh_workflow',JSON.stringify(wfState));renderWf();
+});
+renderWf();
+
+// ---------- Session log (localStorage CRUD) ----------
+var sessions=JSON.parse(localStorage.getItem('xh_sessions')||'[]');
+function saveSessions(){localStorage.setItem('xh_sessions',JSON.stringify(sessions));}
+function integHours(s){return (s.exp||0)*(s.frames||0)/3600;}
+function renderStats(){
+ var totalH=sessions.reduce((a,s)=>a+integHours(s),0);
+ var targets=new Set(sessions.map(s=>s.target).filter(Boolean));
+ log_stats.innerHTML='<div class="stat"><b>'+sessions.length+'</b><span>TOTAL SESSIONS</span></div>'+
+ '<div class="stat"><b>'+totalH.toFixed(1)+'h</b><span>TOTAL INTEGRATION</span></div>'+
+ '<div class="stat"><b>'+targets.size+'</b><span>TARGETS CAPTURED</span></div>';
+}
+function renderLog(filter){
+ var tbody=document.querySelector('#log_table tbody');filter=(filter||'').toLowerCase();
+ tbody.innerHTML=sessions.filter(s=>!filter||(s.target||'').toLowerCase().includes(filter)||(s.date||'').includes(filter))
+ .map(function(s,i){
+  var integ=integHours(s).toFixed(2)+'h';
+  return '<tr><td>'+(s.date||'')+'</td><td>'+(s.target||'')+'</td><td>'+(s.scope||'')+'</td><td>'+(s.cam||'')+'</td><td>'+(s.exp||0)+'s×'+(s.frames||0)+'</td><td>'+integ+'</td><td>'+(s.bortle||'')+'</td>'+
+  '<td><button class="rowbtn" data-edit="'+i+'">Edit</button><button class="rowbtn" data-dup="'+i+'">Duplicate</button><button class="rowbtn" data-del="'+i+'">Delete</button></td></tr>';
+ }).join('');
+ renderStats();
+}
+var logFields=['date','target','loc','scope','cam','mount','filter','exp','frames','bortle','seeing','trans','notes'];
+var logInputs={date:l_date,target:l_target,loc:l_loc,scope:l_scope,cam:l_cam,mount:l_mount,filter:l_filter,exp:l_exp,frames:l_frames,bortle:l_bortle,seeing:l_seeing,trans:l_trans,notes:l_notes};
+var editingIndex=null;
+function readForm(){var o={};logFields.forEach(f=>o[f]=logInputs[f].type==='number'?+logInputs[f].value:logInputs[f].value);return o;}
+l_add.addEventListener('click',function(){
+ var data=readForm();
+ if(editingIndex!==null){sessions[editingIndex]=data;editingIndex=null;l_add.textContent='ADD SESSION';}
+ else sessions.push(data);
+ saveSessions();renderLog(log_search.value);
+});
+document.querySelector('#log_table').addEventListener('click',function(e){
+ var b=e.target;if(b.tagName!=='BUTTON')return;
+ if(b.dataset.del!==undefined){if(confirm('Delete this session?')){sessions.splice(+b.dataset.del,1);saveSessions();renderLog(log_search.value);}}
+ else if(b.dataset.dup!==undefined){sessions.push(Object.assign({},sessions[+b.dataset.dup]));saveSessions();renderLog(log_search.value);}
+ else if(b.dataset.edit!==undefined){var s=sessions[+b.dataset.edit];logFields.forEach(f=>logInputs[f].value=s[f]||'');editingIndex=+b.dataset.edit;l_add.textContent='SAVE CHANGES';window.scrollTo({top:log.offsetTop-70,behavior:'smooth'});}
+});
+log_search.addEventListener('input',()=>renderLog(log_search.value));
+log_csv.addEventListener('click',function(){
+ var rows=[logFields.join(',')].concat(sessions.map(s=>logFields.map(f=>('"'+String(s[f]||'').replace(/"/g,'""')+'"')).join(',')));
+ var blob=new Blob([rows.join('\n')],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='xh_sessions.csv';a.click();
+});
+log_json.addEventListener('click',function(){
+ var blob=new Blob([JSON.stringify(sessions,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='xh_sessions.json';a.click();
+});
+log_import.addEventListener('change',function(e){
+ var file=e.target.files[0];if(!file)return;var reader=new FileReader();
+ reader.onload=function(){try{var data=JSON.parse(reader.result);if(Array.isArray(data)){sessions=sessions.concat(data);saveSessions();renderLog();}else alert('Invalid session file.');}catch(err){alert('Could not parse JSON file.');}};
+ reader.readAsText(file);e.target.value='';
+});
+log_clear.addEventListener('click',function(){if(confirm('Delete ALL session log entries? This cannot be undone.')){sessions=[];saveSessions();renderLog();}});
+renderLog();
+
+// ---------- Knowledge cards ----------
+var cards=[
+["Seeing","Atmospheric turbulence blurring point sources.","Poorer seeing widens star profiles (higher FWHM) regardless of gear quality.","Match sampling to typical local seeing rather than chasing maximum focal length."],
+["Transparency","How clear/haze-free the atmosphere is.","Low transparency scatters light and dims faint targets.","Check forecasts; imaging on hazy nights wastes integration time."],
+["Dynamic Range","Ratio between the brightest and faintest recordable signal.","Limited range means bright cores or faint outer regions can be lost.","Use HDR blending or careful exposure choice for high-contrast targets."],
+["Gain / ISO","Amplification applied to the sensor signal.","Higher gain amplifies noise along with signal past a point.","Many sensors have a 'sweet spot' gain balancing read noise and dynamic range."],
+["Sampling","Relationship between pixel scale and optical resolution.","Oversampling wastes resolution on noise; undersampling blurs detail.","Bin or choose focal length to match your seeing conditions."],
+["Dithering","Small random pointing shifts between subs.","Moves fixed-pattern noise so it averages out during stacking.","Essential for clean backgrounds, especially with CMOS sensors."]];
+document.getElementById('cards').innerHTML=cards.map(c=>
+'<details class="acc"><summary>'+c[0]+'</summary><div class="acc-body"><b>Concept:</b> '+c[1]+'<br><b>Why it matters:</b> '+c[2]+'<br><b>Practical consequence:</b> '+c[3]+'</div></details>'
+).join('');
+
+// ---------- Source Code Lab (reads the page's actual live source) ----------
+function fullHtmlSource(){return '<!DOCTYPE html>\n'+document.documentElement.outerHTML;}
+function cssSource(){return document.getElementById('mainStyle').textContent;}
+function jsSource(){return document.getElementById('mainScript').textContent;}
+var srcCurrent='html';
+function renderSrc(){
+ var map={html:fullHtmlSource(),css:cssSource(),js:jsSource()};
+ srcCode.textContent=map[srcCurrent];
+}
+function openSrc(){srcModal.classList.add('open');renderSrc();srcClose.focus();}
+viewSrc.addEventListener('click',openSrc);
+navSrc.addEventListener('click',function(e){e.preventDefault();openSrc();});
+srcClose.addEventListener('click',()=>srcModal.classList.remove('open'));
+srcModal.addEventListener('click',function(e){if(e.target===srcModal)srcModal.classList.remove('open');});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')srcModal.classList.remove('open');});
+srcTabs.addEventListener('click',function(e){
+ if(e.target.tagName!=='BUTTON')return;
+ srcTabs.querySelectorAll('button').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');
+ srcCurrent=e.target.dataset.src;renderSrc();
+});
+srcCopy.addEventListener('click',function(){
+ navigator.clipboard.writeText(srcCode.textContent).then(function(){srcCopy.textContent='COPIED';setTimeout(()=>srcCopy.textContent='COPY',1200);});
+});
+</script>
+</body>
+</html>
