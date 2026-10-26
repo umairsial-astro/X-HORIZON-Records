@@ -1,0 +1,1951 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X Horizon — Space Books Library</title>
+<meta name="description" content="X Horizon space books reading path with books, magazines, guides, author details, and clean popups.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{
+  --bg:#000;
+  --panel:rgba(255,255,255,.045);
+  --panel2:rgba(255,255,255,.07);
+  --solid:#070707;
+  --solid2:#111;
+  --text:#fff;
+  --soft:#d8d8d8;
+  --muted:#9b9b9b;
+  --line:rgba(255,255,255,.10);
+  --line2:rgba(255,255,255,.18);
+  --gold:#facc15;
+  --max:1220px;
+  --font:'Inter',Arial,Helvetica,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box}
+html{background:#000;color:#fff;scroll-behavior:smooth;overflow-x:hidden}
+body{margin:0;background:#000;color:#fff;font-family:var(--font);overflow-x:hidden;line-height:1.5}
+body:not(.xh-ready){overflow:hidden}
+button,input,select,textarea{font-family:inherit;border:0;outline:0}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.xh-shell{width:min(var(--max),calc(100% - 40px));margin:0 auto}
+.xh-books-page{position:relative;z-index:1;min-height:100vh;background:transparent;color:#fff;isolation:isolate;opacity:0;visibility:hidden;transition:opacity .55s var(--ease),visibility .55s var(--ease)}
+body.xh-ready .xh-books-page{opacity:1;visibility:visible}
+
+/* Loader */
+.xh-loader{position:fixed;inset:0;background:#000;display:grid;place-items:center;z-index:99999;transition:opacity .65s var(--ease),visibility .65s var(--ease)}
+.xh-loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.xh-load-mark{position:relative;width:min(310px,82vw);height:118px;display:grid;place-items:center;overflow:hidden}
+.xh-load-x{position:absolute;left:42px;top:6px;font-size:96px;line-height:1;font-weight:800;letter-spacing:-.12em;color:#fff;z-index:2;text-shadow:0 0 26px rgba(255,255,255,.18)}
+.xh-load-word{position:absolute;left:112px;top:45px;font-size:22px;font-weight:800;letter-spacing:.2em;color:#eee;opacity:.18;animation:xhWordBlink 1.7s steps(2,end) infinite,xhWordSolid .22s ease 1.7s forwards;z-index:3}
+.xh-load-line{position:absolute;left:42px;right:42px;bottom:10px;height:4px;border-radius:99px;background:#161616;overflow:hidden}
+.xh-load-line::after{content:"";position:absolute;left:0;top:0;height:100%;width:100%;background:#e8e8e8;transform:scaleX(0);transform-origin:left center;animation:xhLoadFill 1.95s var(--ease) forwards}
+@keyframes xhWordBlink{0%,100%{opacity:.16}50%{opacity:.68}}
+@keyframes xhWordSolid{to{opacity:1}}
+@keyframes xhLoadFill{to{transform:scaleX(1)}}
+
+/* Live space background */
+.xh-live-bg{position:fixed;inset:0;z-index:0;background:#000;overflow:hidden;pointer-events:none}
+.xh-live-bg::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.46) 0 1px,transparent 1.5px),radial-gradient(circle,rgba(255,255,255,.24) 0 1px,transparent 1.5px);background-size:150px 150px,230px 230px;background-position:20px 40px,95px 12px;opacity:.28;animation:xhStarDrift 46s linear infinite}
+.xh-glow{position:absolute;border-radius:50%;filter:blur(54px);background:radial-gradient(circle,rgba(255,255,255,.09),transparent 70%)}
+.xh-g1{width:560px;height:560px;top:-180px;left:-140px;animation:xhDriftA 38s ease-in-out infinite}
+.xh-g2{width:480px;height:480px;bottom:-160px;right:-100px;animation:xhDriftB 44s ease-in-out infinite}
+.xh-g3{width:420px;height:420px;top:40%;left:50%;animation:xhDriftC 50s ease-in-out infinite}
+@keyframes xhDriftA{0%,100%{transform:translate(0,0)}50%{transform:translate(70px,50px)}}
+@keyframes xhDriftB{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-46px)}}
+@keyframes xhDriftC{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,40px)}}
+@keyframes xhStarDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-150px,150px,0)}}
+
+/* Hero */
+.xh-hero{position:relative;min-height:100vh;padding:110px 20px 80px;display:grid;place-items:center;text-align:center;overflow:hidden;background:#000}
+.xh-hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(0,0,0,.36),rgba(0,0,0,.72) 66%,#000 100%),url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=90&w=2400&auto=format&fit=crop') center/cover no-repeat;filter:brightness(.72) saturate(.88) contrast(1.03);transform:scale(1.01)}
+.xh-hero::before{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;z-index:3;background:linear-gradient(90deg,transparent,rgba(255,255,255,.86),transparent);box-shadow:0 0 30px rgba(255,255,255,.45);pointer-events:none}
+.xh-hero::after{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(circle at 50% 48%,rgba(0,0,0,.06) 0 22%,rgba(0,0,0,.50) 72%,#000 100%);pointer-events:none}
+.xh-hero-content{position:relative;z-index:4;width:min(820px,calc(100% - 34px));display:flex;flex-direction:column;align-items:center;transform:translateY(-12px)}
+.xh-search-wrap{width:min(560px,96vw);position:relative;margin:0 auto 26px}
+.xh-search{display:flex;align-items:center;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);border-radius:15px;padding:7px;backdrop-filter:blur(14px);box-shadow:0 24px 70px rgba(0,0,0,.28)}
+.xh-search i{width:42px;color:#fff;opacity:.82;font-size:15px}
+.xh-search input{flex:1;min-width:0;height:48px;border-radius:12px;background:transparent;color:#fff;padding:0 12px;font-size:14px}
+.xh-search input::placeholder{color:rgba(255,255,255,.62)}
+.xh-results{display:none;position:absolute;left:0;right:0;top:calc(100% + 9px);z-index:20;background:rgba(7,7,7,.96);border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:8px;text-align:left;max-height:330px;overflow:auto;box-shadow:0 26px 80px rgba(0,0,0,.48);backdrop-filter:blur(14px)}
+.xh-results.show{display:block}
+.xh-result-item{display:block;width:100%;text-align:left;padding:13px;border-radius:12px;background:rgba(255,255,255,.045);color:#fff;margin-bottom:7px}
+.xh-result-item:last-child{margin-bottom:0}
+.xh-result-item strong{display:block;font-size:13px;line-height:1.25}
+.xh-result-item span{display:block;margin-top:4px;font-size:12px;color:#bdbdbd}
+.xh-title{display:flex;align-items:baseline;justify-content:center;gap:16px;margin:0;font-size:clamp(34px,5vw,62px);line-height:1;letter-spacing:-.02em;font-weight:500;color:#d0d0d0}
+.xh-title span{display:inline-block;font-size:clamp(62px,9vw,104px);font-weight:800;line-height:.9;color:#fff;letter-spacing:-.04em}
+.xh-hero-line{margin:18px auto 0;color:#cfcfcf;font-size:clamp(14px,1.48vw,18px);line-height:1.75;letter-spacing:.25em;text-transform:uppercase;font-weight:400;max-width:760px}
+.xh-hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:28px}
+.xh-btn,.xh-small-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:50px;border-radius:12px;background:#fff;color:#000 !important;padding:0 25px;font-size:13px;font-weight:700;letter-spacing:.03em;box-shadow:none;transition:transform .25s var(--ease),background .25s var(--ease),color .25s var(--ease)}
+.xh-btn:hover,.xh-small-btn:hover{background:#e7e7e7;color:#000 !important;transform:scale(1.035)}
+.xh-btn.secondary{background:rgba(255,255,255,.055);color:#fff !important;border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(10px)}
+.xh-btn.secondary:hover{background:rgba(255,255,255,.085);color:#fff !important}
+
+/* Sections */
+.xh-section{position:relative;padding:70px 0;background:transparent}
+.xh-section.compact{padding:46px 0}
+.xh-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:28px}
+.xh-head h2{margin:0;font-size:clamp(26px,3.4vw,40px);letter-spacing:-.03em;line-height:1.06;font-weight:700;color:#fff}
+.xh-head p{margin:0;max-width:570px;color:#cfcfcf;font-size:14px;line-height:1.7}
+.xh-kicker{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:8px 11px;color:#e1e1e1;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.xh-dot{width:7px;height:7px;border-radius:50%;background:#e5e5e5;box-shadow:0 0 14px rgba(255,255,255,.24)}
+.xh-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.xh-tab{min-height:44px;border-radius:999px;padding:0 16px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.10);color:#fff;font-size:12px;font-weight:700;letter-spacing:.04em;display:inline-flex;align-items:center;gap:8px;transition:background .2s ease,transform .2s ease}
+.xh-tab.active,.xh-tab:hover{background:#fff;color:#000;transform:translateY(-2px)}
+.xh-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+
+.xh-card-cover{width:100%;height:210px;border-radius:17px;background:#050505;margin:0 0 16px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.xh-card-cover img{width:100%;height:100%;object-fit:contain;padding:10px;background:#050505}
+.xh-card-cover img[src=""],.xh-card-cover img:not([src]){display:none}
+.xh-control-actions-3{grid-template-columns:1fr 1fr 1fr !important}
+@media(max-width:560px){.xh-control-actions-3{grid-template-columns:1fr !important}.xh-card-cover{height:190px}}
+
+.xh-card{position:relative;min-height:300px;border-radius:22px;padding:20px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(12px);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;transition:transform .25s var(--ease),background .25s var(--ease)}
+.xh-card:hover{transform:translateY(-5px);background:rgba(255,255,255,.065)}
+.xh-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+.xh-badge{display:inline-flex;align-items:center;gap:7px;min-height:28px;border-radius:999px;padding:0 10px;background:rgba(255,255,255,.075);font-size:11px;font-weight:700;color:#e6e6e6;white-space:nowrap}
+.xh-order{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;color:#000;font-size:14px;font-weight:800;flex:0 0 auto}
+.xh-card h3{margin:0;font-size:23px;letter-spacing:-.035em;line-height:1.05;color:#fff}
+.xh-author{margin-top:8px;color:#bdbdbd;font-size:13px;line-height:1.45}
+.xh-card p{margin:14px 0 0;color:#d1d1d1;font-size:13px;line-height:1.65}
+.xh-meta{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}
+.xh-chip{display:inline-flex;align-items:center;min-height:27px;border-radius:999px;padding:0 10px;background:rgba(255,255,255,.07);color:#e7e7e7;font-size:11px;font-weight:600}
+.xh-card-actions{display:flex;gap:9px;align-items:center;justify-content:space-between;margin-top:16px}
+.xh-detail-btn{width:100%;min-height:46px;border-radius:12px;background:#fff;color:#000;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:9px;transition:transform .2s ease,background .2s ease}
+.xh-detail-btn:hover{background:#e7e7e7;transform:scale(1.02)}
+
+.xh-path{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.xh-step{position:relative;min-height:220px;border-radius:22px;padding:20px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(12px);overflow:hidden}
+.xh-step::before{content:"";position:absolute;left:22px;top:78px;bottom:20px;width:2px;background:linear-gradient(180deg,rgba(255,255,255,.8),transparent)}
+.xh-step-num{width:46px;height:46px;border-radius:50%;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;margin-bottom:18px}
+.xh-step h3{margin:0 0 8px;font-size:22px;letter-spacing:-.03em;line-height:1.05}
+.xh-step p{margin:0;color:#cfcfcf;font-size:13px;line-height:1.65}
+.xh-band{position:relative;min-height:470px;display:grid;align-items:end;background:#000;overflow:hidden}
+.xh-band::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.20),rgba(0,0,0,.82) 90%,#000 100%),url('https://images.unsplash.com/photo-1517976487492-5750f3195933?q=90&w=2200&auto=format&fit=crop') center/cover no-repeat;filter:brightness(.72) saturate(.85)}
+.xh-band-card{position:relative;z-index:2;width:min(var(--max),calc(100% - 40px));margin:0 auto 70px;max-width:720px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.10);border-radius:24px;padding:28px;backdrop-filter:blur(10px)}
+.xh-band-card h2{margin:0 0 12px;font-size:clamp(34px,5vw,70px);letter-spacing:-.06em;line-height:.9}
+.xh-band-card p{margin:0;color:#d7d7d7;line-height:1.75}
+
+.xh-resource-list{display:grid;gap:10px}
+.xh-resource{display:grid;grid-template-columns:220px 1fr 160px;gap:14px;align-items:center;padding:14px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(12px)}
+.xh-resource b{font-size:18px;line-height:1.1;color:#fff}
+.xh-resource p{margin:5px 0 0;color:#cfcfcf;font-size:13px;line-height:1.55}
+.xh-resource span{font-size:12px;color:#e8e8e8;text-transform:uppercase;letter-spacing:.08em;text-align:right;font-weight:700}
+
+
+/* Requested correction patch */
+.xh-hero{background:#000 !important;}
+.xh-hero-bg{
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.36),rgba(0,0,0,.72) 66%,#000 100%),
+    url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=90&w=2400&auto=format&fit=crop') center/cover no-repeat !important;
+  filter:brightness(.72) saturate(.88) contrast(1.03) !important;
+  opacity:1 !important;
+  transform:scale(1.01) !important;
+}
+.xh-title{font-size:clamp(52px,8vw,104px) !important;font-weight:800 !important;color:#fff !important;letter-spacing:-.05em !important;}
+.xh-search i{order:2;width:42px;text-align:center;flex:0 0 42px;}
+.xh-card{
+  background:#0b0b0b !important;
+  border:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+}
+.xh-card:hover{background:#141414 !important;}
+.xh-card .xh-badge,.xh-card .xh-chip{background:rgba(255,255,255,.065) !important;}
+.xh-popup-cover{
+  position:relative;
+  width:100%;
+  height:min(330px,46vh);
+  margin:0 0 20px;
+  border-radius:20px;
+  overflow:hidden;
+  background:#050505;
+  border:0;
+}
+.xh-popup-cover img{width:100%;height:100%;object-fit:contain;padding:12px;filter:none;background:#050505;}
+.xh-popup-close{top:42px !important;right:42px !important;z-index:8 !important;background:rgba(0,0,0,.72) !important;color:#fff !important;box-shadow:0 8px 26px rgba(0,0,0,.45) !important;}
+.xh-popup-close:hover{background:#fff !important;color:#000 !important;}
+@media(max-width:760px){.xh-popup-close{top:34px !important;right:34px !important}.xh-popup-cover{height:260px}}
+
+
+/* Hidden console */
+.xh-control{display:none;position:fixed;inset:auto 18px 18px auto;width:min(430px,calc(100% - 36px));max-height:min(760px,calc(100vh - 36px));z-index:1000;background:rgba(8,8,8,.96);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:18px;box-shadow:0 28px 90px rgba(0,0,0,.55);backdrop-filter:blur(18px);overflow:auto}
+body.xh-unlocked .xh-control{display:block}
+.xh-control-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.xh-control-title{font-weight:800;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#fff}
+.xh-control-note{margin-top:5px;color:#bdbdbd;font-size:12px;line-height:1.5}
+.xh-control-close{width:38px;height:38px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center}
+.xh-form{display:grid;gap:10px}
+.xh-label{display:block;margin:0 0 7px;color:#e8e8e8;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.xh-input,.xh-textarea,.xh-select{width:100%;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;padding:0 13px;backdrop-filter:blur(12px)}
+.xh-input,.xh-select{height:44px}
+.xh-textarea{min-height:84px;padding-top:12px;resize:vertical;line-height:1.5}
+.xh-select option{background:#080808;color:#fff}
+.xh-control-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.xh-mini-btn{min-height:42px;border-radius:12px;background:#fff;color:#000;font-size:12px;font-weight:800;display:flex;gap:8px;align-items:center;justify-content:center}
+.xh-mini-btn.dark{background:#171717;color:#fff}
+
+/* Popup */
+.xh-popup{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.76);backdrop-filter:blur(15px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,visibility .25s ease}
+.xh-popup.on{opacity:1;visibility:visible;pointer-events:auto}
+.xh-popup-box{position:relative;width:min(760px,100%);max-height:calc(100vh - 44px);overflow:auto;border-radius:26px;background:linear-gradient(180deg,rgba(16,16,16,.98),rgba(5,5,5,.98));border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 100px rgba(0,0,0,.65);padding:28px;transform:translateY(14px) scale(.98);transition:transform .25s ease}
+.xh-popup.on .xh-popup-box{transform:translateY(0) scale(1)}
+.xh-popup-close{position:absolute;right:16px;top:16px;width:38px;height:38px;border-radius:50%;background:#fff;color:#000;font-size:16px;display:grid;place-items:center}
+.xh-popup-icon{width:66px;height:66px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center;font-size:28px;margin-bottom:16px}
+.xh-popup h3{margin:0;font-size:clamp(28px,4vw,44px);line-height:1;letter-spacing:-.05em;max-width:620px}
+.xh-popup .xh-popup-author{margin:10px 0 0;color:#bdbdbd;font-size:15px}
+.xh-popup-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:22px}
+.xh-popup-info{border-radius:16px;background:rgba(255,255,255,.055);padding:14px;color:#d7d7d7;font-size:13px;line-height:1.6}
+.xh-popup-info b{display:block;color:#fff;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+.xh-popup-full{grid-column:1/-1}
+.xh-toast{position:fixed;left:50%;bottom:22px;z-index:9999;transform:translateX(-50%) translateY(20px);max-width:min(420px,calc(100% - 44px));padding:12px 15px;border-radius:12px;background:#111;color:#fff;font-size:13px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
+.xh-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.xh-reveal{opacity:0;transform:translateY(28px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
+.xh-reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:1020px){
+  .xh-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .xh-path{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .xh-resource{grid-template-columns:1fr}
+  .xh-resource span{text-align:left}
+}
+@media(max-width:760px){
+  .xh-shell{width:min(100% - 24px,var(--max))}
+  .xh-hero{padding:96px 14px 66px}
+  .xh-title{gap:10px;font-size:clamp(28px,8vw,42px)}
+  .xh-title span{font-size:clamp(50px,16vw,80px)}
+  .xh-hero-line{font-size:12px;letter-spacing:.15em}
+  .xh-search{padding:6px}
+  .xh-head{display:block}
+  .xh-head p{margin-top:12px}
+  .xh-section{padding:52px 0}
+  .xh-grid,.xh-path,.xh-popup-grid{grid-template-columns:1fr}
+  .xh-card{min-height:270px}
+  .xh-popup-box{padding:22px}
+}
+@media(max-width:480px){
+  .xh-hero-actions{width:100%}
+  .xh-btn{width:100%}
+  .xh-card-actions{display:block}
+  .xh-control{inset:auto 10px 10px 10px;width:auto}
+}
+@media(prefers-reduced-motion:reduce){.xh-live-bg::before,.xh-glow,.xh-load-word,.xh-load-line::after{animation:none !important}}
+</style>
+
+
+<div class="xh-loader" id="xhLoader" aria-hidden="true">
+  <div class="xh-load-mark">
+    <div class="xh-load-x">X</div>
+    <div class="xh-load-word">HORIZON</div>
+    <div class="xh-load-line"></div>
+  </div>
+</div>
+
+<div class="xh-live-bg" aria-hidden="true">
+  <span class="xh-glow xh-g1"></span>
+  <span class="xh-glow xh-g2"></span>
+  <span class="xh-glow xh-g3"></span>
+</div>
+
+<div class="xh-books-page" id="xhBooksPage">
+  <main>
+    <section class="xh-hero" id="home">
+      <div class="xh-hero-bg"></div>
+      <div class="xh-hero-content">
+        <div class="xh-search-wrap">
+          <div class="xh-search"><input id="xhSearch" type="search" placeholder="Search books, authors, magazines" autocomplete="off"><i class="fa-solid fa-magnifying-glass"></i></div>
+          <div class="xh-results" id="xhResults"></div>
+        </div>
+        <h1 class="xh-title">Space Library</h1>
+        <p class="xh-hero-line">Step-by-step space reading path for astronomy, cosmology, missions, and sky observation.</p>
+        <div class="xh-hero-actions">
+          <a class="xh-btn" href="#library"><i class="fa-solid fa-route"></i> Start Path</a>
+          <a class="xh-btn secondary" href="#library"><i class="fa-solid fa-book-open"></i> Explore Library</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="xh-section compact" id="overview">
+      <div class="xh-shell">
+        <div class="xh-tabs xh-reveal" id="tabs">
+          <button class="xh-tab active" data-tab="books"><i class="fa-solid fa-book"></i> Books</button>
+          <button class="xh-tab" data-tab="novels"><i class="fa-solid fa-rocket"></i> Novels</button>
+          <button class="xh-tab" data-tab="magazines"><i class="fa-regular fa-newspaper"></i> Magazines</button>
+          <button class="xh-tab" data-tab="guides"><i class="fa-solid fa-map-location-dot"></i> Guides</button>
+          <button class="xh-tab" data-tab="authors"><i class="fa-solid fa-user-astronaut"></i> Authors</button>
+        </div>
+      </div>
+    </section>
+<section class="xh-section" id="library">
+      <div class="xh-shell">
+        <div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> Library</div><h2 id="libraryTitle">Books to Read</h2></div><p id="libraryText">Open any item for full information, author, level, reading order, and why it matters.</p></div>
+        <div class="xh-grid xh-reveal" id="itemGrid"></div>
+      </div>
+    </section>
+
+    <section class="xh-section" id="resources">
+      <div class="xh-shell">
+        <div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> Extra routes</div><h2>Other Useful Reading Sources</h2></div><p>Use these with the books to build habits, follow current observations, and improve practical sky knowledge.</p></div>
+        <div class="xh-resource-list xh-reveal" id="resourceList"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<section class="xh-control" id="contentConsole" aria-hidden="true">
+  <div class="xh-control-head">
+    <div><div class="xh-control-title">Signal Console</div><div class="xh-control-note">Add or update visible library items for this page.</div></div>
+    <button class="xh-control-close" id="lockConsole" type="button" aria-label="Lock"><i class="fa-solid fa-lock"></i></button>
+  </div>
+  <div class="xh-form">
+    <div><label class="xh-label" for="editCategory">Category</label><select class="xh-select" id="editCategory"><option value="books">Books</option><option value="novels">Novels</option><option value="magazines">Magazines</option><option value="guides">Guides</option><option value="authors">Authors</option></select></div>
+    <div><label class="xh-label" for="editTitle">Title</label><input class="xh-input" id="editTitle" placeholder="Item title"></div>
+    <div><label class="xh-label" for="editAuthor">Author / Publisher</label><input class="xh-input" id="editAuthor" placeholder="Author or publisher"></div>
+    <div><label class="xh-label" for="editLevel">Level</label><select class="xh-select" id="editLevel"><option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>All Levels</option></select></div>
+    <div><label class="xh-label" for="editOrder">Order / Year</label><input class="xh-input" id="editOrder" placeholder="Example: 01 or 2024"></div>
+    <div><label class="xh-label" for="editSummary">Short summary</label><textarea class="xh-textarea" id="editSummary" placeholder="Short visible summary"></textarea></div>
+    <div><label class="xh-label" for="editInfo">Full info</label><textarea class="xh-textarea" id="editInfo" placeholder="Popup details"></textarea></div>
+    <div><label class="xh-label" for="editCover">Card cover image URL</label><input class="xh-input" id="editCover" placeholder="Book cover / relevant image URL"></div>
+    <div><label class="xh-label" for="editPopupImage">Popup image URL</label><input class="xh-input" id="editPopupImage" placeholder="Optional larger popup image URL"></div>
+    <div><label class="xh-label" for="editTags">Tags</label><input class="xh-input" id="editTags" placeholder="Comma separated tags"></div>
+    <div class="xh-control-actions xh-control-actions-3"><button class="xh-mini-btn" id="addItem" type="button"><i class="fa-solid fa-plus"></i> Add</button><button class="xh-mini-btn dark" id="previewItem" type="button"><i class="fa-solid fa-eye"></i> Preview</button><button class="xh-mini-btn dark" id="resetItems" type="button"><i class="fa-solid fa-rotate-left"></i> Reset</button></div>
+  </div>
+</section>
+
+<div class="xh-popup" id="itemPopup" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+  <div class="xh-popup-box">
+    <button class="xh-popup-close" id="popupClose" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <div class="xh-popup-cover" id="popupCover"><img src="" alt="" loading="lazy"></div>
+    <div class="xh-popup-icon"><i class="fa-solid fa-book-open"></i></div>
+    <h3 id="popupTitle">Book title</h3>
+    <div class="xh-popup-author" id="popupAuthor">Author</div>
+    <div class="xh-popup-grid" id="popupGrid"></div>
+  </div>
+</div>
+<div class="xh-toast" id="xhToast">Done</div>
+
+<script type="application/json" id="xhSeedData">
+{
+  "books": [
+    {
+      "order": "01",
+      "title": "The Stars: A New Way to See Them",
+      "author": "H. A. Rey",
+      "level": "Beginner",
+      "type": "Sky Basics",
+      "summary": "A simple first step for recognizing constellations and learning the sky visually.",
+      "info": "Best for new learners who want the sky to feel less confusing. It focuses on easy star patterns and a visual way to remember constellations.",
+      "tags": [
+        "Constellations",
+        "Night Sky",
+        "Beginner"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780395248300-L.jpg"
+    },
+    {
+      "order": "02",
+      "title": "The Backyard Astronomer's Guide",
+      "author": "Terence Dickinson and Alan Dyer",
+      "level": "Beginner",
+      "type": "Observing",
+      "summary": "A practical guide for telescopes, binoculars, observing habits, and sky planning.",
+      "info": "Useful after the basic sky stage. It explains equipment, observing methods, astrophotography basics, and how to make real sky sessions better.",
+      "tags": [
+        "Telescope",
+        "Observation",
+        "Practical"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780228103271-L.jpg"
+    },
+    {
+      "order": "03",
+      "title": "Turn Left at Orion",
+      "author": "Guy Consolmagno and Dan M. Davis",
+      "level": "Beginner",
+      "type": "Observing Guide",
+      "summary": "A strong telescope-friendly guide for finding real objects in the night sky.",
+      "info": "Read when you want to move from theory to observing. It helps locate galaxies, nebulae, clusters, planets, and Moon targets using realistic views.",
+      "tags": [
+        "Deep Sky",
+        "Telescope",
+        "Objects"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781108457569-L.jpg"
+    },
+    {
+      "order": "04",
+      "title": "13 Planets",
+      "author": "David A. Aguilar",
+      "level": "Beginner",
+      "type": "Solar System",
+      "summary": "A friendly solar-system introduction covering planets, dwarf planets, and space context.",
+      "info": "Good for building a clear solar-system foundation before going deeper into planetary science or spacecraft missions.",
+      "tags": [
+        "Planets",
+        "Solar System",
+        "Youth Friendly"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781426307706-L.jpg"
+    },
+    {
+      "order": "05",
+      "title": "Cosmos",
+      "author": "Carl Sagan",
+      "level": "Beginner",
+      "type": "Classic Science",
+      "summary": "A classic journey through astronomy, science, history, life, and humanity's place in the universe.",
+      "info": "Best after basic sky and solar-system reading. It gives a big-picture emotional and scientific view of the universe.",
+      "tags": [
+        "Cosmos",
+        "Science History",
+        "Big Picture"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780345331359-L.jpg"
+    },
+    {
+      "order": "06",
+      "title": "A Brief History of Time",
+      "author": "Stephen Hawking",
+      "level": "Intermediate",
+      "type": "Cosmology",
+      "summary": "A famous introduction to time, black holes, the universe, and fundamental physics ideas.",
+      "info": "Read when you are ready for harder concepts. It introduces gravity, space-time, black holes, the Big Bang, and the search for deeper laws.",
+      "tags": [
+        "Time",
+        "Black Holes",
+        "Cosmology"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780553380163-L.jpg"
+    },
+    {
+      "order": "07",
+      "title": "Astrophysics for People in a Hurry",
+      "author": "Neil deGrasse Tyson",
+      "level": "Beginner",
+      "type": "Astrophysics Overview",
+      "summary": "A short, readable overview of major astrophysics ideas and cosmic scale.",
+      "info": "Useful for quick revision. It covers atoms, dark matter, dark energy, light, and the structure of the universe in compact chapters.",
+      "tags": [
+        "Astrophysics",
+        "Quick Read",
+        "Cosmic Scale"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780393609394-L.jpg"
+    },
+    {
+      "order": "08",
+      "title": "Welcome to the Universe",
+      "author": "Neil deGrasse Tyson, Michael A. Strauss, and J. Richard Gott",
+      "level": "Intermediate",
+      "type": "Astronomy Course",
+      "summary": "A deeper but still readable tour from planets to galaxies, relativity, and cosmology.",
+      "info": "This is a strong middle-stage book. It feels closer to a guided course and works well after introductory books.",
+      "tags": [
+        "Course Style",
+        "Galaxies",
+        "Relativity"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780691157245-L.jpg"
+    },
+    {
+      "order": "09",
+      "title": "The End of Everything",
+      "author": "Katie Mack",
+      "level": "Intermediate",
+      "type": "Cosmology",
+      "summary": "A clear guide to possible futures of the universe and what physics says about cosmic endings.",
+      "info": "Best after learning basic cosmology. It explains heat death, Big Rip, vacuum decay, and other possible endings in an engaging style.",
+      "tags": [
+        "Universe Fate",
+        "Cosmology",
+        "Physics"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781982103545-L.jpg"
+    },
+    {
+      "order": "10",
+      "title": "Black Holes and Time Warps",
+      "author": "Kip S. Thorne",
+      "level": "Advanced",
+      "type": "Gravity",
+      "summary": "A deeper story of black holes, relativity, gravity, and the scientists behind the ideas.",
+      "info": "Use this for serious black-hole learning. It is detailed, historical, and stronger for learners already comfortable with basic physics concepts.",
+      "tags": [
+        "Black Holes",
+        "Relativity",
+        "Gravity"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780393312768-L.jpg"
+    },
+    {
+      "order": "11",
+      "title": "An Introduction to Modern Astrophysics",
+      "author": "Bradley W. Carroll and Dale A. Ostlie",
+      "level": "Advanced",
+      "type": "Textbook",
+      "summary": "A major textbook for serious astrophysics learning with deeper mathematical treatment.",
+      "info": "Use this after the popular-science stage if you want university-level astrophysics. It covers stars, radiation, galaxies, cosmology, and physical processes.",
+      "tags": [
+        "Textbook",
+        "Stars",
+        "University Level"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781108422161-L.jpg"
+    },
+    {
+      "order": "12",
+      "title": "Astronomy 2e",
+      "author": "Andrew Fraknoi, David Morrison, and Sidney C. Wolff",
+      "level": "All Levels",
+      "type": "Open Textbook",
+      "summary": "A structured astronomy textbook path for planets, stars, galaxies, and the universe.",
+      "info": "Good as a reference spine for a full astronomy course. It can support lessons, quizzes, glossary pages, and structured X Horizon learning paths.",
+      "tags": [
+        "Textbook",
+        "Open Learning",
+        "Reference"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781938168284-L.jpg"
+    },
+    {
+      "order": "13",
+      "title": "Pale Blue Dot",
+      "author": "Carl Sagan",
+      "level": "Beginner",
+      "type": "Classic Science",
+      "summary": "A reflective space book about exploration, Earth, and humanity's place in the cosmos.",
+      "info": "Useful after Cosmos for learners who want a wider view of space exploration, planetary perspective, and why astronomy matters for civilization.",
+      "tags": [
+        "Earth",
+        "Exploration",
+        "Perspective"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780345376596-L.jpg"
+    },
+    {
+      "order": "14",
+      "title": "The Planets",
+      "author": "Dava Sobel",
+      "level": "Beginner",
+      "type": "Solar System",
+      "summary": "A literary tour of the planets with science, history, and culture woven together.",
+      "info": "Good for learners who want the solar system to feel memorable, not just technical. It connects each planet with human imagination and discovery.",
+      "tags": [
+        "Planets",
+        "History",
+        "Solar System"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780142001165-L.jpg"
+    },
+    {
+      "order": "15",
+      "title": "How I Killed Pluto and Why It Had It Coming",
+      "author": "Mike Brown",
+      "level": "Beginner",
+      "type": "Planetary Science",
+      "summary": "A readable story about Pluto, dwarf planets, and how science updates categories.",
+      "info": "Helpful for understanding why Pluto was reclassified and how new discoveries can reshape astronomy language.",
+      "tags": [
+        "Pluto",
+        "Dwarf Planets",
+        "Discovery"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780385531108-L.jpg"
+    },
+    {
+      "order": "16",
+      "title": "Death by Black Hole",
+      "author": "Neil deGrasse Tyson",
+      "level": "Intermediate",
+      "type": "Astrophysics Essays",
+      "summary": "A collection of clear essays about black holes, space hazards, light, and cosmic questions.",
+      "info": "Use this for short topic-based reading. It works well when learners want separate chapters instead of one long path.",
+      "tags": [
+        "Black Holes",
+        "Essays",
+        "Astrophysics"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780393330168-L.jpg"
+    },
+    {
+      "order": "17",
+      "title": "The Fabric of the Cosmos",
+      "author": "Brian Greene",
+      "level": "Intermediate",
+      "type": "Physics and Cosmology",
+      "summary": "A deeper guide to space, time, reality, and modern physics ideas.",
+      "info": "Best after basic cosmology. It explains space-time, quantum ideas, and the structure of reality in a readable but deeper style.",
+      "tags": [
+        "Space-time",
+        "Physics",
+        "Cosmology"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780375727207-L.jpg"
+    },
+    {
+      "order": "18",
+      "title": "The Glass Universe",
+      "author": "Dava Sobel",
+      "level": "Intermediate",
+      "type": "Astronomy History",
+      "summary": "A history of the women at Harvard Observatory who helped classify stars and build modern astronomy.",
+      "info": "Important for understanding star classification, astronomical data work, and the human side of scientific progress.",
+      "tags": [
+        "Stars",
+        "History",
+        "Data"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780143111344-L.jpg"
+    },
+    {
+      "order": "19",
+      "title": "Rocket Men",
+      "author": "Robert Kurson",
+      "level": "Beginner",
+      "type": "Spaceflight History",
+      "summary": "A focused story of Apollo 8 and humanity's first journey around the Moon.",
+      "info": "Good for mission-reading sections because it explains risk, crew decisions, navigation, and the emotional power of lunar exploration.",
+      "tags": [
+        "Apollo",
+        "Moon",
+        "Spaceflight"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780525521603-L.jpg"
+    },
+    {
+      "order": "20",
+      "title": "The Universe in a Nutshell",
+      "author": "Stephen Hawking",
+      "level": "Intermediate",
+      "type": "Cosmology",
+      "summary": "A visual follow-up to big ideas about the universe, time, strings, and modern physics.",
+      "info": "Read after A Brief History of Time if you want a more visual and concept-focused continuation of Hawking's ideas.",
+      "tags": [
+        "Cosmology",
+        "Time",
+        "Physics"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780553802023-L.jpg"
+    },
+    {
+      "order": "21",
+      "title": "The Demon-Haunted World",
+      "author": "Carl Sagan",
+      "level": "Beginner",
+      "type": "Scientific Thinking",
+      "summary": "A strong science-literacy book that teaches skepticism, evidence, and how to avoid fake science.",
+      "info": "Useful for X Horizon because astronomy learners must separate real discoveries from myths, viral claims, fake planets, and low-quality space content.",
+      "tags": [
+        "Science Thinking",
+        "Skepticism",
+        "Evidence"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780345409461-L.jpg"
+    },
+    {
+      "order": "22",
+      "title": "Broca's Brain",
+      "author": "Carl Sagan",
+      "level": "Intermediate",
+      "type": "Science Essays",
+      "summary": "A collection of essays on science, astronomy, extraterrestrial life, and human curiosity.",
+      "info": "Good for widening a learner’s mind after basic astronomy, especially around science culture and cosmic questions.",
+      "tags": [
+        "Science Essays",
+        "Curiosity",
+        "Space Culture"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780345336897-L.jpg"
+    },
+    {
+      "order": "23",
+      "title": "The Varieties of Scientific Experience",
+      "author": "Carl Sagan",
+      "level": "Intermediate",
+      "type": "Cosmic Perspective",
+      "summary": "Lectures about God, science, the universe, and the scale of cosmic reality.",
+      "info": "Useful for mature learners who want thoughtful cosmic perspective without losing scientific grounding.",
+      "tags": [
+        "Cosmic Perspective",
+        "Science",
+        "Philosophy"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780143112624-L.jpg"
+    },
+    {
+      "order": "24",
+      "title": "Comet",
+      "author": "Carl Sagan and Ann Druyan",
+      "level": "Intermediate",
+      "type": "Small Bodies",
+      "summary": "A visual and historical guide to comets, their science, and their role in culture.",
+      "info": "Adds depth to solar-system learning by explaining comets as real objects, not just rare sky events.",
+      "tags": [
+        "Comets",
+        "Solar System",
+        "History"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780345412225-L.jpg"
+    },
+    {
+      "order": "25",
+      "title": "The Grand Design",
+      "author": "Stephen Hawking and Leonard Mlodinow",
+      "level": "Intermediate",
+      "type": "Cosmology",
+      "summary": "A compact explanation of physical law, universe origin ideas, and modern cosmology.",
+      "info": "Best after basic cosmology because it asks why the universe follows laws and how scientists model reality.",
+      "tags": [
+        "Cosmology",
+        "Physics",
+        "Universe"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780553384666-L.jpg"
+    },
+    {
+      "order": "26",
+      "title": "Brief Answers to the Big Questions",
+      "author": "Stephen Hawking",
+      "level": "Beginner",
+      "type": "Big Questions",
+      "summary": "A clear collection of Hawking’s answers about black holes, AI, the future, and humanity.",
+      "info": "Good for quick advanced topics without forcing the learner into heavy mathematics.",
+      "tags": [
+        "Big Questions",
+        "Future",
+        "Black Holes"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781984819192-L.jpg"
+    },
+    {
+      "order": "27",
+      "title": "The Hidden Reality",
+      "author": "Brian Greene",
+      "level": "Advanced",
+      "type": "Cosmology",
+      "summary": "A deeper book about multiverse ideas and modern theoretical physics.",
+      "info": "Useful only after foundational cosmology because it moves into speculative but serious physics frameworks.",
+      "tags": [
+        "Multiverse",
+        "Physics",
+        "Advanced"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780307278128-L.jpg"
+    },
+    {
+      "order": "28",
+      "title": "The Elegant Universe",
+      "author": "Brian Greene",
+      "level": "Advanced",
+      "type": "Physics",
+      "summary": "A popular guide to string theory, relativity, and quantum ideas.",
+      "info": "Strong for learners who want to move from astronomy into deeper fundamental physics.",
+      "tags": [
+        "String Theory",
+        "Relativity",
+        "Quantum"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780393338102-L.jpg"
+    },
+    {
+      "order": "29",
+      "title": "Until the End of Time",
+      "author": "Brian Greene",
+      "level": "Intermediate",
+      "type": "Cosmic Time",
+      "summary": "A wide journey through time, matter, life, mind, and the future of the universe.",
+      "info": "Useful for connecting cosmology with life, entropy, consciousness, and long-term cosmic history.",
+      "tags": [
+        "Time",
+        "Entropy",
+        "Cosmic Future"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781524731670-L.jpg"
+    },
+    {
+      "order": "30",
+      "title": "The First Three Minutes",
+      "author": "Steven Weinberg",
+      "level": "Advanced",
+      "type": "Big Bang",
+      "summary": "A classic explanation of the earliest moments after the Big Bang.",
+      "info": "Good for serious learners who want the early-universe story explained with physics depth.",
+      "tags": [
+        "Big Bang",
+        "Early Universe",
+        "Physics"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780465024377-L.jpg"
+    },
+    {
+      "order": "31",
+      "title": "The Inflationary Universe",
+      "author": "Alan Guth",
+      "level": "Advanced",
+      "type": "Cosmology",
+      "summary": "A foundational popular account of cosmic inflation and early-universe theory.",
+      "info": "Best after Big Bang basics because it explains why inflation became important in modern cosmology.",
+      "tags": [
+        "Inflation",
+        "Big Bang",
+        "Cosmology"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780201328400-L.jpg"
+    },
+    {
+      "order": "32",
+      "title": "The Cosmic Landscape",
+      "author": "Leonard Susskind",
+      "level": "Advanced",
+      "type": "Theoretical Physics",
+      "summary": "A deeper discussion of string theory, universe selection, and the landscape idea.",
+      "info": "For advanced learners interested in why constants and laws might appear the way they do.",
+      "tags": [
+        "String Theory",
+        "Multiverse",
+        "Advanced"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780316013338-L.jpg"
+    },
+    {
+      "order": "33",
+      "title": "The Black Hole War",
+      "author": "Leonard Susskind",
+      "level": "Advanced",
+      "type": "Black Holes",
+      "summary": "A story of black holes, information, Hawking, and the debate over fundamental physics.",
+      "info": "Useful after black-hole basics because it shows how scientific arguments develop around deep problems.",
+      "tags": [
+        "Black Holes",
+        "Information",
+        "Physics"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780316016414-L.jpg"
+    },
+    {
+      "order": "34",
+      "title": "Black Hole Blues",
+      "author": "Janna Levin",
+      "level": "Intermediate",
+      "type": "Gravitational Waves",
+      "summary": "A story of LIGO and the effort to detect gravitational waves.",
+      "info": "Adds real modern discovery context to relativity and black-hole learning.",
+      "tags": [
+        "LIGO",
+        "Gravitational Waves",
+        "Discovery"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780307948489-L.jpg"
+    },
+    {
+      "order": "35",
+      "title": "Einstein's Unfinished Revolution",
+      "author": "Lee Smolin",
+      "level": "Advanced",
+      "type": "Quantum Gravity",
+      "summary": "A readable but serious discussion of quantum theory, reality, and unfinished physics.",
+      "info": "Useful for advanced users moving beyond astronomy into modern foundations of physics.",
+      "tags": [
+        "Quantum",
+        "Reality",
+        "Physics"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780143110545-L.jpg"
+    },
+    {
+      "order": "36",
+      "title": "The Life and Death of Stars",
+      "author": "Kenneth R. Lang",
+      "level": "Intermediate",
+      "type": "Stellar Evolution",
+      "summary": "A focused guide to how stars form, burn, change, and die.",
+      "info": "Important for building real knowledge of stellar lifecycles beyond simple star facts.",
+      "tags": [
+        "Stars",
+        "Supernovae",
+        "Stellar Evolution"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780521728232-L.jpg"
+    },
+    {
+      "order": "37",
+      "title": "The Sun: A Very Short Introduction",
+      "author": "Philip Judge",
+      "level": "Beginner",
+      "type": "Solar Science",
+      "summary": "A compact introduction to the Sun, its structure, activity, and influence.",
+      "info": "Useful because every space learner should understand the star closest to Earth before studying distant stars.",
+      "tags": [
+        "Sun",
+        "Solar Activity",
+        "Heliophysics"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780198832690-L.jpg"
+    },
+    {
+      "order": "38",
+      "title": "Exoplanets",
+      "author": "Michael Summers and James Trefil",
+      "level": "Intermediate",
+      "type": "Planetary Science",
+      "summary": "An accessible look at planets beyond the solar system and what scientists learn from them.",
+      "info": "Useful for habitability, planetary systems, and modern discovery topics.",
+      "tags": [
+        "Exoplanets",
+        "Habitability",
+        "Planets"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781588346254-L.jpg"
+    },
+    {
+      "order": "39",
+      "title": "Five Billion Years of Solitude",
+      "author": "Lee Billings",
+      "level": "Intermediate",
+      "type": "Exoplanets",
+      "summary": "A story of the search for Earth-like worlds and life beyond Earth.",
+      "info": "Good for learners who want exoplanets connected with missions, scientists, and life-search questions.",
+      "tags": [
+        "Exoplanets",
+        "SETI",
+        "Life"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781617230066-L.jpg"
+    },
+    {
+      "order": "40",
+      "title": "The Copernican Revolution",
+      "author": "Thomas S. Kuhn",
+      "level": "Advanced",
+      "type": "Astronomy History",
+      "summary": "A classic history of how astronomy changed from Earth-centered to Sun-centered thinking.",
+      "info": "Useful for understanding how major scientific worldview changes happen.",
+      "tags": [
+        "History",
+        "Copernicus",
+        "Science Change"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780674171039-L.jpg"
+    },
+    {
+      "order": "41",
+      "title": "Longitude",
+      "author": "Dava Sobel",
+      "level": "Beginner",
+      "type": "Navigation History",
+      "summary": "A famous story about solving longitude and improving navigation.",
+      "info": "Relevant because astronomy, timekeeping, and navigation are deeply linked to exploration.",
+      "tags": [
+        "Navigation",
+        "Timekeeping",
+        "History"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780802715296-L.jpg"
+    },
+    {
+      "order": "42",
+      "title": "Chasing New Horizons",
+      "author": "Alan Stern and David Grinspoon",
+      "level": "Intermediate",
+      "type": "Mission Story",
+      "summary": "The story of the New Horizons mission to Pluto and beyond.",
+      "info": "Useful for understanding mission design, planetary flybys, spacecraft limits, and Pluto science.",
+      "tags": [
+        "Pluto",
+        "Mission",
+        "Spacecraft"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781250098962-L.jpg"
+    },
+    {
+      "order": "43",
+      "title": "Hidden Figures",
+      "author": "Margot Lee Shetterly",
+      "level": "Beginner",
+      "type": "Spaceflight History",
+      "summary": "The story of NASA mathematicians whose work supported early human spaceflight.",
+      "info": "Important for mission history, computation, orbital calculation, and the people behind space achievements.",
+      "tags": [
+        "NASA",
+        "Math",
+        "Spaceflight"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780062363602-L.jpg"
+    },
+    {
+      "order": "44",
+      "title": "Failure Is Not an Option",
+      "author": "Gene Kranz",
+      "level": "Beginner",
+      "type": "Mission Control",
+      "summary": "A mission-control perspective on Mercury, Gemini, Apollo, and NASA operations.",
+      "info": "Useful for showing that space success depends on systems thinking, checklists, training, and decisions under pressure.",
+      "tags": [
+        "Mission Control",
+        "Apollo",
+        "Operations"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780743200790-L.jpg"
+    },
+    {
+      "order": "45",
+      "title": "Carrying the Fire",
+      "author": "Michael Collins",
+      "level": "Beginner",
+      "type": "Astronaut Memoir",
+      "summary": "An Apollo astronaut’s clear account of training, flight, and the Moon mission experience.",
+      "info": "Great for understanding real astronaut preparation, command-module operations, and Apollo-era mission reality.",
+      "tags": [
+        "Apollo",
+        "Astronaut",
+        "Moon"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780374537760-L.jpg"
+    },
+    {
+      "order": "46",
+      "title": "An Astronaut's Guide to Life on Earth",
+      "author": "Chris Hadfield",
+      "level": "Beginner",
+      "type": "Astronaut Training",
+      "summary": "A practical astronaut memoir about preparation, discipline, risk, and spaceflight mindset.",
+      "info": "Useful for connecting space learning with real habits: preparation, calm problem solving, and mission discipline.",
+      "tags": [
+        "Astronaut",
+        "Training",
+        "ISS"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780316253017-L.jpg"
+    },
+    {
+      "order": "47",
+      "title": "Endurance",
+      "author": "Scott Kelly",
+      "level": "Beginner",
+      "type": "ISS Memoir",
+      "summary": "A long-duration astronaut memoir about life, work, and survival aboard the ISS.",
+      "info": "Good for learners studying human spaceflight, isolation, health, routines, and station operations.",
+      "tags": [
+        "ISS",
+        "Human Spaceflight",
+        "Astronaut"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781524731595-L.jpg"
+    },
+    {
+      "order": "48",
+      "title": "Packing for Mars",
+      "author": "Mary Roach",
+      "level": "Beginner",
+      "type": "Human Spaceflight",
+      "summary": "A funny but useful book about the human body and practical problems of space travel.",
+      "info": "Useful because it explains real crew-life problems: food, hygiene, motion sickness, waste, and habitability.",
+      "tags": [
+        "Human Spaceflight",
+        "Mars",
+        "Crew Life"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780393339918-L.jpg"
+    },
+    {
+      "order": "49",
+      "title": "The Right Stuff",
+      "author": "Tom Wolfe",
+      "level": "Beginner",
+      "type": "Spaceflight Culture",
+      "summary": "A classic narrative about test pilots, Mercury astronauts, risk, and early space culture.",
+      "info": "Useful for understanding the human and cultural side of early astronaut selection and flight risk.",
+      "tags": [
+        "Mercury",
+        "Astronauts",
+        "History"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780312427566-L.jpg"
+    },
+    {
+      "order": "50",
+      "title": "Moondust",
+      "author": "Andrew Smith",
+      "level": "Intermediate",
+      "type": "Apollo Legacy",
+      "summary": "A reflective look at what happened to the Moonwalkers after Apollo.",
+      "info": "Adds human depth to lunar exploration and helps learners see astronauts as people shaped by historic missions.",
+      "tags": [
+        "Moon",
+        "Apollo",
+        "Human Story"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780747563693-L.jpg"
+    }
+  ],
+  "magazines": [
+    {
+      "order": "M1",
+      "title": "Sky & Telescope",
+      "author": "AAS / Sky & Telescope",
+      "level": "All Levels",
+      "type": "Magazine",
+      "summary": "A long-running astronomy magazine for sky events, observing, equipment, and astronomy news.",
+      "info": "Best for regular observers and learners who want monthly sky guidance, charts, gear reviews, and astronomy updates.",
+      "tags": [
+        "Observing",
+        "News",
+        "Sky Events"
+      ],
+      "cover": "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?q=90&w=1200&auto=format&fit=crop"
+    },
+    {
+      "order": "M2",
+      "title": "Astronomy Magazine",
+      "author": "Kalmbach Media",
+      "level": "All Levels",
+      "type": "Magazine",
+      "summary": "Popular astronomy magazine covering space science, observing, missions, and sky targets.",
+      "info": "Useful for general readers who want a mix of discoveries, sky guides, mission updates, and practical astronomy features.",
+      "tags": [
+        "Space News",
+        "Observing",
+        "Missions"
+      ],
+      "cover": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=90&w=1200&auto=format&fit=crop"
+    },
+    {
+      "order": "M3",
+      "title": "BBC Sky at Night Magazine",
+      "author": "BBC / Our Media",
+      "level": "All Levels",
+      "type": "Magazine",
+      "summary": "A practical astronomy magazine with observing guides, equipment features, and sky content.",
+      "info": "Good for monthly observing ideas, telescope guidance, astrophotography content, and accessible astronomy features.",
+      "tags": [
+        "Practical",
+        "Telescope",
+        "Sky Guide"
+      ],
+      "cover": "https://images.unsplash.com/photo-1495020689067-958852a7765e?q=90&w=1200&auto=format&fit=crop"
+    },
+    {
+      "order": "M4",
+      "title": "All About Space",
+      "author": "Future Publishing",
+      "level": "Beginner",
+      "type": "Magazine",
+      "summary": "Visual space magazine focused on astronomy, exploration, missions, and cosmic topics.",
+      "info": "Good for visual learners and younger readers who like strong imagery, quick explanations, and broad space topics.",
+      "tags": [
+        "Visual",
+        "Space Exploration",
+        "Beginner"
+      ],
+      "cover": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=90&w=1200&auto=format&fit=crop"
+    },
+    {
+      "order": "M5",
+      "title": "Scientific American: Space & Physics",
+      "author": "Scientific American",
+      "level": "Intermediate",
+      "type": "Magazine Section",
+      "summary": "Science journalism covering astronomy, physics, discoveries, and space research.",
+      "info": "Use for deeper current science reading and more research-focused explanations beyond simple sky watching.",
+      "tags": [
+        "Science News",
+        "Physics",
+        "Research"
+      ],
+      "cover": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=90&w=1200&auto=format&fit=crop"
+    },
+    {
+      "order": "M6",
+      "title": "National Geographic Space",
+      "author": "National Geographic",
+      "level": "Beginner",
+      "type": "Magazine Section",
+      "summary": "Visual storytelling about space, Earth, exploration, and science culture.",
+      "info": "Best for strong visuals, accessible science storytelling, and space topics connected with Earth and exploration.",
+      "tags": [
+        "Visual Storytelling",
+        "Exploration",
+        "Earth"
+      ],
+      "cover": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=90&w=1200&auto=format&fit=crop"
+    },
+    {
+      "order": "M7",
+      "title": "The Planetary Report",
+      "author": "The Planetary Society",
+      "level": "All Levels",
+      "type": "Magazine",
+      "summary": "A space exploration magazine focused on missions, advocacy, planets, and public space science.",
+      "info": "Useful for readers who want mission culture and current planetary exploration in a public-friendly format.",
+      "tags": [
+        "Missions",
+        "Planets",
+        "Exploration"
+      ],
+      "cover": "https://images.unsplash.com/photo-1517976487492-5750f3195933?q=90&w=1200&auto=format&fit=crop"
+    },
+    {
+      "order": "M8",
+      "title": "Physics World: Astronomy and Space",
+      "author": "Institute of Physics",
+      "level": "Intermediate",
+      "type": "Magazine Section",
+      "summary": "Physics-focused coverage of space science, astronomy research, and discovery news.",
+      "info": "Best for stronger science readers who want astronomy connected with physics, instruments, and research.",
+      "tags": [
+        "Physics",
+        "Research",
+        "Space News"
+      ],
+      "cover": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=90&w=1200&auto=format&fit=crop"
+    }
+  ],
+  "guides": [
+    {
+      "order": "G1",
+      "title": "Field Guide to the Stars and Planets",
+      "author": "Donald H. Menzel and Jay M. Pasachoff",
+      "level": "Beginner",
+      "type": "Field Guide",
+      "summary": "A practical reference for stars, planets, constellations, and sky objects.",
+      "info": "Useful beside the telescope or during planning. It works as a compact reference for object recognition and sky study.",
+      "tags": [
+        "Field Guide",
+        "Planets",
+        "Constellations"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780395934319-L.jpg"
+    },
+    {
+      "order": "G2",
+      "title": "Cambridge Star Atlas",
+      "author": "Wil Tirion",
+      "level": "Intermediate",
+      "type": "Atlas",
+      "summary": "A clear star atlas for finding objects and learning sky positions.",
+      "info": "Use after basic observing books. It helps translate reading into actual sky navigation and target planning.",
+      "tags": [
+        "Atlas",
+        "Star Maps",
+        "Observation"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780521173636-L.jpg"
+    },
+    {
+      "order": "G3",
+      "title": "NightWatch",
+      "author": "Terence Dickinson",
+      "level": "Beginner",
+      "type": "Guide",
+      "summary": "A friendly observing guide for backyard astronomy and first telescope use.",
+      "info": "Strong for early observers. It explains sky motions, equipment, and what to look for in a simple, practical way.",
+      "tags": [
+        "Backyard Astronomy",
+        "Beginner",
+        "Telescope"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781554071470-L.jpg"
+    },
+    {
+      "order": "G4",
+      "title": "Photographing the Night Sky",
+      "author": "Alyn Wallace",
+      "level": "Intermediate",
+      "type": "Astrophotography",
+      "summary": "A practical route for night-sky photography, planning, camera settings, and targets.",
+      "info": "Use after basic observing if you want images. It supports Milky Way, deep-sky, landscape, and night-photography planning.",
+      "tags": [
+        "Astrophotography",
+        "Camera",
+        "Planning"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781781577578-L.jpg"
+    },
+    {
+      "order": "G5",
+      "title": "Deep-Sky Companions Series",
+      "author": "Stephen James O'Meara",
+      "level": "Advanced",
+      "type": "Deep-Sky Guide",
+      "summary": "Detailed observing guides for Messier, Caldwell, and deep-sky objects.",
+      "info": "Use when you already know telescope basics and want serious object-by-object observing context.",
+      "tags": [
+        "Deep Sky",
+        "Messier",
+        "Advanced Observing"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780521553322-L.jpg"
+    },
+    {
+      "order": "G6",
+      "title": "NASA e-Books and Mission Guides",
+      "author": "NASA",
+      "level": "All Levels",
+      "type": "Official Resource",
+      "summary": "Free mission books, science guides, and educational PDFs from NASA.",
+      "info": "Useful for trusted mission information, spacecraft details, public science education, and reference material.",
+      "tags": [
+        "NASA",
+        "Missions",
+        "Free Resource"
+      ],
+      "cover": "https://www.nasa.gov/wp-content/uploads/2023/03/nasa-logo-web-rgb.png"
+    },
+    {
+      "order": "G7",
+      "title": "Observer's Handbook",
+      "author": "Royal Astronomical Society of Canada",
+      "level": "Intermediate",
+      "type": "Annual Guide",
+      "summary": "A yearly observing reference for sky events, data, objects, and practical astronomy.",
+      "info": "Useful for serious observers who want a compact annual reference for planets, eclipses, sky events, and object data.",
+      "tags": [
+        "Observing",
+        "Annual",
+        "Sky Events"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780888652836-L.jpg"
+    },
+    {
+      "order": "G8",
+      "title": "The Monthly Sky Guide",
+      "author": "Ian Ridpath and Wil Tirion",
+      "level": "Beginner",
+      "type": "Sky Guide",
+      "summary": "A month-by-month guide for recognizing constellations and finding seasonal objects.",
+      "info": "Good for learners who want a calendar-style path through the night sky without jumping into difficult atlases too quickly.",
+      "tags": [
+        "Monthly Sky",
+        "Constellations",
+        "Seasonal"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780521728591-L.jpg"
+    }
+  ],
+  "authors": [
+    {
+      "order": "A1",
+      "title": "Carl Sagan",
+      "author": "Author and scientist",
+      "level": "Big Picture",
+      "type": "Author",
+      "summary": "Known for making the universe feel understandable, human, and inspiring.",
+      "info": "Read Sagan when you want astronomy connected with science history, curiosity, skepticism, and humanity's place in the cosmos.",
+      "tags": [
+        "Cosmos",
+        "Science Communication",
+        "Inspiration"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780345331359-L.jpg"
+    },
+    {
+      "order": "A2",
+      "title": "Stephen Hawking",
+      "author": "Theoretical physicist",
+      "level": "Cosmology",
+      "type": "Author",
+      "summary": "Known for black holes, time, cosmology, and public explanations of difficult physics.",
+      "info": "Read Hawking when you want to explore time, gravity, black holes, and the origin of the universe in a popular-science style.",
+      "tags": [
+        "Time",
+        "Black Holes",
+        "Physics"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780553380163-L.jpg"
+    },
+    {
+      "order": "A3",
+      "title": "Katie Mack",
+      "author": "Astrophysicist",
+      "level": "Modern Cosmology",
+      "type": "Author",
+      "summary": "Known for clear, modern explanations of cosmic endings and fundamental physics.",
+      "info": "Read Mack when you want current-feeling cosmology with humor, clarity, and strong scientific grounding.",
+      "tags": [
+        "Cosmology",
+        "Universe Fate",
+        "Modern Physics"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781982103545-L.jpg"
+    },
+    {
+      "order": "A4",
+      "title": "Kip S. Thorne",
+      "author": "Theoretical physicist",
+      "level": "Gravity",
+      "type": "Author",
+      "summary": "Known for relativity, black holes, gravitational waves, and deep physics storytelling.",
+      "info": "Read Thorne when you are ready for a stronger journey through gravity, time warps, and the development of black-hole science.",
+      "tags": [
+        "Gravity",
+        "Relativity",
+        "Black Holes"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780393312768-L.jpg"
+    },
+    {
+      "order": "A5",
+      "title": "Terence Dickinson",
+      "author": "Astronomy writer",
+      "level": "Observation",
+      "type": "Author",
+      "summary": "Known for practical backyard astronomy and beginner-friendly observing guidance.",
+      "info": "Read Dickinson when you want telescope basics, sky planning, and simple steps for real observation.",
+      "tags": [
+        "Observation",
+        "Telescope",
+        "Beginner"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781554071470-L.jpg"
+    },
+    {
+      "order": "A6",
+      "title": "H. A. Rey",
+      "author": "Author and illustrator",
+      "level": "Beginner Sky",
+      "type": "Author",
+      "summary": "Known for making constellation patterns easier to remember visually.",
+      "info": "Read Rey first if the night sky feels confusing. His constellation method is simple and memorable.",
+      "tags": [
+        "Constellations",
+        "Visual Learning",
+        "Beginner"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780395248300-L.jpg"
+    },
+    {
+      "order": "A7",
+      "title": "Dava Sobel",
+      "author": "Science writer",
+      "level": "History and Planets",
+      "type": "Author",
+      "summary": "Known for elegant science-history writing about astronomy, planets, longitude, and discovery.",
+      "info": "Read Sobel when you want astronomy with history, human stories, and clear writing rather than heavy mathematics.",
+      "tags": [
+        "History",
+        "Planets",
+        "Science Writing"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780143111344-L.jpg"
+    },
+    {
+      "order": "A8",
+      "title": "Brian Greene",
+      "author": "Theoretical physicist",
+      "level": "Physics",
+      "type": "Author",
+      "summary": "Known for explaining space, time, string theory, and modern physics for broad readers.",
+      "info": "Read Greene when you want a stronger bridge from astronomy into space-time, quantum physics, and cosmology.",
+      "tags": [
+        "Physics",
+        "Space-time",
+        "Cosmology"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780375727207-L.jpg"
+    }
+  ],
+  "novels": [
+    {
+      "order": "N1",
+      "title": "The Martian",
+      "author": "Andy Weir",
+      "level": "Beginner",
+      "type": "Hard Science Fiction",
+      "summary": "A stranded astronaut uses engineering, chemistry, botany, and mission thinking to survive on Mars.",
+      "info": "Highly relevant for X Horizon because it turns life support, orbital windows, power, food, and problem solving into an exciting story.",
+      "tags": [
+        "Mars",
+        "Survival",
+        "Engineering"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780553418026-L.jpg"
+    },
+    {
+      "order": "N2",
+      "title": "Project Hail Mary",
+      "author": "Andy Weir",
+      "level": "Beginner",
+      "type": "Space Science Fiction",
+      "summary": "A lone astronaut-scientist faces a stellar-energy crisis using experiments and engineering logic.",
+      "info": "Useful fiction for learning scientific method, star systems, communication, and mission pressure.",
+      "tags": [
+        "Stars",
+        "Mission",
+        "Science"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780593135204-L.jpg"
+    },
+    {
+      "order": "N3",
+      "title": "Contact",
+      "author": "Carl Sagan",
+      "level": "Beginner",
+      "type": "SETI Novel",
+      "summary": "A scientifically grounded novel about detecting intelligent life and humanity’s response.",
+      "info": "Relevant because it connects radio astronomy, SETI, skepticism, politics, and the emotional power of discovery.",
+      "tags": [
+        "SETI",
+        "Radio Astronomy",
+        "First Contact"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780671004101-L.jpg"
+    },
+    {
+      "order": "N4",
+      "title": "Rendezvous with Rama",
+      "author": "Arthur C. Clarke",
+      "level": "Beginner",
+      "type": "Alien Megastructure",
+      "summary": "A mysterious object enters the solar system and humans explore it with discipline and curiosity.",
+      "info": "Useful for teaching observation, exploration procedure, unknown-object analysis, and spacecraft mission thinking.",
+      "tags": [
+        "Exploration",
+        "Megastructure",
+        "Solar System"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780553287899-L.jpg"
+    },
+    {
+      "order": "N5",
+      "title": "2001: A Space Odyssey",
+      "author": "Arthur C. Clarke",
+      "level": "Beginner",
+      "type": "Space Exploration",
+      "summary": "A classic novel about AI, lunar discovery, Jupiter mission travel, and cosmic intelligence.",
+      "info": "Good for connecting human evolution, spacecraft systems, AI risk, and deep-space imagination.",
+      "tags": [
+        "Jupiter",
+        "AI",
+        "Classic"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780451457998-L.jpg"
+    },
+    {
+      "order": "N6",
+      "title": "The Fountains of Paradise",
+      "author": "Arthur C. Clarke",
+      "level": "Intermediate",
+      "type": "Space Infrastructure",
+      "summary": "A novel centered on a space elevator and the engineering dream of cheap orbital access.",
+      "info": "Useful for future-tech thinking around materials, orbital infrastructure, and access to space.",
+      "tags": [
+        "Space Elevator",
+        "Engineering",
+        "Orbit"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780345322401-L.jpg"
+    },
+    {
+      "order": "N7",
+      "title": "Red Mars",
+      "author": "Kim Stanley Robinson",
+      "level": "Intermediate",
+      "type": "Mars Colonization",
+      "summary": "A detailed novel about the first Mars colonists, terraforming, politics, and survival.",
+      "info": "Useful for advanced discussion of Mars settlement, habitats, geology, conflict, and long-term planetary planning.",
+      "tags": [
+        "Mars",
+        "Terraforming",
+        "Colonization"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780553560732-L.jpg"
+    },
+    {
+      "order": "N8",
+      "title": "Green Mars",
+      "author": "Kim Stanley Robinson",
+      "level": "Advanced",
+      "type": "Mars Terraforming",
+      "summary": "A continuation of Mars colonization with ecology, social systems, and planetary-scale engineering.",
+      "info": "Useful for showing that space settlement is not only rockets; it includes environment, society, and long-term science.",
+      "tags": [
+        "Mars",
+        "Ecology",
+        "Settlement"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780553572391-L.jpg"
+    },
+    {
+      "order": "N9",
+      "title": "Blue Mars",
+      "author": "Kim Stanley Robinson",
+      "level": "Advanced",
+      "type": "Mars Civilization",
+      "summary": "A later-stage Mars civilization story with politics, climate, and long-term transformation.",
+      "info": "Good for deep conversations about planetary futures, terraforming ethics, and human adaptation.",
+      "tags": [
+        "Mars",
+        "Civilization",
+        "Future"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780553573350-L.jpg"
+    },
+    {
+      "order": "N10",
+      "title": "The Moon Is a Harsh Mistress",
+      "author": "Robert A. Heinlein",
+      "level": "Intermediate",
+      "type": "Lunar Colony",
+      "summary": "A classic lunar-colony novel involving habitats, resources, orbital mechanics, and revolution.",
+      "info": "Relevant because it uses Moon settlement constraints, mass drivers, pressure habitats, and independence themes.",
+      "tags": [
+        "Moon",
+        "Colony",
+        "Orbital Mechanics"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780312863555-L.jpg"
+    },
+    {
+      "order": "N11",
+      "title": "Seveneves",
+      "author": "Neal Stephenson",
+      "level": "Advanced",
+      "type": "Orbital Survival",
+      "summary": "Humanity races to survive in orbit after a catastrophic lunar breakup.",
+      "info": "Useful for advanced readers interested in orbital mechanics, survival engineering, habitat design, and long-term space civilization.",
+      "tags": [
+        "Orbit",
+        "Survival",
+        "Habitat"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780062190413-L.jpg"
+    },
+    {
+      "order": "N12",
+      "title": "Aurora",
+      "author": "Kim Stanley Robinson",
+      "level": "Advanced",
+      "type": "Generation Ship",
+      "summary": "A realistic generation-ship novel about ecosystems, failure modes, and interstellar settlement limits.",
+      "info": "Highly useful because it questions simple space-colony fantasies and shows system fragility.",
+      "tags": [
+        "Generation Ship",
+        "Ecology",
+        "Interstellar"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780316098106-L.jpg"
+    },
+    {
+      "order": "N13",
+      "title": "Children of Time",
+      "author": "Adrian Tchaikovsky",
+      "level": "Intermediate",
+      "type": "Evolutionary Space Fiction",
+      "summary": "A deep-time novel about terraforming, evolution, alien intelligence, and human survival.",
+      "info": "Relevant for astrobiology, evolution, terraforming risk, and non-human intelligence concepts.",
+      "tags": [
+        "Astrobiology",
+        "Evolution",
+        "Terraforming"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9781447273301-L.jpg"
+    },
+    {
+      "order": "N14",
+      "title": "Leviathan Wakes",
+      "author": "James S. A. Corey",
+      "level": "Intermediate",
+      "type": "Solar-System Fiction",
+      "summary": "A solar-system political thriller with realistic-ish habitats, gravity differences, and spacecraft culture.",
+      "info": "Good for learners thinking about life across Earth, Mars, Belt colonies, and the social side of space expansion.",
+      "tags": [
+        "Solar System",
+        "Habitats",
+        "Space Politics"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780316129084-L.jpg"
+    },
+    {
+      "order": "N15",
+      "title": "Caliban's War",
+      "author": "James S. A. Corey",
+      "level": "Intermediate",
+      "type": "Solar-System Fiction",
+      "summary": "A continuation of The Expanse with Mars, Earth, moons, and space conflict.",
+      "info": "Useful as fiction around military space culture, planetary politics, and biological hazard themes.",
+      "tags": [
+        "Mars",
+        "Space Conflict",
+        "Habitats"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780316129060-L.jpg"
+    },
+    {
+      "order": "N16",
+      "title": "The Three-Body Problem",
+      "author": "Cixin Liu",
+      "level": "Intermediate",
+      "type": "First Contact",
+      "summary": "A first-contact novel involving astronomy, physics, civilization, and cosmic threat.",
+      "info": "Useful for discussions of SETI risk, orbital chaos, cosmic scale, and scientific culture.",
+      "tags": [
+        "First Contact",
+        "Physics",
+        "SETI"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780765382030-L.jpg"
+    },
+    {
+      "order": "N17",
+      "title": "The Dark Forest",
+      "author": "Cixin Liu",
+      "level": "Advanced",
+      "type": "Cosmic Strategy",
+      "summary": "A darker continuation about cosmic civilization strategy and survival.",
+      "info": "Useful for advanced discussion around SETI assumptions, interstellar communication, and civilization risk.",
+      "tags": [
+        "SETI",
+        "Civilization",
+        "Risk"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780765386694-L.jpg"
+    },
+    {
+      "order": "N18",
+      "title": "Death's End",
+      "author": "Cixin Liu",
+      "level": "Advanced",
+      "type": "Deep-Time SF",
+      "summary": "A vast cosmic novel spanning civilizations, dimensions, time, and existential risk.",
+      "info": "Good for mature readers exploring huge-scale imagination, cosmic timescales, and civilization futures.",
+      "tags": [
+        "Deep Time",
+        "Cosmology",
+        "Civilization"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780765377104-L.jpg"
+    },
+    {
+      "order": "N19",
+      "title": "Foundation",
+      "author": "Isaac Asimov",
+      "level": "Beginner",
+      "type": "Galactic Civilization",
+      "summary": "A classic about science, prediction, empire, and long-term civilization change.",
+      "info": "Relevant as space-civilization fiction, useful for discussing scale, history, and systems thinking.",
+      "tags": [
+        "Galaxy",
+        "Civilization",
+        "Classic"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780553293357-L.jpg"
+    },
+    {
+      "order": "N20",
+      "title": "Dune",
+      "author": "Frank Herbert",
+      "level": "Intermediate",
+      "type": "Planetary Civilization",
+      "summary": "A planetary science-fiction classic about ecology, survival, power, and harsh-environment adaptation.",
+      "info": "Useful if presented as fiction: it teaches ecology, resource dependence, and how environment shapes civilization.",
+      "tags": [
+        "Planetary Ecology",
+        "Survival",
+        "Classic"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780441172719-L.jpg"
+    },
+    {
+      "order": "N21",
+      "title": "Hyperion",
+      "author": "Dan Simmons",
+      "level": "Advanced",
+      "type": "Literary Space Opera",
+      "summary": "A layered interstellar novel with pilgrimage, time, AI, war, and far-future civilization.",
+      "info": "Good for advanced fiction readers who want rich space themes beyond simple adventure.",
+      "tags": [
+        "Interstellar",
+        "Time",
+        "Civilization"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780553283686-L.jpg"
+    },
+    {
+      "order": "N22",
+      "title": "The Forever War",
+      "author": "Joe Haldeman",
+      "level": "Intermediate",
+      "type": "Relativistic War SF",
+      "summary": "A classic that uses relativity and time dilation to show the human cost of interstellar war.",
+      "info": "Useful for teaching the emotional meaning of relativistic travel and time separation.",
+      "tags": [
+        "Relativity",
+        "Time Dilation",
+        "War"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780312536633-L.jpg"
+    },
+    {
+      "order": "N23",
+      "title": "The Mote in God's Eye",
+      "author": "Larry Niven and Jerry Pournelle",
+      "level": "Advanced",
+      "type": "First Contact",
+      "summary": "A detailed first-contact novel with aliens, empire, and scientific investigation.",
+      "info": "Relevant for advanced readers studying how fiction models biology, culture, and contact protocols.",
+      "tags": [
+        "First Contact",
+        "Aliens",
+        "Investigation"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780671741921-L.jpg"
+    },
+    {
+      "order": "N24",
+      "title": "Tau Zero",
+      "author": "Poul Anderson",
+      "level": "Advanced",
+      "type": "Relativistic Starship",
+      "summary": "A hard-SF novel about a starship accelerating toward relativistic extremes.",
+      "info": "Useful for discussing relativity, interstellar travel, time dilation, and extreme mission failure.",
+      "tags": [
+        "Relativity",
+        "Starship",
+        "Interstellar"
+      ],
+      "cover": "https://covers.openlibrary.org/b/isbn/9780575077321-L.jpg"
+    }
+  ]
+}
+</script>
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+
+const fallbackFirebaseConfig = {
+  apiKey: "AIzaSyAHcR5KPQcn4bCAnRHRVvshwge65ilqFjs",
+  authDomain: "astro-x-08.firebaseapp.com",
+  projectId: "astro-x-08",
+  storageBucket: "astro-x-08.firebasestorage.app",
+  messagingSenderId: "707443922110",
+  appId: "1:707443922110:web:ed5c454960051092edfaef",
+  measurementId: "G-4S9NDS5V92"
+};
+const firebaseConfig = window.XHORIZON_FIREBASE_CONFIG || window.XHorizonFirebaseConfig || fallbackFirebaseConfig;
+function configured(cfg){return cfg && cfg.apiKey && !String(cfg.apiKey).includes("YOUR_") && cfg.projectId && !String(cfg.projectId).includes("YOUR_");}
+let app=null,auth=null,functions=null;
+try{if(configured(firebaseConfig)){app=getApps().length?getApps()[0]:initializeApp(firebaseConfig);auth=getAuth(app);functions=getFunctions(app);}}catch(error){console.error("Firebase initialization failed:",error);}
+if(configured(firebaseConfig) && !window.XHorizonAdmin){
+  window.XHorizonAdmin={async unlock(key,done){const cleanKey=String(key||"").trim();if(!cleanKey||!auth||!functions)return false;try{const verifyAdminKey=httpsCallable(functions,"verifyAdminKey");const result=await verifyAdminKey({key:cleanKey});const data=result&&result.data?result.data:{};const customToken=data.token||data.customToken||data.firebaseToken||"";if(customToken)await signInWithCustomToken(auth,customToken);const user=auth.currentUser;if(!user)return false;const tokenResult=await user.getIdTokenResult(true);const allowed=tokenResult&&tokenResult.claims&&tokenResult.claims.admin===true;if(allowed){document.body.classList.add("xh-unlocked");if(typeof done==="function")done();return true;}return false;}catch(error){console.error("X Horizon unlock failed:",error);return false;}}};
+}
+if(auth){onAuthStateChanged(auth,async function(user){if(!user)return;try{const tokenResult=await user.getIdTokenResult(true);if(tokenResult&&tokenResult.claims&&tokenResult.claims.admin===true)document.body.classList.add("xh-unlocked");}catch(error){console.error("State check failed:",error);}});}
+window.XH_LOCK=async function(){try{if(auth&&auth.currentUser)await signOut(auth);}catch(error){console.error(error);}document.body.classList.remove("xh-unlocked");};
+</script>
+
+<script>
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const toastEl=$('#xhToast');
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');setTimeout(()=>toastEl.classList.remove('show'),1800)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function hideLoader(){const l=$('#xhLoader'); if(l)l.classList.add('done'); document.body.classList.add('xh-ready');}
+window.addEventListener('load',()=>setTimeout(hideLoader,2050));
+setTimeout(hideLoader,3400);
+
+const revealObs=new IntersectionObserver((entries)=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+$$('.xh-reveal').forEach(el=>revealObs.observe(el));
+
+const seed=JSON.parse($('#xhSeedData').textContent||'{}');
+const storageKey='xhSpaceBooksItemsV4';
+let data=loadData();
+let currentTab='books';
+function loadData(){try{const saved=JSON.parse(localStorage.getItem(storageKey)||'null');return saved||seed;}catch(e){return seed;}}
+function saveData(){localStorage.setItem(storageKey,JSON.stringify(data));}
+function allItems(){return Object.keys(data).flatMap(k=>(data[k]||[]).map(x=>({...x,category:k})));}
+function tabTitle(tab){return {books:'Books to Read',novels:'Space Novels',magazines:'Space Magazines',guides:'Guides and Atlases',authors:'Authors to Know'}[tab]||'Library';}
+function tabText(tab){return {books:'A wider step-by-step reading order for astronomy, cosmology, observing, spaceflight, and deeper astrophysics.',novels:'Relevant space novels that build imagination around Mars, SETI, missions, orbital survival, interstellar travel, and future civilizations.',magazines:'Magazine routes for current space news, sky events, telescope culture, and astronomy updates.',guides:'Practical guides, atlases, and official resources for sky planning and deeper reference.',authors:'Important authors and educators behind popular space learning.'}[tab]||'';}
+function iconFor(cat){return {books:'fa-book-open',novels:'fa-rocket',magazines:'fa-newspaper',guides:'fa-map-location-dot',authors:'fa-user-astronaut'}[cat]||'fa-book';}
+function render(){
+  $('#libraryTitle').textContent=tabTitle(currentTab);
+  $('#libraryText').textContent=tabText(currentTab);
+  const grid=$('#itemGrid');
+  const items=(data[currentTab]||[]);
+  grid.innerHTML=items.map((item,idx)=>cardTemplate(item,currentTab,idx)).join('') || '<div class="xh-card"><h3>No items yet</h3><p>Add a new item from the console.</p></div>';
+  renderResources();
+}
+function cardTemplate(item,cat,idx){
+  const tags=(item.tags||[]).slice(0,3).map(t=>`<span class="xh-chip">${esc(t)}</span>`).join('');
+  const cover=esc(item.cover||item.popupImage||'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=90&w=1200&auto=format&fit=crop');
+  return `<article class="xh-card" data-open-detail data-cat="${esc(cat)}" data-idx="${idx}">
+    <div><div class="xh-card-cover"><img src="${cover}" alt="${esc(item.title||'Space library cover')}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=90&w=1200&auto=format&fit=crop'"></div><div class="xh-card-top"><span class="xh-badge"><i class="fa-solid ${iconFor(cat)}"></i>${esc(item.type||tabTitle(cat))}</span><div class="xh-order">${esc(item.order||String(idx+1).padStart(2,'0'))}</div></div>
+    <h3>${esc(item.title)}</h3><div class="xh-author">${esc(item.author||'')}</div><p>${esc(item.summary||'')}</p><div class="xh-meta">${tags}</div></div>
+    <div class="xh-card-actions"><button class="xh-detail-btn" type="button"><i class="fa-solid fa-circle-info"></i> Full Info</button></div>
+  </article>`;
+}
+function renderResources(){
+  const sources=[
+    ['Open textbook path','Use free/open astronomy textbooks with the roadmap to make full lessons and quizzes.','Course base'],
+    ['Magazine habit','Read one magazine issue or article weekly to keep the platform fresh and current.','Weekly reading'],
+    ['Observation notes','After a guide chapter, record one target, one sky condition, and one result.','Practice'],
+    ['Author route','Follow one author at a time to understand style, science depth, and topic focus.','Deep reading'],
+    ['Novel route','Use the Novels tab separately for imagination, mission thinking, Mars survival, SETI, and future civilization ideas.','Fiction path']
+  ];
+  $('#resourceList').innerHTML=sources.map(x=>`<article class="xh-resource"><div><b>${esc(x[0])}</b><p>${esc(x[1])}</p></div><span>${esc(x[2])}</span></article>`).join('');
+}
+function openPopup(item,cat){
+  const coverImg=$('#popupCover img');
+  const cover=item.popupImage||item.cover||'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=90&w=1200&auto=format&fit=crop';
+  if(coverImg){coverImg.src=cover;coverImg.alt=(item.title||'Space library cover');coverImg.onerror=function(){this.src='https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=90&w=1200&auto=format&fit=crop';};}
+  $('#popupTitle').textContent=item.title||'';
+  $('#popupAuthor').textContent=item.author?`By ${item.author}`:'';
+  $('#popupGrid').innerHTML=`
+    <div class="xh-popup-info"><b>Category</b>${esc(tabTitle(cat))}</div>
+    <div class="xh-popup-info"><b>Level</b>${esc(item.level||'All Levels')}</div>
+    <div class="xh-popup-info"><b>Read order / year</b>${esc(item.order||'')}</div>
+    <div class="xh-popup-info"><b>Type</b>${esc(item.type||'')}</div>
+    <div class="xh-popup-info xh-popup-full"><b>Why read it</b>${esc(item.summary||'')}</div>
+    <div class="xh-popup-info xh-popup-full"><b>Full information</b>${esc(item.info||'')}</div>
+    <div class="xh-popup-info xh-popup-full"><b>Topics</b>${esc((item.tags||[]).join(' · ')||'Space learning')}</div>`;
+  $('#itemPopup').classList.add('on');
+}
+function closePopup(){ $('#itemPopup').classList.remove('on'); }
+
+document.addEventListener('click',e=>{
+  const tab=e.target.closest('[data-tab]');
+  if(tab){currentTab=tab.dataset.tab;$$('.xh-tab').forEach(b=>b.classList.toggle('active',b===tab));render();return;}
+  const card=e.target.closest('[data-open-detail]');
+  if(card){const cat=card.dataset.cat;const idx=Number(card.dataset.idx);openPopup((data[cat]||[])[idx],cat);return;}
+});
+$('#popupClose').addEventListener('click',closePopup);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePopup();});
+
+const search=$('#xhSearch'), results=$('#xhResults');
+function runSearch(q){
+  const value=String(q||'').trim().toLowerCase();results.innerHTML='';
+  if(!value){results.classList.remove('show');return;}
+  const matches=allItems().filter(x=>[x.title,x.author,x.summary,x.info,x.type,x.level,x.cover,x.popupImage,(x.tags||[]).join(' ')].join(' ').toLowerCase().includes(value)).slice(0,10);
+  if(!matches.length){results.innerHTML='<button class="xh-result-item" type="button"><strong>No result</strong><span>Try another book, author, or topic.</span></button>';results.classList.add('show');return;}
+  results.innerHTML=matches.map((x,i)=>`<button class="xh-result-item" type="button" data-search-index="${i}"><strong>${esc(x.title)}</strong><span>${esc(x.author||tabTitle(x.category))} · ${esc(tabTitle(x.category))}</span></button>`).join('');
+  results.classList.add('show');
+  $$('[data-search-index]',results).forEach((btn,i)=>btn.addEventListener('click',()=>{const item=matches[i];currentTab=item.category;$$('.xh-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===currentTab));render();openPopup(item,item.category);results.classList.remove('show');search.value='';}));
+}
+function waitForUnlockSystem(){return new Promise(resolve=>{if(window.XHorizonAdmin&&typeof window.XHorizonAdmin.unlock==='function')return resolve(window.XHorizonAdmin);let tries=0;const timer=setInterval(()=>{tries++;if(window.XHorizonAdmin&&typeof window.XHorizonAdmin.unlock==='function'){clearInterval(timer);resolve(window.XHorizonAdmin);}else if(tries>12){clearInterval(timer);resolve(null);}},120);});}
+async function handleSearchSubmit(){
+  const value=search.value.trim();
+  if(!value){runSearch('');return;}
+  search.disabled=true;
+  try{const bridge=await waitForUnlockSystem();if(bridge&&typeof bridge.unlock==='function'){const ok=await Promise.resolve(bridge.unlock(value,()=>{document.body.classList.add('xh-unlocked');toast('Console opened');}));if(ok){search.value='';results.classList.remove('show');return;}}}catch(error){console.error('Unlock failed:',error);}finally{search.disabled=false;}
+  runSearch(value);
+}
+search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();handleSearchSubmit();}});
+search.addEventListener('input',()=>runSearch(search.value));
+document.addEventListener('click',e=>{if(!e.target.closest('.xh-search-wrap'))results.classList.remove('show');});
+
+function readConsoleItem(){const cover=$('#editCover').value.trim()||'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=90&w=1200&auto=format&fit=crop';const popupImage=$('#editPopupImage').value.trim()||cover;return {order:$('#editOrder').value.trim()||String((data[$('#editCategory').value]||[]).length+1).padStart(2,'0'),title:$('#editTitle').value.trim()||'New Space Library Item',author:$('#editAuthor').value.trim()||'Unknown',level:$('#editLevel').value,type:$('#editCategory').selectedOptions[0].textContent,summary:$('#editSummary').value.trim()||'Short useful space learning summary.',info:$('#editInfo').value.trim()||'Detailed popup information will appear here.',cover:cover,popupImage:popupImage,tags:$('#editTags').value.split(',').map(s=>s.trim()).filter(Boolean)};}
+function clearConsole(){['editTitle','editAuthor','editOrder','editSummary','editInfo','editCover','editPopupImage','editTags'].forEach(id=>$('#'+id).value='');$('#editLevel').value='Beginner';}
+$('#addItem').addEventListener('click',()=>{const cat=$('#editCategory').value;data[cat]=data[cat]||[];data[cat].push(readConsoleItem());saveData();currentTab=cat;$$('.xh-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===currentTab));render();clearConsole();toast('Item added');});
+$('#previewItem').addEventListener('click',()=>{const cat=$('#editCategory').value;openPopup(readConsoleItem(),cat);toast('Popup preview opened');});
+$('#resetItems').addEventListener('click',()=>{data=JSON.parse(JSON.stringify(seed));saveData();render();toast('Library reset');});
+$('#lockConsole').addEventListener('click',()=>{if(window.XH_LOCK)window.XH_LOCK();else document.body.classList.remove('xh-unlocked');toast('Locked');});
+
+render();
+})();
+</script>
