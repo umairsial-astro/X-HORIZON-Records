@@ -1,0 +1,1484 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X Horizon — Cosmic Gear</title>
+<meta name="description" content="X Horizon Cosmic Gear page for astronaut tools, EVA equipment, life-support systems, robotics, science kits, safety gear, and mission operations equipment.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{
+  --bg:#000;
+  --panel:#0b0b0b;
+  --panel2:#121212;
+  --panel3:#171717;
+  --text:#fff;
+  --soft:#d6d6d6;
+  --muted:#9b9b9b;
+  --line:rgba(255,255,255,.10);
+  --line2:rgba(255,255,255,.18);
+  --max:1240px;
+  --font:'Inter',Arial,Helvetica,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box}
+html{background:#000;color:#fff;scroll-behavior:smooth;overflow-x:hidden}
+body{margin:0;background:#000;color:#fff;font-family:var(--font);overflow-x:hidden;line-height:1.5}
+body:not(.xh-ready){overflow:hidden}
+button,input,select,textarea{font-family:inherit;border:0;outline:0}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.xh-shell{width:min(var(--max),calc(100% - 40px));margin:0 auto}
+.xh-page{position:relative;z-index:1;min-height:100vh;background:transparent;color:#fff;isolation:isolate;opacity:0;visibility:hidden;transition:opacity .55s var(--ease),visibility .55s var(--ease)}
+body.xh-ready .xh-page{opacity:1;visibility:visible}
+
+.xh-loader{position:fixed;inset:0;background:#000;display:grid;place-items:center;z-index:99999;transition:opacity .65s var(--ease),visibility .65s var(--ease)}
+.xh-loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.xh-load-mark{position:relative;width:min(310px,82vw);height:118px;display:grid;place-items:center;overflow:hidden}
+.xh-load-x{position:absolute;left:42px;top:6px;font-size:96px;line-height:1;font-weight:900;letter-spacing:-.12em;color:#fff;z-index:2;text-shadow:0 0 26px rgba(255,255,255,.18)}
+.xh-load-word{position:absolute;left:112px;top:45px;font-size:22px;font-weight:900;letter-spacing:.2em;color:#eee;opacity:.18;animation:xhWordBlink 1.7s steps(2,end) infinite,xhWordSolid .22s ease 1.7s forwards;z-index:3}
+.xh-load-line{position:absolute;left:42px;right:42px;bottom:10px;height:4px;border-radius:99px;background:#161616;overflow:hidden}
+.xh-load-fill{display:block;height:100%;width:0;background:#e8e8e8;border-radius:inherit;transform-origin:left center}
+.xh-loader.play .xh-load-fill{animation:xhLoadGrow 2.75s linear forwards}
+@keyframes xhLoadGrow{0%{width:0}100%{width:100%}}
+@keyframes xhWordBlink{0%,100%{opacity:.16}50%{opacity:.68}}
+@keyframes xhWordSolid{to{opacity:1}}
+@keyframes xhLoadFill{0%{width:0}100%{width:100%}}
+
+.xh-live-bg{position:fixed;inset:0;z-index:0;background:#000;overflow:hidden;pointer-events:none}
+.xh-live-bg::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.46) 0 1px,transparent 1.5px),radial-gradient(circle,rgba(255,255,255,.24) 0 1px,transparent 1.5px);background-size:150px 150px,230px 230px;background-position:20px 40px,95px 12px;opacity:.28;animation:xhStarDrift 46s linear infinite}
+.xh-glow{position:absolute;border-radius:50%;filter:blur(54px);background:radial-gradient(circle,rgba(255,255,255,.09),transparent 70%)}
+.xh-g1{width:560px;height:560px;top:-180px;left:-140px;animation:xhDriftA 38s ease-in-out infinite}
+.xh-g2{width:480px;height:480px;bottom:-160px;right:-100px;animation:xhDriftB 44s ease-in-out infinite}
+.xh-g3{width:420px;height:420px;top:40%;left:50%;animation:xhDriftC 50s ease-in-out infinite}
+@keyframes xhDriftA{0%,100%{transform:translate(0,0)}50%{transform:translate(70px,50px)}}
+@keyframes xhDriftB{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-46px)}}
+@keyframes xhDriftC{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,40px)}}
+@keyframes xhStarDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-150px,150px,0)}}
+
+.xh-hero{position:relative;min-height:100vh;padding:112px 20px 82px;display:grid;place-items:center;text-align:center;overflow:hidden;background:#000}
+.xh-hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(0,0,0,.33),rgba(0,0,0,.74) 67%,#000 100%),url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=90&w=2400&auto=format&fit=crop') center/cover no-repeat;filter:brightness(.72) saturate(.92) contrast(1.04);transform:scale(1.01)}
+.xh-hero::before{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;z-index:3;background:linear-gradient(90deg,transparent,rgba(255,255,255,.86),transparent);box-shadow:0 0 30px rgba(255,255,255,.45);pointer-events:none}
+.xh-hero::after{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(circle at 50% 48%,rgba(0,0,0,.04) 0 22%,rgba(0,0,0,.54) 72%,#000 100%);pointer-events:none}
+.xh-hero-content{position:relative;z-index:4;width:min(880px,calc(100% - 34px));display:flex;flex-direction:column;align-items:center;transform:translateY(-12px)}
+.xh-search-wrap{width:min(590px,96vw);position:relative;margin:0 auto 26px}
+.xh-search{display:flex;align-items:center;background:rgba(255,255,255,.055);border-radius:15px;padding:7px;backdrop-filter:blur(14px);box-shadow:0 24px 70px rgba(0,0,0,.28)}
+.xh-search input{flex:1;min-width:0;height:48px;border-radius:12px;background:transparent;color:#fff;padding:0 14px;font-size:14px}
+.xh-search input::placeholder{color:rgba(255,255,255,.62)}
+.xh-search .xh-search-icon{width:44px;height:48px;display:grid;place-items:center;color:#fff;opacity:.86;font-size:15px;flex:0 0 auto}
+.xh-results{display:none;position:absolute;left:0;right:0;top:calc(100% + 9px);z-index:20;background:rgba(7,7,7,.96);border-radius:16px;padding:8px;text-align:left;max-height:330px;overflow:auto;box-shadow:0 26px 80px rgba(0,0,0,.48);backdrop-filter:blur(14px)}
+.xh-results.show{display:block}
+.xh-result-item{display:block;width:100%;text-align:left;padding:13px;border-radius:12px;background:rgba(255,255,255,.055);color:#fff;margin-bottom:7px}
+.xh-result-item:last-child{margin-bottom:0}
+.xh-result-item strong{display:block;font-size:13px;line-height:1.25}
+.xh-result-item span{display:block;margin-top:4px;font-size:12px;color:#bdbdbd}
+.xh-title{margin:0;font-size:clamp(54px,8vw,116px);line-height:.9;letter-spacing:-.055em;font-weight:900;color:#fff;text-transform:none}
+.xh-title span{display:block;font-size:clamp(28px,3.2vw,42px);letter-spacing:.18em;text-transform:uppercase;color:#cfcfcf;font-weight:600;margin-bottom:10px}
+.xh-hero-line{margin:20px auto 0;color:#d2d2d2;font-size:clamp(14px,1.48vw,18px);line-height:1.75;letter-spacing:.22em;text-transform:uppercase;font-weight:500;max-width:820px}
+.xh-hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:30px}
+.xh-btn,.xh-small-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:50px;border-radius:12px;background:#fff;color:#000 !important;padding:0 25px;font-size:13px;font-weight:800;letter-spacing:.03em;box-shadow:none;transition:transform .25s var(--ease),background .25s var(--ease),color .25s var(--ease)}
+.xh-btn:hover,.xh-small-btn:hover{background:#e7e7e7;color:#000 !important;transform:scale(1.035)}
+.xh-btn.secondary{background:rgba(255,255,255,.055);color:#fff !important;backdrop-filter:blur(10px)}
+.xh-btn.secondary:hover{background:rgba(255,255,255,.085);color:#fff !important}
+
+.xh-section{position:relative;padding:72px 0;background:transparent}
+.xh-section.compact{padding:46px 0}
+.xh-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:28px}
+.xh-head h2{margin:0;font-size:clamp(28px,3.6vw,44px);letter-spacing:-.04em;line-height:1.05;font-weight:800;color:#fff}
+.xh-head p{margin:0;max-width:620px;color:#cfcfcf;font-size:14px;line-height:1.7}
+.xh-kicker{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.055);border-radius:999px;padding:8px 11px;color:#e1e1e1;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.xh-dot{width:7px;height:7px;border-radius:50%;background:#e5e5e5;box-shadow:0 0 14px rgba(255,255,255,.24)}
+.xh-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.xh-tab{min-height:44px;border-radius:999px;padding:0 16px;background:#0b0b0b;color:#fff;font-size:12px;font-weight:800;letter-spacing:.04em;display:inline-flex;align-items:center;gap:8px;transition:background .2s ease,transform .2s ease,color .2s ease}
+.xh-tab.active,.xh-tab:hover{background:#fff;color:#000;transform:translateY(-2px)}
+.xh-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.xh-card{position:relative;min-height:336px;border-radius:22px;padding:20px;background:#0b0b0b;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;transition:transform .25s var(--ease),background .25s var(--ease)}
+.xh-card:hover{transform:translateY(-5px);background:#121212}
+.xh-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+.xh-badge{display:inline-flex;align-items:center;gap:7px;min-height:28px;border-radius:999px;padding:0 10px;background:rgba(255,255,255,.075);font-size:11px;font-weight:800;color:#e6e6e6;white-space:nowrap}
+.xh-order{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;color:#000;font-size:14px;font-weight:900;flex:0 0 auto}
+.xh-card h3{margin:0;font-size:24px;letter-spacing:-.04em;line-height:1.05;color:#fff}
+.xh-card p{margin:14px 0 0;color:#d1d1d1;font-size:13px;line-height:1.65}
+.xh-meta{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}
+.xh-chip{display:inline-flex;align-items:center;min-height:27px;border-radius:999px;padding:0 10px;background:rgba(255,255,255,.07);color:#e7e7e7;font-size:11px;font-weight:700}
+.xh-detail-btn{width:100%;min-height:46px;border-radius:12px;background:#fff;color:#000;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:9px;transition:transform .2s ease,background .2s ease}
+.xh-detail-btn:hover{background:#e7e7e7;transform:scale(1.02)}
+
+.xh-stack{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.xh-step{position:relative;min-height:240px;border-radius:22px;padding:20px;background:#0b0b0b;overflow:hidden}
+.xh-step::before{content:"";position:absolute;left:22px;top:82px;bottom:20px;width:2px;background:linear-gradient(180deg,rgba(255,255,255,.8),transparent)}
+.xh-step-num{width:48px;height:48px;border-radius:50%;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;margin-bottom:18px}
+.xh-step h3{margin:0 0 9px;font-size:22px;letter-spacing:-.04em;line-height:1.05}
+.xh-step p{margin:0;color:#cfcfcf;font-size:13px;line-height:1.65}
+
+.xh-split{display:grid;grid-template-columns:.9fr 1.1fr;gap:16px;align-items:stretch}
+.xh-visual{min-height:540px;border-radius:26px;overflow:hidden;background:#0b0b0b;position:relative}
+.xh-visual img{width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(.92)}
+.xh-copy{background:#0b0b0b;border-radius:26px;padding:30px;display:flex;flex-direction:column;justify-content:center}
+.xh-copy h2{margin:0 0 14px;font-size:clamp(34px,5vw,70px);letter-spacing:-.065em;line-height:.9}
+.xh-copy p{margin:0;color:#d0d0d0;font-size:14px;line-height:1.75}
+.xh-checks{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:24px}
+.xh-check{background:#050505;border-radius:15px;padding:14px;color:#d8d8d8;font-size:13px;line-height:1.55}
+.xh-check b{display:block;color:#fff;margin-bottom:4px}
+
+.xh-table-wrap{overflow:auto;border-radius:22px;background:#0b0b0b}
+.xh-table{width:100%;border-collapse:collapse;min-width:760px}
+.xh-table th,.xh-table td{padding:16px;text-align:left;font-size:13px;vertical-align:top}
+.xh-table th{background:#141414;color:#fff;text-transform:uppercase;letter-spacing:.08em;font-size:11px}
+.xh-table td{color:#cfcfcf}
+.xh-table tr:nth-child(even) td{background:#080808}
+
+.xh-calc{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.xh-calc-panel{background:#0b0b0b;border-radius:24px;padding:22px}
+.xh-form{display:grid;gap:11px}
+.xh-label{display:block;margin:0 0 7px;color:#e8e8e8;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.xh-input,.xh-textarea,.xh-select{width:100%;border-radius:12px;background:rgba(255,255,255,.06);color:#fff;padding:0 13px;backdrop-filter:blur(12px)}
+.xh-input,.xh-select{height:44px}
+.xh-textarea{min-height:90px;padding-top:12px;resize:vertical;line-height:1.5}
+.xh-select option{background:#080808;color:#fff}
+.xh-calc-results{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.xh-result-metric{background:#050505;border-radius:16px;padding:16px;min-height:106px;display:flex;flex-direction:column;justify-content:space-between}
+.xh-result-metric strong{font-size:28px;letter-spacing:-.05em;color:#fff;line-height:1}
+.xh-result-metric span{font-size:12px;color:#bdbdbd;line-height:1.45}
+
+.xh-grid > .xh-converter-grid{grid-column:1/-1;width:100%}
+.xh-converter-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;width:100%}
+.xh-converter-card{background:#0b0b0b;border-radius:24px;padding:20px;min-height:380px;display:flex;flex-direction:column;gap:14px;width:100%;overflow:hidden}
+.xh-converter-card h3{margin:0;font-size:24px;letter-spacing:-.04em;line-height:1.05;color:#fff}
+.xh-converter-card p{margin:0;color:#cfcfcf;font-size:13px;line-height:1.65}
+.xh-converter-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.xh-converter-top i{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#000;font-size:15px;flex:0 0 auto}
+.xh-converter-form{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.55fr);gap:10px;margin-top:auto;width:100%}
+.xh-converter-form.single{grid-template-columns:1fr}
+.xh-converter-form.two{grid-template-columns:1fr 1fr}
+.xh-converter-form.triple{grid-template-columns:1fr 1fr 1fr}
+.xh-converter-output{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;width:100%}
+.xh-converter-metric{background:#050505;border-radius:15px;padding:13px;min-height:78px;min-width:0}
+.xh-converter-metric b{display:block;color:#fff;font-size:17px;letter-spacing:-.03em;line-height:1.12;overflow-wrap:anywhere}
+.xh-converter-metric span{display:block;margin-top:5px;color:#a9a9a9;font-size:11px;line-height:1.35;text-transform:uppercase;letter-spacing:.06em}
+@media(max-width:1160px){.xh-converter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.xh-converter-output{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.xh-control{display:none;position:fixed;inset:auto 18px 18px auto;width:min(430px,calc(100% - 36px));max-height:min(760px,calc(100vh - 36px));z-index:1000;background:rgba(8,8,8,.96);border-radius:24px;padding:18px;box-shadow:0 28px 90px rgba(0,0,0,.55);backdrop-filter:blur(18px);overflow:auto}
+body.xh-unlocked .xh-control{display:block}
+.xh-control-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.xh-control-title{font-weight:900;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#fff}
+.xh-control-note{margin-top:5px;color:#bdbdbd;font-size:12px;line-height:1.5}
+.xh-control-close{width:38px;height:38px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center}
+.xh-control-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.xh-mini-btn{min-height:42px;border-radius:12px;background:#fff;color:#000;font-size:12px;font-weight:900;display:flex;gap:8px;align-items:center;justify-content:center}
+.xh-mini-btn.dark{background:#171717;color:#fff}
+
+.xh-popup{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.76);backdrop-filter:blur(15px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,visibility .25s ease}
+.xh-popup.on{opacity:1;visibility:visible;pointer-events:auto}
+.xh-popup-box{position:relative;width:min(840px,100%);max-height:calc(100vh - 44px);overflow:auto;border-radius:26px;background:linear-gradient(180deg,rgba(16,16,16,.98),rgba(5,5,5,.98));box-shadow:0 30px 100px rgba(0,0,0,.65);padding:0;transform:translateY(14px) scale(.98);transition:transform .25s ease}
+.xh-popup.on .xh-popup-box{transform:translateY(0) scale(1)}
+.xh-popup-image{height:260px;position:relative;background:#050505;overflow:hidden}
+.xh-popup-image img{width:100%;height:100%;object-fit:cover;filter:brightness(.78) saturate(.92)}
+.xh-popup-image::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.64))}
+.xh-popup-close{position:absolute;right:16px;top:16px;width:40px;height:40px;border-radius:50%;background:#fff;color:#000;font-size:16px;display:grid;place-items:center;z-index:3}
+.xh-popup-content{padding:28px}
+.xh-popup-icon{width:64px;height:64px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center;font-size:26px;margin:-60px 0 16px;position:relative;z-index:2}
+.xh-popup h3{margin:0;font-size:clamp(28px,4vw,46px);line-height:1;letter-spacing:-.055em;max-width:680px}
+.xh-popup .xh-popup-author{margin:10px 0 0;color:#bdbdbd;font-size:15px}
+.xh-popup-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:22px}
+.xh-popup-info{border-radius:16px;background:rgba(255,255,255,.055);padding:14px;color:#d7d7d7;font-size:13px;line-height:1.6}
+.xh-popup-info b{display:block;color:#fff;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+.xh-popup-full{grid-column:1/-1}
+.xh-toast{position:fixed;left:50%;bottom:22px;z-index:9999;transform:translateX(-50%) translateY(20px);max-width:min(420px,calc(100% - 44px));padding:12px 15px;border-radius:12px;background:#111;color:#fff;font-size:13px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
+.xh-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.xh-reveal{opacity:0;transform:translateY(28px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
+.xh-reveal.visible{opacity:1;transform:translateY(0)}
+@media(max-width:1040px){.xh-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.xh-stack{grid-template-columns:repeat(2,minmax(0,1fr))}.xh-split,.xh-calc{grid-template-columns:1fr}.xh-visual{min-height:380px}}
+@media(max-width:760px){.xh-shell{width:min(100% - 24px,var(--max))}.xh-hero{padding:96px 14px 66px}.xh-title{font-size:clamp(48px,16vw,84px)}.xh-title span{font-size:clamp(20px,7vw,30px)}.xh-hero-line{font-size:12px;letter-spacing:.14em}.xh-head{display:block}.xh-head p{margin-top:12px}.xh-section{padding:54px 0}.xh-grid,.xh-stack,.xh-popup-grid,.xh-checks,.xh-calc-results,.xh-converter-grid,.xh-converter-output,.xh-converter-form,.xh-converter-form.two{grid-template-columns:1fr}.xh-card{min-height:290px}.xh-popup-box{border-radius:22px}.xh-popup-content{padding:22px}.xh-popup-image{height:220px}}
+@media(max-width:480px){.xh-hero-actions{width:100%}.xh-btn{width:100%}.xh-control{inset:auto 10px 10px 10px;width:auto}.xh-search{padding:6px}}
+@media(prefers-reduced-motion:reduce){.xh-live-bg::before,.xh-glow,.xh-load-word,.xh-load-fill{animation:none !important}.xh-load-fill{width:100% !important}}
+
+
+/* ULTIMATE CONTENT / VISUAL FIX PATCH */
+.xh-loader:not(.done){display:grid !important;opacity:1 !important;visibility:visible !important;}
+.xh-load-fill{display:block;height:100%;width:0;background:#e8e8e8;border-radius:inherit;transition:width 3.05s linear !important;animation:none !important;}
+.xh-loader.play .xh-load-fill{width:100% !important;animation:none !important;}
+.xh-card{padding:0 !important;min-height:410px;background:#0b0b0b !important;border:0 !important;overflow:hidden;}
+.xh-card:hover{background:#111 !important;}
+.xh-card-image{height:174px;background:#050505;overflow:hidden;position:relative;}
+.xh-card-image img{width:100%;height:100%;object-fit:cover;filter:brightness(.78) saturate(.95);transition:transform .45s var(--ease),filter .45s var(--ease);}
+.xh-card:hover .xh-card-image img{transform:scale(1.04);filter:brightness(.9) saturate(1.02);}
+.xh-card-body{padding:18px 18px 20px;display:flex;flex-direction:column;flex:1;justify-content:space-between;}
+.xh-card .xh-detail-btn{margin-top:16px;}
+.xh-popup{align-items:flex-start !important;padding:86px 22px 22px !important;}
+.xh-popup-box{max-height:calc(100vh - 108px) !important;}
+.xh-popup-image{height:285px !important;}
+.xh-stack-card{background:#0b0b0b;border:0;border-radius:22px;padding:20px;}
+.xh-stack-card h3{margin:0 0 8px;font-size:22px;line-height:1.1;color:#fff;}
+.xh-stack-card p{margin:0;color:#cfcfcf;font-size:13px;line-height:1.65;}
+@media(max-width:760px){.xh-card{min-height:390px}.xh-card-image{height:160px}.xh-popup{padding:70px 14px 14px !important}.xh-popup-box{max-height:calc(100vh - 86px) !important}.xh-popup-image{height:220px !important}}
+
+
+.xh-editor-note{margin:-2px 0 2px;color:#a9a9a9;font-size:12px;line-height:1.45}
+.xh-control-actions.three{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:520px){.xh-control-actions.three{grid-template-columns:1fr}}
+
+</style>
+
+
+<div class="xh-loader" id="xhLoader" aria-hidden="true"><div class="xh-load-mark"><div class="xh-load-x">X</div><div class="xh-load-word">HORIZON</div><div class="xh-load-line"><span class="xh-load-fill"></span></div></div></div>
+<div class="xh-live-bg" aria-hidden="true"><span class="xh-glow xh-g1"></span><span class="xh-glow xh-g2"></span><span class="xh-glow xh-g3"></span></div>
+<div class="xh-page" id="xhPage">
+<main>
+<section class="xh-hero" id="home">
+  <div class="xh-hero-bg"></div>
+  <div class="xh-hero-content">
+    <div class="xh-search-wrap">
+      <div class="xh-search"><input id="xhSearch" type="search" placeholder="Search astronaut gear, EVA tools, safety, science kits" autocomplete="off"><span class="xh-search-icon"><i class="fa-solid fa-magnifying-glass"></i></span></div>
+      <div class="xh-results" id="xhResults"></div>
+    </div>
+    <h1 class="xh-title"><span>X Horizon</span>Cosmic Gear</h1>
+    <p class="xh-hero-line">Advanced astronaut equipment, EVA tools, life-support systems, mission operations gear, robotics, science kits, and crew safety equipment.</p>
+    <div class="xh-hero-actions"><a class="xh-btn" href="#gear-library"><i class="fa-solid fa-screwdriver-wrench"></i> Explore Tools</a><a class="xh-btn secondary" href="#mission-kit"><i class="fa-solid fa-list-check"></i> Mission Kit</a></div>
+  </div>
+</section>
+<section class="xh-section compact"><div class="xh-shell"><div class="xh-tabs xh-reveal" id="tabs"><button class="xh-tab active" data-tab="suits"><i class="fa-solid fa-user-astronaut"></i> Suits</button><button class="xh-tab" data-tab="eva"><i class="fa-solid fa-screwdriver-wrench"></i> EVA Tools</button><button class="xh-tab" data-tab="life"><i class="fa-solid fa-heart-pulse"></i> Life Support</button><button class="xh-tab" data-tab="operations"><i class="fa-solid fa-tablet-screen-button"></i> Operations</button><button class="xh-tab" data-tab="robotics"><i class="fa-solid fa-robot"></i> Robotics</button><button class="xh-tab" data-tab="science"><i class="fa-solid fa-flask-vial"></i> Science Kits</button><button class="xh-tab" data-tab="safety"><i class="fa-solid fa-shield-halved"></i> Safety</button><button class="xh-tab" data-tab="observation"><i class="fa-solid fa-camera-retro"></i> Observation</button><button class="xh-tab" data-tab="converters"><i class="fa-solid fa-right-left"></i> Converters</button></div></div></section>
+<section class="xh-section" id="gear-library"><div class="xh-shell"><div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> Tool library</div><h2 id="libraryTitle">Astronaut Suits</h2></div><p id="libraryText">Essential crew equipment used for protection, mobility, survival, operations, research, and mission safety.</p></div><div class="xh-grid xh-reveal" id="itemGrid"></div></div></section>
+<section class="xh-section" id="mission-kit"><div class="xh-shell"><div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> Mission kit</div><h2>Core Astronaut Tool Sets</h2></div><p>Quick mission-use map for the most important equipment families carried, worn, operated, or maintained by crew members.</p></div><div class="xh-table-wrap xh-reveal"><table class="xh-table"><thead><tr><th>Mission area</th><th>Primary tools</th><th>Used for</th><th>Critical risk controlled</th></tr></thead><tbody><tr><td>EVA outside station/vehicle</td><td>Spacesuit, PLSS, safety tethers, Pistol Grip Tool, body restraint, helmet lights, comm cap.</td><td>Repair, inspection, replacement, cable routing, external science work.</td><td>Vacuum exposure, drift-away risk, overheating, tool loss.</td></tr><tr><td>Cabin operations</td><td>Procedure tablet, headset, laptops, barcode/RFID scanner, checklists, emergency masks.</td><td>Daily procedures, inventory, comms, experiment support, fault response.</td><td>Wrong procedure, lost inventory, delayed response.</td></tr><tr><td>Science work</td><td>Glovebox, sample bags, microscope, ultrasound, plant chamber, dosimeter, freezer/cold stowage.</td><td>Microgravity experiments, health checks, biology, materials, radiation tracking.</td><td>Contamination, sample loss, bad data, crew health issues.</td></tr><tr><td>Robotics and capture</td><td>Robotic arm controls, hand controllers, foot restraints, cameras, grapple fixtures.</td><td>Cargo capture, external payload moves, inspection, crew support.</td><td>Collision, bad alignment, uncontrolled payload motion.</td></tr><tr><td>Safety and emergency</td><td>Fire extinguisher, portable breathing gear, first-aid kit, smoke detector, leak kit, ammonia response kit.</td><td>Fire, leak, toxic atmosphere, medical, depressurization, contamination response.</td><td>Crew injury, cabin atmosphere loss, toxic exposure.</td></tr></tbody></table></div></div></section>
+<section class="xh-section" id="eva-workflow"><div class="xh-shell"><div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> Operational depth</div><h2>EVA Tool Workflow</h2></div><p>Useful sequence astronauts follow so tools stay controlled, tasks stay safe, and ground teams can verify every step.</p></div><div class="xh-stack xh-reveal"><article class="xh-stack-card"><h3>1. Configure</h3><p>Set torque, battery, socket, camera, lighting, restraint position, and tether path before leaving the airlock.</p></article><article class="xh-stack-card"><h3>2. Translate</h3><p>Move along handrails with primary and secondary tethers while keeping tool bags and cables clear of snag points.</p></article><article class="xh-stack-card"><h3>3. Stabilize</h3><p>Use foot restraints, body restraint tethers, or robotic positioning so both hands can work without drifting.</p></article><article class="xh-stack-card"><h3>4. Execute</h3><p>Complete the hardware task with torque checks, connector verification, fastener capture, and video confirmation.</p></article><article class="xh-stack-card"><h3>5. Inspect</h3><p>Use helmet cameras, external cameras, lights, and ground callouts to verify blankets, cables, seals, and latches.</p></article><article class="xh-stack-card"><h3>6. Stow</h3><p>Return every tool to its restraint point, confirm no loose objects, and close the worksite before airlock ingress.</p></article></div></div></section>
+<section class="xh-section" id="gear-readiness"><div class="xh-shell"><div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> Readiness checks</div><h2>Gear Selection Rules</h2></div><p>Fast decision rules for choosing the right astronaut gear family without adding weak or random items.</p></div><div class="xh-table-wrap xh-reveal"><table class="xh-table"><thead><tr><th>Problem</th><th>Correct gear family</th><th>Key check</th><th>Failure avoided</th></tr></thead><tbody><tr><td>External fastener or panel work</td><td>EVA power tool, sockets, capture plate, tethers</td><td>Torque limit, socket fit, secondary tether</td><td>Stripped fastener, loose debris, lost tool</td></tr><tr><td>Crew survival during EVA</td><td>Suit, PLSS, cooling garment, oxygen interface</td><td>Pressure, oxygen, cooling, CO₂ removal</td><td>Hypoxia, overheating, pressure loss</td></tr><tr><td>Station science sample handling</td><td>Glovebox, sample kit, freezer, microscope</td><td>Containment, labels, temperature, contamination control</td><td>Lost sample value or crew exposure</td></tr><tr><td>External inspection</td><td>Helmet camera, robotic camera, cupola optics, range tools</td><td>Lighting, focus, angle, reference marks</td><td>Missed damage or wrong alignment</td></tr><tr><td>Atmosphere problem</td><td>Gas monitor, PBA, masks, scrubbers, leak kit</td><td>Alarm source, module isolation, pressure trend</td><td>Smoke/toxic exposure or decompression risk</td></tr></tbody></table></div></div></section>
+</main></div>
+<section class="xh-control" id="signalConsole" aria-hidden="true"><div class="xh-control-head"><div><div class="xh-control-title">Signal Console</div><div class="xh-control-note">Add or update visible gear entries and their popup details for this page.</div></div><button class="xh-control-close" id="lockConsole" type="button" aria-label="Lock"><i class="fa-solid fa-lock"></i></button></div><div class="xh-form"><div><label class="xh-label" for="editCategory">Category</label><select class="xh-select" id="editCategory"><option value="suits">Suits</option><option value="eva">EVA Tools</option><option value="life">Life Support</option><option value="operations">Operations</option><option value="robotics">Robotics</option><option value="science">Science Kits</option><option value="safety">Safety</option><option value="observation">Observation</option></select></div><div><label class="xh-label" for="editTitle">Card title</label><input class="xh-input" id="editTitle" placeholder="Gear title"></div><div><label class="xh-label" for="editType">Gear type</label><input class="xh-input" id="editType" placeholder="EVA tool, life-support unit, science kit..."></div><div><label class="xh-label" for="editLevel">Level</label><select class="xh-select" id="editLevel"><option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>Field Critical</option></select></div><div><label class="xh-label" for="editImage">Card image URL</label><input class="xh-input" id="editImage" placeholder="Use a real tool photo URL"></div><div><label class="xh-label" for="editSummary">Card short summary</label><textarea class="xh-textarea" id="editSummary" placeholder="Short useful card text"></textarea></div><div><label class="xh-label" for="editInfo">Popup technical notes</label><textarea class="xh-textarea" id="editInfo" placeholder="Real purpose, operation, mission relevance, and technical details"></textarea></div><div><label class="xh-label" for="editPopupImage">Popup image URL</label><input class="xh-input" id="editPopupImage" placeholder="Use a real popup photo URL or leave blank"></div><div><label class="xh-label" for="editPopupTitle">Popup title override</label><input class="xh-input" id="editPopupTitle" placeholder="Leave blank to use card title"></div><div><label class="xh-label" for="editMissionUse">Mission use / example</label><textarea class="xh-textarea" id="editMissionUse" placeholder="Example: used during EVA repair, glovebox science, robotics capture, cabin emergency response"></textarea></div><div><label class="xh-label" for="editHowWorks">How it works</label><textarea class="xh-textarea" id="editHowWorks" placeholder="Explain the mechanism or workflow in useful terms"></textarea></div><div><label class="xh-label" for="editSafety">Safety importance</label><textarea class="xh-textarea" id="editSafety" placeholder="What risk it controls or prevents"></textarea></div><div><label class="xh-label" for="editLimits">Limits / checks</label><textarea class="xh-textarea" id="editLimits" placeholder="Power, pressure, torque, tether, contamination, calibration, or crew-check limits"></textarea></div><div><label class="xh-label" for="editTags">Tags</label><input class="xh-input" id="editTags" placeholder="Comma separated"></div><div class="xh-editor-note">Preview opens the same popup users will see. Add saves the card with its own relevant popup image and details.</div><div class="xh-control-actions three"><button class="xh-mini-btn" id="addItem" type="button"><i class="fa-solid fa-plus"></i> Add</button><button class="xh-mini-btn dark" id="previewItem" type="button"><i class="fa-solid fa-eye"></i> Preview</button><button class="xh-mini-btn dark" id="resetItems" type="button"><i class="fa-solid fa-rotate-left"></i> Reset</button></div></div></section>
+<div class="xh-popup" id="itemPopup" role="dialog" aria-modal="true" aria-labelledby="popupTitle"><div class="xh-popup-box"><button class="xh-popup-close" id="popupClose" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button><div class="xh-popup-image"><img id="popupImage" src="" alt="" loading="lazy"></div><div class="xh-popup-content"><div class="xh-popup-icon"><i id="popupIcon" class="fa-solid fa-screwdriver-wrench"></i></div><h3 id="popupTitle">Gear title</h3><div class="xh-popup-author" id="popupAuthor">Type</div><div class="xh-popup-grid" id="popupGrid"></div></div></div></div>
+<div class="xh-toast" id="xhToast">Done</div>
+<script type="application/json" id="xhSeedData">
+{
+  "suits": [
+    {
+      "order": "01",
+      "title": "Extravehicular Mobility Unit",
+      "type": "Spacewalk pressure suit",
+      "level": "Mission Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/jsc2022e045231orig.jpg?w=2048",
+      "summary": "A wearable spacecraft for vacuum work, pressure protection, oxygen supply, cooling, communications, and micrometeoroid shielding.",
+      "info": "Used during spacewalks where the crew member needs pressure, oxygen, CO2 removal, cooling water loops, gloves, helmet lighting, radio, and suit telemetry. Every seal, connector, glove bearing, visor, and restraint point is part of the safety system.",
+      "tags": [
+        "EVA",
+        "Pressure",
+        "Thermal"
+      ]
+    },
+    {
+      "order": "02",
+      "title": "Liquid Cooling and Ventilation Garment",
+      "type": "Suit cooling layer",
+      "level": "Mission Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/jsc2022e045231orig.jpg?w=2048",
+      "summary": "A body-worn cooling layer that carries heat away during high-workload suit operations.",
+      "info": "Astronauts generate heat inside a sealed suit. Cooling tubes and ventilation flow help manage body temperature, visor fogging, and workload. It is checked before EVA because overheating can end a task early.",
+      "tags": [
+        "Cooling",
+        "Suit layer",
+        "EVA"
+      ]
+    },
+    {
+      "order": "03",
+      "title": "Communications Carrier Assembly",
+      "type": "Crew audio cap",
+      "level": "Mission Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/jsc2022e045231orig.jpg?w=2048",
+      "summary": "Headset cap used for voice communication with crewmates, mission control, and suit audio loops.",
+      "info": "Reliable voice loops are essential for procedures, warnings, timing, and task coordination. The cap must remain comfortable under helmets while supporting microphones and earphones.",
+      "tags": [
+        "Comms",
+        "Audio",
+        "Crew"
+      ]
+    },
+    {
+      "order": "04",
+      "title": "Helmet Lights and Camera Unit",
+      "type": "Suit visibility system",
+      "level": "EVA Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/jsc2022e045231orig.jpg?w=2048",
+      "summary": "Lights and cameras on the helmet support task visibility, remote inspection, and ground-team monitoring.",
+      "info": "Helmet video lets mission control verify hardware, read labels, and guide complex work. Lights are critical during orbital night and shadowed equipment zones.",
+      "tags": [
+        "Helmet",
+        "Camera",
+        "Lighting"
+      ]
+    },
+    {
+      "order": "05",
+      "title": "Crew Dosimeter",
+      "type": "Radiation monitor",
+      "level": "Safety Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/jsc2022e045231orig.jpg?w=2048",
+      "summary": "Personal radiation monitoring device used to track dose exposure during missions.",
+      "info": "Radiation monitoring supports crew health planning, storm-shelter decisions, and mission exposure records. Dosimeters are especially important beyond low Earth orbit.",
+      "tags": [
+        "Radiation",
+        "Health",
+        "Monitoring"
+      ]
+    },
+    {
+      "order": "06",
+      "title": "Hard Upper Torso Assembly",
+      "type": "Suit structure",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/jsc2022e045231orig.jpg?w=2048",
+      "summary": "Rigid torso shell that connects helmet, arms, life-support interfaces, bearings, and suit control hardware.",
+      "info": "The hard upper torso carries suit loads, seals pressure interfaces, and gives astronauts a stable mechanical frame for EVA work. Fit, bearing alignment, and connector access are critical because the torso affects reach, fatigue, and emergency ingress.",
+      "tags": [
+        "HUT",
+        "Suit frame",
+        "Pressure garment"
+      ]
+    },
+    {
+      "order": "07",
+      "title": "Pressure Gloves with Wrist Bearings",
+      "type": "Suit mobility",
+      "level": "Field Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/jsc2022e045231orig.jpg?w=2048",
+      "summary": "Layered gloves with bearings, fingertips, palm restraints, thermal layers, and tactile compromises for tool work.",
+      "info": "Gloves are among the hardest EVA systems because they must hold pressure while allowing tool grip. Poor glove fit causes fatigue, nail trauma, reduced force, and slower task speed.",
+      "tags": [
+        "Gloves",
+        "Mobility",
+        "EVA safety"
+      ]
+    },
+    {
+      "order": "08",
+      "title": "Visor Assembly and Sun Shield",
+      "type": "Helmet protection",
+      "level": "Field Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/jsc2022e045231orig.jpg?w=2048",
+      "summary": "Gold-coated visor, clear bubble, sunshade, lights, camera mount, and anti-fog protection for EVA visibility.",
+      "info": "The visor system protects against solar glare, UV exposure, micrometeoroid impacts, and temperature swings. Crew must manage light direction, reflections, and camera views while working outside.",
+      "tags": [
+        "Helmet",
+        "Visibility",
+        "Thermal protection"
+      ]
+    },
+    {
+      "order": "09",
+      "title": "Suit Purge Valve and Pressure Relief",
+      "type": "Suit pressure control",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/jsc2022e045231orig.jpg?w=2048",
+      "summary": "Emergency pressure pathway used to prevent overpressure and manage suit atmosphere safety.",
+      "info": "Pressure relief and purge interfaces protect the astronaut if suit pressure moves out of safe limits. These systems must be simple, reachable, and reliable under gloves and time pressure.",
+      "tags": [
+        "Pressure",
+        "Emergency",
+        "Suit control"
+      ]
+    },
+    {
+      "order": "10",
+      "title": "In-Suit Drink Bag and Food Port",
+      "type": "Crew endurance",
+      "level": "Intermediate",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/jsc2022e045231orig.jpg?w=2048",
+      "summary": "Hydration and limited nutrition hardware used to support long-duration EVA timelines.",
+      "info": "EVA can last hours. Hydration systems reduce fatigue and support thermal regulation. The system must be leak-safe and compatible with suit pressure and mouth access.",
+      "tags": [
+        "Hydration",
+        "Endurance",
+        "EVA timeline"
+      ]
+    }
+  ],
+  "eva": [
+    {
+      "order": "01",
+      "title": "Pistol Grip Tool",
+      "type": "Cordless EVA power driver",
+      "level": "EVA Critical",
+      "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/model/pistol-grip-tool/Pistol%20Grip%20Tool.png?crop=faces%2Cfocalpoint&fit=clip&h=1080&w=1920",
+      "summary": "A programmable torque-controlled power tool used for bolts, fasteners, and external maintenance tasks.",
+      "info": "Astronauts use torque limits, speed settings, sockets, extensions, and tethers to remove or install hardware without damaging external systems. It is one of the most recognizable EVA tools.",
+      "tags": [
+        "Power tool",
+        "Torque",
+        "Maintenance"
+      ]
+    },
+    {
+      "order": "02",
+      "title": "Safety Tether Set",
+      "type": "Crew and tool restraint",
+      "level": "Mission Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/iss052e013087orig.jpg?w=2048",
+      "summary": "Primary protection against crew drift-away and tool loss during external work.",
+      "info": "Tethers attach astronauts and tools to structure. Crews manage multiple hooks, retractable tethers, waist tethers, and equipment tethers during translation and task work.",
+      "tags": [
+        "Tether",
+        "Safety",
+        "EVA"
+      ]
+    },
+    {
+      "order": "03",
+      "title": "Crew Lock Bag",
+      "type": "EVA tool carrier",
+      "level": "EVA Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/iss052e013087orig.jpg?w=2048",
+      "summary": "Soft stowage bag for carrying small tools, fasteners, caps, wipes, and task hardware outside the vehicle.",
+      "info": "A good EVA bag layout prevents floating loose items, protects small parts, and keeps the task timeline efficient. Every item needs restraint and clear placement.",
+      "tags": [
+        "Tool bag",
+        "Stowage",
+        "EVA"
+      ]
+    },
+    {
+      "order": "04",
+      "title": "Portable Foot Restraint",
+      "type": "Body positioning aid",
+      "level": "EVA Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/iss052e013087orig.jpg?w=2048",
+      "summary": "Foot restraint that locks the astronaut into a stable work posture for two-handed tasks.",
+      "info": "Microgravity makes force application difficult. Foot restraints and body restraints let crew members push, pull, torque, and align hardware without drifting away from the worksite.",
+      "tags": [
+        "Stability",
+        "Restraint",
+        "Worksite"
+      ]
+    },
+    {
+      "order": "05",
+      "title": "SAFER Rescue Unit",
+      "type": "Emergency jetpack",
+      "level": "Emergency Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/iss052e013087orig.jpg?w=2048",
+      "summary": "Small self-rescue propulsion system for emergency return if a spacewalker becomes untethered.",
+      "info": "SAFER is not a normal work tool; it is a final recovery system. It uses hand controls and small thrusters to help the astronaut return toward structure.",
+      "tags": [
+        "Rescue",
+        "Propulsion",
+        "Emergency"
+      ]
+    },
+    {
+      "order": "06",
+      "title": "EVA Socket and Extension Kit",
+      "type": "Fastener interface kit",
+      "level": "EVA Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/iss052e013087orig.jpg?w=2048",
+      "summary": "Sockets, extensions, adapters, and drive interfaces matched to external station or spacecraft hardware.",
+      "info": "Tool interfaces must match glove limits and hardware geometry. Extensions and right-angle adapters help reach recessed fasteners and crowded equipment bays.",
+      "tags": [
+        "Sockets",
+        "Adapters",
+        "Fasteners"
+      ]
+    },
+    {
+      "order": "07",
+      "title": "Articulating Portable Foot Restraint",
+      "type": "Crew restraint",
+      "level": "Field Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/iss052e013087orig.jpg?w=2048",
+      "summary": "Adjustable foot platform that locks boots so astronauts can use both hands during external repairs.",
+      "info": "An APFR gives body stability during high-force tasks such as bolt release, cable routing, and equipment replacement. Correct placement reduces fatigue and prevents unwanted motion.",
+      "tags": [
+        "APFR",
+        "Body restraint",
+        "External repair"
+      ]
+    },
+    {
+      "order": "08",
+      "title": "EVA Helmet Light and HD Camera",
+      "type": "Worksite imaging",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Helmet-mounted lights and camera used for visibility, task recording, and ground-team monitoring.",
+      "info": "Ground controllers rely on crew video to verify connectors, fasteners, thermal blankets, labels, and damage. Lighting helps remove shadows inside tight external work zones.",
+      "tags": [
+        "Camera",
+        "Lighting",
+        "Ground support"
+      ]
+    },
+    {
+      "order": "09",
+      "title": "Wire Tie and Cable Routing Kit",
+      "type": "Cable management",
+      "level": "Intermediate",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/iss052e013087orig.jpg?w=2048",
+      "summary": "Crew-managed ties, cutters, hooks, and routing aids used to secure external cables and hoses.",
+      "info": "Poor cable control can create snag points or stress on connectors. This kit supports clean routing during station repair, payload installation, and external sensor setup.",
+      "tags": [
+        "Cable routing",
+        "Cutters",
+        "Maintenance"
+      ]
+    },
+    {
+      "order": "10",
+      "title": "Fastener Capture Plate",
+      "type": "Small-part control",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/iss052e013087orig.jpg?w=2048",
+      "summary": "Temporary capture surface that prevents screws and bolts from drifting away during microgravity repairs.",
+      "info": "Fasteners can become debris or cause mission delays if they escape. Capture plates are used when removing panels, electronics boxes, and access covers.",
+      "tags": [
+        "Fasteners",
+        "Debris control",
+        "Hubble-style tools"
+      ]
+    },
+    {
+      "order": "11",
+      "title": "Thermal Blanket Handling Kit",
+      "type": "Insulation work",
+      "level": "Intermediate",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/iss052e013087orig.jpg?w=2048",
+      "summary": "Clips, restraints, cutters, and handling tools for opening or securing multilayer insulation.",
+      "info": "External blankets protect hardware from thermal cycling. Crew must open them without tearing layers or blocking connectors and close them correctly after work.",
+      "tags": [
+        "MLI",
+        "Thermal control",
+        "EVA handling"
+      ]
+    },
+    {
+      "order": "12",
+      "title": "EVA Tool Tether Rings and Lanyards",
+      "type": "Tool retention",
+      "level": "Field Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/iss052e013087orig.jpg?w=2048",
+      "summary": "Small but critical tether points that keep every hand tool connected during work outside a vehicle.",
+      "info": "Every tool must have a controlled retention path. Tether discipline prevents lost tools, debris hazards, and task interruption during external operations.",
+      "tags": [
+        "Tether",
+        "Tool safety",
+        "Debris prevention"
+      ]
+    }
+  ],
+  "life": [
+    {
+      "order": "01",
+      "title": "Portable Life Support System",
+      "type": "Suit backpack system",
+      "level": "Mission Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/jsc2022e045231orig.jpg?w=2048",
+      "summary": "Backpack unit that supports suit oxygen, CO2 removal, ventilation, cooling, power, and telemetry.",
+      "info": "The PLSS turns a suit into an independent spacecraft. It must manage breathing gas, cooling water, pressure, battery power, fan flow, sensors, and alarms during EVA.",
+      "tags": [
+        "Oxygen",
+        "Cooling",
+        "Suit"
+      ]
+    },
+    {
+      "order": "02",
+      "title": "CO2 Scrubber Cartridge",
+      "type": "Atmosphere cleanup",
+      "level": "Life Support",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/msfc-202100245orig.jpeg?w=1601",
+      "summary": "Removes carbon dioxide from breathing loops in suits or cabin systems.",
+      "info": "CO2 buildup affects cognition and safety. Scrubbers are monitored by timeline, sensor readings, and procedure limits, especially during high-workload tasks.",
+      "tags": [
+        "CO2",
+        "Air quality",
+        "Breathing"
+      ]
+    },
+    {
+      "order": "03",
+      "title": "Emergency Oxygen Mask",
+      "type": "Cabin emergency breathing",
+      "level": "Emergency Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Portable breathing protection used during smoke, contamination, or cabin atmosphere response.",
+      "info": "Masks and portable breathing gear support rapid response to fire, toxic release, or atmosphere contamination. Storage location and access speed matter.",
+      "tags": [
+        "Oxygen",
+        "Emergency",
+        "Cabin"
+      ]
+    },
+    {
+      "order": "04",
+      "title": "Water Recovery Test Kit",
+      "type": "Crew water quality check",
+      "level": "Operations",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/msfc-202100245orig.jpeg?w=1601",
+      "summary": "Monitoring tools for recycled water quality, sampling, and system health.",
+      "info": "Closed-loop missions depend on clean water processing. Crew procedures include sampling, microbial checks, filter changes, and maintenance reporting.",
+      "tags": [
+        "Water",
+        "Sampling",
+        "Life support"
+      ]
+    },
+    {
+      "order": "05",
+      "title": "Cabin Atmosphere Monitor",
+      "type": "Environmental sensor",
+      "level": "Mission Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/msfc-202100245orig.jpeg?w=1601",
+      "summary": "Tracks oxygen, carbon dioxide, pressure, humidity, temperature, and trace contaminant conditions.",
+      "info": "Atmosphere monitoring drives alarms, ventilation actions, leak response, and crew health decisions. Sensor readings must be checked against procedures.",
+      "tags": [
+        "Atmosphere",
+        "Sensors",
+        "Cabin"
+      ]
+    },
+    {
+      "order": "06",
+      "title": "Oxygen Generation Assembly",
+      "type": "Crew oxygen production",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/msfc-202100245orig.jpeg?w=1601",
+      "summary": "Electrolysis-based life-support hardware that helps generate breathable oxygen from water.",
+      "info": "Oxygen generation reduces resupply demand and supports long-duration missions. It works with water recovery and cabin monitoring systems in a closed-loop life-support architecture.",
+      "tags": [
+        "Oxygen",
+        "Closed loop",
+        "ECLSS"
+      ]
+    },
+    {
+      "order": "07",
+      "title": "Sabatier Reactor Module",
+      "type": "Water recovery",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/msfc-202100245orig.jpeg?w=1601",
+      "summary": "Reacts carbon dioxide with hydrogen to produce water and methane in advanced life-support cycles.",
+      "info": "The Sabatier process helps close the air/water loop by recovering water from waste gases. It supports exploration missions where resupply is limited.",
+      "tags": [
+        "Sabatier",
+        "Water recovery",
+        "CO2 processing"
+      ]
+    },
+    {
+      "order": "08",
+      "title": "Urine Processor Assembly",
+      "type": "Water recycling",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/msfc-202100245orig.jpeg?w=1601",
+      "summary": "System that recovers water from urine and supports spacecraft water-loop efficiency.",
+      "info": "Wastewater recovery is mission-critical for long-duration crews. The processor must manage contamination, brine, odors, filters, and maintenance access.",
+      "tags": [
+        "Water loop",
+        "Waste processing",
+        "Long-duration"
+      ]
+    },
+    {
+      "order": "09",
+      "title": "Trace Contaminant Control System",
+      "type": "Cabin air cleanup",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/msfc-202100245orig.jpeg?w=1601",
+      "summary": "Filters and catalytic elements that remove low-level harmful gases from cabin air.",
+      "info": "Off-gassing from materials, experiments, and crew activity must be controlled. Trace contaminant removal helps keep cabin atmosphere within safe limits.",
+      "tags": [
+        "Air quality",
+        "Filters",
+        "Toxic control"
+      ]
+    },
+    {
+      "order": "10",
+      "title": "Humidity Separator and Condensate Line",
+      "type": "Moisture control",
+      "level": "Intermediate",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/msfc-202100245orig.jpeg?w=1601",
+      "summary": "Hardware that separates cabin moisture and routes recovered water back into processing systems.",
+      "info": "Humidity control prevents condensation, mold risk, electronics damage, and crew discomfort. It is part of the larger air and water recovery loop.",
+      "tags": [
+        "Humidity",
+        "Condensate",
+        "Cabin health"
+      ]
+    },
+    {
+      "order": "11",
+      "title": "Suit Oxygen Recharge Interface",
+      "type": "EVA support",
+      "level": "Field Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2024/02/jsc2022e045231orig.jpg?w=2048",
+      "summary": "Connection hardware used to service suit oxygen and consumables before or after EVA operations.",
+      "info": "Suit recharge interfaces support EVA readiness. They must be verified for pressure integrity, contamination control, and timeline sequencing.",
+      "tags": [
+        "Suit servicing",
+        "Oxygen",
+        "EVA prep"
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "order": "01",
+      "title": "Crew Procedure Tablet",
+      "type": "Digital checklist device",
+      "level": "Daily Operations",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Tablet or laptop-based procedure viewer for step-by-step tasks, checklists, and timeline execution.",
+      "info": "Crew members use procedure tools for maintenance, experiments, exercise, emergency response, and vehicle operations. Clear procedures prevent skipped steps.",
+      "tags": [
+        "Checklists",
+        "Tablet",
+        "Timeline"
+      ]
+    },
+    {
+      "order": "02",
+      "title": "Voice Headset System",
+      "type": "Crew communication gear",
+      "level": "Mission Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Headset and audio loops for crew-to-crew and crew-to-ground coordination.",
+      "info": "Different communication loops support vehicle operations, private medical calls, public events, spacewalk coordination, and emergency response.",
+      "tags": [
+        "Comms",
+        "Voice",
+        "Mission control"
+      ]
+    },
+    {
+      "order": "03",
+      "title": "Barcode / RFID Inventory Scanner",
+      "type": "Cargo tracking tool",
+      "level": "Operations",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Tracks bags, tools, experiment hardware, food, medical items, and replacement parts.",
+      "info": "Spacecraft inventory is mission-critical because missing parts can delay repairs or experiments. RFID/barcode workflows reduce time spent searching.",
+      "tags": [
+        "Inventory",
+        "RFID",
+        "Cargo"
+      ]
+    },
+    {
+      "order": "04",
+      "title": "Onboard Maintenance Kit",
+      "type": "Cabin repair set",
+      "level": "Daily Operations",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "General tools for internal maintenance: drivers, cutters, ties, tape, wipes, fasteners, and adapters.",
+      "info": "Crew maintenance covers filters, fans, experiment racks, stowage, panels, cables, seals, and replacement units. Tools must be restrained in microgravity.",
+      "tags": [
+        "Repair",
+        "Maintenance",
+        "Cabin"
+      ]
+    },
+    {
+      "order": "05",
+      "title": "Mission Clock and Event Timer",
+      "type": "Procedure timing tool",
+      "level": "Operations",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Timekeeping support for burns, experiments, exercise, comm windows, and emergency procedures.",
+      "info": "Precise time references align crew actions with ground teams, vehicle states, sample timing, and orbital events.",
+      "tags": [
+        "Timing",
+        "Procedure",
+        "Operations"
+      ]
+    },
+    {
+      "order": "06",
+      "title": "Cargo Transfer Bag System",
+      "type": "Stowage operations",
+      "level": "Intermediate",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Soft stowage bags, straps, labels, and restraints used to organize equipment in microgravity.",
+      "info": "Crew time depends on organized stowage. Transfer bags keep tools, food, experiment kits, spares, and emergency gear easy to locate and secure.",
+      "tags": [
+        "Stowage",
+        "Inventory",
+        "Crew time"
+      ]
+    },
+    {
+      "order": "07",
+      "title": "Restraint and Mobility Aid Set",
+      "type": "Crew positioning",
+      "level": "Field Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Handrails, foot loops, clamps, bungees, and temporary restraints used to work without drifting.",
+      "info": "Inside spacecraft, crew need restraint points to operate laptops, repair racks, use tools, and handle objects without pushing themselves away.",
+      "tags": [
+        "Restraints",
+        "Mobility",
+        "Microgravity work"
+      ]
+    },
+    {
+      "order": "08",
+      "title": "Crew Medical Monitoring Kit",
+      "type": "Health operations",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Tools for vital signs, symptom tracking, ultrasound support, and medical procedure guidance.",
+      "info": "Medical hardware supports in-flight care when return is not immediate. It must be compact, reliable, and usable by non-physician crew with ground guidance.",
+      "tags": [
+        "Medical",
+        "Crew health",
+        "Telemetry"
+      ]
+    },
+    {
+      "order": "09",
+      "title": "Exercise Countermeasure Hardware",
+      "type": "Health maintenance",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Treadmill harnesses, resistance devices, cycle ergometers, and monitoring gear used to reduce muscle/bone loss.",
+      "info": "Exercise systems protect crew health during long missions. Restraints, loads, and data tracking are as important as the exercise device itself.",
+      "tags": [
+        "Exercise",
+        "Bone loss",
+        "Countermeasures"
+      ]
+    },
+    {
+      "order": "10",
+      "title": "Docking and Visiting Vehicle Checklist Kit",
+      "type": "Vehicle operations",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Procedures, camera views, timing marks, and communication steps used around dockings and departures.",
+      "info": "Docking operations require synchronized crew and ground actions. Crew monitor cameras, hatches, pressure equalization, cargo paths, and emergency steps.",
+      "tags": [
+        "Docking",
+        "Procedures",
+        "Vehicle ops"
+      ]
+    }
+  ],
+  "robotics": [
+    {
+      "order": "01",
+      "title": "Robotic Arm Workstation",
+      "type": "Manipulator control station",
+      "level": "Advanced Operations",
+      "image": "https://www.asc-csa.gc.ca/images/iss/dextre/a-propos-carousel-4-dextre-rapidscat-id-4035.jpg",
+      "summary": "Control interface for robotic arm motion, camera views, payload capture, and external hardware handling.",
+      "info": "Robotics operations need camera interpretation, joint awareness, clearance checks, and precise hand-controller motion. It supports cargo vehicles, payloads, and EVA tasks.",
+      "tags": [
+        "Robotics",
+        "Manipulator",
+        "Cargo"
+      ]
+    },
+    {
+      "order": "02",
+      "title": "Hand Controller Set",
+      "type": "Robotics input device",
+      "level": "Advanced Operations",
+      "image": "https://www.asc-csa.gc.ca/images/iss/dextre/a-propos-carousel-4-dextre-rapidscat-id-4035.jpg",
+      "summary": "Manual control device used to command robotic arm translation, rotation, and end-effector alignment.",
+      "info": "Hand controllers allow fine motion while the operator watches multiple camera angles and follows strict keep-out zones.",
+      "tags": [
+        "Controls",
+        "Alignment",
+        "Robotics"
+      ]
+    },
+    {
+      "order": "03",
+      "title": "Grapple Fixture Interface",
+      "type": "Payload capture hardware",
+      "level": "Mission Hardware",
+      "image": "https://www.asc-csa.gc.ca/images/iss/dextre/a-propos-carousel-4-dextre-rapidscat-id-4035.jpg",
+      "summary": "Standard interface that lets robotic systems capture, move, or stabilize payloads.",
+      "info": "Grapple points reduce risk during payload handling. Operators align the end effector to capture fixtures while monitoring loads and clearances.",
+      "tags": [
+        "Grapple",
+        "Payload",
+        "Interface"
+      ]
+    },
+    {
+      "order": "04",
+      "title": "External Camera View System",
+      "type": "Robotics visual aid",
+      "level": "Mission Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Camera feeds used to inspect clearances, targets, arm joints, payload alignment, and vehicle structure.",
+      "info": "Robotics without camera awareness is unsafe. Crew and ground teams use views to confirm motion paths, target alignment, and hardware condition.",
+      "tags": [
+        "Cameras",
+        "Clearance",
+        "Inspection"
+      ]
+    },
+    {
+      "order": "05",
+      "title": "Dextre Special Purpose Dexterous Manipulator",
+      "type": "Station maintenance robot",
+      "level": "Advanced",
+      "image": "https://www.asc-csa.gc.ca/images/iss/dextre/a-propos-carousel-4-dextre-rapidscat-id-4035.jpg",
+      "summary": "Two-armed external robot used for precise maintenance, payload handling, and reducing risky spacewalk work.",
+      "info": "Dextre can operate outside the ISS to replace components, inspect work areas, and handle payloads with cameras, tools, and force-controlled motion.",
+      "tags": [
+        "Dextre",
+        "External robotics",
+        "Maintenance"
+      ]
+    },
+    {
+      "order": "06",
+      "title": "Latching End Effector",
+      "type": "Robotic arm hand",
+      "level": "Advanced",
+      "image": "https://www.asc-csa.gc.ca/images/iss/dextre/a-propos-carousel-4-dextre-rapidscat-id-4035.jpg",
+      "summary": "Canadarm2 end mechanism that captures grapple fixtures and provides power/data interfaces.",
+      "info": "The LEE lets Canadarm2 walk around the station and securely grip vehicles, payloads, and external fixtures. Cable snare closure and alignment are critical.",
+      "tags": [
+        "Canadarm2",
+        "LEE",
+        "Grapple"
+      ]
+    },
+    {
+      "order": "07",
+      "title": "Mobile Transporter Worksite Interface",
+      "type": "Robotics mobility",
+      "level": "Advanced",
+      "image": "https://www.asc-csa.gc.ca/images/iss/dextre/a-propos-carousel-4-dextre-rapidscat-id-4035.jpg",
+      "summary": "Rail-based platform system that moves the robotic arm along the station truss.",
+      "info": "The Mobile Transporter extends robot reach across the ISS. It supports payload transfers, maintenance, inspections, and staging for external work.",
+      "tags": [
+        "Mobile transporter",
+        "Truss",
+        "Robotics reach"
+      ]
+    },
+    {
+      "order": "08",
+      "title": "Robotic Refueling Tool Adapter",
+      "type": "Satellite servicing",
+      "level": "Advanced",
+      "image": "https://www.asc-csa.gc.ca/images/iss/dextre/a-propos-carousel-4-dextre-rapidscat-id-4035.jpg",
+      "summary": "Specialized robotic tool interface for caps, valves, fittings, and simulated satellite servicing tasks.",
+      "info": "Robotic servicing tools demonstrate how future spacecraft can be inspected, repaired, or refueled without full crew EVA.",
+      "tags": [
+        "Servicing",
+        "Robotic tools",
+        "Refueling"
+      ]
+    },
+    {
+      "order": "09",
+      "title": "External High-Definition Camera Unit",
+      "type": "Robotic vision",
+      "level": "Intermediate",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Camera and lighting system used for robotic alignment, inspection, docking support, and worksite awareness.",
+      "info": "Robotic operations rely on multi-angle video. Cameras help verify clearances, grapple alignment, payload condition, and worksite hazards.",
+      "tags": [
+        "Camera",
+        "Vision",
+        "Alignment"
+      ]
+    }
+  ],
+  "science": [
+    {
+      "order": "01",
+      "title": "Microgravity Glovebox",
+      "type": "Contained experiment workspace",
+      "level": "Research Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/09/hhm-2023-86-aunon-chancellor-exp-56-angiex-cancer-therapy-in-msg-iss056e078401.jpg?w=2048",
+      "summary": "Sealed workspace for handling fluids, particles, biological samples, and hardware safely in microgravity.",
+      "info": "A glovebox prevents floating contamination and protects crew while enabling controlled experiment operations. It supports materials, fluids, combustion, and biological research.",
+      "tags": [
+        "Glovebox",
+        "Research",
+        "Containment"
+      ]
+    },
+    {
+      "order": "02",
+      "title": "Sample Collection Kit",
+      "type": "Specimen handling system",
+      "level": "Research",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/09/hhm-2023-86-aunon-chancellor-exp-56-angiex-cancer-therapy-in-msg-iss056e078401.jpg?w=2048",
+      "summary": "Bags, tubes, swabs, labels, seals, cold packs, and handling tools for science samples.",
+      "info": "Good sample workflow prevents contamination, wrong labeling, temperature errors, and lost metadata. Each item must match the experiment protocol.",
+      "tags": [
+        "Samples",
+        "Labels",
+        "Protocol"
+      ]
+    },
+    {
+      "order": "03",
+      "title": "Onboard Microscope",
+      "type": "Science imaging tool",
+      "level": "Research",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/09/hhm-2023-86-aunon-chancellor-exp-56-angiex-cancer-therapy-in-msg-iss056e078401.jpg?w=2048",
+      "summary": "Microscopy tool for cells, materials, fluids, crystals, and biological experiments.",
+      "info": "Microscopes support crew-operated science and remote ground analysis. Imaging settings, lighting, focus, and sample restraint matter in microgravity.",
+      "tags": [
+        "Microscope",
+        "Biology",
+        "Materials"
+      ]
+    },
+    {
+      "order": "04",
+      "title": "Medical Ultrasound Kit",
+      "type": "Crew health imaging",
+      "level": "Medical Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/09/hhm-2023-86-aunon-chancellor-exp-56-angiex-cancer-therapy-in-msg-iss056e078401.jpg?w=2048",
+      "summary": "Portable imaging system used for medical checks and research into crew physiology.",
+      "info": "Ultrasound can support musculoskeletal, cardiovascular, and emergency health assessments when guided by onboard or ground medical procedures.",
+      "tags": [
+        "Medical",
+        "Ultrasound",
+        "Crew health"
+      ]
+    },
+    {
+      "order": "05",
+      "title": "Plant Growth Chamber",
+      "type": "Biology research hardware",
+      "level": "Research",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/09/hhm-2023-86-aunon-chancellor-exp-56-angiex-cancer-therapy-in-msg-iss056e078401.jpg?w=2048",
+      "summary": "Controlled chamber for plant studies, lighting, airflow, watering, growth tracking, and food-system research.",
+      "info": "Plant hardware supports biology, future life-support studies, crew psychology, and long-duration mission preparation.",
+      "tags": [
+        "Plants",
+        "Biology",
+        "Life support"
+      ]
+    },
+    {
+      "order": "06",
+      "title": "MELFI Laboratory Freezer",
+      "type": "Sample preservation",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/09/hhm-2023-86-aunon-chancellor-exp-56-angiex-cancer-therapy-in-msg-iss056e078401.jpg?w=2048",
+      "summary": "Ultra-cold storage used for biological, medical, and materials samples before return or analysis.",
+      "info": "Cold storage protects experiment integrity in orbit. Crew must manage sample labels, chain of custody, temperature limits, and transfer timelines.",
+      "tags": [
+        "MELFI",
+        "Biology",
+        "Cold storage"
+      ]
+    },
+    {
+      "order": "07",
+      "title": "Combustion Integrated Rack",
+      "type": "Fire and combustion science",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/09/hhm-2023-86-aunon-chancellor-exp-56-angiex-cancer-therapy-in-msg-iss056e078401.jpg?w=2048",
+      "summary": "Controlled chamber for flame, soot, droplet, and material-burning studies in microgravity.",
+      "info": "Combustion research improves spacecraft fire safety and fundamental fluid/thermal models. Containment, sensors, and video capture are mission-critical.",
+      "tags": [
+        "Combustion",
+        "Fire safety",
+        "Microgravity"
+      ]
+    },
+    {
+      "order": "09",
+      "title": "Handheld Spectrometer",
+      "type": "Material analysis",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/09/hhm-2023-86-aunon-chancellor-exp-56-angiex-cancer-therapy-in-msg-iss056e078401.jpg?w=2048",
+      "summary": "Compact instrument for identifying composition, spectral signatures, and sample properties.",
+      "info": "Spectrometers support material checks, geology, atmospheric analysis, and experiment verification in exploration missions.",
+      "tags": [
+        "Spectra",
+        "Materials",
+        "Analysis"
+      ]
+    },
+    {
+      "order": "10",
+      "title": "Lunar Sample Containment Box",
+      "type": "Planetary sample handling",
+      "level": "Field Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/09/hhm-2023-86-aunon-chancellor-exp-56-angiex-cancer-therapy-in-msg-iss056e078401.jpg?w=2048",
+      "summary": "Sealed container system for collecting, isolating, labeling, and protecting surface samples.",
+      "info": "Sample boxes protect science value and crew safety. They must prevent contamination, preserve context, and survive handling through return.",
+      "tags": [
+        "Samples",
+        "Containment",
+        "Planetary science"
+      ]
+    }
+  ],
+  "safety": [
+    {
+      "order": "01",
+      "title": "Portable Fire Extinguisher",
+      "type": "Cabin fire response",
+      "level": "Emergency Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Primary tool for early fire suppression inside a spacecraft or station module.",
+      "info": "Fire response requires fast detection, correct extinguisher access, breathing protection, power isolation, ventilation control, and cleanup procedures.",
+      "tags": [
+        "Fire",
+        "Emergency",
+        "Cabin"
+      ]
+    },
+    {
+      "order": "02",
+      "title": "Portable Breathing Apparatus",
+      "type": "Emergency air supply",
+      "level": "Emergency Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Emergency breathing protection for smoke, contamination, leak response, or toxic atmosphere conditions.",
+      "info": "Breathing units protect crew while they isolate the source, move to safe zones, or prepare further emergency procedures.",
+      "tags": [
+        "Breathing",
+        "Smoke",
+        "Toxic response"
+      ]
+    },
+    {
+      "order": "03",
+      "title": "First Aid and Medical Kit",
+      "type": "Crew medical support",
+      "level": "Medical Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Medical supplies for injury, illness, monitoring, medication, and emergency stabilization.",
+      "info": "Long missions need organized medical supplies, procedure references, communication with flight surgeons, and crew training for remote care.",
+      "tags": [
+        "Medical",
+        "First aid",
+        "Crew health"
+      ]
+    },
+    {
+      "order": "04",
+      "title": "Leak Detection Kit",
+      "type": "Pressure integrity tool",
+      "level": "Emergency Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Tools and materials used to locate, isolate, and respond to pressure leaks.",
+      "info": "Leak response depends on pressure monitoring, module isolation, listening/inspection tools, patch materials, and strict timeline procedures.",
+      "tags": [
+        "Leak",
+        "Pressure",
+        "Emergency"
+      ]
+    },
+    {
+      "order": "05",
+      "title": "Ammonia Response Kit",
+      "type": "Toxic contamination response",
+      "level": "Emergency Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Protective and cleanup equipment for toxic coolant contamination scenarios.",
+      "info": "External thermal systems can involve hazardous substances. Response gear protects crew and prevents contamination spread inside the cabin.",
+      "tags": [
+        "Toxic",
+        "Cleanup",
+        "Protection"
+      ]
+    },
+    {
+      "order": "06",
+      "title": "Radiation Dosimeter Badge",
+      "type": "Radiation monitoring",
+      "level": "Field Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Personal radiation sensor used to track exposure over mission timelines and solar events.",
+      "info": "Radiation monitoring supports crew health decisions, shelter timing, and mission dose tracking. It is especially important beyond low Earth orbit.",
+      "tags": [
+        "Radiation",
+        "Dosimetry",
+        "Crew safety"
+      ]
+    },
+    {
+      "order": "07",
+      "title": "Smoke Detector and Cabin Sensor Set",
+      "type": "Fire detection",
+      "level": "Field Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Distributed sensors that detect smoke, particulates, atmosphere shifts, and warning conditions.",
+      "info": "Early fire detection is critical in sealed spacecraft. Sensors must work despite airflow patterns, dust, and complex cabin geometry.",
+      "tags": [
+        "Smoke",
+        "Atmosphere",
+        "Emergency"
+      ]
+    },
+    {
+      "order": "08",
+      "title": "Emergency Depressurization Kit",
+      "type": "Pressure loss response",
+      "level": "Field Critical",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Masks, procedures, leak isolation aids, and rapid response hardware for cabin pressure emergencies.",
+      "info": "A pressure drop requires immediate crew action: isolate modules, use masks, identify leak zones, and prepare safe haven or return procedures.",
+      "tags": [
+        "Pressure leak",
+        "Emergency",
+        "Safe haven"
+      ]
+    },
+    {
+      "order": "09",
+      "title": "Toxic Spill Containment Kit",
+      "type": "Contamination response",
+      "level": "Advanced",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Absorbent materials, gloves, bags, wipes, and labels used to contain hazardous fluid or chemical releases.",
+      "info": "Experiments and systems use fluids that must not spread through cabin airflow. Containment keeps crew and hardware safe.",
+      "tags": [
+        "Spill kit",
+        "Containment",
+        "Toxicology"
+      ]
+    },
+    {
+      "order": "10",
+      "title": "Portable Emergency Lighting",
+      "type": "Visibility safety",
+      "level": "Intermediate",
+      "image": "https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg",
+      "summary": "Battery lighting used during power faults, smoke response, night-side tasks, or emergency routing.",
+      "info": "Reliable lighting helps crew read procedures, find tools, inspect panels, and navigate modules when normal lighting is limited.",
+      "tags": [
+        "Lighting",
+        "Emergency",
+        "Navigation"
+      ]
+    }
+  ],
+  "observation": [
+    {
+      "order": "01",
+      "title": "Crew Earth-Observation Camera",
+      "type": "Orbital imaging system",
+      "level": "Mission Use",
+      "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTkU1bfjUr9stGOi2Ynk8JXclvcJ75SUqZElcgIu9LSvrAUZQ_lHXPTiOeoWZtWaD3KgpDIzFxmoJ0BpSh9MJqsyEgqwiGuLlrymCxh4fuRxtxIdHTIvzUt3lpWevMphxNbZsI32Whqh7J/s640/iss047e142176.jpg",
+      "summary": "Camera system used for Earth observation, station documentation, events, and public outreach imagery.",
+      "info": "Crew photography supports science, weather, disaster monitoring, engineering inspection, and public communication. Lens choice, window quality, focus, and timing matter.",
+      "tags": [
+        "Camera",
+        "Earth",
+        "Imaging"
+      ]
+    },
+    {
+      "order": "02",
+      "title": "Binoculars and Window Viewing Kit",
+      "type": "Visual observation aid",
+      "level": "Crew Use",
+      "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTkU1bfjUr9stGOi2Ynk8JXclvcJ75SUqZElcgIu9LSvrAUZQ_lHXPTiOeoWZtWaD3KgpDIzFxmoJ0BpSh9MJqsyEgqwiGuLlrymCxh4fuRxtxIdHTIvzUt3lpWevMphxNbZsI32Whqh7J/s640/iss047e142176.jpg",
+      "summary": "Simple optical aid for Earth features, spacecraft inspection, aurora, clouds, fires, and night lights.",
+      "info": "Binoculars support quick crew observation without setting up complex imaging hardware. They are useful for visual target recognition and training.",
+      "tags": [
+        "Binoculars",
+        "Window",
+        "Earth view"
+      ]
+    },
+    {
+      "order": "03",
+      "title": "Star Tracker Reference System",
+      "type": "Navigation sensor",
+      "level": "Vehicle Systems",
+      "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTkU1bfjUr9stGOi2Ynk8JXclvcJ75SUqZElcgIu9LSvrAUZQ_lHXPTiOeoWZtWaD3KgpDIzFxmoJ0BpSh9MJqsyEgqwiGuLlrymCxh4fuRxtxIdHTIvzUt3lpWevMphxNbZsI32Whqh7J/s640/iss047e142176.jpg",
+      "summary": "Optical navigation reference that uses star fields to determine spacecraft attitude.",
+      "info": "Star trackers are spacecraft systems rather than handheld crew gear, but astronauts and flight controllers depend on attitude knowledge for pointing, docking, communication, and power generation.",
+      "tags": [
+        "Navigation",
+        "Attitude",
+        "Stars"
+      ]
+    },
+    {
+      "order": "04",
+      "title": "External Inspection Camera",
+      "type": "Vehicle inspection tool",
+      "level": "Mission Critical",
+      "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTkU1bfjUr9stGOi2Ynk8JXclvcJ75SUqZElcgIu9LSvrAUZQ_lHXPTiOeoWZtWaD3KgpDIzFxmoJ0BpSh9MJqsyEgqwiGuLlrymCxh4fuRxtxIdHTIvzUt3lpWevMphxNbZsI32Whqh7J/s640/iss047e142176.jpg",
+      "summary": "Camera used to inspect exterior surfaces, solar arrays, docking targets, thermal blankets, and possible damage.",
+      "info": "Inspection imagery supports decisions after launch, docking, debris events, and external maintenance. It is often paired with robotics or crew window views.",
+      "tags": [
+        "Inspection",
+        "Camera",
+        "Vehicle"
+      ]
+    },
+    {
+      "order": "05",
+      "title": "Cupola Camera Mount and Restraint",
+      "type": "Earth imaging setup",
+      "level": "Advanced",
+      "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTkU1bfjUr9stGOi2Ynk8JXclvcJ75SUqZElcgIu9LSvrAUZQ_lHXPTiOeoWZtWaD3KgpDIzFxmoJ0BpSh9MJqsyEgqwiGuLlrymCxh4fuRxtxIdHTIvzUt3lpWevMphxNbZsI32Whqh7J/s640/iss047e142176.jpg",
+      "summary": "Mounting and restraint setup used to stabilize cameras while photographing Earth or visiting spacecraft.",
+      "info": "The Cupola supports science imagery, public outreach, weather monitoring, and vehicle observation. Restraints prevent drifting and protect lenses/windows.",
+      "tags": [
+        "Cupola",
+        "Camera mount",
+        "Earth observation"
+      ]
+    },
+    {
+      "order": "06",
+      "title": "Long-Lens Earth Science Kit",
+      "type": "Remote sensing support",
+      "level": "Advanced",
+      "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTkU1bfjUr9stGOi2Ynk8JXclvcJ75SUqZElcgIu9LSvrAUZQ_lHXPTiOeoWZtWaD3KgpDIzFxmoJ0BpSh9MJqsyEgqwiGuLlrymCxh4fuRxtxIdHTIvzUt3lpWevMphxNbZsI32Whqh7J/s640/iss047e142176.jpg",
+      "summary": "Telephoto lens, filters, settings cards, laptop tools, and target lists for high-resolution Earth imaging.",
+      "info": "Crew photography supports disaster monitoring, geology, ocean color, cities at night, storms, and changing landscapes.",
+      "tags": [
+        "Earth science",
+        "Long lens",
+        "Crew photo"
+      ]
+    },
+    {
+      "order": "07",
+      "title": "Window Scratch and Contamination Inspection Kit",
+      "type": "Optical maintenance",
+      "level": "Intermediate",
+      "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTkU1bfjUr9stGOi2Ynk8JXclvcJ75SUqZElcgIu9LSvrAUZQ_lHXPTiOeoWZtWaD3KgpDIzFxmoJ0BpSh9MJqsyEgqwiGuLlrymCxh4fuRxtxIdHTIvzUt3lpWevMphxNbZsI32Whqh7J/s640/iss047e142176.jpg",
+      "summary": "Lights, cameras, checklists, and image comparisons used to track window marks or contamination.",
+      "info": "Observation windows are mission assets. Crews inspect scratches, residue, micrometeoroid marks, and optical limits before imaging or docking work.",
+      "tags": [
+        "Window inspection",
+        "Optics",
+        "Maintenance"
+      ]
+    },
+    {
+      "order": "08",
+      "title": "Docking Approach Camera Set",
+      "type": "Vehicle monitoring",
+      "level": "Advanced",
+      "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTkU1bfjUr9stGOi2Ynk8JXclvcJ75SUqZElcgIu9LSvrAUZQ_lHXPTiOeoWZtWaD3KgpDIzFxmoJ0BpSh9MJqsyEgqwiGuLlrymCxh4fuRxtxIdHTIvzUt3lpWevMphxNbZsI32Whqh7J/s640/iss047e142176.jpg",
+      "summary": "Camera views and reference marks used to track visiting vehicles during approach, capture, docking, or berth.",
+      "info": "Crew and ground controllers use camera feeds to verify range, alignment, clearances, and capture readiness during vehicle operations.",
+      "tags": [
+        "Docking",
+        "Approach",
+        "Camera views"
+      ]
+    },
+    {
+      "order": "09",
+      "title": "Handheld Lidar Rangefinder",
+      "type": "Distance awareness",
+      "level": "Advanced",
+      "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTkU1bfjUr9stGOi2Ynk8JXclvcJ75SUqZElcgIu9LSvrAUZQ_lHXPTiOeoWZtWaD3KgpDIzFxmoJ0BpSh9MJqsyEgqwiGuLlrymCxh4fuRxtxIdHTIvzUt3lpWevMphxNbZsI32Whqh7J/s640/iss047e142176.jpg",
+      "summary": "Compact ranging concept for estimating clearances, distance, and target geometry during visual inspections.",
+      "info": "Ranging tools help estimate object separation and worksite scale, especially for inspection, robotics, and vehicle proximity tasks.",
+      "tags": [
+        "Rangefinder",
+        "Inspection",
+        "Distance"
+      ]
+    }
+  ]
+}
+</script>
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+const fallbackFirebaseConfig={apiKey:"AIzaSyAHcR5KPQcn4bCAnRHRVvshwge65ilqFjs",authDomain:"astro-x-08.firebaseapp.com",projectId:"astro-x-08",storageBucket:"astro-x-08.firebasestorage.app",messagingSenderId:"707443922110",appId:"1:707443922110:web:ed5c454960051092edfaef",measurementId:"G-4S9NDS5V92"};
+const firebaseConfig=window.XHORIZON_FIREBASE_CONFIG||window.XHorizonFirebaseConfig||fallbackFirebaseConfig;
+function configured(cfg){return cfg&&cfg.apiKey&&!String(cfg.apiKey).includes("YOUR_")&&cfg.projectId&&!String(cfg.projectId).includes("YOUR_");}
+let app=null,auth=null,functions=null;
+try{if(configured(firebaseConfig)){app=getApps().length?getApps()[0]:initializeApp(firebaseConfig);auth=getAuth(app);functions=getFunctions(app);}}catch(error){console.error("Firebase initialization failed:",error);}
+if(configured(firebaseConfig)&&!window.XHorizonAdmin){window.XHorizonAdmin={async unlock(key,done){const cleanKey=String(key||"").trim();if(!cleanKey||!auth||!functions)return false;try{const verifyAdminKey=httpsCallable(functions,"verifyAdminKey");const result=await verifyAdminKey({key:cleanKey});const data=result&&result.data?result.data:{};const customToken=data.token||data.customToken||data.firebaseToken||"";if(customToken)await signInWithCustomToken(auth,customToken);const user=auth.currentUser;if(!user)return false;const tokenResult=await user.getIdTokenResult(true);const allowed=tokenResult&&tokenResult.claims&&tokenResult.claims.admin===true;if(allowed){document.body.classList.add("xh-unlocked");if(typeof done==="function")done();return true;}return false;}catch(error){console.error("X Horizon unlock failed:",error);return false;}}};}
+if(auth){onAuthStateChanged(auth,async function(user){if(!user)return;try{const tokenResult=await user.getIdTokenResult(true);if(tokenResult&&tokenResult.claims&&tokenResult.claims.admin===true)document.body.classList.add("xh-unlocked");}catch(error){console.error("State check failed:",error);}});}
+window.XH_LOCK=async function(){try{if(auth&&auth.currentUser)await signOut(auth);}catch(error){console.error(error);}document.body.classList.remove("xh-unlocked");};
+</script>
+<script>
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const toastEl=$('#xhToast');
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');setTimeout(()=>toastEl.classList.remove('show'),1800)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function hideLoader(){const l=$('#xhLoader');document.body.classList.add('xh-ready');if(l)l.classList.add('done');}
+function startLoader(){const loader=document.querySelector('#xhLoader');const fill=document.querySelector('.xh-load-fill');if(fill){fill.style.transition='none';fill.style.width='0%';void fill.offsetWidth;setTimeout(()=>{fill.style.transition='width 3.05s linear';fill.style.width='100%';},120);}if(loader){loader.classList.remove('play');setTimeout(()=>loader.classList.add('play'),120);}setTimeout(hideLoader,3350);}
+requestAnimationFrame(()=>requestAnimationFrame(startLoader));
+setTimeout(hideLoader,5200);
+const revealObs=new IntersectionObserver((entries)=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -40px 0px'});$$('.xh-reveal').forEach(el=>revealObs.observe(el));
+const seed=JSON.parse($('#xhSeedData').textContent||'{}');const storageKey='xhCosmicGearItemsV5';let data=loadData();let currentTab='suits';
+function loadData(){try{const saved=JSON.parse(localStorage.getItem(storageKey)||'null');return saved||seed;}catch(e){return seed;}}
+function saveData(){localStorage.setItem(storageKey,JSON.stringify(data));}
+function converterItems(){return [
+  {title:'Mission Distance Converter',type:'Scale converter',level:'Mission Utility',summary:'Convert meters, kilometers, miles, astronomical units, lunar distance, and light seconds.',info:'Useful for space scale, orbit altitude, lunar distance, and deep-space communication timing.',tags:['Distance','AU','Light time'],category:'converters'},
+  {title:'Suit Pressure Converter',type:'Pressure converter',level:'Crew Safety',summary:'Convert kPa, psi, atm, bar, and mmHg for cabin or suit pressure references.',info:'Useful for suit pressure, cabin pressure, leak discussions, and environment-control learning.',tags:['Pressure','Suit','Cabin'],category:'converters'},
+  {title:'Thermal Converter',type:'Temperature converter',level:'Operations',summary:'Convert Celsius, Fahrenheit, and Kelvin for thermal-control discussions.',info:'Useful for suit cooling, spacecraft thermal control, experiment limits, and equipment checks.',tags:['Temperature','Thermal','Kelvin'],category:'converters'},
+  {title:'Crew Weight by Gravity',type:'Gravity converter',level:'Mission Planning',summary:'Convert mass into weight on Earth, Moon, Mars, and microgravity reference.',info:'Useful for explaining mass vs weight, surface operations, and handling equipment on different worlds.',tags:['Gravity','Moon','Mars'],category:'converters'},
+  {title:'Velocity Converter',type:'Speed converter',level:'Orbital Motion',summary:'Convert m/s, km/h, mph, and km/s for launch, rover, and orbital speed.',info:'Useful for orbital motion, EVA translation, rover speed, and launch vehicle comparisons.',tags:['Velocity','Orbit','Speed'],category:'converters'},
+  {title:'Radiation Dose Converter',type:'Dose converter',level:'Crew Health',summary:'Convert sievert, millisievert, microsievert, rem, and millirem.',info:'Useful for radiation monitoring, dosimeter readings, storm-shelter lessons, and crew health context.',tags:['Radiation','Dosimeter','Health'],category:'converters'},
+  {title:'Mission Elapsed Time Converter',type:'Time converter',level:'Operations',summary:'Convert seconds, minutes, hours, and days into mission elapsed format.',info:'Useful for procedure timing, launch timelines, experiment logs, and EVA duration planning.',tags:['MET','Timeline','Operations'],category:'converters'},
+  {title:'Oxygen Duration Estimator',type:'Life-support estimator',level:'Life Support',summary:'Estimate oxygen runtime from usable oxygen volume and flow rate.',info:'A learning estimator for life-support planning concepts. Real mission systems require exact engineering data and safety margins.',tags:['Oxygen','PLSS','Runtime'],category:'converters'},
+  {title:'Battery Runtime Estimator',type:'Power estimator',level:'Operations',summary:'Estimate runtime from battery energy and device power draw.',info:'Useful for cameras, tablets, sensors, lighting, tool batteries, and field operation planning concepts.',tags:['Battery','Power','Runtime'],category:'converters'}
+];}
+function allItems(){return Object.keys(data).flatMap(k=>(data[k]||[]).map(x=>({...x,category:k}))).concat(converterItems());}
+function tabTitle(tab){return {suits:'Astronaut Suits',eva:'EVA Tools',life:'Life Support',operations:'Operations Gear',robotics:'Robotics Tools',science:'Science Kits',safety:'Safety Gear',observation:'Observation Tools',converters:'Space Converters'}[tab]||'Gear Library';}
+function tabText(tab){return {suits:'Crew-worn systems for pressure, cooling, communication, visibility, and radiation tracking.',eva:'External work tools used during spacewalk repair, installation, restraint, and emergency return.',life:'Breathing, atmosphere, water, pressure, and environmental systems that keep crew alive.',operations:'Daily mission tools for procedures, communication, inventory, maintenance, and timing.',robotics:'Robotic control and payload-handling equipment used for capture, inspection, and external work.',science:'Research tools for samples, biology, microscopy, medical imaging, and microgravity experiments.',safety:'Emergency equipment for fire, leaks, toxic release, medical response, and atmosphere protection.',observation:'Cameras, optics, star references, and inspection tools used for Earth, vehicle, and navigation views.',converters:'Practical unit converters for distance, pressure, temperature, gravity, velocity, radiation, mission time, oxygen, and power runtime.'}[tab]||'';}
+function iconFor(cat){return {suits:'fa-user-astronaut',eva:'fa-screwdriver-wrench',life:'fa-heart-pulse',operations:'fa-tablet-screen-button',robotics:'fa-robot',science:'fa-flask-vial',safety:'fa-shield-halved',observation:'fa-camera-retro',converters:'fa-right-left'}[cat]||'fa-screwdriver-wrench';}
+function renderConverterCard(type, title, desc, icon, body){return `<article class="xh-converter-card" data-converter="${type}"><div class="xh-converter-top"><span class="xh-badge"><i class="fa-solid ${icon}"></i> Converter</span><i class="fa-solid ${icon}"></i></div><h3>${title}</h3><p>${desc}</p>${body}<div class="xh-converter-output" data-output></div></article>`;}
+function renderConverters(){const grid=$('#itemGrid');grid.innerHTML=`<div class="xh-converter-grid">
+${renderConverterCard('distance','Deep Space Distance Converter','Meters, kilometers, miles, nautical miles, AU, lunar distance, light-second, light-minute, light-year, and parsec.','fa-ruler-combined','<div class="xh-converter-form"><input class="xh-input" data-field="value" type="number" value="1" step="any"><select class="xh-select" data-field="unit"><option value="km">Kilometers</option><option value="m">Meters</option><option value="mi">Miles</option><option value="nmi">Nautical miles</option><option value="au">Astronomical Units</option><option value="ld">Lunar Distance</option><option value="ls">Light Seconds</option><option value="lm">Light Minutes</option><option value="ly">Light Years</option><option value="pc">Parsecs</option></select></div>')}
+${renderConverterCard('pressure','Suit & Cabin Pressure','Convert Pa, kPa, psi, atm, bar, mbar, mmHg, and torr for suit/cabin references.','fa-gauge-high','<div class="xh-converter-form"><input class="xh-input" data-field="value" type="number" value="29.6" step="any"><select class="xh-select" data-field="unit"><option value="kpa">kPa</option><option value="pa">Pa</option><option value="psi">psi</option><option value="atm">atm</option><option value="bar">bar</option><option value="mbar">mbar</option><option value="mmhg">mmHg</option><option value="torr">torr</option></select></div>')}
+${renderConverterCard('temperature','Thermal Converter','Celsius, Fahrenheit, Kelvin, and Rankine for spacecraft thermal-control learning.','fa-temperature-half','<div class="xh-converter-form"><input class="xh-input" data-field="value" type="number" value="20" step="any"><select class="xh-select" data-field="unit"><option value="c">Celsius</option><option value="f">Fahrenheit</option><option value="k">Kelvin</option><option value="r">Rankine</option></select></div>')}
+${renderConverterCard('gravity','Crew Weight by Gravity','Convert crew mass into weight on Earth, Moon, Mars, ISS microgravity, Jupiter, and Titan.','fa-weight-hanging','<div class="xh-converter-form single"><input class="xh-input" data-field="mass" type="number" value="80" step="any" placeholder="Mass in kg"></div>')}
+${renderConverterCard('velocity','Mission Velocity Converter','m/s, km/s, km/h, mph, knots, Mach, and percent of light speed.','fa-gauge','<div class="xh-converter-form"><input class="xh-input" data-field="value" type="number" value="7.66" step="any"><select class="xh-select" data-field="unit"><option value="kms">km/s</option><option value="ms">m/s</option><option value="kmh">km/h</option><option value="mph">mph</option><option value="knot">knots</option><option value="mach">Mach</option><option value="c">speed of light</option></select></div>')}
+${renderConverterCard('radiation','Radiation Dose Converter','Sv, mSv, μSv, rem, mrem, and gray-equivalent reference for dosimeter learning.','fa-radiation','<div class="xh-converter-form"><input class="xh-input" data-field="value" type="number" value="1" step="any"><select class="xh-select" data-field="unit"><option value="msv">mSv</option><option value="sv">Sv</option><option value="usv">μSv</option><option value="rem">rem</option><option value="mrem">mrem</option></select></div>')}
+${renderConverterCard('met','Mission Elapsed Time','Convert seconds, minutes, hours, days, or sols into readable mission elapsed time.','fa-clock','<div class="xh-converter-form"><input class="xh-input" data-field="value" type="number" value="93784" step="any"><select class="xh-select" data-field="unit"><option value="seconds">Seconds</option><option value="minutes">Minutes</option><option value="hours">Hours</option><option value="days">Days</option><option value="sols">Mars sols</option></select></div>')}
+${renderConverterCard('oxygen','Oxygen Duration Estimator','Estimate runtime from usable oxygen volume, flow rate, and number of crew. Learning estimate only.','fa-lungs','<div class="xh-converter-form triple"><input class="xh-input" data-field="capacity" type="number" value="840" step="any" placeholder="O₂ liters"><input class="xh-input" data-field="flow" type="number" value="2" step="any" placeholder="L/min"><input class="xh-input" data-field="crew" type="number" value="1" step="1" placeholder="Crew"></div>')}
+${renderConverterCard('battery','Battery Runtime Estimator','Estimate runtime from Wh, voltage, Ah, and equipment power draw.','fa-battery-full','<div class="xh-converter-form triple"><input class="xh-input" data-field="wh" type="number" value="160" step="any" placeholder="Wh"><input class="xh-input" data-field="v" type="number" value="28" step="any" placeholder="Volts"><input class="xh-input" data-field="w" type="number" value="20" step="any" placeholder="Watts"></div>')}
+${renderConverterCard('mass','Payload Mass Converter','kg, grams, metric tons, pounds, ounces, and slugs for payload and cargo planning.','fa-boxes-stacked','<div class="xh-converter-form"><input class="xh-input" data-field="value" type="number" value="100" step="any"><select class="xh-select" data-field="unit"><option value="kg">kg</option><option value="g">grams</option><option value="t">metric tons</option><option value="lb">pounds</option><option value="oz">ounces</option><option value="slug">slugs</option></select></div>')}
+${renderConverterCard('volume','Storage Volume Converter','Liters, cubic meters, cubic feet, gallons, and milliliters for cargo or tank space.','fa-cube','<div class="xh-converter-form"><input class="xh-input" data-field="value" type="number" value="1" step="any"><select class="xh-select" data-field="unit"><option value="l">liters</option><option value="m3">m³</option><option value="cm3">cm³</option><option value="ft3">ft³</option><option value="gal">US gallons</option><option value="ml">mL</option></select></div>')}
+${renderConverterCard('data','Telemetry Data Converter','Bytes, KB, MB, GB, TB, bits, and downlink time from data rate.','fa-satellite-dish','<div class="xh-converter-form triple"><input class="xh-input" data-field="value" type="number" value="1" step="any"><select class="xh-select" data-field="unit"><option value="gb">GB</option><option value="mb">MB</option><option value="kb">KB</option><option value="b">Bytes</option><option value="tb">TB</option><option value="bit">bits</option></select><input class="xh-input" data-field="rate" type="number" value="50" step="any" placeholder="Mbps"></div>')}
+${renderConverterCard('wavelength','Signal Wavelength Converter','Convert frequency to wavelength for radio, radar, and communication bands.','fa-wave-square','<div class="xh-converter-form"><input class="xh-input" data-field="value" type="number" value="2.4" step="any"><select class="xh-select" data-field="unit"><option value="ghz">GHz</option><option value="mhz">MHz</option><option value="khz">kHz</option><option value="hz">Hz</option></select></div>')}
+</div>`;updateAllConverters();}
+function fmt(n, digits=3){if(!isFinite(n))return '—';if(Math.abs(n)>=10000000||Math.abs(n)<0.0001&&n!==0)return n.toExponential(3);return Number(n.toFixed(digits)).toLocaleString();}
+function metric(label,value){return `<div class="xh-converter-metric"><b>${value}</b><span>${label}</span></div>`;}
+function updateConverter(card){const type=card.dataset.converter;const out=card.querySelector('[data-output]');if(!out)return;const val=parseFloat(card.querySelector('[data-field="value"]')?.value||0);const unit=card.querySelector('[data-field="unit"]')?.value;let html='';
+if(type==='distance'){const f={m:1,km:1000,mi:1609.344,nmi:1852,au:149597870700,ld:384400000,ls:299792458,lm:17987547480,ly:9460730472580800,pc:30856775814913673};const m=val*(f[unit]||1000);html=metric('kilometers',fmt(m/1000))+metric('miles',fmt(m/1609.344))+metric('nautical miles',fmt(m/1852))+metric('AU',fmt(m/149597870700,8))+metric('light years',fmt(m/9460730472580800,9))+metric('parsecs',fmt(m/30856775814913673,9));}
+else if(type==='pressure'){const f={pa:1,kpa:1000,psi:6894.757293,atm:101325,bar:100000,mbar:100,mmhg:133.322368,torr:133.322368};const pa=val*(f[unit]||1000);html=metric('Pa',fmt(pa,2))+metric('kPa',fmt(pa/1000,3))+metric('psi',fmt(pa/6894.757293,4))+metric('atm',fmt(pa/101325,6))+metric('bar',fmt(pa/100000,5))+metric('mmHg / torr',fmt(pa/133.322368,3));}
+else if(type==='temperature'){let k=unit==='f'?(val-32)*5/9+273.15:unit==='c'?val+273.15:unit==='r'?val*5/9:val;let c=k-273.15;html=metric('Celsius',fmt(c,2)+' °C')+metric('Fahrenheit',fmt(c*9/5+32,2)+' °F')+metric('Kelvin',fmt(k,2)+' K')+metric('Rankine',fmt(k*9/5,2)+' °R');}
+else if(type==='gravity'){const mass=parseFloat(card.querySelector('[data-field="mass"]')?.value||0);html=metric('Earth weight',fmt(mass*9.80665)+' N')+metric('Moon weight',fmt(mass*1.62)+' N')+metric('Mars weight',fmt(mass*3.721)+' N')+metric('Jupiter weight',fmt(mass*24.79)+' N')+metric('Titan weight',fmt(mass*1.352)+' N')+metric('Mass',fmt(mass)+' kg');}
+else if(type==='velocity'){const c=299792458;const f={ms:1,kmh:1/3.6,mph:0.44704,kms:1000,knot:0.514444,mach:343,c:c};const ms=val*(f[unit]||1);html=metric('m/s',fmt(ms))+metric('km/s',fmt(ms/1000,5))+metric('km/h',fmt(ms*3.6))+metric('mph',fmt(ms/0.44704))+metric('knots',fmt(ms/0.514444))+metric('% light speed',fmt(ms/c*100,8)+'%');}
+else if(type==='radiation'){const f={sv:1,msv:0.001,usv:0.000001,rem:0.01,mrem:0.00001};const sv=val*(f[unit]||0.001);html=metric('Sv',fmt(sv,7))+metric('mSv',fmt(sv*1000,4))+metric('μSv',fmt(sv*1000000,2))+metric('rem',fmt(sv/0.01,4))+metric('mrem',fmt(sv/0.00001,2));}
+else if(type==='met'){const f={seconds:1,minutes:60,hours:3600,days:86400,sols:88775.244};let total=val*(f[unit]||1);let sec=Math.max(0,total);const d=Math.floor(sec/86400);sec-=d*86400;const h=Math.floor(sec/3600);sec-=h*3600;const m=Math.floor(sec/60);const s=Math.floor(sec-m*60);html=metric('MET format',`${d}d ${h}h ${m}m ${s}s`)+metric('total hours',fmt(total/3600,3))+metric('Earth days',fmt(total/86400,4))+metric('Mars sols',fmt(total/88775.244,4));}
+else if(type==='oxygen'){const cap=parseFloat(card.querySelector('[data-field="capacity"]')?.value||0);const flow=parseFloat(card.querySelector('[data-field="flow"]')?.value||0);const crew=Math.max(1,parseFloat(card.querySelector('[data-field="crew"]')?.value||1));const min=flow>0?cap/(flow*crew):0;html=metric('minutes',fmt(min,2))+metric('hours',fmt(min/60,2))+metric('per crew flow',fmt(flow)+' L/min')+metric('crew',fmt(crew,0))+metric('capacity',fmt(cap)+' L');}
+else if(type==='battery'){const wh=parseFloat(card.querySelector('[data-field="wh"]')?.value||0);const v=parseFloat(card.querySelector('[data-field="v"]')?.value||0);const w=parseFloat(card.querySelector('[data-field="w"]')?.value||0);const hr=w>0?wh/w:0;html=metric('hours',fmt(hr,2))+metric('minutes',fmt(hr*60,1))+metric('amp-hours',v>0?fmt(wh/v,3)+' Ah':'—')+metric('energy',fmt(wh)+' Wh')+metric('load',fmt(w)+' W');}
+else if(type==='mass'){const f={kg:1,g:0.001,t:1000,lb:0.45359237,oz:0.028349523125,slug:14.59390294};const kg=val*(f[unit]||1);html=metric('kg',fmt(kg,4))+metric('grams',fmt(kg*1000,2))+metric('metric tons',fmt(kg/1000,6))+metric('pounds',fmt(kg/0.45359237,4))+metric('ounces',fmt(kg/0.028349523125,3));}
+else if(type==='volume'){const f={l:0.001,m3:1,cm3:0.000001,ft3:0.028316846592,gal:0.003785411784,ml:0.000001};const m3=val*(f[unit]||0.001);html=metric('m³',fmt(m3,6))+metric('liters',fmt(m3*1000,3))+metric('cubic feet',fmt(m3/0.028316846592,3))+metric('US gallons',fmt(m3/0.003785411784,3))+metric('mL',fmt(m3*1000000,1));}
+else if(type==='data'){const f={bit:1,b:8,kb:8000,mb:8000000,gb:8000000000,tb:8000000000000};const bits=val*(f[unit]||8000000000);const mbps=parseFloat(card.querySelector('[data-field="rate"]')?.value||0);const sec=mbps>0?bits/(mbps*1000000):0;html=metric('bits',fmt(bits,2))+metric('MB',fmt(bits/8000000,4))+metric('GB',fmt(bits/8000000000,6))+metric('downlink time',sec?fmt(sec,2)+' s':'—')+metric('at rate',fmt(mbps)+' Mbps');}
+else if(type==='wavelength'){const f={hz:1,khz:1000,mhz:1000000,ghz:1000000000};const hz=val*(f[unit]||1000000000);const lambda=299792458/hz;html=metric('Hz',fmt(hz,3))+metric('wavelength',fmt(lambda,6)+' m')+metric('centimeters',fmt(lambda*100,4)+' cm')+metric('millimeters',fmt(lambda*1000,3)+' mm')+metric('light time/cycle',fmt(1/hz,9)+' s');}
+out.innerHTML=html;}
+function updateAllConverters(){$$('.xh-converter-card').forEach(updateConverter);}
+function render(){ $('#libraryTitle').textContent=tabTitle(currentTab);$('#libraryText').textContent=tabText(currentTab);const grid=$('#itemGrid');if(currentTab==='converters'){renderConverters();return;}const items=data[currentTab]||[];grid.innerHTML=items.map((item,idx)=>cardTemplate(item,currentTab,idx)).join('')||'<div class="xh-card"><h3>No items yet</h3><p>Add a new gear item from the console.</p></div>'; }
+function cardTemplate(item,cat,idx){const tags=(item.tags||[]).slice(0,3).map(t=>`<span class="xh-chip">${esc(t)}</span>`).join('');const image=esc(item.image||'https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg');return `<article class="xh-card" data-open-detail data-cat="${esc(cat)}" data-idx="${idx}"><div class="xh-card-image"><img src="${image}" alt="${esc(item.title||'Cosmic gear')}" loading="lazy"></div><div class="xh-card-body"><div><div class="xh-card-top"><span class="xh-badge"><i class="fa-solid ${iconFor(cat)}"></i>${esc(item.type||tabTitle(cat))}</span><div class="xh-order">${esc(item.order||String(idx+1).padStart(2,'0'))}</div></div><h3>${esc(item.title)}</h3><p>${esc(item.summary||'')}</p><div class="xh-meta">${tags}</div></div><button class="xh-detail-btn" type="button"><i class="fa-solid fa-circle-info"></i> Full Specs</button></div></article>`;}
+function openPopup(item,cat){const popupTitle=item.popupTitle||item.title||'';const popupImage=item.popupImage||item.image||'https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg';$('#popupTitle').textContent=popupTitle;$('#popupAuthor').textContent=item.type?`${item.type} · ${item.level||'All Levels'}`:'';$('#popupImage').src=popupImage;$('#popupImage').alt=popupTitle||'Cosmic gear';$('#popupIcon').className='fa-solid '+iconFor(cat);const mission=item.missionUse||item.summary||'';const how=item.howWorks||'Connects to the mission workflow through crew procedure, safety checks, tool restraints, power/pressure limits, or experiment handling depending on the gear family.';const safety=item.safety||'Controls mission risk by protecting crew, equipment, samples, or the spacecraft environment.';const limits=item.limits||'Must be checked for fit, power, pressure, contamination, calibration, tethering, stowage, and procedure match before use.';$('#popupGrid').innerHTML=`<div class="xh-popup-info"><b>Category</b>${esc(tabTitle(cat))}</div><div class="xh-popup-info"><b>Level</b>${esc(item.level||'All Levels')}</div><div class="xh-popup-info"><b>Order</b>${esc(item.order||'')}</div><div class="xh-popup-info"><b>Type</b>${esc(item.type||'')}</div><div class="xh-popup-info xh-popup-full"><b>Mission use</b>${esc(mission)}</div><div class="xh-popup-info xh-popup-full"><b>How it works</b>${esc(how)}</div><div class="xh-popup-info xh-popup-full"><b>Technical notes</b>${esc(item.info||'')}</div><div class="xh-popup-info xh-popup-full"><b>Safety importance</b>${esc(safety)}</div><div class="xh-popup-info xh-popup-full"><b>Limits / checks</b>${esc(limits)}</div><div class="xh-popup-info xh-popup-full"><b>Tags</b>${esc((item.tags||[]).join(' · ')||'Astronaut gear')}</div>`;$('#itemPopup').classList.add('on');}
+function closePopup(){ $('#itemPopup').classList.remove('on'); }
+document.addEventListener('click',e=>{const tab=e.target.closest('[data-tab]');if(tab){currentTab=tab.dataset.tab;$$('.xh-tab').forEach(b=>b.classList.toggle('active',b===tab));render();return;}const card=e.target.closest('[data-open-detail]');if(card){openPopup((data[card.dataset.cat]||[])[Number(card.dataset.idx)],card.dataset.cat);return;}});document.addEventListener('input',e=>{const c=e.target.closest('.xh-converter-card');if(c)updateConverter(c);});document.addEventListener('change',e=>{const c=e.target.closest('.xh-converter-card');if(c)updateConverter(c);});$('#popupClose').addEventListener('click',closePopup);document.addEventListener('keydown',e=>{if(e.key==='Escape')closePopup();});
+const search=$('#xhSearch'),results=$('#xhResults');
+function runSearch(q){const value=String(q||'').trim().toLowerCase();results.innerHTML='';if(!value){results.classList.remove('show');return;}const matches=allItems().filter(x=>[x.title,x.summary,x.info,x.type,x.level,x.popupTitle,x.missionUse,x.howWorks,x.safety,x.limits,(x.tags||[]).join(' ')].join(' ').toLowerCase().includes(value)).slice(0,10);if(!matches.length){results.innerHTML='<button class="xh-result-item" type="button"><strong>No result</strong><span>Try EVA, suit, life support, robotics, safety, science, camera, or oxygen.</span></button>';results.classList.add('show');return;}results.innerHTML=matches.map((x,i)=>`<button class="xh-result-item" type="button" data-search-index="${i}"><strong>${esc(x.title)}</strong><span>${esc(x.type||tabTitle(x.category))} · ${esc(tabTitle(x.category))}</span></button>`).join('');results.classList.add('show');$$('[data-search-index]',results).forEach((btn,i)=>btn.addEventListener('click',()=>{const item=matches[i];currentTab=item.category;$$('.xh-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===currentTab));render();if(item.category==='converters'){document.getElementById('gear-library')?.scrollIntoView({behavior:'smooth',block:'start'});}else{openPopup(item,item.category);}results.classList.remove('show');search.value='';}));}
+function waitForUnlockSystem(){return new Promise(resolve=>{if(window.XHorizonAdmin&&typeof window.XHorizonAdmin.unlock==='function')return resolve(window.XHorizonAdmin);let tries=0;const timer=setInterval(()=>{tries++;if(window.XHorizonAdmin&&typeof window.XHorizonAdmin.unlock==='function'){clearInterval(timer);resolve(window.XHorizonAdmin);}else if(tries>12){clearInterval(timer);resolve(null);}},120);});}
+async function handleSearchSubmit(){const value=search.value.trim();if(!value){runSearch('');return;}search.disabled=true;try{const bridge=await waitForUnlockSystem();if(bridge&&typeof bridge.unlock==='function'){const ok=await Promise.resolve(bridge.unlock(value,()=>{document.body.classList.add('xh-unlocked');toast('Console opened');}));if(ok){search.value='';results.classList.remove('show');return;}}}catch(error){console.error('Unlock failed:',error);}finally{search.disabled=false;}runSearch(value);}
+search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();handleSearchSubmit();}});search.addEventListener('input',()=>runSearch(search.value));document.addEventListener('click',e=>{if(!e.target.closest('.xh-search-wrap'))results.classList.remove('show');});
+function readConsoleItem(){const cardImage=$('#editImage').value.trim()||'https://www.nasa.gov/wp-content/uploads/2023/03/iss069e018265orig.jpg';return {order:String((data[$('#editCategory').value]||[]).length+1).padStart(2,'0'),title:$('#editTitle').value.trim()||'New Gear Item',type:$('#editType').value.trim()||$('#editCategory').selectedOptions[0].textContent,level:$('#editLevel').value,image:cardImage,popupImage:$('#editPopupImage').value.trim()||cardImage,popupTitle:$('#editPopupTitle').value.trim(),summary:$('#editSummary').value.trim()||'Useful mission gear summary.',missionUse:$('#editMissionUse').value.trim()||$('#editSummary').value.trim()||'Used in mission operations to support crew work, safety, repair, science, or observation.',howWorks:$('#editHowWorks').value.trim()||'Works through crew procedure, restraint, power, pressure, data, or mechanical interface checks depending on the gear family.',info:$('#editInfo').value.trim()||'Technical gear information.',safety:$('#editSafety').value.trim()||'Reduces crew, hardware, contamination, drift-away, or mission-failure risk.',limits:$('#editLimits').value.trim()||'Confirm procedure match, stowage, tethering, calibration, power/pressure status, and inspection before use.',tags:$('#editTags').value.split(',').map(s=>s.trim()).filter(Boolean)};}
+function clearConsole(){['editTitle','editType','editImage','editPopupImage','editPopupTitle','editSummary','editInfo','editMissionUse','editHowWorks','editSafety','editLimits','editTags'].forEach(id=>$('#'+id).value='');$('#editLevel').value='Beginner';}
+$('#addItem').addEventListener('click',()=>{const cat=$('#editCategory').value;data[cat]=data[cat]||[];data[cat].push(readConsoleItem());saveData();currentTab=cat;$$('.xh-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===currentTab));render();clearConsole();toast('Item added');});
+$('#previewItem').addEventListener('click',()=>{openPopup(readConsoleItem(),$('#editCategory').value);});
+$('#resetItems').addEventListener('click',()=>{data=JSON.parse(JSON.stringify(seed));saveData();render();toast('Gear reset');});$('#lockConsole').addEventListener('click',()=>{if(window.XH_LOCK)window.XH_LOCK();else document.body.classList.remove('xh-unlocked');toast('Locked');});
+render();
+})();
+</script>
