@@ -1,0 +1,2350 @@
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X Horizon — Silky Space Timeline</title>
+  <meta name="description" content="X Horizon silky ribbon timeline page with decade rows, motion-site dark cards, horizontal era tabs, popups, and admin preview controls.">
+  <style>
+    :root{
+      --xh-bg:#020308;
+      --xh-bg-2:#070911;
+      --xh-card:#0b0d12;
+      --xh-card-2:#11141b;
+      --xh-border:rgba(255,255,255,.12);
+      --xh-text:#f4f6fb;
+      --xh-muted:#a2a7b6;
+      --xh-soft:#747b91;
+      --xh-cyan:#13e7ff;
+      --xh-blue:#4a72ff;
+      --xh-violet:#8d42ff;
+      --xh-pink:#ff3ecf;
+      --xh-orange:#ff7b45;
+      --xh-green:#22f2a7;
+      --xh-radius:28px;
+      --xh-radius-sm:18px;
+      --xh-shadow:0 30px 90px rgba(0,0,0,.62);
+      --xh-ease:cubic-bezier(.2,.8,.2,1);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 16% 12%, rgba(19,231,255,.12), transparent 30%),
+        radial-gradient(circle at 84% 20%, rgba(255,62,207,.12), transparent 32%),
+        radial-gradient(circle at 45% 85%, rgba(141,66,255,.10), transparent 36%),
+        var(--xh-bg);
+      color:var(--xh-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-3;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,.65) 0 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(105,133,255,.55) 0 1px, transparent 1.5px);
+      background-size:86px 86px, 132px 132px;
+      background-position:0 0, 24px 38px;
+      opacity:.18;
+      animation:xhStars 26s linear infinite;
+    }
+    @keyframes xhStars{to{background-position:86px 86px,156px 170px}}
+    .xh-page{width:100%; overflow:hidden;}
+    .xh-wrap{width:min(1500px, calc(100% - 40px)); margin-inline:auto;}
+
+    /* TOP NAV */
+    .xh-topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(16px);
+      background:linear-gradient(180deg, rgba(2,3,8,.86), rgba(2,3,8,.58));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .xh-nav{height:76px; display:flex; align-items:center; justify-content:space-between; gap:18px;}
+    .xh-brand{display:flex; align-items:center; gap:12px; letter-spacing:.02em; font-weight:800; font-size:22px;}
+    .xh-logo{
+      width:42px; height:42px; border-radius:50%;
+      display:grid; place-items:center;
+      background:linear-gradient(135deg, rgba(19,231,255,.20), rgba(141,66,255,.22), rgba(255,62,207,.16));
+      border:1px solid rgba(255,255,255,.13);
+      box-shadow:0 0 34px rgba(19,231,255,.12), inset 0 0 22px rgba(255,255,255,.05);
+    }
+    .xh-brand span:last-child{
+      background:linear-gradient(90deg,#fff,#bfc8ff,#ff5bd8);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .xh-navlinks{display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end;}
+    .xh-navlinks a,.xh-admin-toggle{
+      color:#d9dce7; text-decoration:none; border:1px solid transparent; background:transparent;
+      border-radius:999px; padding:10px 15px; font:inherit; cursor:pointer;
+      transition:background .25s var(--xh-ease), color .25s var(--xh-ease), border-color .25s var(--xh-ease);
+    }
+    .xh-navlinks a:hover,.xh-admin-toggle:hover,.xh-navlinks a.is-active{
+      color:#fff; border-color:rgba(255,255,255,.13);
+      background:rgba(255,255,255,.06);
+    }
+    .xh-admin-toggle{background:#0b0d12; border-color:rgba(255,255,255,.12);}
+
+    /* HERO */
+    .xh-hero{position:relative; min-height:720px; display:flex; align-items:center; isolation:isolate;}
+    .xh-hero::before{
+      content:""; position:absolute; inset:0; z-index:-3;
+      background-image:
+        linear-gradient(90deg, rgba(2,3,8,.88) 0%, rgba(2,3,8,.58) 44%, rgba(2,3,8,.78) 100%),
+        url('https://images.unsplash.com/photo-1446776877081-d282a0f896e2?auto=format&fit=crop&w=2200&q=85');
+      background-size:cover; background-position:center;
+      filter:saturate(1.1) contrast(1.08);
+    }
+    .xh-hero::after{
+      content:""; position:absolute; inset:auto -10% -24% -10%; height:360px; z-index:-2;
+      background:radial-gradient(ellipse at center, rgba(31,97,255,.38), transparent 62%);
+      filter:blur(26px);
+    }
+    .xh-hero-grid{display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:34px; padding:80px 0 64px;}
+    .xh-kicker{letter-spacing:.42em; text-transform:uppercase; color:#9ea7ff; font-size:13px; font-weight:800; margin-bottom:18px;}
+    .xh-title{font-size:clamp(48px,7vw,118px); line-height:.92; margin:0; letter-spacing:-.065em; max-width:820px;}
+    .xh-title strong{display:block; background:linear-gradient(90deg,#ffffff 4%, #cad5ff 34%, #54dfff 58%, #c050ff 78%, #ff4acb 98%); -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow:0 0 46px rgba(107,114,255,.08);}
+    .xh-hero p{font-size:clamp(16px,1.6vw,22px); line-height:1.72; color:#ccd0df; max-width:700px; margin:22px 0 0;}
+    .xh-hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-top:34px;}
+    .xh-btn{border:0; cursor:pointer; border-radius:999px; padding:15px 22px; color:#fff; font-weight:800; font-size:15px; background:linear-gradient(90deg,var(--xh-cyan),var(--xh-violet),var(--xh-pink)); box-shadow:0 18px 42px rgba(141,66,255,.28); text-decoration:none; display:inline-flex; align-items:center; gap:10px;}
+    .xh-btn.is-ghost{background:rgba(10,12,18,.72); border:1px solid rgba(255,255,255,.13); box-shadow:none;}
+    .xh-hero-card{
+      position:relative; min-height:480px; border-radius:42px; overflow:hidden;
+      background:linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.13); box-shadow:var(--xh-shadow);
+    }
+    .xh-hero-card::before{
+      content:""; position:absolute; inset:0;
+      background:
+        linear-gradient(180deg, transparent 36%, rgba(2,3,8,.85) 100%),
+        url('https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=1200&q=85');
+      background-size:cover; background-position:center;
+      opacity:.9;
+    }
+    .xh-hero-card::after{
+      content:""; position:absolute; inset:22px; border-radius:32px; border:1px solid rgba(255,255,255,.12); box-shadow:inset 0 0 90px rgba(19,231,255,.08);
+    }
+    .xh-hero-card-content{position:absolute; left:30px; right:30px; bottom:30px; z-index:1; display:grid; gap:16px;}
+    .xh-orbit-line{height:10px; border-radius:999px; background:linear-gradient(90deg, var(--xh-cyan), var(--xh-blue), var(--xh-violet), var(--xh-pink)); box-shadow:0 0 24px rgba(19,231,255,.25),0 0 34px rgba(255,62,207,.22);}
+    .xh-card-mini{display:flex; align-items:center; justify-content:space-between; gap:16px; background:rgba(0,0,0,.58); border:1px solid rgba(255,255,255,.12); border-radius:22px; padding:16px 18px;}
+    .xh-card-mini b{font-size:18px}.xh-card-mini span{color:#b8bdce}
+
+    /* SECTION */
+    .xh-section{padding:72px 0; position:relative;}
+    .xh-section-head{display:flex; align-items:end; justify-content:space-between; gap:22px; margin-bottom:28px;}
+    .xh-section-title{margin:0; font-size:clamp(34px,4vw,66px); letter-spacing:-.05em;}
+    .xh-section-title span{background:linear-gradient(90deg,#fff,#8aeaff,#ff4fd8); -webkit-background-clip:text; background-clip:text; color:transparent;}
+    .xh-section-desc{margin:12px 0 0; color:var(--xh-muted); max-width:720px; line-height:1.7; font-size:16px;}
+
+    /* HORIZONTAL TABS */
+    .xh-era-tabs-wrap{position:sticky; top:76px; z-index:45; padding:12px 0; background:linear-gradient(180deg, rgba(2,3,8,.94), rgba(2,3,8,.68)); backdrop-filter:blur(18px); border-y:1px solid rgba(255,255,255,.07);}
+    .xh-era-tabs{display:flex; gap:10px; overflow:auto; scrollbar-width:none; padding:2px 0;}
+    .xh-era-tabs::-webkit-scrollbar{display:none}
+    .xh-tab{white-space:nowrap; border:1px solid rgba(255,255,255,.12); background:#0b0d12; color:#dfe3ef; border-radius:999px; padding:12px 18px; font-weight:800; cursor:pointer; transition:transform .25s var(--xh-ease), border-color .25s var(--xh-ease), background .25s var(--xh-ease);}
+    .xh-tab:hover{transform:translateY(-2px); border-color:rgba(19,231,255,.45)}
+    .xh-tab.is-active{background:linear-gradient(90deg,rgba(19,231,255,.18),rgba(141,66,255,.18),rgba(255,62,207,.18)); border-color:rgba(255,255,255,.26); box-shadow:0 0 34px rgba(141,66,255,.20)}
+
+    /* TIMELINE ROWS */
+    .xh-timeline{display:grid; gap:34px; margin-top:36px;}
+    .xh-decade-row{
+      position:relative; display:grid; grid-template-columns:118px 1fr; gap:22px; align-items:stretch;
+      transition:max-height .55s var(--xh-ease), opacity .35s var(--xh-ease), transform .35s var(--xh-ease);
+    }
+    .xh-decade-marker{display:flex; justify-content:center; padding-top:34px;}
+    .xh-decade-circle{
+      width:96px; height:96px; border-radius:50%; position:sticky; top:156px; display:grid; place-items:center; text-align:center;
+      color:#fff; font-weight:950; font-size:16px; line-height:1.08; letter-spacing:-.02em;
+      background:linear-gradient(#05070c,#05070c) padding-box, linear-gradient(135deg,var(--xh-cyan),var(--xh-violet),var(--xh-pink)) border-box;
+      border:2px solid transparent;
+      box-shadow:0 0 44px rgba(141,66,255,.16), inset 0 0 26px rgba(255,255,255,.04);
+    }
+    .xh-decade-shell{
+      position:relative; min-height:390px; border-radius:34px; overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .xh-wave-top,.xh-wave-bottom{position:absolute; left:24px; right:24px; height:58px; pointer-events:none; z-index:1;}
+    .xh-wave-top{top:20px}.xh-wave-bottom{bottom:20px}
+    .xh-ribbon-svg{width:100%; height:100%; overflow:visible; filter:drop-shadow(0 0 18px rgba(19,231,255,.22)) drop-shadow(0 0 24px rgba(255,62,207,.18));}
+    .xh-ribbon-svg path{fill:none; stroke-linecap:round; stroke-linejoin:round;}
+    .xh-ribbon-base{stroke:rgba(255,255,255,.08); stroke-width:22;}
+    .xh-ribbon-soft{stroke:url(#xhMainGradient); stroke-width:12; opacity:.50;}
+    .xh-ribbon-core{stroke:url(#xhMainGradient); stroke-width:4.5; opacity:.96; stroke-dasharray:12 12; animation:xhRibbonMove 14s linear infinite;}
+    .xh-wave-bottom .xh-ribbon-core{animation-direction:reverse}
+    @keyframes xhRibbonMove{to{stroke-dashoffset:-240}}
+    .xh-decade-toolbar{position:absolute; top:20px; right:24px; z-index:4; display:flex; gap:10px; align-items:center;}
+    .xh-decade-title{position:absolute; left:30px; top:96px; z-index:2; margin:0; font-size:18px; color:#dfe5ff; letter-spacing:.02em;}
+    .xh-decade-count{position:absolute; left:30px; top:122px; z-index:2; color:#8e96aa; font-size:13px;}
+    .xh-collapse-btn{border:1px solid rgba(255,255,255,.13); background:#0b0d12; color:#fff; border-radius:999px; padding:9px 13px; cursor:pointer; font-weight:800;}
+    .xh-row-cards{position:relative; z-index:3; padding:152px 26px 100px; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:18px;}
+    .xh-decade-row.is-hidden .xh-decade-shell{min-height:94px;}
+    .xh-decade-row.is-hidden .xh-row-cards,.xh-decade-row.is-hidden .xh-wave-bottom,.xh-decade-row.is-hidden .xh-decade-title,.xh-decade-row.is-hidden .xh-decade-count{display:none;}
+    .xh-decade-row.is-hidden .xh-wave-top{top:18px}
+
+    /* Cards */
+    .xh-event-card{
+      --card-glow:rgba(19,231,255,.35); --card-border:#13e7ff; --card-bg:radial-gradient(circle at 20% 0%, rgba(19,231,255,.32), transparent 38%), radial-gradient(circle at 90% 100%, rgba(141,66,255,.28), transparent 35%);
+      position:relative; min-height:300px; border-radius:26px; padding:1px; cursor:pointer;
+      background:linear-gradient(#090b10,#090b10) padding-box, linear-gradient(145deg,var(--card-border),rgba(255,255,255,.05),var(--card-border)) border-box;
+      border:1px solid transparent;
+      box-shadow:0 28px 70px rgba(0,0,0,.45),0 0 34px var(--card-glow);
+      overflow:hidden; isolation:isolate;
+      transform:translateY(0); transition:transform .3s var(--xh-ease), box-shadow .3s var(--xh-ease), border-color .3s var(--xh-ease);
+    }
+    .xh-event-card::before{content:""; position:absolute; inset:0; background:var(--card-bg); opacity:.88; z-index:-2;}
+    .xh-event-card::after{content:""; position:absolute; inset:10px; border-radius:21px; background:linear-gradient(180deg, rgba(8,10,14,.96), rgba(6,7,10,.97)); z-index:-1; border:1px solid rgba(255,255,255,.065);}
+    .xh-event-card:hover{transform:translateY(-8px); box-shadow:0 38px 90px rgba(0,0,0,.58),0 0 54px var(--card-glow);}
+    .xh-img-wrap{height:132px; margin:14px 14px 0; border-radius:18px; overflow:hidden; background:#11141d; border:1px solid rgba(255,255,255,.08); position:relative;}
+    .xh-img-wrap img{width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.1) contrast(1.03); transition:transform .55s var(--xh-ease);}
+    .xh-event-card:hover .xh-img-wrap img{transform:scale(1.06)}
+    .xh-date-pill{position:absolute; top:16px; left:16px; z-index:2; display:inline-flex; align-items:center; gap:7px; padding:8px 10px; border-radius:999px; background:rgba(0,0,0,.72); border:1px solid rgba(255,255,255,.12); color:#fff; font-size:12px; font-weight:900;}
+    .xh-date-pill i{width:7px; height:7px; border-radius:50%; background:linear-gradient(90deg,var(--xh-cyan),var(--xh-pink)); box-shadow:0 0 13px var(--xh-pink);}
+    .xh-event-content{padding:18px 20px 22px;}
+    .xh-event-meta{display:flex; align-items:center; justify-content:space-between; gap:10px; color:#9aa2b8; font-size:12px; margin-bottom:10px;}
+    .xh-event-icon{width:38px; height:38px; border-radius:14px; display:grid; place-items:center; color:#fff; background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.09); font-size:19px;}
+    .xh-event-card h3{font-size:21px; line-height:1.1; margin:0 0 10px; letter-spacing:-.03em;}
+    .xh-event-card p{margin:0; color:#aeb4c4; line-height:1.55; font-size:14px;}
+    .xh-tag{display:inline-flex; align-items:center; border-radius:999px; background:rgba(255,255,255,.06); color:#dfe6ff; padding:6px 9px; font-size:11px; border:1px solid rgba(255,255,255,.08); margin-top:14px;}
+
+    .fx-aurora{--card-border:#18efff;--card-glow:rgba(19,231,255,.35);--card-bg:radial-gradient(circle at 8% 18%, rgba(19,231,255,.45), transparent 28%),radial-gradient(circle at 78% 115%, rgba(155,55,255,.46), transparent 35%)}
+    .fx-ribbon{--card-border:#ff3ea5;--card-glow:rgba(255,62,207,.32);--card-bg:radial-gradient(circle at 8% 100%, rgba(255,62,207,.34), transparent 30%),linear-gradient(135deg, rgba(255,62,207,.22),rgba(83,70,255,.24),rgba(19,231,255,.18))}
+    .fx-electric{--card-border:#1b91ff;--card-glow:rgba(23,149,255,.48);--card-bg:radial-gradient(circle at 50% 20%, rgba(26,170,255,.55), transparent 30%),radial-gradient(circle at 92% 70%, rgba(83,70,255,.25), transparent 36%)}
+    .fx-sunset{--card-border:#ff7745;--card-glow:rgba(255,119,69,.38);--card-bg:radial-gradient(circle at 10% 100%, rgba(255,119,69,.38), transparent 32%),radial-gradient(circle at 88% 0%, rgba(255,62,207,.42), transparent 30%)}
+    .fx-veil{--card-border:#22f2a7;--card-glow:rgba(34,242,167,.30);--card-bg:radial-gradient(circle at 18% 0%, rgba(34,242,167,.44), transparent 32%),radial-gradient(circle at 94% 78%, rgba(19,231,255,.28), transparent 35%)}
+    .fx-cosmic{--card-border:#704eff;--card-glow:rgba(112,78,255,.34);--card-bg:radial-gradient(circle at 60% 10%, rgba(112,78,255,.44), transparent 33%),radial-gradient(circle at 30% 100%, rgba(255,62,207,.25), transparent 35%)}
+    .fx-pulse{--card-border:#ff3ea5;--card-glow:rgba(255,62,165,.45);--card-bg:radial-gradient(circle at 50% 8%, rgba(255,62,165,.52), transparent 28%),linear-gradient(145deg, rgba(255,62,165,.18), rgba(9,11,16,0), rgba(19,231,255,.15))}
+    .fx-dual{--card-border:#13e7ff;--card-glow:rgba(19,231,255,.34);--card-bg:linear-gradient(135deg, rgba(19,231,255,.42), rgba(5,7,12,0) 45%, rgba(255,62,207,.40))}
+
+    /* POPUP */
+    .xh-pop-backdrop{position:fixed; inset:0; z-index:100; display:none; place-items:center; padding:20px; background:rgba(0,0,0,.74); backdrop-filter:blur(12px);}
+    .xh-pop-backdrop.is-open{display:grid;}
+    .xh-pop{width:min(880px,100%); border-radius:34px; background:#06070b; border:1px solid rgba(255,255,255,.13); box-shadow:0 45px 140px rgba(0,0,0,.82); overflow:hidden; transform:scale(.98); opacity:0; animation:xhPopIn .22s var(--xh-ease) forwards;}
+    @keyframes xhPopIn{to{transform:scale(1); opacity:1}}
+    .xh-pop-img{height:260px; background:#111; position:relative; overflow:hidden;}
+    .xh-pop-img img{width:100%; height:100%; object-fit:cover; filter:saturate(1.1) contrast(1.05);}
+    .xh-pop-img::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 25%, #06070b 100%)}
+    .xh-pop-content{padding:28px; margin-top:-74px; position:relative; z-index:2;}
+    .xh-pop-top{display:flex; justify-content:space-between; gap:16px; align-items:flex-start;}
+    .xh-pop h2{font-size:clamp(32px,4vw,56px); line-height:.95; letter-spacing:-.055em; margin:0;}
+    .xh-pop-date{display:inline-flex; border-radius:999px; padding:10px 14px; background:linear-gradient(90deg,rgba(19,231,255,.16),rgba(255,62,207,.16)); border:1px solid rgba(255,255,255,.14); font-weight:950; color:#fff; margin-bottom:14px;}
+    .xh-pop p{color:#bac0cf; line-height:1.72; font-size:16px; max-width:740px;}
+    .xh-pop-list{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:20px;}
+    .xh-pop-stat{border:1px solid rgba(255,255,255,.1); background:#0b0d12; border-radius:18px; padding:14px;}
+    .xh-pop-stat b{display:block; font-size:20px}.xh-pop-stat span{display:block; color:#8f97a9; font-size:13px; margin-top:4px;}
+    .xh-pop-close{width:44px; height:44px; border-radius:50%; border:1px solid rgba(255,255,255,.14); background:#0c0e14; color:#fff; cursor:pointer; font-size:22px; flex:0 0 auto;}
+
+    /* ADMIN */
+    .xh-admin{display:none; padding:34px 0 80px;}
+    .xh-admin.is-open{display:block;}
+    .xh-admin-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+    .xh-admin-box{background:#07090f; border:1px solid rgba(255,255,255,.10); border-radius:28px; padding:20px; box-shadow:0 24px 70px rgba(0,0,0,.36);}
+    .xh-admin-box h3{margin:0 0 8px; font-size:22px; letter-spacing:-.03em;}.xh-admin-box p{margin:0 0 16px; color:#989faf; line-height:1.55; font-size:14px;}
+    .xh-field{display:grid; gap:7px; margin-bottom:12px;}.xh-field label{font-size:12px; color:#aeb6c7; font-weight:800; text-transform:uppercase; letter-spacing:.08em;}
+    .xh-field input,.xh-field select,.xh-field textarea{width:100%; border-radius:14px; background:#0b0d12; color:#fff; border:1px solid rgba(255,255,255,.13); padding:12px 13px; outline:none; font:inherit;}
+    .xh-field textarea{min-height:90px; resize:vertical}.xh-field input:focus,.xh-field select:focus,.xh-field textarea:focus{border-color:rgba(19,231,255,.48); box-shadow:0 0 0 4px rgba(19,231,255,.08)}
+    .xh-preview{margin-top:16px; border-radius:20px; border:1px solid rgba(255,255,255,.12); background:#0b0d12; min-height:120px; padding:16px; overflow:hidden;}
+    .xh-preview-wave{height:70px; display:grid; place-items:center;}.xh-preview-card{max-width:260px; margin:auto; transform:scale(.82); transform-origin:center;}.xh-preview-pop{background:#05060a; border:1px solid rgba(255,255,255,.12); border-radius:18px; padding:18px;}.xh-preview-pop h4{margin:0 0 8px}.xh-preview-pop span{color:#8f98a9;}
+
+    .xh-footer{padding:46px 0 58px; border-top:1px solid rgba(255,255,255,.08); color:#8e96a8; text-align:center;}
+
+    @media(max-width:1180px){.xh-row-cards{grid-template-columns:repeat(3,minmax(0,1fr));}.xh-hero-grid{grid-template-columns:1fr}.xh-hero-card{min-height:420px}.xh-admin-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:820px){.xh-wrap{width:min(100% - 24px,1500px)}.xh-nav{height:auto; padding:14px 0; align-items:flex-start}.xh-navlinks{display:none}.xh-hero{min-height:auto}.xh-hero-grid{padding:68px 0 46px}.xh-decade-row{grid-template-columns:1fr; gap:14px}.xh-decade-marker{justify-content:flex-start; padding-top:0}.xh-decade-circle{position:relative; top:auto; width:auto; height:auto; min-width:116px; padding:14px 18px; border-radius:999px}.xh-row-cards{grid-template-columns:1fr; padding:146px 16px 94px}.xh-decade-shell{min-height:auto}.xh-wave-top,.xh-wave-bottom{left:14px; right:14px}.xh-admin-grid,.xh-pop-list{grid-template-columns:1fr}.xh-section-head{display:block}.xh-hero-card{min-height:360px}.xh-pop-img{height:210px}}
+  
+
+    /* XH CLEAN STRAIGHT-LINE UPDATE */
+    body{
+      background:#030408 !important;
+    }
+    body::before{display:none !important; animation:none !important;}
+    .xh-page{background:#030408;}
+    .xh-topbar{
+      background:rgba(3,4,8,.96) !important;
+      backdrop-filter:none !important;
+    }
+    .xh-nav{gap:18px;}
+    .xh-navlinks{display:flex; align-items:center; gap:12px;}
+    .xh-search-shell{
+      width:min(360px,38vw);
+      height:44px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid rgba(255,255,255,.12);
+      background:#090b10;
+      border-radius:999px;
+      padding:0 14px;
+      color:#8d96aa;
+    }
+    .xh-search-shell input{
+      width:100%;
+      border:0;
+      outline:0;
+      background:transparent;
+      color:#f4f6fb;
+      font:inherit;
+      min-width:0;
+    }
+    .xh-search-shell input::placeholder{color:#7d8495;}
+    .xh-hero::after{display:none !important;}
+    .xh-hero::before{
+      background-image:
+        linear-gradient(90deg, rgba(3,4,8,.92) 0%, rgba(3,4,8,.70) 48%, rgba(3,4,8,.94) 100%),
+        url('https://images.unsplash.com/photo-1446776877081-d282a0f896e2?auto=format&fit=crop&w=2200&q=85') !important;
+      filter:none !important;
+    }
+    .xh-hero-card{
+      background:#080a0f !important;
+      box-shadow:0 24px 60px rgba(0,0,0,.48) !important;
+    }
+    .xh-hero-card::after{box-shadow:none !important;}
+    .xh-orbit-line{
+      height:6px !important;
+      background:linear-gradient(90deg,var(--xh-cyan),var(--xh-blue),var(--xh-violet),var(--xh-pink)) !important;
+      box-shadow:none !important;
+    }
+    .xh-card-mini{background:#090b10 !important;}
+    .xh-era-tabs-wrap{
+      background:#030408 !important;
+      backdrop-filter:none !important;
+    }
+    .xh-tab{
+      background:#090b10 !important;
+      box-shadow:none !important;
+      transform:none !important;
+      transition:border-color .2s ease, color .2s ease !important;
+    }
+    .xh-tab:hover{transform:none !important; background:#090b10 !important;}
+    .xh-tab.is-active{
+      background:#0c0f16 !important;
+      border-color:rgba(19,231,255,.38) !important;
+      box-shadow:none !important;
+    }
+    .xh-decade-shell{
+      background:#06070b !important;
+      border-color:rgba(255,255,255,.09) !important;
+      overflow:hidden;
+    }
+    .xh-wave-top,.xh-wave-bottom{height:30px !important;}
+    .xh-ribbon-svg{filter:none !important;}
+    .xh-ribbon-base{stroke:rgba(255,255,255,.10) !important; stroke-width:10 !important;}
+    .xh-ribbon-soft{stroke:url(#xhMainGradient) !important; stroke-width:7 !important; opacity:.70 !important;}
+    .xh-ribbon-core{stroke:url(#xhMainGradient) !important; stroke-width:2.5 !important; opacity:1 !important; stroke-dasharray:none !important; animation:none !important;}
+    .xh-decade-circle{box-shadow:none !important; background:linear-gradient(#05070c,#05070c) padding-box, linear-gradient(135deg,var(--xh-cyan),var(--xh-blue),var(--xh-violet),var(--xh-pink)) border-box !important;}
+    .xh-event-card{
+      --card-glow:transparent !important;
+      --card-bg:transparent !important;
+      min-height:286px;
+      background:linear-gradient(#080a0f,#080a0f) padding-box, linear-gradient(135deg,var(--card-border),rgba(255,255,255,.10)) border-box !important;
+      box-shadow:0 18px 40px rgba(0,0,0,.42) !important;
+      transform:none !important;
+      transition:none !important;
+    }
+    .xh-event-card::before{display:none !important;}
+    .xh-event-card::after{
+      inset:0 !important;
+      border-radius:25px !important;
+      background:#080a0f !important;
+      border:0 !important;
+    }
+    .xh-event-card:hover{
+      transform:none !important;
+      box-shadow:0 18px 40px rgba(0,0,0,.42) !important;
+    }
+    .xh-img-wrap img{transition:none !important; filter:none !important;}
+    .xh-event-card:hover .xh-img-wrap img{transform:none !important;}
+    .xh-date-pill{background:#050609 !important; box-shadow:none !important;}
+    .xh-event-icon{background:#0d1017 !important;}
+    .xh-tag{background:#0d1017 !important;}
+    .fx-aurora{--card-border:#13e7ff !important;}
+    .fx-ribbon{--card-border:#ff3ecf !important;}
+    .fx-electric{--card-border:#4a72ff !important;}
+    .fx-sunset{--card-border:#ff9a5c !important;}
+    .fx-veil{--card-border:#22f2a7 !important;}
+    .fx-cosmic{--card-border:#8d42ff !important;}
+    .fx-pulse{--card-border:#ff5b9f !important;}
+    .fx-dual{--card-border:#13e7ff !important;}
+    .xh-pop-backdrop{backdrop-filter:none !important;}
+    .xh-pop{background:#050609 !important; box-shadow:0 35px 100px rgba(0,0,0,.82) !important;}
+    .xh-pop-date{background:#0d1017 !important;}
+    .xh-admin{display:none; background:#030408;}
+    .xh-admin.is-open{display:block;}
+    .xh-admin-box,.xh-preview,.xh-pop-stat{background:#080a0f !important; box-shadow:none !important;}
+    .xh-field input,.xh-field select,.xh-field textarea{background:#0a0c12 !important;}
+    .xh-admin .xh-btn{box-shadow:none !important;}
+    @media(max-width:1180px){
+      .xh-row-cards{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
+    }
+    @media(max-width:900px){
+      .xh-nav{flex-direction:column; align-items:stretch; height:auto; padding:14px 0;}
+      .xh-navlinks{display:flex !important; width:100%; justify-content:space-between;}
+      .xh-search-shell{width:100%; flex:1;}
+      .xh-hero-grid{grid-template-columns:1fr !important;}
+      .xh-title{font-size:clamp(42px,12vw,70px) !important;}
+      .xh-row-cards{grid-template-columns:repeat(2,minmax(0,1fr)) !important; padding:132px 14px 76px !important;}
+      .xh-decade-row{grid-template-columns:1fr !important;}
+      .xh-decade-marker{justify-content:flex-start !important; padding-top:0 !important;}
+      .xh-decade-circle{position:relative !important; top:auto !important; width:auto !important; height:auto !important; min-width:128px !important; padding:13px 18px !important; border-radius:999px !important;}
+      .xh-admin-grid{grid-template-columns:1fr !important;}
+    }
+    @media(max-width:620px){
+      .xh-wrap{width:min(100% - 22px,1500px) !important;}
+      .xh-navlinks{gap:8px;}
+      .xh-navlinks a{padding:10px 12px;}
+      .xh-hero-grid{padding:48px 0 34px !important;}
+      .xh-hero-card{min-height:300px !important; border-radius:26px !important;}
+      .xh-row-cards{grid-template-columns:1fr !important; padding:126px 12px 72px !important;}
+      .xh-decade-shell{border-radius:24px !important;}
+      .xh-decade-title{left:18px !important; top:74px !important;}
+      .xh-decade-count{left:18px !important; top:102px !important;}
+      .xh-wave-top{top:16px !important;}
+      .xh-wave-bottom{bottom:16px !important;}
+      .xh-event-card{min-height:auto !important;}
+      .xh-img-wrap{height:155px !important;}
+      .xh-pop-content{padding:20px !important;}
+      .xh-pop-list{grid-template-columns:1fr !important;}
+    }
+
+
+    /* XH USER PATCH: dynamic cards, neutral cards, rich popup, hidden admin additions */
+    .xh-event-card{
+      --card-border:rgba(255,255,255,.12) !important;
+      --card-glow:transparent !important;
+      --card-bg:transparent !important;
+      background:#080a0f !important;
+      border:1px solid rgba(255,255,255,.105) !important;
+      box-shadow:0 20px 44px rgba(0,0,0,.46) !important;
+      transform:perspective(900px) rotateX(var(--xh-rx,0deg)) rotateY(var(--xh-ry,0deg)) translateY(0) !important;
+      transition:transform .24s var(--xh-ease), border-color .24s var(--xh-ease), box-shadow .24s var(--xh-ease) !important;
+      will-change:transform;
+    }
+    .xh-event-card::before{
+      display:block !important;
+      content:"" !important;
+      position:absolute !important;
+      inset:0 !important;
+      z-index:0 !important;
+      background:radial-gradient(circle at var(--xh-mx,50%) var(--xh-my,40%), rgba(255,255,255,.115), transparent 34%) !important;
+      opacity:0 !important;
+      transition:opacity .22s ease !important;
+      pointer-events:none !important;
+    }
+    .xh-event-card::after{z-index:-1 !important; background:#080a0f !important; border:0 !important;}
+    .xh-event-card:hover{
+      transform:perspective(900px) rotateX(var(--xh-rx,0deg)) rotateY(var(--xh-ry,0deg)) translateY(-7px) !important;
+      border-color:rgba(255,255,255,.20) !important;
+      box-shadow:0 30px 62px rgba(0,0,0,.58) !important;
+    }
+    .xh-event-card:hover::before{opacity:1 !important;}
+    .xh-event-card:hover .xh-img-wrap img{transform:scale(1.045) !important; filter:saturate(1.05) contrast(1.02) !important;}
+    .xh-event-content,.xh-img-wrap{position:relative; z-index:2;}
+    .fx-aurora,.fx-ribbon,.fx-electric,.fx-sunset,.fx-veil,.fx-cosmic,.fx-pulse,.fx-dual{
+      --card-border:rgba(255,255,255,.12) !important;
+      --card-glow:transparent !important;
+      --card-bg:transparent !important;
+    }
+    .xh-pop{
+      width:min(1120px,100%) !important;
+      display:grid !important;
+      grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr) !important;
+      min-height:min(720px,88vh) !important;
+      max-height:92vh !important;
+    }
+    .xh-pop-media{
+      grid-column:2 !important;
+      grid-row:1 !important;
+      position:relative !important;
+      min-height:100% !important;
+      background:#0d1017 !important;
+      overflow:hidden !important;
+    }
+    .xh-pop-media img{width:100%; height:100%; min-height:520px; object-fit:cover; display:block; filter:saturate(1.04) contrast(1.03);}
+    .xh-pop-media::after{content:""; position:absolute; inset:0; background:linear-gradient(90deg,#050609 0%,rgba(5,6,9,.20) 30%,rgba(5,6,9,0) 100%); pointer-events:none;}
+    .xh-pop-content{
+      grid-column:1 !important;
+      grid-row:1 !important;
+      padding:34px !important;
+      margin:0 !important;
+      overflow:auto !important;
+      max-height:92vh !important;
+      background:#050609 !important;
+    }
+    .xh-pop p#xhPopText{font-size:17px !important; color:#d2d7e4 !important; margin:18px 0 18px !important;}
+    .xh-pop-body{color:#aeb6c7; font-size:15.5px; line-height:1.82; white-space:pre-wrap; margin-top:18px; padding-top:18px; border-top:1px solid rgba(255,255,255,.09);}
+    .xh-pop-headings{display:grid; gap:12px; margin-top:20px;}
+    .xh-pop-heading{background:#0b0d12; border:1px solid rgba(255,255,255,.10); border-radius:16px; padding:14px 16px;}
+    .xh-pop-heading b{display:block; color:#fff; font-size:17px; margin-bottom:5px;}
+    .xh-pop-heading span{display:block; color:#8993a6; font-size:13px; line-height:1.55;}
+    .xh-pop-list{margin-top:20px !important;}
+    .xh-popup-preview-mini{display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:stretch;}
+    .xh-popup-preview-mini img{width:100%; height:140px; object-fit:cover; border-radius:14px; border:1px solid rgba(255,255,255,.10);}
+    .xh-admin-box .xh-small-note{display:block; color:#7f899d; font-size:12px; line-height:1.45; margin-top:-5px; margin-bottom:10px;}
+    @media(max-width:900px){
+      .xh-pop{grid-template-columns:1fr !important; min-height:auto !important; overflow:auto !important;}
+      .xh-pop-media{grid-column:1 !important; grid-row:1 !important; min-height:240px !important;}
+      .xh-pop-media img{min-height:260px !important; height:260px !important;}
+      .xh-pop-media::after{background:linear-gradient(180deg,rgba(5,6,9,0) 0%,#050609 100%) !important;}
+      .xh-pop-content{grid-column:1 !important; grid-row:2 !important; max-height:none !important; padding:24px !important;}
+      .xh-popup-preview-mini{grid-template-columns:1fr !important;}
+    }
+    @media(max-width:620px){
+      .xh-pop-backdrop{padding:12px !important; align-items:start !important; overflow:auto !important;}
+      .xh-pop{border-radius:24px !important; max-height:none !important;}
+      .xh-pop h2{font-size:clamp(30px,10vw,46px) !important;}
+      .xh-pop-top{gap:10px !important;}
+      .xh-pop-close{width:42px; height:42px; flex:0 0 42px;}
+      .xh-pop-content{padding:20px !important;}
+    }
+
+
+    /* XH FINAL PATCH: solid MotionSites cards, no colorful mouse lighting, no card emojis */
+    .xh-event-card,
+    .xh-event-card.fx-aurora,
+    .xh-event-card.fx-ribbon,
+    .xh-event-card.fx-electric,
+    .xh-event-card.fx-sunset,
+    .xh-event-card.fx-veil,
+    .xh-event-card.fx-cosmic,
+    .xh-event-card.fx-pulse,
+    .xh-event-card.fx-dual{
+      --card-border:rgba(255,255,255,.11) !important;
+      --card-glow:transparent !important;
+      --card-bg:transparent !important;
+      background:#08090d !important;
+      border:1px solid rgba(255,255,255,.11) !important;
+      box-shadow:0 20px 44px rgba(0,0,0,.52) !important;
+      transform:none !important;
+      transition:border-color .2s ease, background .2s ease, box-shadow .2s ease !important;
+      will-change:auto !important;
+    }
+    .xh-event-card::before{
+      display:none !important;
+      content:none !important;
+      background:none !important;
+      opacity:0 !important;
+    }
+    .xh-event-card::after{
+      inset:0 !important;
+      border-radius:25px !important;
+      background:#08090d !important;
+      border:0 !important;
+      z-index:-1 !important;
+    }
+    .xh-event-card:hover{
+      transform:none !important;
+      background:#0a0c11 !important;
+      border-color:rgba(255,255,255,.18) !important;
+      box-shadow:0 22px 48px rgba(0,0,0,.58) !important;
+    }
+    .xh-img-wrap img,
+    .xh-event-card:hover .xh-img-wrap img{
+      transform:none !important;
+      filter:none !important;
+      transition:none !important;
+    }
+    .xh-date-pill i,
+    .xh-event-icon{
+      display:none !important;
+    }
+    .xh-event-meta{
+      justify-content:flex-start !important;
+    }
+    .xh-tag,
+    .xh-date-pill,
+    .xh-event-meta span{
+      box-shadow:none !important;
+    }
+
+
+    /* XH PATCH: remove hero-side card, keep clean main section, neutral dynamic cards, top-right popup close */
+    .xh-hero-grid{
+      grid-template-columns:minmax(0, 920px) !important;
+      justify-content:start !important;
+    }
+    .xh-hero-card{
+      display:none !important;
+    }
+    .xh-hero p{
+      max-width:760px !important;
+    }
+
+    .xh-event-card,
+    .xh-event-card.fx-aurora,
+    .xh-event-card.fx-ribbon,
+    .xh-event-card.fx-electric,
+    .xh-event-card.fx-sunset,
+    .xh-event-card.fx-veil,
+    .xh-event-card.fx-cosmic,
+    .xh-event-card.fx-pulse,
+    .xh-event-card.fx-dual{
+      background:#08090d !important;
+      border:1px solid rgba(255,255,255,.115) !important;
+      box-shadow:0 18px 42px rgba(0,0,0,.54) !important;
+      transform:perspective(900px) rotateX(var(--xh-rx,0deg)) rotateY(var(--xh-ry,0deg)) translateY(0) !important;
+      transition:transform .22s var(--xh-ease), border-color .22s var(--xh-ease), box-shadow .22s var(--xh-ease), background .22s var(--xh-ease) !important;
+      will-change:transform !important;
+    }
+    .xh-event-card::before{
+      display:none !important;
+      content:none !important;
+      background:none !important;
+      opacity:0 !important;
+    }
+    .xh-event-card::after{
+      inset:0 !important;
+      border-radius:25px !important;
+      background:#08090d !important;
+      border:0 !important;
+      z-index:-1 !important;
+    }
+    .xh-event-card:hover,
+    .xh-event-card.is-card-active{
+      background:#0a0b10 !important;
+      border-color:rgba(255,255,255,.18) !important;
+      box-shadow:0 24px 58px rgba(0,0,0,.66) !important;
+      transform:perspective(900px) rotateX(var(--xh-rx,0deg)) rotateY(var(--xh-ry,0deg)) translateY(-5px) !important;
+    }
+    .xh-img-wrap{
+      background:#0d0f14 !important;
+      border-color:rgba(255,255,255,.08) !important;
+    }
+    .xh-img-wrap img{
+      filter:none !important;
+      transition:transform .34s var(--xh-ease) !important;
+    }
+    .xh-event-card:hover .xh-img-wrap img,
+    .xh-event-card.is-card-active .xh-img-wrap img{
+      transform:scale(1.025) !important;
+      filter:none !important;
+    }
+    .xh-date-pill{
+      background:#050609 !important;
+      border-color:rgba(255,255,255,.13) !important;
+      box-shadow:none !important;
+    }
+    .xh-tag{
+      background:#0c0e13 !important;
+      border-color:rgba(255,255,255,.10) !important;
+      box-shadow:none !important;
+    }
+
+    .xh-pop{
+      position:relative !important;
+    }
+    .xh-pop-close{
+      position:absolute !important;
+      top:16px !important;
+      right:16px !important;
+      z-index:8 !important;
+      width:42px !important;
+      height:42px !important;
+      border-radius:50% !important;
+      background:#090b10 !important;
+      border:1px solid rgba(255,255,255,.18) !important;
+      box-shadow:0 10px 32px rgba(0,0,0,.45) !important;
+    }
+    .xh-pop-top{
+      padding-right:54px !important;
+    }
+
+    @media(max-width:820px){
+      .xh-hero-grid{grid-template-columns:1fr !important;}
+      .xh-pop-close{top:12px !important; right:12px !important;}
+    }
+
+
+    /* XH PATCH: popup editor access + black popup scroll + true top-right close */
+    .xh-pop{
+      position:relative !important;
+      overflow:hidden !important;
+    }
+    .xh-pop-content{
+      position:static !important;
+      scrollbar-width:thin;
+      scrollbar-color:#171a22 #050609;
+    }
+    .xh-pop-content::-webkit-scrollbar,
+    .xh-pop-backdrop::-webkit-scrollbar{
+      width:10px;
+      height:10px;
+    }
+    .xh-pop-content::-webkit-scrollbar-track,
+    .xh-pop-backdrop::-webkit-scrollbar-track{
+      background:#050609;
+    }
+    .xh-pop-content::-webkit-scrollbar-thumb,
+    .xh-pop-backdrop::-webkit-scrollbar-thumb{
+      background:#171a22;
+      border-radius:999px;
+      border:2px solid #050609;
+    }
+    .xh-pop-close{
+      position:absolute !important;
+      top:14px !important;
+      right:14px !important;
+      z-index:60 !important;
+      display:grid !important;
+      place-items:center !important;
+      color:#ffffff !important;
+    }
+    .xh-pop-top{padding-right:56px !important;}
+    .xh-admin-box-wide{
+      grid-column:span 3;
+    }
+    .xh-editor-grid{
+      display:grid;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .xh-editor-grid.two{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .xh-editor-grid.three{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .xh-admin-mini-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin:0 0 14px;
+    }
+    .xh-btn-soft{
+      background:#0b0d12 !important;
+      border-color:rgba(255,255,255,.14) !important;
+      box-shadow:none !important;
+    }
+    .xh-pop-editor-subtitle{
+      margin:16px 0 10px;
+      color:#ffffff;
+      font-size:13px;
+      font-weight:950;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+    }
+    .xh-pop-editor-preview .xh-preview-pop{
+      min-height:150px;
+    }
+    .xh-preview-stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:12px;}
+    .xh-preview-stat-row small{display:grid;gap:2px;background:#0b0d12;border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:8px;font-style:normal;}
+    .xh-preview-stat-row b{font-size:11px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .xh-preview-stat-row em{font-size:10px;color:#8993a6;font-style:normal;}
+    @media(max-width:1180px){
+      .xh-admin-box-wide{grid-column:span 2;}
+      .xh-editor-grid.three{grid-template-columns:repeat(2,minmax(0,1fr));}
+    }
+    @media(max-width:820px){
+      .xh-admin-box-wide{grid-column:span 1;}
+      .xh-editor-grid.two,
+      .xh-editor-grid.three,
+      .xh-admin-mini-actions{grid-template-columns:1fr;}
+      .xh-pop-close{top:10px !important; right:10px !important;}
+    }
+
+
+    /* XH FINAL ADMIN ID PATCH: card IDs, edit/delete tools, clean solid admin controls */
+    .xh-card-id{
+      position:absolute;
+      left:12px;
+      bottom:12px;
+      z-index:3;
+      padding:7px 9px;
+      border-radius:999px;
+      background:#050609;
+      color:#cfd5e6;
+      border:1px solid rgba(255,255,255,.14);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .xh-admin-status{
+      margin-top:10px;
+      min-height:18px;
+      color:#a9b2c7;
+      font-size:12px;
+      line-height:1.5;
+    }
+    .xh-admin-mini-actions .xh-btn{min-height:42px; padding:11px 12px; font-size:12px; justify-content:center;}
+    .xh-field input[readonly]{opacity:.72; cursor:not-allowed;}
+    .xh-event-card[data-card-id] .xh-event-meta{padding-right:70px;}
+
+  
+/* XH REQUEST PATCH: homepage loader, centered hero search, clean card system */
+.xh-loader{position:fixed;inset:0;background:#000;display:grid;place-items:center;z-index:9999;transition:opacity .65s var(--xh-ease),visibility .65s var(--xh-ease)}
+.xh-loader.done{opacity:0;visibility:hidden}
+.xh-load-mark{position:relative;width:min(310px,82vw);height:118px;display:grid;place-items:center;overflow:hidden}
+.xh-load-x{position:absolute;left:42px;top:6px;font-size:96px;line-height:1;font-weight:900;letter-spacing:-.12em;color:#fff;z-index:2;text-shadow:0 0 26px rgba(255,255,255,.18)}
+.xh-load-word{position:absolute;left:112px;top:45px;font-size:22px;font-weight:900;letter-spacing:.2em;color:#eee;opacity:.18;transform:none;animation:xhWordBlink 1.7s steps(2,end) infinite,xhWordSolid .22s ease 1.7s forwards;z-index:3}
+.xh-load-line{position:absolute;left:42px;bottom:10px;width:222px;height:4px;border-radius:99px;background:#161616;overflow:hidden}
+.xh-load-line::after{content:"";display:block;height:100%;width:0;background:#d8d8d8;animation:xhLoadFill 1.7s var(--xh-ease) forwards}
+@keyframes xhWordBlink{0%,100%{opacity:.16}50%{opacity:.68}}
+@keyframes xhWordSolid{to{opacity:1}}
+@keyframes xhLoadFill{to{width:100%}}
+
+.xh-topbar{display:none !important}
+.xh-hero{min-height:100vh !important;display:grid !important;place-items:center !important;text-align:center !important}
+.xh-hero::before{
+  background-image:
+    linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.66) 74%,#030408 100%),
+    linear-gradient(90deg,rgba(0,0,0,.62),rgba(0,0,0,.18),rgba(0,0,0,.62)),
+    url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=90&w=2400&auto=format&fit=crop') !important;
+  background-size:cover !important;
+  background-position:center !important;
+  filter:brightness(1.02) saturate(1.06) contrast(1.02) !important;
+}
+.xh-hero-center{position:relative;z-index:2;width:min(980px,calc(100% - 36px));padding:100px 0 78px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:auto}
+.xh-hero-center .xh-kicker{display:none !important}
+.xh-hero-center .xh-title{margin:0 auto;font-size:clamp(42px,7.5vw,96px);line-height:.9;text-align:center;max-width:900px}
+.xh-hero-center p{max-width:760px;margin:20px auto 0;text-align:center;color:#d7d7d7}
+.xh-search-wrap{width:min(640px,100%);position:relative;margin:0 auto 30px}
+.xh-search{display:flex;align-items:center;gap:8px;background:rgba(6,6,6,.88);border-radius:16px;padding:8px;box-shadow:0 18px 70px rgba(0,0,0,.5)}
+.xh-search input{flex:1;min-width:0;height:48px;border-radius:12px;background:#000;color:#fff;padding:0 16px;font-size:14px;border:0;outline:0}
+.xh-search button{min-height:48px;border-radius:12px;background:#fff;color:#000;padding:0 22px;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;border:0;outline:0}
+.xh-search button:disabled{opacity:.68;cursor:default}
+.xh-results{display:none;position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:20;background:#070707;border-radius:14px;padding:8px;text-align:left;max-height:320px;overflow:auto;box-shadow:0 22px 60px rgba(0,0,0,.48)}
+.xh-results.show{display:block}
+.xh-result-item{display:block;width:100%;padding:12px;border-radius:10px;background:#111;margin-bottom:6px;color:#fff;text-align:left;border:0}
+.xh-result-item:last-child{margin-bottom:0}
+.xh-result-item strong{display:block;font-size:13px}
+.xh-result-item span{display:block;font-size:12px;color:#b8b8b8;margin-top:3px}
+.xh-hero-actions{justify-content:center}
+.xh-hero-card{display:none !important}
+.xh-hero-grid{display:block !important;padding:0 !important}
+
+.xh-decade-row{grid-template-columns:1fr !important;gap:10px !important}
+.xh-decade-marker{justify-content:flex-start !important;padding:0 !important;margin:0 0 -2px !important}
+.xh-decade-circle{
+  position:relative !important;top:auto !important;width:auto !important;height:auto !important;min-width:0 !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+  padding:8px 15px !important;border-radius:999px !important;font-size:12px !important;line-height:1 !important;
+  white-space:nowrap !important;letter-spacing:.06em !important;text-transform:uppercase !important;
+  background:#0b0b0b !important;border:0 !important;box-shadow:none !important;color:#fff !important
+}
+.xh-decade-shell{background:#080808 !important;border:0 !important;box-shadow:none !important}
+.xh-decade-toolbar{top:18px !important;right:18px !important}
+.xh-collapse-btn{border:0 !important;background:#fff !important;color:#000 !important;border-radius:999px !important;padding:9px 16px !important;font-size:12px !important}
+.xh-row-cards{grid-template-columns:repeat(auto-fit,minmax(230px,1fr)) !important;gap:14px !important}
+.xh-event-card{
+  background:#111 !important;border:0 !important;box-shadow:none !important;padding:0 !important;border-radius:22px !important;
+  transform:none !important;transition:transform .25s var(--xh-ease),background .25s var(--xh-ease) !important
+}
+.xh-event-card::before,.xh-event-card::after{display:none !important}
+.xh-event-card:hover,.xh-event-card.is-card-active{transform:translateY(-5px) !important;box-shadow:none !important;background:#151515 !important}
+.xh-img-wrap{background:#080808 !important;border:0 !important;margin:12px 12px 0 !important;border-radius:16px !important}
+.xh-date-pill{top:12px !important;left:12px !important;padding:6px 9px !important;font-size:10px !important;border:0 !important;background:rgba(0,0,0,.78) !important}
+.xh-date-pill i{display:none !important}
+.xh-card-id{border:0 !important;background:#050505 !important}
+.xh-event-icon,.xh-tag,.xh-pop,.xh-pop-stat,.xh-admin-box,.xh-field input,.xh-field select,.xh-field textarea,.xh-preview{border:0 !important;box-shadow:none !important}
+.xh-tab{border:0 !important;background:#111 !important}
+.xh-tab.is-active{background:#fff !important;color:#000 !important}
+.xh-era-tabs-wrap{top:0 !important;border:0 !important}
+.xh-section-desc{color:#b8b8b8}
+@media(max-width:720px){
+  .xh-hero-center{padding:96px 0 64px}
+  .xh-search{flex-direction:column;align-items:stretch}
+  .xh-search input,.xh-search button{width:100%}
+  .xh-row-cards{grid-template-columns:1fr !important}
+}
+
+  
+
+/* XH USER FINAL SMALL FIX: light-black cards/popups, clean heading, matching buttons, lowered popup */
+:root{
+  --xh-light-black:#141414;
+  --xh-light-black-2:#181818;
+  --xh-pure-black:#000000;
+  --xh-soft-black:#0b0b0b;
+}
+body,
+.xh-page{
+  background:#000 !important;
+}
+.xh-hero,
+.xh-section,
+.xh-era-tabs-wrap{
+  border:0 !important;
+  box-shadow:none !important;
+}
+.xh-hero::after,
+.xh-section-head::after,
+.xh-section-title::after,
+.xh-title::after,
+.xh-title strong::after{
+  content:none !important;
+  display:none !important;
+}
+.xh-hero-center .xh-title,
+.xh-hero-center .xh-title strong,
+.xh-section-title span{
+  background:none !important;
+  -webkit-background-clip:initial !important;
+  background-clip:initial !important;
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  text-shadow:none !important;
+}
+.xh-hero-center .xh-title{
+  letter-spacing:-.035em !important;
+}
+.xh-hero-actions .xh-btn,
+.xh-search button,
+.xh-collapse-btn,
+.xh-admin .xh-btn,
+.xh-small-btn{
+  min-height:48px !important;
+  border-radius:12px !important;
+  background:#ffffff !important;
+  color:#000000 !important;
+  border:0 !important;
+  box-shadow:none !important;
+  background-image:none !important;
+  padding:0 22px !important;
+  font-size:12px !important;
+  font-weight:900 !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+}
+.xh-hero-actions .xh-btn:hover,
+.xh-search button:hover,
+.xh-collapse-btn:hover,
+.xh-admin .xh-btn:hover,
+.xh-small-btn:hover{
+  background:#e7e7e7 !important;
+  color:#000 !important;
+  transform:none !important;
+  box-shadow:none !important;
+}
+.xh-btn.is-ghost,
+.xh-btn-soft,
+.xh-admin-mini-actions .xh-btn-soft{
+  background:#141414 !important;
+  color:#ffffff !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.xh-search,
+.xh-results,
+.xh-result-item,
+.xh-tab,
+.xh-decade-shell,
+.xh-img-wrap,
+.xh-tag,
+.xh-date-pill,
+.xh-card-id{
+  background:#141414 !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.xh-result-item,
+.xh-tab.is-active{
+  background:#181818 !important;
+  color:#ffffff !important;
+}
+.xh-tab.is-active{
+  outline:0 !important;
+}
+.xh-event-card,
+.xh-event-card.fx-aurora,
+.xh-event-card.fx-ribbon,
+.xh-event-card.fx-electric,
+.xh-event-card.fx-sunset,
+.xh-event-card.fx-veil,
+.xh-event-card.fx-cosmic,
+.xh-event-card.fx-pulse,
+.xh-event-card.fx-dual{
+  background:#141414 !important;
+  border:0 !important;
+  box-shadow:none !important;
+  background-image:none !important;
+}
+.xh-event-card:hover,
+.xh-event-card.is-card-active{
+  background:#191919 !important;
+  border:0 !important;
+  box-shadow:none !important;
+  transform:translateY(-4px) !important;
+}
+.xh-event-card::before,
+.xh-event-card::after{
+  display:none !important;
+  content:none !important;
+}
+.xh-event-card p,
+.xh-event-meta,
+.xh-section-desc{
+  color:#c9c9c9 !important;
+}
+.xh-pop-backdrop.is-open{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:center !important;
+  padding:96px 20px 28px !important;
+  overflow:auto !important;
+}
+.xh-pop{
+  background:#141414 !important;
+  border:0 !important;
+  box-shadow:0 26px 80px rgba(0,0,0,.72) !important;
+  max-height:calc(100vh - 124px) !important;
+}
+.xh-pop-content,
+.xh-pop-media,
+.xh-pop-stat,
+.xh-pop-heading,
+.xh-pop-body,
+.xh-pop-date,
+.xh-pop-close,
+.xh-admin-box,
+.xh-preview,
+.xh-field input,
+.xh-field select,
+.xh-field textarea{
+  background:#141414 !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.xh-pop-media::after{
+  background:linear-gradient(90deg,#141414 0%,rgba(20,20,20,.18) 34%,rgba(20,20,20,0) 100%) !important;
+}
+.xh-pop p#xhPopText,
+.xh-pop-body,
+.xh-pop-heading span,
+.xh-pop-stat span{
+  color:#c9c9c9 !important;
+}
+.xh-pop-body{
+  border-top:0 !important;
+  padding-top:8px !important;
+}
+.xh-pop-close{
+  background:#1b1b1b !important;
+  color:#fff !important;
+}
+@media(max-width:900px){
+  .xh-pop-backdrop.is-open{
+    padding-top:76px !important;
+  }
+  .xh-pop{
+    max-height:none !important;
+  }
+  .xh-pop-media::after{
+    background:linear-gradient(180deg,rgba(20,20,20,0) 0%,#141414 100%) !important;
+  }
+}
+@media(max-width:720px){
+  .xh-hero-actions .xh-btn,
+  .xh-search button{
+    width:100% !important;
+  }
+  .xh-pop-backdrop.is-open{
+    padding:68px 12px 18px !important;
+  }
+}
+
+  
+
+/* XH FINAL ONLY FIX: dark black cards-section background */
+#xhTimeline,
+#xhTimeline.xh-section,
+#xhTimeline .xh-timeline,
+#xhTimeline .xh-decade-shell,
+#xhTimeline .xh-row-cards{
+  background:#000000 !important;
+  background-image:none !important;
+}
+#xhTimeline .xh-event-card{
+  background:#141414 !important;
+}
+#xhTimeline .xh-event-card:hover,
+#xhTimeline .xh-event-card.is-card-active{
+  background:#191919 !important;
+}
+
+
+/* XH ODOO SAFE FIX: prevent Odoo/narrow containers from clipping timeline rows/cards */
+#xhTimelinePage,
+#xhTimelinePage main,
+#xhTimelinePage .xh-page,
+#xhTimelinePage .xh-section,
+#xhTimelinePage .xh-timeline,
+#xhTimelinePage .xh-decade-row,
+#xhTimelinePage .xh-decade-shell,
+#xhTimelinePage .xh-row-cards{
+  height:auto !important;
+  max-height:none !important;
+  min-height:0 !important;
+  overflow:visible !important;
+  clip-path:none !important;
+  contain:none !important;
+}
+#xhTimelinePage .xh-decade-shell{
+  padding-bottom:28px !important;
+}
+#xhTimelinePage .xh-row-cards{
+  align-items:stretch !important;
+  grid-auto-rows:auto !important;
+  padding-bottom:78px !important;
+}
+#xhTimelinePage .xh-decade-row.is-hidden .xh-decade-shell{
+  min-height:94px !important;
+  overflow:hidden !important;
+  padding-bottom:0 !important;
+}
+#xhTimelinePage .xh-decade-row.is-hidden .xh-row-cards,
+#xhTimelinePage .xh-decade-row.is-hidden .xh-wave-bottom,
+#xhTimelinePage .xh-decade-row.is-hidden .xh-decade-title,
+#xhTimelinePage .xh-decade-row.is-hidden .xh-decade-count{
+  display:none !important;
+}
+#xhTimelinePage .xh-decade-row[style*="display: none"]{
+  display:grid !important;
+}
+#xhTimelinePage .xh-event-card[style*="display: none"]{
+  display:block !important;
+}
+#xhTimelinePage .xh-event-card.xh-filter-hidden,
+#xhTimelinePage .xh-decade-row.xh-filter-hidden{
+  display:none !important;
+}
+
+
+body:has(#xhTimelinePage) .oe_structure,
+body:has(#xhTimelinePage) .o_website_page,
+body:has(#xhTimelinePage) .o_editable,
+body:has(#xhTimelinePage) .o_colored_level,
+body:has(#xhTimelinePage) .s_text_block,
+body:has(#xhTimelinePage) .s_embed_code,
+body:has(#xhTimelinePage) .container,
+body:has(#xhTimelinePage) .container-fluid{
+  height:auto !important;
+  max-height:none !important;
+  overflow:visible !important;
+}
+
+/* XH SEARCH FIX: transparent joined search input/button and transparent suggestions */
+#xhTimelinePage .xh-search-wrap{
+  width:min(680px,100%) !important;
+}
+#xhTimelinePage .xh-search{
+  display:flex !important;
+  align-items:center !important;
+  gap:0 !important;
+  padding:0 !important;
+  border-radius:16px !important;
+  background:rgba(20,20,20,.34) !important;
+  box-shadow:none !important;
+  backdrop-filter:blur(16px) !important;
+  -webkit-backdrop-filter:blur(16px) !important;
+  overflow:hidden !important;
+}
+#xhTimelinePage .xh-search input{
+  height:52px !important;
+  border-radius:16px 0 0 16px !important;
+  background:rgba(0,0,0,.18) !important;
+  color:#fff !important;
+  border:0 !important;
+  outline:0 !important;
+}
+#xhTimelinePage .xh-search input::placeholder{
+  color:rgba(255,255,255,.68) !important;
+}
+#xhTimelinePage .xh-search button{
+  height:52px !important;
+  min-height:52px !important;
+  border-radius:0 16px 16px 0 !important;
+  margin:0 !important;
+  background:rgba(255,255,255,.92) !important;
+  color:#000 !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+#xhTimelinePage .xh-results{
+  background:rgba(20,20,20,.42) !important;
+  backdrop-filter:blur(16px) !important;
+  -webkit-backdrop-filter:blur(16px) !important;
+  border:0 !important;
+  box-shadow:0 20px 70px rgba(0,0,0,.45) !important;
+}
+#xhTimelinePage .xh-result-item{
+  background:rgba(255,255,255,.07) !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+#xhTimelinePage .xh-result-item:hover{
+  background:rgba(255,255,255,.12) !important;
+}
+
+/* XH ADMIN THEME FIX: solid, readable, compact, and editor-friendly */
+#xhTimelinePage .xh-admin{
+  background:#000 !important;
+  color:#fff !important;
+  overflow:visible !important;
+}
+#xhTimelinePage .xh-admin-grid{
+  align-items:start !important;
+}
+#xhTimelinePage .xh-admin-box{
+  background:#141414 !important;
+  border:0 !important;
+  box-shadow:none !important;
+  border-radius:24px !important;
+  padding:22px !important;
+  overflow:visible !important;
+}
+#xhTimelinePage .xh-admin-box h3{
+  color:#fff !important;
+  margin-bottom:8px !important;
+}
+#xhTimelinePage .xh-admin-box p,
+#xhTimelinePage .xh-admin-status,
+#xhTimelinePage .xh-small-note{
+  color:#c9c9c9 !important;
+}
+#xhTimelinePage .xh-field label{
+  color:#e7e7e7 !important;
+}
+#xhTimelinePage .xh-field input,
+#xhTimelinePage .xh-field select,
+#xhTimelinePage .xh-field textarea{
+  background:#0b0b0b !important;
+  color:#fff !important;
+  border:0 !important;
+  box-shadow:none !important;
+  outline:0 !important;
+}
+#xhTimelinePage .xh-field input:focus,
+#xhTimelinePage .xh-field select:focus,
+#xhTimelinePage .xh-field textarea:focus{
+  background:#101010 !important;
+  box-shadow:0 0 0 2px rgba(255,255,255,.12) !important;
+}
+#xhTimelinePage .xh-admin-mini-actions{
+  gap:10px !important;
+}
+#xhTimelinePage .xh-admin .xh-btn,
+#xhTimelinePage .xh-admin .xh-btn-soft{
+  border:0 !important;
+  box-shadow:none !important;
+  border-radius:12px !important;
+}
+#xhTimelinePage .xh-admin .xh-btn:not(.xh-btn-soft){
+  background:#fff !important;
+  color:#000 !important;
+}
+#xhTimelinePage .xh-admin .xh-btn-soft{
+  background:#202020 !important;
+  color:#fff !important;
+}
+#xhTimelinePage .xh-preview,
+#xhTimelinePage .xh-preview-pop,
+#xhTimelinePage .xh-preview-stat-row small{
+  background:#0b0b0b !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+#xhTimelinePage .xh-pop-editor-subtitle{
+  color:#fff !important;
+}
+@media(max-width:720px){
+  #xhTimelinePage .xh-search{
+    flex-direction:row !important;
+  }
+  #xhTimelinePage .xh-search input{
+    width:auto !important;
+    min-width:0 !important;
+  }
+  #xhTimelinePage .xh-search button{
+    width:auto !important;
+    flex:0 0 auto !important;
+    padding-inline:16px !important;
+  }
+}
+
+  </style>
+
+
+<div class="xh-loader" id="xhLoader" aria-hidden="true"><div class="xh-load-mark"><div class="xh-load-x">X</div><div class="xh-load-word">HORIZON</div><div class="xh-load-line"></div></div></div><script>(function(){function done(){var l=document.getElementById("xhLoader");if(l)l.classList.add("done")}document.addEventListener("DOMContentLoaded",function(){setTimeout(done,1900)});setTimeout(done,3200)})();</script>
+
+<div class="xh-page" id="xhTimelinePage">
+  <svg width="0" height="0" style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+    <defs>
+      <linearGradient id="xhMainGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#13e7ff"></stop>
+        <stop offset="34%" stop-color="#4a72ff"></stop>
+        <stop offset="66%" stop-color="#8d42ff"></stop>
+        <stop offset="100%" stop-color="#ff3ecf"></stop>
+      </linearGradient>
+    </defs>
+  </svg>
+<main>
+    <section class="xh-hero" id="xhHero">
+      <div class="xh-wrap xh-hero-center">
+        <div class="xh-search-wrap">
+          <div class="xh-search">
+            <input id="xhSearchBox" type="search" autocomplete="off" placeholder="Search timeline or enter admin key..." aria-label="Search timeline">
+            <button id="xhSearchButton" type="button">Search</button>
+          </div>
+          <div class="xh-results" id="xhSearchResults" aria-live="polite"></div>
+        </div>
+        <div class="xh-kicker">Silky Space History</div>
+        <h1 class="xh-title"><strong>Space Exploration Timeline</strong></h1>
+        <p>Decade waves hold the journey of rockets, satellites, human spaceflight, planetary probes, observatories, private missions, lunar landers, and the next crewed lunar era up to 2026.</p>
+        <div class="xh-hero-actions">
+          <a class="xh-btn" href="#xhTimeline">Explore timeline <span>→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <div class="xh-era-tabs-wrap">
+      <div class="xh-wrap">
+        <div class="xh-era-tabs" id="xhEraTabs" aria-label="Horizontal decade tabs"></div>
+      </div>
+    </div>
+
+    <section class="xh-section" id="xhTimeline">
+      <div class="xh-wrap">
+        <div class="xh-section-head">
+          <div>
+            <h2 class="xh-section-title"><span>Timeline Waves</span></h2>
+            <p class="xh-section-desc">Each 10-year row uses a compact date pill. Use Show/Hide to open or close a row while keeping the timeline clean and centered.</p>
+          </div>
+        </div>
+        <div class="xh-timeline" id="xhTimelineRows"></div>
+      </div>
+    </section>
+
+    <section class="xh-admin" id="xhAdminPanel">
+      <div class="xh-wrap">
+        <div class="xh-section-head">
+          <div>
+            <h2 class="xh-section-title"><span>Hidden Admin Panel</span></h2>
+            <p class="xh-section-desc">Unlocked from the search bar only. Admin can now add, edit, delete, and link popup content by card ID.</p>
+          </div>
+        </div>
+        <div class="xh-admin-grid">
+          <article class="xh-admin-box">
+            <h3>1. Time Line</h3>
+            <p>Add, edit, or delete straight-gradient decade lines.</p>
+            <div class="xh-field"><label for="lineTarget">Select existing line</label><select id="lineTarget"></select></div>
+            <div class="xh-admin-mini-actions">
+              <button class="xh-btn xh-btn-soft" id="loadLineBtn" type="button">Load line</button>
+              <button class="xh-btn xh-btn-soft" id="deleteLineBtn" type="button">Delete line</button>
+            </div>
+            <div class="xh-field"><label for="newEraDate">10-year date</label><input id="newEraDate" placeholder="Example: 2030–2040"></div>
+            <div class="xh-field"><label for="newEraLabel">Line heading</label><input id="newEraLabel" placeholder="Example: Lunar Bases &amp; Mars Prep"></div>
+            <div class="xh-admin-mini-actions">
+              <button class="xh-btn" id="addLineBtn" type="button">Insert new line</button>
+              <button class="xh-btn" id="saveLineBtn" type="button">Save line changes</button>
+            </div>
+            <span class="xh-small-note">Deleting a line also removes its related cards and popup links.</span>
+            <div class="xh-field"><label for="waveSpeed">Line motion</label><select id="waveSpeed"><option value="0">Static</option><option value="14">Soft motion</option><option value="8">Fast preview</option></select></div>
+            <div class="xh-field"><label for="waveMode">Line mode</label><select id="waveMode"><option value="normal">Normal flow</option><option value="reverse">Reverse flow</option></select></div>
+            <button class="xh-btn" id="applyWaveBtn" type="button">Apply line preview</button>
+            <div class="xh-preview xh-preview-wave" id="wavePreview"></div>
+          </article>
+
+          <article class="xh-admin-box">
+            <h3>2. Card</h3>
+            <p>Add, load, edit, or delete cards. Every card has a unique numeric ID.</p>
+            <div class="xh-field"><label for="cardEditSelect">Select card to edit/delete</label><select id="cardEditSelect"></select></div>
+            <div class="xh-admin-mini-actions">
+              <button class="xh-btn xh-btn-soft" id="loadCardBtn" type="button">Load card</button>
+              <button class="xh-btn xh-btn-soft" id="deleteCardBtn" type="button">Delete card</button>
+            </div>
+            <div class="xh-editor-grid two">
+              <div class="xh-field"><label for="cardIdInput">Card ID number</label><input id="cardIdInput" placeholder="Auto ID"></div>
+              <div class="xh-field"><label for="cardEra">Select decade row</label><select id="cardEra"></select></div>
+            </div>
+            <div class="xh-admin-mini-actions">
+              <button class="xh-btn xh-btn-soft" id="newCardIdBtn" type="button">Generate new ID</button>
+              <button class="xh-btn" id="saveCardBtn" type="button">Save card changes</button>
+            </div>
+            <div class="xh-editor-grid two">
+              <div class="xh-field"><label for="cardDate">Card date</label><input id="cardDate" placeholder="Example: 1957"></div>
+              <div class="xh-field"><label for="cardType">Card category</label><input id="cardType" placeholder="Example: Satellite"></div>
+            </div>
+            <div class="xh-field"><label for="cardTitle">Card title</label><input id="cardTitle" placeholder="Example: Sputnik 1"></div>
+            <div class="xh-field"><label for="cardDesc">Card short description</label><textarea id="cardDesc" placeholder="Short mission/event detail"></textarea></div>
+            <div class="xh-editor-grid two">
+              <div class="xh-field"><label for="cardStatus">Card status</label><input id="cardStatus" placeholder="Example: Historic"></div>
+              <div class="xh-field"><label for="cardFx">Card style</label><select id="cardFx"><option value="fx-aurora">Solid black</option><option value="fx-ribbon">Solid black</option><option value="fx-electric">Solid black</option><option value="fx-sunset">Solid black</option><option value="fx-veil">Solid black</option><option value="fx-cosmic">Solid black</option><option value="fx-pulse">Solid black</option><option value="fx-dual">Solid black</option></select></div>
+            </div>
+            <div class="xh-field"><label for="cardImageUrl">Card image URL</label><input id="cardImageUrl" placeholder="https://..."></div>
+            <div class="xh-field"><label for="cardPopImageUrl">Linked popup image URL</label><input id="cardPopImageUrl" placeholder="https://... optional"></div>
+            <div class="xh-field"><label for="cardPopHeadings">Linked popup section headings</label><textarea id="cardPopHeadings" placeholder="Write one heading per line. Optional."></textarea></div>
+            <div class="xh-field"><label for="cardPopBody">Linked popup body text</label><textarea id="cardPopBody" placeholder="Optional long popup text linked to this card"></textarea></div>
+            <button class="xh-btn" id="addCardBtn" type="button">Add card to row</button>
+            <div class="xh-preview"><div class="xh-preview-card" id="cardPreview"></div></div>
+          </article>
+
+          <article class="xh-admin-box xh-admin-box-wide">
+            <h3>3. Detail Pop Editor</h3>
+            <p>Link popup content by card ID. Type a card ID, load it, edit popup content, then save it to that card.</p>
+
+            <div class="xh-editor-grid two">
+              <div class="xh-field"><label for="popCardId">Card ID to link popup</label><input id="popCardId" placeholder="Example: 1001"></div>
+              <div class="xh-field"><label for="popTargetCard">Or select card</label><select id="popTargetCard"></select></div>
+            </div>
+            <div class="xh-admin-mini-actions">
+              <button class="xh-btn xh-btn-soft" id="loadPopBtn" type="button">Load popup by ID</button>
+              <button class="xh-btn" id="savePopBtn" type="button">Save popup to ID</button>
+            </div>
+            <div class="xh-admin-mini-actions">
+              <button class="xh-btn xh-btn-soft" id="openLinkedPopBtn" type="button">Open linked popup</button>
+              <button class="xh-btn xh-btn-soft" id="deletePopBtn" type="button">Delete popup content</button>
+            </div>
+
+            <div class="xh-editor-grid two">
+              <div class="xh-field"><label for="popDate">Popup date</label><input id="popDate" value="Preview"></div>
+              <div class="xh-field"><label for="popTitle">Popup main heading</label><input id="popTitle" value="Mission Detail"></div>
+            </div>
+
+            <div class="xh-field"><label for="popImageUrl">Popup right-side image URL</label><input id="popImageUrl" placeholder="https://..."></div>
+            <div class="xh-field"><label for="popText">Popup short description</label><textarea id="popText">A clean black popup with a right-side image, clear heading, compact description, multiple headings, and a large body section.</textarea></div>
+
+            <div class="xh-pop-editor-subtitle">Three preview grid inside popup</div>
+            <div class="xh-editor-grid three">
+              <div class="xh-field"><label for="popStatOneValue">Grid 1 value</label><input id="popStatOneValue" value="Timeline wave"></div>
+              <div class="xh-field"><label for="popStatTwoValue">Grid 2 value</label><input id="popStatTwoValue" value="Category"></div>
+              <div class="xh-field"><label for="popStatThreeValue">Grid 3 value</label><input id="popStatThreeValue" value="Status"></div>
+              <div class="xh-field"><label for="popStatOneLabel">Grid 1 label</label><input id="popStatOneLabel" value="Timeline wave"></div>
+              <div class="xh-field"><label for="popStatTwoLabel">Grid 2 label</label><input id="popStatTwoLabel" value="Category"></div>
+              <div class="xh-field"><label for="popStatThreeLabel">Grid 3 label</label><input id="popStatThreeLabel" value="Status"></div>
+            </div>
+
+            <div class="xh-field"><label for="popHeadings">Popup section headings</label><textarea id="popHeadings" placeholder="Write one heading per line">Mission Context
+Technology Impact
+Why It Matters</textarea></div>
+            <div class="xh-field"><label for="popHeadingDetails">Popup heading descriptions</label><textarea id="popHeadingDetails" placeholder="Optional: write one small description per line, matching each heading">Focused mission information and background.
+Technology, engineering, and system impact.
+Why this event matters in space history.</textarea></div>
+            <div class="xh-field"><label for="popBody">Popup large body text</label><textarea id="popBody">Write the full detailed story here. This section supports longer paragraphs, mission context, achievements, science return, technical importance, and future impact.</textarea></div>
+
+            <button class="xh-btn" id="previewPopBtn" type="button">Preview popup</button>
+            <div class="xh-preview xh-pop-editor-preview"><div class="xh-preview-pop" id="popPreview"><h4>Mission Detail</h4><span>A rich black popup preview with image and long content support.</span></div></div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="xh-footer">
+    <div class="xh-wrap">X Horizon timeline system — straight gradient rows, solid dynamic cards, horizontal tabs, hidden admin preview.</div>
+  </footer>
+</div>
+
+<div class="xh-pop-backdrop" id="xhPopBackdrop" role="dialog" aria-modal="true" aria-labelledby="xhPopTitle">
+  <article class="xh-pop">
+    <div class="xh-pop-content">
+      <div class="xh-pop-top">
+        <div>
+          <div class="xh-pop-date" id="xhPopDate">1957</div>
+          <h2 id="xhPopTitle">Event title</h2>
+        </div>
+        <button class="xh-pop-close" id="xhPopClose" type="button" aria-label="Close popup">×</button>
+      </div>
+      <p id="xhPopText"></p>
+      <div class="xh-pop-list">
+        <div class="xh-pop-stat"><b id="xhPopEra">1950–1960</b><span>Timeline wave</span></div>
+        <div class="xh-pop-stat"><b id="xhPopType">Mission</b><span>Category</span></div>
+        <div class="xh-pop-stat"><b id="xhPopStatus">Historic</b><span>Status</span></div>
+      </div>
+      <div class="xh-pop-headings" id="xhPopHeadings"></div>
+      <div class="xh-pop-body" id="xhPopBody"></div>
+    </div>
+    <div class="xh-pop-media"><img id="xhPopImage" alt="Timeline event visual" loading="lazy"></div>
+  </article>
+</div>
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+const fallbackFirebaseConfig = {
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+const firebaseConfig = window.XHORIZON_FIREBASE_CONFIG || window.XHorizonFirebaseConfig || fallbackFirebaseConfig;
+function configured(cfg){ return cfg && cfg.apiKey && !String(cfg.apiKey).includes("YOUR_") && cfg.projectId && !String(cfg.projectId).includes("YOUR_"); }
+let app=null, auth=null, functions=null;
+try{ if(configured(firebaseConfig)){ app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig); auth = getAuth(app); functions = getFunctions(app); } }catch(error){ console.error("Firebase initialization failed:", error); }
+if(configured(firebaseConfig) && !window.XHorizonAdmin){
+  window.XHorizonAdmin = {
+    async unlock(key, done){
+      const cleanKey = String(key || "").trim();
+      if(!cleanKey || !auth || !functions) return false;
+      try{
+        const verifyAdminKey = httpsCallable(functions, "verifyAdminKey");
+        const result = await verifyAdminKey({ key: cleanKey });
+        const data = result && result.data ? result.data : {};
+        const customToken = data.token || data.customToken || data.firebaseToken || "";
+        if(customToken) await signInWithCustomToken(auth, customToken);
+        const user = auth.currentUser;
+        if(!user) return false;
+        const tokenResult = await user.getIdTokenResult(true);
+        const allowed = tokenResult && tokenResult.claims && tokenResult.claims.admin === true;
+        if(allowed){ document.body.classList.add("editor-on"); if(typeof done === "function") done(); return true; }
+        return false;
+      }catch(error){ console.error("X Horizon unlock failed:", error); return false; }
+    }
+  };
+}
+if(auth){ onAuthStateChanged(auth, async function(user){ if(!user) return; try{ const tokenResult = await user.getIdTokenResult(true); if(tokenResult && tokenResult.claims && tokenResult.claims.admin === true) document.body.classList.add("editor-on"); }catch(error){ console.error("State check failed:", error); } }); }
+</script>
+<script>
+(function(){
+  'use strict';
+
+  const FALLBACK_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#13e7ff"/><stop offset=".52" stop-color="#8d42ff"/><stop offset="1" stop-color="#ff3ecf"/></linearGradient></defs><rect width="900" height="520" fill="#070911"/><circle cx="675" cy="160" r="150" fill="url(#g)" opacity=".34"/><path d="M0 398 C150 290 245 390 380 302 S650 270 900 148" fill="none" stroke="url(#g)" stroke-width="18" opacity=".65"/><text x="48" y="448" fill="#ffffff" font-family="Arial" font-size="42" font-weight="700">X Horizon</text></svg>`);
+
+  const imagePool = [
+    'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=900&q=80',
+    'https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?auto=format&fit=crop&w=900&q=80',
+    'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=900&q=80',
+    'https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45?auto=format&fit=crop&w=900&q=80',
+    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80',
+    'https://images.unsplash.com/photo-1543722530-d2c3201371e7?auto=format&fit=crop&w=900&q=80',
+    'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=900&q=80',
+    'https://images.unsplash.com/photo-1454789548928-9efd52dc4031?auto=format&fit=crop&w=900&q=80'
+  ];
+  const fxClasses = ['fx-aurora','fx-ribbon','fx-electric','fx-sunset','fx-veil','fx-cosmic','fx-pulse','fx-dual'];
+
+  const initialTimelineData = [
+    {era:"1920–1930", label:"Modern Rocketry Begins", events:[
+      {date:"1926", title:"Goddard Liquid Rocket", type:"Rocketry", status:"Historic", fx:"fx-aurora", image:imagePool[0], desc:"Robert H. Goddard launched the first liquid-fueled rocket, proving a core launch technology.", details:"Goddard’s 1926 flight was small, but it introduced the liquid propellant architecture that later powered major launch vehicles."},
+      {date:"1929", title:"Oberth Rocket Research", type:"Rocket Theory", status:"Historic", fx:"fx-ribbon", image:imagePool[1], desc:"European rocketry research accelerated with stronger mathematical and engineering foundations.", details:"Hermann Oberth and early rocketry societies helped turn spaceflight from fiction into an engineering discipline."}
+    ]},
+    {era:"1930–1940", label:"Rocket Societies & High-Altitude Dreams", events:[
+      {date:"1931", title:"German Rocket Society Tests", type:"Rocketry", status:"Historic", fx:"fx-electric", image:imagePool[2], desc:"Rocket societies tested engines and shaped early launch-vehicle thinking.", details:"Pre-war rocketry groups experimented with propulsion, stability, and test procedures that influenced later vehicle programs."},
+      {date:"1935", title:"Early Gyro Guidance", type:"Guidance", status:"Historic", fx:"fx-sunset", image:imagePool[3], desc:"Guidance and stabilization research matured for high-speed rockets.", details:"Autopilot, gyroscope, and steering research became essential for controlled high-altitude rockets."}
+    ]},
+    {era:"1940–1950", label:"First Machines Reach Space", events:[
+      {date:"1942", title:"V-2 First Space-Capable Rocket", type:"Rocketry", status:"Historic", fx:"fx-veil", image:imagePool[4], desc:"The V-2 became the first human-made object to cross the edge of space during test flights.", details:"Although built as a weapon, the V-2’s propulsion and high-altitude performance heavily influenced postwar scientific rocketry."},
+      {date:"1946", title:"First Photos From Space", type:"Imaging", status:"Historic", fx:"fx-cosmic", image:imagePool[5], desc:"A captured V-2 carried a camera high enough to photograph Earth from space-like altitude.", details:"High-altitude images changed how Earth could be studied from above."},
+      {date:"1947", title:"First Animals in Space", type:"Biology", status:"Historic", fx:"fx-pulse", image:imagePool[6], desc:"Fruit flies flew on a V-2 mission to study radiation exposure beyond the lower atmosphere.", details:"Biology payloads began the long path toward understanding life support and spaceflight effects."}
+    ]},
+    {era:"1950–1960", label:"Dawn of the Space Age", events:[
+      {date:"1957", title:"Sputnik 1", type:"Satellite", status:"Historic", fx:"fx-dual", image:imagePool[7], desc:"The first artificial satellite entered orbit and began the modern Space Age.", details:"Sputnik 1 proved that human-made machines could operate in Earth orbit and accelerated national space programs worldwide."},
+      {date:"1957", title:"Laika on Sputnik 2", type:"Biology", status:"Historic", fx:"fx-aurora", image:imagePool[0], desc:"Laika became the first living creature to orbit Earth.", details:"The mission provided early biological data for future human spaceflight, though it also became a lasting ethical landmark."},
+      {date:"1958", title:"Explorer 1", type:"Satellite", status:"Historic", fx:"fx-ribbon", image:imagePool[1], desc:"America’s first satellite discovered the Van Allen radiation belts.", details:"Explorer 1 carried scientific instrumentation into orbit and returned data that transformed near-Earth space science."},
+      {date:"1958", title:"NASA Founded", type:"Space Agency", status:"Historic", fx:"fx-electric", image:imagePool[2], desc:"NASA was created to lead civilian space exploration and aeronautics research.", details:"The agency became central to crewed spaceflight, planetary missions, observatories, and space technology."},
+      {date:"1959", title:"Luna 1", type:"Moon Probe", status:"Historic", fx:"fx-sunset", image:imagePool[3], desc:"Luna 1 became the first spacecraft to escape Earth’s gravity and pass near the Moon.", details:"It opened the robotic lunar exploration era."},
+      {date:"1959", title:"Luna 2", type:"Moon Probe", status:"Historic", fx:"fx-veil", image:imagePool[4], desc:"The first spacecraft impacted another celestial body: the Moon.", details:"Luna 2 proved direct Earth-to-Moon trajectories were possible."},
+      {date:"1959", title:"Luna 3", type:"Lunar Imaging", status:"Historic", fx:"fx-cosmic", image:imagePool[5], desc:"Luna 3 returned the first images of the Moon’s far side.", details:"Humanity saw a hidden lunar hemisphere for the first time."}
+    ]},
+    {era:"1960–1970", label:"Human Spaceflight & Lunar Victory", events:[
+      {date:"1960", title:"TIROS-1", type:"Weather Satellite", status:"Historic", fx:"fx-pulse", image:imagePool[6], desc:"The first successful weather satellite began orbital meteorology.", details:"TIROS-1 showed how satellites could monitor cloud systems and improve forecasting."},
+      {date:"1961", title:"Vostok 1", type:"Crewed Orbit", status:"Historic", fx:"fx-dual", image:imagePool[7], desc:"Yuri Gagarin completed the first human orbital flight.", details:"Vostok 1 demonstrated that humans could survive launch, orbital flight, and reentry."},
+      {date:"1961", title:"Mercury-Redstone 3", type:"Crewed Flight", status:"Historic", fx:"fx-aurora", image:imagePool[0], desc:"Alan Shepard became the first American in space.", details:"The suborbital flight marked an early milestone for Project Mercury."},
+      {date:"1962", title:"Friendship 7", type:"Crewed Orbit", status:"Historic", fx:"fx-ribbon", image:imagePool[1], desc:"John Glenn became the first American to orbit Earth.", details:"The mission helped validate U.S. orbital human spaceflight."},
+      {date:"1962", title:"Mariner 2", type:"Planetary Probe", status:"Historic", fx:"fx-electric", image:imagePool[2], desc:"The first successful planetary flyby mission reached Venus.", details:"Mariner 2 measured Venus and interplanetary space."},
+      {date:"1963", title:"Vostok 6", type:"Crewed Orbit", status:"Historic", fx:"fx-sunset", image:imagePool[3], desc:"Valentina Tereshkova became the first woman in space.", details:"The flight expanded the human spaceflight record and remains a landmark in space history."},
+      {date:"1965", title:"First Spacewalk", type:"EVA", status:"Historic", fx:"fx-veil", image:imagePool[4], desc:"Alexei Leonov performed the first spacewalk.", details:"Extravehicular activity became essential for repairs, station assembly, and lunar work."},
+      {date:"1965", title:"Mariner 4", type:"Mars Probe", status:"Historic", fx:"fx-cosmic", image:imagePool[5], desc:"Mariner 4 returned the first close-up images of Mars.", details:"The mission transformed Mars from telescope mystery into a mapped world."},
+      {date:"1966", title:"Luna 9", type:"Moon Landing", status:"Historic", fx:"fx-pulse", image:imagePool[6], desc:"Luna 9 achieved the first soft landing on the Moon.", details:"It returned surface images and proved landers could survive touchdown."},
+      {date:"1966", title:"Luna 10", type:"Lunar Orbiter", status:"Historic", fx:"fx-dual", image:imagePool[7], desc:"Luna 10 became the first spacecraft to orbit the Moon.", details:"Orbital mapping became a key step toward future landings."},
+      {date:"1968", title:"Apollo 8", type:"Crewed Lunar Orbit", status:"Historic", fx:"fx-aurora", image:imagePool[0], desc:"Humans orbited the Moon for the first time.", details:"Apollo 8 proved lunar navigation, communications, and crewed deep-space operations."},
+      {date:"1969", title:"Apollo 11", type:"Crewed Moon Landing", status:"Historic", fx:"fx-ribbon", image:imagePool[1], desc:"Humans landed and walked on the Moon for the first time.", details:"Apollo 11 delivered Neil Armstrong and Buzz Aldrin to the lunar surface while Michael Collins orbited above."}
+    ]},
+    {era:"1970–1980", label:"Stations, Landers & Outer Worlds", events:[
+      {date:"1970", title:"Venera 7", type:"Venus Landing", status:"Historic", fx:"fx-electric", image:imagePool[2], desc:"Venera 7 became the first spacecraft to return data from another planet’s surface.", details:"The lander survived Venus’ extreme pressure and temperature long enough to transmit data."},
+      {date:"1971", title:"Salyut 1", type:"Space Station", status:"Historic", fx:"fx-sunset", image:imagePool[3], desc:"The first space station reached orbit.", details:"Salyut 1 began the era of long-term space habitation."},
+      {date:"1971", title:"Mariner 9", type:"Mars Orbiter", status:"Historic", fx:"fx-veil", image:imagePool[4], desc:"Mariner 9 became the first spacecraft to orbit another planet.", details:"It mapped Mars globally and revealed volcanoes, canyons, and dust storms."},
+      {date:"1971", title:"Mars 3", type:"Mars Landing", status:"Historic", fx:"fx-cosmic", image:imagePool[5], desc:"Mars 3 became the first spacecraft to achieve a soft landing on Mars.", details:"Its transmission was brief, but the landing itself was historic."},
+      {date:"1972", title:"Pioneer 10", type:"Jupiter Flyby", status:"Historic", fx:"fx-pulse", image:imagePool[6], desc:"Pioneer 10 launched toward Jupiter and the outer Solar System.", details:"It became the first spacecraft to cross the asteroid belt and visit Jupiter."},
+      {date:"1972", title:"Apollo 17", type:"Crewed Moon Landing", status:"Historic", fx:"fx-dual", image:imagePool[7], desc:"Apollo 17 became the final Apollo lunar landing mission.", details:"It remains the most recent time humans walked on the Moon."},
+      {date:"1973", title:"Skylab", type:"Space Station", status:"Historic", fx:"fx-aurora", image:imagePool[0], desc:"The United States launched its first space station.", details:"Skylab supported solar astronomy, Earth observation, and long-duration crew experiments."},
+      {date:"1975", title:"Apollo-Soyuz", type:"International Mission", status:"Historic", fx:"fx-ribbon", image:imagePool[1], desc:"U.S. and Soviet spacecraft docked in orbit.", details:"The mission became a symbol of space cooperation during the Cold War."},
+      {date:"1975", title:"Venera 9", type:"Venus Surface Images", status:"Historic", fx:"fx-electric", image:imagePool[2], desc:"Venera 9 returned the first images from the surface of another planet.", details:"Its pictures showed the rocky surface of Venus."},
+      {date:"1976", title:"Viking Landers", type:"Mars Landing", status:"Historic", fx:"fx-sunset", image:imagePool[3], desc:"Viking 1 and 2 operated on the Martian surface.", details:"The missions returned panoramic images, weather data, and biology experiment results."},
+      {date:"1977", title:"Voyager Probes", type:"Deep Space Probe", status:"Active Legacy", fx:"fx-veil", image:imagePool[4], desc:"Voyager 1 and 2 launched toward the outer Solar System.", details:"The Voyager probes explored giant planets and continue as humanity’s farthest ambassadors."},
+      {date:"1979", title:"Voyager Jupiter Encounters", type:"Planetary Flyby", status:"Historic", fx:"fx-cosmic", image:imagePool[5], desc:"Voyager revealed Jupiter’s atmosphere, rings, moons, and volcanism on Io.", details:"The flybys transformed understanding of giant planets and active moons."}
+    ]},
+    {era:"1980–1990", label:"Shuttle Era & Planetary Encounters", events:[
+      {date:"1980", title:"Voyager 1 at Saturn", type:"Planetary Flyby", status:"Historic", fx:"fx-pulse", image:imagePool[6], desc:"Voyager 1 reached Saturn and studied its rings and moons.", details:"Titan and the ring system became major scientific targets."},
+      {date:"1981", title:"Space Shuttle Columbia", type:"Reusable Spacecraft", status:"Historic", fx:"fx-dual", image:imagePool[7], desc:"The first Space Shuttle orbital flight launched.", details:"STS-1 introduced a reusable winged spacecraft system."},
+      {date:"1983", title:"Sally Ride", type:"Crewed Flight", status:"Historic", fx:"fx-aurora", image:imagePool[0], desc:"Sally Ride became the first American woman in space.", details:"Her flight on Challenger was a milestone in human spaceflight participation."},
+      {date:"1983", title:"IRAS", type:"Infrared Observatory", status:"Historic", fx:"fx-ribbon", image:imagePool[1], desc:"IRAS mapped the sky in infrared light.", details:"The mission discovered disks, galaxies, and dust structures invisible in ordinary light."},
+      {date:"1984", title:"First Untethered Spacewalk", type:"EVA", status:"Historic", fx:"fx-electric", image:imagePool[2], desc:"Astronauts tested the Manned Maneuvering Unit away from the Shuttle.", details:"The flight demonstrated free-flying EVA mobility in orbit."},
+      {date:"1986", title:"Mir Space Station", type:"Orbital Lab", status:"Historic", fx:"fx-sunset", image:imagePool[3], desc:"Mir became a long-duration modular orbital station.", details:"Mir demonstrated extended human spaceflight and modular station assembly."},
+      {date:"1986", title:"Giotto at Halley", type:"Comet Flyby", status:"Historic", fx:"fx-veil", image:imagePool[4], desc:"ESA’s Giotto flew close to Halley’s Comet.", details:"The mission returned close images of a comet nucleus."},
+      {date:"1986", title:"Challenger Disaster", type:"Crewed Spaceflight", status:"Tragic Historic", fx:"fx-cosmic", image:imagePool[5], desc:"Space Shuttle Challenger was lost during launch.", details:"The disaster reshaped safety culture, launch review, and Shuttle operations."},
+      {date:"1989", title:"Voyager 2 at Neptune", type:"Planetary Flyby", status:"Historic", fx:"fx-pulse", image:imagePool[6], desc:"Voyager 2 completed the first and only Neptune flyby.", details:"The encounter revealed weather, rings, moons, and Triton’s active surface."}
+    ]},
+    {era:"1990–2000", label:"Great Observatories & Mars Return", events:[
+      {date:"1990", title:"Hubble Space Telescope", type:"Observatory", status:"Active Legacy", fx:"fx-dual", image:imagePool[7], desc:"Hubble launched and changed modern astronomy.", details:"Hubble became one of history’s most productive observatories."},
+      {date:"1990", title:"Magellan at Venus", type:"Planetary Orbiter", status:"Historic", fx:"fx-aurora", image:imagePool[0], desc:"Magellan began radar mapping of Venus.", details:"Its radar data revealed Venusian volcanoes, plains, and tectonic features."},
+      {date:"1991", title:"Compton Gamma Ray Observatory", type:"Observatory", status:"Historic", fx:"fx-ribbon", image:imagePool[1], desc:"A major gamma-ray observatory launched into Earth orbit.", details:"It opened high-energy sky monitoring across many astrophysical sources."},
+      {date:"1992", title:"First Confirmed Exoplanets", type:"Astronomy", status:"Historic", fx:"fx-electric", image:imagePool[2], desc:"Planets were confirmed around a pulsar.", details:"This discovery began the modern era of confirmed worlds beyond the Solar System."},
+      {date:"1995", title:"Galileo Arrives at Jupiter", type:"Jupiter Orbiter", status:"Historic", fx:"fx-sunset", image:imagePool[3], desc:"Galileo entered orbit around Jupiter and deployed an atmospheric probe.", details:"The mission studied Jupiter, its magnetosphere, and icy moons."},
+      {date:"1996", title:"Mars Global Surveyor", type:"Mars Orbiter", status:"Historic", fx:"fx-veil", image:imagePool[4], desc:"Mars Global Surveyor launched to map Mars in detail.", details:"It returned long-term data on topography, atmosphere, and surface changes."},
+      {date:"1997", title:"Mars Pathfinder", type:"Mars Lander/Rover", status:"Historic", fx:"fx-cosmic", image:imagePool[5], desc:"Pathfinder landed on Mars with the Sojourner rover.", details:"The mission proved low-cost Mars landing and rover operations after Viking."},
+      {date:"1997", title:"Cassini-Huygens", type:"Saturn Mission", status:"Historic", fx:"fx-pulse", image:imagePool[6], desc:"Cassini launched toward Saturn with the Huygens probe.", details:"The mission became one of the most ambitious planetary explorations."},
+      {date:"1998", title:"ISS Assembly Begins", type:"Space Station", status:"Active", fx:"fx-dual", image:imagePool[7], desc:"The first International Space Station modules reached orbit.", details:"The ISS became a multinational orbital platform for science and engineering."},
+      {date:"1999", title:"Chandra X-ray Observatory", type:"Observatory", status:"Active Legacy", fx:"fx-aurora", image:imagePool[0], desc:"Chandra launched to observe the universe in X-rays.", details:"It revealed black holes, supernova remnants, galaxy clusters, and high-energy processes."}
+    ]},
+    {era:"2000–2010", label:"Rovers, Comets & Commercial Launch", events:[
+      {date:"2000", title:"First ISS Expedition", type:"Space Station", status:"Active Legacy", fx:"fx-ribbon", image:imagePool[1], desc:"The first long-duration crew began living on the ISS.", details:"Continuous human presence in orbit started in November 2000."},
+      {date:"2001", title:"NEAR Shoemaker Landing", type:"Asteroid Landing", status:"Historic", fx:"fx-electric", image:imagePool[2], desc:"NEAR Shoemaker landed on asteroid Eros.", details:"It became the first spacecraft to land on an asteroid."},
+      {date:"2001", title:"Dennis Tito Spaceflight", type:"Commercial Spaceflight", status:"Historic", fx:"fx-sunset", image:imagePool[3], desc:"Dennis Tito became the first self-funded space tourist.", details:"The flight signaled future private human spaceflight markets."},
+      {date:"2003", title:"Columbia Disaster", type:"Crewed Spaceflight", status:"Tragic Historic", fx:"fx-veil", image:imagePool[4], desc:"Space Shuttle Columbia was lost during reentry.", details:"The accident led to major Shuttle safety and inspection changes."},
+      {date:"2003", title:"Shenzhou 5", type:"Crewed Orbit", status:"Historic", fx:"fx-cosmic", image:imagePool[5], desc:"Yang Liwei became China’s first human in space.", details:"China became the third nation to independently send a person into orbit."},
+      {date:"2004", title:"Spirit & Opportunity", type:"Mars Rovers", status:"Historic", fx:"fx-pulse", image:imagePool[6], desc:"Twin rovers began long Mars surface campaigns.", details:"Spirit and Opportunity far exceeded planned lifetimes and changed Mars geology."},
+      {date:"2004", title:"SpaceShipOne", type:"Private Spaceflight", status:"Historic", fx:"fx-dual", image:imagePool[7], desc:"SpaceShipOne became the first privately funded crewed spacecraft to reach space twice.", details:"The flights helped launch a new commercial spaceflight era."},
+      {date:"2004", title:"Cassini Arrives Saturn", type:"Orbiter", status:"Historic", fx:"fx-aurora", image:imagePool[0], desc:"Cassini entered orbit around Saturn.", details:"Cassini enabled years of ring, moon, atmosphere, and magnetosphere science."},
+      {date:"2005", title:"Huygens on Titan", type:"Moon Landing", status:"Historic", fx:"fx-ribbon", image:imagePool[1], desc:"Huygens landed on Saturn’s moon Titan.", details:"It returned the first surface data from the outer Solar System."},
+      {date:"2005", title:"Deep Impact", type:"Comet Mission", status:"Historic", fx:"fx-electric", image:imagePool[2], desc:"Deep Impact struck comet Tempel 1 with an impactor.", details:"The mission exposed subsurface comet material for study."},
+      {date:"2006", title:"New Horizons Launch", type:"Pluto Probe", status:"Extended", fx:"fx-sunset", image:imagePool[3], desc:"A fast spacecraft launched to Pluto and the Kuiper Belt.", details:"New Horizons began a historic journey to Pluto and beyond."},
+      {date:"2008", title:"Chandrayaan-1", type:"Lunar Orbiter", status:"Historic", fx:"fx-veil", image:imagePool[4], desc:"India’s first lunar mission launched and helped detect water signatures on the Moon.", details:"The mission strengthened global lunar science."},
+      {date:"2008", title:"Falcon 1 Orbit", type:"Launch Vehicle", status:"Historic", fx:"fx-cosmic", image:imagePool[5], desc:"A privately developed liquid-fuel rocket reached orbit.", details:"Falcon 1 helped prove a new commercial launch path."},
+      {date:"2009", title:"Kepler Space Telescope", type:"Exoplanet Observatory", status:"Historic", fx:"fx-pulse", image:imagePool[6], desc:"Kepler launched to find Earth-size exoplanets.", details:"Its survey revealed that planets are common across the galaxy."},
+      {date:"2009", title:"LCROSS Lunar Water", type:"Lunar Impact", status:"Historic", fx:"fx-dual", image:imagePool[7], desc:"LCROSS detected water in a lunar polar crater.", details:"The result strengthened interest in lunar polar resources."}
+    ]},
+    {era:"2010–2020", label:"Mars Labs, Reuse & Interstellar Reach", events:[
+      {date:"2010", title:"Hayabusa Sample Return", type:"Sample Return", status:"Historic", fx:"fx-aurora", image:imagePool[0], desc:"Hayabusa returned asteroid Itokawa grains to Earth.", details:"It was the first asteroid sample return mission."},
+      {date:"2011", title:"MESSENGER Mercury Orbit", type:"Planetary Orbiter", status:"Historic", fx:"fx-ribbon", image:imagePool[1], desc:"MESSENGER became the first spacecraft to orbit Mercury.", details:"It mapped Mercury’s surface, composition, and magnetic environment."},
+      {date:"2012", title:"Curiosity Rover", type:"Mars Rover", status:"Active", fx:"fx-electric", image:imagePool[2], desc:"Curiosity landed in Gale Crater using sky-crane descent.", details:"Curiosity studied whether Mars once had conditions suitable for microbial life."},
+      {date:"2012", title:"Voyager 1 Interstellar", type:"Deep Space", status:"Active Legacy", fx:"fx-sunset", image:imagePool[3], desc:"Voyager 1 crossed into interstellar space.", details:"It became the first spacecraft to sample space beyond the Sun’s heliosphere."},
+      {date:"2013", title:"Chang’e 3", type:"Lunar Landing", status:"Historic", fx:"fx-veil", image:imagePool[4], desc:"China achieved a soft Moon landing with the Yutu rover.", details:"The mission reopened surface operations on the Moon after a long gap."},
+      {date:"2014", title:"Rosetta & Philae", type:"Comet Mission", status:"Historic", fx:"fx-cosmic", image:imagePool[5], desc:"Rosetta escorted comet 67P and Philae landed on it.", details:"Rosetta gave long-term close observations of a comet."},
+      {date:"2015", title:"New Horizons Pluto", type:"Flyby", status:"Historic", fx:"fx-pulse", image:imagePool[6], desc:"New Horizons made the first close flyby of Pluto.", details:"The encounter revealed mountains, glaciers, haze, and geologic complexity."},
+      {date:"2015", title:"Falcon 9 Landing", type:"Reusable Rocket", status:"Historic", fx:"fx-dual", image:imagePool[7], desc:"SpaceX landed an orbital-class booster for the first time.", details:"Reusable booster recovery became a major shift in launch economics."},
+      {date:"2016", title:"Juno at Jupiter", type:"Jupiter Orbiter", status:"Active", fx:"fx-aurora", image:imagePool[0], desc:"Juno entered polar orbit around Jupiter.", details:"It studied Jupiter’s gravity, magnetic field, atmosphere, and deep interior."},
+      {date:"2017", title:"Cassini Grand Finale", type:"Saturn Mission", status:"Historic", fx:"fx-ribbon", image:imagePool[1], desc:"Cassini ended with controlled entry into Saturn.", details:"The finale protected Saturn’s moons and returned close atmospheric data."},
+      {date:"2018", title:"Falcon Heavy Demo", type:"Heavy Launch", status:"Historic", fx:"fx-electric", image:imagePool[2], desc:"Falcon Heavy completed its first test flight.", details:"The launch demonstrated a major commercial heavy-lift capability."},
+      {date:"2018", title:"Parker Solar Probe", type:"Solar Probe", status:"Active", fx:"fx-sunset", image:imagePool[3], desc:"Parker Solar Probe launched toward the Sun’s corona.", details:"It became the closest spacecraft to the Sun and studied solar wind origins."},
+      {date:"2018", title:"InSight Mars Lander", type:"Mars Lander", status:"Historic", fx:"fx-veil", image:imagePool[4], desc:"InSight landed on Mars to study the planet’s interior.", details:"The mission measured marsquakes and probed Mars’ internal structure."},
+      {date:"2019", title:"Chang’e 4 Far Side Landing", type:"Lunar Landing", status:"Historic", fx:"fx-cosmic", image:imagePool[5], desc:"Chang’e 4 made the first soft landing on the Moon’s far side.", details:"The mission operated with a relay satellite beyond the Moon."}
+    ]},
+    {era:"2020–2030", label:"Artemis, Samples & New Lunar Era", events:[
+      {date:"2020", title:"Crew Dragon Demo-2", type:"Crewed Commercial Flight", status:"Historic", fx:"fx-pulse", image:imagePool[6], desc:"Crew Dragon carried astronauts to the ISS from U.S. soil.", details:"It began operational commercial crew transport for NASA."},
+      {date:"2020", title:"OSIRIS-REx Bennu Touch", type:"Sample Collection", status:"Historic", fx:"fx-dual", image:imagePool[7], desc:"OSIRIS-REx collected material from asteroid Bennu.", details:"The sample collection prepared one of the most valuable asteroid returns."},
+      {date:"2020", title:"Tianwen-1 Launch", type:"Mars Mission", status:"Historic", fx:"fx-aurora", image:imagePool[0], desc:"China launched an orbiter, lander, and rover toward Mars.", details:"The mission became a major step in independent planetary exploration."},
+      {date:"2021", title:"Perseverance & Ingenuity", type:"Mars Rover/Helicopter", status:"Active Legacy", fx:"fx-ribbon", image:imagePool[1], desc:"Perseverance landed at Jezero Crater with the Ingenuity helicopter.", details:"Perseverance began sample caching while Ingenuity demonstrated powered flight on Mars."},
+      {date:"2021", title:"Zhurong Rover", type:"Mars Rover", status:"Historic", fx:"fx-electric", image:imagePool[2], desc:"Zhurong landed and operated on Mars.", details:"China became one of the few nations to successfully land and operate on Mars."},
+      {date:"2021", title:"James Webb Telescope", type:"Observatory", status:"Active", fx:"fx-sunset", image:imagePool[3], desc:"JWST launched toward the Sun-Earth L2 region.", details:"Webb observes the universe in infrared light, studying early galaxies, stars, exoplanets, and Solar System targets."},
+      {date:"2022", title:"DART Impact", type:"Planetary Defense", status:"Historic", fx:"fx-veil", image:imagePool[4], desc:"DART intentionally impacted asteroid moonlet Dimorphos.", details:"The mission demonstrated asteroid deflection by kinetic impact."},
+      {date:"2022", title:"Artemis I", type:"Lunar Flight Test", status:"Completed", fx:"fx-cosmic", image:imagePool[5], desc:"SLS and Orion completed an uncrewed Moon-orbiting test flight.", details:"Artemis I tested deep-space navigation, Orion systems, and high-speed Earth reentry."},
+      {date:"2023", title:"Chandrayaan-3", type:"Lunar Landing", status:"Historic", fx:"fx-pulse", image:imagePool[6], desc:"India landed near the lunar south polar region.", details:"Chandrayaan-3 marked India’s first successful soft Moon landing."},
+      {date:"2023", title:"OSIRIS-REx Sample", type:"Sample Return", status:"Delivered", fx:"fx-dual", image:imagePool[7], desc:"Asteroid Bennu samples returned to Earth.", details:"The capsule delivered pristine material for laboratory study."},
+      {date:"2023", title:"Euclid Launch", type:"Space Telescope", status:"Active", fx:"fx-aurora", image:imagePool[0], desc:"Euclid launched to map dark matter and dark energy through cosmic structure.", details:"The mission surveys galaxies to study the accelerating universe."},
+      {date:"2023", title:"Psyche Launch", type:"Asteroid Orbiter", status:"Active", fx:"fx-ribbon", image:imagePool[1], desc:"NASA launched a mission to a metal-rich asteroid.", details:"Psyche travels to asteroid 16 Psyche to study a possible planetary core-like body."},
+      {date:"2024", title:"SLIM Moon Landing", type:"Lunar Landing", status:"Historic", fx:"fx-electric", image:imagePool[2], desc:"Japan achieved a precise lunar soft landing with SLIM.", details:"The mission demonstrated high-accuracy landing technology."},
+      {date:"2024", title:"IM-1 Odysseus", type:"Commercial Lunar Lander", status:"Completed", fx:"fx-sunset", image:imagePool[3], desc:"A private lunar lander delivered NASA CLPS payloads.", details:"IM-1 became a major commercial lunar delivery milestone."},
+      {date:"2024", title:"Chang’e 6", type:"Lunar Sample Return", status:"Historic", fx:"fx-veil", image:imagePool[4], desc:"Chang’e 6 returned samples from the Moon’s far side.", details:"It marked the first sample return from the lunar far side."},
+      {date:"2024", title:"Europa Clipper", type:"Jupiter Mission", status:"Cruise", fx:"fx-cosmic", image:imagePool[5], desc:"Europa Clipper launched toward Jupiter’s icy moon Europa.", details:"It will investigate whether Europa has conditions suitable for life."},
+      {date:"2024", title:"Hera Launch", type:"Planetary Defense", status:"Cruise", fx:"fx-pulse", image:imagePool[6], desc:"ESA’s Hera launched to inspect the DART impact system.", details:"Hera will measure the aftermath of asteroid deflection testing."},
+      {date:"2026", title:"Artemis II", type:"Crewed Lunar Flyby", status:"Planned/2026", fx:"fx-dual", image:imagePool[7], desc:"The next crewed lunar flyby era is prepared around Orion and SLS.", details:"Artemis II is designed as the first crewed flight test of NASA’s deep-space human exploration system around the Moon."},
+      {date:"2026", title:"Starship Flight Tests", type:"Launch System Test", status:"Testing", fx:"fx-aurora", image:imagePool[0], desc:"Heavy-lift reusable spacecraft testing continues.", details:"Starship integrated flight tests continue developing high-capacity launch and landing systems for future exploration architecture."}
+    ]}
+  ];
+
+  const STORAGE_KEY = 'xhTimelineFullAdminStateV2';
+  let timelineData = mergeSavedWithDefaults(loadFullState() || migrateOldSavedData(structuredCloneSafe(initialTimelineData)));
+
+  function structuredCloneSafe(value){
+    try{ return structuredClone(value); }catch(error){ return JSON.parse(JSON.stringify(value)); }
+  }
+
+  function readSavedList(key){
+    try{
+      const data = JSON.parse(localStorage.getItem(key) || '[]');
+      return Array.isArray(data) ? data : [];
+    }catch(error){return [];}
+  }
+
+  function readSavedObject(key){
+    try{
+      const data = JSON.parse(localStorage.getItem(key) || '{}');
+      return data && typeof data === 'object' && !Array.isArray(data) ? data : {};
+    }catch(error){return {};}
+  }
+
+  function loadFullState(){
+    try{
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      return Array.isArray(saved) ? saved : null;
+    }catch(error){return null;}
+  }
+
+  function migrateOldSavedData(base){
+    const savedRows = readSavedList('xhTimelineExtraRows');
+    savedRows.forEach(row => {
+      if(row && row.era && !base.some(item => item.era === row.era)){
+        base.push({id:row.id || '', era:row.era, label:row.label || 'New Timeline Line', events:Array.isArray(row.events) ? row.events : []});
+      }
+    });
+    const savedCards = readSavedList('xhTimelineExtraCards');
+    savedCards.forEach(card => {
+      const row = base.find(item => item.era === card.era);
+      if(row) row.events.push(card);
+    });
+    const savedPopEdits = readSavedObject('xhTimelinePopEdits');
+    Object.keys(savedPopEdits).forEach(oldKey => {
+      const parts = decodeURIComponent(oldKey).split('||');
+      const row = base.find(item => item.era === parts[0]);
+      if(!row) return;
+      const title = parts.slice(2).join('||');
+      const event = row.events.find(item => String(item.date || '') === parts[1] && String(item.title || '') === title);
+      if(event) Object.assign(event, savedPopEdits[oldKey]);
+    });
+    return base;
+  }
+
+
+  function mergeSavedWithDefaults(savedValue){
+    const defaults = structuredCloneSafe(initialTimelineData);
+    const saved = Array.isArray(savedValue) ? structuredCloneSafe(savedValue) : [];
+    const merged = [];
+    const usedEras = new Set();
+    const clean = value => String(value || '').trim().toLowerCase();
+    const eventKey = event => clean(event.date) + '||' + clean(event.title);
+
+    defaults.forEach(defaultRow => {
+      const savedRow = saved.find(row => row && clean(row.era) === clean(defaultRow.era));
+      const row = savedRow ? Object.assign({}, defaultRow, savedRow) : structuredCloneSafe(defaultRow);
+      const events = Array.isArray(row.events) ? row.events : [];
+      const existing = new Map();
+      events.forEach(event => {
+        if(event && typeof event === 'object') existing.set(eventKey(event), event);
+      });
+      (Array.isArray(defaultRow.events) ? defaultRow.events : []).forEach(defaultEvent => {
+        const key = eventKey(defaultEvent);
+        const current = existing.get(key);
+        if(current){
+          Object.keys(defaultEvent).forEach(field => {
+            if(current[field] === undefined || current[field] === null || current[field] === '') current[field] = structuredCloneSafe(defaultEvent[field]);
+          });
+        }else{
+          events.push(structuredCloneSafe(defaultEvent));
+        }
+      });
+      row.events = events;
+      merged.push(row);
+      usedEras.add(clean(row.era));
+    });
+
+    saved.forEach(row => {
+      if(row && row.era && !usedEras.has(clean(row.era))) merged.push(row);
+    });
+    return merged;
+  }
+
+  function saveFullState(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(timelineData)); }catch(error){ console.warn('XH state save failed', error); }
+  }
+
+  function normalizeIds(){
+    let used = new Set();
+    let nextId = 1001;
+    timelineData.forEach((row, rowIndex) => {
+      if(!row.id) row.id = 'line-' + (rowIndex + 1);
+      if(!Array.isArray(row.events)) row.events = [];
+      row.events.forEach(event => {
+        let id = String(event.id || event.cardId || '').replace(/\D/g, '');
+        while(!id || used.has(id)){ id = String(nextId++); }
+        event.id = id;
+        event.cardId = id;
+        used.add(id);
+        const numeric = Number(id);
+        if(Number.isFinite(numeric) && numeric >= nextId) nextId = numeric + 1;
+        event.type = event.type || 'Mission';
+        event.status = event.status || 'Status';
+        event.fx = event.fx || 'fx-aurora';
+        event.image = event.image || FALLBACK_IMG;
+        event.desc = event.desc || '';
+      });
+    });
+  }
+
+  normalizeIds();
+  saveFullState();
+
+  const rowsEl = document.getElementById('xhTimelineRows');
+  const tabsEl = document.getElementById('xhEraTabs');
+  const cardEra = document.getElementById('cardEra');
+
+  function safeText(text){
+    return String(text || '').replace(/[&<>"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[char]));
+  }
+
+  function lineSvg(){
+    return `<svg class="xh-ribbon-svg" viewBox="0 0 1200 36" preserveAspectRatio="none" aria-hidden="true">
+      <path class="xh-ribbon-base" d="M10 18 H1190" />
+      <path class="xh-ribbon-soft" d="M10 18 H1190" />
+      <path class="xh-ribbon-core" d="M10 18 H1190" />
+    </svg>`;
+  }
+
+  function getNextCardId(){
+    let max = 1000;
+    timelineData.forEach(row => row.events.forEach(event => {
+      const value = Number(String(event.id || '').replace(/\D/g, ''));
+      if(Number.isFinite(value) && value > max) max = value;
+    }));
+    return String(max + 1);
+  }
+
+  function findRowById(id){ return timelineData.find(row => row.id === id) || null; }
+  function findEventById(id){
+    const clean = String(id || '').replace(/\D/g, '');
+    if(!clean) return null;
+    for(const row of timelineData){
+      const event = row.events.find(item => String(item.id || item.cardId || '') === clean);
+      if(event) return {row, event};
+    }
+    return null;
+  }
+
+  function defaultStats(row, event){
+    return [
+      {value:row?.era || event?.era || 'Timeline', label:'Timeline wave'},
+      {value:event?.type || 'Mission', label:'Category'},
+      {value:event?.status || 'Status', label:'Status'}
+    ];
+  }
+
+  function eventCard(event, era){
+    const id = String(event.id || event.cardId || '');
+    const popupImage = event.popImage || event.popupImage || event.image || FALLBACK_IMG;
+    const popupHeadings = Array.isArray(event.popHeadings) ? event.popHeadings.join('||') : (event.popHeadings || 'Mission Context||Technology Impact||Why It Matters');
+    const popupHeadingDetails = Array.isArray(event.popHeadingDetails) ? event.popHeadingDetails.join('||') : (event.popHeadingDetails || 'Focused mission information and background.||Technology, engineering, and system impact.||Why this event matters in space history.');
+    const popupBody = event.popBody || event.body || event.details || event.desc || '';
+    const popupStats = Array.isArray(event.popStats) && event.popStats.length ? event.popStats : defaultStats({era}, event);
+    return `<article class="xh-event-card ${safeText(event.fx)}" tabindex="0" role="button" aria-label="Open ${safeText(event.title)} details" data-card-id="${safeText(id)}" data-era="${safeText(era)}" data-title="${safeText(event.title)}" data-date="${safeText(event.date)}" data-type="${safeText(event.type)}" data-status="${safeText(event.status)}" data-desc="${safeText(event.desc)}" data-details="${safeText(event.details || event.desc)}" data-image="${safeText(event.image || FALLBACK_IMG)}" data-pop-image="${safeText(popupImage)}" data-pop-headings="${safeText(popupHeadings)}" data-pop-heading-details="${safeText(popupHeadingDetails)}" data-pop-body="${safeText(popupBody)}" data-pop-stats="${safeText(JSON.stringify(popupStats))}">
+      <div class="xh-img-wrap"><span class="xh-date-pill"><i></i>${safeText(event.date)}</span><span class="xh-card-id">ID ${safeText(id)}</span><img src="${safeText(event.image || FALLBACK_IMG)}" alt="${safeText(event.title)} visual" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'"></div>
+      <div class="xh-event-content">
+        <div class="xh-event-meta"><span>${safeText(event.type)}</span></div>
+        <h3>${safeText(event.title)}</h3>
+        <p>${safeText(event.desc)}</p>
+        <span class="xh-tag">${safeText(event.status)}</span>
+      </div>
+    </article>`;
+  }
+
+  function renderTabs(){
+    tabsEl.innerHTML = timelineData.map((row, index) => `<button class="xh-tab ${index === 0 ? 'is-active' : ''}" type="button" data-jump="era-${index}">${safeText(row.era)}</button>`).join('');
+    if(cardEra) cardEra.innerHTML = timelineData.map(row => `<option value="${safeText(row.id)}">${safeText(row.era)} — ${safeText(row.label)}</option>`).join('');
+    const lineTarget = document.getElementById('lineTarget');
+    if(lineTarget) lineTarget.innerHTML = timelineData.map(row => `<option value="${safeText(row.id)}">${safeText(row.era)} — ${safeText(row.label)}</option>`).join('');
+  }
+
+  function renderRows(){
+    rowsEl.innerHTML = timelineData.map((row, index) => `
+      <section class="xh-decade-row" id="era-${index}" data-era="${safeText(row.era)}" data-row-id="${safeText(row.id)}">
+        <div class="xh-decade-marker"><div class="xh-decade-circle">${safeText(row.era)}</div></div>
+        <div class="xh-decade-shell">
+          <div class="xh-wave-top">${lineSvg()}</div>
+          <div class="xh-decade-toolbar"><button class="xh-collapse-btn" type="button" data-collapse="era-${index}">Hide</button></div>
+          <h3 class="xh-decade-title">${safeText(row.label)}</h3>
+          <div class="xh-decade-count">${row.events.length} cards in this 10-year era</div>
+          <div class="xh-row-cards">${row.events.map(event => eventCard(event, row.era)).join('')}</div>
+          <div class="xh-wave-bottom">${lineSvg()}</div>
+        </div>
+      </section>
+    `).join('');
+    wireCards();
+    wireCollapse();
+    renderAdminSelectors();
+  }
+
+  function renderAdminSelectors(){
+    const previousCard = document.getElementById('cardEditSelect')?.value || '';
+    const previousPop = document.getElementById('popTargetCard')?.value || '';
+    const options = [];
+    timelineData.forEach(row => row.events.forEach(event => {
+      options.push(`<option value="${safeText(event.id)}">ID ${safeText(event.id)} — ${safeText(row.era)} — ${safeText(event.date)} — ${safeText(event.title)}</option>`);
+    }));
+    const cardSelect = document.getElementById('cardEditSelect');
+    const popSelect = document.getElementById('popTargetCard');
+    if(cardSelect){
+      cardSelect.innerHTML = options.join('') || '<option value="">No cards available</option>';
+      if(previousCard && [...cardSelect.options].some(option => option.value === previousCard)) cardSelect.value = previousCard;
+    }
+    if(popSelect){
+      popSelect.innerHTML = options.join('') || '<option value="">No cards available</option>';
+      if(previousPop && [...popSelect.options].some(option => option.value === previousPop)) popSelect.value = previousPop;
+    }
+  }
+
+  function wireCards(){
+    document.querySelectorAll('.xh-event-card').forEach(card => {
+      const open = () => openPopupById(card.dataset.cardId);
+      card.addEventListener('click', open);
+      card.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); open(); } });
+      card.addEventListener('pointermove', e => {
+        if(window.matchMedia && window.matchMedia('(pointer: coarse)').matches) return;
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.setProperty('--xh-rx', `${(-y * 4).toFixed(2)}deg`);
+        card.style.setProperty('--xh-ry', `${(x * 4).toFixed(2)}deg`);
+        card.classList.add('is-card-active');
+      });
+      card.addEventListener('pointerleave', () => {
+        card.style.setProperty('--xh-rx', '0deg');
+        card.style.setProperty('--xh-ry', '0deg');
+        card.classList.remove('is-card-active');
+      });
+    });
+  }
+
+  function wireCollapse(){
+    document.querySelectorAll('[data-collapse]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const row = document.getElementById(btn.dataset.collapse);
+        row.classList.toggle('is-hidden');
+        btn.textContent = row.classList.contains('is-hidden') ? 'Show' : 'Hide';
+      });
+    });
+  }
+
+  function openPopupById(id){
+    const found = findEventById(id);
+    if(!found) return;
+    openPopup(found.row, found.event);
+  }
+
+  function openPopup(row, event){
+    const desc = event.desc || event.details || '';
+    const body = event.popBody || event.body || event.details || desc || '';
+    const headings = Array.isArray(event.popHeadings) ? event.popHeadings : String(event.popHeadings || 'Mission Context||Technology Impact||Why It Matters').split('||').filter(Boolean);
+    const headingDetails = Array.isArray(event.popHeadingDetails) ? event.popHeadingDetails : String(event.popHeadingDetails || '').split('||').filter(Boolean);
+    const stats = Array.isArray(event.popStats) && event.popStats.length ? event.popStats : defaultStats(row, event);
+    document.getElementById('xhPopDate').textContent = event.date || 'Date';
+    document.getElementById('xhPopTitle').textContent = event.title || 'Mission detail';
+    document.getElementById('xhPopText').textContent = desc;
+    document.querySelector('.xh-pop-list').innerHTML = stats.slice(0,3).map(stat => `<div class="xh-pop-stat"><b>${safeText(stat.value || '')}</b><span>${safeText(stat.label || '')}</span></div>`).join('');
+    document.getElementById('xhPopHeadings').innerHTML = (headings.length ? headings : ['Mission Context','Technology Impact','Why It Matters']).map((heading, index) => `
+      <div class="xh-pop-heading"><b>${safeText(heading)}</b><span>${safeText(headingDetails[index] || (index === 0 ? (desc || 'Focused mission information and background.') : 'Detailed section added for deeper popup information.'))}</span></div>
+    `).join('');
+    document.getElementById('xhPopBody').textContent = body;
+    const img = document.getElementById('xhPopImage');
+    img.src = event.popImage || event.image || FALLBACK_IMG;
+    img.onerror = function(){ this.onerror = null; this.src = FALLBACK_IMG; };
+    document.getElementById('xhPopBackdrop').classList.add('is-open');
+  }
+
+  function closePopup(){ document.getElementById('xhPopBackdrop').classList.remove('is-open'); }
+
+  function renderWavePreview(){
+    document.getElementById('wavePreview').innerHTML = `<div style="width:100%;height:70px">${lineSvg()}</div>`;
+  }
+
+  function getCardEditorData(){
+    const row = findRowById(document.getElementById('cardEra').value) || timelineData[0];
+    const cardImage = document.getElementById('cardImageUrl').value.trim() || imagePool[Math.floor(Math.random()*imagePool.length)] || FALLBACK_IMG;
+    const description = document.getElementById('cardDesc').value.trim() || 'New card added from hidden admin preview system.';
+    const headings = document.getElementById('cardPopHeadings').value.split('\\n').map(item => item.trim()).filter(Boolean);
+    const body = document.getElementById('cardPopBody').value.trim();
+    const id = String(document.getElementById('cardIdInput').value || getNextCardId()).replace(/\D/g, '') || getNextCardId();
+    return {
+      id,
+      cardId:id,
+      era:row?.era || '',
+      date:document.getElementById('cardDate').value.trim() || 'New Date',
+      title:document.getElementById('cardTitle').value.trim() || 'New Mission Card',
+      type:document.getElementById('cardType').value.trim() || 'Admin Card',
+      status:document.getElementById('cardStatus').value.trim() || 'Draft Preview',
+      fx:document.getElementById('cardFx').value || 'fx-aurora',
+      image:cardImage,
+      popImage:document.getElementById('cardPopImageUrl').value.trim() || cardImage,
+      desc:description,
+      details:body || description,
+      popHeadings:headings.length ? headings : ['Mission Context','Technology Impact','Why It Matters'],
+      popHeadingDetails:['Focused mission information and background.','Technology, engineering, and system impact.','Why this event matters in space history.'],
+      popBody:body || description,
+      popStats:defaultStats(row, {type:document.getElementById('cardType').value.trim() || 'Admin Card', status:document.getElementById('cardStatus').value.trim() || 'Draft Preview'})
+    };
+  }
+
+  function fillCardEditor(row, event){
+    document.getElementById('cardEditSelect').value = event.id;
+    document.getElementById('cardIdInput').value = event.id || '';
+    document.getElementById('cardEra').value = row.id;
+    document.getElementById('cardDate').value = event.date || '';
+    document.getElementById('cardType').value = event.type || '';
+    document.getElementById('cardTitle').value = event.title || '';
+    document.getElementById('cardDesc').value = event.desc || '';
+    document.getElementById('cardStatus').value = event.status || '';
+    document.getElementById('cardFx').value = event.fx || 'fx-aurora';
+    document.getElementById('cardImageUrl').value = event.image || '';
+    document.getElementById('cardPopImageUrl').value = event.popImage || '';
+    const headings = Array.isArray(event.popHeadings) ? event.popHeadings : String(event.popHeadings || '').split('||').filter(Boolean);
+    document.getElementById('cardPopHeadings').value = headings.join('\\n');
+    document.getElementById('cardPopBody').value = event.popBody || event.details || '';
+    renderCardPreview();
+  }
+
+  function renderCardPreview(){
+    const row = findRowById(document.getElementById('cardEra')?.value) || {era:'Preview'};
+    const sample = getCardEditorData();
+    document.getElementById('cardPreview').innerHTML = eventCard(sample, row.era || 'Preview');
+  }
+
+  function getPopStatsFromEditor(){
+    return [
+      {value:document.getElementById('popStatOneValue').value || 'Timeline wave', label:document.getElementById('popStatOneLabel').value || 'Timeline wave'},
+      {value:document.getElementById('popStatTwoValue').value || 'Category', label:document.getElementById('popStatTwoLabel').value || 'Category'},
+      {value:document.getElementById('popStatThreeValue').value || 'Status', label:document.getElementById('popStatThreeLabel').value || 'Status'}
+    ];
+  }
+
+  function getPopEditorData(){
+    const headings = document.getElementById('popHeadings').value.split('\\n').map(item => item.trim()).filter(Boolean);
+    const headingDetails = document.getElementById('popHeadingDetails').value.split('\\n').map(item => item.trim()).filter(Boolean);
+    return {
+      date:document.getElementById('popDate').value || 'Preview',
+      title:document.getElementById('popTitle').value || 'Mission Detail',
+      desc:document.getElementById('popText').value || 'Popup preview text.',
+      details:document.getElementById('popText').value || 'Popup preview text.',
+      popImage:document.getElementById('popImageUrl').value.trim() || imagePool[7] || FALLBACK_IMG,
+      popHeadings:headings.length ? headings : ['Mission Context','Technology Impact','Why It Matters'],
+      popHeadingDetails:headingDetails,
+      popBody:document.getElementById('popBody').value || document.getElementById('popText').value || '',
+      popStats:getPopStatsFromEditor()
+    };
+  }
+
+  function fillPopEditorFromEvent(row, event){
+    const stats = Array.isArray(event.popStats) && event.popStats.length ? event.popStats : defaultStats(row, event);
+    const headings = Array.isArray(event.popHeadings) ? event.popHeadings : String(event.popHeadings || 'Mission Context||Technology Impact||Why It Matters').split('||').filter(Boolean);
+    const headingDetails = Array.isArray(event.popHeadingDetails) ? event.popHeadingDetails : String(event.popHeadingDetails || '').split('||').filter(Boolean);
+    document.getElementById('popCardId').value = event.id || '';
+    document.getElementById('popTargetCard').value = event.id || '';
+    document.getElementById('popDate').value = event.date || '';
+    document.getElementById('popTitle').value = event.title || '';
+    document.getElementById('popImageUrl').value = event.popImage || event.image || '';
+    document.getElementById('popText').value = event.desc || event.details || '';
+    document.getElementById('popStatOneValue').value = stats[0]?.value || row.era || '';
+    document.getElementById('popStatOneLabel').value = stats[0]?.label || 'Timeline wave';
+    document.getElementById('popStatTwoValue').value = stats[1]?.value || event.type || '';
+    document.getElementById('popStatTwoLabel').value = stats[1]?.label || 'Category';
+    document.getElementById('popStatThreeValue').value = stats[2]?.value || event.status || '';
+    document.getElementById('popStatThreeLabel').value = stats[2]?.label || 'Status';
+    document.getElementById('popHeadings').value = headings.join('\\n');
+    document.getElementById('popHeadingDetails').value = headingDetails.join('\\n');
+    document.getElementById('popBody').value = event.popBody || event.details || event.desc || '';
+    renderPopPreviewOnly();
+  }
+
+  function renderPopPreviewOnly(){
+    const data = getPopEditorData();
+    document.getElementById('popPreview').innerHTML = `
+      <div class="xh-popup-preview-mini">
+        <div>
+          <h4>${safeText(data.title)}</h4>
+          <span>${safeText(data.desc)}</span>
+          <div class="xh-preview-stat-row">${data.popStats.map(stat => `<small><b>${safeText(stat.value)}</b><em>${safeText(stat.label)}</em></small>`).join('')}</div>
+        </div>
+        <img src="${safeText(data.popImage)}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'" alt="Popup preview">
+      </div>`;
+  }
+
+  function notifyAdmin(text){
+    let box = document.getElementById('xhAdminStatusBox');
+    if(!box){
+      box = document.createElement('div');
+      box.id = 'xhAdminStatusBox';
+      box.className = 'xh-admin-status';
+      document.getElementById('xhAdminPanel')?.querySelector('.xh-wrap')?.prepend(box);
+    }
+    box.textContent = text;
+  }
+
+  function setupAdmin(){
+    const adminPanel = document.getElementById('xhAdminPanel');
+    const unlockAdmin = () => {
+      adminPanel.classList.add('is-open');
+      document.body.setAttribute('data-xh-admin','unlocked');
+      adminPanel.scrollIntoView({behavior:'smooth', block:'start'});
+    };
+    window.xhUnlockHiddenAdmin = unlockAdmin;
+
+    const previewIds = ['cardIdInput','cardDate','cardTitle','cardDesc','cardFx','cardEra','cardImageUrl','cardPopImageUrl','cardPopHeadings','cardPopBody','cardType','cardStatus'];
+    previewIds.forEach(id => {
+      const el = document.getElementById(id);
+      if(el){ el.addEventListener('input', renderCardPreview); el.addEventListener('change', renderCardPreview); }
+    });
+    const popEditorIds = ['popCardId','popDate','popTitle','popImageUrl','popText','popStatOneValue','popStatTwoValue','popStatThreeValue','popStatOneLabel','popStatTwoLabel','popStatThreeLabel','popHeadings','popHeadingDetails','popBody'];
+    popEditorIds.forEach(id => {
+      const el = document.getElementById(id);
+      if(el){ el.addEventListener('input', renderPopPreviewOnly); el.addEventListener('change', renderPopPreviewOnly); }
+    });
+
+    document.getElementById('lineTarget')?.addEventListener('change', () => document.getElementById('loadLineBtn').click());
+    document.getElementById('loadLineBtn')?.addEventListener('click', () => {
+      const row = findRowById(document.getElementById('lineTarget').value);
+      if(!row) return;
+      document.getElementById('newEraDate').value = row.era || '';
+      document.getElementById('newEraLabel').value = row.label || '';
+      notifyAdmin('Loaded line for editing.');
+    });
+    document.getElementById('saveLineBtn')?.addEventListener('click', () => {
+      const row = findRowById(document.getElementById('lineTarget').value);
+      if(!row) return;
+      row.era = document.getElementById('newEraDate').value.trim() || row.era;
+      row.label = document.getElementById('newEraLabel').value.trim() || row.label;
+      saveFullState(); renderTabs(); renderRows(); notifyAdmin('Line updated.');
+    });
+    document.getElementById('deleteLineBtn')?.addEventListener('click', () => {
+      const id = document.getElementById('lineTarget').value;
+      const index = timelineData.findIndex(row => row.id === id);
+      if(index < 0) return;
+      if(!confirm('Delete this line and all cards inside it?')) return;
+      timelineData.splice(index, 1);
+      saveFullState(); renderTabs(); renderRows(); renderCardPreview(); notifyAdmin('Line deleted with its cards.');
+    });
+    document.getElementById('addLineBtn')?.addEventListener('click', () => {
+      const era = document.getElementById('newEraDate').value.trim() || 'New Era';
+      const label = document.getElementById('newEraLabel').value.trim() || 'New Timeline Line';
+      if(timelineData.some(row => row.era === era)){ alert('This date line already exists. Choose another date range.'); return; }
+      timelineData.push({id:'line-' + Date.now(), era, label, events:[]});
+      saveFullState(); renderTabs(); renderRows(); notifyAdmin('New line inserted.');
+      const targetIndex = timelineData.findIndex(item => item.era === era);
+      document.getElementById(`era-${targetIndex}`)?.scrollIntoView({behavior:'smooth', block:'center'});
+    });
+
+    document.getElementById('newCardIdBtn')?.addEventListener('click', () => { document.getElementById('cardIdInput').value = getNextCardId(); renderCardPreview(); });
+    document.getElementById('cardEditSelect')?.addEventListener('change', e => { const found = findEventById(e.target.value); if(found) fillCardEditor(found.row, found.event); });
+    document.getElementById('loadCardBtn')?.addEventListener('click', () => {
+      const found = findEventById(document.getElementById('cardEditSelect').value || document.getElementById('cardIdInput').value);
+      if(found){ fillCardEditor(found.row, found.event); notifyAdmin('Loaded card ID ' + found.event.id + '.'); }
+    });
+    document.getElementById('addCardBtn')?.addEventListener('click', () => {
+      const data = getCardEditorData();
+      if(findEventById(data.id)){ alert('This card ID already exists. Generate a new ID or edit the existing card.'); return; }
+      const row = findRowById(document.getElementById('cardEra').value);
+      if(!row) return;
+      row.events.push(data);
+      saveFullState(); renderTabs(); renderRows(); document.getElementById('cardEditSelect').value = data.id; document.getElementById('popCardId').value = data.id; notifyAdmin('Added new card ID ' + data.id + '.');
+    });
+    document.getElementById('saveCardBtn')?.addEventListener('click', () => {
+      const data = getCardEditorData();
+      const selected = findEventById(document.getElementById('cardEditSelect').value || data.id);
+      if(!selected){ alert('Select/load a card first or use Add card.'); return; }
+      const duplicate = findEventById(data.id);
+      if(duplicate && duplicate.event !== selected.event){ alert('This new ID belongs to another card. Use a unique ID.'); return; }
+      const currentRow = selected.row;
+      const targetRow = findRowById(document.getElementById('cardEra').value) || currentRow;
+      Object.assign(selected.event, data, {era:targetRow.era});
+      if(targetRow !== currentRow){
+        currentRow.events = currentRow.events.filter(event => event !== selected.event);
+        targetRow.events.push(selected.event);
+      }
+      saveFullState(); renderTabs(); renderRows(); document.getElementById('cardEditSelect').value = data.id; notifyAdmin('Saved card ID ' + data.id + '.');
+    });
+    document.getElementById('deleteCardBtn')?.addEventListener('click', () => {
+      const found = findEventById(document.getElementById('cardEditSelect').value || document.getElementById('cardIdInput').value);
+      if(!found) return;
+      if(!confirm('Delete card ID ' + found.event.id + ' and its popup content?')) return;
+      found.row.events = found.row.events.filter(event => event !== found.event);
+      saveFullState(); renderTabs(); renderRows(); document.getElementById('cardIdInput').value = getNextCardId(); renderCardPreview(); notifyAdmin('Deleted card and linked popup.');
+    });
+
+    document.getElementById('popTargetCard')?.addEventListener('change', e => {
+      document.getElementById('popCardId').value = e.target.value || '';
+      const found = findEventById(e.target.value);
+      if(found) fillPopEditorFromEvent(found.row, found.event);
+    });
+    document.getElementById('loadPopBtn')?.addEventListener('click', () => {
+      const found = findEventById(document.getElementById('popCardId').value || document.getElementById('popTargetCard').value);
+      if(!found){ alert('No card found with that ID.'); return; }
+      fillPopEditorFromEvent(found.row, found.event); notifyAdmin('Loaded popup linked to card ID ' + found.event.id + '.');
+    });
+    document.getElementById('savePopBtn')?.addEventListener('click', () => {
+      const found = findEventById(document.getElementById('popCardId').value || document.getElementById('popTargetCard').value);
+      if(!found){ alert('No card found with that ID.'); return; }
+      const data = getPopEditorData();
+      Object.assign(found.event, {
+        date:data.date,
+        title:data.title,
+        desc:data.desc,
+        details:data.popBody || data.desc,
+        popImage:data.popImage,
+        popHeadings:data.popHeadings,
+        popHeadingDetails:data.popHeadingDetails,
+        popBody:data.popBody,
+        popStats:data.popStats
+      });
+      saveFullState(); renderTabs(); renderRows(); document.getElementById('popCardId').value = found.event.id; document.getElementById('popTargetCard').value = found.event.id; renderPopPreviewOnly(); notifyAdmin('Popup saved to card ID ' + found.event.id + '.');
+    });
+    document.getElementById('deletePopBtn')?.addEventListener('click', () => {
+      const found = findEventById(document.getElementById('popCardId').value || document.getElementById('popTargetCard').value);
+      if(!found) return;
+      if(!confirm('Delete popup content for card ID ' + found.event.id + '? Card will stay.')) return;
+      delete found.event.popImage; delete found.event.popHeadings; delete found.event.popHeadingDetails; delete found.event.popBody; delete found.event.popStats;
+      found.event.details = found.event.desc || '';
+      saveFullState(); fillPopEditorFromEvent(found.row, found.event); notifyAdmin('Popup content deleted; card remains.');
+    });
+    document.getElementById('openLinkedPopBtn')?.addEventListener('click', () => {
+      const found = findEventById(document.getElementById('popCardId').value || document.getElementById('popTargetCard').value);
+      if(found) openPopup(found.row, found.event);
+    });
+    document.getElementById('previewPopBtn')?.addEventListener('click', () => {
+      const data = getPopEditorData();
+      renderPopPreviewOnly();
+      openPopup({era:data.popStats[0]?.value || 'Preview'}, {id:document.getElementById('popCardId').value || 'Preview', date:data.date, title:data.title, desc:data.desc, details:data.desc, popBody:data.popBody, popHeadings:data.popHeadings, popHeadingDetails:data.popHeadingDetails, popStats:data.popStats, popImage:data.popImage, image:data.popImage, type:data.popStats[1]?.value || 'Category', status:data.popStats[2]?.value || 'Status'});
+    });
+
+    document.getElementById('applyWaveBtn')?.addEventListener('click', () => {
+      const speed = document.getElementById('waveSpeed').value;
+      const mode = document.getElementById('waveMode').value;
+      document.querySelectorAll('.xh-ribbon-core').forEach(path => {
+        path.style.animationDuration = speed === '0' ? '0s' : speed + 's';
+        path.style.animationDirection = mode === 'reverse' ? 'reverse' : 'normal';
+      });
+      renderWavePreview();
+      document.querySelectorAll('#wavePreview .xh-ribbon-core').forEach(path => {
+        path.style.animationDuration = speed === '0' ? '0s' : speed + 's';
+        path.style.animationDirection = mode === 'reverse' ? 'reverse' : 'normal';
+      });
+    });
+
+    const firstCard = document.getElementById('cardEditSelect')?.value;
+    if(firstCard){
+      const found = findEventById(firstCard);
+      if(found){ fillCardEditor(found.row, found.event); fillPopEditorFromEvent(found.row, found.event); }
+    } else {
+      document.getElementById('cardIdInput').value = getNextCardId();
+      renderCardPreview();
+      renderPopPreviewOnly();
+    }
+    document.getElementById('loadLineBtn')?.click();
+  }
+
+  function setupSearch(){
+    const input = document.getElementById('xhSearchBox');
+    const searchBtn = document.getElementById('xhSearchButton');
+    const results = document.getElementById('xhSearchResults');
+    const adminPanel = document.getElementById('xhAdminPanel');
+    if(!input || !searchBtn) return;
+
+    function enableAdminFromSearch(){
+      if(adminPanel) adminPanel.classList.add('is-open');
+      document.body.setAttribute('data-xh-admin','unlocked');
+      document.body.classList.add('editor-on');
+      input.value = '';
+      input.placeholder = 'Admin unlocked';
+      if(results){ results.classList.remove('show'); results.innerHTML = ''; }
+      document.querySelectorAll('.xh-event-card').forEach(card => card.classList.remove('xh-filter-hidden'));
+      document.querySelectorAll('.xh-decade-row').forEach(row => row.classList.remove('xh-filter-hidden'));
+      setTimeout(() => adminPanel?.scrollIntoView({behavior:'smooth', block:'start'}), 80);
+    }
+
+    window.xhUnlockHiddenAdmin = enableAdminFromSearch;
+
+    function waitForUnlockSystem(){
+      return new Promise(resolve => {
+        if(window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock === 'function') return resolve(window.XHorizonAdmin);
+        let tries = 0;
+        const timer = setInterval(() => {
+          tries++;
+          if(window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock === 'function'){
+            clearInterval(timer);
+            resolve(window.XHorizonAdmin);
+          }else if(tries > 12){
+            clearInterval(timer);
+            resolve(null);
+          }
+        }, 120);
+      });
+    }
+
+    function filterTimeline(value){
+      const q = String(value || '').trim().toLowerCase();
+      let matches = [];
+      document.querySelectorAll('.xh-decade-row').forEach(row => {
+        let visibleCount = 0;
+        row.querySelectorAll('.xh-event-card').forEach(card => {
+          const text = [card.dataset.cardId, card.dataset.title, card.dataset.date, card.dataset.type, card.dataset.status, card.dataset.desc, card.dataset.popBody, card.dataset.popHeadings, row.dataset.era].join(' ').toLowerCase();
+          const match = !q || text.includes(q);
+          card.classList.toggle('xh-filter-hidden', !match);
+          if(match){
+            visibleCount++;
+            if(q && matches.length < 8) matches.push(card);
+          }
+        });
+        row.classList.toggle('xh-filter-hidden', !visibleCount);
+      });
+
+      if(!results) return;
+      results.innerHTML = '';
+      if(!q){ results.classList.remove('show'); return; }
+      if(matches.length){
+        matches.forEach(card => {
+          const item = document.createElement('button');
+          item.type = 'button';
+          item.className = 'xh-result-item';
+          item.innerHTML = '<strong>' + safeText(card.dataset.title || 'Timeline event') + '</strong><span>' + safeText((card.dataset.date || '') + ' · ' + (card.dataset.type || '')) + '</span>';
+          item.addEventListener('click', () => {
+            results.classList.remove('show');
+            card.scrollIntoView({behavior:'smooth', block:'center'});
+            setTimeout(() => openPopupById(card.dataset.cardId), 220);
+          });
+          results.appendChild(item);
+        });
+      }else{
+        results.innerHTML = '<div class="xh-result-item"><strong>No result</strong><span>Try another timeline keyword.</span></div>';
+      }
+      results.classList.add('show');
+    }
+
+    async function handleSearch(){
+      const value = input.value.trim();
+      if(!value){ filterTimeline(''); return; }
+      searchBtn.disabled = true;
+      const oldLabel = searchBtn.textContent;
+      searchBtn.textContent = 'Checking';
+      try{
+        const bridge = await waitForUnlockSystem();
+        if(bridge && typeof bridge.unlock === 'function'){
+          let callbackDone = false;
+          const ok = await Promise.resolve(bridge.unlock(value, () => { callbackDone = true; enableAdminFromSearch(); }));
+          if(ok){
+            if(!callbackDone) enableAdminFromSearch();
+            return;
+          }
+        }
+      }catch(error){
+        console.error('X Horizon unlock failed:', error);
+      }finally{
+        searchBtn.disabled = false;
+        searchBtn.textContent = oldLabel;
+      }
+      filterTimeline(value);
+    }
+
+    input.addEventListener('input', () => filterTimeline(input.value));
+    input.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); handleSearch(); } });
+    searchBtn.addEventListener('click', handleSearch);
+    document.addEventListener('click', e => { if(results && !e.target.closest('.xh-search-wrap')) results.classList.remove('show'); });
+  }
+
+  function setupTabs(){
+    tabsEl.addEventListener('click', e => {
+      const tab = e.target.closest('.xh-tab');
+      if(!tab) return;
+      tabsEl.querySelectorAll('.xh-tab').forEach(item => item.classList.remove('is-active'));
+      tab.classList.add('is-active');
+      document.getElementById(tab.dataset.jump)?.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  }
+
+  document.getElementById('xhPopClose')?.addEventListener('click', closePopup);
+  document.getElementById('xhPopBackdrop')?.addEventListener('click', e => { if(e.target.id === 'xhPopBackdrop') closePopup(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closePopup(); });
+
+  renderTabs();
+  renderRows();
+  renderWavePreview();
+  setupAdmin();
+  setupSearch();
+  setupTabs();
+})();
+</script>

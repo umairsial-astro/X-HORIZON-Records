@@ -1,0 +1,2383 @@
+<div class="xh-video-loader" id="xhVideoLoader" aria-hidden="true">
+  <div class="xh-video-load-mark">
+    <div class="xh-video-load-x">X</div>
+    <div class="xh-video-load-word">HORIZON</div>
+    <div class="xh-video-load-line"></div>
+  </div>
+</div>
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+
+const fallbackFirebaseConfig = {
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const firebaseConfig = window.XHORIZON_FIREBASE_CONFIG || window.XHorizonFirebaseConfig || fallbackFirebaseConfig;
+function configured(cfg){
+  return cfg &&
+    cfg.apiKey && !String(cfg.apiKey).includes("YOUR_") &&
+    cfg.projectId && !String(cfg.projectId).includes("YOUR_");
+}
+
+let app = null;
+let auth = null;
+let functions = null;
+
+try {
+  if (configured(firebaseConfig)) {
+    app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    functions = getFunctions(app);
+  }
+} catch (error) {
+  console.error("Firebase initialization failed:", error);
+}
+
+if (configured(firebaseConfig) && !window.XHorizonAdmin) {
+  window.XHorizonAdmin = {
+    async unlock(key, done) {
+      const cleanKey = String(key || "").trim();
+      if (!cleanKey || !auth || !functions) return false;
+      try {
+        const verifyAdminKey = httpsCallable(functions, "verifyAdminKey");
+        const result = await verifyAdminKey({ key: cleanKey });
+        const data = result && result.data ? result.data : {};
+        const customToken = data.token || data.customToken || data.firebaseToken || "";
+        if (customToken) await signInWithCustomToken(auth, customToken);
+
+        const user = auth.currentUser;
+        if (!user) return false;
+
+        const tokenResult = await user.getIdTokenResult(true);
+        const allowed = tokenResult && tokenResult.claims && tokenResult.claims.admin === true;
+        if (allowed) {
+          document.body.classList.add("editor-on");
+          if (typeof done === "function") done();
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error("X Horizon unlock failed:", error);
+        return false;
+      }
+    }
+  };
+}
+
+if (auth) {
+  onAuthStateChanged(auth, async function(user) {
+    if (!user) return;
+    try {
+      const tokenResult = await user.getIdTokenResult(true);
+      if (tokenResult && tokenResult.claims && tokenResult.claims.admin === true) {
+        document.body.classList.add("editor-on");
+      }
+    } catch (error) {
+      console.error("State check failed:", error);
+    }
+  });
+}
+</script>
+
+<script>
+(function(){
+  function done(){var l=document.getElementById("xhVideoLoader");if(l)l.classList.add("done");}
+  document.addEventListener("DOMContentLoaded",function(){setTimeout(done,1900);});
+  setTimeout(done,3200);
+})();
+</script>
+
+<div id="xh-video-page" data-xh-video-page="true" style="position:relative;padding:0 42px 42px;background:#000000;border-radius:0;overflow:hidden;border:0;box-shadow:none;margin-bottom:70px;color:white;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif;">
+
+<section id="xh-video-main-section" class="xh-video-hero" aria-label="X Horizon Graphical Media">
+  <div class="xh-video-hero-bg"></div>
+  <div class="xh-video-hero-content">
+    <div class="xh-video-search-wrap" id="xh-video-search-shell">
+      <div class="xh-video-search">
+        <input id="xh-video-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Search video heading">
+        <button id="xh-video-search-button" type="button">Search</button>
+      </div>
+      <div class="xh-video-results" id="xh-video-results"></div>
+      <div id="xh-video-search-status" class="xh-video-search-status">Search video headings here.</div>
+    </div>
+    <h1 class="xh-video-title"><span>X</span> HORIZON GRAPHICAL MEDIA</h1>
+    <p class="xh-video-hero-line">Space documentaries · visual learning · mission media</p>
+    <div class="xh-video-hero-actions">
+      <a class="xh-video-btn xh-video-btn-primary" href="#video-content">Explore Videos</a>
+      <a class="xh-video-btn xh-video-btn-secondary" href="#objects-content">Major Section</a>
+    </div>
+  </div>
+</section>
+
+<div id="xh-video-category-row-main" style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:45px;">
+
+    <div onclick="document.getElementById('objects-content').style.display='block';document.getElementById('phenomena-content').style.display='block';document.getElementById('technology-content').style.display='block';document.getElementById('history-content').style.display='block';document.getElementById('media-content').style.display='block';document.getElementById('places-content').style.display='block';document.getElementById('video-content').style.display='block';" style="min-width:205px;max-width:205px;padding:16px 18px;border-radius:18px;background:rgba(0,195,255,0.12);border:1px solid rgba(0,195,255,0.35);color:white;cursor:pointer;transition:0.4s;box-shadow:0 0 20px rgba(0,195,255,0.15);">
+        <div style="color:#00c3ff;font-size:11px;font-weight:700;letter-spacing:2px;margin-bottom:8px;">CATEGORY</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:6px;background:linear-gradient(90deg,#00c3ff,#a78bfa,#00ffb7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.5px;display:inline-block;">✦ Videos</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.7);line-height:1.5;">Space documentaries &amp; visuals</div>
+    </div>
+
+    <div onclick="document.getElementById('video-content').style.display='none';document.getElementById('phenomena-content').style.display='none';document.getElementById('technology-content').style.display='none';document.getElementById('history-content').style.display='none';document.getElementById('media-content').style.display='none';document.getElementById('places-content').style.display='none';document.getElementById('objects-content').style.display='block';" style="min-width:205px;max-width:205px;padding:16px 18px;border-radius:18px;background:rgba(8,17,31,0.82);border:1px solid rgba(0,195,255,0.16);color:white;transition:0.45s;cursor:pointer;box-shadow:0 0 20px rgba(0,195,255,0.08);backdrop-filter:blur(10px);" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 0 40px rgba(0,195,255,0.35)';this.style.border='1px solid rgba(0,195,255,0.6)';" onmouseout="this.style.transform='translateY(0px)';this.style.boxShadow='0 0 20px rgba(0,195,255,0.08)';this.style.border='1px solid rgba(0,195,255,0.16)';">
+        <div style="color:#00c3ff;font-size:11px;font-weight:700;letter-spacing:2px;margin-bottom:8px;">CATEGORY</div>
+        <div style="font-size:18px;font-weight:700;margin-bottom:8px;">Objects</div>
+        <div style="color:rgba(255,255,255,0.72);font-size:12px;line-height:1.7;">Black holes, exoplanets and mysterious cosmic bodies.</div>
+    </div>
+
+    <div onclick="document.getElementById('video-content').style.display='none';document.getElementById('objects-content').style.display='none';document.getElementById('technology-content').style.display='none';document.getElementById('history-content').style.display='none';document.getElementById('media-content').style.display='none';document.getElementById('places-content').style.display='none';document.getElementById('phenomena-content').style.display='block';" style="min-width:205px;max-width:205px;padding:16px 18px;border-radius:18px;background:rgba(8,17,31,0.82);border:1px solid rgba(157,77,255,0.16);color:white;transition:0.45s;cursor:pointer;box-shadow:0 0 20px rgba(157,77,255,0.08);backdrop-filter:blur(10px);" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 0 40px rgba(157,77,255,0.35)';this.style.border='1px solid rgba(157,77,255,0.6)';" onmouseout="this.style.transform='translateY(0px)';this.style.boxShadow='0 0 20px rgba(157,77,255,0.08)';this.style.border='1px solid rgba(157,77,255,0.16)';">
+        <div style="color:#9d4dff;font-size:11px;font-weight:700;letter-spacing:2px;margin-bottom:8px;">CATEGORY</div>
+        <div style="font-size:18px;font-weight:700;margin-bottom:8px;">Phenomena</div>
+        <div style="color:rgba(255,255,255,0.72);font-size:12px;line-height:1.7;">Supernovas, auroras and hidden cosmic physics.</div>
+    </div>
+
+    <div onclick="document.getElementById('video-content').style.display='none';document.getElementById('objects-content').style.display='none';document.getElementById('phenomena-content').style.display='none';document.getElementById('history-content').style.display='none';document.getElementById('media-content').style.display='none';document.getElementById('places-content').style.display='none';document.getElementById('technology-content').style.display='block';" style="min-width:205px;max-width:205px;padding:16px 18px;border-radius:18px;background:rgba(8,17,31,0.82);border:1px solid rgba(0,255,183,0.16);color:white;transition:0.45s;cursor:pointer;box-shadow:0 0 20px rgba(0,255,183,0.08);backdrop-filter:blur(10px);" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 0 40px rgba(0,255,183,0.35)';this.style.border='1px solid rgba(0,255,183,0.6)';" onmouseout="this.style.transform='translateY(0px)';this.style.boxShadow='0 0 20px rgba(0,255,183,0.08)';this.style.border='1px solid rgba(0,255,183,0.16)';">
+        <div style="color:#00ffb7;font-size:11px;font-weight:700;letter-spacing:2px;margin-bottom:8px;">CATEGORY</div>
+        <div style="font-size:18px;font-weight:700;margin-bottom:8px;">Technology</div>
+        <div style="color:rgba(255,255,255,0.72);font-size:12px;line-height:1.7;">Satellites, probes, rovers and telescopes.</div>
+    </div>
+
+</div>
+
+<div style="width:100%;height:2px;border-radius:30px;margin-bottom:45px;background:linear-gradient(to right,rgba(0,195,255,0.5),rgba(157,77,255,0.5),rgba(0,255,183,0.5),rgba(255,77,240,0.5),rgba(255,255,255,0.02));box-shadow:0 0 22px rgba(0,195,255,0.22);"></div>
+
+<div id="xh-video-category-row-secondary" style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:38px;">
+
+    <div onclick="document.getElementById('video-content').style.display='none';document.getElementById('objects-content').style.display='none';document.getElementById('phenomena-content').style.display='none';document.getElementById('technology-content').style.display='none';document.getElementById('media-content').style.display='none';document.getElementById('places-content').style.display='none';document.getElementById('history-content').style.display='block';" style="min-width:205px;max-width:205px;padding:16px 18px;border-radius:18px;background:rgba(8,17,31,0.82);border:1px solid rgba(255,95,95,0.16);color:white;transition:0.45s;cursor:pointer;box-shadow:0 0 20px rgba(255,95,95,0.08);backdrop-filter:blur(10px);" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 0 40px rgba(255,95,95,0.35)';this.style.border='1px solid rgba(255,95,95,0.6)';" onmouseout="this.style.transform='translateY(0px)';this.style.boxShadow='0 0 20px rgba(255,95,95,0.08)';this.style.border='1px solid rgba(255,95,95,0.16)';">
+        <div style="color:#ff5f5f;font-size:11px;font-weight:700;letter-spacing:2px;margin-bottom:8px;">CATEGORY</div>
+        <div style="font-size:18px;font-weight:700;margin-bottom:8px;">History</div>
+        <div style="color:rgba(255,255,255,0.72);font-size:12px;line-height:1.7;">Space race, moon missions and legendary astronauts.</div>
+    </div>
+
+    <div onclick="document.getElementById('video-content').style.display='none';document.getElementById('objects-content').style.display='none';document.getElementById('phenomena-content').style.display='none';document.getElementById('technology-content').style.display='none';document.getElementById('history-content').style.display='none';document.getElementById('places-content').style.display='none';document.getElementById('media-content').style.display='block';" style="min-width:205px;max-width:205px;padding:16px 18px;border-radius:18px;background:rgba(8,17,31,0.82);border:1px solid rgba(255,77,240,0.16);color:white;transition:0.45s;cursor:pointer;box-shadow:0 0 20px rgba(255,77,240,0.08);backdrop-filter:blur(10px);" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 0 40px rgba(255,77,240,0.35)';this.style.border='1px solid rgba(255,77,240,0.6)';" onmouseout="this.style.transform='translateY(0px)';this.style.boxShadow='0 0 20px rgba(255,77,240,0.08)';this.style.border='1px solid rgba(255,77,240,0.16)';">
+        <div style="color:#ff4df0;font-size:11px;font-weight:700;letter-spacing:2px;margin-bottom:8px;">CATEGORY</div>
+        <div style="font-size:18px;font-weight:700;margin-bottom:8px;">Media</div>
+        <div style="color:rgba(255,255,255,0.72);font-size:12px;line-height:1.7;">Reels, documentaries and cinematic space visuals.</div>
+    </div>
+
+    <div onclick="document.getElementById('video-content').style.display='none';document.getElementById('objects-content').style.display='none';document.getElementById('phenomena-content').style.display='none';document.getElementById('technology-content').style.display='none';document.getElementById('history-content').style.display='none';document.getElementById('media-content').style.display='none';document.getElementById('places-content').style.display='block';" style="min-width:205px;max-width:205px;padding:16px 18px;border-radius:18px;background:rgba(8,17,31,0.82);border:1px solid rgba(255,179,0,0.16);color:white;transition:0.45s;cursor:pointer;box-shadow:0 0 20px rgba(255,179,0,0.08);backdrop-filter:blur(10px);" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 0 40px rgba(255,179,0,0.35)';this.style.border='1px solid rgba(255,179,0,0.6)';" onmouseout="this.style.transform='translateY(0px)';this.style.boxShadow='0 0 20px rgba(255,179,0,0.08)';this.style.border='1px solid rgba(255,179,0,0.16)';">
+        <div style="color:#ffb300;font-size:11px;font-weight:700;letter-spacing:2px;margin-bottom:8px;">CATEGORY</div>
+        <div style="font-size:18px;font-weight:700;margin-bottom:8px;">Places</div>
+        <div style="color:rgba(255,255,255,0.72);font-size:12px;line-height:1.7;">Explore galaxies, nebulae and cosmic destinations.</div>
+    </div>
+
+</div>
+
+<div id="xh-video-admin-panel" style="display:none;position:relative;z-index:2;margin:0 0 42px;padding:20px;border-radius:24px;background:#030711;border:1px solid rgba(0,195,255,0.36);box-shadow:0 0 34px rgba(0,195,255,0.12),inset 0 0 22px rgba(255,255,255,0.025);box-sizing:border-box;">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:16px;">
+        <div>
+            <div style="color:#00c3ff;font-size:11px;font-weight:900;letter-spacing:2.6px;text-transform:uppercase;margin-bottom:6px;">Content Control</div>
+            <div style="font-size:22px;font-weight:900;line-height:1.25;background:linear-gradient(90deg,#ffffff,#9bdcff,#00c3ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-block;">Upload videos into categories</div>
+            <div style="color:rgba(255,255,255,0.66);font-size:12px;line-height:1.6;margin-top:7px;max-width:720px;">Paste a YouTube or Instagram link, choose category, and save. It adds the video card without copying category code.</div>
+        </div>
+        <button id="xh-video-admin-lock" type="button" style="height:40px;border-radius:13px;border:1px solid rgba(255,255,255,0.12);background:#050b16;color:white;font-size:12px;font-weight:800;letter-spacing:1.5px;padding:0 16px;cursor:pointer;">LOCK</button>
+    </div>
+
+    <div id="xh-video-admin-form" style="display:grid;grid-template-columns:1.1fr 1fr 1fr auto;gap:12px;align-items:end;">
+        <label style="display:block;color:rgba(255,255,255,0.76);font-size:12px;font-weight:800;letter-spacing:1px;">VIDEO HEADING
+            <input id="xh-admin-title" type="text" placeholder="Example: Journey Through Galaxies" style="margin-top:7px;width:100%;height:44px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);outline:none;background:#050b16;color:white;padding:0 13px;box-sizing:border-box;">
+        </label>
+        <label style="display:block;color:rgba(255,255,255,0.76);font-size:12px;font-weight:800;letter-spacing:1px;">VIDEO URL
+            <input id="xh-admin-url" type="text" placeholder="YouTube or Instagram URL" style="margin-top:7px;width:100%;height:44px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);outline:none;background:#050b16;color:white;padding:0 13px;box-sizing:border-box;">
+        </label>
+        <label style="display:block;color:rgba(255,255,255,0.76);font-size:12px;font-weight:800;letter-spacing:1px;">CATEGORY
+            <select id="xh-admin-category" style="margin-top:7px;width:100%;height:44px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);outline:none;background:#050b16;color:white;padding:0 13px;box-sizing:border-box;">
+                <option value="objects-content">Objects</option>
+                <option value="phenomena-content">Phenomena</option>
+                <option value="technology-content">Technology</option>
+                <option value="history-content">History</option>
+                <option value="media-content">Media</option>
+                <option value="places-content">Places</option>
+                <option value="video-content">Videos</option>
+            </select>
+        </label>
+        <button id="xh-admin-add-video" type="button" style="height:44px;border-radius:14px;border:1px solid rgba(0,195,255,0.5);background:linear-gradient(135deg,#0c1d34,#08243f);color:white;font-size:12px;font-weight:900;letter-spacing:1.5px;padding:0 18px;cursor:pointer;box-shadow:0 0 20px rgba(0,195,255,0.14);white-space:nowrap;">ADD VIDEO</button>
+    </div>
+    <div id="xh-video-admin-advanced" class="xh-admin-frame-editor">
+        <div class="xh-admin-advanced-head">
+            <div>
+                <div class="xh-admin-mini-label">Placement &amp; Visual Frame Control</div>
+                <div class="xh-admin-mini-title">Move videos and crop labels with live preview</div>
+            </div>
+            <div class="xh-admin-inline-actions xh-admin-head-actions">
+                <button id="xh-admin-set-default-all" type="button">SET DEFAULT + APPLY ALL</button>
+                <button id="xh-admin-reset-frame" type="button">RESET SELECTED</button>
+            </div>
+        </div>
+        <div class="xh-admin-control-grid">
+            <label>SELECT VIDEO
+                <select id="xh-admin-target"></select>
+            </label>
+            <label>MOVE TO CATEGORY
+                <select id="xh-admin-move-category">
+                    <option value="objects-content">Objects</option>
+                    <option value="phenomena-content">Phenomena</option>
+                    <option value="technology-content">Technology</option>
+                    <option value="history-content">History</option>
+                    <option value="media-content">Media</option>
+                    <option value="places-content">Places</option>
+                    <option value="video-content">Videos</option>
+                </select>
+            </label>
+            <label>POSITION
+                <input id="xh-admin-position" type="number" min="1" step="1" placeholder="1">
+            </label>
+            <div class="xh-admin-inline-actions">
+                <button id="xh-admin-move-video" type="button">MOVE</button>
+                <button id="xh-admin-random-move" type="button">RANDOM</button>
+            </div>
+        </div>
+
+        <div class="xh-admin-visual-layout">
+            <div class="xh-admin-preview-side">
+                <div class="xh-admin-preview-note">Drag the edge handles to hide Instagram top/bottom/side labels. Drag the center to move the internal video display. Black mask overlays do not stop playback.</div>
+                <div id="xh-admin-frame-preview" class="xh-admin-frame-preview" data-xh-provider="instagram">
+                    <iframe id="xh-admin-preview-frame" title="Video crop preview" loading="lazy"></iframe>
+                    <span class="xh-frame-mask xh-frame-mask-top"></span>
+                    <span class="xh-frame-mask xh-frame-mask-right"></span>
+                    <span class="xh-frame-mask xh-frame-mask-bottom"></span>
+                    <span class="xh-frame-mask xh-frame-mask-left"></span>
+                    <button type="button" class="xh-crop-handle xh-crop-handle-top" data-xh-handle="top" aria-label="Crop top"></button>
+                    <button type="button" class="xh-crop-handle xh-crop-handle-right" data-xh-handle="right" aria-label="Crop right"></button>
+                    <button type="button" class="xh-crop-handle xh-crop-handle-bottom" data-xh-handle="bottom" aria-label="Crop bottom"></button>
+                    <button type="button" class="xh-crop-handle xh-crop-handle-left" data-xh-handle="left" aria-label="Crop left"></button>
+                    <button type="button" class="xh-crop-move-pad" data-xh-handle="move">MOVE VIDEO</button>
+                </div>
+            </div>
+            <div class="xh-admin-tune-side">
+                <div class="xh-admin-crop-grid xh-admin-visual-sliders">
+                    <label>TOP MASK
+                        <input id="xh-admin-crop-top" type="range" min="0" max="180" step="1" value="0">
+                    </label>
+                    <label>RIGHT MASK
+                        <input id="xh-admin-crop-right" type="range" min="0" max="180" step="1" value="0">
+                    </label>
+                    <label>BOTTOM MASK
+                        <input id="xh-admin-crop-bottom" type="range" min="0" max="180" step="1" value="0">
+                    </label>
+                    <label>LEFT MASK
+                        <input id="xh-admin-crop-left" type="range" min="0" max="180" step="1" value="0">
+                    </label>
+                    <label>ZOOM
+                        <input id="xh-admin-crop-scale" type="range" min="1" max="2" step="0.01" value="1">
+                    </label>
+                    <label>MOVE X
+                        <input id="xh-admin-crop-pan-x" type="range" min="-240" max="240" step="1" value="0">
+                    </label>
+                    <label>MOVE Y
+                        <input id="xh-admin-crop-pan-y" type="range" min="-240" max="240" step="1" value="0">
+                    </label>
+                </div>
+                <div class="xh-admin-inline-actions xh-admin-frame-actions">
+                    <button id="xh-admin-apply-frame" type="button">SAVE SELECTED FRAME</button>
+                    <button id="xh-admin-use-ig-safe" type="button">INSTAGRAM SAFE FRAME</button>
+                    <button id="xh-admin-reset-visual" type="button">ORIGINAL PREVIEW</button>
+                </div>
+                <div class="xh-admin-preview-note small">Default means this saved frame will be used for all upcoming new videos and can be applied to all current videos.</div>
+            </div>
+        </div>
+    </div>
+    <div id="xh-admin-message" style="margin-top:12px;color:rgba(255,255,255,0.68);font-size:12px;line-height:1.5;">Admin unlock uses the Firebase root config. Use live preview to crop Instagram labels, drag the internal video display, move videos, or save one frame as default for future videos.</div>
+    <div id="xh-admin-list" style="margin-top:15px;display:grid;gap:8px;"></div>
+</div>
+
+
+<style>
+#xh-video-page, #xh-video-page * { box-sizing:border-box; }
+#xh-video-page #xh-video-category-row-main, #xh-video-page #xh-video-category-row-secondary { position:relative;z-index:2; }
+#xh-video-page input::placeholder { color:rgba(255,255,255,0.42); }
+#xh-video-page input:-webkit-autofill,
+#xh-video-page input:-webkit-autofill:hover,
+#xh-video-page input:-webkit-autofill:focus { -webkit-text-fill-color:#ffffff !important; box-shadow:0 0 0 1000px #08111f inset !important; transition:background-color 9999s ease-in-out 0s; }
+#xh-video-page .vid-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:24px; row-gap:58px; }
+#xh-video-page .vid-card { position:relative; padding:14px; background:#000000; border:1px solid rgba(0,195,255,0.22); border-radius:20px; box-shadow:0 0 34px rgba(0,0,0,0.58),0 0 18px rgba(0,195,255,0.08); box-sizing:border-box; transition:0.28s ease; }
+#xh-video-page .vid-card:hover { transform:translateY(-5px); border-color:rgba(0,195,255,0.48); box-shadow:0 0 40px rgba(0,195,255,0.15),0 0 38px rgba(0,0,0,0.66); }
+#xh-video-page .xh-video-shell { position:relative; width:100%; overflow:hidden; border-radius:14px; background:#000; border:3px solid #050505; box-shadow:inset 0 0 0 1px rgba(255,255,255,0.03); }
+#xh-video-page .vid-card iframe { width:100%; height:205px; border-radius:11px; display:block; border:0; background:#000; }
+#xh-video-page .vid-card[data-xh-provider="instagram"] iframe { height:430px; }
+#xh-video-page .xh-video-actions { margin-top:12px; display:flex; gap:9px; justify-content:center; flex-wrap:wrap; }
+#xh-video-page .xh-video-action-btn { height:32px; border-radius:999px; border:1px solid rgba(0,195,255,0.34); background:#040914; color:#dff6ff; font-size:10px; font-weight:900; letter-spacing:1.2px; padding:0 12px; cursor:pointer; box-shadow:0 0 16px rgba(0,195,255,0.08); transition:0.24s ease; }
+#xh-video-page .xh-video-action-btn:hover { transform:translateY(-2px); border-color:rgba(0,195,255,0.66); box-shadow:0 0 22px rgba(0,195,255,0.16); }
+#xh-video-page .xh-card-delete { position:absolute;top:12px;right:12px;z-index:7;height:30px;border-radius:999px;border:1px solid rgba(255,95,95,0.45);background:#16070b;color:#ffffff;font-size:10px;font-weight:900;letter-spacing:1px;padding:0 10px;cursor:pointer;box-shadow:0 0 18px rgba(0,0,0,0.45); }
+#xh-video-page .vid-card .vid-title { margin-top:13px; text-align:center; color:white; font-size:14px; font-weight:800; line-height:1.45; letter-spacing:0.2px; word-break:break-word; }
+#xh-video-fullscreen-modal { display:none; position:fixed; inset:0; z-index:999999; background:rgba(0,0,0,0.94); padding:22px; align-items:center; justify-content:center; box-sizing:border-box; }
+#xh-video-fullscreen-modal.xh-modal-open { display:flex; }
+#xh-video-fullscreen-box { width:min(1180px,96vw); max-height:94vh; background:#000; border:1px solid rgba(0,195,255,0.30); border-radius:22px; box-shadow:0 0 80px rgba(0,195,255,0.16),0 0 90px rgba(0,0,0,0.8); padding:14px; box-sizing:border-box; }
+#xh-video-fullscreen-top { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:0 2px 12px; color:white; }
+#xh-video-fullscreen-title { font-size:14px; font-weight:900; letter-spacing:0.5px; color:#dff6ff; }
+#xh-video-fullscreen-close { height:34px; border-radius:999px; border:1px solid rgba(255,255,255,0.18); background:#080d16; color:white; font-size:12px; font-weight:900; padding:0 14px; cursor:pointer; }
+#xh-video-fullscreen-frame { width:100%; height:min(72vh,720px); border:0; border-radius:16px; background:#000; display:block; }
+#xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-frame { height:min(82vh,820px); }
+#xh-video-page #objects-content, #xh-video-page #phenomena-content, #xh-video-page #technology-content, #xh-video-page #history-content, #xh-video-page #media-content, #xh-video-page #places-content, #xh-video-page #video-content { margin-bottom:42px; }
+#xh-video-page #xh-video-category-row-main > div, #xh-video-page #xh-video-category-row-secondary > div { background:#06101f !important; backdrop-filter:none !important; }
+#xh-video-page .xh-admin-item { display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;background:#08111f;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.78);font-size:12px; }
+#xh-video-page .xh-admin-item button { border:1px solid rgba(255,95,95,0.35);background:#180b12;color:white;border-radius:10px;height:30px;padding:0 10px;font-size:11px;font-weight:800;cursor:pointer; }
+#xh-video-page .xh-empty-section-note { grid-column:1/-1;padding:16px;border-radius:18px;background:#08111f;border:1px dashed rgba(0,195,255,0.24);color:rgba(255,255,255,0.58);font-size:13px;text-align:center; }
+@media (max-width:900px) {
+    #xh-video-page { padding:24px !important; border-radius:22px !important; }
+    #xh-video-category-row-main, #xh-video-category-row-secondary { display:grid !important; grid-template-columns:1fr 1fr !important; gap:14px !important; }
+    #xh-video-category-row-main > div, #xh-video-category-row-secondary > div { min-width:0 !important; max-width:none !important; width:100% !important; }
+    #xh-video-page .vid-grid { grid-template-columns:1fr !important; gap:18px !important; }
+    #xh-video-page .vid-card iframe { height:230px !important; }
+    #xh-video-admin-form { grid-template-columns:1fr 1fr !important; }
+}
+@media (max-width:620px) {
+    #xh-video-page { padding:16px !important; border-radius:18px !important; margin-bottom:35px !important; }
+    #xh-video-search-shell, #xh-video-admin-panel, #xh-graphical-media-hero { padding:15px !important; border-radius:18px !important; }
+    #xh-video-category-row-main, #xh-video-category-row-secondary { grid-template-columns:1fr !important; margin-bottom:24px !important; }
+    #xh-video-page .vid-card { padding:10px !important; border-radius:17px !important; }
+    #xh-video-page .vid-grid { grid-template-columns:1fr !important; row-gap:38px !important; }
+    #xh-video-page .vid-card iframe { height:205px !important; border-radius:12px !important; }
+    #xh-video-fullscreen-modal { padding:10px !important; }
+    #xh-video-fullscreen-box { border-radius:16px !important; padding:10px !important; }
+    #xh-video-fullscreen-frame { height:68vh !important; border-radius:12px !important; }
+    #xh-video-page .vid-card[data-xh-provider="instagram"] iframe { height:430px !important; }
+    #xh-video-page .vid-card .vid-title { font-size:13px !important; }
+    #xh-video-admin-form { grid-template-columns:1fr !important; }
+    #xh-video-search-clear, #xh-admin-add-video, #xh-video-admin-lock { width:100% !important; }
+}
+
+
+/* X Horizon provider-specific media sizing: YouTube stays cinematic, Instagram reels stay vertical. */
+#xh-video-page .vid-card[data-xh-provider="youtube"] .xh-video-shell,
+#xh-video-page .vid-card:not([data-xh-provider="instagram"]) .xh-video-shell {
+    aspect-ratio:16 / 9;
+    height:auto !important;
+}
+#xh-video-page .vid-card[data-xh-provider="youtube"] iframe,
+#xh-video-page .vid-card:not([data-xh-provider="instagram"]) iframe {
+    height:100% !important;
+    min-height:0 !important;
+}
+#xh-video-page .vid-card[data-xh-provider="instagram"] {
+    padding:16px !important;
+}
+#xh-video-page .vid-card[data-xh-provider="instagram"] .xh-video-shell {
+    width:min(100%,330px);
+    aspect-ratio:9 / 16;
+    height:auto !important;
+    margin:0 auto;
+    border-radius:26px;
+    overflow:hidden;
+    background:#000;
+    border:4px solid #050505;
+    box-shadow:0 0 0 1px rgba(255,255,255,0.04),0 0 28px rgba(0,0,0,0.75);
+}
+#xh-video-page .vid-card[data-xh-provider="instagram"] iframe {
+    width:100% !important;
+    height:calc(100% + 112px) !important;
+    min-height:0 !important;
+    border-radius:22px !important;
+    transform:translateY(-56px);
+    transform-origin:top center;
+    background:#000 !important;
+}
+#xh-video-page .vid-card[data-xh-provider="instagram"] .vid-title {
+    margin-top:16px !important;
+}
+#xh-video-page .xh-provider-note {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin:12px auto 0;
+    min-height:24px;
+    padding:0 10px;
+    border-radius:999px;
+    background:#050b16;
+    border:1px solid rgba(0,195,255,0.20);
+    color:rgba(210,240,255,0.70);
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:1.3px;
+    text-transform:uppercase;
+}
+#xh-video-fullscreen-box { overflow:hidden; }
+#xh-video-fullscreen-modal[data-xh-provider="youtube"] #xh-video-fullscreen-frame {
+    aspect-ratio:16 / 9;
+    height:auto !important;
+    max-height:78vh;
+}
+#xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-box {
+    width:min(480px,96vw);
+    max-height:96vh;
+}
+#xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-frame {
+    width:min(390px,88vw) !important;
+    height:calc(min(86vh,860px) + 112px) !important;
+    max-height:none !important;
+    display:block;
+    margin:0 auto;
+    transform:translateY(-56px);
+    border-radius:26px !important;
+    background:#000 !important;
+}
+@media (max-width:900px) {
+    #xh-video-page .vid-card[data-xh-provider="instagram"] .xh-video-shell { width:min(100%,310px) !important; }
+    #xh-video-page .vid-card[data-xh-provider="youtube"] iframe,
+    #xh-video-page .vid-card:not([data-xh-provider="instagram"]) iframe { height:100% !important; }
+}
+@media (max-width:620px) {
+    #xh-video-page .vid-card[data-xh-provider="instagram"] .xh-video-shell { width:min(100%,292px) !important; }
+    #xh-video-page .vid-card[data-xh-provider="instagram"] iframe { height:calc(100% + 104px) !important; transform:translateY(-52px) !important; }
+    #xh-video-page .vid-card[data-xh-provider="youtube"] iframe,
+    #xh-video-page .vid-card:not([data-xh-provider="instagram"]) iframe { height:100% !important; }
+    #xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-frame { height:calc(82vh + 104px) !important; transform:translateY(-52px) !important; }
+}
+
+
+/* X Horizon player continuity patch: fullscreen uses the original iframe, not a duplicate. */
+#xh-video-fullscreen-frame { display:none !important; }
+#xh-video-fullscreen-slot {
+    width:100%;
+    background:#000;
+    border-radius:16px;
+    overflow:hidden;
+    box-sizing:border-box;
+}
+#xh-video-fullscreen-slot .xh-video-shell {
+    margin:0 auto !important;
+    background:#000 !important;
+    overflow:hidden !important;
+    box-shadow:none !important;
+}
+#xh-video-fullscreen-slot iframe {
+    display:block !important;
+    width:100% !important;
+    height:100% !important;
+    border:0 !important;
+    background:#000 !important;
+}
+#xh-video-fullscreen-modal[data-xh-provider="youtube"] #xh-video-fullscreen-slot {
+    width:100% !important;
+}
+#xh-video-fullscreen-modal[data-xh-provider="youtube"] #xh-video-fullscreen-slot .xh-video-shell {
+    width:100% !important;
+    height:min(78vh,780px) !important;
+    min-height:0 !important;
+    aspect-ratio:16 / 10 !important;
+    border-radius:16px !important;
+    border:0 !important;
+    transform:none !important;
+}
+#xh-video-fullscreen-modal[data-xh-provider="youtube"] #xh-video-fullscreen-slot iframe {
+    transform:none !important;
+    border-radius:16px !important;
+}
+#xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-slot {
+    width:100% !important;
+    height:100% !important;
+    border-radius:24px !important;
+    overflow:hidden !important;
+}
+#xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-slot .xh-video-shell {
+    width:calc(100% + 96px) !important;
+    height:calc(100% + 240px) !important;
+    max-height:none !important;
+    aspect-ratio:auto !important;
+    border:0 !important;
+    border-radius:0 !important;
+    transform:translate(-48px,-120px) !important;
+    margin:0 !important;
+}
+#xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-slot iframe {
+    width:100% !important;
+    height:100% !important;
+    max-width:none !important;
+    max-height:none !important;
+    border-radius:0 !important;
+    transform:none !important;
+}
+@media (max-width:620px) {
+    #xh-video-fullscreen-modal[data-xh-provider="youtube"] #xh-video-fullscreen-slot .xh-video-shell { height:68vh !important; }
+    #xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-slot .xh-video-shell {
+        width:calc(100% + 76px) !important;
+        height:calc(100% + 210px) !important;
+        transform:translate(-38px,-105px) !important;
+    }
+}
+
+
+/* X Horizon MotionSites-style visual patch: solid black cards, no old radial/circle theme, category colors preserved. */
+#xh-video-page {
+    background:#000000 !important;
+    background-image:none !important;
+    border-color:rgba(255,255,255,0.10) !important;
+}
+#xh-video-page::before {
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+        linear-gradient(90deg,rgba(255,255,255,0.035) 1px,transparent 1px),
+        linear-gradient(180deg,rgba(255,255,255,0.026) 1px,transparent 1px);
+    background-size:92px 92px;
+    opacity:0.18;
+    z-index:0;
+}
+#xh-video-page::after {
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+        radial-gradient(circle at 8% 18%,rgba(0,195,255,0.08),transparent 25%),
+        radial-gradient(circle at 88% 12%,rgba(157,77,255,0.07),transparent 22%),
+        radial-gradient(circle at 78% 92%,rgba(255,179,0,0.055),transparent 22%);
+    opacity:0.82;
+    z-index:0;
+}
+#xh-video-page > * {
+    position:relative;
+    z-index:1;
+}
+#xh-graphical-media-hero {
+    background:linear-gradient(180deg,#080808 0%,#030303 100%) !important;
+    border:1px solid rgba(255,255,255,0.12) !important;
+    box-shadow:0 26px 70px rgba(0,0,0,0.62),inset 0 1px 0 rgba(255,255,255,0.06) !important;
+}
+#xh-graphical-media-hero > div[style*="border-radius:50%"],
+#xh-graphical-media-hero > div[style*="radial-gradient(circle"] {
+    display:none !important;
+}
+#xh-graphical-media-hero h1 {
+    background:linear-gradient(90deg,#ffffff 0%,#d9d9d9 38%,#9fabb8 72%,#ffffff 100%) !important;
+    -webkit-background-clip:text !important;
+    -webkit-text-fill-color:transparent !important;
+    background-clip:text !important;
+}
+#xh-graphical-media-hero p {
+    color:rgba(245,245,245,0.70) !important;
+}
+#xh-graphical-media-hero div[style*="X Horizon Media Library"] {
+    background:#0b0b0b !important;
+    border-color:rgba(255,255,255,0.12) !important;
+    color:#f2f2f2 !important;
+    box-shadow:none !important;
+}
+
+/* Category cards: keep every category's own color, but convert the base to solid premium black. */
+#xh-video-page #xh-video-category-row-main > div,
+#xh-video-page #xh-video-category-row-secondary > div {
+    background:linear-gradient(180deg,#090909 0%,#030303 100%) !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    border-radius:18px !important;
+    box-shadow:0 18px 45px rgba(0,0,0,0.48),inset 0 1px 0 rgba(255,255,255,0.045) !important;
+}
+#xh-video-page #xh-video-category-row-main > div:hover,
+#xh-video-page #xh-video-category-row-secondary > div:hover {
+    background:linear-gradient(180deg,#101010 0%,#050505 100%) !important;
+}
+#xh-video-page #xh-video-category-row-main > div:nth-child(1) { border-color:rgba(0,195,255,0.44) !important; box-shadow:0 18px 45px rgba(0,0,0,0.48),0 0 24px rgba(0,195,255,0.10),inset 0 1px 0 rgba(255,255,255,0.045) !important; }
+#xh-video-page #xh-video-category-row-main > div:nth-child(2) { border-color:rgba(0,195,255,0.32) !important; }
+#xh-video-page #xh-video-category-row-main > div:nth-child(3) { border-color:rgba(157,77,255,0.34) !important; }
+#xh-video-page #xh-video-category-row-main > div:nth-child(4) { border-color:rgba(0,255,183,0.34) !important; }
+#xh-video-page #xh-video-category-row-secondary > div:nth-child(1) { border-color:rgba(255,95,95,0.34) !important; }
+#xh-video-page #xh-video-category-row-secondary > div:nth-child(2) { border-color:rgba(255,77,240,0.34) !important; }
+#xh-video-page #xh-video-category-row-secondary > div:nth-child(3) { border-color:rgba(255,179,0,0.38) !important; }
+
+/* Search/admin/video cards: solid black MotionSites feeling, no glassy old theme. */
+#xh-video-search-shell,
+#xh-video-admin-panel {
+    background:#050505 !important;
+    border:1px solid rgba(255,255,255,0.11) !important;
+    box-shadow:0 22px 60px rgba(0,0,0,0.58),inset 0 1px 0 rgba(255,255,255,0.045) !important;
+}
+#xh-video-page input,
+#xh-video-page select {
+    background:#090909 !important;
+    border-color:rgba(255,255,255,0.14) !important;
+    color:#ffffff !important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.025) !important;
+}
+#xh-video-page input:focus,
+#xh-video-page select:focus {
+    border-color:rgba(0,195,255,0.46) !important;
+    box-shadow:0 0 0 3px rgba(0,195,255,0.09),inset 0 0 0 1px rgba(255,255,255,0.035) !important;
+}
+#xh-video-search-clear,
+#xh-video-admin-lock,
+#xh-admin-add-video {
+    background:#0b0b0b !important;
+    border-color:rgba(255,255,255,0.16) !important;
+    box-shadow:0 12px 28px rgba(0,0,0,0.42) !important;
+}
+#xh-admin-add-video {
+    border-color:rgba(0,195,255,0.42) !important;
+    background:linear-gradient(180deg,#101010,#050505) !important;
+}
+#xh-video-page .vid-card {
+    background:linear-gradient(180deg,#070707 0%,#020202 100%) !important;
+    border:1px solid rgba(255,255,255,0.11) !important;
+    box-shadow:0 22px 55px rgba(0,0,0,0.60),inset 0 1px 0 rgba(255,255,255,0.045) !important;
+}
+#xh-video-page .vid-card:hover {
+    border-color:rgba(255,255,255,0.20) !important;
+    box-shadow:0 26px 70px rgba(0,0,0,0.70),0 0 28px rgba(0,195,255,0.09),inset 0 1px 0 rgba(255,255,255,0.055) !important;
+}
+#xh-video-page .xh-video-shell {
+    background:#000000 !important;
+    border-color:#111111 !important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.045),0 14px 30px rgba(0,0,0,0.45) !important;
+}
+#xh-video-page .vid-card .vid-title {
+    color:#f7f7f7 !important;
+    font-weight:850 !important;
+    letter-spacing:0.05px !important;
+}
+#xh-video-page .xh-video-action-btn {
+    background:#090909 !important;
+    color:#f2f2f2 !important;
+    border-color:rgba(255,255,255,0.14) !important;
+    box-shadow:none !important;
+}
+#xh-video-page .xh-video-action-btn:hover {
+    border-color:rgba(0,195,255,0.42) !important;
+    box-shadow:0 0 20px rgba(0,195,255,0.10) !important;
+}
+
+/* Restore stable media ratios instead of the previous sizing experiment. */
+#xh-video-page .vid-card[data-xh-provider="youtube"] .xh-video-shell,
+#xh-video-page .vid-card:not([data-xh-provider="instagram"]) .xh-video-shell {
+    aspect-ratio:16 / 9 !important;
+    min-height:0 !important;
+}
+#xh-video-page .vid-card[data-xh-provider="youtube"] iframe,
+#xh-video-page .vid-card:not([data-xh-provider="instagram"]) iframe {
+    height:100% !important;
+}
+#xh-video-page .vid-card[data-xh-provider="instagram"] .xh-video-shell {
+    width:min(100%,330px) !important;
+    aspect-ratio:9 / 16 !important;
+    max-height:none !important;
+}
+
+/* Fullscreen theme only: player-continuity code remains active. */
+#xh-video-fullscreen-modal {
+    background:rgba(0,0,0,0.96) !important;
+}
+#xh-video-fullscreen-box {
+    background:#050505 !important;
+    border-color:rgba(255,255,255,0.14) !important;
+    box-shadow:0 34px 110px rgba(0,0,0,0.86),inset 0 1px 0 rgba(255,255,255,0.05) !important;
+}
+#xh-video-fullscreen-title {
+    color:#f4f4f4 !important;
+}
+#xh-video-fullscreen-close {
+    background:#0b0b0b !important;
+    border-color:rgba(255,255,255,0.16) !important;
+}
+#xh-video-page .xh-admin-item {
+    background:#090909 !important;
+    border-color:rgba(255,255,255,0.10) !important;
+}
+#xh-video-page .xh-empty-section-note {
+    background:#070707 !important;
+    border-color:rgba(255,255,255,0.14) !important;
+}
+@media (max-width:620px) {
+    #xh-video-page .vid-card[data-xh-provider="instagram"] .xh-video-shell {
+        width:min(100%,292px) !important;
+    }
+}
+
+
+/* FINAL FIX PATCH — MotionSites solid view, hidden IG chrome, stable fullscreen, fullscreen reload. */
+#xh-video-page::after { display:none !important; }
+#xh-graphical-media-hero > div[style*="border-radius:50%"],
+#xh-graphical-media-hero > div[style*="radial-gradient(circle"] { display:none !important; }
+
+/* Card players: no old rounded/circular mini frame, stronger Instagram top/bottom crop. */
+#xh-video-page .xh-video-shell {
+    border-radius:12px !important;
+    border:1px solid #151515 !important;
+    background:#000 !important;
+}
+#xh-video-page .vid-card[data-xh-provider="youtube"] .xh-video-shell,
+#xh-video-page .vid-card:not([data-xh-provider="instagram"]) .xh-video-shell {
+    aspect-ratio:16 / 9 !important;
+    min-height:0 !important;
+}
+#xh-video-page .vid-card[data-xh-provider="instagram"] .xh-video-shell {
+    width:min(100%,286px) !important;
+    aspect-ratio:9 / 13.15 !important;
+    max-height:378px !important;
+    border-radius:14px !important;
+    overflow:hidden !important;
+    margin:0 auto !important;
+    border:1px solid #151515 !important;
+}
+#xh-video-page .vid-card[data-xh-provider="instagram"] iframe {
+    width:calc(100% + 92px) !important;
+    height:calc(100% + 292px) !important;
+    max-width:none !important;
+    max-height:none !important;
+    border-radius:0 !important;
+    transform:translate(-46px,-146px) !important;
+    transform-origin:top left !important;
+    background:#000 !important;
+}
+
+/* Fullscreen: no title strip/upside/downside frame, only compact floating controls. */
+#xh-video-fullscreen-modal {
+    background:#000 !important;
+    padding:16px !important;
+}
+#xh-video-fullscreen-box {
+    position:relative !important;
+    padding:0 !important;
+    background:#000 !important;
+    border:1px solid rgba(255,255,255,0.12) !important;
+    border-radius:16px !important;
+    overflow:hidden !important;
+    box-shadow:0 35px 110px rgba(0,0,0,0.92) !important;
+}
+#xh-video-fullscreen-top {
+    position:absolute !important;
+    top:12px !important;
+    right:12px !important;
+    z-index:20 !important;
+    display:flex !important;
+    justify-content:flex-end !important;
+    align-items:center !important;
+    gap:8px !important;
+    padding:0 !important;
+    pointer-events:none !important;
+}
+#xh-video-fullscreen-title { display:none !important; }
+#xh-video-fullscreen-reload,
+#xh-video-fullscreen-close {
+    pointer-events:auto !important;
+    height:34px !important;
+    min-width:72px !important;
+    border-radius:999px !important;
+    border:1px solid rgba(255,255,255,0.18) !important;
+    background:rgba(0,0,0,0.72) !important;
+    color:#fff !important;
+    font-size:11px !important;
+    font-weight:900 !important;
+    letter-spacing:1px !important;
+    padding:0 13px !important;
+    cursor:pointer !important;
+    backdrop-filter:none !important;
+}
+#xh-video-fullscreen-slot,
+#xh-video-fullscreen-slot .xh-video-shell,
+#xh-video-fullscreen-slot iframe {
+    background:#000 !important;
+}
+#xh-video-fullscreen-slot .xh-video-shell {
+    border:0 !important;
+    box-shadow:none !important;
+}
+
+/* YouTube fullscreen keeps correct scaling and uses the original iframe, so the same playing video continues. */
+#xh-video-fullscreen-modal[data-xh-provider="youtube"] #xh-video-fullscreen-box,
+#xh-video-fullscreen-modal:not([data-xh-provider="instagram"]) #xh-video-fullscreen-box {
+    width:min(1240px,96vw,calc(86vh * 16 / 9)) !important;
+    height:auto !important;
+    max-height:86vh !important;
+}
+#xh-video-fullscreen-modal[data-xh-provider="youtube"] #xh-video-fullscreen-slot,
+#xh-video-fullscreen-modal:not([data-xh-provider="instagram"]) #xh-video-fullscreen-slot {
+    width:100% !important;
+    height:auto !important;
+    border-radius:16px !important;
+}
+#xh-video-fullscreen-modal[data-xh-provider="youtube"] #xh-video-fullscreen-slot .xh-video-shell,
+#xh-video-fullscreen-modal:not([data-xh-provider="instagram"]) #xh-video-fullscreen-slot .xh-video-shell {
+    width:100% !important;
+    height:auto !important;
+    aspect-ratio:16 / 9 !important;
+    min-height:0 !important;
+    max-height:none !important;
+    transform:none !important;
+    border-radius:16px !important;
+}
+#xh-video-fullscreen-modal[data-xh-provider="youtube"] #xh-video-fullscreen-slot iframe,
+#xh-video-fullscreen-modal:not([data-xh-provider="instagram"]) #xh-video-fullscreen-slot iframe {
+    width:100% !important;
+    height:100% !important;
+    transform:none !important;
+    border-radius:16px !important;
+}
+
+/* Instagram fullscreen: hard crop top, bottom, and sides so profile/id/footer page info cannot show. */
+#xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-box {
+    width:min(390px,94vw) !important;
+    height:min(82vh,700px) !important;
+    max-height:82vh !important;
+    border-radius:16px !important;
+}
+#xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-slot {
+    width:100% !important;
+    height:100% !important;
+    border-radius:16px !important;
+    overflow:hidden !important;
+}
+#xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-slot .xh-video-shell {
+    width:calc(100% + 132px) !important;
+    height:calc(100% + 340px) !important;
+    max-width:none !important;
+    max-height:none !important;
+    aspect-ratio:auto !important;
+    border-radius:0 !important;
+    transform:translate(-66px,-170px) !important;
+    transform-origin:top left !important;
+    margin:0 !important;
+}
+#xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-slot iframe {
+    width:100% !important;
+    height:100% !important;
+    max-width:none !important;
+    max-height:none !important;
+    border-radius:0 !important;
+    transform:none !important;
+}
+
+@media (max-width:620px) {
+    #xh-video-page .vid-card[data-xh-provider="instagram"] .xh-video-shell {
+        width:min(100%,252px) !important;
+        max-height:334px !important;
+    }
+    #xh-video-page .vid-card[data-xh-provider="instagram"] iframe {
+        width:calc(100% + 78px) !important;
+        height:calc(100% + 250px) !important;
+        transform:translate(-39px,-125px) !important;
+    }
+    #xh-video-fullscreen-modal { padding:9px !important; }
+    #xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-box {
+        width:min(340px,94vw) !important;
+        height:min(74vh,590px) !important;
+        max-height:74vh !important;
+    }
+    #xh-video-fullscreen-modal[data-xh-provider="instagram"] #xh-video-fullscreen-slot .xh-video-shell {
+        width:calc(100% + 104px) !important;
+        height:calc(100% + 286px) !important;
+        transform:translate(-52px,-143px) !important;
+    }
+    #xh-video-fullscreen-reload,
+    #xh-video-fullscreen-close {
+        height:32px !important;
+        min-width:64px !important;
+        font-size:10px !important;
+    }
+}
+
+
+/* X Horizon video page reference-main update */
+.xh-video-loader{
+  position:fixed;inset:0;background:#000;display:grid;place-items:center;z-index:999999;
+  transition:opacity .65s cubic-bezier(.16,1,.3,1),visibility .65s cubic-bezier(.16,1,.3,1);
+}
+.xh-video-loader.done{opacity:0;visibility:hidden}
+.xh-video-load-mark{position:relative;width:min(310px,82vw);height:118px;display:grid;place-items:center;overflow:hidden}
+.xh-video-load-x{position:absolute;left:42px;top:6px;font-size:96px;line-height:1;font-weight:900;letter-spacing:-.12em;color:#fff;z-index:2;text-shadow:0 0 26px rgba(255,255,255,.18)}
+.xh-video-load-word{position:absolute;left:112px;top:45px;font-size:22px;font-weight:900;letter-spacing:.2em;color:#eee;opacity:.18;animation:xhVideoWordBlink 1.7s steps(2,end) infinite,xhVideoWordSolid .22s ease 1.7s forwards;z-index:3}
+.xh-video-load-line{position:absolute;left:42px;bottom:10px;width:222px;height:4px;border-radius:99px;background:#161616;overflow:hidden}
+.xh-video-load-line::after{content:"";display:block;height:100%;width:0;background:#d8d8d8;animation:xhVideoLoadFill 1.7s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes xhVideoWordBlink{0%,100%{opacity:.16}50%{opacity:.68}}
+@keyframes xhVideoWordSolid{to{opacity:1}}
+@keyframes xhVideoLoadFill{to{width:100%}}
+
+#xh-video-page{
+  background:#000 !important;
+  border:0 !important;
+  box-shadow:none !important;
+  overflow:hidden !important;
+}
+#xh-video-page::before,
+#xh-video-page::after{display:none !important}
+
+#xh-video-main-section.xh-video-hero{
+  position:relative;
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  overflow:hidden;
+  background:#000;
+  margin:0 -42px 42px;
+}
+#xh-video-main-section .xh-video-hero-bg{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.44) 74%,#000 100%),
+    linear-gradient(90deg,rgba(0,0,0,.48),rgba(0,0,0,.08),rgba(0,0,0,.48)),
+    url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=90&w=2400&auto=format&fit=crop') center/cover no-repeat;
+  filter:brightness(1.04) saturate(1.12) contrast(1.03);
+  transform:scale(1.02);
+}
+#xh-video-main-section::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 50% 48%,rgba(0,0,0,.06) 0 24%,rgba(0,0,0,.38) 68%,#000 100%);
+  pointer-events:none;
+}
+#xh-video-main-section .xh-video-hero-content{
+  position:relative;
+  z-index:2;
+  width:min(980px,calc(100% - 36px));
+  padding:82px 0 72px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  transform:translateY(-18px);
+}
+#xh-video-search-shell.xh-video-search-wrap{
+  width:min(640px,100%);
+  position:relative;
+  margin:0 auto 30px;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+}
+#xh-video-search-shell .xh-video-search{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(0,0,0,.22) !important;
+  border-radius:16px;
+  padding:8px;
+  border:0 !important;
+  box-shadow:0 18px 70px rgba(0,0,0,.34);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+#xh-video-search-input{
+  flex:1 !important;
+  min-width:0 !important;
+  width:auto !important;
+  height:48px !important;
+  border-radius:12px !important;
+  background:rgba(0,0,0,.34) !important;
+  color:#fff !important;
+  padding:0 16px !important;
+  font-size:14px !important;
+  font-weight:400 !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+}
+#xh-video-search-button,
+.xh-video-btn{
+  min-height:48px;
+  border-radius:12px;
+  border:0 !important;
+  padding:0 20px;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  transition:transform .25s cubic-bezier(.16,1,.3,1),background .25s cubic-bezier(.16,1,.3,1),color .25s cubic-bezier(.16,1,.3,1);
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:none !important;
+}
+#xh-video-search-button,
+.xh-video-btn-primary{
+  background:#fff !important;
+  color:#000 !important;
+}
+.xh-video-btn-secondary{
+  background:rgba(0,0,0,.18) !important;
+  color:#fff !important;
+  border:0 !important;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+#xh-video-search-button:hover,
+.xh-video-btn-primary:hover{background:#e8e8e8 !important;color:#000 !important;transform:scale(1.035)}
+.xh-video-btn-secondary:hover{background:rgba(255,255,255,.12) !important;color:#fff !important;transform:scale(1.035)}
+#xh-video-search-button:disabled{opacity:.72;cursor:default;transform:none}
+.xh-video-results{
+  display:none;
+  position:absolute;
+  left:0;right:0;top:calc(100% + 8px);
+  z-index:20;
+  background:#070707;
+  border-radius:14px;
+  padding:8px;
+  text-align:left;
+  max-height:320px;
+  overflow:auto;
+  box-shadow:0 22px 60px rgba(0,0,0,.48);
+}
+.xh-video-results.show{display:block}
+.xh-video-search-status{
+  margin-top:9px;
+  color:rgba(255,255,255,.62);
+  font-size:12px;
+  line-height:1.5;
+  text-align:center;
+}
+.xh-video-title{
+  margin:0;
+  font-size:clamp(44px,8vw,116px);
+  line-height:.84;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  font-weight:900;
+  background:linear-gradient(135deg,#fff 0%,#c9c9c9 44%,#777 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  text-shadow:none;
+}
+.xh-video-title span{
+  display:inline-block;
+  color:#fff;
+  background:none;
+  -webkit-text-fill-color:#fff;
+}
+.xh-video-hero-line{
+  margin:20px 0 0;
+  color:#d7d7d7;
+  font-size:clamp(13px,1.7vw,20px);
+  letter-spacing:.32em;
+  text-transform:uppercase;
+}
+.xh-video-hero-actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:32px;
+}
+
+#xh-video-admin-panel{
+  background:#050505 !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+#xh-video-page #xh-video-category-row-main > div,
+#xh-video-page #xh-video-category-row-secondary > div{
+  border:0 !important;
+  box-shadow:none !important;
+  background:#101010 !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+#xh-video-page #xh-video-category-row-main > div:hover,
+#xh-video-page #xh-video-category-row-secondary > div:hover{
+  border:0 !important;
+  box-shadow:none !important;
+}
+
+#xh-video-page .vid-grid{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:24px !important;
+  align-items:start !important;
+  grid-auto-flow:row !important;
+}
+#xh-video-page .vid-card{width:100% !important;min-width:0 !important;}
+#xh-video-page .vid-card{
+  background:#101010 !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+#xh-video-page .vid-card:hover{
+  border:0 !important;
+  box-shadow:none !important;
+}
+#xh-video-page .xh-video-shell{
+  border:0 !important;
+  box-shadow:none !important;
+}
+#xh-video-page .vid-card[data-xh-provider="instagram"] .xh-video-shell{
+  border:0 !important;
+  box-shadow:none !important;
+}
+#xh-video-page .vid-card[data-xh-provider="instagram"] iframe{
+  transform:none !important;
+  width:100% !important;
+  height:100% !important;
+  border-radius:0 !important;
+}
+#xh-video-page .vid-card[data-xh-provider="instagram"] .xh-video-shell{
+  width:min(100%,286px) !important;
+  aspect-ratio:9 / 13.15 !important;
+  max-height:378px !important;
+  overflow:hidden !important;
+}
+
+@media (max-width:900px){
+  #xh-video-page{padding:0 24px 32px !important}
+  #xh-video-main-section.xh-video-hero{margin:0 -24px 36px !important}
+  #xh-video-page .vid-grid{grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:18px !important}
+}
+@media (max-width:720px){
+  #xh-video-page{padding:0 16px 28px !important}
+  #xh-video-main-section.xh-video-hero{margin:0 -16px 28px !important;min-height:86vh !important}
+  #xh-video-main-section .xh-video-hero-content{padding-top:78px;transform:translateY(-10px)}
+  #xh-video-search-shell .xh-video-search{flex-direction:column;align-items:stretch}
+  #xh-video-search-input,#xh-video-search-button{width:100% !important}
+  .xh-video-title{font-size:clamp(42px,15vw,76px);letter-spacing:-.02em}
+  .xh-video-hero-line{letter-spacing:.18em;font-size:12px}
+  #xh-video-page .vid-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:16px !important}
+  #xh-video-admin-form{grid-template-columns:1fr !important}
+}
+@media (max-width:520px){
+  #xh-video-page .vid-grid{grid-template-columns:1fr !important}
+}
+
+
+/* Admin placement + visual crop editor. Search remains transparent; video card buttons stay untouched. */
+#xh-video-search-shell.xh-video-search-wrap{padding:0 !important;border:0 !important;background:transparent !important;border-radius:0 !important;box-shadow:none !important;}
+#xh-video-search-shell.xh-video-search-wrap *{box-shadow:none !important;}
+#xh-video-search-shell .xh-video-search{
+  background:rgba(0,0,0,.10) !important;
+  border:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+#xh-video-search-input{
+  background:rgba(0,0,0,.12) !important;
+  border:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+#xh-video-page .xh-admin-frame-editor{
+  margin-top:16px;
+  padding:16px;
+  border-radius:18px;
+  background:#070707;
+  border:0;
+  box-shadow:none;
+}
+#xh-video-page .xh-admin-advanced-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+#xh-video-page .xh-admin-head-actions{justify-content:flex-end;}
+#xh-video-page .xh-admin-mini-label{color:#cfcfcf;font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+#xh-video-page .xh-admin-mini-title{color:#fff;font-size:16px;font-weight:900;line-height:1.2;}
+#xh-video-page .xh-admin-control-grid{display:grid;grid-template-columns:1.2fr 1fr .55fr auto;gap:10px;align-items:end;margin-top:10px;}
+#xh-video-page .xh-admin-control-grid label,
+#xh-video-page .xh-admin-crop-grid label{display:block;color:rgba(255,255,255,.72);font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase;}
+#xh-video-page .xh-admin-control-grid input,
+#xh-video-page .xh-admin-control-grid select{margin-top:6px;width:100%;height:40px;border-radius:12px;border:0;outline:none;background:#000;color:#fff;padding:0 11px;box-sizing:border-box;}
+#xh-video-page .xh-admin-inline-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+#xh-video-page .xh-admin-inline-actions button,
+#xh-video-page .xh-admin-item-controls button{height:40px;border-radius:12px;border:0;background:#fff;color:#000;font-size:10px;font-weight:900;letter-spacing:1px;padding:0 12px;cursor:pointer;white-space:nowrap;box-shadow:none !important;}
+#xh-video-page .xh-admin-inline-actions button:nth-child(2),
+#xh-video-page .xh-admin-inline-actions button:nth-child(3),
+#xh-video-page .xh-admin-item-controls button:nth-child(2),
+#xh-video-page .xh-admin-item-controls button:nth-child(3){background:transparent;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.24) !important;}
+#xh-video-page .xh-admin-visual-layout{display:grid;grid-template-columns:minmax(260px,390px) minmax(0,1fr);gap:16px;align-items:start;margin-top:15px;}
+#xh-video-page .xh-admin-preview-side,
+#xh-video-page .xh-admin-tune-side{background:#050505;border-radius:16px;padding:14px;}
+#xh-video-page .xh-admin-preview-note{font-size:12px;line-height:1.55;color:rgba(255,255,255,.62);margin-bottom:11px;}
+#xh-video-page .xh-admin-preview-note.small{margin:10px 0 0;color:rgba(255,255,255,.48);}
+#xh-video-page .xh-admin-frame-preview{position:relative;width:min(100%,330px);aspect-ratio:9/16;margin:0 auto;border-radius:22px;background:#000;overflow:hidden;isolation:isolate;box-shadow:0 0 0 1px rgba(255,255,255,.08) inset;touch-action:none;}
+#xh-video-page .xh-admin-frame-preview iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;transform-origin:top left;z-index:1;}
+#xh-video-page .xh-admin-visual-sliders{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end;margin:0;}
+#xh-video-page .xh-admin-visual-sliders input[type="range"]{width:100%;accent-color:#fff;cursor:pointer;}
+#xh-video-page .xh-admin-frame-actions{margin-top:14px;}
+#xh-video-page .xh-crop-handle{position:absolute;z-index:8;border:0;background:rgba(255,255,255,.72);padding:0;box-shadow:0 0 14px rgba(0,0,0,.35) !important;}
+#xh-video-page .xh-crop-handle-top{top:var(--xh-frame-mask-top,0px);left:22%;right:22%;height:8px;border-radius:999px;cursor:ns-resize;}
+#xh-video-page .xh-crop-handle-bottom{bottom:var(--xh-frame-mask-bottom,0px);left:22%;right:22%;height:8px;border-radius:999px;cursor:ns-resize;}
+#xh-video-page .xh-crop-handle-left{left:var(--xh-frame-mask-left,0px);top:22%;bottom:22%;width:8px;border-radius:999px;cursor:ew-resize;}
+#xh-video-page .xh-crop-handle-right{right:var(--xh-frame-mask-right,0px);top:22%;bottom:22%;width:8px;border-radius:999px;cursor:ew-resize;}
+#xh-video-page .xh-crop-move-pad{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9;height:34px;border:0;border-radius:999px;background:rgba(255,255,255,.88);color:#000;font-size:10px;font-weight:900;letter-spacing:1px;padding:0 12px;cursor:move;box-shadow:0 12px 24px rgba(0,0,0,.38) !important;}
+#xh-video-page .xh-frame-mask,
+#xh-video-fullscreen-slot .xh-frame-mask,
+#xh-video-page .xh-admin-frame-preview .xh-frame-mask{position:absolute;display:block;background:#000;z-index:5;pointer-events:none;}
+#xh-video-page .xh-frame-mask-top,
+#xh-video-fullscreen-slot .xh-frame-mask-top{left:0;right:0;top:0;height:var(--xh-frame-mask-top,0px);}
+#xh-video-page .xh-frame-mask-right,
+#xh-video-fullscreen-slot .xh-frame-mask-right{top:0;right:0;bottom:0;width:var(--xh-frame-mask-right,0px);}
+#xh-video-page .xh-frame-mask-bottom,
+#xh-video-fullscreen-slot .xh-frame-mask-bottom{left:0;right:0;bottom:0;height:var(--xh-frame-mask-bottom,0px);}
+#xh-video-page .xh-frame-mask-left,
+#xh-video-fullscreen-slot .xh-frame-mask-left{top:0;left:0;bottom:0;width:var(--xh-frame-mask-left,0px);}
+#xh-video-page .xh-video-shell[data-xh-frame-custom="true"]{overflow:hidden !important;}
+#xh-video-page .xh-video-shell[data-xh-frame-custom="true"] iframe,
+#xh-video-fullscreen-slot .xh-video-shell[data-xh-frame-custom="true"] iframe,
+#xh-video-page .xh-admin-frame-preview[data-xh-frame-custom="true"] iframe{
+  width:calc(100% + var(--xh-crop-extra-x,0px)) !important;
+  height:calc(100% + var(--xh-crop-extra-y,0px)) !important;
+  max-width:none !important;
+  max-height:none !important;
+  border-radius:0 !important;
+  transform:translate(var(--xh-crop-shift-left,0px),var(--xh-crop-shift-top,0px)) scale(var(--xh-crop-scale,1)) !important;
+  transform-origin:top left !important;
+}
+#xh-video-page .xh-admin-item{display:grid !important;grid-template-columns:minmax(0,1fr) auto !important;align-items:center !important;gap:12px !important;}
+#xh-video-page .xh-admin-item-title{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#xh-video-page .xh-admin-item-title span{display:block;color:rgba(255,255,255,.48);font-size:10px;margin-top:3px;}
+#xh-video-page .xh-admin-item-controls{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+#xh-video-page .xh-admin-item-controls select,
+#xh-video-page .xh-admin-item-controls input{height:34px;border-radius:10px;border:0;background:#000;color:#fff;padding:0 9px;font-size:11px;}
+#xh-video-page .xh-admin-item-controls input{width:72px;}
+@media(max-width:980px){
+  #xh-video-page .xh-admin-control-grid{grid-template-columns:1fr 1fr !important;}
+  #xh-video-page .xh-admin-visual-layout{grid-template-columns:1fr !important;}
+  #xh-video-page .xh-admin-inline-actions{grid-column:1/-1;}
+}
+@media(max-width:560px){
+  #xh-video-page .xh-admin-control-grid,
+  #xh-video-page .xh-admin-visual-sliders{grid-template-columns:1fr !important;}
+  #xh-video-page .xh-admin-item{grid-template-columns:1fr !important;}
+  #xh-video-page .xh-admin-item-controls{justify-content:flex-start;}
+}
+
+</style>
+
+<div id="objects-content">
+    <div class="vid-grid"></div>
+</div>
+
+<div id="phenomena-content" style="display:none;">
+    <div class="vid-grid"></div>
+</div>
+
+<div id="technology-content" style="display:none;">
+    <div class="vid-grid"></div>
+</div>
+
+<div id="history-content" style="display:none;">
+    <div class="vid-grid"></div>
+</div>
+
+<div id="media-content" style="display:none;">
+    <div class="vid-grid"></div>
+</div>
+
+<div id="places-content" style="display:none;">
+    <div class="vid-grid"></div>
+</div>
+
+<div id="video-content">
+    <div class="vid-grid"></div>
+</div>
+
+<div id="xh-video-fullscreen-modal" aria-hidden="true">
+    <div id="xh-video-fullscreen-box">
+        <div id="xh-video-fullscreen-top">
+            <div id="xh-video-fullscreen-title">X Horizon Media Player</div>
+            <button id="xh-video-fullscreen-reload" type="button">RELOAD</button>
+            <button id="xh-video-fullscreen-close" type="button">CLOSE</button>
+        </div>
+        <div id="xh-video-fullscreen-slot"></div>
+        <iframe id="xh-video-fullscreen-frame" src="about:blank" allowfullscreen="" style="display:none;"></iframe>
+    </div>
+</div>
+
+<script>
+(function(){
+    var page = document.getElementById('xh-video-page');
+    if (!page || page.getAttribute('data-xh-init') === 'done') return;
+    page.setAttribute('data-xh-init','done');
+
+    var sectionIds = ['objects-content','phenomena-content','technology-content','history-content','media-content','places-content','video-content'];
+    var storageKey = 'xh_video_admin_items_v2_clean';
+    var hiddenStaticKey = 'xh_video_hidden_static_v2_clean';
+    var frameSettingsKey = 'xh_video_frame_settings_v2_visual';
+    var defaultFrameKey = 'xh_video_default_frame_v1_visual';
+    var staticMovesKey = 'xh_video_static_moves_v1';
+    var adminKeys = [];
+    var adminOpen = false;
+    var input = document.getElementById('xh-video-search-input');
+    var status = document.getElementById('xh-video-search-status');
+    var clearBtn = document.getElementById('xh-video-search-clear');
+    var searchBtn = document.getElementById('xh-video-search-button');
+    var adminPanel = document.getElementById('xh-video-admin-panel');
+    var adminMsg = document.getElementById('xh-admin-message');
+    var adminList = document.getElementById('xh-admin-list');
+    var titleInput = document.getElementById('xh-admin-title');
+    var urlInput = document.getElementById('xh-admin-url');
+    var catInput = document.getElementById('xh-admin-category');
+    var addBtn = document.getElementById('xh-admin-add-video');
+    var lockBtn = document.getElementById('xh-video-admin-lock');
+    var targetInput = document.getElementById('xh-admin-target');
+    var moveCategoryInput = document.getElementById('xh-admin-move-category');
+    var positionInput = document.getElementById('xh-admin-position');
+    var moveBtn = document.getElementById('xh-admin-move-video');
+    var randomMoveBtn = document.getElementById('xh-admin-random-move');
+    var cropTopInput = document.getElementById('xh-admin-crop-top');
+    var cropRightInput = document.getElementById('xh-admin-crop-right');
+    var cropBottomInput = document.getElementById('xh-admin-crop-bottom');
+    var cropLeftInput = document.getElementById('xh-admin-crop-left');
+    var cropScaleInput = document.getElementById('xh-admin-crop-scale');
+    var cropPanXInput = document.getElementById('xh-admin-crop-pan-x');
+    var cropPanYInput = document.getElementById('xh-admin-crop-pan-y');
+    var previewShell = document.getElementById('xh-admin-frame-preview');
+    var previewFrame = document.getElementById('xh-admin-preview-frame');
+    var setDefaultAllBtn = document.getElementById('xh-admin-set-default-all');
+    var igSafeBtn = document.getElementById('xh-admin-use-ig-safe');
+    var resetVisualBtn = document.getElementById('xh-admin-reset-visual');
+    var applyFrameBtn = document.getElementById('xh-admin-apply-frame');
+    var resetFrameBtn = document.getElementById('xh-admin-reset-frame');
+    var modal = document.getElementById('xh-video-fullscreen-modal');
+    var modalFrame = document.getElementById('xh-video-fullscreen-frame');
+    var modalSlot = document.getElementById('xh-video-fullscreen-slot');
+    var modalTitle = document.getElementById('xh-video-fullscreen-title');
+    var modalClose = document.getElementById('xh-video-fullscreen-close');
+    var modalReload = document.getElementById('xh-video-fullscreen-reload');
+    var activePlayerMove = null;
+
+    function getSections(){
+        return sectionIds.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+    }
+
+    getSections().forEach(function(sec){
+        sec.setAttribute('data-xh-default-display', sec.style.display || 'block');
+    });
+
+    function normalizeText(text){
+        return String(text || '').toLowerCase().replace(/\s+/g,' ').trim();
+    }
+
+    function safeText(value){
+        return String(value || '').replace(/[<>]/g,'').trim();
+    }
+
+    function simpleHash(value){
+        var str = String(value || '');
+        var hash = 0;
+        for (var i = 0; i < str.length; i++) {
+            hash = ((hash << 5) - hash) + str.charCodeAt(i);
+            hash |= 0;
+        }
+        return 'xhstatic_' + Math.abs(hash);
+    }
+
+    function readJson(key){
+        try { return JSON.parse(localStorage.getItem(key) || '[]'); }
+        catch(e){ return []; }
+    }
+
+    function writeJson(key, value){
+        localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function readItems(){ return readJson(storageKey); }
+    function writeItems(items){ writeJson(storageKey, items); }
+    function readHiddenStatic(){ return readJson(hiddenStaticKey); }
+    function writeHiddenStatic(items){ writeJson(hiddenStaticKey, items); }
+    function readObject(key){
+        try {
+            var parsed = JSON.parse(localStorage.getItem(key) || '{}');
+            return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+        } catch(e){ return {}; }
+    }
+    function writeObject(key, value){ localStorage.setItem(key, JSON.stringify(value || {})); }
+    function readFrameSettings(){ return readObject(frameSettingsKey); }
+    function writeFrameSettings(value){ writeObject(frameSettingsKey, value); }
+    function readStaticMoves(){ return readObject(staticMovesKey); }
+    function writeStaticMoves(value){ writeObject(staticMovesKey, value); }
+    function categoryName(id){
+        var map = {
+            'objects-content':'Objects',
+            'phenomena-content':'Phenomena',
+            'technology-content':'Technology',
+            'history-content':'History',
+            'media-content':'Media',
+            'places-content':'Places',
+            'video-content':'Videos'
+        };
+        return map[id] || String(id || '').replace('-content','');
+    }
+    function clampNumber(value, min, max, fallback){
+        var num = Number(value);
+        if (!isFinite(num)) num = fallback;
+        if (!isFinite(num)) num = min;
+        return Math.max(min, Math.min(max, num));
+    }
+    function getCardIdentity(card){
+        if (!card) return '';
+        var adminId = card.getAttribute('data-admin-id');
+        if (adminId) return 'admin:' + adminId;
+        var staticId = card.getAttribute('data-static-id');
+        if (staticId) return 'static:' + staticId;
+        return '';
+    }
+    function findCardByIdentity(identity){
+        if (!identity) return null;
+        if (identity.indexOf('admin:') === 0) return page.querySelector('.vid-card[data-admin-id="' + identity.slice(6) + '"]');
+        if (identity.indexOf('static:') === 0) return page.querySelector('.vid-card[data-static-id="' + identity.slice(7) + '"]');
+        return null;
+    }
+    function getCardTitle(card){
+        var title = card ? card.querySelector('.vid-title') : null;
+        return title ? safeText(title.textContent || 'Video') : 'Video';
+    }
+    function getCardCategory(card){
+        var section = card ? card.closest('#objects-content,#phenomena-content,#technology-content,#history-content,#media-content,#places-content,#video-content') : null;
+        return section ? section.id : 'video-content';
+    }
+    function getGrid(categoryId){
+        var section = document.getElementById(categoryId || 'video-content');
+        return section ? section.querySelector('.vid-grid') : null;
+    }
+    function positionInGrid(card){
+        if (!card || !card.parentElement) return 1;
+        return Array.prototype.indexOf.call(card.parentElement.children, card) + 1;
+    }
+    function selectedTarget(){ return targetInput ? targetInput.value : ''; }
+    function instagramSafeFrame(){
+        return { mode:'custom', top:44, right:0, bottom:58, left:0, scale:1, x:0, y:0 };
+    }
+    function originalFrame(){
+        return { mode:'custom', top:0, right:0, bottom:0, left:0, scale:1, x:0, y:0 };
+    }
+    function normalizeFrame(frame){
+        frame = frame || {};
+        return {
+            mode:'custom',
+            top:clampNumber(frame.top, 0, 240, 0),
+            right:clampNumber(frame.right, 0, 240, 0),
+            bottom:clampNumber(frame.bottom, 0, 240, 0),
+            left:clampNumber(frame.left, 0, 240, 0),
+            scale:clampNumber(frame.scale, 1, 2, 1),
+            x:clampNumber(frame.x, -260, 260, 0),
+            y:clampNumber(frame.y, -260, 260, 0)
+        };
+    }
+    function readDefaultFrame(){
+        var frame = readObject(defaultFrameKey);
+        return frame && frame.mode === 'custom' ? normalizeFrame(frame) : null;
+    }
+    function writeDefaultFrame(frame){ writeObject(defaultFrameKey, normalizeFrame(frame)); }
+    function currentFrameFromInputs(){
+        return normalizeFrame({
+            top:cropTopInput ? cropTopInput.value : 0,
+            right:cropRightInput ? cropRightInput.value : 0,
+            bottom:cropBottomInput ? cropBottomInput.value : 0,
+            left:cropLeftInput ? cropLeftInput.value : 0,
+            scale:cropScaleInput ? cropScaleInput.value : 1,
+            x:cropPanXInput ? cropPanXInput.value : 0,
+            y:cropPanYInput ? cropPanYInput.value : 0
+        });
+    }
+    function setFrameInputs(frame){
+        frame = normalizeFrame(frame || originalFrame());
+        if (cropTopInput) cropTopInput.value = frame.top;
+        if (cropRightInput) cropRightInput.value = frame.right;
+        if (cropBottomInput) cropBottomInput.value = frame.bottom;
+        if (cropLeftInput) cropLeftInput.value = frame.left;
+        if (cropScaleInput) cropScaleInput.value = frame.scale;
+        if (cropPanXInput) cropPanXInput.value = frame.x;
+        if (cropPanYInput) cropPanYInput.value = frame.y;
+    }
+    function getProviderFromCard(card){
+        if (!card) return 'youtube';
+        return card.getAttribute('data-xh-provider') || ((card.querySelector('iframe') && (card.querySelector('iframe').src || '').indexOf('instagram.com') !== -1) ? 'instagram' : 'youtube');
+    }
+    function getSavedOrDefaultFrame(card, identity){
+        var id = identity || getCardIdentity(card);
+        var frames = readFrameSettings();
+        if (id && frames[id] && frames[id].mode === 'custom') return normalizeFrame(frames[id]);
+        var defaultFrame = readDefaultFrame();
+        if (defaultFrame) return defaultFrame;
+        return getProviderFromCard(card) === 'instagram' ? instagramSafeFrame() : null;
+    }
+    function ensureFrameMasks(shell){
+        if (!shell) return;
+        ['top','right','bottom','left'].forEach(function(side){
+            if (shell.querySelector('.xh-frame-mask-' + side)) return;
+            var mask = document.createElement('span');
+            mask.className = 'xh-frame-mask xh-frame-mask-' + side;
+            shell.appendChild(mask);
+        });
+        shell.setAttribute('data-xh-masks-ready','true');
+    }
+    function applyFrameStyleToShell(shell, frame){
+        if (!shell) return;
+        ensureFrameMasks(shell);
+        frame = frame ? normalizeFrame(frame) : null;
+        if (!frame || frame.mode !== 'custom') {
+            shell.removeAttribute('data-xh-frame-custom');
+            ['--xh-crop-extra-x','--xh-crop-extra-y','--xh-crop-shift-left','--xh-crop-shift-top','--xh-crop-scale','--xh-frame-mask-top','--xh-frame-mask-right','--xh-frame-mask-bottom','--xh-frame-mask-left'].forEach(function(prop){ shell.style.removeProperty(prop); });
+            return;
+        }
+        shell.setAttribute('data-xh-frame-custom','true');
+        shell.style.setProperty('--xh-crop-extra-x', (frame.left + frame.right) + 'px');
+        shell.style.setProperty('--xh-crop-extra-y', (frame.top + frame.bottom) + 'px');
+        shell.style.setProperty('--xh-crop-shift-left', ((-frame.left) + frame.x) + 'px');
+        shell.style.setProperty('--xh-crop-shift-top', ((-frame.top) + frame.y) + 'px');
+        shell.style.setProperty('--xh-crop-scale', String(frame.scale));
+        shell.style.setProperty('--xh-frame-mask-top', frame.top + 'px');
+        shell.style.setProperty('--xh-frame-mask-right', frame.right + 'px');
+        shell.style.setProperty('--xh-frame-mask-bottom', frame.bottom + 'px');
+        shell.style.setProperty('--xh-frame-mask-left', frame.left + 'px');
+    }
+    function syncFrameInputs(identity){
+        var card = findCardByIdentity(identity || selectedTarget());
+        var id = identity || getCardIdentity(card);
+        var frame = getSavedOrDefaultFrame(card, id) || originalFrame();
+        setFrameInputs(frame);
+        if (moveCategoryInput) moveCategoryInput.value = card ? getCardCategory(card) : 'video-content';
+        if (positionInput) positionInput.value = card ? positionInGrid(card) : 1;
+        updateVisualPreview();
+    }
+    function buildTargetOptions(preferred){
+        if (!targetInput) return;
+        var current = preferred || targetInput.value;
+        targetInput.innerHTML = '';
+        page.querySelectorAll('.vid-card').forEach(function(card){
+            var id = getCardIdentity(card);
+            if (!id) return;
+            var option = document.createElement('option');
+            option.value = id;
+            option.textContent = getCardTitle(card) + ' • ' + categoryName(getCardCategory(card)) + (id.indexOf('admin:') === 0 ? ' • Added' : ' • Static');
+            targetInput.appendChild(option);
+        });
+        if (current && Array.prototype.some.call(targetInput.options, function(opt){ return opt.value === current; })) targetInput.value = current;
+        else if (targetInput.options.length) targetInput.selectedIndex = 0;
+        syncFrameInputs(targetInput.value);
+    }
+    function applyFrameToCard(card){
+        if (!card) return;
+        var id = getCardIdentity(card);
+        var shell = card.querySelector('.xh-video-shell');
+        if (!id || !shell) return;
+        applyFrameStyleToShell(shell, getSavedOrDefaultFrame(card, id));
+    }
+    function applyFrameSettingsToAll(){
+        page.querySelectorAll('.vid-card').forEach(function(card){ applyFrameToCard(card); });
+    }
+    function updateVisualPreview(){
+        if (!previewShell) return;
+        var card = findCardByIdentity(selectedTarget());
+        var iframe = card ? card.querySelector('iframe') : null;
+        var provider = getProviderFromCard(card);
+        var frame = currentFrameFromInputs();
+        previewShell.setAttribute('data-xh-provider', provider);
+        previewShell.classList.toggle('xh-instagram-crop-shell', provider === 'instagram');
+        previewShell.classList.toggle('xh-youtube-wide-shell', provider !== 'instagram');
+        applyFrameStyleToShell(previewShell, frame);
+        if (previewFrame && iframe) {
+            var src = iframe.getAttribute('data-xh-original-src') || iframe.getAttribute('src') || iframe.src || '';
+            if (src && src !== 'about:blank' && previewFrame.getAttribute('src') !== src) configureIframe(previewFrame, provider, src);
+        }
+        var liveShell = card ? card.querySelector('.xh-video-shell') : null;
+        if (liveShell) applyFrameStyleToShell(liveShell, frame);
+    }
+    function applyStaticMoves(){
+        var moves = readStaticMoves();
+        Object.keys(moves).forEach(function(staticId){
+            var move = moves[staticId] || {};
+            var grid = getGrid(move.category);
+            var card = page.querySelector('.vid-card[data-static-id="' + staticId + '"]');
+            if (!grid || !card) return;
+            var pos = Math.max(0, parseInt(move.position, 10) || 0);
+            grid.insertBefore(card, grid.children[pos] || null);
+        });
+    }
+    function moveAdminItemById(adminId, category, zeroIndex){
+        var items = readItems();
+        var selected = null;
+        var rest = [];
+        items.forEach(function(item){
+            if (item.id === adminId) selected = item;
+            else rest.push(item);
+        });
+        if (!selected) return false;
+        selected.category = category || selected.category || 'video-content';
+        var rebuilt = [];
+        sectionIds.forEach(function(cat){
+            var bucket = rest.filter(function(item){ return (item.category || 'video-content') === cat; });
+            if (cat === selected.category) {
+                var pos = Math.max(0, Math.min(bucket.length, parseInt(zeroIndex,10) || 0));
+                bucket.splice(pos, 0, selected);
+            }
+            rebuilt = rebuilt.concat(bucket);
+        });
+        writeItems(rebuilt);
+        return true;
+    }
+    function moveVideoTo(category, positionOneBased, identity){
+        var id = identity || selectedTarget();
+        var categoryId = category || (moveCategoryInput ? moveCategoryInput.value : 'video-content');
+        var zeroIndex = Math.max(0, (parseInt(positionOneBased, 10) || 1) - 1);
+        if (id.indexOf('admin:') === 0) {
+            if (!moveAdminItemById(id.slice(6), categoryId, zeroIndex)) return false;
+        } else if (id.indexOf('static:') === 0) {
+            var moves = readStaticMoves();
+            moves[id.slice(7)] = { category:categoryId, position:zeroIndex };
+            writeStaticMoves(moves);
+        } else return false;
+        renderAdminVideos(id);
+        runSearch(input ? input.value : '');
+        return true;
+    }
+    function randomMoveVideo(identity){
+        var id = identity || selectedTarget();
+        if (!id) return false;
+        var category = sectionIds[Math.floor(Math.random() * sectionIds.length)] || 'video-content';
+        var grid = getGrid(category);
+        var count = grid ? grid.querySelectorAll('.vid-card').length : 0;
+        var pos = Math.floor(Math.random() * (count + 1)) + 1;
+        if (moveCategoryInput) moveCategoryInput.value = category;
+        if (positionInput) positionInput.value = pos;
+        return moveVideoTo(category, pos, id);
+    }
+    function applyCustomFrame(){
+        var id = selectedTarget();
+        if (!id) return;
+        var frames = readFrameSettings();
+        frames[id] = currentFrameFromInputs();
+        writeFrameSettings(frames);
+        applyFrameSettingsToAll();
+        updateVisualPreview();
+        if (adminMsg) adminMsg.textContent = 'Selected video frame saved with the visual crop.';
+    }
+    function setDefaultFrameForAll(){
+        var frame = currentFrameFromInputs();
+        writeDefaultFrame(frame);
+        var frames = readFrameSettings();
+        page.querySelectorAll('.vid-card').forEach(function(card){
+            var id = getCardIdentity(card);
+            if (id) frames[id] = frame;
+        });
+        writeFrameSettings(frames);
+        applyFrameSettingsToAll();
+        updateVisualPreview();
+        if (adminMsg) adminMsg.textContent = 'This frame is now the default for upcoming videos and has been applied to all current videos.';
+    }
+    function resetFrame(){
+        var id = selectedTarget();
+        if (!id) return;
+        var frames = readFrameSettings();
+        delete frames[id];
+        writeFrameSettings(frames);
+        syncFrameInputs(id);
+        applyFrameSettingsToAll();
+        if (adminMsg) adminMsg.textContent = 'Selected video restored to the saved default frame.';
+    }
+    function useInstagramSafeFrame(){
+        setFrameInputs(instagramSafeFrame());
+        updateVisualPreview();
+        if (adminMsg) adminMsg.textContent = 'Instagram-safe frame loaded in preview. Save selected or set default to keep it.';
+    }
+    function resetVisualToOriginal(){
+        setFrameInputs(originalFrame());
+        updateVisualPreview();
+        if (adminMsg) adminMsg.textContent = 'Original frame loaded in preview. Save selected or set default to keep it.';
+    }
+    function bindVisualEditor(){
+        [cropTopInput,cropRightInput,cropBottomInput,cropLeftInput,cropScaleInput,cropPanXInput,cropPanYInput].forEach(function(control){
+            if (!control) return;
+            control.addEventListener('input', updateVisualPreview);
+            control.addEventListener('change', updateVisualPreview);
+        });
+        if (!previewShell) return;
+        var drag = null;
+        function startDrag(e){
+            var handle = e.target && e.target.getAttribute('data-xh-handle');
+            if (!handle) return;
+            e.preventDefault();
+            drag = { handle:handle, x:e.clientX, y:e.clientY, frame:currentFrameFromInputs() };
+            try { e.target.setPointerCapture(e.pointerId); } catch(err){}
+        }
+        function moveDrag(e){
+            if (!drag) return;
+            e.preventDefault();
+            var dx = e.clientX - drag.x;
+            var dy = e.clientY - drag.y;
+            var f = Object.assign({}, drag.frame);
+            if (drag.handle === 'top') f.top = drag.frame.top + dy;
+            if (drag.handle === 'bottom') f.bottom = drag.frame.bottom - dy;
+            if (drag.handle === 'left') f.left = drag.frame.left + dx;
+            if (drag.handle === 'right') f.right = drag.frame.right - dx;
+            if (drag.handle === 'move') { f.x = drag.frame.x + dx; f.y = drag.frame.y + dy; }
+            setFrameInputs(normalizeFrame(f));
+            updateVisualPreview();
+        }
+        function endDrag(){ drag = null; }
+        previewShell.addEventListener('pointerdown', startDrag);
+        window.addEventListener('pointermove', moveDrag);
+        window.addEventListener('pointerup', endDrag);
+        window.addEventListener('pointercancel', endDrag);
+    }
+
+    function clearLegacyVideosOnce(){
+        try {
+            localStorage.removeItem('xh_video_admin_items_v1');
+            localStorage.removeItem('xh_video_hidden_static_v1');
+        } catch(e){}
+    }
+
+    function withYouTubeOptions(url){
+        var src = String(url || '');
+        if (src.indexOf('youtube.com/embed/') === -1) return src;
+        var joiner = src.indexOf('?') === -1 ? '?' : '&';
+        var options = [];
+        if (src.indexOf('rel=') === -1) options.push('rel=0');
+        if (src.indexOf('modestbranding=') === -1) options.push('modestbranding=1');
+        if (src.indexOf('playsinline=') === -1) options.push('playsinline=1');
+        return options.length ? src + joiner + options.join('&') : src;
+    }
+
+    function instagramEmbedUrl(kind, code){
+        var cleanKind = String(kind || 'reel').toLowerCase();
+        var cleanCode = String(code || '').replace(/[^a-zA-Z0-9_-]/g,'');
+        return 'https://www.instagram.com/' + cleanKind + '/' + cleanCode + '/embed/?utm_source=ig_embed';
+    }
+
+    function mediaEmbed(value){
+        var raw = String(value || '').trim();
+        if (!raw) return null;
+
+        if (/^[a-zA-Z0-9_-]{8,}$/.test(raw) && raw.indexOf('http') !== 0) {
+            return { embed:withYouTubeOptions('https://www.youtube.com/embed/' + raw), provider:'youtube', label:'YouTube Video' };
+        }
+
+        var ytPatterns = [
+            /youtu\.be\/([a-zA-Z0-9_-]{8,})/,
+            /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{8,})/,
+            /youtube\.com\/embed\/([a-zA-Z0-9_-]{8,})/,
+            /youtube\.com\/shorts\/([a-zA-Z0-9_-]{8,})/,
+            /[?&]v=([a-zA-Z0-9_-]{8,})/
+        ];
+        for (var i = 0; i < ytPatterns.length; i++) {
+            var yt = raw.match(ytPatterns[i]);
+            if (yt && yt[1]) return { embed:withYouTubeOptions('https://www.youtube.com/embed/' + yt[1]), provider:'youtube', label:'YouTube Video' };
+        }
+
+        var igEmbed = raw.match(/instagram\.com\/(p|reel|tv)\/([^\/?#]+)\/embed/i);
+        if (igEmbed && igEmbed[1] && igEmbed[2]) {
+            return { embed:instagramEmbedUrl(igEmbed[1].toLowerCase(), igEmbed[2]), provider:'instagram', label: igEmbed[1].toLowerCase() === 'reel' ? 'Instagram Reel' : 'Instagram Video' };
+        }
+        var ig = raw.match(/instagram\.com\/(p|reel|tv)\/([^\/?#]+)/i);
+        if (ig && ig[1] && ig[2]) {
+            return { embed:instagramEmbedUrl(ig[1].toLowerCase(), ig[2]), provider:'instagram', label: ig[1].toLowerCase() === 'reel' ? 'Instagram Reel' : 'Instagram Video' };
+        }
+
+        return { embed:raw, provider:'custom', label:'Video' };
+    }
+
+    function cleanTitle(value, media){
+        var title = safeText(value);
+        if (!title || /https?:\/\//i.test(title) || /instagram\.com|youtu\.be|youtube\.com/i.test(title)) {
+            title = media && media.label ? media.label : 'X Horizon Video';
+        }
+        title = title.replace(/\b(reel|p|tv)\/[a-zA-Z0-9_-]+\b/gi, '').replace(/\s{2,}/g,' ').trim();
+        return title || 'X Horizon Video';
+    }
+
+    function configureIframe(iframe, provider, src){
+        var cleanProvider = provider === 'instagram' ? 'instagram' : (provider === 'custom' ? 'custom' : 'youtube');
+        iframe.src = cleanProvider === 'youtube' ? withYouTubeOptions(src) : src;
+        iframe.allowFullscreen = true;
+        iframe.setAttribute('allowfullscreen','allowfullscreen');
+        iframe.setAttribute('webkitallowfullscreen','webkitallowfullscreen');
+        iframe.setAttribute('mozallowfullscreen','mozallowfullscreen');
+        iframe.setAttribute('scrolling','no');
+        iframe.loading = 'lazy';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen';
+        iframe.classList.remove('xh-ig-frame','xh-yt-frame');
+        if (cleanProvider === 'instagram') {
+            iframe.classList.add('xh-ig-frame');
+            iframe.removeAttribute('sandbox');
+            iframe.setAttribute('allow','autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen');
+        } else {
+            iframe.classList.add('xh-yt-frame');
+            iframe.removeAttribute('sandbox');
+        }
+    }
+
+    function addNoRedirectControls(card){
+        if (card.querySelector('.xh-video-actions')) return;
+        var iframe = card.querySelector('iframe');
+        var title = card.querySelector('.vid-title');
+        if (!iframe) return;
+        var provider = card.getAttribute('data-xh-provider') || (iframe.src.indexOf('instagram.com') !== -1 ? 'instagram' : 'youtube');
+        card.setAttribute('data-xh-provider', provider);
+        configureIframe(iframe, provider, iframe.getAttribute('src') || iframe.src);
+        var shell = iframe.parentElement && iframe.parentElement.classList.contains('xh-video-shell') ? iframe.parentElement : null;
+        if (!shell) {
+            shell = document.createElement('div');
+            shell.className = 'xh-video-shell';
+            iframe.parentNode.insertBefore(shell, iframe);
+            shell.appendChild(iframe);
+        }
+        shell.classList.toggle('xh-instagram-crop-shell', provider === 'instagram');
+        shell.classList.toggle('xh-youtube-wide-shell', provider !== 'instagram');
+        ensureFrameMasks(shell);
+        var actions = document.createElement('div');
+        actions.className = 'xh-video-actions';
+        var full = document.createElement('button');
+        full.type = 'button';
+        full.className = 'xh-video-action-btn';
+        full.textContent = 'FULLSCREEN';
+        full.onclick = function(e){ e.preventDefault(); e.stopPropagation(); openPlayer(card); };
+        var reload = document.createElement('button');
+        reload.type = 'button';
+        reload.className = 'xh-video-action-btn';
+        reload.textContent = 'RELOAD';
+        reload.onclick = function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            var current = iframe.getAttribute('src') || iframe.src;
+            iframe.setAttribute('src','about:blank');
+            setTimeout(function(){ configureIframe(iframe, provider, current); }, 60);
+        };
+        actions.appendChild(full);
+        actions.appendChild(reload);
+        if (title) title.parentNode.insertBefore(actions, title.nextSibling);
+        else card.appendChild(actions);
+    }
+
+    function buildCard(item){
+        var card = document.createElement('div');
+        card.className = 'vid-card xh-admin-video';
+        card.setAttribute('data-admin-id', item.id);
+        card.setAttribute('data-xh-provider', item.provider || 'youtube');
+        var iframe = document.createElement('iframe');
+        configureIframe(iframe, item.provider || 'youtube', item.embed);
+        var title = document.createElement('div');
+        title.className = 'vid-title';
+        title.textContent = cleanTitle(item.title, {label:item.provider === 'instagram' ? 'Instagram Video' : 'YouTube Video'});
+        var shell = document.createElement('div');
+        shell.className = 'xh-video-shell ' + ((item.provider || 'youtube') === 'instagram' ? 'xh-instagram-crop-shell' : 'xh-youtube-wide-shell');
+        shell.appendChild(iframe);
+        card.appendChild(shell);
+        card.appendChild(title);
+        addNoRedirectControls(card);
+        return card;
+    }
+
+
+    function isVideoVisibleInPage(iframe){
+        var card = iframe ? iframe.closest('.vid-card') : null;
+        var section = card ? card.closest('#objects-content,#phenomena-content,#technology-content,#history-content,#media-content,#places-content,#video-content') : null;
+        if (!card || !section) return true;
+        return section.style.display !== 'none' && card.style.display !== 'none' && card.getAttribute('data-xh-hidden') !== 'true';
+    }
+
+    function rememberIframeSrc(iframe){
+        if (!iframe) return '';
+        var src = iframe.getAttribute('src') || iframe.src || '';
+        var stored = iframe.getAttribute('data-xh-original-src') || '';
+        if (src && src !== 'about:blank') {
+            iframe.setAttribute('data-xh-original-src', src);
+            return src;
+        }
+        return stored;
+    }
+
+    function pauseIframeForHiddenCategory(iframe){
+        if (!iframe) return;
+        if (activePlayerMove && activePlayerMove.shell && activePlayerMove.shell.contains(iframe)) return;
+        var src = rememberIframeSrc(iframe);
+        if (!src || src === 'about:blank') return;
+        if (iframe.getAttribute('src') !== 'about:blank') {
+            iframe.setAttribute('data-xh-paused-by-category','true');
+            iframe.setAttribute('src','about:blank');
+        }
+    }
+
+    function restoreIframeAfterCategory(iframe){
+        if (!iframe || iframe.getAttribute('data-xh-paused-by-category') !== 'true') return;
+        var card = iframe.closest('.vid-card');
+        var provider = card ? (card.getAttribute('data-xh-provider') || 'youtube') : 'youtube';
+        var src = iframe.getAttribute('data-xh-original-src') || '';
+        if (src && src !== 'about:blank') configureIframe(iframe, provider, src);
+        iframe.removeAttribute('data-xh-paused-by-category');
+    }
+
+    function syncCategoryVideoPlayback(){
+        getSections().forEach(function(sec){
+            var sectionHidden = sec.style.display === 'none';
+            sec.querySelectorAll('.vid-card iframe').forEach(function(iframe){
+                var card = iframe.closest('.vid-card');
+                var hidden = sectionHidden || (card && (card.style.display === 'none' || card.getAttribute('data-xh-hidden') === 'true'));
+                if (hidden) pauseIframeForHiddenCategory(iframe);
+                else restoreIframeAfterCategory(iframe);
+            });
+        });
+    }
+
+    function reloadActivePlayer(){
+        var iframe = modalSlot ? modalSlot.querySelector('iframe') : null;
+        if (!iframe) return;
+        var provider = modal ? (modal.getAttribute('data-xh-provider') || 'youtube') : 'youtube';
+        var src = rememberIframeSrc(iframe) || iframe.getAttribute('src') || iframe.src || '';
+        if (!src || src === 'about:blank') return;
+        iframe.setAttribute('src','about:blank');
+        setTimeout(function(){ configureIframe(iframe, provider, src); iframe.removeAttribute('data-xh-paused-by-category'); }, 80);
+    }
+
+    function openPlayer(card){
+        if (!modal || !modalSlot || !card) return;
+        var shell = card.querySelector('.xh-video-shell');
+        var iframe = shell ? shell.querySelector('iframe') : card.querySelector('iframe');
+        var title = card.querySelector('.vid-title');
+        var provider = card.getAttribute('data-xh-provider') || (iframe && iframe.src.indexOf('instagram.com') !== -1 ? 'instagram' : 'youtube');
+        if (!shell || !iframe) return;
+
+        if (activePlayerMove && activePlayerMove.card === card) {
+            modal.classList.add('xh-modal-open');
+            modal.setAttribute('aria-hidden','false');
+            return;
+        }
+        if (activePlayerMove) closePlayer();
+
+        var placeholder = document.createElement('div');
+        placeholder.className = 'xh-video-player-placeholder';
+        placeholder.style.display = 'none';
+        shell.parentNode.insertBefore(placeholder, shell);
+
+        activePlayerMove = { card:card, shell:shell, placeholder:placeholder };
+        modal.setAttribute('data-xh-provider', provider);
+        if (modalTitle) modalTitle.textContent = title ? (title.textContent || 'X Horizon Media Player') : 'X Horizon Media Player';
+        if (modalFrame) modalFrame.setAttribute('src','about:blank');
+        modalSlot.innerHTML = '';
+        modalSlot.appendChild(shell);
+        modal.classList.add('xh-modal-open');
+        modal.setAttribute('aria-hidden','false');
+    }
+
+    function closePlayer(){
+        if (!modal) return;
+        if (activePlayerMove && activePlayerMove.shell) {
+            var shell = activePlayerMove.shell;
+            var placeholder = activePlayerMove.placeholder;
+            if (placeholder && placeholder.parentNode) {
+                placeholder.parentNode.insertBefore(shell, placeholder);
+                placeholder.remove();
+            } else if (activePlayerMove.card) {
+                activePlayerMove.card.insertBefore(shell, activePlayerMove.card.firstChild);
+            }
+            activePlayerMove = null;
+        }
+        modal.classList.remove('xh-modal-open');
+        modal.setAttribute('aria-hidden','true');
+        if (modalFrame) modalFrame.setAttribute('src','about:blank');
+        modal.removeAttribute('data-xh-provider');
+        setTimeout(syncCategoryVideoPlayback, 0);
+    }
+
+    function enhanceCards(){
+        page.querySelectorAll('.vid-card').forEach(function(card){ addNoRedirectControls(card); });
+    }
+
+    function prepareStaticCards(){
+        getSections().forEach(function(sec){
+            sec.querySelectorAll('.vid-card:not(.xh-admin-video)').forEach(function(card){
+                var iframe = card.querySelector('iframe');
+                var title = card.querySelector('.vid-title');
+                var src = iframe ? iframe.getAttribute('src') || '' : '';
+                var text = title ? title.textContent || '' : '';
+                if (!card.getAttribute('data-static-id')) card.setAttribute('data-static-id', simpleHash(sec.id + '|' + src + '|' + text));
+                card.setAttribute('data-xh-static','true');
+                if (src.indexOf('instagram.com') !== -1) card.setAttribute('data-xh-provider','instagram');
+                else if (src.indexOf('youtube.com') !== -1 || src.indexOf('youtu.be') !== -1) card.setAttribute('data-xh-provider','youtube');
+                if (title && /https?:\/\//i.test(title.textContent || '')) title.textContent = src.indexOf('instagram.com') !== -1 ? 'Instagram Video' : 'YouTube Video';
+                addNoRedirectControls(card);
+            });
+        });
+    }
+
+    function applyHiddenStatic(){
+        var hidden = readHiddenStatic();
+        page.querySelectorAll('.vid-card[data-static-id]').forEach(function(card){
+            var id = card.getAttribute('data-static-id');
+            if (hidden.indexOf(id) !== -1) {
+                card.setAttribute('data-xh-hidden','true');
+                card.style.display = 'none';
+            } else {
+                card.removeAttribute('data-xh-hidden');
+            }
+        });
+    }
+
+    function removeEmptyNotes(){
+        page.querySelectorAll('.xh-empty-section-note').forEach(function(note){ note.remove(); });
+    }
+
+    function removeDeleteButtons(){
+        page.querySelectorAll('.xh-card-delete').forEach(function(btn){ btn.remove(); });
+    }
+
+    function installDeleteButtons(){
+        removeDeleteButtons();
+        if (!adminOpen) return;
+        page.querySelectorAll('.vid-card').forEach(function(card){
+            if (card.getAttribute('data-xh-hidden') === 'true') return;
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'xh-card-delete';
+            btn.textContent = 'DELETE';
+            btn.onclick = function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                var adminId = card.getAttribute('data-admin-id');
+                var staticId = card.getAttribute('data-static-id');
+                if (adminId) {
+                    writeItems(readItems().filter(function(saved){ return saved.id !== adminId; }));
+                    if (adminMsg) adminMsg.textContent = 'Video deleted.';
+                } else if (staticId) {
+                    var hidden = readHiddenStatic();
+                    if (hidden.indexOf(staticId) === -1) hidden.push(staticId);
+                    writeHiddenStatic(hidden);
+                    if (adminMsg) adminMsg.textContent = 'Video hidden from this page.';
+                }
+                renderAdminVideos();
+                restoreDefault();
+                installDeleteButtons();
+            };
+            card.appendChild(btn);
+        });
+    }
+
+    function renderAdminVideos(preferredTarget){
+        page.querySelectorAll('.xh-admin-video').forEach(function(card){ card.remove(); });
+        readItems().forEach(function(item){
+            var section = document.getElementById(item.category);
+            var grid = section ? section.querySelector('.vid-grid') : null;
+            if (grid) grid.appendChild(buildCard(item));
+        });
+        prepareStaticCards();
+        applyStaticMoves();
+        applyHiddenStatic();
+        enhanceCards();
+        applyFrameSettingsToAll();
+        renderAdminList();
+        buildTargetOptions(preferredTarget);
+        installDeleteButtons();
+    }
+
+    function seedInstagramTestVideos(){
+        var seedKey = 'xh_video_instagram_test_seed_v1';
+        try {
+            if (localStorage.getItem(seedKey) === 'done') return;
+            var items = readItems();
+            var seeds = [
+                { title:'Instagram Test Reel — Roman Telescope Shield', url:'https://www.instagram.com/nasa/reel/DL7mvATMAsI/' },
+                { title:'Instagram Test Reel — Vehicle Assembly Building', url:'https://www.instagram.com/nasa/reel/CguovKDJ68C/' }
+            ];
+            seeds.forEach(function(seed, index){
+                var media = mediaEmbed(seed.url);
+                if (!media || !media.embed) return;
+                items.push({
+                    id:'xhv_test_inst_' + Date.now() + '_' + index,
+                    title:seed.title,
+                    embed:media.embed,
+                    provider:media.provider,
+                    category:'video-content'
+                });
+            });
+            writeItems(items);
+            localStorage.setItem(seedKey,'done');
+        } catch(e){}
+    }
+
+    function renderAdminList(){
+        if (!adminList) return;
+        var items = readItems();
+        adminList.innerHTML = '';
+        if (!items.length) {
+            adminList.innerHTML = '<div style="color:rgba(255,255,255,0.48);font-size:12px;line-height:1.5;">No added videos yet.</div>';
+            return;
+        }
+        items.forEach(function(item){
+            var row = document.createElement('div');
+            row.className = 'xh-admin-item';
+
+            var label = document.createElement('div');
+            label.className = 'xh-admin-item-title';
+            label.textContent = item.title || 'Video';
+            var meta = document.createElement('span');
+            meta.textContent = categoryName(item.category) + ' • ' + (item.provider || 'video');
+            label.appendChild(meta);
+
+            var controls = document.createElement('div');
+            controls.className = 'xh-admin-item-controls';
+
+            var cat = document.createElement('select');
+            sectionIds.forEach(function(secId){
+                var opt = document.createElement('option');
+                opt.value = secId;
+                opt.textContent = categoryName(secId);
+                cat.appendChild(opt);
+            });
+            cat.value = item.category || 'video-content';
+
+            var pos = document.createElement('input');
+            pos.type = 'number';
+            pos.min = '1';
+            pos.step = '1';
+            pos.value = '1';
+
+            var move = document.createElement('button');
+            move.type = 'button';
+            move.textContent = 'MOVE';
+            move.onclick = function(){
+                moveAdminItemById(item.id, cat.value, Math.max(0, (parseInt(pos.value,10) || 1) - 1));
+                renderAdminVideos('admin:' + item.id);
+                runSearch(input ? input.value : '');
+                if (adminMsg) adminMsg.textContent = 'Video moved to selected category and position.';
+            };
+
+            var random = document.createElement('button');
+            random.type = 'button';
+            random.textContent = 'RANDOM';
+            random.onclick = function(){
+                randomMoveVideo('admin:' + item.id);
+                if (adminMsg) adminMsg.textContent = 'Video moved to a random category/position.';
+            };
+
+            var frame = document.createElement('button');
+            frame.type = 'button';
+            frame.textContent = 'FRAME';
+            frame.onclick = function(){
+                if (targetInput) targetInput.value = 'admin:' + item.id;
+                syncFrameInputs('admin:' + item.id);
+                if (adminMsg) adminMsg.textContent = 'Frame controls loaded for selected video.';
+            };
+
+            var del = document.createElement('button');
+            del.type = 'button';
+            del.textContent = 'DELETE';
+            del.onclick = function(){
+                writeItems(readItems().filter(function(saved){ return saved.id !== item.id; }));
+                renderAdminVideos();
+                runSearch(input ? input.value : '');
+                if (adminMsg) adminMsg.textContent = 'Video deleted.';
+            };
+
+            controls.appendChild(cat);
+            controls.appendChild(pos);
+            controls.appendChild(move);
+            controls.appendChild(random);
+            controls.appendChild(frame);
+            controls.appendChild(del);
+            row.appendChild(label);
+            row.appendChild(controls);
+            adminList.appendChild(row);
+        });
+    }
+
+
+    function waitForUnlockSystem(){
+        return new Promise(function(resolve){
+            if (window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock === 'function') return resolve(window.XHorizonAdmin);
+            var tries = 0;
+            var timer = setInterval(function(){
+                tries++;
+                if (window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock === 'function') {
+                    clearInterval(timer);
+                    resolve(window.XHorizonAdmin);
+                } else if (tries > 12) {
+                    clearInterval(timer);
+                    resolve(null);
+                }
+            }, 120);
+        });
+    }
+
+    async function handleSearchAction(){
+        var value = input ? input.value.trim() : '';
+        if (!value) {
+            runSearch('');
+            return;
+        }
+
+        var oldLabel = searchBtn ? searchBtn.textContent : '';
+        if (searchBtn) {
+            searchBtn.disabled = true;
+            searchBtn.textContent = 'Checking';
+        }
+
+        try {
+            var bridge = await waitForUnlockSystem();
+            if (bridge && typeof bridge.unlock === 'function') {
+                var callbackDone = false;
+                var ok = await Promise.resolve(bridge.unlock(value, function(){
+                    callbackDone = true;
+                    unlockAdmin();
+                }));
+                if (ok) {
+                    if (!callbackDone) unlockAdmin();
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error('X Horizon video admin unlock failed:', error);
+        } finally {
+            if (searchBtn) {
+                searchBtn.disabled = false;
+                searchBtn.textContent = oldLabel || 'Search';
+            }
+        }
+
+        runSearch(value);
+    }
+
+    function unlockAdmin(){
+        adminOpen = true;
+        if (adminPanel) adminPanel.style.display = 'block';
+        if (status) status.textContent = 'Control panel opened.';
+        if (input) input.value = '';
+        restoreDefault();
+        buildTargetOptions();
+        installDeleteButtons();
+        setTimeout(function(){ if (titleInput) titleInput.focus(); }, 50);
+    }
+
+    function lockAdmin(){
+        adminOpen = false;
+        if (adminPanel) adminPanel.style.display = 'none';
+        removeDeleteButtons();
+        if (status) status.textContent = 'Search video headings here.';
+    }
+
+    function restoreDefault(){
+        removeEmptyNotes();
+        getSections().forEach(function(sec){
+            sec.style.display = sec.getAttribute('data-xh-default-display') || 'block';
+            sec.querySelectorAll('.vid-card').forEach(function(card){
+                if (card.getAttribute('data-xh-hidden') === 'true') card.style.display = 'none';
+                else card.style.display = '';
+            });
+        });
+        applyHiddenStatic();
+        if (status && !adminOpen) status.textContent = 'Search video headings here.';
+        setTimeout(syncCategoryVideoPlayback, 0);
+    }
+
+    function runSearch(value){
+        var query = normalizeText(value);
+        removeEmptyNotes();
+        if (!query) {
+            restoreDefault();
+            installDeleteButtons();
+            return;
+        }
+        var total = 0;
+        getSections().forEach(function(sec){
+            var matchInSection = 0;
+            sec.style.display = 'block';
+            sec.querySelectorAll('.vid-card').forEach(function(card){
+                if (card.getAttribute('data-xh-hidden') === 'true') {
+                    card.style.display = 'none';
+                    return;
+                }
+                var title = card.querySelector('.vid-title');
+                var text = normalizeText(title ? title.textContent : '');
+                var matched = text.indexOf(query) !== -1;
+                card.style.display = matched ? '' : 'none';
+                if (matched) { matchInSection++; total++; }
+            });
+            if (!matchInSection) sec.style.display = 'none';
+        });
+        if (status) status.textContent = total ? (total + ' video heading match' + (total === 1 ? '' : 'es') + ' found.') : 'No video heading matched your search.';
+        installDeleteButtons();
+        setTimeout(syncCategoryVideoPlayback, 0);
+    }
+
+    if (input) {
+        input.addEventListener('input', function(){ runSearch(input.value); });
+        input.addEventListener('keydown', function(e){
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSearchAction();
+            }
+        });
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', handleSearchAction);
+
+    if (clearBtn) clearBtn.addEventListener('click', function(){
+        if (input) input.value = '';
+        restoreDefault();
+        installDeleteButtons();
+    });
+
+
+    if (targetInput) targetInput.addEventListener('change', function(){ syncFrameInputs(targetInput.value); });
+    if (moveBtn) moveBtn.addEventListener('click', function(){
+        if (moveVideoTo(moveCategoryInput ? moveCategoryInput.value : 'video-content', positionInput ? positionInput.value : 1)) {
+            if (adminMsg) adminMsg.textContent = 'Selected video moved.';
+        }
+    });
+    if (randomMoveBtn) randomMoveBtn.addEventListener('click', function(){
+        if (randomMoveVideo()) {
+            if (adminMsg) adminMsg.textContent = 'Selected video moved randomly.';
+        }
+    });
+    if (applyFrameBtn) applyFrameBtn.addEventListener('click', applyCustomFrame);
+    if (resetFrameBtn) resetFrameBtn.addEventListener('click', resetFrame);
+    if (setDefaultAllBtn) setDefaultAllBtn.addEventListener('click', setDefaultFrameForAll);
+    if (igSafeBtn) igSafeBtn.addEventListener('click', useInstagramSafeFrame);
+    if (resetVisualBtn) resetVisualBtn.addEventListener('click', resetVisualToOriginal);
+    bindVisualEditor();
+
+    if (modalClose) modalClose.addEventListener('click', closePlayer);
+    if (modalReload) modalReload.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); reloadActivePlayer(); });
+    if (modal) modal.addEventListener('click', function(e){
+        if (e.target === modal) closePlayer();
+    });
+    document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') closePlayer();
+    });
+
+    ['xh-video-category-row-main','xh-video-category-row-secondary'].forEach(function(rowId){
+        var row = document.getElementById(rowId);
+        if (!row) return;
+        row.querySelectorAll('div[onclick]').forEach(function(card){
+            card.addEventListener('click', function(){
+                if (input) input.value = '';
+                removeEmptyNotes();
+                getSections().forEach(function(sec){
+                    sec.querySelectorAll('.vid-card').forEach(function(videoCard){
+                        if (videoCard.getAttribute('data-xh-hidden') === 'true') videoCard.style.display = 'none';
+                        else videoCard.style.display = '';
+                    });
+                });
+                if (status) status.textContent = 'Search video headings here.';
+                installDeleteButtons();
+                setTimeout(syncCategoryVideoPlayback, 0);
+            });
+        });
+    });
+
+    if (lockBtn) lockBtn.addEventListener('click', lockAdmin);
+
+    if (addBtn) addBtn.addEventListener('click', function(){
+        var media = mediaEmbed(urlInput ? urlInput.value : '');
+        var title = cleanTitle(titleInput ? titleInput.value : '', media);
+        var category = catInput ? catInput.value : 'video-content';
+        if (!media || !media.embed) {
+            if (adminMsg) adminMsg.textContent = 'Add a valid YouTube or Instagram video URL.';
+            return;
+        }
+        var items = readItems();
+        items.push({ id:'xhv_' + Date.now(), title:title, embed:media.embed, provider:media.provider, category:category });
+        writeItems(items);
+        if (titleInput) titleInput.value = '';
+        if (urlInput) urlInput.value = '';
+        renderAdminVideos();
+        if (adminMsg) adminMsg.textContent = 'Video added successfully inside selected category.';
+        runSearch(input ? input.value : '');
+    });
+
+    clearLegacyVideosOnce();
+    seedInstagramTestVideos();
+    prepareStaticCards();
+    renderAdminVideos();
+})();
+</script>
+
+</div>
