@@ -1,0 +1,1367 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<title>X HORIZON — Explore Nature Beyond the Horizon</title>
+<meta name="description" content="X HORIZON is a free, global space-science ecosystem: learn astronomy, build space-science skills, explore missions and simulations, and follow what is happening beyond Earth today.">
+
+
+<style>
+/* standalone preview only — delete this line when pasting into Odoo */
+html,body{margin:0;background:#000;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+
+/* ---------- base ---------- */
+#xhHome{
+  --bg:#000; --bg2:#070707; --surf:#101010; --surf2:#181818;
+  --line:rgba(255,255,255,.14); --line2:rgba(255,255,255,.32);
+  --tx:#fff; --mute:rgba(255,255,255,.72); --dim:rgba(255,255,255,.52);
+  --live:#ff3b30; --pad:clamp(20px,4.6vw,72px); --max:1400px;
+  position:relative; background:var(--bg); color:var(--tx);
+  font-family:inherit; font-size:clamp(15px,.3vw + 14px,17px); line-height:1.6;
+  overflow-x:clip; -webkit-font-smoothing:antialiased;
+}
+#xhHome *,#xhHome *::before,#xhHome *::after{box-sizing:border-box}
+#xhHome :where(h1,h2,h3,h4,p,ul,ol,figure,dl,dd,dt,blockquote){margin:0;padding:0}
+#xhHome :where(ul,ol){list-style:none}
+#xhHome a{color:inherit;text-decoration:none}
+#xhHome img,#xhHome svg,#xhHome video{display:block;max-width:100%}
+#xhHome button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+#xhHome :focus-visible{outline:2px solid #fff;outline-offset:3px}
+#xhHome [hidden]{display:none!important}
+#xhHome .xh-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#xhHome .xh-wrap{width:100%;max-width:var(--max);margin-inline:auto;padding-inline:var(--pad)}
+#xhHome .xh-sec{position:relative;padding-block:clamp(64px,9vw,128px);border-top:1px solid var(--line);content-visibility:auto;contain-intrinsic-size:auto 900px}
+#xhHome .xh-vc,#xhHome .xh-live{content-visibility:visible}
+#xhHome .xh-ic{width:1.25em;height:1.25em;flex:none}
+#xhHome .xh-badge{display:grid;place-items:center;width:46px;height:46px;flex:none;border:1px solid var(--line2);border-radius:50%;background:rgba(0,0,0,.5)}
+#xhHome .xh-badge .xh-ic{width:22px;height:22px}
+
+/* off-screen sections do not animate (keeps low-end devices fast) */
+#xhHome .xh-sec:not(.is-vis) *,#xhHome .xh-sec:not(.is-vis) *::before,#xhHome .xh-sec:not(.is-vis) *::after{animation-play-state:paused!important}
+
+/* ---------- type + controls ---------- */
+#xhHome .xh-h2{font-size:clamp(2rem,4.6vw,4.2rem);font-weight:700;line-height:1.04;letter-spacing:-.02em;text-transform:uppercase;text-wrap:balance}
+#xhHome .xh-h2--case{text-transform:none;letter-spacing:-.03em}
+#xhHome .xh-sub{margin-top:1rem;color:var(--mute);font-size:clamp(1rem,1.2vw,1.18rem);max-width:48ch}
+#xhHome .xh-lead{font-size:clamp(1.05rem,1.4vw,1.32rem);line-height:1.55;color:rgba(255,255,255,.88);max-width:38rem}
+#xhHome .xh-small{font-size:.84rem;color:var(--dim)}
+#xhHome .xh-btn{display:inline-flex;align-items:center;justify-content:center;gap:.7em;min-height:52px;padding:.9rem 1.7rem;border:1px solid var(--line2);border-radius:2px;font-size:.82rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:background .25s,color .25s,border-color .25s,transform .25s}
+#xhHome .xh-btn--solid{background:#fff;color:#000;border-color:#fff}
+#xhHome .xh-btn--solid:hover{background:#e6e6e6;border-color:#e6e6e6}
+#xhHome .xh-btn--ghost{background:rgba(0,0,0,.25)}
+#xhHome .xh-btn--ghost:hover{border-color:#fff;background:rgba(255,255,255,.1)}
+#xhHome .xh-link{display:inline-flex;align-items:center;gap:.6em;padding-block:.6rem;border-bottom:1px solid var(--line2);font-size:.82rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:border-color .25s,gap .25s}
+#xhHome .xh-link:hover{border-color:#fff;gap:1em}
+#xhHome .xh-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--live);flex:none;animation:xhPulse 2.2s ease-out infinite}
+#xhHome .xh-img{position:relative;overflow:hidden;background:#0c0c0c}
+#xhHome .xh-img>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#xhHome .xh-img>img.is-new{animation:xhFadeIn 1.1s ease both}
+#xhHome .xh-credit{font-size:.66rem;line-height:1.3;color:rgba(255,255,255,.62);text-shadow:0 1px 6px rgba(0,0,0,.95)}
+#xhHome .xh-rv{opacity:1}
+#xhHome.xh-js .xh-rv{opacity:0;transform:translate3d(0,26px,0);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+#xhHome.xh-js .xh-rv.is-in{opacity:1;transform:none}
+
+#xhHome .xh-hero__actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;margin-top:clamp(1.4rem,4vh,2.4rem);animation:xhRise 1.2s cubic-bezier(.2,.7,.2,1) .7s both}
+
+/* headline ticker (LIVE) */
+#xhHome .xh-ticker{overflow:hidden;border-block:1px solid var(--line);background:rgba(0,0,0,.62)}
+#xhHome .xh-ticker__track{display:flex;width:max-content;animation:xhTick var(--tt,50s) linear infinite}
+#xhHome .xh-ticker:hover .xh-ticker__track,#xhHome .xh-ticker:focus-within .xh-ticker__track{animation-play-state:paused}
+#xhHome .xh-ticker__grp{display:flex;flex:none}
+#xhHome .xh-ticker__grp>*{flex:none;display:inline-flex;align-items:center;padding:1rem 0 1rem 3.2rem;font-size:.8rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;color:var(--mute)}
+#xhHome .xh-ticker__grp>*::before{content:"";width:5px;height:5px;margin-right:3.2rem;border-radius:50%;background:var(--dim)}
+#xhHome .xh-ticker--news .xh-ticker__grp>*{letter-spacing:.02em;text-transform:none;font-size:.9rem;font-weight:500;color:rgba(255,255,255,.86)}
+#xhHome .xh-ticker--news a:hover{color:#fff;text-decoration:underline}
+#xhHome .xh-ticker--news .xh-ticker__grp b{margin-right:.6em;color:var(--dim);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
+
+/* ---------- 2. WHAT IS ---------- */
+#xhHome .xh-what__grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(32px,6vw,100px);align-items:center}
+#xhHome .xh-what .xh-h2{font-size:clamp(2.4rem,6vw,5.8rem);line-height:.96}
+#xhHome .xh-index{display:grid;grid-template-columns:1fr 1fr;gap:.35rem 2rem;margin-top:2rem}
+#xhHome .xh-index li{display:flex;align-items:center;gap:.7rem;padding:.4rem 0;color:var(--mute)}
+#xhHome .xh-index li::before{content:"";width:6px;height:6px;border-radius:50%;background:#fff;flex:none}
+#xhHome .xh-collage{position:relative;aspect-ratio:1/1;max-width:640px;margin-left:auto;width:100%}
+#xhHome .xh-collage .xh-img{position:absolute;border-radius:2px;box-shadow:0 18px 50px rgba(0,0,0,.6)}
+#xhHome .xh-collage .xh-img:nth-child(1){left:0;top:6%;width:64%;height:56%;animation:xhFloat 9s ease-in-out infinite alternate}
+#xhHome .xh-collage .xh-img:nth-child(2){right:0;top:0;width:44%;height:44%;animation:xhFloat 11s ease-in-out -3s infinite alternate-reverse}
+#xhHome .xh-collage .xh-img:nth-child(3){right:6%;bottom:0;width:58%;height:48%;animation:xhFloat 13s ease-in-out -6s infinite alternate}
+#xhHome .xh-collage .xh-img>img{animation:xhKen 30s ease-in-out infinite alternate}
+
+/* ---------- 3. ECOSYSTEM ---------- */
+#xhHome .xh-eco__head{margin-bottom:clamp(32px,4.5vw,64px)}
+#xhHome .xh-eco__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,1.2vw,18px)}
+#xhHome .xh-panel{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:clamp(340px,33vw,500px);padding:clamp(20px,2.2vw,34px);overflow:hidden;isolation:isolate;border-radius:2px;background:#0c0c0c}
+#xhHome .xh-panel>img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;filter:brightness(.72);transition:filter .7s;animation:xhKen 36s ease-in-out infinite alternate}
+#xhHome .xh-panel:nth-child(even)>img{animation-direction:alternate-reverse;animation-delay:-9s}
+#xhHome .xh-panel::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(0,0,0,.94) 0%,rgba(0,0,0,.35) 55%,rgba(0,0,0,.25) 100%)}
+#xhHome .xh-panel:hover>img{filter:brightness(.95)}
+#xhHome .xh-panel .xh-badge{position:absolute;top:clamp(16px,2vw,28px);left:clamp(16px,2vw,28px);transition:background .3s,color .3s}
+#xhHome .xh-panel:hover .xh-badge{background:#fff;color:#000}
+#xhHome .xh-panel h3{font-size:clamp(1.9rem,3.2vw,3rem);font-weight:800;line-height:1;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:.7rem}
+#xhHome .xh-panel p{color:rgba(255,255,255,.82);max-width:30ch}
+#xhHome .xh-panel__go{display:inline-flex;align-items:center;gap:.6em;margin-top:1.2rem;font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:gap .3s}
+#xhHome .xh-panel:hover .xh-panel__go{gap:1em}
+
+/* ---------- 4. LIVE ---------- */
+#xhHome .xh-live{background:var(--bg2)}
+#xhHome .xh-live::before{content:"";position:absolute;left:0;top:-1px;width:min(36%,480px);height:2px;background:var(--live)}
+#xhHome .xh-live__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1.6rem 2rem}
+#xhHome .xh-live__badge{display:inline-flex;align-items:center;gap:.7rem;font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--live)}
+#xhHome .xh-live__title{margin-top:.9rem;font-size:clamp(3.4rem,10vw,8.4rem);font-weight:800;line-height:.88;letter-spacing:-.04em}
+#xhHome .xh-live__status{display:grid;gap:.4rem;text-align:right;max-width:34rem;font-size:.86rem;color:var(--mute)}
+#xhHome .xh-live__status p:first-child{color:#fff;font-weight:600}
+#xhHome .xh-ticker--news{margin-top:clamp(24px,3.4vw,44px)}
+#xhHome .xh-cats{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(20px,2.6vw,32px)}
+#xhHome .xh-chip{display:inline-flex;align-items:center;gap:.55em;min-height:42px;padding:.5rem 1rem;border:1px solid var(--line);border-radius:999px;color:var(--mute);font-size:.88rem;white-space:nowrap;transition:border-color .2s,color .2s,background .2s}
+#xhHome .xh-chip .xh-ic{width:1.1em;height:1.1em}
+#xhHome .xh-chip:hover{border-color:var(--line2);color:#fff}
+#xhHome .xh-chip[aria-pressed="true"]{background:#fff;border-color:#fff;color:#000}
+#xhHome .xh-live__grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:clamp(24px,3.4vw,56px);margin-top:clamp(22px,3vw,40px);align-items:start}
+#xhHome .xh-feat__img{aspect-ratio:16/9}
+#xhHome .xh-feat__img>img{animation:xhKen 40s ease-in-out infinite alternate}
+#xhHome .xh-feat__flag{position:absolute;left:0;top:0;z-index:2;display:inline-flex;align-items:center;gap:.7em;padding:.7rem 1rem;background:#000;font-size:.74rem;font-weight:700;letter-spacing:.16em}
+#xhHome .xh-feat__body{padding-top:1.4rem}
+#xhHome .xh-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem 1.1rem;font-size:.84rem;color:var(--dim)}
+#xhHome .xh-tag{display:inline-flex;align-items:center;gap:.5em;font-weight:600;color:#fff}
+#xhHome .xh-tag .xh-ic{width:1.05em;height:1.05em}
+#xhHome .xh-feat h3{margin:.8rem 0 .8rem;font-size:clamp(1.5rem,2.8vw,2.5rem);font-weight:700;line-height:1.12;letter-spacing:-.02em;text-wrap:balance}
+#xhHome .xh-clamp3,#xhHome .xh-clamp2{display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
+#xhHome .xh-clamp3{-webkit-line-clamp:3;line-clamp:3}
+#xhHome .xh-clamp2{-webkit-line-clamp:2;line-clamp:2}
+#xhHome .xh-feat p.xh-clamp3{color:rgba(255,255,255,.8);max-width:62ch}
+#xhHome .xh-feat__foot{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.6rem;margin-top:1.4rem}
+#xhHome .xh-item{display:grid;grid-template-columns:88px minmax(0,1fr);gap:1rem;padding:1rem 0;border-top:1px solid var(--line)}
+#xhHome .xh-item:first-child{padding-top:0;border-top:0}
+#xhHome .xh-item .xh-img{width:88px;height:88px;border-radius:2px}
+#xhHome .xh-item h3{margin:.35rem 0 .3rem;font-size:1.04rem;font-weight:700;line-height:1.3}
+#xhHome .xh-item h3 a{background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .35s}
+#xhHome .xh-item h3 a:hover{background-size:100% 1px}
+#xhHome .xh-item p.xh-clamp2{color:var(--mute);font-size:.9rem;line-height:1.45}
+#xhHome .xh-item .xh-small{margin-top:.4rem}
+#xhHome .xh-live__msg{grid-column:1/-1;padding:clamp(20px,3vw,36px);border:1px solid var(--line);color:var(--mute)}
+#xhHome .xh-live__msg strong{display:block;margin-bottom:.4rem;color:#fff;font-size:1.2rem}
+#xhHome .xh-live__foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1.2rem 2rem;margin-top:clamp(28px,3.6vw,52px);padding-top:1.5rem;border-top:1px solid var(--line)}
+#xhHome .xh-official{display:flex;flex-wrap:wrap;gap:.3rem 1.3rem;font-size:.84rem;color:var(--dim)}
+#xhHome .xh-official a{color:var(--mute);border-bottom:1px solid var(--line)}
+#xhHome .xh-official a:hover{color:#fff;border-color:#fff}
+
+/* ---------- 5. VISUAL COLLECTIONS (moving picture rows) ---------- */
+#xhHome .xh-vc{overflow:hidden}
+#xhHome .xh-vc__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1.4rem 3rem;margin-bottom:clamp(28px,4vw,56px)}
+#xhHome .xh-vc .xh-h2{font-size:clamp(2.5rem,6.6vw,6.2rem);line-height:.94}
+#xhHome .xh-rows{display:grid;gap:clamp(10px,1.2vw,18px)}
+#xhHome .xh-row{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+#xhHome .xh-row__track{display:flex;width:max-content;animation:xhTick var(--rt,80s) linear infinite}
+#xhHome .xh-row--rev .xh-row__track{animation-direction:reverse}
+#xhHome .xh-row:hover .xh-row__track,#xhHome .xh-row:focus-within .xh-row__track{animation-play-state:paused}
+#xhHome .xh-row__grp{display:flex;gap:clamp(10px,1.2vw,18px);padding-right:clamp(10px,1.2vw,18px)}
+#xhHome .xh-card{position:relative;flex:none;width:clamp(250px,25vw,380px);aspect-ratio:3/4;overflow:hidden;isolation:isolate;border-radius:2px;background:#0c0c0c}
+#xhHome .xh-row--wide .xh-card{width:clamp(300px,34vw,520px);aspect-ratio:16/11}
+#xhHome .xh-card>img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;transition:transform 1.6s cubic-bezier(.2,.7,.2,1),filter .6s;filter:saturate(.95)}
+#xhHome .xh-card:hover>img{transform:scale(1.07);filter:saturate(1.1)}
+#xhHome .xh-card::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.3) 45%,rgba(0,0,0,0) 70%)}
+#xhHome .xh-card__cap{position:absolute;left:0;right:0;bottom:0;padding:clamp(16px,1.6vw,24px);display:grid;gap:.35rem}
+#xhHome .xh-card h3{font-size:clamp(1.15rem,1.7vw,1.6rem);font-weight:800;line-height:1.05;text-transform:uppercase;letter-spacing:-.01em}
+#xhHome .xh-card p{font-size:.9rem;line-height:1.4;color:rgba(255,255,255,.84);max-width:34ch}
+#xhHome .xh-card__go{justify-self:start;display:inline-flex;align-items:center;gap:.5em;margin-top:.4rem;font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--line2);padding-bottom:.3rem}
+#xhHome .xh-card__go::after{content:"";position:absolute;inset:0}
+#xhHome .xh-card__go:focus-visible{outline:none}
+#xhHome .xh-card:focus-within{outline:2px solid #fff;outline-offset:-2px}
+#xhHome .xh-card .xh-credit{position:absolute;right:12px;top:10px;max-width:75%;text-align:right}
+
+/* ---------- 6. TOOLS ---------- */
+#xhHome .xh-tools__head{margin-bottom:clamp(32px,4.5vw,64px);max-width:60rem}
+#xhHome .xh-tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.2vw,18px)}
+#xhHome .xh-tool{position:relative;display:flex;flex-direction:column;background:var(--surf);border-radius:2px;overflow:hidden;transition:background .3s,transform .4s}
+#xhHome .xh-tool:hover{background:var(--surf2);transform:translateY(-4px)}
+#xhHome .xh-tool__pv{aspect-ratio:4/3}
+#xhHome .xh-tool__pv>img{animation:xhKen 32s ease-in-out infinite alternate;transition:filter .5s;filter:brightness(.85)}
+#xhHome .xh-tool:hover .xh-tool__pv>img{filter:brightness(1.05)}
+#xhHome .xh-tool .xh-badge{position:absolute;top:calc(75% - 0px);left:clamp(14px,1.5vw,22px);transform:translateY(-50%);background:#000;z-index:2}
+#xhHome .xh-tool__txt{display:flex;flex-direction:column;gap:.5rem;flex:1;padding:clamp(34px,3vw,44px) clamp(16px,1.6vw,24px) clamp(18px,1.8vw,26px)}
+#xhHome .xh-tool h3{font-size:clamp(1.12rem,1.5vw,1.4rem);font-weight:700;line-height:1.15}
+#xhHome .xh-tool p{flex:1;color:var(--mute);font-size:.92rem;line-height:1.5}
+#xhHome .xh-tool__go{display:inline-flex;align-items:center;gap:.5em;margin-top:.7rem;font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:gap .3s}
+#xhHome .xh-tool:hover .xh-tool__go{gap:.9em}
+#xhHome .xh-tool__go::after{content:"";position:absolute;inset:0}
+#xhHome .xh-tool__go:focus-visible{outline:none}
+#xhHome .xh-tool:focus-within{outline:2px solid #fff}
+
+/* ---------- 7. MISSION ---------- */
+#xhHome .xh-mission{background:var(--bg2)}
+#xhHome .xh-mission__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(32px,6vw,96px);align-items:center}
+#xhHome .xh-mission .xh-h2{font-size:clamp(2.2rem,4.8vw,4.6rem)}
+#xhHome .xh-caps{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem 1.6rem;margin:2rem 0}
+#xhHome .xh-caps li{display:grid;grid-template-columns:auto 1fr;gap:.2rem .8rem;align-items:start}
+#xhHome .xh-caps .xh-ic{grid-row:1/3;width:22px;height:22px;margin-top:.1rem;color:#fff}
+#xhHome .xh-caps strong{font-weight:700;line-height:1.3}
+#xhHome .xh-caps span{color:var(--dim);font-size:.86rem;line-height:1.4}
+#xhHome .xh-mission__vis{position:relative}
+#xhHome .xh-mission__main{aspect-ratio:4/5;max-height:min(84vh,820px);width:100%;border-radius:2px}
+#xhHome .xh-mission__main>img{animation:xhKen 34s ease-in-out infinite alternate}
+#xhHome .xh-mission__main::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,0) 45%)}
+#xhHome .xh-mission__inset{position:absolute;left:-6%;bottom:8%;width:44%;aspect-ratio:4/3;border:3px solid #000;border-radius:2px;box-shadow:0 18px 50px rgba(0,0,0,.7);animation:xhFloat 10s ease-in-out infinite alternate}
+#xhHome .xh-mission__inset>img{animation:xhKen 24s ease-in-out infinite alternate}
+#xhHome .xh-mission__note{position:absolute;right:clamp(14px,2vw,26px);bottom:clamp(14px,2vw,26px);z-index:2;max-width:46%;text-align:right;font-size:.82rem;line-height:1.4;color:rgba(255,255,255,.88)}
+#xhHome .xh-mission__note b{display:block;font-size:1.5rem;line-height:1.1;letter-spacing:-.02em}
+
+/* ---------- 8. LEARNING PATH ---------- */
+#xhHome .xh-path .xh-h2{font-size:clamp(1.9rem,5.2vw,4.8rem);line-height:1}
+#xhHome .xh-path__wrap{position:relative;margin-top:clamp(44px,6vw,90px)}
+#xhHome .xh-path__line{position:absolute;left:23px;right:0;top:23px;height:1px;background:var(--line2)}
+#xhHome .xh-path__line::after{content:"";position:absolute;inset:0;background:#fff;transform-origin:left center;transform:scaleX(0);transition:transform 2.6s cubic-bezier(.3,.7,.2,1)}
+#xhHome .xh-path.is-in .xh-path__line::after,#xhHome .xh-path.no-io .xh-path__line::after{transform:scaleX(1)}
+#xhHome .xh-path__track{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+#xhHome .xh-step{padding-right:clamp(14px,2.2vw,36px)}
+#xhHome .xh-step .xh-badge{background:#000;transition:background .5s,color .5s}
+#xhHome .xh-path.is-in .xh-step .xh-badge{background:#fff;color:#000}
+#xhHome .xh-path.is-in .xh-step:nth-child(2) .xh-badge{transition-delay:.6s}
+#xhHome .xh-path.is-in .xh-step:nth-child(3) .xh-badge{transition-delay:1.2s}
+#xhHome .xh-path.is-in .xh-step:nth-child(4) .xh-badge{transition-delay:1.8s}
+#xhHome .xh-step h3{margin-top:1.4rem;font-size:clamp(1.5rem,2.6vw,2.4rem);font-weight:800;line-height:1;letter-spacing:-.01em;text-transform:uppercase}
+#xhHome .xh-step p{margin-top:.7rem;color:var(--mute);max-width:24ch}
+
+/* ---------- 9. CAREERS ---------- */
+#xhHome .xh-car__grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.35fr);gap:clamp(32px,6vw,96px);align-items:start}
+#xhHome .xh-car .xh-h2{font-size:clamp(2.2rem,4.8vw,4.6rem)}
+#xhHome .xh-car__cta{display:flex;flex-wrap:wrap;gap:12px 16px;margin-top:2rem}
+#xhHome .xh-paths{display:flex;flex-wrap:wrap;gap:8px;margin-top:1.4rem}
+#xhHome .xh-paths a{display:inline-flex;align-items:center;gap:.5em;min-height:44px;padding:.5rem 1.1rem;border:1px solid var(--line);border-radius:999px;color:var(--mute);font-size:.9rem;transition:border-color .2s,color .2s}
+#xhHome .xh-paths a:hover{border-color:#fff;color:#fff}
+#xhHome .xh-nav{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);background:var(--surf);border-radius:2px;overflow:hidden}
+#xhHome .xh-nav__tabs{border-right:1px solid var(--line)}
+#xhHome .xh-tab{position:relative;display:flex;align-items:center;gap:.8rem;width:100%;padding:.95rem 1.2rem;border-bottom:1px solid var(--line);color:var(--mute);font-weight:600;line-height:1.3;transition:color .2s,background .2s}
+#xhHome .xh-tab:last-child{border-bottom:0}
+#xhHome .xh-tab:hover{color:#fff}
+#xhHome .xh-tab[aria-selected="true"]{color:#fff;background:var(--surf2)}
+#xhHome .xh-tab[aria-selected="true"]::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#fff}
+#xhHome .xh-nav__body{display:flex;flex-direction:column;min-width:0}
+#xhHome .xh-nav__img{aspect-ratio:16/8;flex:none}
+#xhHome .xh-nav__img>img{animation:xhKen 28s ease-in-out infinite alternate}
+#xhHome .xh-nav__panel{padding:clamp(18px,2.4vw,32px);display:grid;gap:1.2rem;align-content:start}
+#xhHome .xh-nav__panel h3{font-size:clamp(1.6rem,2.6vw,2.4rem);font-weight:800;line-height:1.05}
+#xhHome .xh-nav__panel dt{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:.35rem}
+#xhHome .xh-nav__panel dd{color:rgba(255,255,255,.88);max-width:46ch}
+
+/* ---------- 10. COMMUNITY ---------- */
+#xhHome .xh-com{background:var(--bg2)}
+#xhHome .xh-com__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:center}
+#xhHome .xh-com .xh-h2{font-size:clamp(2.2rem,5.2vw,4.8rem);line-height:.98}
+#xhHome .xh-comlist{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem 1.6rem;margin:2rem 0}
+#xhHome .xh-comlist li{display:grid;grid-template-columns:auto 1fr;gap:.1rem .8rem}
+#xhHome .xh-comlist .xh-ic{grid-row:1/3;width:22px;height:22px;margin-top:.1rem}
+#xhHome .xh-comlist strong{font-weight:700;line-height:1.3}
+#xhHome .xh-comlist span{color:var(--dim);font-size:.86rem;line-height:1.4}
+#xhHome .xh-collage--com .xh-img:nth-child(1){left:0;top:0;width:58%;height:62%}
+#xhHome .xh-collage--com .xh-img:nth-child(2){right:0;top:10%;width:38%;height:50%}
+#xhHome .xh-collage--com .xh-img:nth-child(3){left:12%;right:auto;bottom:0;width:66%;height:42%}
+
+/* ---------- 11. PAKISTAN + GLOBAL ---------- */
+#xhHome .xh-glob__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(32px,6vw,96px);align-items:center}
+#xhHome .xh-glob .xh-h2{font-size:clamp(2.2rem,5.2vw,4.8rem);line-height:.98}
+#xhHome .xh-glob__tag{margin-top:1.4rem;font-size:clamp(1.3rem,2.4vw,2rem);font-weight:700;line-height:1.15;letter-spacing:-.01em}
+#xhHome .xh-glob__facts{display:grid;gap:1.1rem;margin:1.8rem 0 2rem}
+#xhHome .xh-glob__facts li{display:grid;grid-template-columns:auto 1fr;gap:.1rem .9rem}
+#xhHome .xh-glob__facts .xh-ic{grid-row:1/3;width:22px;height:22px;margin-top:.1rem}
+#xhHome .xh-glob__facts strong{font-weight:700}
+#xhHome .xh-glob__facts span{color:var(--mute);font-size:.92rem;line-height:1.5}
+#xhHome .xh-glob__vis{aspect-ratio:5/4;border-radius:2px}
+#xhHome .xh-glob__vis>img{animation:xhKen 36s ease-in-out infinite alternate}
+#xhHome .xh-glob__vis::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.7),rgba(0,0,0,0) 45%)}
+#xhHome .xh-glob__pin{position:absolute;z-index:2;left:clamp(14px,2vw,26px);bottom:clamp(14px,2vw,26px);display:inline-flex;align-items:center;gap:.6em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:.84rem}
+#xhHome .xh-glob__vis .xh-credit{position:absolute;z-index:2;right:12px;bottom:10px}
+
+/* ---------- 12. TODAY'S SKY ---------- */
+#xhHome .xh-sky{background:var(--bg2);padding-block:clamp(48px,6vw,88px)}
+#xhHome .xh-sky__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1rem 2rem;margin-bottom:22px}
+#xhHome .xh-sky__head h2{font-size:clamp(1.6rem,3vw,2.6rem);font-weight:800;line-height:1;text-transform:uppercase}
+#xhHome .xh-sky__grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+#xhHome .xh-cell{position:relative;background:var(--bg2);padding:clamp(16px,1.7vw,24px);min-width:0}
+#xhHome .xh-cell dt{display:flex;align-items:center;gap:.6em;font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+#xhHome .xh-cell dt .xh-ic{width:1.2em;height:1.2em;color:#fff}
+#xhHome .xh-cell .v{margin-top:.8rem;font-size:clamp(1.1rem,1.5vw,1.4rem);font-weight:700;line-height:1.2;overflow-wrap:anywhere}
+#xhHome .xh-cell .d{margin-top:.4rem;color:var(--mute);font-size:.86rem;line-height:1.45}
+#xhHome .xh-cell .d a{border-bottom:1px solid var(--line2)}
+#xhHome .xh-cell .d a:hover{color:#fff;border-color:#fff}
+#xhHome .xh-moon{position:absolute;right:clamp(14px,1.5vw,22px);top:clamp(14px,1.5vw,22px);width:34px;height:34px}
+
+/* ---------- 13. FINAL CTA ---------- */
+#xhHome .xh-final{content-visibility:visible;display:flex;align-items:center;justify-content:center;min-height:min(92svh,940px);overflow:hidden;isolation:isolate;text-align:center;background:#000}
+#xhHome .xh-final__bg{position:absolute;inset:0;z-index:-2}
+#xhHome .xh-final__bg img,#xhHome .xh-final__bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#xhHome .xh-final__bg img{animation:xhKen 40s ease-in-out infinite alternate}
+#xhHome .xh-final__bg video{opacity:0;transition:opacity 1.8s ease}
+#xhHome .xh-final__bg video.is-playing{opacity:1}
+#xhHome .xh-final::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at center,rgba(0,0,0,.4),rgba(0,0,0,.88) 80%);pointer-events:none}
+#xhHome .xh-final h2{font-size:clamp(2.5rem,9.2vw,9rem);font-weight:800;line-height:.92;letter-spacing:-.035em;text-transform:uppercase;text-wrap:balance}
+#xhHome .xh-final p{margin:1.5rem auto 0;max-width:36rem;color:rgba(255,255,255,.86);font-size:clamp(1.05rem,1.5vw,1.4rem)}
+#xhHome .xh-final .xh-hero__actions{justify-content:center;animation:none}
+#xhHome .xh-final__credit{position:absolute;right:var(--pad);bottom:14px}
+
+
+/* ---------- motion ---------- */
+@keyframes xhRise{from{opacity:0;transform:translate3d(0,.5em,0)}to{opacity:1;transform:none}}
+@keyframes xhFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes xhPulse{0%{box-shadow:0 0 0 0 rgba(255,59,48,.55)}70%,100%{box-shadow:0 0 0 10px rgba(255,59,48,0)}}
+@keyframes xhKen{from{transform:scale(1.02) translate3d(0,0,0)}to{transform:scale(1.13) translate3d(-1.6%,-1.2%,0)}}
+@keyframes xhFloat{from{transform:translate3d(0,-8px,0)}to{transform:translate3d(0,10px,0)}}
+@keyframes xhTick{to{transform:translate3d(-50%,0,0)}}
+
+/* ---------- responsive ---------- */
+@media (max-width:1200px){
+  #xhHome .xh-tools{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #xhHome .xh-sky__grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:1024px){
+  #xhHome .xh-what__grid,#xhHome .xh-mission__grid,#xhHome .xh-car__grid,#xhHome .xh-com__grid,#xhHome .xh-glob__grid{grid-template-columns:1fr}
+  #xhHome .xh-eco__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #xhHome .xh-live__grid{grid-template-columns:1fr}
+  #xhHome .xh-live__status{text-align:left}
+  #xhHome .xh-collage{margin-inline:auto;max-width:560px}
+  #xhHome .xh-mission__inset{left:4%}
+}
+@media (max-width:760px){
+  #xhHome .xh-index,#xhHome .xh-caps,#xhHome .xh-comlist{grid-template-columns:1fr}
+  #xhHome .xh-path__track{grid-template-columns:1fr;gap:2rem}
+  #xhHome .xh-path__line{left:23px;right:auto;top:23px;bottom:23px;width:1px;height:auto}
+  #xhHome .xh-path__line::after{transform-origin:center top;transform:scaleY(0)}
+  #xhHome .xh-path.is-in .xh-path__line::after,#xhHome .xh-path.no-io .xh-path__line::after{transform:scaleY(1)}
+  #xhHome .xh-step{display:grid;grid-template-columns:auto 1fr;gap:0 1.2rem;align-items:start}
+  #xhHome .xh-step h3{margin-top:.6rem}
+  #xhHome .xh-step p{grid-column:2}
+  #xhHome .xh-nav{grid-template-columns:1fr}
+  #xhHome .xh-nav__tabs{display:flex;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);scrollbar-width:thin}
+  #xhHome .xh-tab{flex:none;width:auto;border-bottom:0;border-right:1px solid var(--line);white-space:nowrap}
+  #xhHome .xh-tab[aria-selected="true"]::before{top:auto;width:auto;height:3px;right:0}
+  #xhHome .xh-cats{flex-wrap:nowrap;overflow-x:auto;margin-inline:calc(var(--pad) * -1);padding-inline:var(--pad);scrollbar-width:none}
+  #xhHome .xh-cats::-webkit-scrollbar{display:none}
+  #xhHome .xh-mission__inset{width:46%;left:3%;bottom:6%}
+  #xhHome .xh-mission__note{max-width:50%}
+}
+@media (max-width:640px){
+  #xhHome .xh-eco__grid,#xhHome .xh-tools{grid-template-columns:1fr}
+  #xhHome .xh-panel{min-height:300px}
+  #xhHome .xh-sky__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #xhHome .xh-hero__actions .xh-btn{flex:1 1 100%}
+  #xhHome .xh-item{grid-template-columns:72px minmax(0,1fr)}
+  #xhHome .xh-item .xh-img{width:72px;height:72px}
+}
+@media (max-width:420px){
+  #xhHome .xh-sky__grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  #xhHome *,#xhHome *::before,#xhHome *::after{animation:none!important;transition:none!important}
+  #xhHome .xh-row{overflow-x:auto;-webkit-mask-image:none;mask-image:none}
+  #xhHome .xh-row__grp[aria-hidden="true"],#xhHome .xh-ticker__grp[aria-hidden="true"]{display:none}
+  #xhHome .xh-ticker{overflow-x:auto}
+  #xhHome .xh-path__line::after{transform:none!important}
+  #xhHome.xh-js .xh-rv{opacity:1;transform:none}
+}
+</style>
+
+
+<div id="xhHome">
+
+
+<section class="xh-sec xh-what" id="xh-what" aria-labelledby="xh-what-h">
+  <div class="xh-wrap xh-what__grid">
+    <div class="xh-rv">
+      <h2 class="xh-h2 xh-h2--case" id="xh-what-h">One Horizon.<br>Many Ways to Explore.</h2>
+      <p class="xh-lead" style="margin-top:1.6rem">X HORIZON is a free, global space-science ecosystem. Learn the concepts, practise the skills, then put them to work in simulations, observation and mission engineering — alongside people who share the curiosity. </p>
+      <ul class="xh-index" aria-label="What X HORIZON combines">
+        <li>Astronomy education</li><li>Practical space-science skills</li>
+        <li>Simulations</li><li>Observation</li>
+        <li>Astrophotography</li><li>Mission engineering</li>
+        <li>Careers</li><li>Space news</li>
+        <li>Community</li><li>Collaboration</li>
+      </ul>
+    </div>
+    <div class="xh-collage xh-rv" style="--d:.15s" aria-hidden="true">
+      <div class="xh-img"><img data-img="what1" data-w="900" alt="" loading="lazy"></div>
+      <div class="xh-img"><img data-img="what2" data-w="700" alt="" loading="lazy"></div>
+      <div class="xh-img"><img data-img="what3" data-w="900" alt="" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="xh-sec xh-eco" id="xh-ecosystem" aria-labelledby="xh-eco-h">
+  <div class="xh-wrap">
+    <div class="xh-eco__head xh-rv"><h2 class="xh-h2" id="xh-eco-h">Explore the Ecosystem</h2></div>
+    <div class="xh-eco__grid">
+
+      <a class="xh-panel xh-rv" href="/concepts" data-xh-link="learn">
+        <img data-img="ecoLearn" data-w="900" alt="" loading="lazy">
+        <span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"></path> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg></span>
+        <h3>Learn</h3><p>Astronomy concepts, physics, mathematics and structured learning paths.</p>
+        <span class="xh-panel__go">Enter <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></span>
+      </a>
+      <a class="xh-panel xh-rv" style="--d:.08s" href="/skills" data-xh-link="practice">
+        <img data-img="ecoPractice" data-w="900" alt="" loading="lazy">
+        <span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44"></path> <path d="m13.56 11.747 4.332-.924"></path> <path d="m16 21-3.105-6.21"></path> <path d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z"></path> <path d="m6.158 8.633 1.114 4.456"></path> <path d="m8 21 3.105-6.21"></path> <circle cx="12" cy="13" r="2"></circle></svg></span>
+        <h3>Practice</h3><p>Hands-on astronomy, observation, astrophotography and scientific skills.</p>
+        <span class="xh-panel__go">Enter <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></span>
+      </a>
+      <a class="xh-panel xh-rv" style="--d:.16s" href="/mission-designer" data-xh-link="build">
+        <img data-img="ecoBuild" data-w="900" alt="" loading="lazy">
+        <span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"></path> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"></path> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"></path></svg></span>
+        <h3>Build</h3><p>Simulations, mission design, space tools and technical projects.</p>
+        <span class="xh-panel__go">Enter <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></span>
+      </a>
+      <a class="xh-panel xh-rv" href="/space-news" data-xh-link="discover">
+        <img data-img="ecoDiscover" data-w="900" alt="" loading="lazy">
+        <span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path> <path d="M20 2v4"></path> <path d="M22 4h-4"></path> <circle cx="4" cy="20" r="2"></circle></svg></span>
+        <h3>Discover</h3><p>Space missions, discoveries, astronomy events and scientific stories.</p>
+        <span class="xh-panel__go">Enter <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></span>
+      </a>
+      <a class="xh-panel xh-rv" style="--d:.08s" href="/forum" data-xh-link="connect">
+        <img data-img="ecoConnect" data-w="900" alt="" loading="lazy">
+        <span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path> <path d="M16 3.128a4 4 0 0 1 0 7.744"></path> <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path> <circle cx="9" cy="7" r="4"></circle></svg></span>
+        <h3>Connect</h3><p>Social learning, societies, collaboration and astronomy communities.</p>
+        <span class="xh-panel__go">Enter <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></span>
+      </a>
+      <a class="xh-panel xh-rv" style="--d:.16s" href="/career" data-xh-link="progress">
+        <img data-img="ecoProgress" data-w="900" alt="" loading="lazy">
+        <span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 7h6v6"></path> <path d="m22 7-8.5 8.5-5-5L2 17"></path></svg></span>
+        <h3>Progress</h3><p>Careers, universities, opportunities and space-science pathways.</p>
+        <span class="xh-panel__go">Enter <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="xh-sec xh-live" id="xh-live" aria-labelledby="xh-live-h">
+  <div class="xh-wrap">
+    <header class="xh-live__head">
+      <div>
+        <p class="xh-live__badge"><span class="xh-dot" aria-hidden="true"></span>Live · current information</p>
+        <h2 class="xh-live__title" id="xh-live-h">LIVE</h2>
+        <p class="xh-sub">What is happening beyond Earth — today.</p>
+      </div>
+      <div class="xh-live__status">
+        <p id="xhLiveStamp">Checking for the latest stories…</p>
+        <p id="xhWx"></p>
+      </div>
+    </header>
+
+    <div class="xh-ticker xh-ticker--news" id="xhNewsTicker" aria-label="Latest headlines" hidden="">
+      <div class="xh-ticker__track"></div>
+    </div>
+
+    <div class="xh-cats" id="xhCats" role="group" aria-label="Filter stories by category"></div>
+    <p class="xh-sr" id="xhLiveSr" role="status" aria-live="polite"></p>
+
+    <div class="xh-live__grid" id="xhLiveGrid">
+      <article class="xh-feat" id="xhLiveFeat" aria-label="Featured story"></article>
+      <div class="xh-list" id="xhLiveList" aria-label="More current stories"></div>
+    </div>
+
+    <div class="xh-live__foot">
+      <a class="xh-link" href="/live" data-xh-link="live">VIEW ALL LIVE →</a>
+      <p class="xh-official">Official sources:
+        <a href="https://www.nasa.gov/news/" target="_blank" rel="noopener noreferrer">NASA</a>
+        <a href="https://www.esa.int/Newsroom" target="_blank" rel="noopener noreferrer">ESA</a>
+        <a href="https://www.jpl.nasa.gov/news" target="_blank" rel="noopener noreferrer">JPL</a>
+        <a href="https://www.swpc.noaa.gov/" target="_blank" rel="noopener noreferrer">NOAA SWPC</a>
+      </p>
+    </div>
+    <p class="xh-small" style="margin-top:1rem">Stories are fetched live and link to their original publishers. Categories are assigned automatically by X HORIZON.</p>
+  </div>
+</section>
+
+
+<section class="xh-sec xh-vc" id="xh-collections" aria-labelledby="xh-vc-h">
+  <div class="xh-wrap">
+    <div class="xh-vc__head xh-rv">
+      <div>
+        <h2 class="xh-h2" id="xh-vc-h">Exclusive Articles</h2>
+        <p class="xh-sub">See the universe from different perspectives.</p>
+      </div>
+      <a class="xh-link" href="/space-gallery" data-xh-link="collections">All articles →</a>
+    </div>
+  </div>
+
+  <div class="xh-rows">
+    <div class="xh-row" data-row="" style="--rt:90s">
+      <div class="xh-row__track"><div class="xh-row__grp">
+
+        <article class="xh-card xh-img"><img data-img="vcDeepspace" data-w="800" alt="Distant galaxies in a deep-space field" loading="lazy"><span class="xh-credit" data-credit="vcDeepspace"></span>
+          <div class="xh-card__cap"><h3>Deep Space</h3><p>Galaxies, nebulae and distant structures across the universe.</p><a class="xh-card__go" href="/universe-cosmology" data-xh-link="collection:deep-space" aria-label="Explore Deep Space">Explore <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+        <article class="xh-card xh-img"><img data-img="vcNebulae" data-w="800" alt="A glowing nebula where stars are forming" loading="lazy"><span class="xh-credit" data-credit="vcNebulae"></span>
+          <div class="xh-card__cap"><h3>Nebulae</h3><p>Stellar nurseries and the remnants of dying stars.</p><a class="xh-card__go" href="/nebula-interstellar-objects" data-xh-link="collection:nebulae" aria-label="Explore Nebulae">Explore <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+        <article class="xh-card xh-img"><img data-img="vcGalaxies" data-w="800" alt="A spiral galaxy seen face-on" loading="lazy"><span class="xh-credit" data-credit="vcGalaxies"></span>
+          <div class="xh-card__cap"><h3>Galaxies</h3><p>Island universes of billions of stars.</p><a class="xh-card__go" href="/galaxy-large-scale-structure" data-xh-link="collection:galaxies" aria-label="Explore Galaxies">Explore <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+        <article class="xh-card xh-img"><img data-img="vcStars" data-w="800" alt="A bright young star cluster" loading="lazy"><span class="xh-credit" data-credit="vcStars"></span>
+          <div class="xh-card__cap"><h3>Stars</h3><p>The birth, life and death of suns.</p><a class="xh-card__go" href="/stars-stellar-evolution" data-xh-link="collection:stars" aria-label="Explore Stars">Explore <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+        <article class="xh-card xh-img"><img data-img="vcSolar" data-w="800" alt="Saturn and its rings" loading="lazy"><span class="xh-credit" data-credit="vcSolar"></span>
+          <div class="xh-card__cap"><h3>Solar System</h3><p>Planets, moons and small bodies around our Sun.</p><a class="xh-card__go" href="/solar-system" data-xh-link="collection:solar-system" aria-label="Explore the Solar System">Explore <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+        <article class="xh-card xh-img"><img data-img="vcExo" data-w="800" alt="A planetary system around a distant star" loading="lazy"><span class="xh-credit" data-credit="vcExo"></span>
+          <div class="xh-card__cap"><h3>Exoplanets</h3><p>Worlds orbiting stars beyond our Solar System.</p><a class="xh-card__go" href="/exoplanets" data-xh-link="collection:exoplanets" aria-label="Explore Exoplanets">Explore <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+      </div></div>
+    </div>
+
+    <div class="xh-row xh-row--rev xh-row--wide" data-row="" style="--rt:100s">
+      <div class="xh-row__track"><div class="xh-row__grp">
+
+        <article class="xh-card xh-img"><img data-img="vcBlackhole" data-w="900" alt="A black hole with a glowing ring of gas" loading="lazy"><span class="xh-credit" data-credit="vcBlackhole"></span>
+          <div class="xh-card__cap"><h3>Black Holes</h3><p>Event horizons, accretion and the limits of gravity.</p><a class="xh-card__go" href="/black-hole" data-xh-link="collection:black-holes" aria-label="Explore Black Holes">Explore <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+        <article class="xh-card xh-img"><img data-img="vcEarth" data-w="900" alt="Earth seen from space" loading="lazy"><span class="xh-credit" data-credit="vcEarth"></span>
+          <div class="xh-card__cap"><h3>Earth from Space</h3><p>Our planet as seen from orbit and beyond.</p><a class="xh-card__go" href="/where-we-are" data-xh-link="collection:earth" aria-label="Explore Earth from Space">Explore <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+        <article class="xh-card xh-img"><img data-img="vcSpacecraft" data-w="900" alt="A robotic spacecraft on the surface of Mars" loading="lazy"><span class="xh-credit" data-credit="vcSpacecraft"></span>
+          <div class="xh-card__cap"><h3>Spacecraft</h3><p>Robotic explorers and the engineering behind them.</p><a class="xh-card__go" href="/space-technology-exploration" data-xh-link="collection:spacecraft" aria-label="Explore Spacecraft">Explore <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+        <article class="xh-card xh-img"><img data-img="vcMissions" data-w="900" alt="A rocket lifting off from its launch pad" loading="lazy"><span class="xh-credit" data-credit="vcMissions"></span>
+          <div class="xh-card__cap"><h3>Mission Archive</h3><p>Spacecraft, launches and exploration missions.</p><a class="xh-card__go" href="/history" data-xh-link="collection:mission-archive" aria-label="Explore the Mission Archive">Explore <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+        <article class="xh-card xh-img"><img data-img="vcAstro" data-w="900" alt="A deep-sky astrophotograph" loading="lazy"><span class="xh-credit" data-credit="vcAstro"></span>
+          <div class="xh-card__cap"><h3>Astrophotography</h3><p>The cosmos captured from backyards and observatories.</p><a class="xh-card__go" href="/astrophotography" data-xh-link="collection:astrophotography" aria-label="Explore Astrophotography">Explore <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+        <article class="xh-card xh-img"><img data-img="vcNight" data-w="900" alt="A telescope under a starry night sky" loading="lazy"><span class="xh-credit" data-credit="vcNight"></span>
+          <div class="xh-card__cap"><h3>Night Sky</h3><p>Observatories and dark skies on Earth.</p><a class="xh-card__go" href="/stellar-sky" data-xh-link="collection:night-sky" aria-label="Explore the Night Sky">Explore <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+      </div></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="xh-sec xh-tools-sec" id="xh-explore" aria-labelledby="xh-tools-h">
+  <div class="xh-wrap">
+    <div class="xh-tools__head xh-rv">
+      <h2 class="xh-h2" id="xh-tools-h">Don't just read about space. Explore it.</h2>
+      <p class="xh-sub">Interactive tools for observing, modelling and experimenting.</p>
+    </div>
+    <div class="xh-tools">
+
+      <article class="xh-tool xh-rv"><div class="xh-tool__pv xh-img"><img data-img="toolSky" data-w="700" alt="" loading="lazy"></div><span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path> <path d="M20 2v4"></path> <path d="M22 4h-4"></path> <circle cx="4" cy="20" r="2"></circle></svg></span>
+        <div class="xh-tool__txt"><h3>Stellar Sky</h3><p>An interactive map of the sky above any place and time.</p><a class="xh-tool__go" href="/stellar-sky" data-xh-link="stellarsky" aria-label="Open Stellar Sky">Open <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+      <article class="xh-tool xh-rv" style="--d:.07s"><div class="xh-tool__pv xh-img"><img data-img="toolSat" data-w="700" alt="" loading="lazy"></div><span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m13.5 6.5-3.148-3.148a1.205 1.205 0 0 0-1.704 0L6.352 5.648a1.205 1.205 0 0 0 0 1.704L9.5 10.5"></path> <path d="M16.5 7.5 19 5"></path> <path d="m17.5 10.5 3.148 3.148a1.205 1.205 0 0 1 0 1.704l-2.296 2.296a1.205 1.205 0 0 1-1.704 0L13.5 14.5"></path> <path d="M9 21a6 6 0 0 0-6-6"></path> <path d="M9.352 10.648a1.205 1.205 0 0 0 0 1.704l2.296 2.296a1.205 1.205 0 0 0 1.704 0l4.296-4.296a1.205 1.205 0 0 0 0-1.704l-2.296-2.296a1.205 1.205 0 0 0-1.704 0z"></path></svg></span>
+        <div class="xh-tool__txt"><h3>Satellite Tracker</h3><p>Follow satellites and the space station along their orbits.</p><a class="xh-tool__go" href="/satellites" data-xh-link="satellites" aria-label="Open Satellite Tracker">Open <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+      <article class="xh-tool xh-rv" style="--d:.14s"><div class="xh-tool__pv xh-img"><img data-img="toolSolar" data-w="700" alt="" loading="lazy"></div><span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.341 6.484A10 10 0 0 1 10.266 21.85"></path> <path d="M3.659 17.516A10 10 0 0 1 13.74 2.152"></path> <circle cx="12" cy="12" r="3"></circle> <circle cx="19" cy="5" r="2"></circle> <circle cx="5" cy="19" r="2"></circle></svg></span>
+        <div class="xh-tool__txt"><h3>Solar System</h3><p>Travel between the planets, moons and orbits of our system.</p><a class="xh-tool__go" href="/solar-system" data-xh-link="solarsystem" aria-label="Open Solar System">Open <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+      <article class="xh-tool xh-rv" style="--d:.21s"><div class="xh-tool__pv xh-img"><img data-img="toolExo" data-w="700" alt="" loading="lazy"></div><span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path> <path d="M2 12h20"></path></svg></span>
+        <div class="xh-tool__txt"><h3>Exoplanet Explorer</h3><p>Browse worlds around other stars and how they are detected.</p><a class="xh-tool__go" href="/exoplanets" data-xh-link="exoplanets" aria-label="Open Exoplanet Explorer">Open <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+      <article class="xh-tool xh-rv"><div class="xh-tool__pv xh-img"><img data-img="toolGrav" data-w="700" alt="" loading="lazy"></div><span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"></circle> <path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"></path> <path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"></path></svg></span>
+        <div class="xh-tool__txt"><h3>Gravity Simulator</h3><p>Place bodies, set velocities and watch gravity do the rest.</p><a class="xh-tool__go" href="/gravity-simulator" data-xh-link="gravity" aria-label="Open Gravity Simulator">Open <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+      <article class="xh-tool xh-rv" style="--d:.07s"><div class="xh-tool__pv xh-img"><img data-img="toolMission" data-w="700" alt="" loading="lazy"></div><span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"></path> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"></path> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"></path></svg></span>
+        <div class="xh-tool__txt"><h3>Mission Designer</h3><p>Plan transfers, orbits and mission profiles from scratch.</p><a class="xh-tool__go" href="/mission-designer" data-xh-link="missiondesigner" aria-label="Open Mission Designer">Open <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+      <article class="xh-tool xh-rv" style="--d:.14s"><div class="xh-tool__pv xh-img"><img data-img="toolTele" data-w="700" alt="" loading="lazy"></div><span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44"></path> <path d="m13.56 11.747 4.332-.924"></path> <path d="m16 21-3.105-6.21"></path> <path d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z"></path> <path d="m6.158 8.633 1.114 4.456"></path> <path d="m8 21 3.105-6.21"></path> <circle cx="12" cy="13" r="2"></circle></svg></span>
+        <div class="xh-tool__txt"><h3>Telescope Lab</h3><p>Understand optics, magnification and how telescopes work.</p><a class="xh-tool__go" href="/telescope-handling" data-xh-link="telescopelab" aria-label="Open Telescope Lab">Open <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+      <article class="xh-tool xh-rv" style="--d:.21s"><div class="xh-tool__pv xh-img"><img data-img="toolAstro" data-w="700" alt="" loading="lazy"></div><span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"></path> <circle cx="12" cy="13" r="3"></circle></svg></span>
+        <div class="xh-tool__txt"><h3>Astrophotography Lab</h3><p>Practise exposure, stacking and image processing.</p><a class="xh-tool__go" href="/astrophotography" data-xh-link="astrolab" aria-label="Open Astrophotography Lab">Open <svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path> <path d="m12 5 7 7-7 7"></path></svg></a></div></article>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="xh-sec xh-mission" id="xh-mission" aria-labelledby="xh-mission-h">
+  <div class="xh-wrap xh-mission__grid">
+    <div class="xh-rv">
+      <h2 class="xh-h2" id="xh-mission-h">From Observation to Mission Design</h2>
+      <p class="xh-lead" style="margin-top:1.6rem">Move from understanding concepts to modelling them. Work through orbits, spacecraft systems and mission trade-offs in practical, hands-on tools.</p>
+      <ul class="xh-caps" aria-label="Engineering topics">
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.341 6.484A10 10 0 0 1 10.266 21.85"></path> <path d="M3.659 17.516A10 10 0 0 1 13.74 2.152"></path> <circle cx="12" cy="12" r="3"></circle> <circle cx="19" cy="5" r="2"></circle> <circle cx="5" cy="19" r="2"></circle></svg><strong>Orbital mechanics</strong><span>Kepler's laws, transfers, perturbations</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v2"></path> <path d="M12 2v2"></path> <path d="M17 20v2"></path> <path d="M17 2v2"></path> <path d="M2 12h2"></path> <path d="M2 17h2"></path> <path d="M2 7h2"></path> <path d="M20 12h2"></path> <path d="M20 17h2"></path> <path d="M20 7h2"></path> <path d="M7 20v2"></path> <path d="M7 2v2"></path> <rect x="4" y="4" width="16" height="16" rx="2"></rect> <rect x="8" y="8" width="8" height="8" rx="1"></rect></svg><strong>Spacecraft systems</strong><span>Power, thermal, propulsion, attitude</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle> <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg><strong>Mission design</strong><span>From objectives to architecture</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="19" r="3"></circle> <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path> <circle cx="18" cy="5" r="3"></circle></svg><strong>Trajectory analysis</strong><span>Δv budgets and launch windows</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 12a6 6 0 00-6-6"></path> <path d="M2.824 10.459a8 8 0 0010.717 10.717c.558-.276.623-1.012.183-1.452l-9.448-9.448c-.44-.44-1.176-.375-1.452.183"></path> <path d="M22 12A10 10 0 0012 2"></path> <path d="m9 15 4-4"></path></svg><strong>Satellite operations</strong><span>Passes, coverage, ground contact</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.247 7.761a6 6 0 0 1 0 8.478"></path> <path d="M19.075 4.933a10 10 0 0 1 0 14.134"></path> <path d="M4.925 19.067a10 10 0 0 1 0-14.134"></path> <path d="M7.753 16.239a6 6 0 0 1 0-8.478"></path> <circle cx="12" cy="12" r="2"></circle></svg><strong>Communications</strong><span>Link budgets, frequencies, latency</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg><strong>Simulation</strong><span>Numerical propagation and N-body</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"></path> <path d="M6.453 15h11.094"></path> <path d="M8.5 2h7"></path></svg><strong>Scientific modelling</strong><span>From data to physical models</span></li>
+      </ul>
+      <a class="xh-btn xh-btn--solid" href="/mission-designer" data-xh-link="missiondesigner">Enter Mission Designer →</a>
+    </div>
+    <div class="xh-mission__vis xh-rv" style="--d:.15s">
+      <div class="xh-mission__main xh-img"><img data-img="missionMain" data-w="1200" alt="A rocket on the launch pad at dawn" loading="lazy"></div>
+      <div class="xh-mission__inset xh-img"><img data-img="missionInset" data-w="600" alt="The International Space Station in orbit" loading="lazy"></div>
+      <p class="xh-mission__note"><b>≈ 3.9 km/s</b>total Δv for a Hohmann transfer from a 300 km orbit to geostationary orbit</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="xh-sec xh-path" id="xh-path" aria-labelledby="xh-path-h">
+  <div class="xh-wrap">
+    <h2 class="xh-h2 xh-rv" id="xh-path-h">Learn → Practice → Build → Progress</h2>
+    <div class="xh-path__wrap">
+      <div class="xh-path__line" aria-hidden="true"></div>
+      <ol class="xh-path__track">
+        <li class="xh-step"><span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"></path> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg></span><h3>Learn</h3><p>Understand the concept.</p></li>
+        <li class="xh-step"><span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44"></path> <path d="m13.56 11.747 4.332-.924"></path> <path d="m16 21-3.105-6.21"></path> <path d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z"></path> <path d="m6.158 8.633 1.114 4.456"></path> <path d="m8 21 3.105-6.21"></path> <circle cx="12" cy="13" r="2"></circle></svg></span><h3>Practice</h3><p>Use it through observation, simulations and exercises.</p></li>
+        <li class="xh-step"><span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 12-9.373 9.373a1 1 0 0 1-3.001-3L12 9"></path> <path d="m18 15 4-4"></path> <path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172v-.344a2 2 0 0 0-.586-1.414l-1.657-1.657A6 6 0 0 0 12.516 3H9l1.243 1.243A6 6 0 0 1 12 8.485V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"></path></svg></span><h3>Build</h3><p>Create projects and solve scientific problems.</p></li>
+        <li class="xh-step"><span class="xh-badge"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 7h6v6"></path> <path d="m22 7-8.5 8.5-5-5L2 17"></path></svg></span><h3>Progress</h3><p>Turn knowledge into skills, opportunities and careers.</p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+
+<section class="xh-sec xh-car" id="xh-careers" aria-labelledby="xh-car-h">
+  <div class="xh-wrap xh-car__grid">
+    <div class="xh-rv">
+      <h2 class="xh-h2" id="xh-car-h">Your Path into Space</h2>
+      <p class="xh-lead" style="margin-top:1.6rem">See how astronomy, engineering and policy connect to real study routes and opportunities — then follow the one that fits you.</p>
+      <div class="xh-car__cta">
+        <a class="xh-btn xh-btn--solid" href="/career" data-xh-link="careers">Explore Space Careers →</a>
+        <a class="xh-btn xh-btn--ghost" href="/universities" data-xh-link="universities">Explore Universities →</a>
+      </div>
+      <div class="xh-paths" aria-label="Also explore">
+        <a href="/universities" data-xh-link="universities"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path> <path d="M22 10v6"></path> <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>Universities</a>
+        <a href="/scholarships-internships" data-xh-link="scholarships"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path> <circle cx="12" cy="8" r="6"></circle></svg>Scholarships</a>
+        <a href="/industries" data-xh-link="international"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path> <path d="M2 12h20"></path></svg>International opportunities</a>
+      </div>
+    </div>
+    <div class="xh-nav xh-rv" id="xhNav" style="--d:.15s">
+      <div class="xh-nav__tabs" role="tablist" aria-label="Fields in space and science" aria-orientation="vertical" id="xhTabs"></div>
+      <div class="xh-nav__body">
+        <div class="xh-nav__img xh-img" aria-hidden="true"><img id="xhCarImg" data-w="900" alt="" loading="lazy"></div>
+        <div class="xh-nav__panel" role="tabpanel" id="xhNavPanel" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="xh-sec xh-com" id="xh-community" aria-labelledby="xh-com-h">
+  <div class="xh-wrap xh-com__grid">
+    <div class="xh-rv">
+      <h2 class="xh-h2" id="xh-com-h">Space is better explored together.</h2>
+      <ul class="xh-comlist">
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 10a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 14.286V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path> <path d="M20 9a2 2 0 0 1 2 2v10.286a.71.71 0 0 1-1.212.502l-2.202-2.202A2 2 0 0 0 17.172 19H10a2 2 0 0 1-2-2v-1"></path></svg><strong>Social learning</strong><span>Learn with and from others</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 18v-7"></path> <path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"></path> <path d="M14 18v-7"></path> <path d="M18 18v-7"></path> <path d="M3 22h18"></path> <path d="M6 18v-7"></path></svg><strong>Astronomy societies</strong><span>Find and connect with societies</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 17 2 2a1 1 0 1 0 3-3"></path> <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"></path> <path d="m21 3 1 11h-2"></path> <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"></path> <path d="M3 4h8"></path></svg><strong>Collaboration</strong><span>Work on observations and ideas together</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path> <path d="M22 10v6"></path> <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg><strong>Student communities</strong><span>Study groups and student-led projects</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18h8"></path> <path d="M3 22h18"></path> <path d="M14 22a7 7 0 1 0 0-14h-1"></path> <path d="M9 14h2"></path> <path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path> <path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg><strong>Researchers</strong><span>Hear from people working in the field</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg><strong>Space enthusiasts</strong><span>Share curiosity at every level</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 12-9.373 9.373a1 1 0 0 1-3.001-3L12 9"></path> <path d="m18 15 4-4"></path> <path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172v-.344a2 2 0 0 0-.586-1.414l-1.657-1.657A6 6 0 0 0 12.516 3H9l1.243 1.243A6 6 0 0 1 12 8.485V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"></path></svg><strong>Projects</strong><span>Build and contribute together</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg><strong>Discussions</strong><span>Ask questions, share findings</span></li>
+      </ul>
+      <a class="xh-btn xh-btn--solid" href="/forum" data-xh-link="community">Join the Community →</a>
+    </div>
+    <div class="xh-collage xh-collage--com xh-rv" style="--d:.15s" aria-hidden="true">
+      <div class="xh-img"><img data-img="com1" data-w="900" alt="" loading="lazy"></div>
+      <div class="xh-img"><img data-img="com2" data-w="700" alt="" loading="lazy"></div>
+      <div class="xh-img"><img data-img="com3" data-w="900" alt="" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="xh-sec xh-glob" id="xh-global" aria-labelledby="xh-glob-h">
+  <div class="xh-wrap xh-glob__grid">
+    <div class="xh-rv">
+      <h2 class="xh-h2" id="xh-glob-h">From Pakistan to the Universe</h2>
+      <p class="xh-glob__tag">Built from Pakistan. Open to the world.</p>
+      <ul class="xh-glob__facts">
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path> <path d="M2 12h20"></path></svg><strong>Open to every learner</strong><span>Astronomy and space-science resources that work the same wherever you are.</span></li>
+        <li><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path> <circle cx="12" cy="10" r="3"></circle></svg><strong>Pakistan resources</strong><span>Climate, temperature and seasonal maps alongside past and future space events, connected to the wider ecosystem.</span></li>
+      </ul>
+      <a class="xh-link" href="/pakistan-s-special" data-xh-link="pakistan">Explore Pakistan →</a>
+    </div>
+    <div class="xh-glob__vis xh-img xh-rv" style="--d:.15s">
+      <img data-img="glob" data-w="1200" alt="Pakistan and South Asia seen from orbit" loading="lazy">
+      <span class="xh-glob__pin"><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path> <circle cx="12" cy="10" r="3"></circle></svg>Pakistan</span>
+      <span class="xh-credit" data-credit="glob"></span>
+    </div>
+  </div>
+</section>
+
+
+<section class="xh-sec xh-sky" id="xh-sky" aria-labelledby="xh-sky-h">
+  <div class="xh-wrap">
+    <div class="xh-sky__head">
+      <div>
+        <h2 id="xh-sky-h">Today's Sky</h2>
+        <p class="xh-small" style="margin-top:.6rem"><time id="xhSkyDate"></time> · updates automatically each day</p>
+      </div>
+      <a class="xh-link" href="/stellar-sky" data-xh-link="todaysky">Explore Today's Sky →</a>
+    </div>
+    <dl class="xh-sky__grid">
+      <div class="xh-cell"><dt><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg>Moon</dt><dd class="v" id="skMoonV">—</dd><dd class="d" id="skMoonD"></dd><svg class="xh-moon" id="skMoonSvg" viewBox="0 0 36 36" aria-hidden="true"></svg></div>
+      <div class="xh-cell"><dt><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.341 6.484A10 10 0 0 1 10.266 21.85"></path> <path d="M3.659 17.516A10 10 0 0 1 13.74 2.152"></path> <circle cx="12" cy="12" r="3"></circle> <circle cx="19" cy="5" r="2"></circle> <circle cx="5" cy="19" r="2"></circle></svg>Planets</dt><dd class="v" id="skPlV">—</dd><dd class="d" id="skPlD"></dd></div>
+      <div class="xh-cell"><dt><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path> <path d="M20 2v4"></path> <path d="M22 4h-4"></path> <circle cx="4" cy="20" r="2"></circle></svg>Meteor showers</dt><dd class="v" id="skMetV">—</dd><dd class="d" id="skMetD"></dd></div>
+      <div class="xh-cell"><dt><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m13.5 6.5-3.148-3.148a1.205 1.205 0 0 0-1.704 0L6.352 5.648a1.205 1.205 0 0 0 0 1.704L9.5 10.5"></path> <path d="M16.5 7.5 19 5"></path> <path d="m17.5 10.5 3.148 3.148a1.205 1.205 0 0 1 0 1.704l-2.296 2.296a1.205 1.205 0 0 1-1.704 0L13.5 14.5"></path> <path d="M9 21a6 6 0 0 0-6-6"></path> <path d="M9.352 10.648a1.205 1.205 0 0 0 0 1.704l2.296 2.296a1.205 1.205 0 0 0 1.704 0l4.296-4.296a1.205 1.205 0 0 0 0-1.704l-2.296-2.296a1.205 1.205 0 0 0-1.704 0z"></path></svg>ISS right now</dt><dd class="v" id="skIssV">—</dd><dd class="d" id="skIssD"></dd></div>
+      <div class="xh-cell"><dt><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"></path> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"></path> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"></path></svg>Next launch</dt><dd class="v" id="skLaunchV">—</dd><dd class="d" id="skLaunchD"></dd></div>
+      <div class="xh-cell"><dt><svg class="xh-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2"></path> <path d="M12 20v2"></path> <path d="m4.93 4.93 1.41 1.41"></path> <path d="m17.66 17.66 1.41 1.41"></path> <path d="M2 12h2"></path> <path d="M20 12h2"></path> <path d="m6.34 17.66-1.41 1.41"></path> <path d="m19.07 4.93-1.41 1.41"></path></svg>Next eclipse</dt><dd class="v" id="skEclV">—</dd><dd class="d" id="skEclD"></dd></div>
+    </dl>
+  </div>
+</section>
+
+
+<section class="xh-sec xh-final" id="xh-final" aria-labelledby="xh-final-h">
+  <div class="xh-final__bg" aria-hidden="true">
+    <img data-img="finalPoster" data-w="1800" alt="" loading="lazy">
+    <video muted="" loop="" playsinline="" preload="none" tabindex="-1"></video>
+  </div>
+  <div class="xh-wrap">
+    <h2 id="xh-final-h">The Universe is Waiting.</h2>
+    <p>Start with a question. Follow it beyond the horizon.</p>
+    <div class="xh-hero__actions">
+      <a class="xh-btn xh-btn--solid" href="#xh-ecosystem" data-xh-link="explore">Explore X HORIZON</a>
+      <a class="xh-btn xh-btn--ghost" href="/slides" data-xh-link="learn">Start Learning</a>
+    </div>
+  </div>
+  <span class="xh-credit xh-final__credit" data-credit="finalPoster"></span>
+</section>
+
+</div>
+<script>
+(function () {
+'use strict';
+var root = document.getElementById('xhHome');
+if (!root) return;
+
+/* =====================================================================
+   CONFIG — edit here. Everything else adapts automatically.
+   You can also override any part from another snippet placed before this:
+   window.XH_CONFIG = { links:{ live:'/my-live' },
+                        images:{ finalPoster:{ fb:['/web/image/123'] } } };
+   ===================================================================== */
+var DEFAULTS = {
+  /* Page routes — taken from the live X HORIZON navigation. */
+  links: {
+    explore:'#xh-ecosystem', learn:'/slides', practice:'/skills', build:'/mission-designer', simulations:'/solar-system',
+    discover:'/space-news', connect:'/forum', progress:'/career', live:'/live', collections:'/space-gallery',
+    stellarsky:'/stellar-sky', satellites:'/satellites', solarsystem:'/solar-system', exoplanets:'/exoplanets',
+    gravity:'/gravity-simulator', missiondesigner:'/mission-designer', telescopelab:'/telescope-handling', astrolab:'/astrophotography',
+    careers:'/career', universities:'/universities', scholarships:'/scholarships-internships', international:'/industries',
+    community:'/forum', pakistan:'/pakistan-s-special', todaysky:'/stellar-sky', about:'/xhorizon-vision', mission:'/xhorizon-vision',
+    collaboration:'/collaboration', rules:'/platform-rules', contact:'/contactus',
+    social:{ instagram:'https://www.instagram.com/xhorizon8.0/', youtube:'https://www.youtube.com/channel/UC6wxjseAGqaUWiqcHLT86vw', linkedin:'https://www.linkedin.com/in/x-horizon-8b8b3442b', github:'https://github.com/xhorizon80xh' }
+  },
+  /* Exclusive Articles card destinations (slug -> page). */
+  collectionLinks: {
+    'deep-space':'/universe-cosmology', 'nebulae':'/nebula-interstellar-objects', 'galaxies':'/galaxy-large-scale-structure',
+    'stars':'/stars-stellar-evolution', 'solar-system':'/solar-system', 'exoplanets':'/exoplanets', 'black-holes':'/black-hole',
+    'earth':'/where-we-are', 'astrophotography':'/astrophotography', 'night-sky':'/stellar-sky',
+    'spacecraft':'/space-technology-exploration', 'mission-archive':'/history'
+  },
+  /* Background video for the last section (Mixkit "Satellite shot of Planet Earth"). Set '' for photo only. */
+  videos: { final:'https://assets.mixkit.co/videos/45032/45032-720.mp4' },
+  newsUrl: 'https://api.spaceflightnewsapi.net/v4/articles/?limit=40',
+  rss2json: 'https://api.rss2json.com/v1/api.json?rss_url=',
+  rssFeeds: [['NASA', 'https://www.nasa.gov/feed/'], ['Space.com', 'https://www.space.com/feeds/all']],
+  nasaApi: 'https://images-api.nasa.gov/search',
+  apodUrl: 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY',
+  blockSources: ['teslarati'],
+  preferSources: ['nasa','esa','spacenews','spaceflight now','nasaspaceflight','space.com','ars technica','arstechnica','planetary society','universe today','phys.org','spacepolicyonline','space daily','jpl','noaa'],
+  launchUrl: 'https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=3&mode=list',
+  issUrl: 'https://api.wheretheiss.at/v1/satellites/25544',
+  wxUrl: 'https://services.swpc.noaa.gov/products/noaa-scales.json'
+};
+var EXT = window.XH_CONFIG || {};
+var C = {};
+Object.keys(DEFAULTS).forEach(function (k) {
+  var d = DEFAULTS[k], e = EXT[k];
+  if (e && typeof d === 'object' && !Array.isArray(d)) {
+    C[k] = {}; Object.keys(d).forEach(function (j) { C[k][j] = d[j]; }); Object.keys(e).forEach(function (j) { C[k][j] = e[j]; });
+  } else { C[k] = e !== undefined ? e : d; }
+});
+
+/* ---------- images ----------
+   Every picture has a guaranteed fallback ("fb": photos already used on your site),
+   and — where "nasa" is set — is upgraded at runtime to a real NASA image found through
+   NASA's open Image Library: [search words, title must match, size]. */
+var UN = { deep:'1462331940025-496dfbfc7564', moon:'1614728263952-84ea256f9679', launch:'1517976487492-5750f3195933', orbit:'1446776811953-b23d57bd21aa', nebula:'1506318137071-a8e063b4bec0', telescope:'1543722530-d2c3201371e7', planets:'1451187580459-43490279c0fa', signal:'1581822261290-991b38693d1b' };
+var OD = ['https://xhorizon.odoo.com/unsplash/n463SoeSiVY/1312/launch.jpg?unique=ddfddbc7', 'https://xhorizon.odoo.com/unsplash/MEW1f-yu2KI/1311/launch.jpg?unique=9bc4a8f5', 'https://xhorizon.odoo.com/unsplash/woWf_VJ7dNs/1313/launch.jpg?unique=6607541f', 'https://xhorizon.odoo.com/unsplash/dCgbRAQmTQA/1314/launch.jpg?unique=13cdd846'];
+function resolveFb(f, w) {
+  if (UN[f]) return 'https://images.unsplash.com/photo-' + UN[f] + '?q=80&w=' + (w || 1200) + '&auto=format&fit=crop';
+  var m = /^od(\d)$/.exec(f); if (m) return OD[+m[1]];
+  return f;
+}
+var BASE_IMAGES = {
+  what1: { fb: ['planets'], nasa: ['solar system planets', /planet|jupiter|saturn|mars|solar system/i, 'medium'] }, what2: { fb: ['telescope'], nasa: ['telescope observatory', /telescope|observatory/i, 'medium'] }, what3: { fb: ['nebula'], nasa: ['nebula Hubble', /nebula/i, 'medium'] },
+  ecoLearn: { fb: ['nebula'], nasa: ['galaxy Hubble', /galax/i, 'medium'] }, ecoPractice: { fb: ['telescope'], nasa: ['telescope', /telescope/i, 'medium'] }, ecoBuild: { fb: ['launch', 'od0'], nasa: ['rocket launch', /launch|rocket/i, 'medium'] },
+  ecoDiscover: { fb: ['deep'], nasa: ['Webb telescope image', /webb|nebula|galax/i, 'medium'] }, ecoConnect: { fb: ['signal'], nasa: ['astronauts crew', /crew|astronaut/i, 'medium'] }, ecoProgress: { fb: ['planets'], nasa: ['astronaut spacewalk', /spacewalk|astronaut/i, 'medium'] },
+  vcDeepspace: { fb: ['deep'], nasa: ['Hubble Ultra Deep Field', /deep field/i, 'medium'] },
+  vcNebulae:   { fb: ['nebula'], nasa: ['Pillars of Creation', /pillars/i, 'medium'] },
+  vcGalaxies:  { fb: ['deep', 'nebula'], nasa: ['Pinwheel galaxy', /pinwheel|m101/i, 'medium'] },
+  vcStars:     { fb: ['nebula', 'deep'], nasa: ['Pleiades star cluster', /pleiades/i, 'medium'] },
+  vcSolar:     { fb: ['planets'], nasa: ['Saturn rings Cassini', /saturn/i, 'medium'] },
+  vcExo:       { fb: ['planets', 'deep'], nasa: ['exoplanet system', /exoplanet|trappist|hr 8799|fomalhaut|kepler/i, 'medium'] },
+  vcBlackhole: { fb: ['deep'], nasa: ['black hole accretion disk', /black hole/i, 'medium'] },
+  vcEarth:     { fb: ['orbit'], nasa: ['Earthrise Apollo 8', /earthrise/i, 'medium'] },
+  vcSpacecraft:{ fb: ['od1', 'launch'], nasa: ['Curiosity rover self portrait', /curiosity|rover/i, 'medium'] },
+  vcMissions:  { fb: ['launch', 'od2'], nasa: ['Apollo 11 launch', /apollo 11|saturn v/i, 'medium'] },
+  vcAstro:     { fb: ['nebula'], nasa: ['Milky Way galaxy', /milky way/i, 'medium'] },
+  vcNight:     { fb: ['telescope', 'moon'], nasa: ['observatory night sky', /observatory|night sky|telescope/i, 'medium'] },
+  toolSky: { fb: ['nebula'], nasa: ['Milky Way night sky', /milky way|night sky|star/i, 'medium'] }, toolSat: { fb: ['orbit'], nasa: ['satellite in orbit', /satellite/i, 'medium'] }, toolSolar: { fb: ['planets'], nasa: ['planet Jupiter Saturn Mars', /jupiter|saturn|mars|venus|neptune|uranus/i, 'medium'] }, toolExo: { fb: ['deep'], nasa: ['exoplanet', /exoplanet|planet/i, 'medium'] },
+  toolGrav: { fb: ['moon'], nasa: ['galaxy collision', /galax|collision|black hole/i, 'medium'] }, toolMission: { fb: ['launch'], nasa: ['spacecraft launch', /launch|spacecraft/i, 'medium'] }, toolTele: { fb: ['telescope'], nasa: ['telescope mirror', /telescope|mirror/i, 'medium'] }, toolAstro: { fb: ['signal', 'nebula'], nasa: ['astrophotography nebula', /nebula|astro/i, 'medium'] },
+  missionMain: { fb: ['od0', 'launch'], nasa: ['Artemis launch', /artemis/i, 'large'] },
+  missionInset:{ fb: ['orbit'], nasa: ['International Space Station', /international space station|\biss\b/i, 'medium'] },
+  com1: { fb: ['telescope'], nasa: ['astronomers telescope', /astronom|telescope|observ/i, 'medium'] }, com2: { fb: ['signal'], nasa: ['mission control', /control|operations|team/i, 'medium'] }, com3: { fb: ['orbit'], nasa: ['Earth horizon sunrise orbit', /earth|horizon|sunrise|orbit/i, 'medium'] },
+  glob: { fb: ['orbit', 'planets'], nasa: ['Pakistan astronaut photograph', /pakistan|indus|karakoram|himalaya/i, 'large'] },
+  finalPoster: { fb: ['deep', 'nebula'], apod: true },
+  broadcastunsplash: { fb: ['orbit'] }
+};
+var IMAGES = {};
+Object.keys(BASE_IMAGES).forEach(function (k) { IMAGES[k] = BASE_IMAGES[k]; });
+if (EXT.images) Object.keys(EXT.images).forEach(function (k) { IMAGES[k] = EXT.images[k]; });
+var CAR_IMGS = ['planets', 'telescope', 'launch', 'orbit', 'signal', 'nebula', 'deep', 'moon', 'telescope'];
+
+/* ---------- icons: Lucide (ISC licence) ---------- */
+var ICONS = {"rocket":"<path d=\"M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5\"/> <path d=\"M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09\"/> <path d=\"M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z\"/> <path d=\"M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05\"/>","satellite":"<path d=\"m13.5 6.5-3.148-3.148a1.205 1.205 0 0 0-1.704 0L6.352 5.648a1.205 1.205 0 0 0 0 1.704L9.5 10.5\"/> <path d=\"M16.5 7.5 19 5\"/> <path d=\"m17.5 10.5 3.148 3.148a1.205 1.205 0 0 1 0 1.704l-2.296 2.296a1.205 1.205 0 0 1-1.704 0L13.5 14.5\"/> <path d=\"M9 21a6 6 0 0 0-6-6\"/> <path d=\"M9.352 10.648a1.205 1.205 0 0 0 0 1.704l2.296 2.296a1.205 1.205 0 0 0 1.704 0l4.296-4.296a1.205 1.205 0 0 0 0-1.704l-2.296-2.296a1.205 1.205 0 0 0-1.704 0z\"/>","satellite-dish":"<path d=\"M18 12a6 6 0 00-6-6\"/> <path d=\"M2.824 10.459a8 8 0 0010.717 10.717c.558-.276.623-1.012.183-1.452l-9.448-9.448c-.44-.44-1.176-.375-1.452.183\"/> <path d=\"M22 12A10 10 0 0012 2\"/> <path d=\"m9 15 4-4\"/>","telescope":"<path d=\"m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44\"/> <path d=\"m13.56 11.747 4.332-.924\"/> <path d=\"m16 21-3.105-6.21\"/> <path d=\"M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z\"/> <path d=\"m6.158 8.633 1.114 4.456\"/> <path d=\"m8 21 3.105-6.21\"/> <circle cx=\"12\" cy=\"13\" r=\"2\"/>","orbit":"<path d=\"M20.341 6.484A10 10 0 0 1 10.266 21.85\"/> <path d=\"M3.659 17.516A10 10 0 0 1 13.74 2.152\"/> <circle cx=\"12\" cy=\"12\" r=\"3\"/> <circle cx=\"19\" cy=\"5\" r=\"2\"/> <circle cx=\"5\" cy=\"19\" r=\"2\"/>","moon":"<path d=\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\"/>","sun":"<circle cx=\"12\" cy=\"12\" r=\"4\"/> <path d=\"M12 2v2\"/> <path d=\"M12 20v2\"/> <path d=\"m4.93 4.93 1.41 1.41\"/> <path d=\"m17.66 17.66 1.41 1.41\"/> <path d=\"M2 12h2\"/> <path d=\"M20 12h2\"/> <path d=\"m6.34 17.66-1.41 1.41\"/> <path d=\"m19.07 4.93-1.41 1.41\"/>","globe":"<circle cx=\"12\" cy=\"12\" r=\"10\"/> <path d=\"M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20\"/> <path d=\"M2 12h20\"/>","earth":"<path d=\"M21.54 15H17a2 2 0 0 0-2 2v4.54\"/> <path d=\"M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17\"/> <path d=\"M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05\"/> <circle cx=\"12\" cy=\"12\" r=\"10\"/>","users":"<path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"/> <path d=\"M16 3.128a4 4 0 0 1 0 7.744\"/> <path d=\"M22 21v-2a4 4 0 0 0-3-3.87\"/> <circle cx=\"9\" cy=\"7\" r=\"4\"/>","graduation-cap":"<path d=\"M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z\"/> <path d=\"M22 10v6\"/> <path d=\"M6 12.5V16a6 3 0 0 0 12 0v-3.5\"/>","book-open":"<path d=\"M12 5v16\"/> <path d=\"M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z\"/>","flask-conical":"<path d=\"M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2\"/> <path d=\"M6.453 15h11.094\"/> <path d=\"M8.5 2h7\"/>","hammer":"<path d=\"m15 12-9.373 9.373a1 1 0 0 1-3.001-3L12 9\"/> <path d=\"m18 15 4-4\"/> <path d=\"m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172v-.344a2 2 0 0 0-.586-1.414l-1.657-1.657A6 6 0 0 0 12.516 3H9l1.243 1.243A6 6 0 0 1 12 8.485V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5\"/>","trending-up":"<path d=\"M16 7h6v6\"/> <path d=\"m22 7-8.5 8.5-5-5L2 17\"/>","compass":"<circle cx=\"12\" cy=\"12\" r=\"10\"/> <path d=\"m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z\"/>","camera":"<path d=\"M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z\"/> <circle cx=\"12\" cy=\"13\" r=\"3\"/>","atom":"<circle cx=\"12\" cy=\"12\" r=\"1\"/> <path d=\"M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z\"/> <path d=\"M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z\"/>","radar":"<path d=\"M19.07 4.93A10 10 0 0 0 6.99 3.34\"/> <path d=\"M4 6h.01\"/> <path d=\"M2.29 9.62A10 10 0 1 0 21.31 8.35\"/> <path d=\"M16.24 7.76A6 6 0 1 0 8.23 16.67\"/> <path d=\"M12 18h.01\"/> <path d=\"M17.99 11.66A6 6 0 0 1 15.77 16.67\"/> <circle cx=\"12\" cy=\"12\" r=\"2\"/> <path d=\"m13.41 10.59 5.66-5.66\"/>","newspaper":"<path d=\"M15 18h-5\"/> <path d=\"M18 14h-8\"/> <path d=\"M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2\"/> <rect width=\"8\" height=\"4\" x=\"10\" y=\"6\" rx=\"1\"/>","calendar-days":"<path d=\"M8 2v3\"/> <path d=\"M16 2v3\"/> <rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/> <path d=\"M3 9h18\"/> <path d=\"M8 13h.01\"/> <path d=\"M12 13h.01\"/> <path d=\"M16 13h.01\"/> <path d=\"M8 17h.01\"/> <path d=\"M12 17h.01\"/> <path d=\"M16 17h.01\"/>","arrow-right":"<path d=\"M5 12h14\"/> <path d=\"m12 5 7 7-7 7\"/>","arrow-up-right":"<path d=\"M7 7h10v10\"/> <path d=\"M7 17 17 7\"/>","handshake":"<path d=\"m11 17 2 2a1 1 0 1 0 3-3\"/> <path d=\"m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4\"/> <path d=\"m21 3 1 11h-2\"/> <path d=\"M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3\"/> <path d=\"M3 4h8\"/>","library":"<path d=\"m16 6 4 14\"/> <path d=\"M12 6v14\"/> <path d=\"M8 8v12\"/> <path d=\"M4 4v16\"/>","microscope":"<path d=\"M6 18h8\"/> <path d=\"M3 22h18\"/> <path d=\"M14 22a7 7 0 1 0 0-14h-1\"/> <path d=\"M9 14h2\"/> <path d=\"M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z\"/> <path d=\"M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3\"/>","landmark":"<path d=\"M10 18v-7\"/> <path d=\"M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z\"/> <path d=\"M14 18v-7\"/> <path d=\"M18 18v-7\"/> <path d=\"M3 22h18\"/> <path d=\"M6 18v-7\"/>","scale":"<path d=\"M12 3v18\"/> <path d=\"m19 8 3 8a5 5 0 0 1-6 0zV7\"/> <path d=\"M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1\"/> <path d=\"m5 8 3 8a5 5 0 0 1-6 0zV7\"/> <path d=\"M7 21h10\"/>","bot":"<path d=\"M12 8V4H8\"/> <rect width=\"16\" height=\"12\" x=\"4\" y=\"8\" rx=\"2\"/> <path d=\"M2 14h2\"/> <path d=\"M20 14h2\"/> <path d=\"M15 13v2\"/> <path d=\"M9 13v2\"/>","star":"<path d=\"M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z\"/>","cloud-sun":"<path d=\"M12 2v2\"/> <path d=\"m4.93 4.93 1.41 1.41\"/> <path d=\"M20 12h2\"/> <path d=\"m19.07 4.93-1.41 1.41\"/> <path d=\"M15.947 12.65a4 4 0 0 0-5.925-4.128\"/> <path d=\"M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z\"/>","sparkles":"<path d=\"M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z\"/> <path d=\"M20 2v4\"/> <path d=\"M22 4h-4\"/> <circle cx=\"4\" cy=\"20\" r=\"2\"/>","crosshair":"<circle cx=\"12\" cy=\"12\" r=\"10\"/> <line x1=\"22\" x2=\"18\" y1=\"12\" y2=\"12\"/> <line x1=\"6\" x2=\"2\" y1=\"12\" y2=\"12\"/> <line x1=\"12\" x2=\"12\" y1=\"6\" y2=\"2\"/> <line x1=\"12\" x2=\"12\" y1=\"22\" y2=\"18\"/>","binoculars":"<path d=\"M10 10h4\"/> <path d=\"M19 7V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3\"/> <path d=\"M20 21a2 2 0 0 0 2-2v-3.851c0-1.39-2-2.962-2-4.829V8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2z\"/> <path d=\"M 22 16 L 2 16\"/> <path d=\"M4 21a2 2 0 0 1-2-2v-3.851c0-1.39 2-2.962 2-4.829V8a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2z\"/> <path d=\"M9 7V4a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3\"/>","cpu":"<path d=\"M12 20v2\"/> <path d=\"M12 2v2\"/> <path d=\"M17 20v2\"/> <path d=\"M17 2v2\"/> <path d=\"M2 12h2\"/> <path d=\"M2 17h2\"/> <path d=\"M2 7h2\"/> <path d=\"M20 12h2\"/> <path d=\"M20 17h2\"/> <path d=\"M20 7h2\"/> <path d=\"M7 20v2\"/> <path d=\"M7 2v2\"/> <rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"2\"/> <rect x=\"8\" y=\"8\" width=\"8\" height=\"8\" rx=\"1\"/>","search":"<path d=\"m21 21-4.34-4.34\"/> <circle cx=\"11\" cy=\"11\" r=\"8\"/>","radio":"<path d=\"M16.247 7.761a6 6 0 0 1 0 8.478\"/> <path d=\"M19.075 4.933a10 10 0 0 1 0 14.134\"/> <path d=\"M4.925 19.067a10 10 0 0 1 0-14.134\"/> <path d=\"M7.753 16.239a6 6 0 0 1 0-8.478\"/> <circle cx=\"12\" cy=\"12\" r=\"2\"/>","activity":"<path d=\"M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2\"/>","message-circle":"<path d=\"M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719\"/>","messages-square":"<path d=\"M16 10a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 14.286V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z\"/> <path d=\"M20 9a2 2 0 0 1 2 2v10.286a.71.71 0 0 1-1.212.502l-2.202-2.202A2 2 0 0 0 17.172 19H10a2 2 0 0 1-2-2v-1\"/>","chevron-left":"<path d=\"m15 18-6-6 6-6\"/>","chevron-right":"<path d=\"m9 18 6-6-6-6\"/>","play":"<path d=\"M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z\"/>","pause":"<rect x=\"14\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\"/> <rect x=\"5\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\"/>","plane":"<path d=\"M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z\"/>","building-2":"<path d=\"M10 12h4\"/> <path d=\"M10 8h4\"/> <path d=\"M14 21v-3a2 2 0 0 0-4 0v3\"/> <path d=\"M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2\"/> <path d=\"M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16\"/>","route":"<circle cx=\"6\" cy=\"19\" r=\"3\"/> <path d=\"M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15\"/> <circle cx=\"18\" cy=\"5\" r=\"3\"/>","file-text":"<path d=\"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z\"/> <path d=\"M14 2v5a1 1 0 0 0 1 1h5\"/> <path d=\"M10 9H8\"/> <path d=\"M16 13H8\"/> <path d=\"M16 17H8\"/>","lightbulb":"<path d=\"M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5\"/> <path d=\"M9 18h6\"/> <path d=\"M10 22h4\"/>","network":"<rect x=\"16\" y=\"16\" width=\"6\" height=\"6\" rx=\"1\"/> <rect x=\"2\" y=\"16\" width=\"6\" height=\"6\" rx=\"1\"/> <rect x=\"9\" y=\"2\" width=\"6\" height=\"6\" rx=\"1\"/> <path d=\"M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3\"/> <path d=\"M12 12V8\"/>","clock":"<circle cx=\"12\" cy=\"12\" r=\"10\"/> <path d=\"M12 6v6l4 2\"/>","map-pin":"<path d=\"M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0\"/> <circle cx=\"12\" cy=\"10\" r=\"3\"/>","zap":"<path d=\"M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z\"/>","briefcase":"<path d=\"M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16\"/> <rect width=\"20\" height=\"14\" x=\"2\" y=\"6\" rx=\"2\"/>","award":"<path d=\"m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526\"/> <circle cx=\"12\" cy=\"8\" r=\"6\"/>"};
+function icon(name, cls) {
+  return '<svg class="xh-ic' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
+}
+
+/* ---------- helpers ---------- */
+var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var saveData = !!(navigator.connection && navigator.connection.saveData);
+var hasIO = 'IntersectionObserver' in window;
+function $(s, r) { return (r || root).querySelector(s); }
+function $$(s, r) { return Array.prototype.slice.call((r || root).querySelectorAll(s)); }
+function safe(fn, name) { try { fn(); } catch (e) { if (window.console) console.warn('[X HORIZON] ' + (name || 'module') + ' failed:', e); } }
+function h(tag, props, kids) {
+  var e = document.createElement(tag);
+  if (props) Object.keys(props).forEach(function (k) {
+    var v = props[k]; if (v == null) return;
+    if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else if (k === 'html') e.innerHTML = v; else e.setAttribute(k, v);
+  });
+  (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+  return e;
+}
+function safeUrl(u) { try { var x = new URL(u); return (x.protocol === 'https:' || x.protocol === 'http:') ? x.href : ''; } catch (e) { return ''; } }
+function httpsUp(u) { return u ? u.replace(/^http:\/\//i, 'https://') : u; }
+function decode(s) { var t = document.createElement('textarea'); t.innerHTML = s; return t.value; }
+function cacheGet(k, maxAge) { try { var v = JSON.parse(localStorage.getItem('xh:' + k)); if (v && Date.now() - v.t < maxAge) return v; } catch (e) {} return null; }
+function cacheSet(k, val) { try { localStorage.setItem('xh:' + k, JSON.stringify({ t: Date.now(), v: val })); } catch (e) {} }
+function fetchJSON(url, ms) {
+  var ctl = ('AbortController' in window) ? new AbortController() : null;
+  var timer = ctl ? setTimeout(function () { ctl.abort(); }, ms || 9000) : null;
+  return fetch(url, { signal: ctl ? ctl.signal : undefined, headers: { Accept: 'application/json' } })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function (j) { if (timer) clearTimeout(timer); return j; }, function (e) { if (timer) clearTimeout(timer); throw e; });
+}
+function ago(ms) {
+  var m = Math.round((Date.now() - ms) / 60000);
+  if (m < 1) return 'just now'; if (m < 60) return m + ' min ago';
+  var hr = Math.round(m / 60); if (hr < 24) return hr + ' h ago';
+  return Math.round(hr / 24) + ' d ago';
+}
+function fmtDT(ms) { return new Date(ms).toLocaleString(undefined, { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+function fmtD(ms) { return new Date(ms).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }); }
+function inDays(n) { return n <= 0 ? (n === 0 ? 'today' : 'now') : n === 1 ? 'tomorrow' : 'in ' + n + ' days'; }
+function debounce(fn, ms) { var t; return function () { clearTimeout(t); t = setTimeout(fn, ms); }; }
+
+/* ---------- links ---------- */
+safe(function () {
+  $$('[data-xh-link]').forEach(function (a) {
+    var key = a.getAttribute('data-xh-link'), href;
+    if (key.indexOf('collection:') === 0) { var slug = key.slice(11); href = (C.collectionLinks && C.collectionLinks[slug]) || ''; }
+    else if (key.indexOf('.') > 0) { var p = key.split('.'); href = C.links[p[0]] && C.links[p[0]][p[1]]; }
+    else href = C.links[key];
+    if (href) a.setAttribute('href', href);
+    else if (key.indexOf('social.') === 0) { var li = a.closest('li'); (li || a).hidden = true; }
+  });
+  root.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#xh-"]'); if (!a) return;
+    var t = document.getElementById(a.getAttribute('href').slice(1)); if (!t) return;
+    e.preventDefault();
+    t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    t.setAttribute('tabindex', '-1'); t.focus({ preventScroll: true });
+  });
+}, 'links');
+
+/* ---------- pictures: guaranteed fallback first ---------- */
+safe(function () {
+  $$('img[data-img]').forEach(function (img) {
+    var key = img.getAttribute('data-img'), cfg = IMAGES[key], w = parseInt(img.getAttribute('data-w'), 10) || 1000;
+    var list = cfg && cfg.fb ? [].concat(cfg.fb) : [], i = 0;
+    if (!list.length) { img.style.visibility = 'hidden'; return; }
+    if (img.hasAttribute('data-eager')) img.setAttribute('fetchpriority', 'high');
+    else if (!img.closest('.xh-row')) img.loading = 'lazy';
+    img.decoding = 'async';
+    img.addEventListener('error', function () { i++; if (i < list.length) img.src = resolveFb(list[i], w); else img.style.visibility = 'hidden'; });
+    img.src = resolveFb(list[0], w);
+  });
+  $$('[data-credit]').forEach(function (el) { el.textContent = 'Unsplash'; });
+}, 'images');
+
+/* ---------- pictures: upgrade to real NASA imagery (runs after load) ---------- */
+function swapKey(key, url, credit) {
+  var imgs = $$('img[data-img="' + key + '"]'), pre = new Image();
+  pre.onload = function () {
+    imgs.forEach(function (im) { im.src = url; im.style.visibility = ''; im.classList.remove('is-new'); void im.offsetWidth; im.classList.add('is-new'); });
+    $$('[data-credit="' + key + '"]').forEach(function (el) { el.textContent = credit; });
+  };
+  pre.src = url;
+}
+function dayKey() { var d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+function dayNum() { var d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000); }
+/* Picks a different matching NASA picture each day (rotation by calendar day). */
+function nasaFind(cfg, offset) {
+  return fetchJSON(C.nasaApi + '?media_type=image&page_size=40&q=' + encodeURIComponent(cfg[0]), 9000).then(function (j) {
+    var items = (j && j.collection && j.collection.items) || [], ok = [];
+    items.forEach(function (it) {
+      var d = it.data && it.data[0], l = it.links && it.links[0];
+      if (d && l && l.href && cfg[1].test((d.title || '') + ' ' + (d.keywords || []).join(' '))) ok.push({ url: httpsUp(l.href).replace('~thumb', '~' + (cfg[2] || 'medium')), credit: 'NASA' + (d.center ? ' \u00b7 ' + d.center : '') });
+    });
+    return ok.length ? ok[(dayNum() + offset) % ok.length] : null;
+  });
+}
+/* NASA Astronomy Picture of the Day — new every day. */
+function apodFind() {
+  return fetchJSON(C.apodUrl, 9000).then(function (j) {
+    if (!j || j.media_type !== 'image') return null;
+    var u = httpsUp(safeUrl(j.url || '')); if (!u) return null;
+    return { url: u, credit: 'NASA APOD' + (j.copyright ? ' \u00b7 ' + String(j.copyright).replace(/\s+/g, ' ').trim() : '') };
+  });
+}
+var lastPicDay = '';
+function upgradePictures() {
+  if (saveData) return;
+  var dk = dayKey(), todo = []; lastPicDay = dk;
+  var keys = Object.keys(IMAGES).filter(function (k) { return (IMAGES[k].nasa || IMAGES[k].apod) && $('img[data-img="' + k + '"]'); });
+  keys.forEach(function (k, idx) {
+    var ck = 'img:' + k + ':' + dk, c = cacheGet(ck, 26 * 3600e3);
+    if (c) { if (c.v && c.v.url) swapKey(k, c.v.url, c.v.credit); return; }
+    todo.push(function () {
+      var p = IMAGES[k].apod ? apodFind() : nasaFind(IMAGES[k].nasa, idx);
+      return p.then(function (r) { cacheSet(ck, r || { none: 1 }); if (r) swapKey(k, r.url, r.credit); });
+    });
+  });
+  var i = 0; function next() { if (i >= todo.length) return; var t = todo[i++]; t().then(next, next); }
+  for (var n = 0; n < 3; n++) next();
+}
+safe(function () {
+  function start() { setTimeout(upgradePictures, 500); }
+  if (document.readyState === 'complete') start(); else window.addEventListener('load', start);
+}, 'nasa-images');
+
+/* ---------- background videos ---------- */
+function setupVideo(v, src, lazyHost) {
+  if (!v || !src || reduced || saveData || window.innerWidth < 700) return;
+  function go() {
+    v.src = src; v.muted = true;
+    v.addEventListener('error', function () { if (/-720\.mp4$/.test(v.src)) { v.src = v.src.replace('-720.mp4', '-360.mp4'); var q = v.play(); if (q && q.catch) q.catch(function () {}); } });
+    v.addEventListener('playing', function () { v.classList.add('is-playing'); }, { once: true });
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+  }
+  if (lazyHost && hasIO) { var io = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { io.disconnect(); go(); } }, { rootMargin: '300px' }); io.observe(lazyHost); }
+  else if (document.readyState === 'complete') go(); else window.addEventListener('load', go);
+}
+safe(function () {
+  setupVideo($('.xh-final__bg video'), C.videos.final, $('#xh-final'));
+}, 'video');
+
+/* ---------- endless tickers + moving picture rows ---------- */
+function buildLoop(host, trackSel, grpSel, pxPerSec, cssVar) {
+  var track = $(trackSel, host), grps = $$(grpSel, track); if (!grps.length) return;
+  var base = grps[0];
+  if (!base._orig) base._orig = Array.prototype.slice.call(base.children).map(function (n) { return n.cloneNode(true); });
+  grps.slice(1).forEach(function (g) { g.parentNode.removeChild(g); });
+  base.textContent = ''; base._orig.forEach(function (n) { base.appendChild(n.cloneNode(true)); });
+  var guard = 0; while (base.scrollWidth > 0 && base.scrollWidth < window.innerWidth * 1.05 && guard++ < 10) base._orig.forEach(function (n) { base.appendChild(n.cloneNode(true)); });
+  var copy = base.cloneNode(true); copy.setAttribute('aria-hidden', 'true');
+  $$('a,button', copy).forEach(function (a) { a.setAttribute('tabindex', '-1'); });
+  track.appendChild(copy);
+  host.style.setProperty(cssVar, (base.scrollWidth > 0 ? Math.max(24, Math.round(base.scrollWidth / pxPerSec)) : 60) + 's');
+  host._built = window.innerWidth;
+}
+function initLoops() {
+  $$('[data-ticker]').forEach(function (t) { buildLoop(t, '.xh-ticker__track', '.xh-ticker__grp', 70, '--tt'); });
+  $$('[data-row]').forEach(function (r) { buildLoop(r, '.xh-row__track', '.xh-row__grp', 38, '--rt'); });
+}
+safe(function () {
+  initLoops();
+  window.addEventListener('resize', debounce(function () {
+    var again = $$('[data-ticker],[data-row]').some(function (e) { return window.innerWidth > (e._built || 0) * 1.25; });
+    if (again) initLoops();
+  }, 300));
+}, 'loops');
+
+/* ---------- reveal on scroll + pause off-screen animation ---------- */
+safe(function () {
+  var secs = $$('.xh-sec');
+  if (!hasIO) { secs.forEach(function (s) { s.classList.add('is-vis'); }); return; }
+  var vis = new IntersectionObserver(function (en) { en.forEach(function (e) { e.target.classList.toggle('is-vis', e.isIntersecting); if (e.isIntersecting && !e.target._looped) { e.target._looped = 1; $$('[data-ticker],[data-row]', e.target).forEach(function (n) { if (!n.querySelector('.xh-ticker__grp,.xh-row__grp').scrollWidth) return; buildLoop(n, n.hasAttribute('data-row') ? '.xh-row__track' : '.xh-ticker__track', n.hasAttribute('data-row') ? '.xh-row__grp' : '.xh-ticker__grp', n.hasAttribute('data-row') ? 38 : 70, n.hasAttribute('data-row') ? '--rt' : '--tt'); }); } }); }, { rootMargin: '200px 0px' });
+  secs.forEach(function (s) { vis.observe(s); });
+  if (reduced) return;
+  root.classList.add('xh-js');
+  var rv = new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); rv.unobserve(e.target); } }); }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+  $$('.xh-rv').forEach(function (n) { rv.observe(n); });
+  setTimeout(function () { $$('.xh-rv').forEach(function (n) { n.classList.add('is-in'); }); }, 6000); // failsafe
+  var p = $('#xh-path');
+  var pio = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { p.classList.add('is-in'); pio.disconnect(); } }, { threshold: .35 });
+  pio.observe(p);
+}, 'reveal');
+safe(function () { if (!hasIO || reduced) $('#xh-path').classList.add('no-io'); }, 'path');
+
+/* =====================================================================
+   LIVE — daily space news
+   Chain: Spaceflight News API  ->  NASA / Space.com RSS (via rss2json)  ->  cached copy
+          ->  clearly-labelled saved snapshot (only if the browser has no network access)
+   ===================================================================== */
+var CATS = [
+  { id: 'all', label: 'All', ic: 'newspaper' },
+  { id: 'missions', label: 'Missions', ic: 'rocket', re: 'mission|launch|rocket|spacecraft|probe|orbiter|lander|starship|falcon|vulcan|ariane|new glenn|booster|engine|payload|landing' },
+  { id: 'satellites', label: 'Satellites', ic: 'satellite', re: 'satellite|constellation|starlink|kuiper|cubesat|smallsat|broadband|space debris|orbital debris' },
+  { id: 'astronomy', label: 'Astronomy', ic: 'telescope', re: 'telescope|astronom|galax|star\\b|stars\\b|black hole|nebula|universe|cosmic|exoplanet|webb|hubble|observatory|supernova|pulsar|quasar|roman' },
+  { id: 'discoveries', label: 'Discoveries', ic: 'search', re: 'discover|detect|reveal|unveil|evidence|first-ever|first ever|breakthrough' },
+  { id: 'weather', label: 'Earth & Space Weather', ic: 'cloud-sun', re: 'geomagnetic|aurora|space weather|noaa|earth observation|climate|weather satellite|atmosphere|hurricane|wildfire' },
+  { id: 'moon', label: 'Moon', ic: 'moon', re: 'moon|lunar|artemis|chang.e' },
+  { id: 'solar', label: 'Solar Activity', ic: 'sun', re: '\\bsun\\b|solar (?:flare|storm|wind|cycle|activity|maximum|orbiter)|sunspot|coronal|corona\\b|heliophysic|parker solar' },
+  { id: 'planetary', label: 'Planetary Science', ic: 'globe', re: 'mars|venus|jupiter|saturn|mercury|uranus|neptune|pluto|asteroid|comet|titan|europa|enceladus|solar system|planetary|rover|ceres|bennu|juice' },
+  { id: 'human', label: 'Human Spaceflight', ic: 'users', re: 'astronaut|cosmonaut|taikonaut|crew|space station|iss\\b|spacewalk|shenzhou|tiangong|gaganyaan|starliner|human spaceflight|axiom' }
+];
+var CLASS_ORDER = ['human', 'moon', 'planetary', 'solar', 'weather', 'satellites', 'discoveries', 'astronomy', 'missions'];
+var CAT_FB = { missions: 'launch', satellites: 'orbit', astronomy: 'deep', discoveries: 'nebula', weather: 'orbit', moon: 'moon', solar: 'planets', planetary: 'planets', human: 'orbit', other: 'deep' };
+CATS.forEach(function (c) { if (c.re) c.rx = new RegExp('\\b(?:' + c.re + ')', 'i'); });
+function catById(id) { for (var i = 0; i < CATS.length; i++) if (CATS[i].id === id) return CATS[i]; return { id: 'other', label: 'Space', ic: 'sparkles' }; }
+function classify(text) { for (var i = 0; i < CLASS_ORDER.length; i++) { var c = catById(CLASS_ORDER[i]); if (c.rx && c.rx.test(text)) return c.id; } return 'other'; }
+
+/* Saved snapshot of real headlines (4 Oct 2026). Shown ONLY when no live source can be reached. */
+var SNAP_AT = Date.UTC(2026, 9, 4, 12, 0);
+var SNAP = [
+  ['SpaceX Crew-13 reaches the space station in under eight hours, the fastest US crew flight yet', 'Four astronauts launched on a Falcon 9 and Dragon from Florida on 1 October and docked with the ISS the same day, starting a six-month stay.', 'Space.com', '2026-10-01T16:00:00Z', 'https://space.com/news/live/spacex-nasa-crew-13-astronauts-launch-to-iss-october-1-2026'],
+  ['ESA\u2019s Juice swings past Earth on its way to Jupiter', 'The spacecraft used Earth\u2019s gravity on 28 September to reshape its path toward Jupiter without spending much fuel.', 'ScienceDaily', '2026-10-03T08:00:00Z', 'https://www.sciencedaily.com/news/space_time/space_exploration/'],
+  ['Chang\u2019e-6 lunar soil holds a previously unknown magnetic iron mineral', 'Researchers studying the returned samples found a form of metallic iron called \u03b3-Fe inside tiny grains of impact glass.', 'ScienceDaily', '2026-10-03T08:00:00Z', 'https://www.sciencedaily.com/news/space_time/space_exploration/'],
+  ['NASA\u2019s Roman Space Telescope shows steady pointing and a first coronagraph view', 'Early tests show the telescope can hold precisely on a target, and its planet-imaging coronagraph has taken a first look at the cosmos.', 'ScienceDaily', '2026-10-02T08:00:00Z', 'https://www.sciencedaily.com/news/space_time/space_exploration/'],
+  ['Webb finds heavy elements spreading from galaxies just 500 million years after the Big Bang', 'Early galaxies were already dispersing carbon and oxygen, suggesting the young universe enriched itself faster than expected.', 'ScienceDaily', '2026-10-02T08:00:00Z', 'https://www.sciencedaily.com/news/space_time/'],
+  ['Starship returns to Earth and splashes down north of Hawaii', 'After a flight of about three hours, the rocket came back and landed in the Pacific on 28 September.', 'Spaceflight Now', '2026-09-28T20:00:00Z', 'https://spaceflightnow.com/2026/10/'],
+  ['NASA plans an uncrewed Starliner test flight at the end of the year', 'The agency is lining up a test flight without crew for Boeing\u2019s Starliner before the year ends.', 'Spaceflight Now', '2026-09-29T16:00:00Z', 'https://spaceflightnow.com/2026/10/']
+].map(function (s) {
+  return { title: s[0], summary: s[1], source: s[2], published: Date.parse(s[3]), updated: Date.parse(s[3]), url: s[4], image: '', cat: classify(s[0] + ' ' + s[1]) };
+});
+
+var live = { items: [], cat: 'all', fetchedAt: 0, cached: false, ok: false, snapshot: false };
+var elStamp = $('#xhLiveStamp'), elFeat = $('#xhLiveFeat'), elList = $('#xhLiveList'), elCats = $('#xhCats'), elSr = $('#xhLiveSr'), elWx = $('#xhWx'), elTick = $('#xhNewsTicker');
+
+function pickAndSort(out) {
+  out.sort(function (x, y) { return y.published - x.published; });
+  var pref = out.filter(function (a) { var s = a.source.toLowerCase(); return C.preferSources.some(function (p) { return s.indexOf(p) > -1; }); });
+  return pref.length >= 8 ? pref : out;
+}
+function normalise(json) {
+  var rows = (json && json.results) || [], seen = {}, out = [];
+  rows.forEach(function (a) {
+    var url = safeUrl(a.url), title = (a.title || '').trim(), src = (a.news_site || '').trim(), pub = Date.parse(a.published_at);
+    if (!url || !title || !src || isNaN(pub) || seen[title.toLowerCase()]) return;
+    if (C.blockSources.indexOf(src.toLowerCase()) > -1) return;
+    seen[title.toLowerCase()] = 1;
+    out.push({ title: title, summary: (a.summary || '').trim(), url: url, image: httpsUp(safeUrl(a.image_url || '')), source: src, published: pub, updated: Date.parse(a.updated_at) || pub, cat: classify(title + ' ' + (a.summary || '')) });
+  });
+  return pickAndSort(out);
+}
+function normaliseRss(feedName, json) {
+  var rows = (json && json.items) || [], out = [];
+  rows.forEach(function (a) {
+    var url = safeUrl(a.link), title = decode(a.title || '').trim();
+    /* RSS dates commonly already contain GMT/UTC or an explicit offset; do not append a second Z. */
+    var rawDate = String(a.pubDate || a.published || a.updated || '').trim();
+    var pub = Date.parse(rawDate);
+    if (isNaN(pub) && rawDate) pub = Date.parse(rawDate.replace(/\s+GMT$/i, ' UTC'));
+    var sum = decode(String(a.description || a.content || '').replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
+    if (sum.length > 280) sum = sum.slice(0, 277).replace(/\s+\S*$/, '') + '\u2026';
+    if (!url || !title || isNaN(pub)) return;
+    out.push({ title: title, summary: sum, url: url, image: httpsUp(safeUrl(a.thumbnail || (a.enclosure && a.enclosure.link) || '')), source: feedName, published: pub, updated: pub, cat: classify(title + ' ' + sum) });
+  });
+  return out;
+}
+function loadRss() {
+  return Promise.all(C.rssFeeds.map(function (f) {
+    return fetchJSON(C.rss2json + encodeURIComponent(f[1]), 10000).then(function (j) { return normaliseRss(f[0], j); }).catch(function () { return []; });
+  })).then(function (lists) {
+    var all = [].concat.apply([], lists), seen = {};
+    all = all.filter(function (a) { var k = a.title.toLowerCase(); if (seen[k]) return false; seen[k] = 1; return true; });
+    if (!all.length) throw new Error('rss empty');
+    all.sort(function (x, y) { return y.published - x.published; });
+    return all;
+  });
+}
+
+function buildChips() {
+  elCats.textContent = '';
+  CATS.forEach(function (c) {
+    var b = h('button', { type: 'button', class: 'xh-chip', 'aria-pressed': String(live.cat === c.id), 'data-cat': c.id }, [h('span', { html: icon(c.ic) }), c.label]);
+    b.addEventListener('click', function () { live.cat = c.id; buildChips(); renderStories(true); });
+    elCats.appendChild(b);
+  });
+}
+function srcLine(a) { return a.source.toUpperCase() + ' · ' + fmtD(a.published); }
+function storyImg(a, cls) {
+  var wrap = h('div', { class: cls + ' xh-img' });
+  /* Use the explicitly named broadcastunsplash image when configured; otherwise retain category-specific fallbacks. */
+  var broadcastCfg = IMAGES.broadcastunsplash;
+  var broadcastRef = broadcastCfg && broadcastCfg.fb && broadcastCfg.fb.length ? resolveFb(broadcastCfg.fb[0], 700) : '';
+  var fb = broadcastRef || resolveFb(CAT_FB[a.cat] || 'deep', 700);
+  var im = h('img', { src: a.image || fb, alt: '', loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer' });
+  im.addEventListener('error', function () { if (im.src !== fb) im.src = fb; });
+  wrap.appendChild(im); return wrap;
+}
+function renderStories(announce) {
+  elFeat.textContent = ''; elList.textContent = '';
+  var grid = $('#xhLiveGrid'), old = grid.querySelector('.xh-live__msg'); if (old) old.remove();
+  var items = live.items.filter(function (a) { return live.cat === 'all' || a.cat === live.cat; });
+  if (!live.ok || !items.length) {
+    elFeat.hidden = elList.hidden = true;
+    grid.appendChild(h('div', { class: 'xh-live__msg', role: 'status' }, [
+      h('strong', { text: live.ok ? 'No current stories in this category.' : 'The live feed is temporarily unavailable.' }),
+      live.ok ? 'Try another category, or open an official newsroom below.' : 'X HORIZON could not reach any news source. Open an official newsroom below or try again shortly.'
+    ]));
+    elSr.textContent = live.ok ? 'No current stories in this category.' : 'Live feed unavailable.'; return;
+  }
+  elFeat.hidden = elList.hidden = false;
+  var f = items.filter(function (a) { return a.image; })[0] || items[0];
+  var rest = items.filter(function (a) { return a !== f; }).slice(0, 5);
+  var fresh = !live.snapshot && Date.now() - f.published < 36 * 3600e3, c = catById(f.cat);
+  var fig = storyImg(f, 'xh-feat__img');
+  fig.appendChild(h('div', { class: 'xh-feat__flag' }, [fresh ? h('span', { class: 'xh-dot', 'aria-hidden': 'true' }) : null, fresh ? 'TODAY IN SPACE' : (live.snapshot ? 'SAVED SNAPSHOT' : 'LATEST IN SPACE')]));
+  var body = h('div', { class: 'xh-feat__body' }, [
+    h('div', { class: 'xh-meta' }, [h('span', { class: 'xh-tag' }, [h('span', { html: icon(c.ic) }), c.label]), h('span', { text: fmtDT(f.published) })]),
+    h('h3', { text: f.title }),
+    h('p', { class: 'xh-clamp3', text: f.summary }),
+    h('div', { class: 'xh-feat__foot' }, [
+      h('a', { class: 'xh-btn xh-btn--solid', href: f.url, target: '_blank', rel: 'noopener noreferrer' }, ['Read story', h('span', { class: 'xh-sr', text: ': ' + f.title + ' (opens the publisher in a new tab)' })]),
+      h('span', { class: 'xh-small', text: 'Source: ' + f.source })
+    ])
+  ]);
+  elFeat.appendChild(fig); elFeat.appendChild(body);
+  rest.forEach(function (a) {
+    var cc = catById(a.cat);
+    elList.appendChild(h('article', { class: 'xh-item' }, [
+      storyImg(a, 'xh-item__img'),
+      h('div', null, [
+        h('span', { class: 'xh-tag' }, [h('span', { html: icon(cc.ic) }), cc.label]),
+        h('h3', null, [h('a', { href: a.url, target: '_blank', rel: 'noopener noreferrer', text: a.title })]),
+        h('p', { class: 'xh-clamp2', text: a.summary }),
+        h('p', { class: 'xh-small', text: srcLine(a) })
+      ])
+    ]));
+  });
+  if (announce) elSr.textContent = 'Showing ' + (1 + rest.length) + ' stories' + (live.cat === 'all' ? '.' : ' in ' + catById(live.cat).label + '.');
+}
+function buildNewsTicker() {
+  if (!live.ok || !live.items.length) { elTick.hidden = true; return; }
+  var track = $('.xh-ticker__track', elTick); track.textContent = '';
+  var grp = h('div', { class: 'xh-ticker__grp' });
+  live.items.slice(0, 10).forEach(function (a) {
+    grp.appendChild(h('a', { href: a.url, target: '_blank', rel: 'noopener noreferrer' }, [h('b', { text: a.source }), a.title]));
+  });
+  track.appendChild(grp); elTick.hidden = false;
+  buildLoop(elTick, '.xh-ticker__track', '.xh-ticker__grp', 60, '--tt');
+}
+function renderStamp() {
+  if (!live.ok) { elStamp.textContent = 'Live feed unavailable right now'; return; }
+  if (live.snapshot) { elStamp.textContent = 'Saved snapshot from ' + fmtD(SNAP_AT) + ' — the live feed could not be reached from this browser'; return; }
+  var newest = live.items.length ? live.items[0].published : 0;
+  elStamp.textContent = 'Updated ' + ago(live.fetchedAt) + (live.cached ? ' (cached feed)' : '') + (newest ? ' · newest story ' + ago(newest) : '');
+}
+function loadNews() {
+  function viaApi() { return fetchJSON(C.newsUrl, 10000).then(function (j) { cacheSet('news', j); var it = normalise(j); if (!it.length) throw 0; return { items: it, at: Date.now(), cached: false }; }); }
+  function viaRss() { return loadRss().then(function (it) { return { items: it, at: Date.now(), cached: false }; }); }
+  function viaCache() { var c = cacheGet('news', 12 * 3600e3); if (!c) return Promise.reject(0); var it = normalise(c.v); if (!it.length) return Promise.reject(0); return Promise.resolve({ items: it, at: c.t, cached: true }); }
+  return viaApi().catch(viaRss).catch(viaCache).then(function (r) {
+    live.items = r.items; live.fetchedAt = r.at; live.cached = r.cached; live.ok = true; live.snapshot = false;
+  }).catch(function () {
+    live.items = SNAP; live.ok = true; live.snapshot = true; live.fetchedAt = SNAP_AT;
+  }).then(function () { buildChips(); renderStories(false); renderStamp(); buildNewsTicker(); });
+}
+function loadWx() {
+  return fetchJSON(C.wxUrl, 8000).then(function (j) {
+    var cur = j && (j['0'] || j[0]); if (!cur || !cur.G) throw 0;
+    elWx.textContent = 'Space weather now (NOAA SWPC): geomagnetic G' + cur.G.Scale + ' · radiation S' + (cur.S && cur.S.Scale) + ' · radio blackout R' + (cur.R && cur.R.Scale);
+  }).catch(function () { elWx.textContent = ''; });
+}
+safe(function () {
+  buildChips();
+  elFeat.appendChild(h('p', { class: 'xh-small', text: 'Loading current stories…' }));
+  loadNews(); loadWx();
+  setInterval(function () { if (!document.hidden) renderStamp(); }, 30000);
+  setInterval(function () { if (!document.hidden) { loadNews(); loadWx(); } }, 10 * 60000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && Date.now() - live.fetchedAt > 10 * 60000) { loadNews(); loadWx(); } });
+  /* a page left open past midnight picks up the new day's pictures */
+  setInterval(function () { if (!document.hidden && lastPicDay && dayKey() !== lastPicDay) upgradePictures(); }, 5 * 60000);
+}, 'live');
+
+/* =====================================================================
+   TODAY'S SKY — computed from the date; ISS + launch from live APIs
+   ===================================================================== */
+var D2R = Math.PI / 180;
+var PL = { /* JPL approximate Keplerian elements, 1800–2050: a, da, e, de, I, dI, L, dL, ϖ, dϖ, Ω, dΩ */
+  mercury: [0.38709927, 0.00000037, 0.20563593, 0.00001906, 7.00497902, -0.00594749, 252.25032350, 149472.67411175, 77.45779628, 0.16047689, 48.33076593, -0.12534081],
+  venus:   [0.72333566, 0.00000390, 0.00677672, -0.00004107, 3.39467605, -0.00078890, 181.97909950, 58517.81538729, 131.60246718, 0.00268329, 76.67984255, -0.27769418],
+  earth:   [1.00000261, 0.00000562, 0.01671123, -0.00004392, -0.00001531, -0.01294668, 100.46457166, 35999.37244981, 102.93768193, 0.32327364, 0, 0],
+  mars:    [1.52371034, 0.00001847, 0.09339410, 0.00007882, 1.84969142, -0.00813131, -4.55343205, 19140.30268499, -23.94362959, 0.44441088, 49.55953891, -0.29257343],
+  jupiter: [5.20288700, -0.00011607, 0.04838624, -0.00013253, 1.30439695, -0.00183714, 34.39644051, 3034.74612775, 14.72847983, 0.21252668, 100.47390909, 0.20469106],
+  saturn:  [9.53667594, -0.00125060, 0.05386179, -0.00050991, 2.48599187, 0.00193609, 49.95424423, 1222.49362201, 92.59887831, -0.41897216, 113.66242448, -0.28867794]
+};
+function helio(e, T) {
+  var a = e[0] + e[1] * T, ec = e[2] + e[3] * T, I = (e[4] + e[5] * T) * D2R, L = e[6] + e[7] * T, w = e[8] + e[9] * T, O = (e[10] + e[11] * T) * D2R;
+  var M = (((L - w) % 360) + 540) % 360 - 180; M *= D2R;
+  var E = M; for (var i = 0; i < 10; i++) E = M + ec * Math.sin(E);
+  var xv = a * (Math.cos(E) - ec), yv = a * Math.sqrt(1 - ec * ec) * Math.sin(E);
+  var v = Math.atan2(yv, xv), r = Math.sqrt(xv * xv + yv * yv), u = v + (w * D2R - O);
+  return [r * (Math.cos(O) * Math.cos(u) - Math.sin(O) * Math.sin(u) * Math.cos(I)), r * (Math.sin(O) * Math.cos(u) + Math.cos(O) * Math.sin(u) * Math.cos(I)), r * Math.sin(u) * Math.sin(I)];
+}
+function planetsNow(ms) {
+  var T = (ms / 86400000 + 2440587.5 - 2451545) / 36525, ea = helio(PL.earth, T), res = { evening: [], morning: [], night: [] };
+  var s = [-ea[0], -ea[1], -ea[2]], sl = Math.sqrt(s[0] * s[0] + s[1] * s[1] + s[2] * s[2]);
+  ['mercury', 'venus', 'mars', 'jupiter', 'saturn'].forEach(function (n) {
+    var p = helio(PL[n], T), g = [p[0] - ea[0], p[1] - ea[1], p[2] - ea[2]], gl = Math.sqrt(g[0] * g[0] + g[1] * g[1] + g[2] * g[2]);
+    var el = Math.acos((g[0] * s[0] + g[1] * s[1] + g[2] * s[2]) / (gl * sl)) / D2R;
+    var d = ((Math.atan2(g[1], g[0]) - Math.atan2(s[1], s[0])) / D2R + 540) % 360 - 180;
+    var name = n.charAt(0).toUpperCase() + n.slice(1);
+    if (el < (n === 'mercury' ? 18 : 22)) return;
+    if (el > 150 && (n === 'mars' || n === 'jupiter' || n === 'saturn')) res.night.push(name);
+    else (d > 0 ? res.evening : res.morning).push(name);
+  });
+  return res;
+}
+function moonNow(ms) {
+  var syn = 29.530588853, age = (((ms - Date.UTC(2000, 0, 6, 18, 14)) / 86400000) % syn + syn) % syn, ph = age / syn;
+  var names = ['New moon', 'Waxing crescent', 'First quarter', 'Waxing gibbous', 'Full moon', 'Waning gibbous', 'Last quarter', 'Waning crescent'];
+  var idx = Math.floor((age + 1.8456) / 3.6912) % 8;
+  return { age: age, ph: ph, ill: (1 - Math.cos(2 * Math.PI * ph)) / 2, name: names[idx], toFull: ((14.7653 - age) % syn + syn) % syn, toNew: syn - age };
+}
+function moonSvg(ph) {
+  var r = 15, cx = 18, cy = 18, wax = ph <= .5, p = wax ? ph : 1 - ph, k = Math.cos(2 * Math.PI * p), rx = Math.abs(k) * r;
+  var lit = 'M' + cx + ' ' + (cy - r) + 'A' + r + ' ' + r + ' 0 0 1 ' + cx + ' ' + (cy + r) + 'A' + rx.toFixed(2) + ' ' + r + ' 0 0 ' + (k > 0 ? 0 : 1) + ' ' + cx + ' ' + (cy - r) + 'Z';
+  return '<circle cx="18" cy="18" r="15" fill="#161616" stroke="#f2f2f2" stroke-opacity=".35"/><path d="' + lit + '" fill="#f2f2f2" transform="' + (wax ? '' : 'translate(36 0) scale(-1 1)') + '"/>';
+}
+var SHOWERS = [['Quadrantids', 1, 3], ['Lyrids', 4, 22], ['Eta Aquariids', 5, 6], ['Perseids', 8, 12], ['Draconids', 10, 8], ['Orionids', 10, 21], ['Southern Taurids', 11, 5], ['Leonids', 11, 17], ['Geminids', 12, 14], ['Ursids', 12, 22]];
+var ECLIPSES = [['2026-08-12', 'Total solar eclipse'], ['2026-08-28', 'Partial lunar eclipse'], ['2027-02-06', 'Annular solar eclipse'], ['2027-08-02', 'Total solar eclipse']];
+function nextShower(now) {
+  var t0 = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()), best = null;
+  SHOWERS.forEach(function (s) {
+    [now.getFullYear(), now.getFullYear() + 1].forEach(function (y) {
+      var d = Math.round((Date.UTC(y, s[1] - 1, s[2]) - t0) / 86400000);
+      if (d >= 0 && (!best || d < best.d)) best = { n: s[0], d: d, m: s[1], day: s[2] };
+    });
+  });
+  return best;
+}
+function nextEclipse(now) {
+  var t0 = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  for (var i = 0; i < ECLIPSES.length; i++) {
+    var p = ECLIPSES[i][0].split('-'), d = Math.round((Date.UTC(+p[0], +p[1] - 1, +p[2]) - t0) / 86400000);
+    if (d >= 0) return { n: ECLIPSES[i][1], d: d, ms: Date.UTC(+p[0], +p[1] - 1, +p[2], 12) };
+  }
+  return null;
+}
+function setT(id, v) { var e = document.getElementById(id); if (e) e.textContent = v; }
+function setPlanets(res) {
+  var parts = [];
+  if (res.evening.length) parts.push('Evening: ' + res.evening.join(', '));
+  if (res.morning.length) parts.push('Morning: ' + res.morning.join(', '));
+  if (res.night.length) parts.push('All night: ' + res.night.join(', '));
+  var n = res.evening.length + res.morning.length + res.night.length;
+  setT('skPlV', n ? n + (n === 1 ? ' planet' : ' planets') + ' placed for viewing' : 'None well placed');
+  setT('skPlD', parts.length ? parts.join(' · ') : 'All close to the Sun in the sky.');
+}
+function renderSky() {
+  var now = new Date(), ms = now.getTime();
+  var dt = document.getElementById('xhSkyDate');
+  if (dt) { dt.textContent = now.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); dt.setAttribute('datetime', now.toISOString().slice(0, 10)); }
+  var m = moonNow(ms);
+  setT('skMoonV', m.name);
+  setT('skMoonD', Math.round(m.ill * 100) + '% lit · ' + (m.toFull < m.toNew ? 'full moon ' + inDays(Math.round(m.toFull)) : 'new moon ' + inDays(Math.round(m.toNew))));
+  var ms2 = document.getElementById('skMoonSvg'); if (ms2) ms2.innerHTML = moonSvg(m.ph);
+  setPlanets(planetsNow(ms));
+  var sh = nextShower(now);
+  if (sh) {
+    setT('skMetV', sh.n);
+    setT('skMetD', (sh.d === 0 ? 'Peaks today' : 'Peaks ' + inDays(sh.d)) + ' · around ' + new Date(2001, sh.m - 1, sh.day).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }));
+  }
+  var ec = nextEclipse(now);
+  if (ec) { setT('skEclV', ec.n); setT('skEclD', fmtD(ec.ms) + ' · ' + inDays(ec.d)); }
+  else { setT('skEclV', 'None listed'); setT('skEclD', 'Check NASA\u2019s eclipse pages for later dates.'); }
+}
+function loadIss() {
+  return fetchJSON(C.issUrl, 7000).then(function (j) {
+    var la = +j.latitude, lo = +j.longitude;
+    setT('skIssV', Math.abs(la).toFixed(1) + '°' + (la >= 0 ? 'N' : 'S') + ' ' + Math.abs(lo).toFixed(1) + '°' + (lo >= 0 ? 'E' : 'W'));
+    var d = document.getElementById('skIssD'); d.textContent = '';
+    d.appendChild(document.createTextNode(Math.round(j.altitude) + ' km up · ' + Math.round(j.velocity).toLocaleString() + ' km/h · '));
+    d.appendChild(h('a', { href: C.links.satellites, text: 'pass times' }));
+  }).catch(function () { setT('skIssV', 'Unavailable'); setT('skIssD', 'Position feed not reachable right now.'); });
+}
+function loadLaunch() {
+  var c = cacheGet('launch', 20 * 60000), p = c ? Promise.resolve(c.v) : fetchJSON(C.launchUrl, 8000).then(function (j) { cacheSet('launch', j); return j; });
+  return p.catch(function () { var o = cacheGet('launch', 24 * 3600e3); if (o) return o.v; throw 0; }).then(function (j) {
+    var now = Date.now(), r = (j.results || []).filter(function (x) { return Date.parse(x.net) > now - 3600e3; })[0] || (j.results || [])[0];
+    if (!r) throw 0;
+    var parts = (r.name || 'Launch').split('|'), mission = parts.length > 1 ? parts.slice(1).join('|').trim() : parts[0].trim(), vehicle = parts.length > 1 ? parts[0].trim() + ' · ' : '';
+    setT('skLaunchV', mission);
+    setT('skLaunchD', vehicle + 'NET ' + fmtDT(Date.parse(r.net)) + (r.status && r.status.abbrev ? ' · ' + r.status.abbrev : ''));
+  }).catch(function () { setT('skLaunchV', 'Unavailable'); setT('skLaunchD', 'Launch schedule not reachable right now.'); });
+}
+safe(function () {
+  /* move the moon svg into a dd so the <dl> stays valid */
+  var mv = document.getElementById('skMoonSvg');
+  if (mv && mv.parentNode.tagName === 'DIV') { var dd = document.createElement('dd'); mv.parentNode.insertBefore(dd, mv); dd.appendChild(mv); }
+  renderSky(); setInterval(renderSky, 60000);
+  loadIss(); setInterval(function () { if (!document.hidden) loadIss(); }, 30000);
+  loadLaunch(); setInterval(function () { if (!document.hidden) loadLaunch(); }, 20 * 60000);
+}, 'sky');
+
+
+
+
+
+/* =====================================================================
+   CAREER NAVIGATOR (with a changing photo)
+   ===================================================================== */
+var FIELDS = [
+  ['Astronomy', 'telescope', 'Physics, mathematics, observing methods and data handling.', 'Observatories, planetariums, science communication and graduate research.'],
+  ['Astrophysics', 'atom', 'Mechanics, electromagnetism, quantum physics, statistics and Python.', 'Research institutes, PhD programmes, data science and space agencies.'],
+  ['Aerospace', 'plane', 'Dynamics, propulsion, materials and control systems.', 'Spacecraft engineering, launch systems, the aviation industry and agencies.'],
+  ['Satellites', 'satellite', 'Orbital mechanics, radio communications and embedded systems.', 'Satellite operators, ground segment, Earth-observation and communications companies.'],
+  ['Remote sensing', 'radar', 'Optics, GIS, image analysis and machine learning.', 'Earth observation, climate monitoring, agriculture, disaster response and geospatial analysis.'],
+  ['Robotics', 'bot', 'Kinematics, control, computer vision and autonomy.', 'Planetary rovers, in-orbit servicing, automation and mission operations.'],
+  ['Space science', 'flask-conical', 'Planetary science, heliophysics and instrumentation.', 'Mission science teams, instrument design and data archives.'],
+  ['Space policy', 'scale', 'International law, economics and science literacy.', 'Agencies, regulators, think tanks and work on space sustainability.'],
+  ['Research', 'microscope', 'The scientific method, statistics, writing and coding.', 'Graduate programmes, laboratories and open-data collaborations.']
+];
+safe(function () {
+  var tabs = $('#xhTabs'), panel = $('#xhNavPanel'), carImg = $('#xhCarImg'), btns = [];
+  function showPhoto(i) {
+    var url = resolveFb(CAR_IMGS[i % CAR_IMGS.length], 900), pre = new Image();
+    pre.onload = function () { carImg.src = url; carImg.classList.remove('is-new'); void carImg.offsetWidth; carImg.classList.add('is-new'); };
+    pre.src = url;
+  }
+  function select(i, focus) {
+    btns.forEach(function (b, j) { var on = j === i; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; });
+    panel.setAttribute('aria-labelledby', btns[i].id); panel.textContent = '';
+    panel.appendChild(h('h3', { text: FIELDS[i][0] }));
+    panel.appendChild(h('dl', null, [
+      h('div', null, [h('dt', { text: 'Build the foundation' }), h('dd', { text: FIELDS[i][2] })]),
+      h('div', { style: 'margin-top:1.1rem' }, [h('dt', { text: 'Where it leads' }), h('dd', { text: FIELDS[i][3] })])
+    ]));
+    showPhoto(i);
+    if (focus) btns[i].focus();
+  }
+  FIELDS.forEach(function (f, i) {
+    var b = h('button', { type: 'button', class: 'xh-tab', role: 'tab', id: 'xhTab' + i, 'aria-controls': 'xhNavPanel' }, [h('span', { html: icon(f[1]) }), f[0]]);
+    b.addEventListener('click', function () { select(i); });
+    b.addEventListener('keydown', function (e) {
+      var k = e.key, n = btns.length, to = -1;
+      if (k === 'ArrowDown' || k === 'ArrowRight') to = (i + 1) % n; else if (k === 'ArrowUp' || k === 'ArrowLeft') to = (i - 1 + n) % n;
+      else if (k === 'Home') to = 0; else if (k === 'End') to = n - 1;
+      if (to > -1) { e.preventDefault(); select(to, true); }
+    });
+    btns.push(b); tabs.appendChild(b);
+  });
+  select(0);
+}, 'careers');
+
+})();
+</script>
