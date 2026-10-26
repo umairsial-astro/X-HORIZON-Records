@@ -1,0 +1,1403 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Clarissa Do — Special · X Horizon</title>
+<meta name="description" content="A small corner of X Horizon dedicated to someone worth thanking.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,440;0,9..144,600;1,9..144,500;1,9..144,600&amp;family=Inter:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+/* =================================================================
+   X HORIZON — DR. CLARISSA DO · SPECIAL APPRECIATION PAGE
+   All CSS scoped under #clarisaa-page to avoid Odoo / site conflicts.
+   Theme: pink (primary) on white (secondary). No emoji glyphs anywhere —
+   all iconography is inline SVG drawn from XH.ICONS.
+   ================================================================= */
+
+#clarisaa-page {
+  /* X HORIZON — PINK PRIMARY / WHITE SECONDARY */
+  --paper:       #c92f68;
+  --blush-50:    #d83d78;
+  --blush-100:   #e44b84;
+  --blush-200:   #f06b9b;
+  --rose-300:    #ff9fc2;
+  --rose-400:    #f66fa2;
+  --rose-500:    #e8447f;
+  --rose-600:    #c92f68;
+  --rose-700:    #a91f55;
+  --rose-900:    #76133f;
+  --ink:         #fff7fb;
+  --ink-soft:    #ffe0eb;
+  --line:        rgba(255,255,255,0.22);
+  --shadow-c:    rgba(118,19,63,0.35);
+  --radius:      20px;
+  --font-display:"Fraunces", Georgia, "Times New Roman", serif;
+  --font-body:   "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  --font-mono:   "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace;
+
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background:
+    radial-gradient(1100px 640px at 82% -8%, #f06b9b 0%, transparent 58%),
+    radial-gradient(900px 700px at -10% 25%, #d83d78 0%, transparent 55%),
+    linear-gradient(180deg, #b5225d 0%, #c92f68 48%, #a91f55 100%);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  box-sizing: border-box;
+  isolation: isolate;
+  -webkit-font-smoothing: antialiased;
+}
+#clarisaa-page *, #clarisaa-page *::before, #clarisaa-page *::after { box-sizing: border-box; }
+#clarisaa-page img { max-width: 100%; display: block; }
+#clarisaa-page.xh-no-anim * { animation: none !important; transition: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  #clarisaa-page * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- ambient stars ---------- */
+#clarisaa-page .xh-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+#clarisaa-page .xh-star {
+  position: absolute; border-radius: 50%; background: var(--rose-300);
+  animation: xh-twinkle 5s ease-in-out infinite;
+}
+@keyframes xh-twinkle { 0%,100% { opacity: 0.15; transform: scale(0.85); } 50% { opacity: 0.55; transform: scale(1.1); } }
+
+/* ---------- scroll progress ---------- */
+#clarisaa-page .xh-progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%; z-index: 60;
+  background: linear-gradient(90deg, var(--rose-400), var(--rose-700));
+  transition: width 0.1s linear;
+}
+
+/* ---------- gate ---------- */
+#clarisaa-page .xh-gate {
+  position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
+  padding: 24px; text-align: center; color: #fff;
+  background:
+    radial-gradient(900px 560px at 50% 12%, rgba(255,159,197,0.32), transparent 60%),
+    linear-gradient(180deg, var(--rose-900) 0%, #26081a 100%);
+}
+#clarisaa-page .xh-gate-card {
+  width: 100%; max-width: 420px; background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,180,205,0.28); border-radius: 24px; padding: 40px 30px;
+  backdrop-filter: blur(12px); box-shadow: 0 30px 70px -30px rgba(0,0,0,0.55);
+}
+#clarisaa-page .xh-gate h1 {
+  margin: 0 0 8px; font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-size: 1.5rem; letter-spacing: 0.02em; color: #ffdcea;
+}
+#clarisaa-page .xh-gate p { margin: 0 0 24px; font-size: 0.92rem; color: #ffdcea; opacity: 0.85; }
+#clarisaa-page .xh-gate input {
+  width: 100%; padding: 13px 16px; border-radius: 14px; border: 1px solid rgba(255,180,205,0.4);
+  background: rgba(255,255,255,0.08); color: #fff; font-family: var(--font-mono); font-size: 0.95rem;
+  outline: none; text-align: center; letter-spacing: 0.05em;
+}
+#clarisaa-page .xh-gate input::placeholder { color: rgba(255,220,234,0.55); }
+#clarisaa-page .xh-gate input:focus { border-color: var(--rose-300); box-shadow: 0 0 0 3px rgba(255,157,197,0.25); }
+#clarisaa-page .xh-gate-btn {
+  margin-top: 14px; width: 100%; padding: 13px; border: none; border-radius: 14px; cursor: pointer;
+  font-family: var(--font-body); font-weight: 700; letter-spacing: 0.02em;
+  background: linear-gradient(135deg, var(--rose-400), var(--rose-700)); color: #fff;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+#clarisaa-page .xh-gate-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -12px rgba(232,68,127,0.55); }
+#clarisaa-page .xh-gate-error { color: #ffb3c8; font-size: 0.82rem; margin-top: 10px; min-height: 1em; }
+#clarisaa-page .xh-gate-hint { margin-top: 18px; font-size: 0.78rem; color: rgba(255,220,234,0.6); }
+#clarisaa-page .xh-gate-hint a { color: #ffc9de; cursor: pointer; text-decoration: underline dotted; }
+
+/* ---------- layout ---------- */
+#clarisaa-page .xh-main { position: relative; z-index: 2; max-width: 720px; margin: 0 auto; padding: 0 22px 40px; }
+
+/* ---------- hero ---------- */
+#clarisaa-page .xh-hero { position: relative; min-height: 88vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 0 40px; }
+#clarisaa-page .xh-hero-orbit { position: absolute; width: 300px; height: 300px; top: 50%; left: 50%; transform: translate(-50%,-50%); color: var(--rose-300); opacity: 0.6; }
+#clarisaa-page .xh-hero-orbit svg { width: 100%; height: 100%; animation: xh-spin 34s linear infinite; }
+@keyframes xh-spin { to { transform: rotate(360deg); } }
+#clarisaa-page .xh-hero-eyebrow { position: relative; font-family: var(--font-mono); letter-spacing: 0.34em; font-size: 0.72rem; color: #ffffff; text-transform: uppercase; }
+#clarisaa-page .xh-hero-name {
+  position: relative; margin: 16px 0 0; font-family: var(--font-display); font-style: italic; font-weight: 600;
+  font-size: clamp(2.3rem, 8.2vw, 4.8rem); line-height: 1.05; color: var(--ink); letter-spacing: 0.005em;
+  animation: xh-rise 1s cubic-bezier(.2,.8,.2,1) both;
+}
+#clarisaa-page .xh-hero-sub {
+  position: relative; margin-top: 22px; max-width: 480px; font-size: clamp(0.95rem, 2.2vw, 1.06rem);
+  color: var(--ink-soft); animation: xh-rise 1s 0.18s cubic-bezier(.2,.8,.2,1) both;
+}
+#clarisaa-page .xh-scroll-cue {
+  position: relative; margin-top: 46px; display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: #ffffff; animation: xh-bob 2.6s ease-in-out infinite;
+}
+#clarisaa-page .xh-scroll-cue svg { width: 14px; height: 14px; }
+@keyframes xh-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes xh-bob { 0%,100% { transform: translateY(0); opacity: 0.7; } 50% { transform: translateY(6px); opacity: 1; } }
+
+/* ---------- section dividers (signature: orbit mark) ---------- */
+#clarisaa-page .xh-sec-head { position: relative; text-align: center; margin: 100px 0 34px; padding-bottom: 30px; }
+#clarisaa-page .xh-sec-head::after {
+  content: ""; position: absolute; left: 50%; bottom: 0; width: 0; height: 24px;
+  border-left: 1.5px dashed var(--rose-300); transform: translateX(-50%);
+}
+#clarisaa-page .xh-sec-mark { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center; color: #ffffff; }
+#clarisaa-page .xh-sec-mark svg { width: 18px; height: 18px; animation: xh-spin 20s linear infinite; }
+#clarisaa-page .xh-eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.32em; color: #ffffff; margin-top: 4px; text-transform: uppercase; }
+#clarisaa-page .xh-sec-head h2 {
+  margin: 8px 0 0; font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-size: clamp(1.5rem, 4.4vw, 2.2rem); color: var(--ink);
+}
+
+/* ---------- cards ---------- */
+#clarisaa-page .xh-card {
+  position: relative; background: linear-gradient(145deg, #d83d78 0%, #c92f68 100%); border: 1px solid rgba(255,255,255,0.20); border-radius: var(--radius);
+  padding: 32px 30px; margin: 0 0 22px; box-shadow: 0 22px 46px -30px var(--shadow-c);
+  opacity: 0; transform: translateY(26px); transition: opacity 0.65s ease, transform 0.65s cubic-bezier(.2,.8,.2,1);
+}
+#clarisaa-page .xh-card.xh-in { opacity: 1; transform: translateY(0); }
+#clarisaa-page .xh-card-icon {
+  display: inline-flex; width: 40px; height: 40px; border-radius: 50%; margin-bottom: 14px;
+  background: #ffffff; color: var(--rose-600); align-items: center; justify-content: center;
+}
+#clarisaa-page .xh-card-icon svg { width: 18px; height: 18px; }
+#clarisaa-page .xh-card h3 { margin: 0 0 10px; font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 1.26rem; color: #ffffff; }
+#clarisaa-page .xh-card p { margin: 0 0 10px; color: var(--ink); font-size: 1rem; line-height: 1.72; }
+#clarisaa-page .xh-card p:last-child { margin-bottom: 0; }
+
+#clarisaa-page .xh-ask { text-align: left; margin: 16px 0 4px; font-family: var(--font-display); font-style: italic; font-size: 1.06rem; color: #ffffff; }
+#clarisaa-page .xh-btn-row { position: relative; display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0 6px; min-height: 50px; }
+#clarisaa-page .xh-btn {
+  position: relative; padding: 13px 22px; border-radius: 999px; cursor: pointer; font-family: var(--font-body);
+  font-weight: 700; font-size: 0.92rem; letter-spacing: 0.01em; border: 1.5px solid transparent;
+  transition: transform 0.18s, box-shadow 0.18s; user-select: none; -webkit-tap-highlight-color: transparent;
+}
+#clarisaa-page .xh-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -16px var(--shadow-c); }
+#clarisaa-page .xh-btn:focus-visible { outline: 3px solid var(--rose-300); outline-offset: 3px; }
+#clarisaa-page .xh-btn-primary { background: linear-gradient(135deg, var(--rose-400), var(--rose-600)); color: #fff; }
+#clarisaa-page .xh-btn-outline { background: #ffffff; border-color: #ffffff; color: var(--rose-600); }
+#clarisaa-page .xh-btn-ghost { background: var(--blush-50); border-color: var(--blush-200); color: var(--rose-700); }
+#clarisaa-page .xh-dodge { transition: transform 0.22s cubic-bezier(.2,.8,.2,1); will-change: transform; }
+#clarisaa-page .xh-btn.xh-anim-shake { animation: xh-shake 0.5s ease; }
+@keyframes xh-shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-7px); } 50% { transform: translateX(7px); } 75% { transform: translateX(-4px); } }
+#clarisaa-page .xh-btn.xh-tiny { transform: scale(0.6); }
+#clarisaa-page .xh-btn.xh-anim-spin { animation: xh-spin-once 0.7s ease; }
+@keyframes xh-spin-once { to { transform: rotate(360deg); } }
+#clarisaa-page .xh-btn.xh-anim-flip { animation: xh-flip 0.6s ease; }
+@keyframes xh-flip { 50% { transform: rotateY(180deg); } }
+#clarisaa-page .xh-reply { min-height: 1.4em; margin-top: 8px; font-size: 0.9rem; color: #ffffff; font-style: italic; }
+
+/* ---------- spark burst (replaces emoji confetti) ---------- */
+#clarisaa-page .xh-spark-particle, .xh-spark-particle {
+  position: fixed; z-index: 65; pointer-events: none; width: 16px; height: 16px; color: var(--rose-500);
+  animation: xh-float-up 1.2s ease-out forwards;
+}
+.xh-spark-particle svg { width: 100%; height: 100%; }
+@keyframes xh-float-up { 0% { opacity: 0; transform: translateY(0) scale(0.5); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-100px) scale(1.15); } }
+
+/* ---------- finale ---------- */
+#clarisaa-page .xh-finale {
+  position: relative; margin-top: 90px; padding: 100px 26px 110px; text-align: center;
+  border-radius: 28px 28px 0 0; overflow: hidden;
+  background: linear-gradient(160deg, var(--rose-500), var(--rose-700));
+}
+#clarisaa-page .xh-finale::before { content: ""; position: absolute; inset: 0; background: radial-gradient(600px 380px at 50% 0%, rgba(255,255,255,0.16), transparent 60%); }
+#clarisaa-page .xh-finale-inner { position: relative; max-width: 520px; margin: 0 auto; }
+#clarisaa-page .xh-finale-mark { color: #fff; margin-bottom: 16px; }
+#clarisaa-page .xh-finale-mark svg { width: 28px; height: 28px; }
+#clarisaa-page .xh-finale h2 { font-family: var(--font-display); font-style: italic; font-weight: 600; color: #fff; font-size: clamp(1.9rem, 6vw, 3rem); margin: 0 0 16px; }
+#clarisaa-page .xh-finale p { color: rgba(255,255,255,0.92); font-size: 1.04rem; line-height: 1.72; }
+
+/* ---------- floating dot nav & back-to-top (replace removed header/footer nav) ---------- */
+#clarisaa-page .xh-dotnav { position: fixed; right: 22px; top: 50%; transform: translateY(-50%); z-index: 40; display: flex; flex-direction: column; gap: 10px; }
+#clarisaa-page .xh-dot { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--rose-400); background: transparent; padding: 0; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+#clarisaa-page .xh-dot.is-active { background: var(--rose-500); transform: scale(1.35); }
+#clarisaa-page .xh-backtotop {
+  position: fixed; right: 22px; bottom: 22px; z-index: 40; width: 46px; height: 46px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--rose-400), var(--rose-600)); color: #fff; border: none;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity 0.25s, transform 0.25s;
+  box-shadow: 0 14px 32px -14px var(--shadow-c);
+}
+#clarisaa-page .xh-backtotop.xh-show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+#clarisaa-page .xh-backtotop svg { width: 18px; height: 18px; }
+
+/* ---------- admin panel ---------- */
+#clarisaa-page .xh-admin {
+  position: fixed; z-index: 110; top: 0; right: 0; width: 100%; max-width: 440px; height: 100vh; overflow-y: auto;
+  background: linear-gradient(180deg, #b5225d 0%, #9f1d50 100%); border-left: 1px solid rgba(255,255,255,0.22); box-shadow: -22px 0 60px -24px rgba(156,35,80,0.4);
+  transform: translateX(100%); transition: transform 0.4s cubic-bezier(.2,.8,.2,1); padding: 24px 20px 60px; color: var(--ink);
+}
+#clarisaa-page .xh-admin.xh-open { transform: translateX(0); }
+#clarisaa-page .xh-admin h2 { font-family: var(--font-display); font-style: italic; margin: 0 0 4px; color: #ffffff; font-size: 1.28rem; }
+#clarisaa-page .xh-admin-sub { font-size: 0.8rem; color: #ffd6e5; margin: 0 0 18px; }
+#clarisaa-page .xh-admin .xh-field { margin-bottom: 14px; }
+#clarisaa-page .xh-admin label { display: block; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.03em; color: var(--rose-700); margin-bottom: 5px; }
+#clarisaa-page .xh-admin input, #clarisaa-page .xh-admin textarea, #clarisaa-page .xh-admin select {
+  width: 100%; padding: 9px 11px; border-radius: 10px; border: 1px solid var(--blush-200);
+  font-family: var(--font-body); font-size: 0.9rem; color: #ffffff; background: #8f1948; outline: none;
+}
+#clarisaa-page .xh-admin textarea { resize: vertical; min-height: 62px; }
+#clarisaa-page .xh-admin input:focus, #clarisaa-page .xh-admin textarea:focus, #clarisaa-page .xh-admin select:focus { border-color: var(--rose-400); }
+#clarisaa-page .xh-admin .xh-admin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+#clarisaa-page .xh-admin .xh-admin-actions button { flex: 1 1 auto; padding: 11px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; font-size: 0.85rem; font-family: var(--font-body); }
+#clarisaa-page .xh-admin .xh-save { background: linear-gradient(135deg, var(--rose-400), var(--rose-600)); color: #fff; }
+#clarisaa-page .xh-admin .xh-reset { background: var(--blush-100); color: var(--rose-700); border: 1px solid var(--blush-200) !important; }
+#clarisaa-page .xh-admin .xh-close { background: #ffffff; color: #a91f55; }
+#clarisaa-page .xh-sec-title { font-family: var(--font-display); font-style: italic; color: #ffffff; font-size: 1rem; margin: 24px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--blush-100); }
+#clarisaa-page .xh-mini-row { display: flex; gap: 8px; }
+#clarisaa-page .xh-mini-row > * { flex: 1; }
+#clarisaa-page .xh-toggle { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+#clarisaa-page .xh-toggle input { width: auto; }
+#clarisaa-page .xh-icon-btn { width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--blush-200); background: #ffffff; color: var(--rose-600); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex: 0 0 auto; }
+#clarisaa-page .xh-icon-btn svg { width: 16px; height: 16px; }
+#clarisaa-page .xh-icon-btn.xh-icon-danger { color: #ffffff; border-color: #ff9fc2; }
+#clarisaa-page .xh-icon-btn.xh-icon-danger:hover { background: #d83d78; }
+#clarisaa-page .xh-admin-section-block { border: 1px dashed var(--blush-200); border-radius: 16px; padding: 14px; margin-bottom: 16px; background: #b5225d; }
+#clarisaa-page .xh-admin-section-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+#clarisaa-page .xh-admin-section-tag { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; color: var(--rose-600); }
+#clarisaa-page .xh-card-block { border: 1px solid rgba(255,255,255,0.22); border-radius: 12px; padding: 12px; margin: 10px 0; background: #c92f68; }
+#clarisaa-page .xh-card-block h4 { margin: 0; font-size: 0.76rem; color: #ffffff; letter-spacing: 0.03em; }
+#clarisaa-page .xh-locked-note { font-size: 0.72rem; color: #ffd6e5; margin: 6px 0 10px; line-height: 1.4; }
+#clarisaa-page .xh-add-card-btn, #clarisaa-page .xh-add-section-btn {
+  display: inline-flex; align-items: center; gap: 6px; background: var(--blush-50); border: 1px dashed var(--rose-300);
+  color: var(--rose-600); border-radius: 10px; padding: 9px 12px; font-size: 0.8rem; font-weight: 700; cursor: pointer; margin-top: 4px;
+  font-family: var(--font-body);
+}
+#clarisaa-page .xh-add-card-btn svg, #clarisaa-page .xh-add-section-btn svg { width: 14px; height: 14px; }
+#clarisaa-page .xh-response-row { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--blush-100); font-size: 0.82rem; }
+#clarisaa-page .xh-response-time { color: #ffd6e5; font-family: var(--font-mono); font-size: 0.7rem; white-space: nowrap; }
+#clarisaa-page .xh-response-label { color: #ffffff; text-align: right; }
+#clarisaa-page .xh-admin-empty { font-size: 0.82rem; color: #ffd6e5; }
+#clarisaa-page .xh-admin-hint-text { font-size: 0.72rem; color: #ffd6e5; margin: -6px 0 12px; line-height: 1.5; }
+#clarisaa-page .xh-admin-footnote { font-size: 0.7rem; color: #ffd6e5; margin-top: 18px; line-height: 1.5; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 860px) {
+  #clarisaa-page .xh-dotnav { display: none; }
+  #clarisaa-page .xh-backtotop { width: 42px; height: 42px; right: 16px; bottom: 16px; }
+  #clarisaa-page .xh-card { padding: 26px 22px; }
+  #clarisaa-page .xh-hero-orbit { width: 230px; height: 230px; }
+  #clarisaa-page .xh-admin { max-width: 100%; }
+  #clarisaa-page .xh-btn { padding: 12px 18px; font-size: 0.88rem; }
+  #clarisaa-page .xh-finale { padding: 76px 20px 96px; border-radius: 22px 22px 0 0; }
+  #clarisaa-page .xh-main { padding: 0 18px 30px; }
+}
+  /* ---------- FINAL PINK SURFACE OVERRIDES ---------- */
+  #clarisaa-page .xh-card,
+  #clarisaa-page .xh-admin-section-block,
+  #clarisaa-page .xh-card-block,
+  #clarisaa-page .xh-response-row,
+  #clarisaa-page .xh-admin {
+    color: #ffffff;
+  }
+
+  #clarisaa-page .xh-card {
+    background: linear-gradient(145deg, #d83d78 0%, #c92f68 100%);
+    border-color: rgba(255,255,255,0.20);
+  }
+
+  #clarisaa-page .xh-admin-section-block {
+    background: #b5225d;
+    border-color: rgba(255,255,255,0.24);
+  }
+
+  #clarisaa-page .xh-response-row {
+    border-bottom-color: rgba(255,255,255,0.18);
+  }
+
+  #clarisaa-page .xh-admin input,
+  #clarisaa-page .xh-admin textarea,
+  #clarisaa-page .xh-admin select {
+    background: #8f1948;
+    color: #ffffff;
+    border-color: rgba(255,255,255,0.24);
+  }
+
+  #clarisaa-page .xh-admin input::placeholder,
+  #clarisaa-page .xh-admin textarea::placeholder {
+    color: rgba(255,255,255,0.62);
+  }
+
+  #clarisaa-page .xh-admin .xh-reset {
+    background: #e44b84;
+    color: #ffffff;
+    border-color: rgba(255,255,255,0.22) !important;
+  }
+
+  #clarisaa-page .xh-admin .xh-close {
+    background: #ffffff;
+    color: #a91f55;
+  }
+
+  #clarisaa-page .xh-admin .xh-icon-btn {
+    background: #ffffff;
+    color: #c92f68;
+    border-color: #ffffff;
+  }
+
+
+/* =====================================================================
+   X HORIZON / ODOO HARD ISOLATION
+   This page owns its typography, spacing, colors, controls and surfaces.
+   No global Odoo/site selectors are allowed to bleed into #clarisaa-page.
+   ===================================================================== */
+
+#clarisaa-page,
+#clarisaa-page * ,
+#clarisaa-page *::before,
+#clarisaa-page *::after {
+  box-sizing: border-box !important;
+}
+
+#clarisaa-page {
+  all: initial !important;
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  isolation: isolate !important;
+  contain: layout style paint !important;
+  color: #fff7fb !important;
+  background:
+    radial-gradient(1100px 640px at 82% -8%, #f06b9b 0%, transparent 58%),
+    radial-gradient(900px 700px at -10% 25%, #d83d78 0%, transparent 55%),
+    linear-gradient(180deg, #b5225d 0%, #c92f68 48%, #a91f55 100%) !important;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+  line-height: 1.6 !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+#clarisaa-page :where(h1,h2,h3,h4,h5,h6,p,ul,ol,li,figure,blockquote,form,fieldset,legend,button,input,textarea,select,article,section,main,nav,aside,div,span,a) {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+  line-height: inherit;
+}
+
+#clarisaa-page :where(h1,h2,h3,h4,h5,h6,p,span,div,article,section,main,nav,aside,button,input,textarea,select,a) {
+  color: inherit;
+  text-shadow: none;
+}
+
+#clarisaa-page button,
+#clarisaa-page input,
+#clarisaa-page textarea,
+#clarisaa-page select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  font: inherit !important;
+  letter-spacing: normal;
+  text-transform: none;
+  background-clip: padding-box;
+}
+
+#clarisaa-page button {
+  border-radius: 0;
+}
+
+#clarisaa-page a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#clarisaa-page img,
+#clarisaa-page svg {
+  vertical-align: middle;
+}
+
+#clarisaa-page svg {
+  overflow: visible;
+}
+
+#clarisaa-page [hidden] {
+  display: none !important;
+}
+
+/* Re-assert page components after the hard reset. */
+#clarisaa-page .xh-main {
+  position: relative !important;
+  z-index: 2 !important;
+  max-width: 720px !important;
+  margin: 0 auto !important;
+  padding: 0 22px 40px !important;
+}
+
+#clarisaa-page .xh-hero,
+#clarisaa-page .xh-section,
+#clarisaa-page .xh-finale {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+#clarisaa-page .xh-card {
+  width: 100% !important;
+}
+
+#clarisaa-page .xh-btn,
+#clarisaa-page .xh-gate-btn,
+#clarisaa-page .xh-backtotop,
+#clarisaa-page .xh-dot,
+#clarisaa-page .xh-add-card-btn,
+#clarisaa-page .xh-add-section-btn,
+#clarisaa-page .xh-icon-btn,
+#clarisaa-page .xh-admin-actions button {
+  text-transform: none !important;
+  letter-spacing: inherit;
+}
+
+#clarisaa-page .xh-gate input,
+#clarisaa-page .xh-admin input,
+#clarisaa-page .xh-admin textarea,
+#clarisaa-page .xh-admin select {
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#clarisaa-page .xh-gate input:focus,
+#clarisaa-page .xh-admin input:focus,
+#clarisaa-page .xh-admin textarea:focus,
+#clarisaa-page .xh-admin select:focus,
+#clarisaa-page button:focus {
+  outline-offset: 3px;
+}
+
+/* Prevent the page's generated spark particles from inheriting Odoo styles.
+   The original selector is intentionally preserved; this makes its visual
+   behavior deterministic without changing the JavaScript. */
+#clarisaa-page .xh-spark-particle {
+  position: fixed !important;
+  z-index: 2147482998 !important;
+  pointer-events: none !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--rose-500) !important;
+}
+
+/* =====================================================================
+   OUTER THEME LOCKDOWN — stop the surrounding Odoo/site theme from
+   painting page or header backgrounds black on top of this page.
+   This <style> block only lives on this one page, so these selectors
+   only ever apply here, not sitewide.
+   ===================================================================== */
+
+html, body,
+#wrapwrap, #wrap, .o_wrapwrap,
+main, #main,
+.oe_structure, .o_colored_level,
+.dropdown-menu, .o_mega_menu {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Hide the site header and footer entirely on this page. */
+#xhHeader,
+#xhFooter {
+  display: none !important;
+}
+
+/* =====================================================================
+   HEADER BRIDGE — pink only
+   The header is outside #clarisaa-page, so this narrowly targets only
+   the supplied X Horizon header. Footer is intentionally untouched.
+   ===================================================================== */
+
+#xhHeader {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255,255,255,.10), transparent 32%),
+    linear-gradient(180deg, #d83d78 0%, #c92f68 100%) !important;
+  background-color: #c92f68 !important;
+  background-image:
+    radial-gradient(circle at 18% 0%, rgba(255,255,255,.10), transparent 32%),
+    linear-gradient(180deg, #d83d78 0%, #c92f68 100%) !important;
+  border-bottom: 1px solid rgba(255,255,255,.22) !important;
+  box-shadow: 0 12px 36px rgba(118,19,63,.25) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html.xhHeaderTop #xhHeader,
+#xhHeader.xhAtTop,
+#xhHeader.xhAtTop:not(.xhScrolled),
+#xhHeader:not(.xhScrolled),
+html.xhHeaderScrolled #xhHeader,
+#xhHeader.xhScrolled {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255,255,255,.10), transparent 32%),
+    linear-gradient(180deg, #d83d78 0%, #c92f68 100%) !important;
+  background-color: #c92f68 !important;
+  background-image:
+    radial-gradient(circle at 18% 0%, rgba(255,255,255,.10), transparent 32%),
+    linear-gradient(180deg, #d83d78 0%, #c92f68 100%) !important;
+  border-bottom-color: rgba(255,255,255,.22) !important;
+  box-shadow: 0 12px 36px rgba(118,19,63,.25) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+#xhHeader .xhNav,
+#xhHeader .xhNavLink,
+#xhHeader .xhNavBtn,
+#xhHeader .xhAccountBtn,
+#xhHeader .xhMobileBtn,
+#xhHeader .xhDropdown,
+#xhHeader .xhHeaderInner {
+  font-family: Inter, Arial, sans-serif !important;
+}
+
+#xhHeader .xhDropdown {
+  background:
+    linear-gradient(180deg, rgba(185,35,93,.98), rgba(118,19,63,.98)) !important;
+  background-color: #b5225d !important;
+  background-image:
+    linear-gradient(180deg, rgba(185,35,93,.98), rgba(118,19,63,.98)) !important;
+  border-color: rgba(255,255,255,.22) !important;
+  box-shadow: 0 26px 80px rgba(118,19,63,.42) !important;
+}
+
+@media (max-width:1180px) {
+  #xhHeader .xhNav {
+    background:
+      linear-gradient(180deg, rgba(185,35,93,.98), rgba(118,19,63,.98)) !important;
+    background-color: #b5225d !important;
+    background-image:
+      linear-gradient(180deg, rgba(185,35,93,.98), rgba(118,19,63,.98)) !important;
+    border-color: rgba(255,255,255,.22) !important;
+    box-shadow: 0 30px 90px rgba(118,19,63,.45) !important;
+  }
+
+  #xhHeader .xhDropdown {
+    background: rgba(255,255,255,.09) !important;
+    background-color: rgba(255,255,255,.09) !important;
+    background-image: none !important;
+  }
+}
+
+#xhHeader .xhLogoImage,
+#xhHeader .xhLogo {
+  background: transparent !important;
+}
+
+</style>
+
+<script>
+(function () {
+  function xhHideChrome() {
+    ["xhHeader", "xhFooter"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.style.setProperty("display", "none", "important");
+    });
+  }
+  xhHideChrome();
+  document.addEventListener("DOMContentLoaded", xhHideChrome);
+  window.addEventListener("load", xhHideChrome);
+  if ("MutationObserver" in window) {
+    new MutationObserver(xhHideChrome).observe(document.documentElement, { childList: true, subtree: true });
+  }
+})();
+</script>
+
+<div id="clarisaa-page">
+
+  <div class="xh-progress" id="xh-progress"></div>
+  <div class="xh-stars" id="xh-stars" aria-hidden="true"></div>
+
+  <div class="xh-gate" id="xh-gate">
+    <div class="xh-gate-card" role="dialog" aria-label="Access">
+      <h1>Dr. Clary · Special</h1>
+      <p>This corner is reserved for someone worth thanking.<br>Enter the access key to continue.</p>
+      <input id="xh-gate-input" type="password" placeholder="Access key" aria-label="Access key" autocomplete="off">
+      <button class="xh-gate-btn" id="xh-gate-enter" type="button">Enter</button>
+      <div class="xh-gate-error" id="xh-gate-error" role="alert"></div>
+      <div class="xh-gate-hint">Don't have a key? <a id="xh-admin-hint">Reach out to the horizon keeper.</a></div>
+    </div>
+  </div>
+
+  <div id="xh-app-wrap" hidden="">
+    <main class="xh-main" id="xh-app"></main>
+    <nav class="xh-dotnav" id="xh-dotnav" aria-label="Section navigation"></nav>
+    <button class="xh-backtotop" id="xh-backtotop" type="button" aria-label="Back to top"></button>
+  </div>
+
+  <aside class="xh-admin" id="xh-admin" aria-label="Admin editor" aria-hidden="true">
+    <h2>X Horizon · Control Panel</h2>
+    <div class="xh-admin-sub">Edit the page, add sections, and review recorded responses. Changes preview live after Save.</div>
+
+    <div class="xh-sec-title">Identity</div>
+    <div class="xh-field"><label>Eyebrow label</label><input id="a-hero-eyebrow" type="text"></div>
+    <div class="xh-field"><label>Hero name</label><input id="a-hero-name" type="text"></div>
+    <div class="xh-field"><label>Hero subtitle</label><textarea id="a-hero-sub"></textarea></div>
+    <div class="xh-field"><label>Scroll cue text</label><input id="a-hero-scrollcue" type="text"></div>
+
+    <div class="xh-sec-title">Sections &amp; cards</div>
+    <div id="a-sections"></div>
+    <button type="button" class="xh-add-section-btn" id="a-add-section">Add new section</button>
+
+    <div class="xh-sec-title">Thank-you question</div>
+    <div class="xh-field"><label>Prompt line</label><input id="a-ad-ask" type="text"></div>
+    <div class="xh-mini-row">
+      <div class="xh-field"><label>Accept button</label><input id="a-ad-accept" type="text"></div>
+      <div class="xh-field"><label>Dodge button</label><input id="a-ad-dodge" type="text"></div>
+    </div>
+    <div class="xh-field"><label>Reply when accepted</label><input id="a-ad-accept-reply" type="text"></div>
+    <div class="xh-field"><label>Reply when caught dodging</label><input id="a-ad-dodge-reply" type="text"></div>
+
+    <div class="xh-sec-title">Reaction buttons</div>
+    <div class="xh-mini-row">
+      <div class="xh-field"><label>Button 1</label><input id="a-re-shake" type="text"></div>
+      <div class="xh-field"><label>Button 2</label><input id="a-re-tiny" type="text"></div>
+    </div>
+    <div class="xh-mini-row">
+      <div class="xh-field"><label>Button 3</label><input id="a-re-spin" type="text"></div>
+      <div class="xh-field"><label>Button 4</label><input id="a-re-flip" type="text"></div>
+    </div>
+    <div class="xh-field"><label>Button 5</label><input id="a-re-sarcasm" type="text"></div>
+
+    <div class="xh-sec-title">Final question</div>
+    <div class="xh-field"><label>Prompt line</label><input id="a-fi-ask" type="text"></div>
+    <div class="xh-mini-row">
+      <div class="xh-field"><label>Yes button</label><input id="a-fi-yes" type="text"></div>
+      <div class="xh-field"><label>No button</label><input id="a-fi-no" type="text"></div>
+    </div>
+    <div class="xh-field"><label>Reply to yes</label><input id="a-fi-yes-reply" type="text"></div>
+    <div class="xh-field"><label>Reply to no</label><input id="a-fi-no-reply" type="text"></div>
+
+    <div class="xh-sec-title">Finale</div>
+    <div class="xh-field"><label>Finale title</label><input id="a-finale-title" type="text"></div>
+    <div class="xh-field"><label>Finale message</label><textarea id="a-finale-body"></textarea></div>
+
+    <div class="xh-sec-title">Theme &amp; motion</div>
+    <div class="xh-toggle"><input type="checkbox" id="a-anim"><label for="a-anim" style="margin:0">Animations enabled</label></div>
+
+    <div class="xh-sec-title">Remote log (optional)</div>
+    <div class="xh-field"><label>Webhook URL</label><input id="a-webhook" type="text" placeholder="https://..."></div>
+    <p class="xh-admin-hint-text">If set, every recorded response is also sent here as JSON (for example, a Formspree endpoint) so you can see it from any device. Leave blank and everything stays local to whichever browser was used to view the page.</p>
+
+    <div class="xh-admin-actions">
+      <button class="xh-save" id="a-save" type="button">Save &amp; preview</button>
+      <button class="xh-reset" id="a-reset" type="button">Reset content</button>
+      <button class="xh-close" id="a-close" type="button">Close</button>
+    </div>
+
+    <div class="xh-sec-title">Responses</div>
+    <p class="xh-admin-hint-text">Recorded automatically when someone opens the page with the guest key and interacts with it. Stored in that browser only, unless a webhook is set above.</p>
+    <div id="a-responses"></div>
+    <div class="xh-admin-actions">
+      <button class="xh-reset" id="a-copy-log" type="button">Copy log</button>
+      <button class="xh-reset" id="a-clear-log" type="button">Clear log</button>
+    </div>
+
+    <p class="xh-admin-footnote">Note: this admin key lives in the page's front-end code only and is not secure authentication — treat it as a discreet lock, not a real one.</p>
+  </aside>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var XH = {};
+  window.XHClarisaa = XH;
+
+  /* ---- ACCESS KEYS ----
+     VIEWER_KEY -> opens the appreciation experience
+     ADMIN_KEY  -> opens the admin editor
+     Front-end only. Not secure auth. */
+  XH.VIEWER_KEY = "Pink is everything for me";
+  XH.ADMIN_KEY  = "XH-horizon-admin";
+  XH.STORAGE_KEY = "xh_clarisaa_v2_state";
+  XH.RESPONSES_KEY = "xh_clarisaa_v2_responses";
+
+  /* ---------------------------------------------------------------
+     ICONS — every visual mark on the page is one of these, drawn
+     as inline SVG (currentColor). No emoji characters anywhere.
+     --------------------------------------------------------------- */
+  XH.ICONS = {
+    ring: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><ellipse cx="12" cy="12" rx="9" ry="4.2" transform="rotate(-18 12 12)"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg>',
+    star: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>',
+    spark: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c.4 3 2 4.6 5 5-3 .4-4.6 2-5 5-.4-3-2-4.6-5-5 3-.4 4.6-2 5-5z"/></svg>',
+    heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 20s-7-4.5-9.5-9C1 7.8 2.6 4.8 5.8 4.4c2-.3 3.6.7 4.9 2.4 1.3-1.7 2.9-2.7 4.9-2.4 3.2.4 4.8 3.4 3.3 6.6C19 15.5 12 20 12 20z"/></svg>',
+    moon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 1 0 10.5 10.5z"/></svg>',
+    telescope: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l12-6 2 4-12 6z"/><path d="M13 9l6 2.2"/><circle cx="6.5" cy="17.5" r="2"/><path d="M9 14l-1 2.5"/></svg>',
+    galaxy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3a9 9 0 1 0 6.4 15.4c-3.6 1-8.4-.6-8.4-4.4 0-3 3-4 5.4-3 1.6.7 2 2.3.9 3.2"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg>',
+    "chevron-down": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>',
+    "chevron-up": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>',
+    "arrow-up": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+    trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>'
+  };
+  XH.icon = function (name, cls) {
+    var svg = XH.ICONS[name];
+    if (!svg) return "";
+    if (cls) svg = svg.replace("<svg ", '<svg class="' + cls + '" ');
+    return svg;
+  };
+  XH.ICON_NAMES = ["star", "spark", "heart", "moon", "telescope", "galaxy", "ring"];
+
+  /* ---------------------------------------------------------------
+     DEFAULT CONTENT — fully editable from the admin panel.
+     --------------------------------------------------------------- */
+  XH.defaults = {
+    hero: {
+      eyebrow: "X Horizon — Special",
+      name: "DR. CLARY",
+      sub: "A page built for one person, about the difference she's made.",
+      scrollCue: "Scroll to begin"
+    },
+    sections: [
+      {
+        id: "sec-intro", eyebrow: "One", title: "Why this exists",
+        cards: [
+          { id: "card-intro-1", icon: "spark", title: "Not really a thank-you card",
+            body: "A one-line thank-you felt too small, and a long speech felt worse. So this became the middle ground — a page instead of a paragraph, built section by section instead of said in one breath.I hope this will make your day",
+            interactive: null }
+        ]
+      },
+      {
+        id: "sec-thanks", eyebrow: "Your Availability on Social Media", title: "Thank you, genuinely for this",
+        cards: [
+          { id: "card-thanks-1", icon: "heart", title: "For the time, specifically",
+            body: "For answering questions that didn't have quick answers. For taking curiosity seriously instead of managing it. For the kind of guidance that costs the giver more time than it looks like from the outside.",
+            interactive: null },
+          { id: "card-thanks-2", icon: "star", title: "A question for you!",
+            body: "Can't a Postdoc be a Professor for her student..whom she didn't make only inspire but urged to get back to work..?",
+            interactive: "accept-dodge" }
+        ]
+      },
+      {
+        id: "sec-impact", eyebrow: "Your Qualities", title: "What turns you to make Special for us!",
+        cards: [
+          { id: "card-impact-1", icon: "ring", title: "Your spark and beauty!",
+            body: "You always loved the true version of yourself being irrespective of people thoughts.. You Proved to the world that you can do anything serious with your fashion style. You always shared your efforts and work with people without making your skills and knowledge a business. This the point we like the most and just for your deep inspiration and motivation we'll serve X HORIZON completely free.",
+            interactive: null },
+          { id: "card-impact-2", icon: "spark", title: "Need your choice !!!",
+            body: "What should I prefer for our Hosting (Node.js, Vercel, Supabase+github/ Odoo,Firebase only) ---one last--- what additional theme we should introduce to X HORIZON with black: pink only, white only, both.",
+            interactive: "reactions" }
+        ]
+      },
+      {
+        id: "sec-horizon", eyebrow: "Best Part", title: "Where this connects to X Horizon",
+        cards: [
+          { id: "card-horizon-1", icon: "galaxy", title: "Your Inspiration!",
+            body: "Being in Pakistan its rare to find astronomy lovers and finding a serious career in foreign like NASA.. with this dream it was too hard to achieve this here. I tried a lot!! when I got my undergraduate admission in PIEAS university Islamabad in Materials (it was your Grandfather dream)..it was too hard for me to make myself still hope for Space Career then You appeared as a star and bright up our pathways..You were always with us for inspiration and motivation when even shadow leaves in the dark .. Thanks a lot!",
+            interactive: null }
+        ]
+      },
+      {
+        id: "sec-person", eyebrow: "One Last thing!!", title: "Thanks for giving time !!!",
+        cards: [
+          { id: "card-person-1", icon: "moon", title: "A sweet memory",
+            body: "May in this small and rare life. We would never know each other but knowing you made the best chapter of my life as a startup of my professional life.. I don't know whether you like it or not. But this was a small tribute for you..As always Greatness begins from small steps!",
+            interactive: null }
+        ]
+      },
+      {
+        id: "sec-before-finale", eyebrow: "A happy Good Bye!", title: "Thanks for making us stay firm in our Career..",
+        cards: [
+          { id: "card-final-q", icon: "telescope", title: "I hope you like it atleast!!",
+            body: "Did you??",
+            interactive: "final" }
+        ]
+      }
+    ],
+    interactive: {
+      acceptDodge: {
+        ask: "So — do you accept me as your Student!!!?",
+        btnAccept: "Yes",
+        btnDodge: "Absolutely not",
+        acceptReply: "Good. That wasn't so bad.",
+        dodgeCaughtReply: "Caught you. The thank-you stands anyway."
+      },
+      reactions: {
+        btnShake: "Vercel Setup", btnTiny: "Odoo Setup", btnSpin: "Pink only", btnFlip: "White only", btnSarcasm: "Both",
+        replyShake: "Okay — that got a reaction out of both of us.",
+        replyTinyOn: "Small. Click again to undo.",
+        replyTinyOff: "Back to normal.",
+        replySpin: "There it goes.",
+        replyFlip: "And it's back.",
+        replySarcasm: "A little, yes. Leaving it anyway."
+      },
+      final: {
+        ask: "I expect for better one?",
+        btnYes: "Yes",
+        btnNo: "Not even close",
+        yesReply: "Then this next part will still land. Keep scrolling.",
+        noReply: "Good — We willl try our best again."
+      }
+    },
+    finale: {
+      title: "THANK YOU, DR. CLARY.",
+      body: "For the time, the patience, and the way you make curiosity feel worth protecting. This page is a small, permanent way of saying so. X HORIZON will never forget your teachings and inspiration.. We'll try our best to serve for humanity.. Thanks a lot again! You can leave or even watch the site. All is yours"
+    },
+    anim: true,
+    webhookUrl: ""
+  };
+
+  XH.state = JSON.parse(JSON.stringify(XH.defaults));
+  XH.responses = [];
+
+  /* ---------------------------------------------------------------
+     small helpers
+     --------------------------------------------------------------- */
+  XH.$ = function (id) { return document.getElementById(id); };
+  XH.val = function (id) { return XH.$(id).value; };
+  XH.esc = function (str) { return String(str == null ? "" : str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+  XH.escAttr = function (str) { return XH.esc(str).replace(/"/g, "&quot;"); };
+  XH.uid = function (prefix) { return prefix + "-" + Math.random().toString(36).slice(2, 9); };
+  XH.ORDINALS = ["One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen","Twenty"];
+  XH.ordinal = function (n) { return XH.ORDINALS[n - 1] || ("Section " + n); };
+
+  /* ---------------------------------------------------------------
+     persistence — content and responses are stored separately so
+     resetting content never erases the recorded response log.
+     --------------------------------------------------------------- */
+  XH.saveState = function () { try { localStorage.setItem(XH.STORAGE_KEY, JSON.stringify(XH.state)); } catch (e) {} };
+  XH.loadState = function () {
+    XH.state = JSON.parse(JSON.stringify(XH.defaults));
+    try {
+      var raw = localStorage.getItem(XH.STORAGE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && parsed.hero && parsed.sections && parsed.interactive && parsed.finale) XH.state = parsed;
+      }
+    } catch (e) {}
+  };
+  XH.saveResponses = function () { try { localStorage.setItem(XH.RESPONSES_KEY, JSON.stringify(XH.responses)); } catch (e) {} };
+  XH.loadResponses = function () {
+    try { var raw = localStorage.getItem(XH.RESPONSES_KEY); XH.responses = raw ? (JSON.parse(raw) || []) : []; }
+    catch (e) { XH.responses = []; }
+  };
+  XH.log = function (label) {
+    XH.responses.push({ time: Date.now(), label: label });
+    XH.saveResponses();
+    if (XH.$("xh-admin").classList.contains("xh-open")) XH.renderResponses();
+    if (XH.state.webhookUrl) {
+      try {
+        fetch(XH.state.webhookUrl, {
+          method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ label: label, time: new Date().toISOString(), page: "Dr. Clarissa Wright — Special" })
+        }).catch(function () {});
+      } catch (e) {}
+    }
+  };
+
+  /* ---------------------------------------------------------------
+     ambient stars
+     --------------------------------------------------------------- */
+  XH.buildStars = function () {
+    var box = XH.$("xh-stars");
+    var n = window.innerWidth < 700 ? 14 : 26;
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < n; i++) {
+      var s = document.createElement("div");
+      s.className = "xh-star";
+      s.style.left = Math.random() * 100 + "%";
+      s.style.top = Math.random() * 100 + "%";
+      s.style.animationDelay = (Math.random() * 5) + "s";
+      s.style.opacity = (0.15 + Math.random() * 0.35);
+      var sz = 1.5 + Math.random() * 2;
+      s.style.width = sz + "px"; s.style.height = sz + "px";
+      frag.appendChild(s);
+    }
+    box.appendChild(frag);
+  };
+
+  /* ---------------------------------------------------------------
+     RENDER — the entire viewer-facing page is built from XH.state.
+     --------------------------------------------------------------- */
+  XH.renderCard = function (card) {
+    var iconSvg = card.icon && XH.ICONS[card.icon] ? '<span class="xh-card-icon">' + XH.icon(card.icon) + "</span>" : "";
+    var html = '<article class="xh-card" data-card-id="' + card.id + '">' + iconSvg +
+      "<h3>" + XH.esc(card.title) + "</h3>" +
+      "<p>" + XH.esc(card.body) + "</p>";
+
+    if (card.interactive === "accept-dodge") {
+      var d = XH.state.interactive.acceptDodge;
+      html += '<div class="xh-ask">' + XH.esc(d.ask) + "</div>" +
+        '<div class="xh-btn-row">' +
+          '<button type="button" class="xh-btn xh-btn-primary" data-act="accept">' + XH.esc(d.btnAccept) + "</button>" +
+          '<button type="button" class="xh-btn xh-btn-outline xh-dodge" data-act="dodge">' + XH.esc(d.btnDodge) + "</button>" +
+        "</div>" +
+        '<div class="xh-reply" data-reply="accept-dodge"></div>';
+    } else if (card.interactive === "reactions") {
+      var r = XH.state.interactive.reactions;
+      html += '<div class="xh-btn-row" data-row="reactions">' +
+          '<button type="button" class="xh-btn xh-btn-ghost" data-act="shake">' + XH.esc(r.btnShake) + "</button>" +
+          '<button type="button" class="xh-btn xh-btn-ghost" data-act="tiny">' + XH.esc(r.btnTiny) + "</button>" +
+          '<button type="button" class="xh-btn xh-btn-ghost" data-act="spin">' + XH.esc(r.btnSpin) + "</button>" +
+          '<button type="button" class="xh-btn xh-btn-ghost" data-act="flip">' + XH.esc(r.btnFlip) + "</button>" +
+          '<button type="button" class="xh-btn xh-btn-ghost" data-act="sarcasm">' + XH.esc(r.btnSarcasm) + "</button>" +
+        "</div>" +
+        '<div class="xh-reply" data-reply="reactions"></div>';
+    } else if (card.interactive === "final") {
+      var f = XH.state.interactive.final;
+      html += '<div class="xh-ask">' + XH.esc(f.ask) + "</div>" +
+        '<div class="xh-btn-row">' +
+          '<button type="button" class="xh-btn xh-btn-primary" data-act="final-yes">' + XH.esc(f.btnYes) + "</button>" +
+          '<button type="button" class="xh-btn xh-btn-outline xh-dodge" data-act="final-no">' + XH.esc(f.btnNo) + "</button>" +
+        "</div>" +
+        '<div class="xh-reply" data-reply="final"></div>';
+    }
+    html += "</article>";
+    return html;
+  };
+
+  XH.render = function () {
+    var s = XH.state;
+    var html = "";
+
+    html += '<section class="xh-hero" id="sec-hero" data-nav-label="Start">' +
+      '<div class="xh-hero-orbit" aria-hidden="true">' + XH.icon("ring") + "</div>" +
+      '<div class="xh-hero-eyebrow">' + XH.esc(s.hero.eyebrow) + "</div>" +
+      '<h1 class="xh-hero-name">' + XH.esc(s.hero.name) + "</h1>" +
+      '<p class="xh-hero-sub">' + XH.esc(s.hero.sub) + "</p>" +
+      '<div class="xh-scroll-cue">' + XH.esc(s.hero.scrollCue) + XH.icon("chevron-down") + "</div>" +
+      "</section>";
+
+    s.sections.forEach(function (sec) {
+      html += '<section class="xh-section" id="' + sec.id + '" data-nav-label="' + XH.escAttr(sec.title) + '">' +
+        '<div class="xh-sec-head"><span class="xh-sec-mark">' + XH.icon("ring") + '</span><div class="xh-eyebrow">' + XH.esc(sec.eyebrow) + "</div><h2>" + XH.esc(sec.title) + "</h2></div>";
+      sec.cards.forEach(function (card) { html += XH.renderCard(card); });
+      html += "</section>";
+    });
+
+    html += '<section class="xh-finale" id="sec-finale" data-nav-label="Finale">' +
+      '<div class="xh-finale-inner">' +
+        '<div class="xh-finale-mark">' + XH.icon("spark") + "</div>" +
+        "<h2>" + XH.esc(s.finale.title) + "</h2>" +
+        "<p>" + XH.esc(s.finale.body) + "</p>" +
+      "</div>" +
+      "</section>";
+
+    XH.$("xh-app").innerHTML = html;
+
+    var root = XH.$("clarisaa-page");
+    if (s.anim) root.classList.remove("xh-no-anim"); else root.classList.add("xh-no-anim");
+
+    XH.wireInteractiveCards();
+    XH.buildDotNav();
+    XH.initReveal();
+  };
+
+  /* ---------------------------------------------------------------
+     dodge mechanic + interaction wiring
+     --------------------------------------------------------------- */
+  XH.initDodge = function (btn, onCaught) {
+    function evade(e) {
+      var r = btn.getBoundingClientRect();
+      var row = btn.parentElement.getBoundingClientRect();
+      var cx = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : null);
+      var cy = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : null);
+      if (cx === null) return;
+      var bx = r.left + r.width / 2, by = r.top + r.height / 2;
+      var dist = Math.hypot(cx - bx, cy - by);
+      if (dist < 85) {
+        var maxDX = Math.max(0, (row.width - r.width) / 2 - 6);
+        var dx = Math.max(-maxDX, Math.min(maxDX, (bx - cx) * 0.6));
+        var dy = Math.max(-16, Math.min(16, (by - cy) * 0.4));
+        btn.style.transform = "translate(" + dx + "px," + dy + "px)";
+      }
+    }
+    document.addEventListener("mousemove", evade);
+    btn.addEventListener("touchmove", evade, { passive: true });
+    btn.addEventListener("click", function () { onCaught(); });
+  };
+
+  XH.spark = function (el) {
+    var r = el.getBoundingClientRect();
+    var x = r.left + r.width / 2, y = r.top;
+    for (var i = 0; i < 6; i++) {
+      var name = XH.ICON_NAMES[Math.floor(Math.random() * 3)];
+      var b = document.createElement("div");
+      b.className = "xh-spark-particle";
+      b.innerHTML = XH.icon(name);
+      b.style.left = (x + (Math.random() * 70 - 35)) + "px";
+      b.style.top = y + "px";
+      b.style.animationDelay = (i * 0.05) + "s";
+      document.body.appendChild(b);
+      (function (node) { setTimeout(function () { node.remove(); }, 1300); })(b);
+    }
+  };
+
+  XH.wireInteractiveCards = function () {
+    var app = XH.$("xh-app");
+    var d = XH.state.interactive.acceptDodge, f = XH.state.interactive.final;
+
+    var acceptBtn = app.querySelector('[data-act="accept"]');
+    if (acceptBtn) acceptBtn.addEventListener("click", function () {
+      XH.spark(acceptBtn);
+      acceptBtn.closest(".xh-card").querySelector('[data-reply="accept-dodge"]').textContent = d.acceptReply;
+      XH.log("Accepted the thank-you.");
+    });
+    var dodgeBtn = app.querySelector('[data-act="dodge"]');
+    if (dodgeBtn) XH.initDodge(dodgeBtn, function () {
+      dodgeBtn.closest(".xh-card").querySelector('[data-reply="accept-dodge"]').textContent = d.dodgeCaughtReply;
+      XH.spark(dodgeBtn);
+      XH.log("Tried to dodge the thank-you — caught anyway.");
+    });
+
+    app.querySelectorAll('[data-row="reactions"] .xh-btn').forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var act = btn.getAttribute("data-act");
+        var reply = btn.closest(".xh-card").querySelector('[data-reply="reactions"]');
+        var r = XH.state.interactive.reactions;
+        if (act === "shake") { btn.classList.remove("xh-anim-shake"); void btn.offsetWidth; btn.classList.add("xh-anim-shake"); reply.textContent = r.replyShake; }
+        else if (act === "tiny") { btn.classList.toggle("xh-tiny"); reply.textContent = btn.classList.contains("xh-tiny") ? r.replyTinyOn : r.replyTinyOff; }
+        else if (act === "spin") { btn.classList.remove("xh-anim-spin"); void btn.offsetWidth; btn.classList.add("xh-anim-spin"); reply.textContent = r.replySpin; }
+        else if (act === "flip") { btn.classList.remove("xh-anim-flip"); void btn.offsetWidth; btn.classList.add("xh-anim-flip"); reply.textContent = r.replyFlip; }
+        else if (act === "sarcasm") { reply.textContent = r.replySarcasm; XH.spark(btn); }
+        XH.log("Reaction: " + btn.textContent.trim());
+      });
+    });
+
+    var finalYes = app.querySelector('[data-act="final-yes"]');
+    if (finalYes) finalYes.addEventListener("click", function () {
+      XH.spark(finalYes);
+      finalYes.closest(".xh-card").querySelector('[data-reply="final"]').textContent = f.yesReply;
+      XH.log("Final question: answered yes.");
+      setTimeout(function () { XH.$("sec-finale").scrollIntoView({ behavior: "smooth", block: "center" }); }, 900);
+    });
+    var finalNo = app.querySelector('[data-act="final-no"]');
+    if (finalNo) XH.initDodge(finalNo, function () {
+      finalNo.closest(".xh-card").querySelector('[data-reply="final"]').textContent = f.noReply;
+      XH.spark(finalNo);
+      XH.log("Final question: answered no (caught).");
+      setTimeout(function () { XH.$("sec-finale").scrollIntoView({ behavior: "smooth", block: "center" }); }, 700);
+    });
+  };
+
+  /* ---------------------------------------------------------------
+     reveal on scroll, progress bar, dot nav, back-to-top
+     --------------------------------------------------------------- */
+  XH.initReveal = function () {
+    var cards = document.querySelectorAll("#clarisaa-page .xh-card");
+    if (!("IntersectionObserver" in window)) { cards.forEach(function (c) { c.classList.add("xh-in"); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("xh-in"); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    cards.forEach(function (c) { io.observe(c); });
+  };
+
+  XH.initProgress = function () {
+    var bar = XH.$("xh-progress");
+    function onScroll() {
+      var st = window.scrollY || document.documentElement.scrollTop;
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (h > 0 ? (st / h) * 100 : 0) + "%";
+      XH.updateDotNav();
+      XH.updateBackToTop();
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  };
+
+  XH.buildDotNav = function () {
+    var nav = XH.$("xh-dotnav");
+    var marks = document.querySelectorAll("#clarisaa-page .xh-hero, #clarisaa-page .xh-section, #clarisaa-page .xh-finale");
+    nav.innerHTML = "";
+    marks.forEach(function (sec) {
+      var label = sec.getAttribute("data-nav-label") || sec.id;
+      var dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "xh-dot";
+      dot.setAttribute("data-target", sec.id);
+      dot.setAttribute("aria-label", label);
+      dot.title = label;
+      dot.addEventListener("click", function () { sec.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      nav.appendChild(dot);
+    });
+    XH.updateDotNav();
+  };
+  XH.updateDotNav = function () {
+    var marks = document.querySelectorAll("#clarisaa-page .xh-hero, #clarisaa-page .xh-section, #clarisaa-page .xh-finale");
+    var dots = document.querySelectorAll("#clarisaa-page .xh-dot");
+    var cur = null;
+    marks.forEach(function (sec) { if (sec.getBoundingClientRect().top < 160) cur = sec.id; });
+    dots.forEach(function (d) { d.classList.toggle("is-active", d.getAttribute("data-target") === cur); });
+  };
+
+  XH.initBackToTop = function () {
+    var b = XH.$("xh-backtotop");
+    b.innerHTML = XH.icon("arrow-up");
+    b.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
+  };
+  XH.updateBackToTop = function () {
+    var b = XH.$("xh-backtotop"), hero = XH.$("sec-hero");
+    if (!hero || !b) return;
+    b.classList.toggle("xh-show", hero.getBoundingClientRect().bottom < 0);
+  };
+
+  /* ---------------------------------------------------------------
+     ADMIN — identity/messages are static fields; sections, cards
+     and the response log are rendered dynamically from state.
+     --------------------------------------------------------------- */
+  XH.fillAdminStatic = function () {
+    var s = XH.state;
+    XH.$("a-hero-eyebrow").value = s.hero.eyebrow;
+    XH.$("a-hero-name").value = s.hero.name;
+    XH.$("a-hero-sub").value = s.hero.sub;
+    XH.$("a-hero-scrollcue").value = s.hero.scrollCue;
+    XH.$("a-ad-ask").value = s.interactive.acceptDodge.ask;
+    XH.$("a-ad-accept").value = s.interactive.acceptDodge.btnAccept;
+    XH.$("a-ad-dodge").value = s.interactive.acceptDodge.btnDodge;
+    XH.$("a-ad-accept-reply").value = s.interactive.acceptDodge.acceptReply;
+    XH.$("a-ad-dodge-reply").value = s.interactive.acceptDodge.dodgeCaughtReply;
+    XH.$("a-re-shake").value = s.interactive.reactions.btnShake;
+    XH.$("a-re-tiny").value = s.interactive.reactions.btnTiny;
+    XH.$("a-re-spin").value = s.interactive.reactions.btnSpin;
+    XH.$("a-re-flip").value = s.interactive.reactions.btnFlip;
+    XH.$("a-re-sarcasm").value = s.interactive.reactions.btnSarcasm;
+    XH.$("a-fi-ask").value = s.interactive.final.ask;
+    XH.$("a-fi-yes").value = s.interactive.final.btnYes;
+    XH.$("a-fi-no").value = s.interactive.final.btnNo;
+    XH.$("a-fi-yes-reply").value = s.interactive.final.yesReply;
+    XH.$("a-fi-no-reply").value = s.interactive.final.noReply;
+    XH.$("a-finale-title").value = s.finale.title;
+    XH.$("a-finale-body").value = s.finale.body;
+    XH.$("a-anim").checked = s.anim;
+    XH.$("a-webhook").value = s.webhookUrl || "";
+  };
+
+  XH.readAdminStatic = function () {
+    var s = XH.state;
+    s.hero.eyebrow = XH.val("a-hero-eyebrow");
+    s.hero.name = XH.val("a-hero-name");
+    s.hero.sub = XH.val("a-hero-sub");
+    s.hero.scrollCue = XH.val("a-hero-scrollcue");
+    s.interactive.acceptDodge.ask = XH.val("a-ad-ask");
+    s.interactive.acceptDodge.btnAccept = XH.val("a-ad-accept");
+    s.interactive.acceptDodge.btnDodge = XH.val("a-ad-dodge");
+    s.interactive.acceptDodge.acceptReply = XH.val("a-ad-accept-reply");
+    s.interactive.acceptDodge.dodgeCaughtReply = XH.val("a-ad-dodge-reply");
+    s.interactive.reactions.btnShake = XH.val("a-re-shake");
+    s.interactive.reactions.btnTiny = XH.val("a-re-tiny");
+    s.interactive.reactions.btnSpin = XH.val("a-re-spin");
+    s.interactive.reactions.btnFlip = XH.val("a-re-flip");
+    s.interactive.reactions.btnSarcasm = XH.val("a-re-sarcasm");
+    s.interactive.final.ask = XH.val("a-fi-ask");
+    s.interactive.final.btnYes = XH.val("a-fi-yes");
+    s.interactive.final.btnNo = XH.val("a-fi-no");
+    s.interactive.final.yesReply = XH.val("a-fi-yes-reply");
+    s.interactive.final.noReply = XH.val("a-fi-no-reply");
+    s.finale.title = XH.val("a-finale-title");
+    s.finale.body = XH.val("a-finale-body");
+    s.anim = XH.$("a-anim").checked;
+    s.webhookUrl = XH.val("a-webhook").trim();
+  };
+
+  XH.iconOptions = function (selected) {
+    return XH.ICON_NAMES.map(function (n) { return '<option value="' + n + '"' + (n === selected ? " selected" : "") + ">" + n + "</option>"; }).join("");
+  };
+
+  XH.renderAdminSections = function () {
+    var box = XH.$("a-sections");
+    box.innerHTML = "";
+    XH.state.sections.forEach(function (sec, si) {
+      var wrap = document.createElement("div");
+      wrap.className = "xh-admin-section-block";
+      wrap.innerHTML =
+        '<div class="xh-admin-section-head">' +
+          '<span class="xh-admin-section-tag">SECTION ' + (si + 1) + "</span>" +
+          '<div class="xh-mini-row" style="flex:0 0 auto">' +
+            '<button type="button" class="xh-icon-btn" data-sec-up="' + si + '" title="Move up">' + XH.icon("chevron-up") + "</button>" +
+            '<button type="button" class="xh-icon-btn" data-sec-down="' + si + '" title="Move down">' + XH.icon("chevron-down") + "</button>" +
+            '<button type="button" class="xh-icon-btn xh-icon-danger" data-sec-del="' + si + '" title="Delete section">' + XH.icon("trash") + "</button>" +
+          "</div>" +
+        "</div>" +
+        '<div class="xh-field"><label>Eyebrow label</label><input type="text" data-sec="' + si + '" data-sk="eyebrow" value="' + XH.escAttr(sec.eyebrow) + '"></div>' +
+        '<div class="xh-field"><label>Section title</label><input type="text" data-sec="' + si + '" data-sk="title" value="' + XH.escAttr(sec.title) + '"></div>' +
+        '<div class="xh-admin-cards" data-cards-for="' + si + '"></div>' +
+        '<button type="button" class="xh-add-card-btn" data-add-card="' + si + '">' + XH.icon("plus") + " Add card to this section</button>";
+      box.appendChild(wrap);
+
+      var cardsBox = wrap.querySelector('[data-cards-for="' + si + '"]');
+      sec.cards.forEach(function (card, ci) {
+        var cb = document.createElement("div");
+        cb.className = "xh-card-block";
+        var lockedNote = card.interactive ? '<div class="xh-locked-note">Powers a built-in interaction — text and icon are editable, but this card can\'t be removed.</div>' : "";
+        cb.innerHTML =
+          '<div class="xh-admin-section-head">' +
+            "<h4>CARD " + (ci + 1) + (card.interactive ? " · LOCKED" : "") + "</h4>" +
+            '<div class="xh-mini-row" style="flex:0 0 auto">' +
+              '<button type="button" class="xh-icon-btn" data-card-up="' + si + ":" + ci + '" title="Move up">' + XH.icon("chevron-up") + "</button>" +
+              '<button type="button" class="xh-icon-btn" data-card-down="' + si + ":" + ci + '" title="Move down">' + XH.icon("chevron-down") + "</button>" +
+              (card.interactive ? "" : '<button type="button" class="xh-icon-btn xh-icon-danger" data-card-del="' + si + ":" + ci + '" title="Delete card">' + XH.icon("trash") + "</button>") +
+            "</div>" +
+          "</div>" +
+          lockedNote +
+          '<div class="xh-field"><label>Icon</label><select data-card="' + si + ":" + ci + '" data-ck="icon">' + XH.iconOptions(card.icon) + "</select></div>" +
+          '<div class="xh-field"><label>Title</label><input type="text" data-card="' + si + ":" + ci + '" data-ck="title" value="' + XH.escAttr(card.title) + '"></div>' +
+          '<div class="xh-field"><label>Body</label><textarea data-card="' + si + ":" + ci + '" data-ck="body">' + XH.esc(card.body) + "</textarea></div>";
+        cardsBox.appendChild(cb);
+      });
+    });
+
+    box.querySelectorAll("[data-sec][data-sk]").forEach(function (el) {
+      el.addEventListener("input", function () { XH.state.sections[+el.getAttribute("data-sec")][el.getAttribute("data-sk")] = el.value; });
+    });
+    box.querySelectorAll("[data-card][data-ck]").forEach(function (el) {
+      el.addEventListener("input", function () {
+        var p = el.getAttribute("data-card").split(":");
+        XH.state.sections[+p[0]].cards[+p[1]][el.getAttribute("data-ck")] = el.value;
+      });
+    });
+    box.querySelectorAll("[data-sec-up]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var i = +b.getAttribute("data-sec-up"); var arr = XH.state.sections;
+        if (i > 0) { var t = arr[i]; arr[i] = arr[i - 1]; arr[i - 1] = t; XH.renderAdminSections(); }
+      });
+    });
+    box.querySelectorAll("[data-sec-down]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var i = +b.getAttribute("data-sec-down"); var arr = XH.state.sections;
+        if (i < arr.length - 1) { var t = arr[i]; arr[i] = arr[i + 1]; arr[i + 1] = t; XH.renderAdminSections(); }
+      });
+    });
+    box.querySelectorAll("[data-sec-del]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var i = +b.getAttribute("data-sec-del"); var sec = XH.state.sections[i];
+        if (sec.cards.some(function (c) { return c.interactive; })) { alert("This section holds a built-in interaction and can't be deleted. You can still edit or reorder it."); return; }
+        if (confirm('Delete "' + sec.title + '" and its card(s)?')) { XH.state.sections.splice(i, 1); XH.renderAdminSections(); }
+      });
+    });
+    box.querySelectorAll("[data-card-del]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var p = b.getAttribute("data-card-del").split(":"); var si = +p[0], ci = +p[1];
+        if (confirm("Delete this card?")) { XH.state.sections[si].cards.splice(ci, 1); XH.renderAdminSections(); }
+      });
+    });
+    box.querySelectorAll("[data-card-up]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var p = b.getAttribute("data-card-up").split(":"); var si = +p[0], ci = +p[1]; var arr = XH.state.sections[si].cards;
+        if (ci > 0) { var t = arr[ci]; arr[ci] = arr[ci - 1]; arr[ci - 1] = t; XH.renderAdminSections(); }
+      });
+    });
+    box.querySelectorAll("[data-card-down]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var p = b.getAttribute("data-card-down").split(":"); var si = +p[0], ci = +p[1]; var arr = XH.state.sections[si].cards;
+        if (ci < arr.length - 1) { var t = arr[ci]; arr[ci] = arr[ci + 1]; arr[ci + 1] = t; XH.renderAdminSections(); }
+      });
+    });
+    box.querySelectorAll("[data-add-card]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var si = +b.getAttribute("data-add-card");
+        XH.state.sections[si].cards.push({ id: XH.uid("card"), icon: "star", title: "New card", body: "Write something here.", interactive: null });
+        XH.renderAdminSections();
+      });
+    });
+  };
+
+  XH.renderResponses = function () {
+    var box = XH.$("a-responses");
+    var list = XH.responses.slice().reverse();
+    if (!list.length) { box.innerHTML = '<p class="xh-admin-empty">No responses recorded yet. Entries appear here once someone opens the page with the guest key and interacts with it.</p>'; return; }
+    box.innerHTML = list.map(function (r) {
+      return '<div class="xh-response-row"><span class="xh-response-time">' + XH.esc(new Date(r.time).toLocaleString()) + '</span><span class="xh-response-label">' + XH.esc(r.label) + "</span></div>";
+    }).join("");
+  };
+
+  XH.openAdmin = function () {
+    XH.fillAdminStatic();
+    XH.renderAdminSections();
+    XH.renderResponses();
+    XH.$("xh-admin").classList.add("xh-open");
+    XH.$("xh-admin").setAttribute("aria-hidden", "false");
+  };
+  XH.closeAdmin = function () { XH.$("xh-admin").classList.remove("xh-open"); XH.$("xh-admin").setAttribute("aria-hidden", "true"); };
+  XH.toggleAdmin = function () { if (XH.$("xh-admin").classList.contains("xh-open")) XH.closeAdmin(); else XH.openAdmin(); };
+
+  XH.initAdminActions = function () {
+    XH.$("a-save").addEventListener("click", function () {
+      XH.readAdminStatic();
+      XH.saveState();
+      if (!XH.$("xh-app-wrap").hidden) XH.render();
+    });
+    XH.$("a-reset").addEventListener("click", function () {
+      if (!confirm("Reset all content back to defaults? Your sections and cards will be replaced.")) return;
+      XH.state = JSON.parse(JSON.stringify(XH.defaults));
+      XH.saveState();
+      XH.fillAdminStatic();
+      XH.renderAdminSections();
+      if (!XH.$("xh-app-wrap").hidden) XH.render();
+    });
+    XH.$("a-close").addEventListener("click", XH.closeAdmin);
+    XH.$("a-add-section").addEventListener("click", function () {
+      XH.state.sections.push({ id: XH.uid("sec"), eyebrow: XH.ordinal(XH.state.sections.length + 1), title: "New section", cards: [{ id: XH.uid("card"), icon: "star", title: "New card", body: "Write something here.", interactive: null }] });
+      XH.renderAdminSections();
+    });
+    XH.$("a-clear-log").addEventListener("click", function () {
+      if (!confirm("Clear all recorded responses? This can't be undone.")) return;
+      XH.responses = []; XH.saveResponses(); XH.renderResponses();
+    });
+    XH.$("a-copy-log").addEventListener("click", function () {
+      var text = XH.responses.slice().reverse().map(function (r) { return new Date(r.time).toLocaleString() + " — " + r.label; }).join("\n") || "No responses recorded yet.";
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(function () {});
+    });
+  };
+
+  /* ---------------------------------------------------------------
+     gate
+     --------------------------------------------------------------- */
+  XH.initGate = function () {
+    var gate = XH.$("xh-gate"), input = XH.$("xh-gate-input"), err = XH.$("xh-gate-error");
+
+    function open(mode) {
+      gate.style.display = "none";
+      XH.$("xh-app-wrap").hidden = false;
+      XH.render();
+      XH.initProgress();
+      XH.initBackToTop();
+      if (mode === "viewer") XH.log("Opened the page.");
+      if (mode === "admin") XH.openAdmin();
+    }
+    function tryEnter() {
+      var v = input.value.trim();
+      if (v === XH.VIEWER_KEY) { err.textContent = ""; open("viewer"); }
+      else if (v === XH.ADMIN_KEY) { err.textContent = ""; open("admin"); }
+      else { err.textContent = "That key doesn't open this page."; input.value = ""; input.focus(); }
+    }
+    XH.$("xh-gate-enter").addEventListener("click", tryEnter);
+    input.addEventListener("keydown", function (e) { if (e.key === "Enter") tryEnter(); });
+    XH.$("xh-admin-hint").addEventListener("click", function (e) {
+      e.preventDefault(); input.value = ""; input.placeholder = "Admin key"; input.focus();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.ctrlKey && e.altKey && (e.key === "a" || e.key === "A")) {
+        if (XH.$("xh-app-wrap").hidden) { input.placeholder = "Admin key"; input.focus(); }
+        else { XH.toggleAdmin(); }
+      }
+    });
+  };
+
+  XH.init = function () {
+    XH.loadState();
+    XH.loadResponses();
+    XH.buildStars();
+    XH.fillAdminStatic();
+    XH.renderAdminSections();
+    XH.renderResponses();
+    XH.initAdminActions();
+    XH.initGate();
+  };
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", XH.init);
+  else XH.init();
+})();
+</script>
