@@ -1,0 +1,588 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Islam &amp; Space Science — Muslim Special</title>
+
+
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+
+<style>
+  /* ===================================================================
+     DESIGN TOKENS
+     Dark black + neutral white theme, per the brief. No colour accents
+     are introduced — contrast and typography carry the hierarchy.
+     =================================================================== */
+  :root{
+    --bg:        #050504;   /* page background — near-black */
+    --panel:     #0e0e0c;   /* ayah card background — one step up from bg */
+    --panel-2:   #131311;   /* hover / secondary surface */
+    --line:      #2a2a26;   /* visible hairline borders */
+    --line-soft: #1a1a17;   /* faint dividers */
+    --ink:       #f3f2ec;   /* primary neutral-white text */
+    --ink-dim:   #a7a69c;   /* secondary / muted text */
+    --ink-faint: #6f6e65;   /* tertiary text, meta labels */
+
+    --font-arabic: 'Amiri', 'Traditional Arabic', serif;
+    --font-serif:  'Newsreader', Georgia, serif;
+    --font-sans:   'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    --content-w: 760px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ background: var(--bg); }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Respect users who've asked for reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  a{ color: var(--ink); }
+
+  /* ===================================================================
+     LAYOUT SHELL
+     =================================================================== */
+  .page{
+    max-width: var(--content-w);
+    margin: 0 auto;
+    padding: 72px 24px 96px;
+  }
+
+  /* ===================================================================
+     GEOMETRIC STAR MOTIF
+     A simple eight-pointed star (two overlapping squares), a recurring
+     device in Islamic geometric art. Pure CSS, monochrome, used once
+     as the page's signature visual and again as a quiet divider
+     before the final ayah — never repeated per-card so it stays a
+     deliberate accent rather than decoration.
+     =================================================================== */
+  .star{
+    width: 34px;
+    height: 34px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .star span{
+    position: absolute;
+    inset: 0;
+    border: 1.5px solid var(--ink-dim);
+  }
+  .star span:nth-child(2){ transform: rotate(45deg); }
+
+  /* ===================================================================
+     INTRO / TITLE AREA
+     (Deliberately not an actual <header> element — see note above.)
+     =================================================================== */
+  .intro{
+    text-align: center;
+    opacity: 0;
+    animation: rise 0.9s ease-out forwards;
+  }
+  @keyframes rise{
+    from{ opacity: 0; transform: translateY(10px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  .eyebrow{
+    display: inline-block;
+    margin-top: 34px;
+    margin-bottom: 22px;
+    padding: 6px 14px;
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+
+  .title-arabic{
+    font-family: var(--font-arabic);
+    font-size: clamp(2.1rem, 6vw, 3.1rem);
+    line-height: 1.35;
+    margin: 0 0 6px;
+  }
+
+  .title-english{
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    color: var(--ink-dim);
+    margin: 0 0 30px;
+  }
+
+  .intro-copy{
+    max-width: 580px;
+    margin: 0 auto;
+    color: var(--ink-dim);
+    font-size: 15.5px;
+    line-height: 1.75;
+  }
+
+  /* Byline: page handler + last-updated status. Plain text, edit the
+     two values inside the HTML further down — no script required. */
+  .byline{
+    margin-top: 26px;
+    font-size: 13px;
+    color: var(--ink-faint);
+    letter-spacing: 0.01em;
+  }
+  .byline strong{ color: var(--ink-dim); font-weight: 500; }
+
+  .divider{
+    margin: 56px 0;
+  }
+
+  /* A short editorial note about how to read these reflections. */
+  .note{
+    max-width: 620px;
+    margin: 0 auto 8px;
+    padding: 18px 22px;
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+    color: var(--ink-faint);
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .note em{ color: var(--ink-dim); font-style: italic; }
+
+  /* ===================================================================
+     AYAT LIST
+     =================================================================== */
+  #ayat-list{
+    margin-top: 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .ayah-card{
+    border: 1px solid var(--line);
+    background: var(--panel);
+    border-radius: 6px;
+    padding: 36px 38px;
+  }
+
+  .ayah-ref-row{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    margin-bottom: 26px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .ayah-ref{
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 14.5px;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+  }
+  .ayah-ref .surah-native{
+    font-family: var(--font-arabic);
+    color: var(--ink-dim);
+    font-weight: 400;
+    margin-inline-start: 8px;
+    font-size: 15px;
+  }
+
+  .ayah-topic{
+    font-family: var(--font-sans);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--ink-faint);
+    border: 1px solid var(--line);
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .ayah-arabic{
+    direction: rtl;
+    text-align: right;
+    font-family: var(--font-arabic);
+    font-size: clamp(1.5rem, 3.4vw, 1.9rem);
+    line-height: 2.1;
+    color: var(--ink);
+    margin: 0 0 22px;
+  }
+
+  .ayah-translation{
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--ink);
+    margin: 0 0 8px;
+    padding-inline-start: 18px;
+    border-inline-start: 2px solid var(--line);
+  }
+
+  .ayah-translator{
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin: 0 0 26px;
+    padding-inline-start: 20px;
+  }
+
+  .ayah-explanation-label{
+    font-family: var(--font-sans);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+
+  .ayah-explanation{
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--ink-dim);
+    margin: 0;
+  }
+
+  /* ===================================================================
+     RESPONSIVE ADJUSTMENTS
+     =================================================================== */
+  @media (max-width: 640px){
+    .page{ padding: 48px 18px 72px; }
+    .ayah-card{ padding: 26px 22px; }
+    .ayah-translation{ padding-inline-start: 12px; }
+    .ayah-translator{ padding-inline-start: 14px; }
+  }
+
+  /* Accessible focus visibility, in case any interactive element
+     is added to this page later. */
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--ink-dim);
+    outline-offset: 2px;
+  }
+</style>
+
+
+
+<div class="page">
+
+  
+  <div class="intro">
+    <div class="star" aria-hidden="true"><span></span><span></span></div>
+
+    <span class="eyebrow">Muslim Special</span>
+
+    <h1 class="title-arabic" lang="ar" dir="rtl">القرآن والفضاء</h1>
+    <p class="title-english">Islam &amp; Space Science</p>
+
+    <p class="intro-copy">
+      A collection of Qur'anic ayat that touch on the heavens, the stars,
+      and the order of the cosmos — each shown with its exact reference,
+      the original Arabic text, an English translation, and a short
+      reflection linking it to a space-science theme.
+    </p>
+
+    
+    <p class="byline">
+      Curated by <strong>Umair Sial</strong> &nbsp;·&nbsp;
+      Last updated: <strong>August 31, 2026</strong>
+    </p>
+  </div>
+
+  <div class="divider">
+    
+    <p class="note">
+      <em>A note on approach —</em> each entry below pairs the ayah with
+      a widely used English translation (Sahih International) and a
+      short reflection drawn from tafsir (Qur'anic commentary) and later
+      commentary on the natural world. These reflections are offered as
+      devotional and educational reading, not as scientific proofs, and
+      readers are encouraged to consult qualified scholars for deeper
+      study.
+    </p>
+  </div>
+
+  
+  <main id="ayat-list" aria-live="polite">
+    <noscript>
+      &lt;p style="color:var(--ink-dim)"&gt;
+        This page uses a small script to lay out the ayat below.
+        Please enable JavaScript to view them.
+      &lt;/p&gt;
+    </noscript>
+  </main>
+
+</div>
+
+<script>
+  /* =====================================================================
+     QURAN_SPACE_AYAT
+     =====================================================================
+     This array is the ONLY thing you need to touch to add, remove, or
+     reorder an ayah on this page. Each entry is a plain JavaScript
+     object — copy the TEMPLATE below, paste it wherever you'd like the
+     new ayah to appear in the list, and fill in your own values.
+
+     FIELD GUIDE
+     -----------
+     surahNameEnglish   Latin transliteration of the surah's name,
+                        e.g. "Al-Anbya"
+     surahNameArabic    The surah's name written in Arabic,
+                        e.g. "الأنبياء"
+     surahMeaning       English meaning of the surah's name in
+                        parentheses in the UI, e.g. "The Prophets"
+     surahNumber        Surah number, 1–114
+     ayahRange          Ayah number as a string — use "30" for a single
+                        verse or "40-41" for a range
+     arabicText         The exact original Arabic text of the ayah.
+                        Always verify this against a trusted mushaf or
+                        quran.com before publishing.
+     translation        The English translation of the ayah.
+     translator         Name of the translation used,
+                        e.g. "Sahih International"
+     topic              A short 2-4 word tag shown as a pill in the
+                        card header, e.g. "Orbits & Motion"
+     explanation        The paragraph connecting the ayah to a space /
+                        astronomy theme. Plain text only (no HTML tags
+                        needed — the script inserts it safely as text).
+
+     ---------------------------------------------------------------------
+     TEMPLATE — copy everything between the { and } below to start a
+     new entry:
+
+     {
+       surahNameEnglish: "",
+       surahNameArabic:  "",
+       surahMeaning:     "",
+       surahNumber:      0,
+       ayahRange:        "",
+       arabicText:       "",
+       translation:      "",
+       translator:       "Sahih International",
+       topic:            "",
+       explanation:      ""
+     },
+     ---------------------------------------------------------------------
+  */
+  const QURAN_SPACE_AYAT = [
+
+    {
+      surahNameEnglish: "Al-Anbya",
+      surahNameArabic:  "الأنبياء",
+      surahMeaning:     "The Prophets",
+      surahNumber:      21,
+      ayahRange:        "30",
+      arabicText:       "أَوَلَمْ يَرَ الَّذِينَ كَفَرُوا أَنَّ السَّمَاوَاتِ وَالْأَرْضَ كَانَتَا رَتْقًا فَفَتَقْنَاهُمَا ۖ وَجَعَلْنَا مِنَ الْمَاءِ كُلَّ شَيْءٍ حَيٍّ ۖ أَفَلَا يُؤْمِنُونَ",
+      translation:      "Have those who disbelieved not considered that the heavens and the earth were a joined entity, and We separated them and made from water every living thing? Then will they not believe?",
+      translator:       "Sahih International",
+      topic:            "Origin of the Cosmos",
+      explanation:      "Early commentators read this verse as describing the heavens and the earth as a single joined mass that was then split apart. In the twentieth century, physicists arrived independently at a strikingly similar picture: an observable universe expanding outward from an extremely dense, unified early state, a model now known as the Big Bang. Many Muslim scholars and scientists have pointed to this verse as an example of harmony between the Qur'an and modern cosmology, while others caution that such readings are interpretive rather than literal scientific claims. The verse closes by tying life itself to water, a detail that resonates with biology's own understanding of water as essential to every living cell."
+    },
+
+    {
+      surahNameEnglish: "Adh-Dhariyat",
+      surahNameArabic:  "الذاريات",
+      surahMeaning:     "The Winnowing Winds",
+      surahNumber:      51,
+      ayahRange:        "47",
+      arabicText:       "وَالسَّمَاءَ بَنَيْنَاهَا بِأَيْدٍ وَإِنَّا لَمُوسِعُونَ",
+      translation:      "And the heaven We constructed with strength, and indeed, We are [its] expander.",
+      translator:       "Sahih International",
+      topic:            "The Expanding Universe",
+      explanation:      "The Arabic word musi'un, translated here as \u201cexpander,\u201d shares a root with words for capacity and ampleness. Classical exegetes understood it as describing the sky's vastness, but after Edwin Hubble's 1929 observation that distant galaxies are receding from us, later commentators connected this verse to the ongoing expansion of the universe. As with the other entries on this page, this is offered as a devotional reflection rather than a scientific proof text, but it captures a recurring Qur'anic theme: a universe that is deliberately and purposefully built, not static or accidental."
+    },
+
+    {
+      surahNameEnglish: "Fussilat",
+      surahNameArabic:  "فصلت",
+      surahMeaning:     "Explained in Detail",
+      surahNumber:      41,
+      ayahRange:        "11",
+      arabicText:       "ثُمَّ اسْتَوَىٰ إِلَى السَّمَاءِ وَهِيَ دُخَانٌ فَقَالَ لَهَا وَلِلْأَرْضِ ائْتِيَا طَوْعًا أَوْ كَرْهًا قَالَتَا أَتَيْنَا طَائِعِينَ",
+      translation:      "Then He directed Himself to the heaven while it was smoke and said to it and to the earth, \u201cCome [into being], willingly or by compulsion.\u201d They said, \u201cWe have come willingly.\u201d",
+      translator:       "Sahih International",
+      topic:            "A Universe Born of Gas",
+      explanation:      "Before the heavens took their present shape, this verse describes them as dukhan — smoke, vapour, or a diffuse gaseous state. Commentators have often compared this to the picture modern astrophysics gives of the early universe and of star formation generally: matter beginning as hot, diffuse gas and dust that gradually condenses under gravity into stars, planets, and galaxies. The verse also personifies the heaven and earth as answering a divine command \u201cwillingly,\u201d a poetic device emphasising that the order we now observe in the cosmos did not arise by chance."
+    },
+
+    {
+      surahNameEnglish: "Al-Mulk",
+      surahNameArabic:  "الملك",
+      surahMeaning:     "The Sovereignty",
+      surahNumber:      67,
+      ayahRange:        "3",
+      arabicText:       "الَّذِي خَلَقَ سَبْعَ سَمَاوَاتٍ طِبَاقًا ۖ مَّا تَرَىٰ فِي خَلْقِ الرَّحْمَٰنِ مِن تَفَاوُتٍ ۖ فَارْجِعِ الْبَصَرَ هَلْ تَرَىٰ مِن فُطُورٍ",
+      translation:      "[And] who created seven heavens in layers. You do not see in the creation of the Most Merciful any inconsistency. So return [your] vision [to the sky]; do you see any breaks?",
+      translator:       "Sahih International",
+      topic:            "A Layered Cosmos",
+      explanation:      "Tibaqan means layered, one above another, without gaps or flaws. Commentators have long discussed \u201cseven heavens\u201d as a phrase describing the vastness and structured order of creation beyond the single sky we see, and some contemporary writers extend it, more loosely, to findings about the layered structure of Earth's own atmosphere or the hierarchical structure of the cosmos — from planets, to stars, to galaxies, to galaxy clusters. The verse's own emphasis, though, is on an invitation: look at the sky, and search it twice over for a flaw."
+    },
+
+    {
+      surahNameEnglish: "Ya-Sin",
+      surahNameArabic:  "يس",
+      surahMeaning:     "Ya-Sin",
+      surahNumber:      36,
+      ayahRange:        "38",
+      arabicText:       "وَالشَّمْسُ تَجْرِي لِمُسْتَقَرٍّ لَّهَا ۚ ذَٰلِكَ تَقْدِيرُ الْعَزِيزِ الْعَلِيمِ",
+      translation:      "And the sun runs [on course] toward its stopping point. That is the determination of the Exalted in Might, the Knowing.",
+      translator:       "Sahih International",
+      topic:            "The Sun's Own Motion",
+      explanation:      "Mustaqarr — the sun's \u201cstopping point\u201d or \u201cresting place\u201d — has been read by different scholars as referring to the sun's daily path across the sky, to a future point when its motion will end, or to the destination of its long-term trajectory. Astronomers today know the Sun is not fixed but orbits the centre of the Milky Way, carrying the entire solar system with it at roughly 220 kilometres per second, a journey that takes about 230 million years to complete. Modern commentators sometimes cite this phrase as open enough to accommodate a discovery unavailable to seventh-century audiences."
+    },
+
+    {
+      surahNameEnglish: "Ya-Sin",
+      surahNameArabic:  "يس",
+      surahMeaning:     "Ya-Sin",
+      surahNumber:      36,
+      ayahRange:        "40",
+      arabicText:       "لَا الشَّمْسُ يَنبَغِي لَهَا أَن تُدْرِكَ الْقَمَرَ وَلَا اللَّيْلُ سَابِقُ النَّهَارِ ۚ وَكُلٌّ فِي فَلَكٍ يَسْبَحُونَ",
+      translation:      "It is not allowable for the sun to reach the moon, nor does the night overtake the day, but each, in an orbit, is swimming.",
+      translator:       "Sahih International",
+      topic:            "Orbits That Never Collide",
+      explanation:      "This verse describes the sun and moon each \u201cswimming\u201d — yasbahoon — along its own path, in a fixed order that never allows the sun to catch the moon or the night to overtake the day before its time. Read alongside the next entry on this page, it affirms an orderly, law-governed cosmos in which celestial bodies move on defined paths rather than wandering freely — the same underlying idea, expressed poetically here, that Kepler and Newton would later formalise mathematically as the laws of orbital motion."
+    },
+
+    {
+      surahNameEnglish: "Al-Anbya",
+      surahNameArabic:  "الأنبياء",
+      surahMeaning:     "The Prophets",
+      surahNumber:      21,
+      ayahRange:        "33",
+      arabicText:       "وَهُوَ الَّذِي خَلَقَ اللَّيْلَ وَالنَّهَارَ وَالشَّمْسَ وَالْقَمَرَ ۖ كُلٌّ فِي فَلَكٍ يَسْبَحُونَ",
+      translation:      "And it is He who created the night and the day and the sun and the moon; all [heavenly bodies] in an orbit are swimming.",
+      translator:       "Sahih International",
+      topic:            "Everything in Motion",
+      explanation:      "Falak, translated \u201corbit,\u201d is a specific word for a circular path or sphere of motion, distinct from the general word for \u201csky.\u201d The verse states that the night, the day, the sun, and the moon are each \u201cswimming\u201d along such a path — a description modern astronomy affirms in a far more literal sense than early audiences could have appreciated, now that the sun, moon, planets, and even galaxies are known to be in constant, orbit-bound motion, none of them fixed in place."
+    },
+
+    {
+      surahNameEnglish: "Ar-Rahman",
+      surahNameArabic:  "الرحمن",
+      surahMeaning:     "The Most Merciful",
+      surahNumber:      55,
+      ayahRange:        "33",
+      arabicText:       "يَا مَعْشَرَ الْجِنِّ وَالْإِنْسِ إِنِ اسْتَطَعْتُمْ أَنْ تَنفُذُوا مِنْ أَقْطَارِ السَّمَاوَاتِ وَالْأَرْضِ فَانفُذُوا ۚ لَا تَنفُذُونَ إِلَّا بِسُلْطَانٍ",
+      translation:      "O company of jinn and mankind, if you are able to pass beyond the regions of the heavens and the earth, then pass. You will not pass except by authority.",
+      translator:       "Sahih International",
+      topic:            "Leaving Earth's Bounds",
+      explanation:      "Addressed to \u201cthe assembly of jinn and mankind,\u201d this verse poses a challenge: passing beyond the zones — aqtar — of the heavens and the earth requires sultan, a word meaning authority, power, or dominion. Many modern readers have connected this to the tremendous energy, technology, and scientific knowledge required for spaceflight — the \u201cauthority\u201d needed to escape Earth's gravity was, in a literal sense, unavailable to any human being until the discovery of rocketry and orbital mechanics in the twentieth century. The verse's deeper message is about the limits of human power relative to the vastness of creation, of which the difficulty of space travel is one illustration among many."
+    }
+
+    /* Add new ayah objects above this line, separated by commas. */
+
+  ];
+
+  /* =====================================================================
+     RENDERING
+     Turns each object in QURAN_SPACE_AYAT into a card and appends it to
+     the #ayat-list container. You should not need to edit anything
+     below this line just to add or change an ayah — only the array
+     above needs to change.
+     ===================================================================== */
+  function buildAyahCard(entry){
+    const card = document.createElement("article");
+    card.className = "ayah-card";
+
+    // --- Reference row: "Surah Al-Anbya (21:30)" + Arabic surah name + topic pill
+    const refRow = document.createElement("div");
+    refRow.className = "ayah-ref-row";
+
+    const ref = document.createElement("div");
+    ref.className = "ayah-ref";
+    ref.textContent = `Surah ${entry.surahNameEnglish} (${entry.surahNumber}:${entry.ayahRange}) — ${entry.surahMeaning}`;
+
+    const nativeName = document.createElement("span");
+    nativeName.className = "surah-native";
+    nativeName.setAttribute("lang", "ar");
+    nativeName.setAttribute("dir", "rtl");
+    nativeName.textContent = entry.surahNameArabic;
+    ref.appendChild(nativeName);
+
+    const topic = document.createElement("span");
+    topic.className = "ayah-topic";
+    topic.textContent = entry.topic;
+
+    refRow.appendChild(ref);
+    refRow.appendChild(topic);
+
+    // --- Original Arabic ayah text
+    const arabic = document.createElement("p");
+    arabic.className = "ayah-arabic";
+    arabic.setAttribute("lang", "ar");
+    arabic.setAttribute("dir", "rtl");
+    arabic.textContent = entry.arabicText;
+
+    // --- English translation + translator credit
+    const translation = document.createElement("p");
+    translation.className = "ayah-translation";
+    translation.textContent = `\u201C${entry.translation}\u201D`;
+
+    const translator = document.createElement("p");
+    translator.className = "ayah-translator";
+    translator.textContent = `— ${entry.translator}`;
+
+    // --- Explanation
+    const explLabel = document.createElement("p");
+    explLabel.className = "ayah-explanation-label";
+    explLabel.textContent = "Reflection";
+
+    const explanation = document.createElement("p");
+    explanation.className = "ayah-explanation";
+    explanation.textContent = entry.explanation;
+
+    card.appendChild(refRow);
+    card.appendChild(arabic);
+    card.appendChild(translation);
+    card.appendChild(translator);
+    card.appendChild(explLabel);
+    card.appendChild(explanation);
+
+    return card;
+  }
+
+  function renderAyat(){
+    const container = document.getElementById("ayat-list");
+    if (!container) return;
+
+    // Clear the <noscript> fallback and anything else, then rebuild.
+    container.innerHTML = "";
+
+    QURAN_SPACE_AYAT.forEach(function(entry, index){
+      container.appendChild(buildAyahCard(entry));
+
+      // Insert a quiet star-motif divider before the FINAL card only,
+      // as a closing visual accent rather than a repeated decoration.
+      if (index === QURAN_SPACE_AYAT.length - 2){
+        const divider = document.createElement("div");
+        divider.className = "star";
+        divider.setAttribute("aria-hidden", "true");
+        divider.innerHTML = "<span></span><span></span>";
+        divider.style.margin = "8px auto 8px";
+        container.insertBefore(divider, container.lastChild);
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", renderAyat);
+</script>
