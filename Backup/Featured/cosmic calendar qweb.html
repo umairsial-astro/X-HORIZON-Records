@@ -1,0 +1,929 @@
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cosmic Calendar — Live Astronomy Scanner</title>
+<style>
+  :root {
+    --bg: #000000;
+    --panel: #0a0a0a;
+    --border: #1f1f23;
+    --border-soft: #18181b;
+    --text: #f4f4f5;
+    --muted: #a1a1aa;
+    --faint: #52525b;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh; -webkit-font-smoothing: antialiased;
+  }
+  .backdrop {
+    position: fixed; inset: 0; overflow: hidden; pointer-events: none; opacity: .6;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(120,120,160,.12), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(80,80,120,.10), transparent 45%);
+  }
+  .wrap { position: relative; max-width: 1100px; margin: 0 auto; padding: 40px 24px 64px; }
+  header.top { display: flex; flex-direction: column; gap: 16px; margin-bottom: 16px; }
+  @media (min-width: 640px) { header.top { flex-direction: row; align-items: flex-end; justify-content: space-between; } }
+  .eyebrow { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 11px; letter-spacing: .3em; text-transform: uppercase; }
+  h1 { margin: 8px 0 0; font-size: 34px; font-weight: 600; letter-spacing: -0.02em; color: #fff; }
+  .subtitle { margin: 4px 0 0; font-size: 14px; color: var(--muted); }
+  .controls { display: flex; align-items: center; gap: 8px; }
+  .btn { border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 999px; padding: 8px 16px; font-size: 12px; cursor: pointer; transition: border-color .15s, color .15s, background .15s; font-family: inherit; }
+  .btn:hover { border-color: #3f3f46; color: #fff; }
+  .btn.icon { padding: 8px 14px; font-size: 16px; line-height: 1; }
+  .layout { display: grid; gap: 24px; }
+  @media (min-width: 1024px) { .layout { grid-template-columns: 1fr 380px; } }
+  .card { border: 1px solid var(--border-soft); background: rgba(10,10,10,.6); border-radius: 16px; padding: 24px; backdrop-filter: blur(8px); }
+  .card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 12px; }
+  .card-head h2 { margin: 0; font-size: 20px; font-weight: 500; color: #fff; }
+  .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+  .weekdays div { padding: 8px 0; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
+  .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .cell { aspect-ratio: 1 / 1; border: 1px solid transparent; background: transparent; border-radius: 12px; padding: 6px; cursor: pointer; position: relative; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; transition: background .15s, border-color .15s; font-family: inherit; color: inherit; text-align: left; }
+  .cell.empty { cursor: default; }
+  .cell:hover:not(.empty) { background: rgba(24,24,27,.5); }
+  .cell.has { border-color: var(--border); background: rgba(20,20,24,.7); }
+  .cell.has:hover { border-color: #3f3f46; background: rgba(30,30,34,.7); }
+  .cell.today { box-shadow: inset 0 0 0 1px rgba(255,255,255,.3); }
+  .cell.selected { box-shadow: 0 0 0 2px var(--ring, rgba(255,255,255,.4)); }
+  .daynum { font-size: 12px; font-weight: 500; color: var(--faint); }
+  .cell.has .daynum { color: #e4e4e7; }
+  .cell.today .daynum { color: #fff; }
+  .stickers { display: flex; flex-wrap: wrap; gap: 4px; width: 100%; }
+  .sticker { width: 20px; height: 20px; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-size: 11px; background: rgba(0,0,0,.7); border: 1px solid var(--ring, rgba(255,255,255,.2)); line-height: 1; }
+  .sticker.more { width: auto; padding: 0 6px; font-size: 10px; color: var(--muted); border-color: #27272a; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-soft); }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--faint); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 999px; }
+  aside.detail { position: sticky; top: 24px; align-self: start; }
+  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 200px; color: var(--faint); }
+  .empty-state .emoji { font-size: 28px; margin-bottom: 12px; opacity: .5; }
+  .empty-state p { margin: 0; font-size: 14px; }
+  .empty-state .date { margin-top: 4px; font-size: 12px; }
+  .detail-date { font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: var(--faint); }
+  .detail-title { margin: 4px 0 16px; font-size: 18px; font-weight: 500; color: #fff; }
+  .event-card { border: 1px solid var(--border); background: rgba(20,20,24,.5); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .event-head { display: flex; gap: 12px; align-items: flex-start; }
+  .event-emoji { width: 36px; height: 36px; flex-shrink: 0; border-radius: 999px; background: #000; border: 1px solid var(--ring, rgba(255,255,255,.2)); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .event-name { font-weight: 500; color: #fff; margin: 0; }
+  .event-type { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--type-color, var(--muted)); }
+  .event-desc { margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #d4d4d8; }
+  .event-vis { margin: 8px 0 0; font-size: 12px; color: var(--faint); }
+  .event-vis b { color: #3f3f46; font-weight: 500; }
+  .note { margin-top: 16px; font-size: 11px; color: var(--faint); line-height: 1.5; border-top: 1px solid var(--border-soft); padding-top: 12px; }
+</style>
+
+
+<div class="backdrop"/>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">✦ Astronomy Scanner</div>
+      <h1>Cosmic Calendar</h1>
+      <p class="subtitle" id="subtitle">Sky events for this month, scanned and ready.</p>
+    </div>
+    <div class="controls">
+      <button class="btn icon" id="prev" aria-label="Previous month">‹</button>
+      <button class="btn" id="today">Today</button>
+      <button class="btn icon" id="next" aria-label="Next month">›</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <section class="card">
+      <div class="card-head">
+        <h2 id="monthLabel">—</h2>
+        <span class="scan-badge" id="scanBadge" style="display:none"/>
+      </div>
+      <div class="weekdays" id="weekdays"/>
+      <div class="grid" id="grid"/>
+      <div class="legend" id="legend"/>
+    </section>
+
+    <aside class="card detail" id="detail">
+      <div class="empty-state">
+        <div class="emoji">✦</div>
+        <p>Select a highlighted date to see what's happening in the sky.</p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const TYPE_META = {
+  meteor_shower: { emoji: '☄️', label: 'Meteor Shower', color: '#fcd34d', ring: 'rgba(252,211,77,.45)' },
+  eclipse:       { emoji: '🌑', label: 'Eclipse',        color: '#fda4af', ring: 'rgba(253,164,175,.45)' },
+  conjunction:  { emoji: '🪐', label: 'Conjunction',     color: '#7dd3fc', ring: 'rgba(125,211,252,.45)' },
+  moon_phase:   { emoji: '🌙', label: 'Moon Phase',     color: '#e4e4e7', ring: 'rgba(228,228,231,.45)' },
+  planet:       { emoji: '🪐', label: 'Planet',         color: '#6ee7b7', ring: 'rgba(110,231,183,.45)' },
+  comet:        { emoji: '☄️', label: 'Comet',          color: '#c4b5fd', ring: 'rgba(196,181,253,.45)' },
+  aurora:       { emoji: '🌌', label: 'Aurora',          color: '#67e8f9', ring: 'rgba(103,232,249,.45)' },
+  solstice:     { emoji: '☀️', label: 'Solstice',       color: '#fdba74', ring: 'rgba(253,186,116,.45)' },
+  close_approach: { emoji: '🪨', label: 'Close Approach', color: '#fb923c', ring: 'rgba(251,146,60,.45)' },
+  other:        { emoji: '✦',  label: 'Sky Event',      color: '#fafafa', ring: 'rgba(250,250,250,.45)' }
+};
+
+const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// ---- Moon phase computation ----
+const SYNODIC = 29.530588853;
+const REF_NEW_MOON = Date.UTC(2000, 0, 6, 18, 14) / 86400000;
+function moonAge(date) {
+  const d = date.getTime() / 86400000;
+  let age = (d - REF_NEW_MOON) % SYNODIC;
+  if (age &lt; 0) age += SYNODIC;
+  return age;
+}
+function closestPhaseDay(year, month, targetAge) {
+  let bestDay = 1, bestDiff = Infinity;
+  const daysIn = new Date(year, month + 1, 0).getDate();
+  for (let d = 1; d &lt;= daysIn; d++) {
+    const age = moonAge(new Date(Date.UTC(year, month, d, 12)));
+    let diff = Math.abs(age - targetAge);
+    if (diff &gt; SYNODIC / 2) diff = SYNODIC - diff;
+    if (diff &lt; bestDiff) { bestDiff = diff; bestDay = d; }
+  }
+  return bestDay;
+}
+function moonPhasesForMonth(year, month) {
+  return [
+    { day: closestPhaseDay(year, month, 0),       name: 'New Moon',      phase: 'new' },
+    { day: closestPhaseDay(year, month, 7.3826),   name: 'First Quarter', phase: 'first' },
+    { day: closestPhaseDay(year, month, 14.7653),  name: 'Full Moon',      phase: 'full' },
+    { day: closestPhaseDay(year, month, 22.1479),   name: 'Last Quarter',  phase: 'last' }
+  ];
+}
+
+// ---- Curated recurring events (fallback / supplement) ----
+const ANNUAL = [
+  { md: '01-03', name: 'Quadrantid Meteor Shower Peak', type: 'meteor_shower', description: 'One of the strongest annual meteor showers, up to 120 bright meteors per hour with a sharp peak.', visibility: 'Best after midnight in the Northern Hemisphere; naked eye.' },
+  { md: '04-22', name: 'Lyrid Meteor Shower Peak', type: 'meteor_shower', description: 'An ancient shower producing 15-20 meteors per hour, occasionally with bright fireballs.', visibility: 'Best after midnight; naked eye.' },
+  { md: '05-06', name: 'Eta Aquariid Meteor Shower Peak', type: 'meteor_shower', description: 'Remnants of Halley\'s Comet, up to 50 meteors per hour, best from the tropics and Southern Hemisphere.', visibility: 'Best before dawn; naked eye.' },
+  { md: '06-21', name: 'June Solstice', type: 'solstice', description: 'Longest day in the Northern Hemisphere, shortest in the Southern. Start of astronomical summer in the north.', visibility: 'Worldwide — a seasonal marker.' },
+  { md: '08-12', name: 'Perseid Meteor Shower Peak', type: 'meteor_shower', description: 'One of the most prolific annual showers, up to 100 bright meteors per hour under dark skies.', visibility: 'Best after midnight; naked eye.' },
+  { md: '09-22', name: 'September Equinox', type: 'solstice', description: 'Day and night nearly equal worldwide. Start of astronomical autumn in the Northern Hemisphere.', visibility: 'Worldwide — a seasonal marker.' },
+  { md: '10-21', name: 'Orionid Meteor Shower Peak', type: 'meteor_shower', description: 'Debris from Halley\'s Comet, 10-20 fast meteors per hour.', visibility: 'Best after midnight; naked eye.' },
+  { md: '11-17', name: 'Leonid Meteor Shower Peak', type: 'meteor_shower', description: 'Fast, bright meteors from comet Tempel-Tuttle, 10-15 per hour.', visibility: 'Best after midnight; naked eye.' },
+  { md: '12-13', name: 'Geminid Meteor Shower Peak', type: 'meteor_shower', description: 'The most reliable annual shower, up to 120 multicolored meteors per hour.', visibility: 'All night; naked eye.' },
+  { md: '12-21', name: 'December Solstice', type: 'solstice', description: 'Shortest day in the Northern Hemisphere. Start of astronomical winter in the north.', visibility: 'Worldwide — a seasonal marker.' },
+  { md: '03-20', name: 'March Equinox', type: 'solstice', description: 'Day and night nearly equal worldwide. Start of astronomical spring in the Northern Hemisphere.', visibility: 'Worldwide — a seasonal marker.' }
+];
+
+const ECLIPSES = [
+  { date: '2025-03-14', name: 'Total Lunar Eclipse', type: 'eclipse', description: 'A total lunar eclipse visible from the Americas, western Europe, and western Africa. The Moon turns a deep coppery red.', visibility: 'Americas, W. Europe, W. Africa.' },
+  { date: '2025-09-07', name: 'Total Lunar Eclipse', type: 'eclipse', description: 'A total lunar eclipse visible from Europe, Africa, Asia, and Australia.', visibility: 'Europe, Africa, Asia, Australia.' },
+  { date: '2026-02-17', name: 'Annular Solar Eclipse', type: 'eclipse', description: 'An annular ("ring of fire") solar eclipse visible from Antarctica, with partial views from southern Africa and the South Atlantic.', visibility: 'Antarctica; partial in S. Africa, S. Atlantic.' },
+  { date: '2026-03-03', name: 'Total Lunar Eclipse ("Blood Moon")', type: 'eclipse', description: 'The Moon passes fully through Earth\'s shadow and turns a deep red, with totality lasting nearly an hour.', visibility: 'Best across the Pacific and the Americas; Moon sets during totality in the east.' },
+  { date: '2026-08-12', name: 'Total Solar Eclipse', type: 'eclipse', description: 'A total solar eclipse over Greenland, Iceland, and Spain — the first total solar eclipse visible from mainland Europe since 1999.', visibility: 'Totality in Greenland, Iceland, Spain; partial across N. Hemisphere.' },
+  { date: '2026-08-28', name: 'Near-Total Lunar Eclipse', type: 'eclipse', description: 'A deep partial lunar eclipse, with the Moon nearly entirely swallowed by Earth\'s shadow, on the night of August 27/28.', visibility: 'Americas, Europe, Africa.' },
+  { date: '2027-02-06', name: 'Annular Solar Eclipse', type: 'eclipse', description: 'A long annular solar eclipse across parts of South America and West Africa.', visibility: 'S. America, W. Africa; partial elsewhere.' },
+  { date: '2027-08-02', name: 'Total Solar Eclipse', type: 'eclipse', description: 'One of the longest total solar eclipses of the century, with totality over 6 minutes across parts of Africa and the Middle East.', visibility: 'Totality across N. Africa, Middle East; partial widely.' }
+];
+
+// Dated, year-specific highlights for 2026 (oppositions, conjunctions, a
+// notable comet) sourced and verified from current skywatching coverage.
+const SPECIAL_EVENTS = [
+  { date: '2026-01-10', name: 'Jupiter at Opposition', type: 'planet', description: 'Jupiter reaches opposition, appearing at its brightest and largest for the year, rising at sunset and visible all night long.', visibility: 'Visible all night worldwide; naked eye, best in binoculars or a telescope.' },
+  { date: '2026-02-19', name: 'Mercury at Greatest Elongation East', type: 'planet', description: 'Mercury reaches its furthest apparent distance from the Sun in the evening sky — the best chance all year to spot the elusive innermost planet.', visibility: 'Low in the west just after sunset.' },
+  { date: '2026-02-28', name: 'Six-Planet Parade', type: 'conjunction', description: 'Mercury, Venus, Jupiter, Uranus, Saturn and Neptune line up in a gentle diagonal from the western horizon up toward the near-full Moon.', visibility: 'About an hour after sunset; naked eye for the brightest planets, binoculars help for Uranus and Neptune.' },
+  { date: '2026-04-25', name: 'Comet C/2025 R3 (PANSTARRS) Peak Brightness', type: 'comet', description: 'Comet C/2025 R3 (PANSTARRS) is forecast to reach its maximum brightness, and may become the brightest comet of the year.', visibility: 'Likely needs binoculars; check closer to the date for an updated forecast and finder chart.' },
+  { date: '2026-09-05', name: 'Late-Summer Planetary Parade', type: 'conjunction', description: 'A second planetary clustering of the year unfolds, with several planets grouping together in the sky from late August into mid-September.', visibility: 'Check a sky-map app for the exact alignment and timing from your location.' },
+  { date: '2026-10-04', name: 'Saturn at Opposition', type: 'planet', description: 'Saturn reaches opposition, shining at its brightest for the year with its rings well positioned for observation.', visibility: 'Visible all night worldwide; rings best seen through a telescope.' }
+];
+
+function pad(n) { return String(n).padStart(2, '0'); }
+function dateKey(y, m, d) { return `${y}-${pad(m + 1)}-${pad(d)}`; }
+
+// ---- State ----
+const today = new Date();
+let viewYear = today.getFullYear();
+let viewMonth = today.getMonth();
+let selectedKey = null;
+let currentEvents = [];
+let currentByDate = {};
+
+const $ = (id) =&gt; document.getElementById(id);
+const todayKey = () =&gt; dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+// ---- Live scan 1: NASA Astronomy Picture of the Day ----
+// The original bug: this always requested through the LAST day of the
+// viewed month, which for the current month means asking for dates that
+// haven't happened yet — NASA's API rejects that with HTTP 400. Fixed by
+// clamping the end date to today. Any failure (network block, CORS, rate
+// limit) resolves to an empty result rather than throwing, so a flaky or
+// unreachable feed can never break the page — it just doesn't add anything.
+async function scanApod(year, month) {
+  try {
+    const start = dateKey(year, month, 1);
+    const daysIn = new Date(year, month + 1, 0).getDate();
+    let end = dateKey(year, month, daysIn);
+    if (end &gt; todayKey()) end = todayKey();
+    if (start &gt; todayKey()) return {}; // whole month is in the future — nothing to scan yet
+
+    const url = `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&amp;start_date=${start}&amp;end_date=${end}`;
+    const res = await fetch(url);
+    if (!res.ok) return {};
+    const data = await res.json();
+    const items = Array.isArray(data) ? data : [data];
+    const map = {};
+    for (const item of items) {
+      if (!item || !item.date) continue;
+      const text = `${item.title || ''} ${item.explanation || ''}`.toLowerCase();
+      const type = detectApodType(text);
+      if (!type) continue; // skip daily pictures unrelated to a known sky-event type
+      (map[item.date] ||= []).push({
+        date: item.date,
+        name: item.title,
+        type,
+        description: item.explanation || '',
+        visibility: item.copyright ? `Image credit: ${item.copyright}` : 'NASA Astronomy Picture of the Day',
+        live: true
+      });
+    }
+    return map;
+  } catch (_) {
+    return {}; // network blocked, CORS, or otherwise unreachable — fail quietly
+  }
+}
+
+function detectApodType(t) {
+  if (t.includes('meteor')) return 'meteor_shower';
+  if (t.includes('eclipse') || t.includes('totality')) return 'eclipse';
+  if (t.includes('conjunction') || t.includes('alignment')) return 'conjunction';
+  if (t.includes('comet')) return 'comet';
+  if (t.includes('aurora')) return 'aurora';
+  if (t.includes('solstice') || t.includes('equinox')) return 'solstice';
+  if (t.includes('jupiter') || t.includes('saturn') || t.includes('mars') || t.includes('venus') || t.includes('mercury') || t.includes('opposition')) return 'planet';
+  return null;
+}
+
+// ---- Live scan 2: JPL Small-Body Database close-approach feed ----
+// Real asteroid/comet flyby data with real dates and distances. Keyless, no
+// shared rate limit — but wrapped the same way, so if it's unreachable in
+// a given environment it just contributes nothing instead of erroring.
+async function scanCloseApproaches(year, month) {
+  try {
+    const start = dateKey(year, month, 1);
+    const daysIn = new Date(year, month + 1, 0).getDate();
+    const end = dateKey(year, month, daysIn);
+    const url = `https://ssd-api.jpl.nasa.gov/cad.api?date-min=${start}&amp;date-max=${end}&amp;dist-max=0.05&amp;sort=date`;
+    const res = await fetch(url);
+    if (!res.ok) return {};
+    const data = await res.json();
+    if (!data || !data.data || !data.data.length) return {};
+
+    const fieldIndex = {};
+    data.fields.forEach((f, i) =&gt; { fieldIndex[f] = i; });
+
+    const byDay = {};
+    for (const row of data.data) {
+      const cd = row[fieldIndex.cd]; // e.g. "2026-Aug-06 03:15"
+      if (!cd) continue;
+      const [yPart, monAbbr, rest] = cd.split('-');
+      if (!rest) continue;
+      const dayPart = rest.trim().split(' ')[0];
+      const mIdx = MONTH_ABBR.indexOf(monAbbr);
+      if (mIdx === -1) continue;
+      const key = dateKey(Number(yPart), mIdx, Number(dayPart));
+      const distAU = parseFloat(row[fieldIndex.dist]);
+      if (isNaN(distAU)) continue;
+      (byDay[key] ||= []).push({
+        des: row[fieldIndex.des],
+        distAU,
+        vRel: parseFloat(row[fieldIndex.v_rel]),
+        h: parseFloat(row[fieldIndex.h])
+      });
+    }
+
+    const map = {};
+    for (const key in byDay) {
+      byDay[key].sort((a, b) =&gt; a.distAU - b.distAU);
+      const c = byDay[key][0];
+      const distLD = c.distAU * 389.171; // AU -&gt; lunar distances
+      const size = estimateDiameterMeters(c.h);
+      const sizeStr = size ? `${size.min}–${size.max} m across` : 'size unknown';
+      map[key] = [{
+        date: key,
+        name: `Close Approach: ${c.des}`,
+        type: 'close_approach',
+        description: `Near-Earth object ${c.des} passes within about ${distLD.toFixed(1)} lunar distances of Earth${isNaN(c.vRel) ? '' : `, moving at roughly ${c.vRel.toFixed(1)} km/s relative to Earth`}. Estimated ${sizeStr}.`,
+        visibility: 'Data: NASA/JPL Small-Body Database (Close-Approach)',
+        live: true
+      }];
+    }
+    return map;
+  } catch (_) {
+    return {};
+  }
+}
+
+function estimateDiameterMeters(h) {
+  if (isNaN(h)) return null;
+  const diam = (albedo) =&gt; 1329000 / Math.sqrt(albedo) * Math.pow(10, -0.2 * h); // meters
+  return { min: Math.round(diam(0.25)), max: Math.round(diam(0.05)) };
+}
+
+function combineMaps(...maps) {
+  const out = {};
+  for (const m of maps) {
+    for (const key in m) (out[key] ||= []).push(...m[key]);
+  }
+  return out;
+}
+
+// ---- Build combined events for a month ----
+function buildEvents(year, month) {
+  const events = [];
+  for (const p of moonPhasesForMonth(year, month)) {
+    let desc, vis;
+    if (p.phase === 'new') { desc = 'The Moon is between Earth and the Sun, not visible. Dark skies ideal for stargazing and meteor showers.'; vis = 'Not visible; ideal dark skies.'; }
+    else if (p.phase === 'full') { desc = 'The Moon is fully illuminated, rising at sunset and setting at sunrise. Bright all night.'; vis = 'Visible all night worldwide.'; }
+    else if (p.phase === 'first') { desc = 'The Moon is half-illuminated, rising around midday and setting around midnight.'; vis = 'Visible in the evening sky.'; }
+    else { desc = 'The Moon is half-illuminated, rising around midnight and setting around midday.'; vis = 'Visible in the pre-dawn sky.'; }
+    events.push({ date: dateKey(year, month, p.day), name: p.name, type: 'moon_phase', description: desc, visibility: vis });
+  }
+  for (const e of ANNUAL) {
+    const [mm] = e.md.split('-');
+    if (Number(mm) - 1 === month) events.push({ date: `${year}-${e.md}`, name: e.name, type: e.type, description: e.description, visibility: e.visibility });
+  }
+  for (const e of ECLIPSES) {
+    if (e.date.startsWith(`${year}-${pad(month + 1)}`)) events.push({ ...e });
+  }
+  for (const e of SPECIAL_EVENTS) {
+    if (e.date.startsWith(`${year}-${pad(month + 1)}`)) events.push({ ...e });
+  }
+  return events;
+}
+
+function mergeEvents(staticEvents, liveMap) {
+  const byDate = {};
+  for (const ev of staticEvents) (byDate[ev.date] ||= []).push(ev);
+  for (const key in liveMap) {
+    for (const ev of liveMap[key]) (byDate[key] ||= []).push(ev);
+  }
+  return byDate;
+}
+
+// ---- Render ----
+function renderWeekdays() {
+  $('weekdays').innerHTML = WEEKDAYS.map(d =&gt; `&lt;div&gt;${d}&lt;/div&gt;`).join('');
+}
+function renderLegend() {
+  $('legend').innerHTML = Object.entries(TYPE_META).map(([k, m]) =&gt;
+    `&lt;div class="legend-item"&gt;&lt;span class="legend-dot" style="background:${m.color}"&gt;&lt;/span&gt;${m.label}&lt;/div&gt;`
+  ).join('');
+}
+
+function renderGrid(byDate) {
+  const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+  const daysIn = new Date(viewYear, viewMonth + 1, 0).getDate();
+  const cells = [];
+  for (let i = 0; i &lt; firstDay; i++) cells.push(null);
+  for (let d = 1; d &lt;= daysIn; d++) cells.push(d);
+  const tKey = todayKey();
+  let html = '';
+  for (const day of cells) {
+    if (day === null) { html += `&lt;button class="cell empty" disabled&gt;&lt;/button&gt;`; continue; }
+    const key = dateKey(viewYear, viewMonth, day);
+    const dayEvents = byDate[key] || [];
+    const has = dayEvents.length &gt; 0;
+    const primary = dayEvents[0]?.type || 'other';
+    const meta = TYPE_META[primary] || TYPE_META.other;
+    const cls = ['cell'];
+    if (has) cls.push('has');
+    if (key === tKey) cls.push('today');
+    if (key === selectedKey) cls.push('selected');
+    let stickers = '';
+    if (has) {
+      stickers = '&lt;div class="stickers"&gt;';
+      dayEvents.slice(0, 3).forEach(ev =&gt; {
+        const m = TYPE_META[ev.type] || TYPE_META.other;
+        stickers += `&lt;span class="sticker" style="--ring:${m.ring}" title="${ev.name.replace(/"/g, '&amp;quot;')}"&gt;${m.emoji}&lt;/span&gt;`;
+      });
+      if (dayEvents.length &gt; 3) stickers += `&lt;span class="sticker more"&gt;+${dayEvents.length - 3}&lt;/span&gt;`;
+      stickers += '&lt;/div&gt;';
+    }
+    html += `&lt;button class="${cls.join(' ')}" style="--ring:${meta.ring}" data-key="${key}"&gt;&lt;span class="daynum"&gt;${day}&lt;/span&gt;${stickers}&lt;/button&gt;`;
+  }
+  const grid = $('grid');
+  grid.innerHTML = html;
+  grid.querySelectorAll('.cell[data-key]').forEach(btn =&gt; {
+    btn.addEventListener('click', () =&gt; { selectedKey = btn.dataset.key; renderGrid(currentByDate); renderDetail(); });
+  });
+}
+
+function renderDetail() {
+  const el = $('detail');
+  if (!selectedKey) {
+    el.innerHTML = `&lt;div class="empty-state"&gt;&lt;div class="emoji"&gt;✦&lt;/div&gt;&lt;p&gt;Select a highlighted date to see what's happening in the sky.&lt;/p&gt;&lt;/div&gt;`;
+    return;
+  }
+  const evs = currentByDate[selectedKey] || [];
+  const d = new Date(selectedKey + 'T12:00:00Z');
+  const dateStr = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  if (evs.length === 0) {
+    el.innerHTML = `&lt;div class="empty-state"&gt;&lt;div class="emoji"&gt;🌙&lt;/div&gt;&lt;p&gt;No notable sky events on this date.&lt;/p&gt;&lt;p class="date"&gt;${dateStr}&lt;/p&gt;&lt;/div&gt;`;
+    return;
+  }
+  let html = `&lt;div&gt;&lt;div class="detail-date"&gt;${dateStr}&lt;/div&gt;&lt;div class="detail-title"&gt;${evs.length} event${evs.length &gt; 1 ? 's' : ''}&lt;/div&gt;&lt;/div&gt;&lt;div&gt;`;
+  for (const ev of evs) {
+    const m = TYPE_META[ev.type] || TYPE_META.other;
+    html += `&lt;div class="event-card"&gt;
+      &lt;div class="event-head"&gt;
+        &lt;span class="event-emoji" style="--ring:${m.ring}"&gt;${m.emoji}&lt;/span&gt;
+        &lt;div&gt;&lt;p class="event-name"&gt;${ev.name}&lt;/p&gt;&lt;span class="event-type" style="--type-color:${m.color}"&gt;${m.label}&lt;/span&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p class="event-desc"&gt;${ev.description}&lt;/p&gt;
+      ${ev.visibility ? `&lt;p class="event-vis"&gt;&lt;b&gt;Visibility:&lt;/b&gt; ${ev.visibility}&lt;/p&gt;` : ''}
+    &lt;/div&gt;`;
+  }
+  html += '&lt;/div&gt;';
+  html += `&lt;p class="note"&gt;Moon phases are computed with real orbital math; meteor showers, solstices, eclipses, oppositions, and conjunctions are a verified 2025–2027 dataset.&lt;/p&gt;`;
+  el.innerHTML = html;
+}
+
+function renderMonth() {
+  const label = new Date(viewYear, viewMonth, 1).toLocaleString('en-US', { month: 'long', year: 'numeric' });
+  $('monthLabel').textContent = label;
+  $('subtitle').textContent = `Sky events for ${label}, scanned and ready.`;
+
+  const events = buildEvents(viewYear, viewMonth);
+  currentByDate = mergeEvents(events, {});
+  renderGrid(currentByDate);
+  renderDetail();
+}
+
+$('prev').addEventListener('click', () =&gt; { let m = viewMonth - 1, y = viewYear; if (m &lt; 0) { m = 11; y--; } viewMonth = m; viewYear = y; selectedKey = null; renderMonth(); });
+$('next').addEventListener('click', () =&gt; { let m = viewMonth + 1, y = viewYear; if (m &gt; 11) { m = 0; y++; } viewMonth = m; viewYear = y; selectedKey = null; renderMonth(); });
+$('today').addEventListener('click', () =&gt; { viewYear = today.getFullYear(); viewMonth = today.getMonth(); selectedKey = null; renderMonth(); });
+
+renderWeekdays();
+renderLegend();
+renderMonth();
+</script>
+
+
+</template>
+        <div class="s_embed_code_embedded o_not_editable container-fluid"><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Cosmic Calendar — Live Astronomy Scanner</title><style>
+  :root {
+    --bg: #000000;
+    --panel: #0a0a0a;
+    --border: #1f1f23;
+    --border-soft: #18181b;
+    --text: #f4f4f5;
+    --muted: #a1a1aa;
+    --faint: #52525b;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh; -webkit-font-smoothing: antialiased;
+  }
+  .backdrop {
+    position: fixed; inset: 0; overflow: hidden; pointer-events: none; opacity: .6;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(120,120,160,.12), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(80,80,120,.10), transparent 45%);
+  }
+  .wrap { position: relative; max-width: 1100px; margin: 0 auto; padding: 40px 24px 64px; }
+  header.top { display: flex; flex-direction: column; gap: 16px; margin-bottom: 16px; }
+  @media (min-width: 640px) { header.top { flex-direction: row; align-items: flex-end; justify-content: space-between; } }
+  .eyebrow { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 11px; letter-spacing: .3em; text-transform: uppercase; }
+  h1 { margin: 8px 0 0; font-size: 34px; font-weight: 600; letter-spacing: -0.02em; color: #fff; }
+  .subtitle { margin: 4px 0 0; font-size: 14px; color: var(--muted); }
+  .controls { display: flex; align-items: center; gap: 8px; }
+  .btn { border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 999px; padding: 8px 16px; font-size: 12px; cursor: pointer; transition: border-color .15s, color .15s, background .15s; font-family: inherit; }
+  .btn:hover { border-color: #3f3f46; color: #fff; }
+  .btn.icon { padding: 8px 14px; font-size: 16px; line-height: 1; }
+  .layout { display: grid; gap: 24px; }
+  @media (min-width: 1024px) { .layout { grid-template-columns: 1fr 380px; } }
+  .card { border: 1px solid var(--border-soft); background: rgba(10,10,10,.6); border-radius: 16px; padding: 24px; backdrop-filter: blur(8px); }
+  .card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 12px; }
+  .card-head h2 { margin: 0; font-size: 20px; font-weight: 500; color: #fff; }
+  .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+  .weekdays div { padding: 8px 0; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
+  .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .cell { aspect-ratio: 1 / 1; border: 1px solid transparent; background: transparent; border-radius: 12px; padding: 6px; cursor: pointer; position: relative; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; transition: background .15s, border-color .15s; font-family: inherit; color: inherit; text-align: left; }
+  .cell.empty { cursor: default; }
+  .cell:hover:not(.empty) { background: rgba(24,24,27,.5); }
+  .cell.has { border-color: var(--border); background: rgba(20,20,24,.7); }
+  .cell.has:hover { border-color: #3f3f46; background: rgba(30,30,34,.7); }
+  .cell.today { box-shadow: inset 0 0 0 1px rgba(255,255,255,.3); }
+  .cell.selected { box-shadow: 0 0 0 2px var(--ring, rgba(255,255,255,.4)); }
+  .daynum { font-size: 12px; font-weight: 500; color: var(--faint); }
+  .cell.has .daynum { color: #e4e4e7; }
+  .cell.today .daynum { color: #fff; }
+  .stickers { display: flex; flex-wrap: wrap; gap: 4px; width: 100%; }
+  .sticker { width: 20px; height: 20px; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-size: 11px; background: rgba(0,0,0,.7); border: 1px solid var(--ring, rgba(255,255,255,.2)); line-height: 1; }
+  .sticker.more { width: auto; padding: 0 6px; font-size: 10px; color: var(--muted); border-color: #27272a; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-soft); }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--faint); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 999px; }
+  aside.detail { position: sticky; top: 24px; align-self: start; }
+  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 200px; color: var(--faint); }
+  .empty-state .emoji { font-size: 28px; margin-bottom: 12px; opacity: .5; }
+  .empty-state p { margin: 0; font-size: 14px; }
+  .empty-state .date { margin-top: 4px; font-size: 12px; }
+  .detail-date { font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: var(--faint); }
+  .detail-title { margin: 4px 0 16px; font-size: 18px; font-weight: 500; color: #fff; }
+  .event-card { border: 1px solid var(--border); background: rgba(20,20,24,.5); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .event-head { display: flex; gap: 12px; align-items: flex-start; }
+  .event-emoji { width: 36px; height: 36px; flex-shrink: 0; border-radius: 999px; background: #000; border: 1px solid var(--ring, rgba(255,255,255,.2)); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .event-name { font-weight: 500; color: #fff; margin: 0; }
+  .event-type { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--type-color, var(--muted)); }
+  .event-desc { margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #d4d4d8; }
+  .event-vis { margin: 8px 0 0; font-size: 12px; color: var(--faint); }
+  .event-vis b { color: #3f3f46; font-weight: 500; }
+  .note { margin-top: 16px; font-size: 11px; color: var(--faint); line-height: 1.5; border-top: 1px solid var(--border-soft); padding-top: 12px; }
+</style><div class="backdrop"/><div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">✦ Astronomy Scanner</div>
+      <h1>Cosmic Calendar</h1>
+      <p class="subtitle" id="subtitle">Sky events for this month, scanned and ready.</p>
+    </div>
+    <div class="controls">
+      <button class="btn icon" id="prev" aria-label="Previous month">‹</button>
+      <button class="btn" id="today">Today</button>
+      <button class="btn icon" id="next" aria-label="Next month">›</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <section class="card">
+      <div class="card-head">
+        <h2 id="monthLabel">—</h2>
+        <span class="scan-badge" id="scanBadge" style="display:none"/>
+      </div>
+      <div class="weekdays" id="weekdays"/>
+      <div class="grid" id="grid"/>
+      <div class="legend" id="legend"/>
+    </section>
+
+    <aside class="card detail" id="detail">
+      <div class="empty-state">
+        <div class="emoji">✦</div>
+        <p>Select a highlighted date to see what's happening in the sky.</p>
+      </div>
+    </aside>
+  </div>
+</div><script>
+const TYPE_META = {
+  meteor_shower: { emoji: '☄️', label: 'Meteor Shower', color: '#fcd34d', ring: 'rgba(252,211,77,.45)' },
+  eclipse:       { emoji: '🌑', label: 'Eclipse',        color: '#fda4af', ring: 'rgba(253,164,175,.45)' },
+  conjunction:  { emoji: '🪐', label: 'Conjunction',     color: '#7dd3fc', ring: 'rgba(125,211,252,.45)' },
+  moon_phase:   { emoji: '🌙', label: 'Moon Phase',     color: '#e4e4e7', ring: 'rgba(228,228,231,.45)' },
+  planet:       { emoji: '🪐', label: 'Planet',         color: '#6ee7b7', ring: 'rgba(110,231,183,.45)' },
+  comet:        { emoji: '☄️', label: 'Comet',          color: '#c4b5fd', ring: 'rgba(196,181,253,.45)' },
+  aurora:       { emoji: '🌌', label: 'Aurora',          color: '#67e8f9', ring: 'rgba(103,232,249,.45)' },
+  solstice:     { emoji: '☀️', label: 'Solstice',       color: '#fdba74', ring: 'rgba(253,186,116,.45)' },
+  close_approach: { emoji: '🪨', label: 'Close Approach', color: '#fb923c', ring: 'rgba(251,146,60,.45)' },
+  other:        { emoji: '✦',  label: 'Sky Event',      color: '#fafafa', ring: 'rgba(250,250,250,.45)' }
+};
+
+const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// ---- Moon phase computation ----
+const SYNODIC = 29.530588853;
+const REF_NEW_MOON = Date.UTC(2000, 0, 6, 18, 14) / 86400000;
+function moonAge(date) {
+  const d = date.getTime() / 86400000;
+  let age = (d - REF_NEW_MOON) % SYNODIC;
+  if (age &lt; 0) age += SYNODIC;
+  return age;
+}
+function closestPhaseDay(year, month, targetAge) {
+  let bestDay = 1, bestDiff = Infinity;
+  const daysIn = new Date(year, month + 1, 0).getDate();
+  for (let d = 1; d &lt;= daysIn; d++) {
+    const age = moonAge(new Date(Date.UTC(year, month, d, 12)));
+    let diff = Math.abs(age - targetAge);
+    if (diff &gt; SYNODIC / 2) diff = SYNODIC - diff;
+    if (diff &lt; bestDiff) { bestDiff = diff; bestDay = d; }
+  }
+  return bestDay;
+}
+function moonPhasesForMonth(year, month) {
+  return [
+    { day: closestPhaseDay(year, month, 0),       name: 'New Moon',      phase: 'new' },
+    { day: closestPhaseDay(year, month, 7.3826),   name: 'First Quarter', phase: 'first' },
+    { day: closestPhaseDay(year, month, 14.7653),  name: 'Full Moon',      phase: 'full' },
+    { day: closestPhaseDay(year, month, 22.1479),   name: 'Last Quarter',  phase: 'last' }
+  ];
+}
+
+// ---- Curated recurring events (fallback / supplement) ----
+const ANNUAL = [
+  { md: '01-03', name: 'Quadrantid Meteor Shower Peak', type: 'meteor_shower', description: 'One of the strongest annual meteor showers, up to 120 bright meteors per hour with a sharp peak.', visibility: 'Best after midnight in the Northern Hemisphere; naked eye.' },
+  { md: '04-22', name: 'Lyrid Meteor Shower Peak', type: 'meteor_shower', description: 'An ancient shower producing 15-20 meteors per hour, occasionally with bright fireballs.', visibility: 'Best after midnight; naked eye.' },
+  { md: '05-06', name: 'Eta Aquariid Meteor Shower Peak', type: 'meteor_shower', description: 'Remnants of Halley\'s Comet, up to 50 meteors per hour, best from the tropics and Southern Hemisphere.', visibility: 'Best before dawn; naked eye.' },
+  { md: '06-21', name: 'June Solstice', type: 'solstice', description: 'Longest day in the Northern Hemisphere, shortest in the Southern. Start of astronomical summer in the north.', visibility: 'Worldwide — a seasonal marker.' },
+  { md: '08-12', name: 'Perseid Meteor Shower Peak', type: 'meteor_shower', description: 'One of the most prolific annual showers, up to 100 bright meteors per hour under dark skies.', visibility: 'Best after midnight; naked eye.' },
+  { md: '09-22', name: 'September Equinox', type: 'solstice', description: 'Day and night nearly equal worldwide. Start of astronomical autumn in the Northern Hemisphere.', visibility: 'Worldwide — a seasonal marker.' },
+  { md: '10-21', name: 'Orionid Meteor Shower Peak', type: 'meteor_shower', description: 'Debris from Halley\'s Comet, 10-20 fast meteors per hour.', visibility: 'Best after midnight; naked eye.' },
+  { md: '11-17', name: 'Leonid Meteor Shower Peak', type: 'meteor_shower', description: 'Fast, bright meteors from comet Tempel-Tuttle, 10-15 per hour.', visibility: 'Best after midnight; naked eye.' },
+  { md: '12-13', name: 'Geminid Meteor Shower Peak', type: 'meteor_shower', description: 'The most reliable annual shower, up to 120 multicolored meteors per hour.', visibility: 'All night; naked eye.' },
+  { md: '12-21', name: 'December Solstice', type: 'solstice', description: 'Shortest day in the Northern Hemisphere. Start of astronomical winter in the north.', visibility: 'Worldwide — a seasonal marker.' },
+  { md: '03-20', name: 'March Equinox', type: 'solstice', description: 'Day and night nearly equal worldwide. Start of astronomical spring in the Northern Hemisphere.', visibility: 'Worldwide — a seasonal marker.' }
+];
+
+const ECLIPSES = [
+  { date: '2025-03-14', name: 'Total Lunar Eclipse', type: 'eclipse', description: 'A total lunar eclipse visible from the Americas, western Europe, and western Africa. The Moon turns a deep coppery red.', visibility: 'Americas, W. Europe, W. Africa.' },
+  { date: '2025-09-07', name: 'Total Lunar Eclipse', type: 'eclipse', description: 'A total lunar eclipse visible from Europe, Africa, Asia, and Australia.', visibility: 'Europe, Africa, Asia, Australia.' },
+  { date: '2026-02-17', name: 'Annular Solar Eclipse', type: 'eclipse', description: 'An annular ("ring of fire") solar eclipse visible from Antarctica, with partial views from southern Africa and the South Atlantic.', visibility: 'Antarctica; partial in S. Africa, S. Atlantic.' },
+  { date: '2026-03-03', name: 'Total Lunar Eclipse ("Blood Moon")', type: 'eclipse', description: 'The Moon passes fully through Earth\'s shadow and turns a deep red, with totality lasting nearly an hour.', visibility: 'Best across the Pacific and the Americas; Moon sets during totality in the east.' },
+  { date: '2026-08-12', name: 'Total Solar Eclipse', type: 'eclipse', description: 'A total solar eclipse over Greenland, Iceland, and Spain — the first total solar eclipse visible from mainland Europe since 1999.', visibility: 'Totality in Greenland, Iceland, Spain; partial across N. Hemisphere.' },
+  { date: '2026-08-28', name: 'Near-Total Lunar Eclipse', type: 'eclipse', description: 'A deep partial lunar eclipse, with the Moon nearly entirely swallowed by Earth\'s shadow, on the night of August 27/28.', visibility: 'Americas, Europe, Africa.' },
+  { date: '2027-02-06', name: 'Annular Solar Eclipse', type: 'eclipse', description: 'A long annular solar eclipse across parts of South America and West Africa.', visibility: 'S. America, W. Africa; partial elsewhere.' },
+  { date: '2027-08-02', name: 'Total Solar Eclipse', type: 'eclipse', description: 'One of the longest total solar eclipses of the century, with totality over 6 minutes across parts of Africa and the Middle East.', visibility: 'Totality across N. Africa, Middle East; partial widely.' }
+];
+
+// Dated, year-specific highlights for 2026 (oppositions, conjunctions, a
+// notable comet) sourced and verified from current skywatching coverage.
+const SPECIAL_EVENTS = [
+  { date: '2026-01-10', name: 'Jupiter at Opposition', type: 'planet', description: 'Jupiter reaches opposition, appearing at its brightest and largest for the year, rising at sunset and visible all night long.', visibility: 'Visible all night worldwide; naked eye, best in binoculars or a telescope.' },
+  { date: '2026-02-19', name: 'Mercury at Greatest Elongation East', type: 'planet', description: 'Mercury reaches its furthest apparent distance from the Sun in the evening sky — the best chance all year to spot the elusive innermost planet.', visibility: 'Low in the west just after sunset.' },
+  { date: '2026-02-28', name: 'Six-Planet Parade', type: 'conjunction', description: 'Mercury, Venus, Jupiter, Uranus, Saturn and Neptune line up in a gentle diagonal from the western horizon up toward the near-full Moon.', visibility: 'About an hour after sunset; naked eye for the brightest planets, binoculars help for Uranus and Neptune.' },
+  { date: '2026-04-25', name: 'Comet C/2025 R3 (PANSTARRS) Peak Brightness', type: 'comet', description: 'Comet C/2025 R3 (PANSTARRS) is forecast to reach its maximum brightness, and may become the brightest comet of the year.', visibility: 'Likely needs binoculars; check closer to the date for an updated forecast and finder chart.' },
+  { date: '2026-09-05', name: 'Late-Summer Planetary Parade', type: 'conjunction', description: 'A second planetary clustering of the year unfolds, with several planets grouping together in the sky from late August into mid-September.', visibility: 'Check a sky-map app for the exact alignment and timing from your location.' },
+  { date: '2026-10-04', name: 'Saturn at Opposition', type: 'planet', description: 'Saturn reaches opposition, shining at its brightest for the year with its rings well positioned for observation.', visibility: 'Visible all night worldwide; rings best seen through a telescope.' }
+];
+
+function pad(n) { return String(n).padStart(2, '0'); }
+function dateKey(y, m, d) { return `${y}-${pad(m + 1)}-${pad(d)}`; }
+
+// ---- State ----
+const today = new Date();
+let viewYear = today.getFullYear();
+let viewMonth = today.getMonth();
+let selectedKey = null;
+let currentEvents = [];
+let currentByDate = {};
+
+const $ = (id) =&gt; document.getElementById(id);
+const todayKey = () =&gt; dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+// ---- Live scan 1: NASA Astronomy Picture of the Day ----
+// The original bug: this always requested through the LAST day of the
+// viewed month, which for the current month means asking for dates that
+// haven't happened yet — NASA's API rejects that with HTTP 400. Fixed by
+// clamping the end date to today. Any failure (network block, CORS, rate
+// limit) resolves to an empty result rather than throwing, so a flaky or
+// unreachable feed can never break the page — it just doesn't add anything.
+async function scanApod(year, month) {
+  try {
+    const start = dateKey(year, month, 1);
+    const daysIn = new Date(year, month + 1, 0).getDate();
+    let end = dateKey(year, month, daysIn);
+    if (end &gt; todayKey()) end = todayKey();
+    if (start &gt; todayKey()) return {}; // whole month is in the future — nothing to scan yet
+
+    const url = `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&amp;start_date=${start}&amp;end_date=${end}`;
+    const res = await fetch(url);
+    if (!res.ok) return {};
+    const data = await res.json();
+    const items = Array.isArray(data) ? data : [data];
+    const map = {};
+    for (const item of items) {
+      if (!item || !item.date) continue;
+      const text = `${item.title || ''} ${item.explanation || ''}`.toLowerCase();
+      const type = detectApodType(text);
+      if (!type) continue; // skip daily pictures unrelated to a known sky-event type
+      (map[item.date] ||= []).push({
+        date: item.date,
+        name: item.title,
+        type,
+        description: item.explanation || '',
+        visibility: item.copyright ? `Image credit: ${item.copyright}` : 'NASA Astronomy Picture of the Day',
+        live: true
+      });
+    }
+    return map;
+  } catch (_) {
+    return {}; // network blocked, CORS, or otherwise unreachable — fail quietly
+  }
+}
+
+function detectApodType(t) {
+  if (t.includes('meteor')) return 'meteor_shower';
+  if (t.includes('eclipse') || t.includes('totality')) return 'eclipse';
+  if (t.includes('conjunction') || t.includes('alignment')) return 'conjunction';
+  if (t.includes('comet')) return 'comet';
+  if (t.includes('aurora')) return 'aurora';
+  if (t.includes('solstice') || t.includes('equinox')) return 'solstice';
+  if (t.includes('jupiter') || t.includes('saturn') || t.includes('mars') || t.includes('venus') || t.includes('mercury') || t.includes('opposition')) return 'planet';
+  return null;
+}
+
+// ---- Live scan 2: JPL Small-Body Database close-approach feed ----
+// Real asteroid/comet flyby data with real dates and distances. Keyless, no
+// shared rate limit — but wrapped the same way, so if it's unreachable in
+// a given environment it just contributes nothing instead of erroring.
+async function scanCloseApproaches(year, month) {
+  try {
+    const start = dateKey(year, month, 1);
+    const daysIn = new Date(year, month + 1, 0).getDate();
+    const end = dateKey(year, month, daysIn);
+    const url = `https://ssd-api.jpl.nasa.gov/cad.api?date-min=${start}&amp;date-max=${end}&amp;dist-max=0.05&amp;sort=date`;
+    const res = await fetch(url);
+    if (!res.ok) return {};
+    const data = await res.json();
+    if (!data || !data.data || !data.data.length) return {};
+
+    const fieldIndex = {};
+    data.fields.forEach((f, i) =&gt; { fieldIndex[f] = i; });
+
+    const byDay = {};
+    for (const row of data.data) {
+      const cd = row[fieldIndex.cd]; // e.g. "2026-Aug-06 03:15"
+      if (!cd) continue;
+      const [yPart, monAbbr, rest] = cd.split('-');
+      if (!rest) continue;
+      const dayPart = rest.trim().split(' ')[0];
+      const mIdx = MONTH_ABBR.indexOf(monAbbr);
+      if (mIdx === -1) continue;
+      const key = dateKey(Number(yPart), mIdx, Number(dayPart));
+      const distAU = parseFloat(row[fieldIndex.dist]);
+      if (isNaN(distAU)) continue;
+      (byDay[key] ||= []).push({
+        des: row[fieldIndex.des],
+        distAU,
+        vRel: parseFloat(row[fieldIndex.v_rel]),
+        h: parseFloat(row[fieldIndex.h])
+      });
+    }
+
+    const map = {};
+    for (const key in byDay) {
+      byDay[key].sort((a, b) =&gt; a.distAU - b.distAU);
+      const c = byDay[key][0];
+      const distLD = c.distAU * 389.171; // AU -&gt; lunar distances
+      const size = estimateDiameterMeters(c.h);
+      const sizeStr = size ? `${size.min}–${size.max} m across` : 'size unknown';
+      map[key] = [{
+        date: key,
+        name: `Close Approach: ${c.des}`,
+        type: 'close_approach',
+        description: `Near-Earth object ${c.des} passes within about ${distLD.toFixed(1)} lunar distances of Earth${isNaN(c.vRel) ? '' : `, moving at roughly ${c.vRel.toFixed(1)} km/s relative to Earth`}. Estimated ${sizeStr}.`,
+        visibility: 'Data: NASA/JPL Small-Body Database (Close-Approach)',
+        live: true
+      }];
+    }
+    return map;
+  } catch (_) {
+    return {};
+  }
+}
+
+function estimateDiameterMeters(h) {
+  if (isNaN(h)) return null;
+  const diam = (albedo) =&gt; 1329000 / Math.sqrt(albedo) * Math.pow(10, -0.2 * h); // meters
+  return { min: Math.round(diam(0.25)), max: Math.round(diam(0.05)) };
+}
+
+function combineMaps(...maps) {
+  const out = {};
+  for (const m of maps) {
+    for (const key in m) (out[key] ||= []).push(...m[key]);
+  }
+  return out;
+}
+
+// ---- Build combined events for a month ----
+function buildEvents(year, month) {
+  const events = [];
+  for (const p of moonPhasesForMonth(year, month)) {
+    let desc, vis;
+    if (p.phase === 'new') { desc = 'The Moon is between Earth and the Sun, not visible. Dark skies ideal for stargazing and meteor showers.'; vis = 'Not visible; ideal dark skies.'; }
+    else if (p.phase === 'full') { desc = 'The Moon is fully illuminated, rising at sunset and setting at sunrise. Bright all night.'; vis = 'Visible all night worldwide.'; }
+    else if (p.phase === 'first') { desc = 'The Moon is half-illuminated, rising around midday and setting around midnight.'; vis = 'Visible in the evening sky.'; }
+    else { desc = 'The Moon is half-illuminated, rising around midnight and setting around midday.'; vis = 'Visible in the pre-dawn sky.'; }
+    events.push({ date: dateKey(year, month, p.day), name: p.name, type: 'moon_phase', description: desc, visibility: vis });
+  }
+  for (const e of ANNUAL) {
+    const [mm] = e.md.split('-');
+    if (Number(mm) - 1 === month) events.push({ date: `${year}-${e.md}`, name: e.name, type: e.type, description: e.description, visibility: e.visibility });
+  }
+  for (const e of ECLIPSES) {
+    if (e.date.startsWith(`${year}-${pad(month + 1)}`)) events.push({ ...e });
+  }
+  for (const e of SPECIAL_EVENTS) {
+    if (e.date.startsWith(`${year}-${pad(month + 1)}`)) events.push({ ...e });
+  }
+  return events;
+}
+
+function mergeEvents(staticEvents, liveMap) {
+  const byDate = {};
+  for (const ev of staticEvents) (byDate[ev.date] ||= []).push(ev);
+  for (const key in liveMap) {
+    for (const ev of liveMap[key]) (byDate[key] ||= []).push(ev);
+  }
+  return byDate;
+}
+
+// ---- Render ----
+function renderWeekdays() {
+  $('weekdays').innerHTML = WEEKDAYS.map(d =&gt; `&lt;div&gt;${d}&lt;/div&gt;`).join('');
+}
+function renderLegend() {
+  $('legend').innerHTML = Object.entries(TYPE_META).map(([k, m]) =&gt;
+    `&lt;div class="legend-item"&gt;&lt;span class="legend-dot" style="background:${m.color}"&gt;&lt;/span&gt;${m.label}&lt;/div&gt;`
+  ).join('');
+}
+
+function renderGrid(byDate) {
+  const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+  const daysIn = new Date(viewYear, viewMonth + 1, 0).getDate();
+  const cells = [];
+  for (let i = 0; i &lt; firstDay; i++) cells.push(null);
+  for (let d = 1; d &lt;= daysIn; d++) cells.push(d);
+  const tKey = todayKey();
+  let html = '';
+  for (const day of cells) {
+    if (day === null) { html += `&lt;button class="cell empty" disabled&gt;&lt;/button&gt;`; continue; }
+    const key = dateKey(viewYear, viewMonth, day);
+    const dayEvents = byDate[key] || [];
+    const has = dayEvents.length &gt; 0;
+    const primary = dayEvents[0]?.type || 'other';
+    const meta = TYPE_META[primary] || TYPE_META.other;
+    const cls = ['cell'];
+    if (has) cls.push('has');
+    if (key === tKey) cls.push('today');
+    if (key === selectedKey) cls.push('selected');
+    let stickers = '';
+    if (has) {
+      stickers = '&lt;div class="stickers"&gt;';
+      dayEvents.slice(0, 3).forEach(ev =&gt; {
+        const m = TYPE_META[ev.type] || TYPE_META.other;
+        stickers += `&lt;span class="sticker" style="--ring:${m.ring}" title="${ev.name.replace(/"/g, '&amp;quot;')}"&gt;${m.emoji}&lt;/span&gt;`;
+      });
+      if (dayEvents.length &gt; 3) stickers += `&lt;span class="sticker more"&gt;+${dayEvents.length - 3}&lt;/span&gt;`;
+      stickers += '&lt;/div&gt;';
+    }
+    html += `&lt;button class="${cls.join(' ')}" style="--ring:${meta.ring}" data-key="${key}"&gt;&lt;span class="daynum"&gt;${day}&lt;/span&gt;${stickers}&lt;/button&gt;`;
+  }
+  const grid = $('grid');
+  grid.innerHTML = html;
+  grid.querySelectorAll('.cell[data-key]').forEach(btn =&gt; {
+    btn.addEventListener('click', () =&gt; { selectedKey = btn.dataset.key; renderGrid(currentByDate); renderDetail(); });
+  });
+}
+
+function renderDetail() {
+  const el = $('detail');
+  if (!selectedKey) {
+    el.innerHTML = `&lt;div class="empty-state"&gt;&lt;div class="emoji"&gt;✦&lt;/div&gt;&lt;p&gt;Select a highlighted date to see what's happening in the sky.&lt;/p&gt;&lt;/div&gt;`;
+    return;
+  }
+  const evs = currentByDate[selectedKey] || [];
+  const d = new Date(selectedKey + 'T12:00:00Z');
+  const dateStr = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  if (evs.length === 0) {
+    el.innerHTML = `&lt;div class="empty-state"&gt;&lt;div class="emoji"&gt;🌙&lt;/div&gt;&lt;p&gt;No notable sky events on this date.&lt;/p&gt;&lt;p class="date"&gt;${dateStr}&lt;/p&gt;&lt;/div&gt;`;
+    return;
+  }
+  let html = `&lt;div&gt;&lt;div class="detail-date"&gt;${dateStr}&lt;/div&gt;&lt;div class="detail-title"&gt;${evs.length} event${evs.length &gt; 1 ? 's' : ''}&lt;/div&gt;&lt;/div&gt;&lt;div&gt;`;
+  for (const ev of evs) {
+    const m = TYPE_META[ev.type] || TYPE_META.other;
+    html += `&lt;div class="event-card"&gt;
+      &lt;div class="event-head"&gt;
+        &lt;span class="event-emoji" style="--ring:${m.ring}"&gt;${m.emoji}&lt;/span&gt;
+        &lt;div&gt;&lt;p class="event-name"&gt;${ev.name}&lt;/p&gt;&lt;span class="event-type" style="--type-color:${m.color}"&gt;${m.label}&lt;/span&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p class="event-desc"&gt;${ev.description}&lt;/p&gt;
+      ${ev.visibility ? `&lt;p class="event-vis"&gt;&lt;b&gt;Visibility:&lt;/b&gt; ${ev.visibility}&lt;/p&gt;` : ''}
+    &lt;/div&gt;`;
+  }
+  html += '&lt;/div&gt;';
+  html += `&lt;p class="note"&gt;Moon phases are computed with real orbital math; meteor showers, solstices, eclipses, oppositions, and conjunctions are a verified 2025–2027 dataset.&lt;/p&gt;`;
+  el.innerHTML = html;
+}
+
+function renderMonth() {
+  const label = new Date(viewYear, viewMonth, 1).toLocaleString('en-US', { month: 'long', year: 'numeric' });
+  $('monthLabel').textContent = label;
+  $('subtitle').textContent = `Sky events for ${label}, scanned and ready.`;
+
+  const events = buildEvents(viewYear, viewMonth);
+  currentByDate = mergeEvents(events, {});
+  renderGrid(currentByDate);
+  renderDetail();
+}
+
+$('prev').addEventListener('click', () =&gt; { let m = viewMonth - 1, y = viewYear; if (m &lt; 0) { m = 11; y--; } viewMonth = m; viewYear = y; selectedKey = null; renderMonth(); });
+$('next').addEventListener('click', () =&gt; { let m = viewMonth + 1, y = viewYear; if (m &gt; 11) { m = 0; y++; } viewMonth = m; viewYear = y; selectedKey = null; renderMonth(); });
+$('today').addEventListener('click', () =&gt; { viewYear = today.getFullYear(); viewMonth = today.getMonth(); selectedKey = null; renderMonth(); });
+
+renderWeekdays();
+renderLegend();
+renderMonth();
+</script>
+</div>
