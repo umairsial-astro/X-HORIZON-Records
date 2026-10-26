@@ -1,0 +1,2783 @@
+<style>
+/* X Horizon scoped theme + mobile layer. Functional astrox-* IDs/classes are intentionally preserved. */
+#xhorizon-social-learning-root,
+#xhorizon-social-learning-root *{
+  box-sizing:border-box;
+}
+#xhorizon-social-learning-root{
+  background:
+    radial-gradient(circle at 15% 5%,rgba(56,189,248,0.18),transparent 34%),
+    radial-gradient(circle at 85% 12%,rgba(96,165,250,0.14),transparent 36%),
+    radial-gradient(circle at 50% 100%,rgba(15,23,42,0.9),transparent 42%),
+    #01040d !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  color:#f8fbff !important;
+  isolation:isolate;
+}
+#xhorizon-social-learning-root:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    radial-gradient(circle,rgba(255,255,255,0.55) 1px,transparent 1.8px),
+    radial-gradient(circle,rgba(125,211,252,0.35) 1px,transparent 1.8px);
+  background-size:90px 90px,150px 150px;
+  opacity:0.08;
+  z-index:0;
+}
+#xhorizon-social-learning-root > section{
+  background-color:#01040d !important;
+}
+#xhorizon-social-learning-root > section:first-of-type{
+  background:
+    linear-gradient(rgba(1,4,13,0.86),rgba(1,4,13,0.96)),
+    radial-gradient(circle at 50% 18%,rgba(125,211,252,0.20),transparent 32%),
+    url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1800&auto=format&fit=crop') center/cover no-repeat !important;
+}
+#xhorizon-social-learning-root h1,
+#xhorizon-social-learning-root > section > div h2,
+#xhorizon-social-control-studio h2{
+  background:linear-gradient(90deg,#ffffff 0%,#dbeafe 24%,#7dd3fc 52%,#e5e7eb 78%,#ffffff 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent !important;
+  text-shadow:0 0 38px rgba(56,189,248,0.32) !important;
+  letter-spacing:-1px;
+}
+#xhorizon-social-learning-root p,
+#xhorizon-social-learning-root label{
+  color:#c7d2fe;
+}
+#xhorizon-social-learning-root input,
+#xhorizon-social-learning-root textarea,
+#xhorizon-social-learning-root select{
+  background:rgba(3,7,18,0.82) !important;
+  border-color:rgba(125,211,252,0.22) !important;
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  caret-color:#7dd3fc;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.02),0 0 28px rgba(56,189,248,0.08);
+}
+#xhorizon-social-learning-root input:focus,
+#xhorizon-social-learning-root textarea:focus,
+#xhorizon-social-learning-root select:focus{
+  border-color:rgba(125,211,252,0.58) !important;
+  box-shadow:0 0 0 3px rgba(56,189,248,0.14),0 0 35px rgba(56,189,248,0.16) !important;
+}
+#xhorizon-social-learning-root input:-webkit-autofill,
+#xhorizon-social-learning-root input:-webkit-autofill:hover,
+#xhorizon-social-learning-root input:-webkit-autofill:focus{
+  -webkit-box-shadow:0 0 0 1000px #030712 inset !important;
+  -webkit-text-fill-color:#ffffff !important;
+  caret-color:#7dd3fc !important;
+  transition:background-color 9999s ease-out 0s;
+}
+#xhorizon-social-learning-root img{
+  max-width:100%;
+}
+@keyframes float1{
+  0%,100%{transform:translate3d(0,0,0) scale(1);}
+  50%{transform:translate3d(18px,22px,0) scale(1.04);}
+}
+@keyframes float2{
+  0%,100%{transform:translate3d(0,0,0) scale(1);}
+  50%{transform:translate3d(-20px,-18px,0) scale(1.03);}
+}
+@media (max-width:900px){
+  #xhorizon-social-learning-root > section{
+    padding-left:22px !important;
+    padding-right:22px !important;
+  }
+  #xhorizon-social-learning-root > section:first-of-type{
+    padding-top:95px !important;
+    padding-bottom:82px !important;
+  }
+  #xhorizon-social-learning-root h1{
+    font-size:clamp(42px,12vw,64px) !important;
+    line-height:1.08 !important;
+  }
+  #xhorizon-social-learning-root h2{
+    font-size:clamp(32px,9vw,48px) !important;
+    line-height:1.15 !important;
+  }
+  #xhorizon-social-learning-root h3{
+    font-size:26px !important;
+    line-height:1.18 !important;
+  }
+  #xhorizon-social-learning-root p{
+    font-size:16px !important;
+    line-height:1.75 !important;
+  }
+  #astrox-social-search-input{
+    min-width:100% !important;
+    width:100% !important;
+    flex:0 0 100% !important;
+    padding:18px 18px !important;
+  }
+  #astrox-social-search-btn{
+    width:100% !important;
+    padding:18px !important;
+  }
+  #xhorizon-social-learning-root div[style*="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"]{
+    grid-template-columns:1fr !important;
+    gap:24px !important;
+  }
+  #xhorizon-social-learning-root div[style*="grid-template-columns:1fr 1fr"],
+  #xhorizon-social-learning-root div[style*="grid-template-columns:1fr 1fr 1fr"]{
+    grid-template-columns:1fr !important;
+  }
+  #xhorizon-social-learning-root [style*="height:230px"]{
+    height:210px !important;
+    min-height:210px !important;
+    max-height:210px !important;
+  }
+  #astrox-social-control-studio{
+    padding-top:70px !important;
+    padding-bottom:70px !important;
+  }
+}
+@media (max-width:520px){
+  #xhorizon-social-learning-root > section{
+    padding-left:16px !important;
+    padding-right:16px !important;
+  }
+  #xhorizon-social-learning-root > section:first-of-type{
+    padding-top:80px !important;
+    padding-bottom:70px !important;
+  }
+  #xhorizon-social-learning-root h1{
+    font-size:38px !important;
+  }
+  #xhorizon-social-learning-root h2{
+    font-size:30px !important;
+  }
+  #xhorizon-social-learning-root h3{
+    font-size:23px !important;
+    min-height:auto !important;
+  }
+  #xhorizon-social-learning-root p{
+    font-size:15px !important;
+  }
+  #xhorizon-social-learning-root button,
+  #xhorizon-social-learning-root a{
+    max-width:100%;
+  }
+  #xhorizon-social-learning-root [style*="padding:80px 50px"]{
+    padding:46px 22px !important;
+    border-radius:28px !important;
+  }
+  #xhorizon-social-learning-root [style*="height:230px"]{
+    height:195px !important;
+    min-height:195px !important;
+    max-height:195px !important;
+  }
+}
+
+
+/* MAIN SECTION ONLY — homepage reference visual patch */
+#xhorizon-social-learning-root{
+  --xh-display:'Space Grotesk',Arial,Helvetica,sans-serif;
+  --xh-ease:cubic-bezier(.16,1,.3,1);
+  background:#000 !important;
+}
+#xhorizon-social-learning-root > section:first-of-type{
+  min-height:100vh !important;
+  padding:108px 20px 76px !important;
+  display:grid !important;
+  place-items:center !important;
+  text-align:center !important;
+  overflow:hidden !important;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.28),rgba(0,0,0,.64) 68%,#000 100%),
+    url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=90&w=2000&auto=format&fit=crop') center/cover no-repeat !important;
+}
+#xhorizon-social-learning-root > section:first-of-type::before{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  height:2px !important;
+  z-index:3 !important;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.86),transparent) !important;
+  box-shadow:0 0 30px rgba(255,255,255,.45) !important;
+  pointer-events:none !important;
+}
+#xhorizon-social-learning-root > section:first-of-type::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:1 !important;
+  background:radial-gradient(circle at 50% 48%,rgba(0,0,0,.04) 0 24%,rgba(0,0,0,.45) 72%,#000 100%) !important;
+  pointer-events:none !important;
+}
+#xhorizon-social-learning-root > section:first-of-type > div[style*="filter:blur"]{
+  display:none !important;
+}
+#xhorizon-social-learning-root > section:first-of-type > div:not([style*="filter:blur"]){
+  position:relative !important;
+  z-index:4 !important;
+  width:min(650px,calc(100% - 34px)) !important;
+  max-width:650px !important;
+  margin:auto !important;
+  padding:48px 0 42px !important;
+  transform:translateY(-20px) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  text-align:center !important;
+}
+#xhorizon-social-learning-root > section:first-of-type h1{
+  font-family:var(--xh-display) !important;
+  margin:0 !important;
+  font-size:clamp(44px,7vw,76px) !important;
+  line-height:.94 !important;
+  letter-spacing:-.02em !important;
+  font-weight:700 !important;
+  text-transform:none !important;
+  color:#fff !important;
+  background:none !important;
+  -webkit-background-clip:initial !important;
+  background-clip:initial !important;
+  -webkit-text-fill-color:#fff !important;
+  text-shadow:none !important;
+}
+#xhorizon-social-learning-root > section:first-of-type p{
+  max-width:620px !important;
+  margin:18px auto 0 !important;
+  color:#cfcfcf !important;
+  font-size:clamp(14px,1.48vw,18px) !important;
+  line-height:1.7 !important;
+  letter-spacing:.08em !important;
+  font-weight:400 !important;
+}
+#xhorizon-social-learning-root > section:first-of-type div:has(> #astrox-social-search-input){
+  width:min(460px,90vw) !important;
+  max-width:460px !important;
+  margin:0 auto 23px !important;
+  display:flex !important;
+  background:rgba(255,255,255,.045) !important;
+  border:0 !important;
+  border-radius:14px !important;
+  padding:6px !important;
+  gap:6px !important;
+  box-shadow:none !important;
+  backdrop-filter:blur(12px) !important;
+  justify-content:center !important;
+  flex-wrap:nowrap !important;
+}
+#xhorizon-social-learning-root > section:first-of-type #astrox-social-search-input{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  height:46px !important;
+  min-height:46px !important;
+  border:0 !important;
+  border-radius:10px !important;
+  background:transparent !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  padding:0 14px !important;
+  font-size:13px !important;
+  box-shadow:none !important;
+  outline:none !important;
+}
+#xhorizon-social-learning-root > section:first-of-type #astrox-social-search-btn{
+  min-height:46px !important;
+  height:46px !important;
+  border:0 !important;
+  border-radius:10px !important;
+  background:#fff !important;
+  color:#000 !important;
+  padding:0 20px !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  letter-spacing:.04em !important;
+  text-transform:none !important;
+  box-shadow:none !important;
+  transition:transform .28s var(--xh-ease),background .28s var(--xh-ease) !important;
+}
+#xhorizon-social-learning-root > section:first-of-type #astrox-social-search-btn:hover{
+  background:#e7e7e7 !important;
+  color:#000 !important;
+  transform:scale(1.04) !important;
+}
+#xhorizon-social-learning-root > section:first-of-type #astrox-social-search-btn:disabled{
+  opacity:.72 !important;
+  cursor:wait !important;
+}
+@media(max-width:720px){
+  #xhorizon-social-learning-root > section:first-of-type{padding:96px 14px 64px !important;}
+  #xhorizon-social-learning-root > section:first-of-type > div:not([style*="filter:blur"]){width:min(100%,calc(100% - 10px)) !important;padding:42px 0 36px !important;transform:translateY(-10px) !important;}
+  #xhorizon-social-learning-root > section:first-of-type div:has(> #astrox-social-search-input){flex-direction:column !important;align-items:stretch !important;}
+  #xhorizon-social-learning-root > section:first-of-type #astrox-social-search-input,
+  #xhorizon-social-learning-root > section:first-of-type #astrox-social-search-btn{width:100% !important;}
+  #xhorizon-social-learning-root > section:first-of-type h1{font-size:clamp(40px,13vw,68px) !important;}
+  #xhorizon-social-learning-root > section:first-of-type p{font-size:12px !important;letter-spacing:.04em !important;}
+}
+
+
+
+/* CARDS HEIGHT ONLY PATCH — no JS/admin/search/theme changes */
+#instagram > div[style*="border-radius:30px"],
+#youtube > div[style*="border-radius:30px"],
+#tiktok > div[style*="border-radius:30px"],
+#xplatform > div[style*="border-radius:30px"],
+#threads > div[style*="border-radius:30px"],
+#facebook > div[style*="border-radius:30px"]{
+  padding:22px !important;
+  min-height:0 !important;
+}
+
+#instagram > div[style*="border-radius:30px"] > div[style*="height:230px"],
+#youtube > div[style*="border-radius:30px"] > div[style*="height:230px"],
+#tiktok > div[style*="border-radius:30px"] > div[style*="height:230px"],
+#xplatform > div[style*="border-radius:30px"] > div[style*="height:230px"],
+#threads > div[style*="border-radius:30px"] > div[style*="height:230px"],
+#facebook > div[style*="border-radius:30px"] > div[style*="height:230px"]{
+  height:165px !important;
+  min-height:165px !important;
+  max-height:165px !important;
+  margin-bottom:16px !important;
+}
+
+#instagram > div[style*="border-radius:30px"] h3,
+#youtube > div[style*="border-radius:30px"] h3,
+#tiktok > div[style*="border-radius:30px"] h3,
+#xplatform > div[style*="border-radius:30px"] h3,
+#threads > div[style*="border-radius:30px"] h3,
+#facebook > div[style*="border-radius:30px"] h3{
+  min-height:auto !important;
+  margin-bottom:10px !important;
+}
+
+#instagram > div[style*="border-radius:30px"] p,
+#youtube > div[style*="border-radius:30px"] p,
+#tiktok > div[style*="border-radius:30px"] p,
+#xplatform > div[style*="border-radius:30px"] p,
+#threads > div[style*="border-radius:30px"] p,
+#facebook > div[style*="border-radius:30px"] p{
+  min-height:auto !important;
+  margin-bottom:18px !important;
+}
+
+#instagram > div[style*="border-radius:30px"] div[style*="min-height:48px"],
+#youtube > div[style*="border-radius:30px"] div[style*="min-height:48px"],
+#tiktok > div[style*="border-radius:30px"] div[style*="min-height:48px"],
+#xplatform > div[style*="border-radius:30px"] div[style*="min-height:48px"],
+#threads > div[style*="border-radius:30px"] div[style*="min-height:48px"],
+#facebook > div[style*="border-radius:30px"] div[style*="min-height:48px"]{
+  min-height:auto !important;
+  margin-bottom:14px !important;
+}
+
+#instagram > div[style*="border-radius:30px"] div[style*="min-height:85px"],
+#youtube > div[style*="border-radius:30px"] div[style*="min-height:85px"],
+#tiktok > div[style*="border-radius:30px"] div[style*="min-height:85px"],
+#xplatform > div[style*="border-radius:30px"] div[style*="min-height:85px"],
+#threads > div[style*="border-radius:30px"] div[style*="min-height:85px"],
+#facebook > div[style*="border-radius:30px"] div[style*="min-height:85px"]{
+  min-height:auto !important;
+  margin-bottom:18px !important;
+  padding-top:12px !important;
+}
+
+@media (max-width:900px){
+  #instagram > div[style*="border-radius:30px"] > div[style*="height:230px"],
+  #youtube > div[style*="border-radius:30px"] > div[style*="height:230px"],
+  #tiktok > div[style*="border-radius:30px"] > div[style*="height:230px"],
+  #xplatform > div[style*="border-radius:30px"] > div[style*="height:230px"],
+  #threads > div[style*="border-radius:30px"] > div[style*="height:230px"],
+  #facebook > div[style*="border-radius:30px"] > div[style*="height:230px"]{
+    height:150px !important;
+    min-height:150px !important;
+    max-height:150px !important;
+  }
+}
+
+@media (max-width:520px){
+  #instagram > div[style*="border-radius:30px"],
+  #youtube > div[style*="border-radius:30px"],
+  #tiktok > div[style*="border-radius:30px"],
+  #xplatform > div[style*="border-radius:30px"],
+  #threads > div[style*="border-radius:30px"],
+  #facebook > div[style*="border-radius:30px"]{
+    padding:18px !important;
+  }
+
+  #instagram > div[style*="border-radius:30px"] > div[style*="height:230px"],
+  #youtube > div[style*="border-radius:30px"] > div[style*="height:230px"],
+  #tiktok > div[style*="border-radius:30px"] > div[style*="height:230px"],
+  #xplatform > div[style*="border-radius:30px"] > div[style*="height:230px"],
+  #threads > div[style*="border-radius:30px"] > div[style*="height:230px"],
+  #facebook > div[style*="border-radius:30px"] > div[style*="height:230px"]{
+    height:138px !important;
+    min-height:138px !important;
+    max-height:138px !important;
+  }
+}
+
+
+
+/* XHORIZON_LOADER_PATCH_START — loading system only */
+.xh-loader{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:10000 !important;
+  display:grid !important;
+  place-items:center !important;
+  background:#000 !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+  transition:opacity .65s cubic-bezier(.16,1,.3,1),visibility .65s cubic-bezier(.16,1,.3,1) !important;
+}
+.xh-loader.done{
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+.xh-load-mark{
+  position:relative !important;
+  width:min(310px,82vw) !important;
+  height:122px !important;
+  display:grid !important;
+  place-items:center !important;
+  overflow:hidden !important;
+}
+.xh-load-x{
+  position:absolute !important;
+  left:42px !important;
+  top:5px !important;
+  z-index:2 !important;
+  color:#fff !important;
+  font-size:96px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  letter-spacing:-.12em !important;
+  text-shadow:0 0 26px rgba(255,255,255,.18) !important;
+}
+.xh-load-word{
+  position:absolute !important;
+  left:112px !important;
+  top:47px !important;
+  z-index:3 !important;
+  color:#f2f2f2 !important;
+  font-size:22px !important;
+  font-weight:900 !important;
+  letter-spacing:.20em !important;
+  opacity:.9 !important;
+  line-height:1 !important;
+  text-transform:uppercase !important;
+}
+.xh-load-line{
+  position:absolute !important;
+  left:42px !important;
+  bottom:9px !important;
+  width:226px !important;
+  height:4px !important;
+  border-radius:99px !important;
+  background:#171717 !important;
+  overflow:hidden !important;
+}
+.xh-load-fill{
+  display:block !important;
+  width:0 !important;
+  height:100% !important;
+  border-radius:inherit !important;
+  background:#f5f5f5 !important;
+  box-shadow:0 0 16px rgba(255,255,255,.32) !important;
+  transition:width 1.05s cubic-bezier(.16,1,.3,1) !important;
+}
+.xh-loader.ready .xh-load-word{
+  animation:xhHorizonBlink .44s steps(2,end) infinite !important;
+  color:#fff !important;
+  text-shadow:0 0 18px rgba(255,255,255,.22) !important;
+}
+@keyframes xhHorizonBlink{0%,100%{opacity:1}50%{opacity:.35}}
+@media (max-width:520px){
+  .xh-load-mark{width:min(270px,86vw) !important;height:110px !important;}
+  .xh-load-x{left:34px !important;font-size:82px !important;}
+  .xh-load-word{left:96px !important;top:42px !important;font-size:18px !important;}
+  .xh-load-line{left:36px !important;width:64px !important;}
+}
+/* XHORIZON_LOADER_PATCH_END */
+</style>
+
+
+<div id="xh-loader" class="xh-loader" aria-label="Loading X Horizon" role="status">
+  <div class="xh-load-mark" aria-hidden="true">
+    <span class="xh-load-x">X</span>
+    <span class="xh-load-word">Horizon</span>
+    <span class="xh-load-line"><span class="xh-load-fill"></span></span>
+  </div>
+</div>
+
+<section id="xhorizon-social-learning-root" style="
+position:relative;
+background:#020617;
+font-family:Arial;
+color:white;
+overflow:hidden;
+">
+
+
+
+
+
+
+
+
+<section style="
+position:relative;
+padding:140px 6% 120px 6%;
+overflow:hidden;
+background:
+linear-gradient(rgba(2,6,23,0.92),rgba(2,6,23,0.96)),
+url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&amp;w=1800&amp;auto=format&amp;fit=crop') center/cover no-repeat;
+">
+
+
+<div style="
+position:absolute;
+width:500px;
+height:500px;
+border-radius:50%;
+background:#2563eb;
+filter:blur(180px);
+opacity:0.22;
+top:-120px;
+right:-120px;
+"></div>
+
+
+<div style="
+position:absolute;
+width:420px;
+height:420px;
+border-radius:50%;
+background:#7c3aed;
+filter:blur(180px);
+opacity:0.18;
+bottom:-120px;
+left:-120px;
+"></div>
+
+
+<div style="
+max-width:1450px;
+margin:auto;
+position:relative;
+z-index:2;
+text-align:center;
+">
+
+<div style="
+max-width:850px;
+margin:auto;
+display:flex;
+gap:18px;
+flex-wrap:wrap;
+justify-content:center;
+">
+
+
+<input id="astrox-social-search-input" type="text" placeholder="Search Space Creators..." style="
+flex:1;
+min-width:280px;
+padding:22px 24px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.08);
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(12px);
+color:white;
+font-size:16px;
+outline:none;
+">
+    
+<button id="astrox-social-search-btn" style="
+padding:22px 40px;
+border:none;
+border-radius:18px;
+background:linear-gradient(135deg,#2563eb,#1d4ed8);
+color:white;
+font-size:16px;
+font-weight:700;
+cursor:pointer;
+box-shadow:0 0 30px rgba(59,130,246,0.45);
+">
+EXPLORE
+</button>
+
+</div>
+
+<h1 style="
+font-size:82px;
+line-height:1.1;
+margin-bottom:30px;
+font-family:'Orbitron',sans-serif;
+font-weight:900;
+text-shadow:0 0 35px rgba(96,165,250,0.45);
+">
+SOCIAL LEARNING
+UNIVERSE
+</h1>
+
+<p style="
+max-width:950px;
+margin:auto;
+font-size:20px;
+line-height:1.9;
+color:#cbd5e1;
+margin-bottom:50px;
+">
+Explore futuristic space creators, educational communities, simulations and cosmic learning ecosystems from every major social platform inside X Horizon.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section style="
+padding:80px 6%;
+background:#020617;
+">
+
+<div style="
+max-width:1450px;
+margin:auto;
+">
+
+
+
+
+<div style="
+display:flex;
+justify-content:center;
+gap:18px;
+flex-wrap:wrap;
+margin-bottom:50px;
+">
+
+
+<button onmouseover="
+this.style.transform='translateY(-6px)';
+this.style.boxShadow='0 0 35px rgba(255,255,255,0.18)';
+" onmouseout="
+this.style.transform='translateY(0px)';
+this.style.boxShadow='0 0 25px rgba(255,255,255,0.08)';
+" onclick="
+document.getElementById('instagram').style.display='grid';
+document.getElementById('youtube').style.display='none';
+document.getElementById('tiktok').style.display='none';
+document.getElementById('xplatform').style.display='none';
+document.getElementById('threads').style.display='none';
+document.getElementById('facebook').style.display='none';
+" style="
+padding:16px 34px;
+border:none;
+border-radius:16px;
+background:linear-gradient(135deg,#ec4899,#7e22ce);
+color:white;
+font-family:'Orbitron',sans-serif;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+transition:0.4s ease;
+box-shadow:0 0 25px rgba(255,255,255,0.08);
+">
+INSTAGRAM
+</button>
+
+
+<button onmouseover="
+this.style.transform='translateY(-6px)';
+this.style.boxShadow='0 0 35px rgba(255,255,255,0.18)';
+" onmouseout="
+this.style.transform='translateY(0px)';
+this.style.boxShadow='0 0 25px rgba(255,255,255,0.08)';
+" onclick="
+document.getElementById('instagram').style.display='none';
+document.getElementById('youtube').style.display='grid';
+document.getElementById('tiktok').style.display='none';
+document.getElementById('xplatform').style.display='none';
+document.getElementById('threads').style.display='none';
+document.getElementById('facebook').style.display='none';
+" style="
+padding:16px 34px;
+border:none;
+border-radius:16px;
+background:linear-gradient(135deg,#ef4444,#b91c1c);
+color:white;
+font-family:'Orbitron',sans-serif;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+transition:0.4s ease;
+box-shadow:0 0 25px rgba(255,255,255,0.08);
+">
+YOUTUBE
+</button>
+
+
+<button onmouseover="
+this.style.transform='translateY(-6px)';
+this.style.boxShadow='0 0 35px rgba(255,255,255,0.18)';
+" onmouseout="
+this.style.transform='translateY(0px)';
+this.style.boxShadow='0 0 25px rgba(255,255,255,0.08)';
+" onclick="
+document.getElementById('instagram').style.display='none';
+document.getElementById('youtube').style.display='none';
+document.getElementById('tiktok').style.display='grid';
+document.getElementById('xplatform').style.display='none';
+document.getElementById('threads').style.display='none';
+document.getElementById('facebook').style.display='none';
+" style="
+padding:16px 34px;
+border:none;
+border-radius:16px;
+background:linear-gradient(135deg,#06b6d4,#111827);
+color:white;
+font-family:'Orbitron',sans-serif;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+transition:0.4s ease;
+box-shadow:0 0 25px rgba(255,255,255,0.08);
+">
+TIKTOK
+</button>
+
+
+
+<button onmouseover="
+this.style.transform='translateY(-6px)';
+this.style.boxShadow='0 0 35px rgba(255,255,255,0.18)';
+" onmouseout="
+this.style.transform='translateY(0px)';
+this.style.boxShadow='0 0 25px rgba(255,255,255,0.08)';
+" onclick="
+document.getElementById('instagram').style.display='none';
+document.getElementById('youtube').style.display='none';
+document.getElementById('tiktok').style.display='none';
+document.getElementById('xplatform').style.display='grid';
+document.getElementById('threads').style.display='none';
+document.getElementById('facebook').style.display='none';
+" style="
+padding:16px 34px;
+border:none;
+border-radius:16px;
+background:linear-gradient(135deg,#94a3b8,#0f172a);
+color:white;
+font-family:'Orbitron',sans-serif;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+transition:0.4s ease;
+box-shadow:0 0 25px rgba(255,255,255,0.08);
+">
+X / TWITTER
+</button>
+
+
+
+<button onmouseover="
+this.style.transform='translateY(-6px)';
+this.style.boxShadow='0 0 35px rgba(255,255,255,0.18)';
+" onmouseout="
+this.style.transform='translateY(0px)';
+this.style.boxShadow='0 0 25px rgba(255,255,255,0.08)';
+" onclick="
+document.getElementById('instagram').style.display='none';
+document.getElementById('youtube').style.display='none';
+document.getElementById('tiktok').style.display='none';
+document.getElementById('xplatform').style.display='none';
+document.getElementById('threads').style.display='grid';
+document.getElementById('facebook').style.display='none';
+" style="
+padding:16px 34px;
+border:none;
+border-radius:16px;
+background:linear-gradient(135deg,#111827,#64748b);
+color:white;
+font-family:'Orbitron',sans-serif;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+transition:0.4s ease;
+box-shadow:0 0 25px rgba(255,255,255,0.08);
+">
+THREADS
+</button>
+
+
+
+<button onmouseover="
+this.style.transform='translateY(-6px)';
+this.style.boxShadow='0 0 35px rgba(255,255,255,0.18)';
+" onmouseout="
+this.style.transform='translateY(0px)';
+this.style.boxShadow='0 0 25px rgba(255,255,255,0.08)';
+" onclick="
+document.getElementById('instagram').style.display='none';
+document.getElementById('youtube').style.display='none';
+document.getElementById('tiktok').style.display='none';
+document.getElementById('xplatform').style.display='none';
+document.getElementById('threads').style.display='none';
+document.getElementById('facebook').style.display='grid';
+" style="
+padding:16px 34px;
+border:none;
+border-radius:16px;
+background:linear-gradient(135deg,#3b82f6,#1d4ed8);
+color:white;
+font-family:'Orbitron',sans-serif;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+transition:0.4s ease;
+box-shadow:0 0 25px rgba(255,255,255,0.08);
+">
+FACEBOOK
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+<div id="instagram" style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:35px;
+">
+    <h2 style="
+grid-column:1/-1;
+font-size:52px;
+margin-bottom:10px;
+font-family:'Orbitron',sans-serif;
+">
+INSTAGRAM SPACE CREATORS
+</h2>
+
+<p style="
+grid-column:1/-1;
+color:#94a3b8;
+font-size:18px;
+line-height:1.8;
+margin-bottom:20px;
+">
+Explore futuristic astronomy creators, simulations and cosmic discoveries from Instagram.
+</p>
+
+
+
+<div onmouseover="
+this.style.transform='translateY(-12px)';
+this.style.boxShadow='0 0 45px rgba(236,72,153,0.45)';
+this.querySelector('.creator-img').style.transform='scale(1.08)';
+" onmouseout="
+this.style.transform='translateY(0px) scale(1)';
+this.style.boxShadow='0 0 0px rgba(0,0,0,0)';
+this.querySelector('.creator-img').style.transform='scale(1)';
+" style="
+position:relative;
+overflow:hidden;
+border-radius:30px;
+background:
+linear-gradient(135deg,
+rgba(236,72,153,0.14),
+rgba(126,34,206,0.12));
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(16px);
+padding:28px;
+transition:0.45s ease;
+cursor:pointer;
+">
+
+
+
+
+
+<div style="
+position:absolute;
+width:180px;
+height:180px;
+background:#ec4899;
+border-radius:50%;
+filter:blur(90px);
+opacity:0.18;
+top:-60px;
+right:-60px;
+"></div>
+
+
+
+
+
+
+<div style="
+position:relative;
+z-index:2;
+overflow:hidden;
+border-radius:24px;
+margin-bottom:24px;
+height:230px;
+">
+
+<img class="creator-img" src="https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?q=80&amp;w=1200&amp;auto=format&amp;fit=crop" style="
+width:100%;
+height:100%;
+object-fit:cover;
+transition:0.5s ease;
+" loading="lazy">
+
+</div>
+
+
+
+
+
+
+<h3 style="
+font-size:30px;
+margin-bottom:12px;
+font-family:'Orbitron',sans-serif;
+position:relative;
+z-index:2;
+">
+ASTRO EXPLORER
+</h3>
+
+
+
+
+
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:18px;
+position:relative;
+z-index:2;
+">
+
+<div style="
+padding:8px 14px;
+border-radius:12px;
+background:rgba(255,255,255,0.08);
+font-size:13px;
+">
+ASTROPHYSICS
+</div>
+
+<div style="
+padding:8px 14px;
+border-radius:12px;
+background:rgba(255,255,255,0.08);
+font-size:13px;
+">
+SIMULATIONS
+</div>
+
+</div>
+
+
+
+
+
+
+<p style="
+font-size:15px;
+line-height:1.8;
+color:#d4d4d4;
+margin-bottom:24px;
+position:relative;
+z-index:2;
+">
+Exploring futuristic space science, simulations and advanced cosmic discoveries for the next generation learners.
+</p>
+
+
+
+
+
+
+<div style="
+display:flex;
+justify-content:space-between;
+margin-bottom:24px;
+position:relative;
+z-index:2;
+">
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+2.4M
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Followers
+</div>
+</div>
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+540
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Posts
+</div>
+</div>
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+98%
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Rating
+</div>
+</div>
+
+</div>
+
+
+
+
+
+
+<button style="
+width:100%;
+padding:18px;
+border:none;
+border-radius:18px;
+background:linear-gradient(135deg,#ec4899,#7e22ce);
+color:white;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+position:relative;
+z-index:2;
+box-shadow:0 0 25px rgba(236,72,153,0.35);
+">
+EXPLORE CREATOR
+</button>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div id="youtube" style="
+display:none;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:35px;
+">
+
+<h2 style="
+grid-column:1/-1;
+font-size:52px;
+margin-bottom:10px;
+font-family:'Orbitron',sans-serif;
+">
+YOUTUBE SPACE CREATORS
+</h2>
+
+<p style="
+grid-column:1/-1;
+color:#94a3b8;
+font-size:18px;
+line-height:1.8;
+margin-bottom:20px;
+">
+Explore futuristic astronomy creators, simulations and cosmic discoveries from YouTube.
+</p>
+
+
+
+<div onmouseover="
+this.style.transform='translateY(-12px)';
+this.style.boxShadow='0 0 45px rgba(239,68,68,0.45)';
+this.querySelector('.creator-img').style.transform='scale(1.08)';
+" onmouseout="
+this.style.transform='translateY(0px) scale(1)';
+this.style.boxShadow='0 0 0px rgba(0,0,0,0)';
+this.querySelector('.creator-img').style.transform='scale(1)';
+" style="
+position:relative;
+overflow:hidden;
+border-radius:30px;
+background:
+linear-gradient(135deg,
+rgba(239,68,68,0.14),
+rgba(127,29,29,0.12));
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(16px);
+padding:28px;
+transition:0.45s ease;
+cursor:pointer;
+">
+
+
+
+
+
+<div style="
+position:absolute;
+width:180px;
+height:180px;
+background:#ef4444;
+border-radius:50%;
+filter:blur(90px);
+opacity:0.18;
+top:-60px;
+right:-60px;
+"></div>
+
+
+
+
+
+
+<div style="
+position:relative;
+z-index:2;
+overflow:hidden;
+border-radius:24px;
+margin-bottom:24px;
+height:230px;
+">
+
+<img class="creator-img" src="https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?q=80&amp;w=1200&amp;auto=format&amp;fit=crop" style="
+width:100%;
+height:100%;
+object-fit:cover;
+transition:0.5s ease;
+" loading="lazy">
+
+</div>
+
+
+
+
+
+
+<h3 style="
+font-size:30px;
+margin-bottom:12px;
+font-family:'Orbitron',sans-serif;
+position:relative;
+z-index:2;
+">
+ASTRO EXPLORER
+</h3>
+
+
+
+
+
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:18px;
+position:relative;
+z-index:2;
+">
+
+<div style="
+padding:8px 14px;
+border-radius:12px;
+background:rgba(255,255,255,0.08);
+font-size:13px;
+">
+ASTROPHYSICS
+</div>
+
+<div style="
+padding:8px 14px;
+border-radius:12px;
+background:rgba(255,255,255,0.08);
+font-size:13px;
+">
+SIMULATIONS
+</div>
+
+</div>
+
+
+
+
+
+
+<p style="
+font-size:15px;
+line-height:1.8;
+color:#d4d4d4;
+margin-bottom:24px;
+position:relative;
+z-index:2;
+">
+Exploring futuristic space science, simulations and advanced cosmic discoveries for the next generation learners.
+</p>
+
+
+
+
+
+
+<div style="
+display:flex;
+justify-content:space-between;
+margin-bottom:24px;
+position:relative;
+z-index:2;
+">
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+2.4M
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Followers
+</div>
+</div>
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+540
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Posts
+</div>
+</div>
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+98%
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Rating
+</div>
+</div>
+
+</div>
+
+
+
+
+
+
+<button style="
+width:100%;
+padding:18px;
+border:none;
+border-radius:18px;
+background:linear-gradient(135deg,#ef4444,#991b1b);
+color:white;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+position:relative;
+z-index:2;
+box-shadow:0 0 25px rgba(239,68,68,0.35);
+">
+EXPLORE CREATOR
+</button>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div id="tiktok" style="
+display:none;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:35px;
+align-items:stretch;
+">
+
+
+<h2 style="
+grid-column:1/-1;
+font-size:52px;
+margin-bottom:10px;
+font-family:'Orbitron',sans-serif;
+">
+TIKTOK SPACE CREATORS
+</h2>
+
+
+<p style="
+grid-column:1/-1;
+color:#94a3b8;
+font-size:18px;
+line-height:1.8;
+margin-bottom:20px;
+">
+Explore futuristic short-form space creators, cosmic visuals and astronomy facts from TikTok.
+</p>
+
+
+<div onmouseover="
+this.style.transform='translateY(-12px)';
+this.style.boxShadow='0 0 45px rgba(34,211,238,0.45)';
+this.querySelector('.creator-img').style.transform='scale(1.08)';
+this.querySelector('.explore-btn').style.transform='scale(1.04)';
+" onmouseout="
+this.style.transform='translateY(0px) scale(1)';
+this.style.boxShadow='0 0 0px rgba(0,0,0,0)';
+this.querySelector('.creator-img').style.transform='scale(1)';
+this.querySelector('.explore-btn').style.transform='scale(1)';
+" style="
+position:relative;
+overflow:hidden;
+border-radius:30px;
+background:
+linear-gradient(135deg,
+rgba(34,211,238,0.14),
+rgba(15,23,42,0.18));
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(16px);
+padding:28px;
+transition:0.45s ease;
+cursor:pointer;
+display:flex;
+flex-direction:column;
+min-height:100%;
+">
+
+
+<div style="
+position:absolute;
+width:180px;
+height:180px;
+background:#22d3ee;
+border-radius:50%;
+filter:blur(90px);
+opacity:0.18;
+top:-60px;
+right:-60px;
+"></div>
+
+
+<div style="
+position:relative;
+z-index:2;
+overflow:hidden;
+border-radius:24px;
+margin-bottom:24px;
+height:230px;
+flex-shrink:0;
+">
+
+<img class="creator-img" src="https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?q=80&amp;w=1200&amp;auto=format&amp;fit=crop" style="
+width:100%;
+height:100%;
+object-fit:cover;
+transition:0.5s ease;
+display:block;
+" loading="lazy">
+
+</div>
+
+
+<h3 style="
+font-size:30px;
+margin-bottom:12px;
+font-family:'Orbitron',sans-serif;
+position:relative;
+z-index:2;
+line-height:1.2;
+">
+COSMIC TIKTOK
+</h3>
+
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:18px;
+position:relative;
+z-index:2;
+">
+
+<div style="
+padding:8px 14px;
+border-radius:12px;
+background:rgba(255,255,255,0.08);
+font-size:13px;
+">
+SHORT VIDEOS
+</div>
+
+<div style="
+padding:8px 14px;
+border-radius:12px;
+background:rgba(255,255,255,0.08);
+font-size:13px;
+">
+SPACE FACTS
+</div>
+
+</div>
+
+
+<p style="
+font-size:15px;
+line-height:1.8;
+color:#d4d4d4;
+margin-bottom:24px;
+position:relative;
+z-index:2;
+flex-grow:1;
+">
+Quick futuristic space discoveries, black hole visuals and advanced astronomy explained through short-form content.
+</p>
+
+
+<div style="
+display:flex;
+justify-content:space-between;
+margin-bottom:24px;
+position:relative;
+z-index:2;
+">
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+5.1M
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Followers
+</div>
+</div>
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+1.2K
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Videos
+</div>
+</div>
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+99%
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Rating
+</div>
+</div>
+
+</div>
+
+
+<button class="explore-btn" style="
+width:100%;
+padding:18px;
+border:none;
+border-radius:18px;
+background:linear-gradient(135deg,#22d3ee,#111827);
+color:white;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+position:relative;
+z-index:2;
+box-shadow:0 0 25px rgba(34,211,238,0.35);
+transition:0.35s ease;
+margin-top:auto;
+">
+EXPLORE CREATOR
+</button>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div id="xplatform" style="
+display:none;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:35px;
+align-items:stretch;
+">
+
+
+<h2 style="
+grid-column:1/-1;
+font-size:52px;
+margin-bottom:10px;
+font-family:'Orbitron',sans-serif;
+">
+X / TWITTER SPACE CREATORS
+</h2>
+
+
+<p style="
+grid-column:1/-1;
+color:#94a3b8;
+font-size:18px;
+line-height:1.8;
+margin-bottom:20px;
+">
+Explore futuristic space news creators, astronomy discussions and live scientific discoveries from X platform.
+</p>
+
+
+<div onmouseover="
+this.style.transform='translateY(-12px)';
+this.style.boxShadow='0 0 45px rgba(148,163,184,0.45)';
+this.querySelector('.creator-img').style.transform='scale(1.08)';
+" onmouseout="
+this.style.transform='translateY(0px) scale(1)';
+this.style.boxShadow='0 0 0px rgba(0,0,0,0)';
+this.querySelector('.creator-img').style.transform='scale(1)';
+" style="
+position:relative;
+overflow:hidden;
+border-radius:30px;
+background:
+linear-gradient(135deg,
+rgba(148,163,184,0.14),
+rgba(15,23,42,0.28));
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(16px);
+padding:28px;
+transition:0.45s ease;
+cursor:pointer;
+min-height:100%;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+">
+
+
+<div style="
+position:absolute;
+width:180px;
+height:180px;
+background:#94a3b8;
+border-radius:50%;
+filter:blur(90px);
+opacity:0.18;
+top:-60px;
+right:-60px;
+"></div>
+
+
+<div style="
+position:relative;
+z-index:2;
+overflow:hidden;
+border-radius:24px;
+margin-bottom:24px;
+height:230px;
+min-height:230px;
+max-height:230px;
+">
+
+<img class="creator-img" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&amp;w=1200&amp;auto=format&amp;fit=crop" style="
+width:100%;
+height:100%;
+object-fit:cover;
+transition:0.5s ease;
+display:block;
+" loading="lazy">
+
+</div>
+
+
+<h3 style="
+font-size:30px;
+margin-bottom:12px;
+font-family:'Orbitron',sans-serif;
+position:relative;
+z-index:2;
+line-height:1.2;
+min-height:72px;
+display:flex;
+align-items:center;
+">
+GALAXY REPORTER
+</h3>
+
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:18px;
+position:relative;
+z-index:2;
+min-height:48px;
+align-items:flex-start;
+">
+
+<div style="
+padding:8px 14px;
+border-radius:12px;
+background:rgba(255,255,255,0.08);
+font-size:13px;
+">
+SPACE NEWS
+</div>
+
+<div style="
+padding:8px 14px;
+border-radius:12px;
+background:rgba(255,255,255,0.08);
+font-size:13px;
+">
+LIVE THREADS
+</div>
+
+</div>
+
+
+<p style="
+font-size:15px;
+line-height:1.8;
+color:#d4d4d4;
+margin-bottom:24px;
+position:relative;
+z-index:2;
+min-height:108px;
+">
+Real-time astronomy discussions, rocket launch updates and futuristic scientific discoveries shared instantly.
+</p>
+
+
+<div style="
+display:flex;
+justify-content:space-between;
+margin-bottom:24px;
+position:relative;
+z-index:2;
+padding-top:18px;
+border-top:1px solid rgba(255,255,255,0.08);
+min-height:85px;
+align-items:center;
+">
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+3.8M
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Followers
+</div>
+</div>
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+8.9K
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Threads
+</div>
+</div>
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+97%
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Rating
+</div>
+</div>
+
+</div>
+
+
+<button onmouseover="
+this.style.transform='scale(1.03)';
+this.style.boxShadow='0 0 35px rgba(148,163,184,0.55)';
+" onmouseout="
+this.style.transform='scale(1)';
+this.style.boxShadow='0 0 25px rgba(148,163,184,0.35)';
+" style="
+width:100%;
+padding:18px;
+border:none;
+border-radius:18px;
+background:linear-gradient(135deg,#94a3b8,#0f172a);
+color:white;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+position:relative;
+z-index:2;
+box-shadow:0 0 25px rgba(148,163,184,0.35);
+transition:0.35s ease;
+margin-top:auto;
+">
+EXPLORE CREATOR
+</button>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div id="threads" style="
+display:none;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:35px;
+align-items:stretch;
+">
+
+
+<h2 style="
+grid-column:1/-1;
+font-size:52px;
+margin-bottom:10px;
+font-family:'Orbitron',sans-serif;
+">
+THREADS SPACE CREATORS
+</h2>
+
+
+<p style="
+grid-column:1/-1;
+color:#94a3b8;
+font-size:18px;
+line-height:1.8;
+margin-bottom:20px;
+">
+Explore astronomy discussions, creator updates, learning threads and space-community conversations from Threads.
+</p>
+
+
+<div onmouseover="
+this.style.transform='translateY(-12px)';
+this.style.boxShadow='0 0 45px rgba(100,116,139,0.45)';
+this.querySelector('.creator-img').style.transform='scale(1.08)';
+" onmouseout="
+this.style.transform='translateY(0px) scale(1)';
+this.style.boxShadow='0 0 0px rgba(0,0,0,0)';
+this.querySelector('.creator-img').style.transform='scale(1)';
+" style="
+position:relative;
+overflow:hidden;
+border-radius:30px;
+background:
+linear-gradient(135deg,
+rgba(100,116,139,0.18),
+rgba(15,23,42,0.30));
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(16px);
+padding:28px;
+transition:0.45s ease;
+cursor:pointer;
+min-height:100%;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+">
+
+
+<div style="
+position:absolute;
+width:180px;
+height:180px;
+background:#64748b;
+border-radius:50%;
+filter:blur(90px);
+opacity:0.20;
+top:-60px;
+right:-60px;
+"></div>
+
+
+<div style="
+position:relative;
+z-index:2;
+overflow:hidden;
+border-radius:24px;
+margin-bottom:24px;
+height:230px;
+min-height:230px;
+max-height:230px;
+">
+
+<img class="creator-img" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&amp;w=1200&amp;auto=format&amp;fit=crop" style="
+width:100%;
+height:100%;
+object-fit:cover;
+transition:0.5s ease;
+display:block;
+" loading="lazy">
+
+</div>
+
+
+<h3 style="
+font-size:30px;
+margin-bottom:12px;
+font-family:'Orbitron',sans-serif;
+position:relative;
+z-index:2;
+line-height:1.2;
+min-height:72px;
+display:flex;
+align-items:center;
+">
+COSMIC THREADS
+</h3>
+
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:18px;
+position:relative;
+z-index:2;
+min-height:48px;
+align-items:flex-start;
+">
+
+<div style="
+padding:8px 14px;
+border-radius:12px;
+background:rgba(255,255,255,0.08);
+font-size:13px;
+">
+DISCUSSIONS
+</div>
+
+<div style="
+padding:8px 14px;
+border-radius:12px;
+background:rgba(255,255,255,0.08);
+font-size:13px;
+">
+SPACE THREADS
+</div>
+
+</div>
+
+
+<p style="
+font-size:15px;
+line-height:1.8;
+color:#d4d4d4;
+margin-bottom:24px;
+position:relative;
+z-index:2;
+min-height:108px;
+">
+Short creator discussions, astronomy updates, space learning notes and community conversations for X Horizon learners.
+</p>
+
+
+<div style="
+display:flex;
+justify-content:space-between;
+margin-bottom:24px;
+position:relative;
+z-index:2;
+padding-top:18px;
+border-top:1px solid rgba(255,255,255,0.08);
+min-height:85px;
+align-items:center;
+">
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+1.8M
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Followers
+</div>
+</div>
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+4.2K
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Threads
+</div>
+</div>
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+96%
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Rating
+</div>
+</div>
+
+</div>
+
+
+<button onmouseover="
+this.style.transform='scale(1.03)';
+this.style.boxShadow='0 0 35px rgba(100,116,139,0.55)';
+" onmouseout="
+this.style.transform='scale(1)';
+this.style.boxShadow='0 0 25px rgba(100,116,139,0.35)';
+" style="
+width:100%;
+padding:18px;
+border:none;
+border-radius:18px;
+background:linear-gradient(135deg,#64748b,#111827);
+color:white;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+position:relative;
+z-index:2;
+box-shadow:0 0 25px rgba(100,116,139,0.35);
+transition:0.35s ease;
+margin-top:auto;
+">
+EXPLORE CREATOR
+</button>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div id="facebook" style="
+display:none;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:35px;
+align-items:stretch;
+">
+
+
+<h2 style="
+grid-column:1/-1;
+font-size:52px;
+margin-bottom:10px;
+font-family:'Orbitron',sans-serif;
+">
+FACEBOOK SPACE COMMUNITIES
+</h2>
+
+
+<p style="
+grid-column:1/-1;
+color:#94a3b8;
+font-size:18px;
+line-height:1.8;
+margin-bottom:20px;
+">
+Explore futuristic astronomy communities, research discussions and cosmic learning groups from Facebook.
+</p>
+
+
+<div onmouseover="
+this.style.transform='translateY(-12px)';
+this.style.boxShadow='0 0 45px rgba(59,130,246,0.45)';
+this.querySelector('.creator-img').style.transform='scale(1.08)';
+" onmouseout="
+this.style.transform='translateY(0px) scale(1)';
+this.style.boxShadow='0 0 0px rgba(0,0,0,0)';
+this.querySelector('.creator-img').style.transform='scale(1)';
+" style="
+position:relative;
+overflow:hidden;
+border-radius:30px;
+background:
+linear-gradient(135deg,
+rgba(59,130,246,0.14),
+rgba(30,64,175,0.18));
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(16px);
+padding:28px;
+transition:0.45s ease;
+cursor:pointer;
+min-height:100%;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+">
+
+
+<div style="
+position:absolute;
+width:180px;
+height:180px;
+background:#3b82f6;
+border-radius:50%;
+filter:blur(90px);
+opacity:0.18;
+top:-60px;
+right:-60px;
+"></div>
+
+
+<div style="
+position:relative;
+z-index:2;
+overflow:hidden;
+border-radius:24px;
+margin-bottom:24px;
+height:230px;
+min-height:230px;
+max-height:230px;
+">
+
+<img class="creator-img" src="https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?q=80&amp;w=1200&amp;auto=format&amp;fit=crop" style="
+width:100%;
+height:100%;
+object-fit:cover;
+transition:0.5s ease;
+display:block;
+" loading="lazy">
+
+</div>
+
+
+<h3 style="
+font-size:30px;
+margin-bottom:12px;
+font-family:'Orbitron',sans-serif;
+position:relative;
+z-index:2;
+line-height:1.2;
+min-height:72px;
+display:flex;
+align-items:center;
+">
+GALAXY FACEBOOK
+</h3>
+
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:18px;
+position:relative;
+z-index:2;
+min-height:48px;
+align-items:flex-start;
+">
+
+<div style="
+padding:8px 14px;
+border-radius:12px;
+background:rgba(255,255,255,0.08);
+font-size:13px;
+">
+COMMUNITY
+</div>
+
+<div style="
+padding:8px 14px;
+border-radius:12px;
+background:rgba(255,255,255,0.08);
+font-size:13px;
+">
+SPACE GROUPS
+</div>
+
+</div>
+
+
+<p style="
+font-size:15px;
+line-height:1.8;
+color:#d4d4d4;
+margin-bottom:24px;
+position:relative;
+z-index:2;
+min-height:108px;
+">
+Connecting astronomy enthusiasts, educators and researchers through futuristic space communities and discussions.
+</p>
+
+
+<div style="
+display:flex;
+justify-content:space-between;
+margin-bottom:24px;
+position:relative;
+z-index:2;
+padding-top:18px;
+border-top:1px solid rgba(255,255,255,0.08);
+min-height:85px;
+align-items:center;
+">
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+4.7M
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Members
+</div>
+</div>
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+860
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Posts
+</div>
+</div>
+
+<div>
+<div style="
+font-size:22px;
+font-weight:700;
+">
+96%
+</div>
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+">
+Rating
+</div>
+</div>
+
+</div>
+
+
+<button onmouseover="
+this.style.transform='scale(1.03)';
+this.style.boxShadow='0 0 35px rgba(59,130,246,0.55)';
+" onmouseout="
+this.style.transform='scale(1)';
+this.style.boxShadow='0 0 25px rgba(59,130,246,0.35)';
+" style="
+width:100%;
+padding:18px;
+border:none;
+border-radius:18px;
+background:linear-gradient(135deg,#3b82f6,#1d4ed8);
+color:white;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+position:relative;
+z-index:2;
+box-shadow:0 0 25px rgba(59,130,246,0.35);
+transition:0.35s ease;
+margin-top:auto;
+">
+EXPLORE CREATOR
+</button>
+
+</div>
+
+
+</div>
+
+
+
+
+</div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+<section id="astrox-social-control-studio" style="display:none;padding:95px 6%;background:#020617;position:relative;overflow:hidden;">
+  <div style="position:absolute;width:480px;height:480px;background:#2563eb;border-radius:50%;filter:blur(170px);opacity:0.14;top:-130px;right:-120px;"></div>
+  <div style="position:absolute;width:420px;height:420px;background:#7c3aed;border-radius:50%;filter:blur(170px);opacity:0.12;bottom:-140px;left:-120px;"></div>
+  <div style="max-width:1450px;margin:auto;position:relative;z-index:2;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:25px;flex-wrap:wrap;margin-bottom:35px;">
+      <div>
+        <h2 style="font-size:52px;line-height:1.1;margin:0 0 14px 0;font-family:'Orbitron',sans-serif;text-shadow:0 0 30px rgba(96,165,250,0.35);">X HORIZON CREATOR STUDIO</h2>
+        <p style="font-size:17px;line-height:1.8;color:#94a3b8;max-width:850px;margin:0;">Paste a creator link, generate a professional card, preview it, then publish it into the Social Learning Universe.</p>
+      </div>
+      <button id="astrox-social-close-studio" style="padding:15px 26px;border:none;border-radius:16px;background:linear-gradient(135deg,#0f172a,#334155);color:white;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 0 25px rgba(148,163,184,0.22);">HIDE TOOLS</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:28px;align-items:start;">
+      <div style="position:relative;overflow:hidden;border-radius:34px;background:linear-gradient(135deg,rgba(37,99,235,0.14),rgba(124,58,237,0.12));border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(16px);padding:32px;">
+        <div style="position:absolute;width:200px;height:200px;background:#2563eb;border-radius:50%;filter:blur(90px);opacity:0.16;top:-70px;right:-70px;"></div>
+        <h3 style="position:relative;z-index:2;font-size:30px;font-family:'Orbitron',sans-serif;margin:0 0 22px 0;">ADD SOCIAL CREATOR</h3>
+        <div style="position:relative;z-index:2;display:grid;gap:18px;">
+          <label style="font-size:13px;color:#cbd5e1;font-weight:800;letter-spacing:1px;">PLATFORM</label>
+          <select id="astrox-admin-section" style="width:100%;padding:18px 20px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:#0f172a;color:white;font-size:15px;outline:none;">
+            <option value="auto">Auto Detect From Link</option>
+            <option value="instagram">Instagram</option>
+            <option value="youtube">YouTube</option>
+            <option value="tiktok">TikTok</option>
+            <option value="xplatform">X / Twitter</option>
+            <option value="threads">Threads</option>
+            <option value="facebook">Facebook</option>
+          </select>
+
+          <label style="font-size:13px;color:#cbd5e1;font-weight:800;letter-spacing:1px;">CREATOR LINK</label>
+          <input id="astrox-admin-url" type="text" placeholder="Paste Instagram, YouTube, TikTok, X, Threads or Facebook link" style="width:100%;box-sizing:border-box;padding:18px 20px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:white;font-size:15px;outline:none;">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <button id="astrox-generate-card" style="padding:18px;border:none;border-radius:16px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:white;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 0 25px rgba(96,165,250,0.28);">GENERATE CARD</button>
+            <button id="astrox-save-card" style="padding:18px;border:none;border-radius:16px;background:linear-gradient(135deg,#22c55e,#15803d);color:white;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 0 25px rgba(34,197,94,0.25);">SAVE CARD</button>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div><label style="font-size:12px;color:#94a3b8;font-weight:800;letter-spacing:1px;">TITLE</label><input id="astrox-admin-title" type="text" style="width:100%;box-sizing:border-box;margin-top:8px;padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:white;outline:none;"></div>
+            <div><label style="font-size:12px;color:#94a3b8;font-weight:800;letter-spacing:1px;">IMAGE URL</label><input id="astrox-admin-image" type="text" style="width:100%;box-sizing:border-box;margin-top:8px;padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:white;outline:none;"></div>
+          </div>
+
+          <div><label style="font-size:12px;color:#94a3b8;font-weight:800;letter-spacing:1px;">DESCRIPTION</label><textarea id="astrox-admin-description" rows="4" style="width:100%;box-sizing:border-box;margin-top:8px;padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:white;outline:none;resize:vertical;"></textarea></div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+            <div><label style="font-size:12px;color:#94a3b8;font-weight:800;letter-spacing:1px;">TAG 1</label><input id="astrox-admin-tag1" type="text" style="width:100%;box-sizing:border-box;margin-top:8px;padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:white;outline:none;"></div>
+            <div><label style="font-size:12px;color:#94a3b8;font-weight:800;letter-spacing:1px;">TAG 2</label><input id="astrox-admin-tag2" type="text" style="width:100%;box-sizing:border-box;margin-top:8px;padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:white;outline:none;"></div>
+            <div><label style="font-size:12px;color:#94a3b8;font-weight:800;letter-spacing:1px;">ORDER</label><input id="astrox-admin-order" type="number" value="1" style="width:100%;box-sizing:border-box;margin-top:8px;padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:white;outline:none;"></div>
+          </div>
+
+          <div id="astrox-admin-message" style="min-height:24px;font-size:14px;line-height:1.7;color:#cbd5e1;"></div>
+        </div>
+      </div>
+
+      <div id="astrox-card-preview" style="position:relative;min-height:500px;"></div>
+    </div>
+  </div>
+</section>
+
+<div style="
+width:100%;
+height:1px;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+margin:0;
+"></div>
+
+<section style="
+padding:120px 6%;
+background:#020617;
+text-align:center;
+position:relative;
+overflow:hidden;
+">
+
+
+<div style="
+position:absolute;
+width:500px;
+height:500px;
+background:#2563eb;
+border-radius:50%;
+filter:blur(160px);
+opacity:0.18;
+top:-120px;
+left:-120px;
+animation:float1 8s ease-in-out infinite;
+"></div>
+
+<div style="
+position:absolute;
+width:450px;
+height:450px;
+background:#7c3aed;
+border-radius:50%;
+filter:blur(160px);
+opacity:0.15;
+bottom:-140px;
+right:-120px;
+animation:float2 10s ease-in-out infinite;
+"></div>
+
+
+
+
+<div style="
+max-width:1100px;
+margin:auto;
+padding:80px 50px;
+border-radius:40px;
+background:
+linear-gradient(135deg,
+rgba(37,99,235,0.18),
+rgba(124,58,237,0.16));
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(14px);
+transition:0.5s ease;
+position:relative;
+" onmouseover="
+this.style.transform='translateY(-10px) scale(1.02)';
+this.style.boxShadow='0 0 60px rgba(96,165,250,0.35)';
+" onmouseout="
+this.style.transform='translateY(0px) scale(1)';
+this.style.boxShadow='none';
+">
+
+
+<h2 style="
+font-size:68px;
+line-height:1.1;
+margin-bottom:25px;
+font-family:'Orbitron',sans-serif;
+transition:0.4s ease;
+" onmouseover="this.style.transform='scale(1.05)';this.style.textShadow='0 0 25px rgba(255,255,255,0.25)';" onmouseout="this.style.transform='scale(1)';this.style.textShadow='none';">
+BECOME A<br>X HORIZON CREATOR
+</h2>
+
+
+<p style="
+font-size:20px;
+line-height:1.9;
+color:#d4d4d4;
+max-width:850px;
+margin:auto;
+margin-bottom:45px;
+transition:0.4s ease;
+">
+Apply for collaboration and become part of the next generation futuristic space learning ecosystem.
+</p>
+
+
+
+<a href="/collaboration" style="
+display:inline-block;
+padding:24px 50px;
+border:none;
+border-radius:20px;
+background:linear-gradient(135deg,#2563eb,#7c3aed);
+color:white;
+font-size:17px;
+font-weight:700;
+cursor:pointer;
+transition:0.4s ease;
+box-shadow:0 0 35px rgba(96,165,250,0.45);
+text-decoration:none;
+" onmouseover="
+this.style.transform='scale(1.08)';
+this.style.letterSpacing='1px';
+this.style.boxShadow='0 0 70px rgba(124,58,237,0.6)';
+" onmouseout="
+this.style.transform='scale(1)';
+this.style.letterSpacing='0px';
+this.style.boxShadow='0 0 35px rgba(96,165,250,0.45)';
+">
+APPLY NOW
+</a>
+</div>
+</section>
+
+
+<div style="
+width:100%;
+height:1px;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+"></div>
+
+
+
+
+
+
+
+
+</section>
+
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+const fallbackFirebaseConfig = {
+  apiKey: "AIzaSyBgwCB5yG7tBka2VYpwmcd-iAObtxQdIPk",
+  authDomain: "learning-posts.firebaseapp.com",
+  projectId: "learning-posts",
+  storageBucket: "learning-posts.firebasestorage.app",
+  messagingSenderId: "400519896357",
+  appId: "1:400519896357:web:45ebf4163e0a1dd6cb0ecc",
+  measurementId: "G-6FLXBXSRSP"
+};
+const firebaseConfig = window.XHORIZON_FIREBASE_CONFIG || window.XHorizonFirebaseConfig || fallbackFirebaseConfig;
+function configured(cfg){ return cfg && cfg.apiKey && !String(cfg.apiKey).includes("YOUR_") && cfg.projectId && !String(cfg.projectId).includes("YOUR_"); }
+let app=null, auth=null, functions=null;
+try{
+  if(configured(firebaseConfig)){
+    app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    functions = getFunctions(app);
+  }
+}catch(error){ console.error("Firebase initialization failed:", error); }
+if(configured(firebaseConfig) && !window.XHorizonAdmin){
+  window.XHorizonAdmin = {
+    async unlock(key, done){
+      const cleanKey = String(key || "").trim();
+      if(!cleanKey || !auth || !functions) return false;
+      try{
+        const verifyAdminKey = httpsCallable(functions, "verifyAdminKey");
+        const result = await verifyAdminKey({ key: cleanKey });
+        const data = result && result.data ? result.data : {};
+        const customToken = data.token || data.customToken || data.firebaseToken || "";
+        if(customToken) await signInWithCustomToken(auth, customToken);
+        const user = auth.currentUser;
+        if(!user) return false;
+        const tokenResult = await user.getIdTokenResult(true);
+        const allowed = tokenResult && tokenResult.claims && tokenResult.claims.admin === true;
+        if(allowed){ document.body.classList.add("editor-on"); if(typeof done === "function") done(); return true; }
+        return false;
+      }catch(error){ console.error("X Horizon unlock failed:", error); return false; }
+    }
+  };
+}
+if(auth){
+  onAuthStateChanged(auth, async function(user){
+    if(!user) return;
+    try{
+      const tokenResult = await user.getIdTokenResult(true);
+      if(tokenResult && tokenResult.claims && tokenResult.claims.admin === true) document.body.classList.add("editor-on");
+    }catch(error){ console.error("State check failed:", error); }
+  });
+}
+</script>
+
+<script>
+(function(){
+  var firebaseConfig = window.XHORIZON_FIREBASE_CONFIG || window.XHorizonFirebaseConfig || {
+    apiKey: 'AIzaSyBgwCB5yG7tBka2VYpwmcd-iAObtxQdIPk',
+    authDomain: 'learning-posts.firebaseapp.com',
+    projectId: 'learning-posts',
+    storageBucket: 'learning-posts.firebasestorage.app',
+    messagingSenderId: '400519896357',
+    appId: '1:400519896357:web:45ebf4163e0a1dd6cb0ecc',
+    measurementId: 'G-6FLXBXSRSP'
+  };
+
+  var SECTION_STYLE = {
+    instagram: { glow:'rgba(236,72,153,0.45)', orb:'#ec4899', card1:'rgba(236,72,153,0.14)', card2:'rgba(126,34,206,0.12)', btn1:'#ec4899', btn2:'#7e22ce', shadow:'rgba(236,72,153,0.35)' },
+    youtube: { glow:'rgba(239,68,68,0.45)', orb:'#ef4444', card1:'rgba(239,68,68,0.14)', card2:'rgba(127,29,29,0.12)', btn1:'#ef4444', btn2:'#991b1b', shadow:'rgba(239,68,68,0.35)' },
+    tiktok: { glow:'rgba(34,211,238,0.45)', orb:'#22d3ee', card1:'rgba(34,211,238,0.14)', card2:'rgba(15,23,42,0.18)', btn1:'#22d3ee', btn2:'#111827', shadow:'rgba(34,211,238,0.35)' },
+    xplatform: { glow:'rgba(148,163,184,0.45)', orb:'#94a3b8', card1:'rgba(148,163,184,0.14)', card2:'rgba(15,23,42,0.28)', btn1:'#94a3b8', btn2:'#0f172a', shadow:'rgba(148,163,184,0.35)' },
+    threads: { glow:'rgba(100,116,139,0.45)', orb:'#64748b', card1:'rgba(100,116,139,0.18)', card2:'rgba(15,23,42,0.30)', btn1:'#64748b', btn2:'#111827', shadow:'rgba(100,116,139,0.35)' },
+    facebook: { glow:'rgba(59,130,246,0.45)', orb:'#3b82f6', card1:'rgba(59,130,246,0.14)', card2:'rgba(30,64,175,0.18)', btn1:'#3b82f6', btn2:'#1d4ed8', shadow:'rgba(59,130,246,0.35)' }
+  };
+
+  var FALLBACK_IMAGES = {
+    instagram: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?q=80&w=1200&auto=format&fit=crop',
+    youtube: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?q=80&w=1200&auto=format&fit=crop',
+    tiktok: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?q=80&w=1200&auto=format&fit=crop',
+    xplatform: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop',
+    threads: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop',
+    facebook: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?q=80&w=1200&auto=format&fit=crop'
+  };
+
+  var db = null, firestoreApi = null, latestGeneratedCard = null;
+
+  function cleanText(value, fallback){ value = String(value == null ? '' : value).trim(); return value || fallback || ''; }
+  function escapeHTML(value){ return cleanText(value,'').replace(/[&<>"']/g,function(ch){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]; }); }
+  function safeUrl(value, fallback){ value = cleanText(value, fallback || ''); if(!value) return ''; if(value === '#') return '#'; if(/^https?:\/\//i.test(value)) return value; return 'https://' + value.replace(/^\/+/, ''); }
+  function sectionId(value){ value = cleanText(value,'').toLowerCase().replace(/\s+/g,''); if(value === 'x' || value === 'twitter' || value === 'x/twitter' || value === 'xplatform') return 'xplatform'; if(value === 'thread' || value === 'threads' || value === 'metathreads') return 'threads'; if(['instagram','youtube','tiktok','threads','facebook'].indexOf(value) !== -1) return value; return ''; }
+  function detectSectionFromUrl(url){ var v=cleanText(url,'').toLowerCase(); if(v.indexOf('instagram.com')!==-1) return 'instagram'; if(v.indexOf('youtube.com')!==-1 || v.indexOf('youtu.be')!==-1) return 'youtube'; if(v.indexOf('tiktok.com')!==-1) return 'tiktok'; if(v.indexOf('twitter.com')!==-1 || v.indexOf('x.com')!==-1) return 'xplatform'; if(v.indexOf('threads.net')!==-1 || v.indexOf('threads.com')!==-1) return 'threads'; if(v.indexOf('facebook.com')!==-1 || v.indexOf('fb.com')!==-1) return 'facebook'; return 'instagram'; }
+  function platformLabel(section){ return {instagram:'Instagram',youtube:'YouTube',tiktok:'TikTok',xplatform:'X / Twitter',threads:'Threads',facebook:'Facebook'}[section] || 'Social'; }
+  function prettyNameFromUrl(url){ var clean=cleanText(url,''); try{ if(!/^https?:\/\//i.test(clean)) clean='https://'+clean; var u=new URL(clean); var parts=u.pathname.split('/').filter(Boolean); var name=parts[0] || u.hostname.replace(/^www\./,'').split('.')[0]; if(['channel','c','user'].indexOf(name.toLowerCase())!==-1 && parts[1]) name=parts[1]; name=name.replace(/^@/,'').replace(/[_.-]+/g,' '); return name.replace(/\w/g,function(c){return c.toUpperCase();}); }catch(e){ return 'X Horizon Creator'; } }
+  function defaultDescription(section,title){ var label=platformLabel(section); if(section==='youtube') return title+' shares space science videos, astronomy explainers, cosmic discoveries and educational visual learning for X Horizon learners.'; if(section==='tiktok') return title+' shares short-form astronomy facts, space visuals, black hole concepts and quick cosmic learning content.'; if(section==='xplatform') return title+' shares space news, launch updates, astronomy discussions and real-time scientific discovery threads.'; if(section==='threads') return title+' shares space learning notes, creator discussions, astronomy updates and community conversations.'; if(section==='facebook') return title+' connects astronomy learners, researchers and educators through space communities and discussion groups.'; return title+' shares astronomy visuals, cosmic discoveries, simulations and futuristic space-learning content on '+label+'.'; }
+  function tagDefaults(section){ if(section==='youtube') return ['SPACE VIDEOS','ASTRO EDUCATION']; if(section==='tiktok') return ['SHORT VIDEOS','SPACE FACTS']; if(section==='xplatform') return ['SPACE NEWS','LIVE THREADS']; if(section==='threads') return ['DISCUSSIONS','SPACE THREADS']; if(section==='facebook') return ['COMMUNITY','SPACE GROUPS']; return ['ASTROPHYSICS','SIMULATIONS']; }
+
+  function cardHTML(card, preview){
+    var section=sectionId(card.section), theme=SECTION_STYLE[section]||SECTION_STYLE.instagram;
+    var tagsArray=Array.isArray(card.tags)?card.tags:[];
+    var image=safeUrl(card.imageUrl,FALLBACK_IMAGES[section]||FALLBACK_IMAGES.instagram);
+    var title=escapeHTML(card.title||'X HORIZON CREATOR');
+    var tag1=escapeHTML(card.tag1||tagsArray[0]||'SPACE LEARNING');
+    var tag2=escapeHTML(card.tag2||tagsArray[1]||'X HORIZON');
+    var description=escapeHTML(card.description||'Approved X Horizon collaborator sharing useful space learning content.');
+    var buttonUrl=safeUrl(card.buttonUrl||card.url||card.link||'#','#');
+    var buttonText=escapeHTML(card.buttonText||'EXPLORE CREATOR');
+    var cls=preview?'astrox-preview-public-card':'astrox-live-public-card';
+    return `<div class="${cls}" data-card-title="${title.toLowerCase()}" data-card-tags="${(tag1+' '+tag2).toLowerCase()}" onmouseover="this.style.transform='translateY(-12px)';this.style.boxShadow='0 0 45px ${theme.glow}';var img=this.querySelector('.creator-img');if(img){img.style.transform='scale(1.08)';}" onmouseout="this.style.transform='translateY(0px) scale(1)';this.style.boxShadow='0 0 0px rgba(0,0,0,0)';var img=this.querySelector('.creator-img');if(img){img.style.transform='scale(1)';}" style="position:relative;overflow:hidden;border-radius:30px;background:linear-gradient(135deg,${theme.card1},${theme.card2});border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(16px);padding:28px;transition:0.45s ease;cursor:pointer;min-height:100%;display:flex;flex-direction:column;">
+      <div style="position:absolute;width:180px;height:180px;background:${theme.orb};border-radius:50%;filter:blur(90px);opacity:0.18;top:-60px;right:-60px;"></div>
+      <div style="position:relative;z-index:2;overflow:hidden;border-radius:24px;margin-bottom:24px;height:230px;min-height:230px;max-height:230px;flex-shrink:0;"><img class="creator-img" src="${escapeHTML(image)}" style="width:100%;height:100%;object-fit:cover;transition:0.5s ease;display:block;" loading="lazy"></div>
+      <h3 style="font-size:30px;margin-bottom:12px;font-family:'Orbitron',sans-serif;position:relative;z-index:2;line-height:1.2;min-height:72px;display:flex;align-items:center;">${title}</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;position:relative;z-index:2;min-height:48px;align-items:flex-start;"><div style="padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.08);font-size:13px;">${tag1}</div><div style="padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.08);font-size:13px;">${tag2}</div></div>
+      <p style="font-size:15px;line-height:1.8;color:#d4d4d4;margin-bottom:24px;position:relative;z-index:2;min-height:108px;flex-grow:1;">${description}</p>
+      <div style="display:flex;justify-content:space-between;margin-bottom:24px;position:relative;z-index:2;padding-top:18px;border-top:1px solid rgba(255,255,255,0.08);min-height:85px;align-items:center;"><div><div style="font-size:22px;font-weight:700;">${escapeHTML(card.metric1Value||'Active')}</div><div style="font-size:13px;color:#94a3b8;">${escapeHTML(card.metric1Label||'Followers')}</div></div><div><div style="font-size:22px;font-weight:700;">${escapeHTML(card.metric2Value||'Updated')}</div><div style="font-size:13px;color:#94a3b8;">${escapeHTML(card.metric2Label||'Posts')}</div></div><div><div style="font-size:22px;font-weight:700;">${escapeHTML(card.metric3Value||'Verified')}</div><div style="font-size:13px;color:#94a3b8;">${escapeHTML(card.metric3Label||'Status')}</div></div></div>
+      <a href="${escapeHTML(buttonUrl)}" target="_blank" rel="noopener" style="text-decoration:none;position:relative;z-index:2;margin-top:auto;display:block;"><button style="width:100%;padding:18px;border:none;border-radius:18px;background:linear-gradient(135deg,${theme.btn1},${theme.btn2});color:white;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 0 25px ${theme.shadow};transition:0.35s ease;">${buttonText}</button></a>
+    </div>`;
+  }
+
+  function renderCards(cards){ document.querySelectorAll('.astrox-live-public-card').forEach(function(n){n.remove();}); cards.sort(function(a,b){var ao=Number(a.order||999999),bo=Number(b.order||999999);return ao!==bo?ao-bo:Number(b.createdAtMs||0)-Number(a.createdAtMs||0);}); cards.forEach(function(card){var holder=document.getElementById(sectionId(card.section)); if(holder) holder.insertAdjacentHTML('beforeend', cardHTML(card,false));}); applySearchFilter(); }
+  function applySearchFilter(){ var input=document.getElementById('astrox-social-search-input')||document.querySelector('input[placeholder="Search Space Creators..."]'); var q=input?cleanText(input.value,'').toLowerCase():''; document.querySelectorAll('.astrox-live-public-card').forEach(function(card){var text=(card.getAttribute('data-card-title')||'')+' '+(card.getAttribute('data-card-tags')||'')+' '+card.textContent.toLowerCase(); card.style.display=(!q||text.indexOf(q)!==-1)?'flex':'none';}); }
+  function setMsg(msg,bad){var el=document.getElementById('astrox-admin-message'); if(el){el.style.color=bad?'#fca5a5':'#cbd5e1'; el.textContent=msg||'';}}
+  function val(id){var el=document.getElementById(id); return cleanText(el?el.value:'','');}
+  function setVal(id,v){var el=document.getElementById(id); if(el) el.value=v||'';}
+  function openStudio(){var panel=document.getElementById('astrox-social-control-studio'); var input=document.getElementById('astrox-social-search-input'); if(input) input.value=''; applySearchFilter(); if(panel){panel.style.display='block'; setTimeout(function(){panel.scrollIntoView({behavior:'smooth',block:'start'});},60);} setMsg('Creator Studio opened. Paste a link and generate the card.');}
+  function closeStudio(){var panel=document.getElementById('astrox-social-control-studio'); if(panel) panel.style.display='none';}
+  function waitForAdminBridge(timeoutMs){
+    return new Promise(function(resolve){
+      if(window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock==='function'){resolve(window.XHorizonAdmin);return;}
+      var started=Date.now();
+      var timer=setInterval(function(){
+        if(window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock==='function'){
+          clearInterval(timer);resolve(window.XHorizonAdmin);return;
+        }
+        if(Date.now()-started>(timeoutMs||1200)){clearInterval(timer);resolve(null);}
+      },80);
+    });
+  }
+  async function searchAction(){
+    var input=document.getElementById('astrox-social-search-input')||document.querySelector('input[placeholder="Search Space Creators..."]');
+    var button=document.getElementById('astrox-social-search-btn');
+    var q=cleanText(input?input.value:'','');
+    if(!q){applySearchFilter();return;}
+    var oldLabel=button?button.textContent:'';
+    if(button){button.disabled=true;button.textContent='Checking';}
+    try{
+      var bridge=await waitForAdminBridge(1200);
+      if(bridge && typeof bridge.unlock==='function'){
+        var callbackDone=false;
+        var ok=await Promise.resolve(bridge.unlock(q,function(){callbackDone=true;openStudio();}));
+        if(ok){if(!callbackDone) openStudio();return;}
+      }
+    }catch(error){console.error('X Horizon admin search unlock failed:',error);}
+    finally{if(button){button.disabled=false;button.textContent=oldLabel||'EXPLORE';}}
+    applySearchFilter();
+  }
+
+  function generatedCard(){
+    var url=safeUrl(val('astrox-admin-url'),''); if(!url){setMsg('Paste a creator link first.',true);return null;}
+    var manual=val('astrox-admin-section'); var section=manual==='auto'?detectSectionFromUrl(url):sectionId(manual);
+    var title=prettyNameFromUrl(url), tags=tagDefaults(section);
+    return {page:'socialLearning',section:section,status:'active',title:title,description:defaultDescription(section,title),imageUrl:FALLBACK_IMAGES[section]||FALLBACK_IMAGES.instagram,buttonText:'EXPLORE CREATOR',buttonUrl:url,url:url,tag1:tags[0],tag2:tags[1],tags:tags,metric1Value:'Active',metric1Label:section==='facebook'?'Members':'Followers',metric2Value:'Updated',metric2Label:(section==='xplatform'||section==='threads')?'Threads':(section==='youtube'?'Videos':'Posts'),metric3Value:'Verified',metric3Label:'Status',order:Number(val('astrox-admin-order')||1),createdAtMs:Date.now()};
+  }
+  function generateCard(){var card=generatedCard(); if(!card) return; latestGeneratedCard=card; setVal('astrox-admin-title',card.title); setVal('astrox-admin-description',card.description); setVal('astrox-admin-image',card.imageUrl); setVal('astrox-admin-tag1',card.tag1); setVal('astrox-admin-tag2',card.tag2); var p=document.getElementById('astrox-card-preview'); if(p) p.innerHTML=cardHTML(card,true); setMsg('Card generated. You can edit the fields, then click SAVE CARD.');}
+  function collectCard(){var card=generatedCard(); if(!card) return null; card.title=val('astrox-admin-title')||card.title; card.description=val('astrox-admin-description')||card.description; card.imageUrl=safeUrl(val('astrox-admin-image'),card.imageUrl); card.tag1=val('astrox-admin-tag1')||card.tag1; card.tag2=val('astrox-admin-tag2')||card.tag2; card.tags=[card.tag1,card.tag2]; card.order=Number(val('astrox-admin-order')||1); return card;}
+  function saveCard(){var card=collectCard()||latestGeneratedCard; if(!card){setMsg('Paste a link and generate the card first.',true);return;} if(!db||!firestoreApi){setMsg('Firestore is loading. Try again in a moment.',true);return;} card.createdAtMs=Date.now(); try{card.createdAt=firestoreApi.serverTimestamp();}catch(e){} firestoreApi.addDoc(firestoreApi.collection(db,'publicCards'),card).then(function(){setMsg('Card saved. It will appear in the correct platform section.'); setVal('astrox-admin-url','');}).catch(function(error){console.error('X Horizon save error:',error); setMsg('Card could not be saved. Check Firestore create rules.',true);});}
+
+  function bind(){
+    var input=document.getElementById('astrox-social-search-input')||document.querySelector('input[placeholder="Search Space Creators..."]'); var button=document.getElementById('astrox-social-search-btn');
+    if(input&&!input.__bound){input.__bound=true; input.addEventListener('input',function(){applySearchFilter();}); input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();searchAction();}});}
+    if(button&&!button.__bound){button.__bound=true; button.addEventListener('click',function(e){e.preventDefault();searchAction();});}
+    var g=document.getElementById('astrox-generate-card'), s=document.getElementById('astrox-save-card'), c=document.getElementById('astrox-social-close-studio'), u=document.getElementById('astrox-admin-url');
+    if(g&&!g.__bound){g.__bound=true;g.addEventListener('click',function(e){e.preventDefault();generateCard();});}
+    if(s&&!s.__bound){s.__bound=true;s.addEventListener('click',function(e){e.preventDefault();saveCard();});}
+    if(c&&!c.__bound){c.__bound=true;c.addEventListener('click',function(e){e.preventDefault();closeStudio();});}
+    if(u&&!u.__bound){u.__bound=true;u.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();generateCard();}});}
+  }
+
+  Promise.all([import('https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js'),import('https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js')]).then(function(modules){
+    var appModule=modules[0], fb=modules[1]; var app=appModule.getApps&&appModule.getApps().length?appModule.getApp():appModule.initializeApp(firebaseConfig); db=fb.getFirestore(app); firestoreApi=fb;
+    var q=fb.query(fb.collection(db,'publicCards'),fb.where('page','==','socialLearning'),fb.where('status','==','active'));
+    fb.onSnapshot(q,function(snapshot){var cards=[]; snapshot.forEach(function(doc){var data=doc.data()||{}; data.id=doc.id; cards.push(data);}); renderCards(cards);},function(error){console.error('X Horizon publicCards read error:',error);});
+  }).catch(function(error){console.error('X Horizon Social Learning Firebase load error:',error);});
+
+  bind(); document.addEventListener('DOMContentLoaded',bind);
+})();
+</script>
+
+
+<script id="xhorizon-loading-only-script">
+/* XHORIZON_LOADER_PATCH_START — loading system only */
+(function(){
+  'use strict';
+  var loader = document.getElementById('xh-loader');
+  if(!loader) return;
+  var fill = loader.querySelector('.xh-load-fill');
+  var finished = false;
+  function finishLoader(){
+    if(finished) return;
+    finished = true;
+    if(fill) fill.style.setProperty('width','100%','important');
+    loader.classList.add('ready');
+    setTimeout(function(){ loader.classList.add('done'); }, 650);
+  }
+  requestAnimationFrame(function(){
+    if(fill) fill.style.setProperty('width','100%','important');
+  });
+  window.addEventListener('load', finishLoader, {once:true});
+  setTimeout(finishLoader, 1650);
+})();
+/* XHORIZON_LOADER_PATCH_END */
+</script>

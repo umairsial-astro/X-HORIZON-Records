@@ -1,0 +1,2448 @@
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X Horizon Professional Platforms - Hidden Console Search</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&amp;family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: #020617;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    #astrox-professional-platforms-page {
+      position: relative;
+      min-height: 100vh;
+      padding: 92px 6% 105px;
+      background:
+        radial-gradient(circle at 10% 7%, rgba(37, 99, 235, 0.25), transparent 31%),
+        radial-gradient(circle at 88% 14%, rgba(124, 58, 237, 0.22), transparent 29%),
+        radial-gradient(circle at 50% 92%, rgba(34, 211, 238, 0.13), transparent 34%),
+        linear-gradient(135deg, #020617 0%, #07111f 45%, #020617 100%);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    #astrox-professional-platforms-page::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.033) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.033) 1px, transparent 1px);
+      background-size: 58px 58px;
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.72), transparent 86%);
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.72), transparent 86%);
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    #astrox-professional-platforms-page::after {
+      content: '';
+      position: absolute;
+      width: 950px;
+      height: 950px;
+      border: 1px solid rgba(147,197,253,0.09);
+      border-radius: 50%;
+      right: -430px;
+      top: -330px;
+      box-shadow:
+        inset 0 0 90px rgba(37,99,235,0.08),
+        0 0 120px rgba(37,99,235,0.08);
+      z-index: -2;
+    }
+
+    .pp-bg-star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.78);
+      box-shadow: 0 0 18px rgba(255,255,255,0.65);
+      animation: ppTwinkle 4s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .pp-bg-star:nth-child(1) { top: 12%; left: 8%; animation-delay: 0s; }
+    .pp-bg-star:nth-child(2) { top: 24%; left: 68%; animation-delay: 1.1s; }
+    .pp-bg-star:nth-child(3) { top: 58%; left: 14%; animation-delay: 2.2s; }
+    .pp-bg-star:nth-child(4) { top: 82%; left: 79%; animation-delay: 0.7s; }
+    .pp-bg-star:nth-child(5) { top: 42%; left: 91%; animation-delay: 1.7s; }
+    .pp-bg-star:nth-child(6) { top: 72%; left: 44%; animation-delay: 2.8s; }
+
+    @keyframes ppTwinkle {
+      0%, 100% { opacity: 0.25; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.25); }
+    }
+
+    .pp-shell {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1480px;
+      margin: 0 auto;
+    }
+
+    .pp-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(310px, 0.65fr);
+      align-items: end;
+      gap: 32px;
+      margin-bottom: 44px;
+    }
+
+    .pp-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      color: #bfdbfe;
+      background: rgba(37, 99, 235, 0.14);
+      border: 1px solid rgba(147, 197, 253, 0.22);
+      box-shadow: 0 0 30px rgba(37, 99, 235, 0.12);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .pp-title {
+      max-width: 950px;
+      margin: 0;
+      font-size: clamp(35px, 5vw, 68px);
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .pp-title span {
+      color: #93c5fd;
+      text-shadow: 0 0 38px rgba(59, 130, 246, 0.48);
+    }
+
+    .pp-description {
+      max-width: 690px;
+      margin: 20px 0 0;
+      color: #cbd5e1;
+      font-size: 16px;
+      line-height: 1.86;
+    }
+
+    .pp-hero-panel {
+      position: relative;
+      padding: 24px;
+      border-radius: 30px;
+      background:
+        linear-gradient(145deg, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.48));
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 28px 85px rgba(0,0,0,0.33);
+      overflow: hidden;
+    }
+
+    .pp-hero-panel::before {
+      content: '';
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      right: -82px;
+      top: -82px;
+      background: #2563eb;
+      filter: blur(88px);
+      opacity: 0.21;
+    }
+
+    .pp-panel-title {
+      position: relative;
+      margin: 0 0 16px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 19px;
+      color: #e0f2fe;
+      letter-spacing: 0.03em;
+    }
+
+    .pp-panel-list {
+      position: relative;
+      display: grid;
+      gap: 12px;
+    }
+
+    .pp-panel-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .pp-panel-item span:first-child {
+      color: #cbd5e1;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .pp-panel-item span:last-child {
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .pp-top-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 44px;
+    }
+
+    .pp-top-metric {
+      position: relative;
+      overflow: hidden;
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, 0.58);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px);
+    }
+
+    .pp-top-metric::after {
+      content: '';
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      right: -55px;
+      top: -55px;
+      background: rgba(59,130,246,0.22);
+      filter: blur(38px);
+    }
+
+    .pp-top-metric strong {
+      position: relative;
+      display: block;
+      font-size: 28px;
+      line-height: 1;
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 9px;
+    }
+
+    .pp-top-metric span {
+      position: relative;
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 700;
+    }
+
+    .pp-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 52px;
+    }
+
+    .pp-tab-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 190px;
+      padding: 16px 28px;
+      border: none;
+      border-radius: 18px;
+      cursor: pointer;
+      color: white;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      transition: 0.35s ease;
+      text-transform: uppercase;
+    }
+
+    .pp-tab-button:hover {
+      transform: translateY(-4px);
+      filter: brightness(1.08);
+    }
+
+    .pp-tab-button.pp-active {
+      outline: 1px solid rgba(255,255,255,0.26);
+      transform: translateY(-4px);
+    }
+
+    .pp-tab-linkedin {
+      background: linear-gradient(135deg,#2563eb,#1d4ed8);
+      box-shadow: 0 0 25px rgba(37,99,235,0.35);
+    }
+
+    .pp-tab-website {
+      background: linear-gradient(135deg,#7c3aed,#5b21b6);
+      box-shadow: 0 0 25px rgba(124,58,237,0.35);
+    }
+
+    .pp-tab-github {
+      background: linear-gradient(135deg,#111827,#374151);
+      box-shadow: 0 0 25px rgba(148,163,184,0.25);
+    }
+
+    .pp-grid {
+      display: none;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .pp-grid.pp-visible {
+      display: grid;
+    }
+
+    .pp-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px);
+      padding: 22px;
+      transition: 0.45s ease;
+      cursor: pointer;
+      min-height: 100%;
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+      isolation: isolate;
+    }
+
+    .pp-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.055), transparent 42%);
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .pp-card:hover {
+      transform: translateY(-12px) scale(1.025);
+    }
+
+    .pp-card:hover .pp-card-img {
+      transform: scale(1.08);
+    }
+
+    .pp-card-blue {
+      background: linear-gradient(135deg, rgba(37,99,235,0.16), rgba(15,23,42,0.22));
+    }
+
+    .pp-card-sky {
+      background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(15,23,42,0.22));
+    }
+
+    .pp-card-purple {
+      background: linear-gradient(135deg, rgba(124,58,237,0.16), rgba(15,23,42,0.22));
+    }
+
+    .pp-card-cyan {
+      background: linear-gradient(135deg, rgba(34,211,238,0.14), rgba(15,23,42,0.22));
+    }
+
+    .pp-card-github {
+      background: linear-gradient(135deg, rgba(148,163,184,0.14), rgba(15,23,42,0.26));
+    }
+
+    .pp-card-green {
+      background: linear-gradient(135deg, rgba(16,185,129,0.13), rgba(15,23,42,0.24));
+    }
+
+    .pp-card-amber {
+      background: linear-gradient(135deg, rgba(245,158,11,0.13), rgba(15,23,42,0.24));
+    }
+
+    .pp-card-glow {
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      filter: blur(92px);
+      opacity: 0.18;
+      top: -64px;
+      right: -64px;
+      pointer-events: none;
+    }
+
+    .pp-card-media {
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      border-radius: 20px;
+      margin-bottom: 18px;
+      height: 185px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .pp-card-media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(2,6,23,0.38), transparent 58%);
+      pointer-events: none;
+    }
+
+    .pp-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: 0.5s ease;
+      display: block;
+    }
+
+    .pp-card-title {
+      font-size: 24px;
+      margin: 0 0 10px;
+      font-family: 'Orbitron', sans-serif;
+      position: relative;
+      z-index: 2;
+      line-height: 1.15;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    .pp-tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pp-tag {
+      padding: 7px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.06);
+      font-size: 12px;
+      color: #e2e8f0;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .pp-card-text {
+      font-size: 14px;
+      line-height: 1.72;
+      color: #d4d4d4;
+      margin: 0 0 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pp-stats {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pp-stat {
+      min-width: 0;
+    }
+
+    .pp-stat-value {
+      font-size: 18px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .pp-stat-label {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 4px;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
+    .pp-card-link {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      border-radius: 16px;
+      color: white;
+      font-size: 15px;
+      font-weight: 900;
+      text-align: center;
+      text-decoration: none;
+      position: relative;
+      z-index: 2;
+      transition: 0.35s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .pp-card-link:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.08);
+    }
+
+    .pp-empty {
+      grid-column: 1 / -1;
+      padding: 34px;
+      border-radius: 26px;
+      background: rgba(15,23,42,0.68);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #cbd5e1;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+
+    .pp-control-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+      align-items: stretch;
+      margin: -18px 0 42px;
+    }
+
+    .pp-search-box,
+    .pp-admin-access,
+    .pp-admin-tools {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      background: rgba(15,23,42,0.64);
+      border: 1px solid rgba(255,255,255,0.09);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+    }
+
+    .pp-search-box {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+    }
+
+    .pp-search-box input,
+    .pp-admin-access input,
+    .pp-admin-field input,
+    .pp-admin-field textarea,
+    .pp-admin-field select,
+    .pp-admin-search input {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.1);
+      outline: none;
+      border-radius: 16px;
+      background: rgba(2,6,23,0.72);
+      color: #ffffff;
+      padding: 15px 16px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .pp-search-box input::placeholder,
+    .pp-admin-access input::placeholder,
+    .pp-admin-field input::placeholder,
+    .pp-admin-field textarea::placeholder,
+    .pp-admin-search input::placeholder {
+      color: #64748b;
+    }
+
+    .pp-search-count {
+      min-height: 50px;
+      padding: 0 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: rgba(37,99,235,0.14);
+      border: 1px solid rgba(147,197,253,0.16);
+      color: #bfdbfe;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+    }
+
+    .pp-admin-access {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 14px;
+    }
+
+    .pp-small-button,
+    .pp-admin-button {
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      color: #ffffff;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      transition: 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .pp-small-button {
+      min-height: 50px;
+      padding: 0 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      background: linear-gradient(135deg,#1d4ed8,#2563eb);
+      box-shadow: 0 0 22px rgba(37,99,235,0.24);
+    }
+
+    .pp-admin-button {
+      padding: 15px 18px;
+      background: linear-gradient(135deg,#111827,#374151);
+      box-shadow: 0 0 22px rgba(148,163,184,0.18);
+    }
+
+    .pp-admin-button.pp-primary {
+      background: linear-gradient(135deg,#2563eb,#1d4ed8);
+      box-shadow: 0 0 24px rgba(37,99,235,0.3);
+    }
+
+    .pp-small-button:hover,
+    .pp-admin-button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    .pp-admin-tools {
+      display: none;
+      padding: 24px;
+      margin: 0 0 48px;
+    }
+
+    .pp-admin-tools.pp-admin-open {
+      display: block;
+    }
+
+    .pp-admin-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .pp-admin-head h2 {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 34px);
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+    }
+
+    .pp-admin-head p {
+      margin: 8px 0 0;
+      color: #94a3b8;
+      line-height: 1.6;
+      max-width: 720px;
+      font-size: 14px;
+    }
+
+    .pp-admin-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .pp-admin-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pp-admin-field.pp-wide,
+    .pp-admin-actions,
+    .pp-admin-status,
+    .pp-admin-search,
+    .pp-admin-results {
+      grid-column: 1 / -1;
+    }
+
+    .pp-admin-field label,
+    .pp-admin-search label {
+      display: block;
+      margin-bottom: 8px;
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .pp-admin-field textarea {
+      min-height: 108px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .pp-admin-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pp-admin-status {
+      min-height: 24px;
+      color: #93c5fd;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .pp-preview-wrap {
+      position: sticky;
+      top: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .pp-preview-title {
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .pp-admin-results {
+      display: grid;
+      gap: 10px;
+      max-height: 280px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .pp-admin-result-item {
+      padding: 13px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.07);
+      color: #cbd5e1;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .pp-admin-result-item strong {
+      display: block;
+      color: #ffffff;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .pp-admin-result-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: #94a3b8;
+      font-size: 12px;
+    }
+
+    .pp-process {
+      margin-top: 58px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .pp-process-card {
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(15,23,42,0.56);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #cbd5e1;
+      line-height: 1.68;
+    }
+
+    .pp-process-card strong {
+      display: block;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 8px;
+      font-size: 15px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .pp-reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: 0.62s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pp-reveal.pp-visible-reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+
+
+
+    /* X Horizon theme polish: visual-only, no template/config changes */
+    body {
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    #astrox-professional-platforms-page {
+      background:
+        radial-gradient(circle at 14% 8%, rgba(56, 189, 248, 0.24), transparent 30%),
+        radial-gradient(circle at 82% 10%, rgba(148, 163, 184, 0.18), transparent 28%),
+        radial-gradient(circle at 50% 98%, rgba(14, 165, 233, 0.16), transparent 36%),
+        linear-gradient(135deg, #01040d 0%, #06111f 46%, #020617 100%);
+    }
+
+    .pp-eyebrow {
+      color: #e0f2fe;
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.18), rgba(148, 163, 184, 0.08));
+      border-color: rgba(186, 230, 253, 0.28);
+      box-shadow: 0 0 34px rgba(14, 165, 233, 0.15);
+    }
+
+    .pp-title {
+      color: #f8fafc;
+      text-shadow: 0 0 42px rgba(56, 189, 248, 0.12);
+    }
+
+    .pp-title span {
+      color: transparent;
+      background: linear-gradient(135deg, #ffffff 0%, #bae6fd 38%, #38bdf8 70%, #f8fafc 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-shadow: none;
+      filter: drop-shadow(0 0 26px rgba(56, 189, 248, 0.42));
+    }
+
+    .pp-hero-panel,
+    .pp-top-metric,
+    .pp-search-box,
+    .pp-admin-tools,
+    .pp-process-card {
+      border-color: rgba(186, 230, 253, 0.12);
+      box-shadow: 0 28px 95px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255,255,255,0.045);
+    }
+
+    .pp-panel-title,
+    .pp-process-card strong,
+    .pp-card-title,
+    .pp-admin-head h2 {
+      background: linear-gradient(135deg, #f8fafc, #93c5fd, #e5e7eb);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .pp-tab-linkedin,
+    .pp-small-button,
+    .pp-admin-button.pp-primary {
+      background: linear-gradient(135deg, #38bdf8, #2563eb, #0f172a);
+      box-shadow: 0 0 28px rgba(56, 189, 248, 0.28);
+    }
+
+    .pp-tab-website {
+      background: linear-gradient(135deg, #e5e7eb, #38bdf8, #1d4ed8);
+      box-shadow: 0 0 28px rgba(125, 211, 252, 0.24);
+    }
+
+    .pp-tab-github,
+    .pp-admin-button {
+      background: linear-gradient(135deg, #020617, #1e293b, #64748b);
+      box-shadow: 0 0 25px rgba(148, 163, 184, 0.2);
+    }
+
+    .pp-card-blue,
+    .pp-card-sky,
+    .pp-card-purple,
+    .pp-card-cyan,
+    .pp-card-github,
+    .pp-card-green,
+    .pp-card-amber {
+      background:
+        linear-gradient(145deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.44)),
+        radial-gradient(circle at 82% 5%, rgba(56, 189, 248, 0.13), transparent 36%);
+      border-color: rgba(186, 230, 253, 0.11);
+    }
+
+    .pp-card-link {
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pp-search-box input,
+    .pp-admin-field input,
+    .pp-admin-field textarea,
+    .pp-admin-field select,
+    .pp-admin-search input {
+      background: rgba(2, 6, 23, 0.86);
+      border-color: rgba(186, 230, 253, 0.14);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.015);
+    }
+
+    .pp-search-box input:focus,
+    .pp-admin-field input:focus,
+    .pp-admin-field textarea:focus,
+    .pp-admin-field select:focus,
+    .pp-admin-search input:focus {
+      border-color: rgba(56, 189, 248, 0.55);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1), inset 0 0 0 1px rgba(255,255,255,0.025);
+    }
+
+    .pp-search-box input:-webkit-autofill,
+    .pp-admin-field input:-webkit-autofill,
+    .pp-admin-search input:-webkit-autofill {
+      -webkit-text-fill-color: #ffffff;
+      caret-color: #ffffff;
+      transition: background-color 9999s ease-in-out 0s;
+      box-shadow: 0 0 0 1000px #020617 inset;
+    }
+
+    @media (max-width: 980px) {
+      .pp-control-row,
+      .pp-admin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pp-preview-wrap {
+        position: relative;
+        top: 0;
+      }
+
+      .pp-admin-form {
+        grid-template-columns: 1fr;
+      }
+
+      .pp-admin-access,
+      .pp-search-box {
+        grid-template-columns: 1fr;
+      }
+
+      .pp-small-button {
+        padding: 15px 18px;
+      }
+
+      .pp-hero {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .pp-top-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .pp-process {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #astrox-professional-platforms-page {
+        padding: 70px 18px 82px;
+      }
+
+      .pp-description {
+        font-size: 15px;
+      }
+
+      .pp-tab-button {
+        width: 100%;
+      }
+
+      .pp-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pp-card {
+        padding: 22px;
+      }
+
+      .pp-card-title {
+        font-size: 25px;
+      }
+
+      .pp-stats {
+        flex-wrap: wrap;
+      }
+
+      .pp-stat {
+        flex: 1 1 92px;
+      }
+    }
+
+
+
+    @media (max-width: 640px) {
+      #astrox-professional-platforms-page {
+        padding: 58px 14px 72px;
+      }
+
+      .pp-shell {
+        max-width: 100%;
+      }
+
+      .pp-hero {
+        gap: 22px;
+        margin-bottom: 30px;
+      }
+
+      .pp-eyebrow {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        padding: 9px 12px;
+      }
+
+      .pp-title {
+        font-size: clamp(31px, 11vw, 46px);
+        line-height: 1.08;
+        text-align: center;
+      }
+
+      .pp-description {
+        text-align: center;
+        margin-top: 16px;
+        font-size: 14px;
+        line-height: 1.75;
+      }
+
+      .pp-hero-panel,
+      .pp-search-box,
+      .pp-admin-tools,
+      .pp-top-metric,
+      .pp-process-card,
+      .pp-card {
+        border-radius: 22px;
+      }
+
+      .pp-hero-panel,
+      .pp-admin-tools {
+        padding: 18px;
+      }
+
+      .pp-panel-item {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .pp-top-metrics {
+        gap: 12px;
+        margin-bottom: 30px;
+      }
+
+      .pp-top-metric {
+        padding: 18px;
+      }
+
+      .pp-tabs {
+        gap: 11px;
+        margin-bottom: 34px;
+      }
+
+      .pp-tab-button {
+        min-width: 0;
+        width: 100%;
+        padding: 15px 16px;
+        border-radius: 16px;
+        font-size: 12px;
+      }
+
+      .pp-control-row {
+        margin: -10px 0 32px;
+      }
+
+      .pp-search-box,
+      .pp-admin-access {
+        padding: 12px;
+        gap: 10px;
+      }
+
+      .pp-search-count,
+      .pp-small-button,
+      .pp-admin-button {
+        width: 100%;
+        min-height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .pp-grid.pp-visible {
+        gap: 18px;
+      }
+
+      .pp-card {
+        padding: 16px;
+      }
+
+      .pp-card-media {
+        height: 165px;
+        border-radius: 17px;
+      }
+
+      .pp-card-title {
+        font-size: 21px;
+      }
+
+      .pp-tags {
+        gap: 8px;
+      }
+
+      .pp-tag {
+        font-size: 10px;
+        padding: 6px 9px;
+      }
+
+      .pp-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .pp-stat-value {
+        font-size: 15px;
+      }
+
+      .pp-stat-label {
+        white-space: normal;
+        font-size: 10px;
+      }
+
+      .pp-admin-head {
+        align-items: stretch;
+      }
+
+      .pp-admin-head h2 {
+        font-size: 22px;
+      }
+
+      .pp-admin-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .pp-admin-results {
+        max-height: 230px;
+      }
+
+      .pp-preview-wrap {
+        display: none;
+      }
+
+      .pp-process {
+        margin-top: 36px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .pp-top-metrics {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+    /* X Horizon homepage-style main section + loader patch */
+    .xh-loader{position:fixed;inset:0;background:#000;display:grid;place-items:center;z-index:9999;transition:opacity .65s cubic-bezier(.16,1,.3,1),visibility .65s cubic-bezier(.16,1,.3,1)}
+    .xh-loader.done{opacity:0;visibility:hidden}
+    .xh-load-mark{position:relative;width:min(310px,82vw);height:118px;display:grid;place-items:center;overflow:hidden}
+    .xh-load-x{position:absolute;left:42px;top:6px;font-size:96px;line-height:1;font-weight:900;letter-spacing:-.12em;color:#fff;z-index:2;text-shadow:0 0 26px rgba(255,255,255,.18)}
+    .xh-load-word{position:absolute;left:112px;top:45px;font-size:22px;font-weight:900;letter-spacing:.2em;color:#eee;opacity:.18;animation:xhWordBlink 1.7s steps(2,end) infinite,xhWordSolid .22s ease 1.7s forwards;z-index:3}
+    .xh-load-line{position:absolute;left:42px;bottom:10px;width:222px;height:4px;border-radius:99px;background:#161616;overflow:hidden}
+    .xh-load-line::after{content:"";display:block;height:100%;width:0;background:#d8d8d8;animation:xhLoadFill 1.7s cubic-bezier(.16,1,.3,1) forwards}
+    @keyframes xhWordBlink{0%,100%{opacity:.16}50%{opacity:.68}}
+    @keyframes xhWordSolid{to{opacity:1}}
+    @keyframes xhLoadFill{to{width:100%}}
+
+    #astrox-professional-platforms-page{padding:0;background:#000;min-height:100vh;overflow:hidden;isolation:isolate}
+    #astrox-professional-platforms-page::before,#astrox-professional-platforms-page::after,.pp-bg-star{display:none!important}
+    .pp-hero{position:relative;min-height:100vh;display:grid!important;grid-template-columns:1fr!important;place-items:center;text-align:center;overflow:hidden;margin:0!important;background:#000;isolation:isolate}
+    .pp-hero-bg{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.28),rgba(0,0,0,.66) 74%,#000 100%),linear-gradient(90deg,rgba(0,0,0,.64),rgba(0,0,0,.18),rgba(0,0,0,.64)),url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=90&w=2400&auto=format&fit=crop') center/cover no-repeat;filter:brightness(1.03) saturate(1.08) contrast(1.02);transform:scale(1.02);z-index:-2}
+    .pp-hero::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 48%,transparent 0 24%,rgba(0,0,0,.58) 68%,#000 100%);pointer-events:none;z-index:-1}
+    .pp-hero-content{position:relative;z-index:2;width:min(980px,calc(100% - 36px));padding:82px 0 72px;display:flex;flex-direction:column;align-items:center;transform:translateY(-18px)}
+    .pp-search-wrap{width:min(640px,100%);position:relative;margin:0 auto 30px}
+    .pp-search-box{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;background:rgba(6,6,6,.88)!important;border:0!important;border-radius:16px!important;padding:8px!important;box-shadow:0 18px 70px rgba(0,0,0,.5)!important;backdrop-filter:none!important}
+    .pp-search-box input{height:48px;border-radius:12px!important;background:#000!important;color:#fff!important;border:0!important;padding:0 16px!important;font-size:14px;font-weight:700}
+    .pp-small-button,.pp-search-box button{min-height:48px;border-radius:12px!important;background:#171717!important;color:#fff!important;padding:0 20px!important;font-size:12px!important;font-weight:900;letter-spacing:.08em;text-transform:uppercase;box-shadow:none!important;border:0!important;transition:transform .25s cubic-bezier(.16,1,.3,1),background .25s cubic-bezier(.16,1,.3,1)}
+    .pp-small-button:hover,.pp-search-box button:hover{background:#242424!important;color:#fff!important;transform:scale(1.035)!important}
+    .pp-search-count{min-height:48px;border:0!important;border-radius:12px!important;background:#111!important;color:#d7d7d7!important;padding:0 14px!important;box-shadow:none!important}
+    .pp-title{margin:0;font-family:Arial,Helvetica,sans-serif;font-size:clamp(48px,7.5vw,110px);line-height:.86;letter-spacing:.01em;text-transform:uppercase;font-weight:900;background:linear-gradient(135deg,#fff 0%,#c9c9c9 44%,#777 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;max-width:980px}
+    .pp-title span{display:inline-block;color:#fff;background:none;-webkit-text-fill-color:#fff;text-shadow:none;filter:none}
+    .pp-description{max-width:820px;margin:22px 0 0;color:#d7d7d7;font-size:clamp(14px,1.45vw,19px);line-height:1.72;letter-spacing:.08em;text-transform:uppercase}
+    .pp-card-section{position:relative;z-index:2;padding:76px 0 90px;background:#000}
+    .pp-tabs{margin:0 0 36px!important}
+    .pp-grid{gap:22px}
+    .pp-admin-tools{border:0!important;background:#080808!important;backdrop-filter:none!important;box-shadow:none!important;margin:0 0 36px!important}
+    .pp-admin-field input,.pp-admin-field textarea,.pp-admin-field select,.pp-admin-search input{border:0!important;background:#000!important;color:#fff!important}
+    .pp-admin-button{border:0!important;background:#171717!important;box-shadow:none!important}
+    .pp-admin-button.pp-primary{background:#242424!important;box-shadow:none!important}
+    .pp-empty{border:0!important;background:#0b0b0b!important}
+    @media(max-width:720px){.pp-hero-content{padding-top:78px;transform:translateY(-10px)}.pp-search-box{grid-template-columns:1fr}.pp-search-box input,.pp-search-box button,.pp-search-count{width:100%}.pp-title{font-size:clamp(42px,16vw,82px)}.pp-description{letter-spacing:.04em;font-size:13px}.pp-card-section{padding:50px 0 70px}}
+
+  
+
+    /* final requested correction: keep original card/category colors; match homepage search shape */
+    .pp-search-box{display:flex!important;align-items:center!important;gap:8px!important;background:rgba(6,6,6,.88)!important;border-radius:16px!important;padding:8px!important;box-shadow:0 18px 70px rgba(0,0,0,.5)!important;border:0!important;backdrop-filter:none!important}
+    .pp-search-box input{flex:1!important;min-width:0!important;height:48px!important;border-radius:12px!important;background:#000!important;color:#fff!important;padding:0 16px!important;font-size:14px!important;border:0!important}
+    .pp-search-box button{min-height:48px!important;border-radius:12px!important;background:#171717!important;color:#fff!important;padding:0 20px!important;font-size:12px!important;font-weight:900!important;letter-spacing:.08em!important;text-transform:uppercase!important;border:0!important;box-shadow:none!important}
+    .pp-search-box button:hover{background:#242424!important;color:#fff!important;transform:scale(1.035)!important}
+    .pp-search-count{display:none!important}
+    @media(max-width:720px){.pp-search-box{flex-direction:column!important;align-items:stretch!important}.pp-search-box input,.pp-search-box button{width:100%!important}}
+
+
+/* exact reference-main correction + no hover glow patch */
+#astrox-professional-platforms-page{
+  padding:0 !important;
+  background:#000 !important;
+}
+.pp-hero{
+  position:relative !important;
+  min-height:100vh !important;
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  place-items:center !important;
+  text-align:center !important;
+  overflow:hidden !important;
+  margin:0 !important;
+  padding:0 !important;
+  background:#000 !important;
+  isolation:isolate !important;
+}
+.pp-hero-bg{
+  position:absolute !important;
+  inset:0 !important;
+  z-index:-2 !important;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.54) 74%,#000 100%),
+    linear-gradient(90deg,rgba(0,0,0,.58),rgba(0,0,0,.16),rgba(0,0,0,.58)),
+    url('https://images.unsplash.com/photo-1778793576394-9386b3058dee?auto=format&fit=crop&w=2000&q=90') center/cover no-repeat !important;
+  filter:brightness(.82) saturate(1.02) contrast(1.04) !important;
+  transform:scale(1.01) !important;
+}
+.pp-hero::before{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  height:2px !important;
+  z-index:3 !important;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.86),transparent) !important;
+  box-shadow:0 0 30px rgba(255,255,255,.45) !important;
+  pointer-events:none !important;
+}
+.pp-hero::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:-1 !important;
+  background:radial-gradient(circle at 50% 48%,rgba(0,0,0,.04) 0 24%,rgba(0,0,0,.45) 72%,#000 100%) !important;
+  pointer-events:none !important;
+}
+.pp-hero-content{
+  position:relative !important;
+  z-index:4 !important;
+  width:min(650px,calc(100% - 34px)) !important;
+  padding:48px 0 42px !important;
+  transform:translateY(-20px) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+}
+.pp-search-wrap{
+  width:min(460px,90vw) !important;
+  margin:0 auto 23px !important;
+  position:relative !important;
+}
+.pp-search-box{
+  display:flex !important;
+  align-items:center !important;
+  background:rgba(255,255,255,.045) !important;
+  border:0 !important;
+  border-radius:14px !important;
+  padding:6px !important;
+  gap:6px !important;
+  box-shadow:none !important;
+  backdrop-filter:blur(12px) !important;
+  -webkit-backdrop-filter:blur(12px) !important;
+}
+.pp-search-box input{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  height:46px !important;
+  min-height:46px !important;
+  border-radius:10px !important;
+  background:transparent !important;
+  color:#fff !important;
+  padding:0 14px !important;
+  font-size:13px !important;
+  font-weight:400 !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.pp-search-box input::placeholder{color:rgba(255,255,255,.54) !important;}
+.pp-search-box button,
+.pp-search-box .pp-small-button{
+  min-height:46px !important;
+  height:46px !important;
+  border-radius:10px !important;
+  background:#fff !important;
+  color:#000 !important;
+  padding:0 20px !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  letter-spacing:.04em !important;
+  text-transform:none !important;
+  border:0 !important;
+  box-shadow:none !important;
+  filter:none !important;
+}
+.pp-search-box button:hover,
+.pp-search-box .pp-small-button:hover{
+  background:#e7e7e7 !important;
+  color:#000 !important;
+  transform:scale(1.04) !important;
+  box-shadow:none !important;
+  filter:none !important;
+}
+.pp-search-count{display:none !important;}
+.pp-title{
+  display:block !important;
+  margin:0 !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  font-size:clamp(42px,6vw,76px) !important;
+  line-height:.96 !important;
+  letter-spacing:-.02em !important;
+  font-weight:800 !important;
+  text-transform:none !important;
+  background:none !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  text-shadow:none !important;
+  filter:none !important;
+  max-width:650px !important;
+}
+.pp-description{
+  margin:18px 0 0 !important;
+  color:#cfcfcf !important;
+  font-size:clamp(14px,1.48vw,18px) !important;
+  line-height:1.7 !important;
+  letter-spacing:.18em !important;
+  text-transform:uppercase !important;
+  font-weight:400 !important;
+  max-width:620px !important;
+}
+
+/* category buttons: original colors kept, 3D depth added, no glow */
+.pp-tabs{
+  perspective:700px !important;
+  gap:16px !important;
+  margin:0 0 36px !important;
+}
+.pp-tab-button{
+  min-width:190px !important;
+  padding:15px 26px !important;
+  border:0 !important;
+  border-radius:14px !important;
+  color:#fff !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  letter-spacing:.02em !important;
+  text-transform:none !important;
+  text-shadow:none !important;
+  filter:none !important;
+  outline:0 !important;
+  box-shadow:0 8px 0 rgba(0,0,0,.58),0 14px 22px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.12) !important;
+  transform:translateY(0) translateZ(0) !important;
+  transition:transform .18s cubic-bezier(.16,1,.3,1),box-shadow .18s cubic-bezier(.16,1,.3,1),filter .18s cubic-bezier(.16,1,.3,1) !important;
+}
+.pp-tab-linkedin{box-shadow:0 8px 0 rgba(0,0,0,.58),0 14px 22px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.12) !important;}
+.pp-tab-website{box-shadow:0 8px 0 rgba(0,0,0,.58),0 14px 22px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.12) !important;}
+.pp-tab-github{box-shadow:0 8px 0 rgba(0,0,0,.58),0 14px 22px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.12) !important;}
+.pp-tab-button:hover,
+.pp-tab-button.pp-active{
+  outline:0 !important;
+  filter:none !important;
+  text-shadow:none !important;
+  transform:translateY(2px) !important;
+  box-shadow:0 5px 0 rgba(0,0,0,.62),0 10px 16px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.14) !important;
+}
+
+/* remove hover glow everywhere while keeping card/category colors */
+.pp-card,
+.pp-card:hover,
+.pp-card-link,
+.pp-card-link:hover,
+.pp-admin-tools,
+.pp-admin-button,
+.pp-admin-button:hover,
+.pp-small-button,
+.pp-small-button:hover{
+  box-shadow:none !important;
+  text-shadow:none !important;
+  filter:none !important;
+}
+.pp-card-glow{display:none !important;}
+.pp-card:hover{transform:translateY(-8px) scale(1.018) !important;}
+.pp-card:hover .pp-card-img{transform:scale(1.05) !important;}
+.pp-card-link:hover{transform:translateY(-2px) !important;}
+.pp-card-link{box-shadow:none !important;}
+.pp-card *{text-shadow:none !important;}
+
+@media(max-width:720px){
+  .pp-hero{padding:96px 14px 64px !important;}
+  .pp-hero-content{width:min(100%,calc(100% - 10px)) !important;padding:42px 0 36px !important;transform:translateY(-10px) !important;}
+  .pp-search-box{flex-direction:column !important;align-items:stretch !important;}
+  .pp-search-box input,.pp-search-box button{width:100% !important;}
+  .pp-title{font-size:clamp(38px,13vw,68px) !important;}
+  .pp-description{font-size:12px !important;letter-spacing:.12em !important;}
+  .pp-tab-button{width:100% !important;min-width:0 !important;}
+}
+
+</style>
+
+
+
+  <div class="xh-loader" id="xhLoader" aria-hidden="true">
+    <div class="xh-load-mark">
+      <div class="xh-load-x">X</div>
+      <div class="xh-load-word">HORIZON</div>
+      <div class="xh-load-line"></div>
+    </div>
+  </div>
+
+  <main id="astrox-professional-platforms-page">
+    <section class="pp-hero pp-reveal" id="professional-platforms-hero">
+      <div class="pp-hero-bg"></div>
+      <div class="pp-hero-content">
+        <div class="pp-search-wrap">
+          <div class="pp-search-box">
+            <input id="pp-search-input" type="search" placeholder="Search platforms or enter admin key" autocomplete="off">
+            <button id="pp-search-action" class="pp-small-button" type="button">Search</button>
+            <span id="pp-search-count" class="pp-search-count">Loading</span>
+          </div>
+        </div>
+
+        <h1 class="pp-title">Professional Platform</h1>
+        <p class="pp-description">
+          A professional directory for X Horizon collaboration channels, research networks, trusted websites and developer repositories connected with astronomy, space science and future technology.
+        </p>
+      </div>
+    </section>
+
+    <section class="pp-shell pp-card-section">
+      <div class="pp-tabs pp-reveal" aria-label="Professional platform filters">
+        <button id="pp-tab-linkedin" class="pp-tab-button pp-tab-linkedin pp-active" type="button" data-target="linkedin">
+          LinkedIn Networks
+        </button>
+
+        <button id="pp-tab-website" class="pp-tab-button pp-tab-website" type="button" data-target="website">
+          Website Partners
+        </button>
+
+        <button id="pp-tab-github" class="pp-tab-button pp-tab-github" type="button" data-target="github">
+          GitHub Projects
+        </button>
+      </div>
+
+      <div id="pp-admin-tools" class="pp-admin-tools pp-reveal">
+        <div class="pp-admin-head">
+          <div>
+            <h2>Platform Tools</h2>
+            <p>Add professional collaboration cards by choosing a section and pasting the link. GitHub profile or repository links can auto-fill useful public project details; other links are formatted into professional X Horizon cards.</p>
+          </div>
+          <button id="pp-admin-close-btn" class="pp-admin-button" type="button">Hide Tools</button>
+        </div>
+
+        <div class="pp-admin-grid">
+          <div class="pp-admin-form">
+            <div class="pp-admin-field">
+              <label for="pp-admin-section">Section</label>
+              <select id="pp-admin-section">
+                <option value="linkedin">LinkedIn Networks</option>
+                <option value="website">Website Partners</option>
+                <option value="github">GitHub Projects</option>
+              </select>
+            </div>
+
+            <div class="pp-admin-field">
+              <label for="pp-admin-order">Order</label>
+              <input id="pp-admin-order" type="number" min="1" placeholder="Auto">
+            </div>
+
+            <div class="pp-admin-field pp-wide">
+              <label for="pp-admin-url">Platform URL</label>
+              <input id="pp-admin-url" type="url" placeholder="Paste LinkedIn, website, GitHub profile or repo link">
+            </div>
+
+            <div class="pp-admin-actions">
+              <button id="pp-admin-generate-btn" class="pp-admin-button pp-primary" type="button">Generate Card</button>
+              <button id="pp-admin-save-btn" class="pp-admin-button" type="button">Save Card</button>
+            </div>
+
+            <div class="pp-admin-field">
+              <label for="pp-admin-title">Title</label>
+              <input id="pp-admin-title" type="text" placeholder="Generated automatically">
+            </div>
+
+            <div class="pp-admin-field">
+              <label for="pp-admin-tags">Tags</label>
+              <input id="pp-admin-tags" type="text" placeholder="GitHub, Open Source">
+            </div>
+
+            <div class="pp-admin-field pp-wide">
+              <label for="pp-admin-description">Description</label>
+              <textarea id="pp-admin-description" placeholder="Generated automatically"></textarea>
+            </div>
+
+            <div class="pp-admin-field pp-wide">
+              <label for="pp-admin-image">Image URL</label>
+              <input id="pp-admin-image" type="url" placeholder="Generated automatically or paste custom image link">
+            </div>
+
+            <div id="pp-admin-status" class="pp-admin-status"></div>
+
+            <div class="pp-admin-search">
+              <label for="pp-admin-card-search">Search Saved Cards</label>
+              <input id="pp-admin-card-search" type="search" placeholder="Search title, section, URL or tags">
+            </div>
+
+            <div id="pp-admin-results" class="pp-admin-results"></div>
+          </div>
+
+          <div class="pp-preview-wrap">
+            <div class="pp-preview-title">Live Card Preview</div>
+            <div id="pp-admin-preview"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="linkedin-platforms" class="pp-grid pp-visible" data-section="linkedin"></div>
+      <div id="web-platforms" class="pp-grid" data-section="website"></div>
+      <div id="github-platforms" class="pp-grid" data-section="github"></div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { getAuth, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+
+    const fallbackFirebaseConfig = {
+      apiKey: "AIzaSyBgwCB5yG7tBka2VYpwmcd-iAObtxQdIPk",
+      authDomain: "learning-posts.firebaseapp.com",
+      projectId: "learning-posts",
+      storageBucket: "learning-posts.firebasestorage.app",
+      messagingSenderId: "400519896357",
+      appId: "1:400519896357:web:45ebf4163e0a1dd6cb0ecc",
+      measurementId: "G-6FLXBXSRSP"
+    };
+
+    const firebaseConfig = window.XHORIZON_FIREBASE_CONFIG || window.XHorizonFirebaseConfig || fallbackFirebaseConfig;
+    const COLLECTION_NAME = "publicCards";
+    let firebaseApp = null;
+    let authInstance = null;
+    let functionsInstance = null;
+    let dbInstance = null;
+    let allCards = [];
+    let currentDraftCard = null;
+    const PAGE_KEYS = [
+      "professional",
+      "professional-platforms",
+      "professionalPlatforms",
+      "professional platforms",
+      "pp"
+    ];
+
+    function configured(cfg) {
+      return cfg && cfg.apiKey && !String(cfg.apiKey).includes("YOUR_") && cfg.projectId && !String(cfg.projectId).includes("YOUR_");
+    }
+
+    function getFirebaseAppInstance() {
+      if (firebaseApp) return firebaseApp;
+      if (!configured(firebaseConfig)) throw new Error("Firebase config is missing.");
+      firebaseApp = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      return firebaseApp;
+    }
+
+    function initAdminBridge() {
+      try {
+        const app = getFirebaseAppInstance();
+        authInstance = getAuth(app);
+        functionsInstance = getFunctions(app);
+
+        if (!window.XHorizonAdmin) {
+          window.XHorizonAdmin = {
+            async unlock(key, done) {
+              const cleanKey = String(key || "").trim();
+              if (!cleanKey || !authInstance || !functionsInstance) return false;
+
+              try {
+                const verifyAdminKey = httpsCallable(functionsInstance, "verifyAdminKey");
+                const result = await verifyAdminKey({ key: cleanKey });
+                const data = result && result.data ? result.data : {};
+                const customToken = data.token || data.customToken || data.firebaseToken || "";
+                if (customToken) await signInWithCustomToken(authInstance, customToken);
+
+                const user = authInstance.currentUser;
+                if (!user) return false;
+
+                const tokenResult = await user.getIdTokenResult(true);
+                const allowed = tokenResult && tokenResult.claims && tokenResult.claims.admin === true;
+                if (allowed) {
+                  document.body.classList.add("pp-admin-authorized");
+                  if (typeof done === "function") done();
+                  return true;
+                }
+                return false;
+              } catch (error) {
+                console.error("X Horizon Firebase admin unlock failed:", error);
+                return false;
+              }
+            }
+          };
+        }
+
+        onAuthStateChanged(authInstance, async user => {
+          if (!user) return;
+          try {
+            const tokenResult = await user.getIdTokenResult(true);
+            if (tokenResult && tokenResult.claims && tokenResult.claims.admin === true) {
+              document.body.classList.add("pp-admin-authorized");
+            }
+          } catch (error) {
+            console.error("X Horizon admin state check failed:", error);
+          }
+        });
+      } catch (error) {
+        console.error("X Horizon admin bridge initialization failed:", error);
+      }
+    }
+
+    initAdminBridge();
+
+    const DEFAULT_CARDS = [
+      {
+        page: "professionalPlatforms",
+        section: "linkedin",
+        title: "Horizon Link",
+        description: "Professional astrophysics collaborations, scientific networking and futuristic educational partnerships.",
+        imageUrl: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop",
+        url: "#",
+        buttonText: "Visit Network",
+        tags: ["LinkedIn", "Education"],
+        stats: [
+          { value: "420K", label: "Members" },
+          { value: "120", label: "Partners" },
+          { value: "98%", label: "Trust" }
+        ],
+        accent: "blue",
+        order: 1
+      },
+      {
+        page: "professionalPlatforms",
+        section: "linkedin",
+        title: "Space Connect",
+        description: "Future-space innovators, engineering collaborations and global astronomy partnership systems.",
+        imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop",
+        url: "#",
+        buttonText: "Visit Network",
+        tags: ["Research", "Networking"],
+        stats: [
+          { value: "280K", label: "Users" },
+          { value: "94", label: "Projects" },
+          { value: "97%", label: "Quality" }
+        ],
+        accent: "sky",
+        order: 2
+      },
+      {
+        page: "professionalPlatforms",
+        section: "website",
+        title: "Orbit Web",
+        description: "Interactive scientific websites, simulations and futuristic astronomy learning systems.",
+        imageUrl: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1200&auto=format&fit=crop",
+        url: "#",
+        buttonText: "Open Website",
+        tags: ["Website", "Simulation"],
+        stats: [
+          { value: "180K", label: "Visitors" },
+          { value: "64", label: "Tools" },
+          { value: "95%", label: "Trust" }
+        ],
+        accent: "purple",
+        order: 3
+      },
+      {
+        page: "professionalPlatforms",
+        section: "website",
+        title: "Galaxy Hub",
+        description: "Trusted futuristic astronomy platforms, scientific visualizations and cosmic research systems.",
+        imageUrl: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop",
+        url: "#",
+        buttonText: "Open Website",
+        tags: ["Astronomy", "Research"],
+        stats: [
+          { value: "310K", label: "Learners" },
+          { value: "88", label: "Partners" },
+          { value: "96%", label: "Quality" }
+        ],
+        accent: "cyan",
+        order: 4
+      },
+      {
+        page: "professionalPlatforms",
+        section: "github",
+        title: "Code Orbit",
+        description: "Professional repositories, research tools, space-science codebases, simulations and technical collaboration projects.",
+        imageUrl: "https://images.unsplash.com/photo-1556075798-4825dfaaf498?q=80&w=1200&auto=format&fit=crop",
+        url: "#",
+        buttonText: "Open GitHub",
+        tags: ["GitHub", "Open Source"],
+        stats: [
+          { value: "85K", label: "Developers" },
+          { value: "240", label: "Repositories" },
+          { value: "96%", label: "Reliability" }
+        ],
+        accent: "github",
+        order: 5
+      },
+      {
+        page: "professionalPlatforms",
+        section: "github",
+        title: "X Horizon Dev Lab",
+        description: "Open-source development space for X Horizon simulations, data tools, astronomy scripts and research-based learning systems.",
+        imageUrl: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?q=80&w=1200&auto=format&fit=crop",
+        url: "#",
+        buttonText: "Open Repository",
+        tags: ["Code", "Research Tools"],
+        stats: [
+          { value: "42K", label: "Stars" },
+          { value: "115", label: "Projects" },
+          { value: "99%", label: "Active" }
+        ],
+        accent: "green",
+        order: 6
+      }
+    ];
+
+    const sectionMap = {
+      linkedin: document.getElementById("linkedin-platforms"),
+      website: document.getElementById("web-platforms"),
+      web: document.getElementById("web-platforms"),
+      github: document.getElementById("github-platforms")
+    };
+
+    const tabButtons = Array.from(document.querySelectorAll(".pp-tab-button"));
+    const searchInput = document.getElementById("pp-search-input");
+    const searchCount = document.getElementById("pp-search-count");
+    const searchAction = document.getElementById("pp-search-action");
+    const adminCloseBtn = document.getElementById("pp-admin-close-btn");
+    const adminTools = document.getElementById("pp-admin-tools");
+    const adminSection = document.getElementById("pp-admin-section");
+    const adminUrl = document.getElementById("pp-admin-url");
+    const adminOrder = document.getElementById("pp-admin-order");
+    const adminTitle = document.getElementById("pp-admin-title");
+    const adminTags = document.getElementById("pp-admin-tags");
+    const adminDescription = document.getElementById("pp-admin-description");
+    const adminImage = document.getElementById("pp-admin-image");
+    const adminStatus = document.getElementById("pp-admin-status");
+    const adminPreview = document.getElementById("pp-admin-preview");
+    const adminCardSearch = document.getElementById("pp-admin-card-search");
+    const adminResults = document.getElementById("pp-admin-results");
+    const adminGenerateBtn = document.getElementById("pp-admin-generate-btn");
+    const adminSaveBtn = document.getElementById("pp-admin-save-btn");
+
+    const colorMap = {
+      blue: {
+        card: "pp-card-blue",
+        glow: "#38bdf8",
+        shadow: "rgba(56,189,248,0.35)",
+        button: "linear-gradient(135deg,#38bdf8,#2563eb,#0f172a)"
+      },
+      sky: {
+        card: "pp-card-sky",
+        glow: "#7dd3fc",
+        shadow: "rgba(125,211,252,0.32)",
+        button: "linear-gradient(135deg,#7dd3fc,#2563eb,#0f172a)"
+      },
+      purple: {
+        card: "pp-card-purple",
+        glow: "#e5e7eb",
+        shadow: "rgba(226,232,240,0.25)",
+        button: "linear-gradient(135deg,#e5e7eb,#38bdf8,#1d4ed8)"
+      },
+      cyan: {
+        card: "pp-card-cyan",
+        glow: "#22d3ee",
+        shadow: "rgba(34,211,238,0.34)",
+        button: "linear-gradient(135deg,#22d3ee,#0284c7,#0f172a)"
+      },
+      github: {
+        card: "pp-card-github",
+        glow: "#cbd5e1",
+        shadow: "rgba(203,213,225,0.24)",
+        button: "linear-gradient(135deg,#020617,#1e293b,#64748b)"
+      },
+      green: {
+        card: "pp-card-green",
+        glow: "#38bdf8",
+        shadow: "rgba(56,189,248,0.26)",
+        button: "linear-gradient(135deg,#0ea5e9,#1d4ed8,#020617)"
+      },
+      amber: {
+        card: "pp-card-amber",
+        glow: "#f8fafc",
+        shadow: "rgba(248,250,252,0.2)",
+        button: "linear-gradient(135deg,#f8fafc,#38bdf8,#1e3a8a)"
+      }
+    };
+
+    function cleanText(value, fallback = "") {
+      if (typeof value !== "string") return fallback;
+      return value.trim() || fallback;
+    }
+
+    function normalizeSection(card) {
+      const raw = String(card.section || card.platformType || card.category || "").trim().toLowerCase();
+      if (raw.includes("linkedin")) return "linkedin";
+      if (raw.includes("web") || raw.includes("website") || raw.includes("partner")) return "website";
+      if (raw.includes("github") || raw.includes("repo") || raw.includes("code")) return "github";
+      return "linkedin";
+    }
+
+    function isProfessionalPage(card) {
+      const raw = String(card.page || card.pageType || card.targetPage || "professionalPlatforms").trim().toLowerCase();
+      return PAGE_KEYS.map(key => key.toLowerCase()).includes(raw);
+    }
+
+    function normalizeTags(card) {
+      if (Array.isArray(card.tags)) {
+        return card.tags.map(tag => String(tag).trim()).filter(Boolean).slice(0, 4);
+      }
+      if (typeof card.tags === "string") {
+        return card.tags.split(",").map(tag => tag.trim()).filter(Boolean).slice(0, 4);
+      }
+      const fallbackOne = cleanText(card.tag1 || card.type || "Professional");
+      const fallbackTwo = cleanText(card.tag2 || card.section || "Platform");
+      return [fallbackOne, fallbackTwo].filter(Boolean).slice(0, 4);
+    }
+
+    function normalizeStats(card) {
+      if (Array.isArray(card.stats)) {
+        return card.stats
+          .map(stat => ({
+            value: cleanText(stat.value || stat.number || stat.count, "—"),
+            label: cleanText(stat.label || stat.name || stat.title, "Metric")
+          }))
+          .filter(stat => stat.value || stat.label)
+          .slice(0, 3);
+      }
+
+      const stats = [
+        { value: cleanText(card.stat1Value || card.members || card.users || card.developers, "—"), label: cleanText(card.stat1Label || "Reach") },
+        { value: cleanText(card.stat2Value || card.partners || card.projects || card.repositories, "—"), label: cleanText(card.stat2Label || "Partners") },
+        { value: cleanText(card.stat3Value || card.trust || card.quality || card.reliability, "—"), label: cleanText(card.stat3Label || "Trust") }
+      ];
+
+      return stats.slice(0, 3);
+    }
+
+    function getAccent(card, index, section) {
+      const rawAccent = cleanText(card.accent || card.accentColor || card.color || "").toLowerCase();
+      if (colorMap[rawAccent]) return rawAccent;
+      if (section === "github") return index % 2 === 0 ? "github" : "green";
+      if (section === "website") return index % 2 === 0 ? "purple" : "cyan";
+      return index % 2 === 0 ? "blue" : "sky";
+    }
+
+    function cardTemplate(card, index) {
+      const section = normalizeSection(card);
+      const accentName = getAccent(card, index, section);
+      const accent = colorMap[accentName] || colorMap.blue;
+      const title = cleanText(card.title || card.name, "Professional Platform");
+      const description = cleanText(card.description || card.summary, "Professional collaboration platform connected with X Horizon.");
+      const imageUrl = cleanText(card.imageUrl || card.image || card.photoUrl, "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop");
+      const url = cleanText(card.url || card.link || card.linkUrl || card.websiteUrl || card.githubUrl || card.linkedinUrl, "#");
+      const buttonText = cleanText(card.buttonText || card.cta || (section === "github" ? "Open GitHub" : section === "website" ? "Open Website" : "Visit Network"));
+      const tags = normalizeTags(card);
+      const stats = normalizeStats(card);
+      const safeTarget = url === "#" ? "" : ' target="_blank" rel="noopener noreferrer"';
+
+      return `
+        <article class="pp-card ${accent.card} pp-reveal" style="--pp-shadow:${accent.shadow};">
+          <div class="pp-card-media">
+            <img class="pp-card-img" src="${escapeAttribute(imageUrl)}" alt="" role="presentation" loading="lazy">
+          </div>
+
+          <h3 class="pp-card-title">${escapeHTML(title)}</h3>
+
+          <div class="pp-tags">
+            ${tags.map(tag => `<span class="pp-tag">${escapeHTML(tag)}</span>`).join("")}
+          </div>
+
+          <p class="pp-card-text">${escapeHTML(description)}</p>
+
+          <div class="pp-stats">
+            ${stats.map(stat => `
+              <div class="pp-stat">
+                <div class="pp-stat-value">${escapeHTML(stat.value)}</div>
+                <div class="pp-stat-label">${escapeHTML(stat.label)}</div>
+              </div>
+            `).join("")}
+          </div>
+
+          <a class="pp-card-link" href="${escapeAttribute(url)}"${safeTarget} style="background:${accent.button};">
+            ${escapeHTML(buttonText)}
+          </a>
+        </article>
+      `;
+    }
+
+    function escapeHTML(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeAttribute(value) {
+      return escapeHTML(value).replace(/`/g, "&#096;");
+    }
+
+
+    function cardSearchText(card) {
+      return [
+        card.title,
+        card.name,
+        card.description,
+        card.summary,
+        card.section,
+        card.url,
+        card.link,
+        normalizeTags(card).join(" ")
+      ].map(value => String(value || "").toLowerCase()).join(" ");
+    }
+
+    function updateSearchCount(count, total) {
+      if (!searchCount) return;
+      const shown = Number(count || 0);
+      const available = Number(total || 0);
+      searchCount.textContent = `${shown} / ${available} Cards`;
+    }
+
+    function applySearchFilter() {
+      const rawValue = String(searchInput?.value || "").trim();
+      const searchValue = rawValue.toLowerCase();
+      const sourceCards = allCards.length ? allCards : DEFAULT_CARDS;
+      const filteredCards = searchValue
+        ? sourceCards.filter(card => cardSearchText(card).includes(searchValue))
+        : sourceCards;
+      renderCards(filteredCards);
+      updateSearchCount(filteredCards.filter(isProfessionalPage).length, sourceCards.filter(isProfessionalPage).length);
+    }
+
+    function getDefaultImage(section) {
+      if (section === "github") return "https://images.unsplash.com/photo-1556075798-4825dfaaf498?q=80&w=1200&auto=format&fit=crop";
+      if (section === "website") return "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop";
+      return "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop";
+    }
+
+    function titleFromUrl(url) {
+      try {
+        const parsed = new URL(url);
+        const host = parsed.hostname.replace(/^www\./, "");
+        const pathName = parsed.pathname.split("/").filter(Boolean).slice(-1)[0] || host.split(".")[0];
+        return pathName
+          .replace(/[-_]/g, " ")
+          .replace(/\b\w/g, letter => letter.toUpperCase())
+          .trim() || host;
+      } catch (error) {
+        return "Professional Platform";
+      }
+    }
+
+    function normalizeUrl(value) {
+      const clean = String(value || "").trim();
+      if (!clean) return "";
+      if (/^https?:\/\//i.test(clean)) return clean;
+      return `https://${clean}`;
+    }
+
+    function detectSectionFromUrl(url, selectedSection) {
+      const lower = String(url || "").toLowerCase();
+      if (lower.includes("github.com")) return "github";
+      if (lower.includes("linkedin.com")) return "linkedin";
+      return selectedSection || "website";
+    }
+
+    function formatNumber(value) {
+      const number = Number(value || 0);
+      if (number >= 1000000) return `${(number / 1000000).toFixed(number >= 10000000 ? 0 : 1)}M`;
+      if (number >= 1000) return `${(number / 1000).toFixed(number >= 10000 ? 0 : 1)}K`;
+      return String(number);
+    }
+
+    function githubParts(url) {
+      try {
+        const parsed = new URL(url);
+        if (!parsed.hostname.toLowerCase().includes("github.com")) return null;
+        const parts = parsed.pathname.split("/").filter(Boolean);
+        if (!parts.length) return null;
+        return { owner: parts[0], repo: parts[1] || "" };
+      } catch (error) {
+        return null;
+      }
+    }
+
+    async function githubCard(url) {
+      const parts = githubParts(url);
+      if (!parts) throw new Error("This is not a valid GitHub link.");
+
+      if (parts.repo) {
+        const response = await fetch(`https://api.github.com/repos/${encodeURIComponent(parts.owner)}/${encodeURIComponent(parts.repo)}`);
+        if (!response.ok) throw new Error("GitHub repository data was not available.");
+        const repo = await response.json();
+        const tags = ["GitHub", repo.language || "Open Source", "Repository"];
+        return {
+          page: "professionalPlatforms",
+          section: "github",
+          status: "active",
+          title: repo.full_name || titleFromUrl(url),
+          description: repo.description || "Professional GitHub repository connected with space-science tools, simulations, technical learning or X Horizon collaboration.",
+          imageUrl: repo.owner?.avatar_url || getDefaultImage("github"),
+          url: repo.html_url || url,
+          buttonText: "Open Repository",
+          tags,
+          stats: [
+            { value: formatNumber(repo.stargazers_count), label: "Stars" },
+            { value: formatNumber(repo.forks_count), label: "Forks" },
+            { value: formatNumber(repo.watchers_count), label: "Watchers" }
+          ],
+          accent: "github"
+        };
+      }
+
+      const response = await fetch(`https://api.github.com/users/${encodeURIComponent(parts.owner)}`);
+      if (!response.ok) throw new Error("GitHub profile data was not available.");
+      const user = await response.json();
+      return {
+        page: "professionalPlatforms",
+        section: "github",
+        status: "active",
+        title: user.name || user.login || titleFromUrl(url),
+        description: user.bio || "Professional GitHub profile for technical collaboration, repositories, research tools and open-source development.",
+        imageUrl: user.avatar_url || getDefaultImage("github"),
+        url: user.html_url || url,
+        buttonText: "Open GitHub",
+        tags: ["GitHub", "Developer", "Projects"],
+        stats: [
+          { value: formatNumber(user.public_repos), label: "Repos" },
+          { value: formatNumber(user.followers), label: "Followers" },
+          { value: formatNumber(user.following), label: "Following" }
+        ],
+        accent: "github"
+      };
+    }
+
+    function websiteCard(url, section) {
+      let host = "Professional Platform";
+      try { host = new URL(url).hostname.replace(/^www\./, ""); } catch (error) {}
+      const title = titleFromUrl(url);
+      const isLinkedIn = section === "linkedin";
+      const isGitHub = section === "github";
+      return {
+        page: "professionalPlatforms",
+        section,
+        status: "active",
+        title,
+        description: isLinkedIn
+          ? "Professional LinkedIn network for space science, research outreach, industry collaboration and X Horizon partnership visibility."
+          : isGitHub
+            ? "Technical project link for code, repositories, tools, simulations and collaborative development."
+            : `Trusted professional website partner connected with astronomy learning, research resources, simulations or space-science collaboration. Source: ${host}.`,
+        imageUrl: getDefaultImage(section),
+        url,
+        buttonText: isLinkedIn ? "Visit Network" : isGitHub ? "Open GitHub" : "Open Website",
+        tags: isLinkedIn ? ["LinkedIn", "Professional", "Network"] : isGitHub ? ["GitHub", "Code", "Project"] : ["Website", "Partner", "Research"],
+        stats: [
+          { value: "Live", label: "Status" },
+          { value: "01", label: "Source" },
+          { value: "Pro", label: "Quality" }
+        ],
+        accent: isLinkedIn ? "blue" : isGitHub ? "github" : "purple"
+      };
+    }
+
+    async function generateDraftCard() {
+      const url = normalizeUrl(adminUrl?.value);
+      if (!url) throw new Error("Paste a platform link first.");
+      const section = detectSectionFromUrl(url, adminSection?.value || "website");
+      if (adminSection) adminSection.value = section;
+      const draft = section === "github" ? await githubCard(url) : websiteCard(url, section);
+      draft.order = Number(adminOrder?.value || 0) || (allCards.length + 1);
+      return draft;
+    }
+
+    function fillAdminForm(card) {
+      currentDraftCard = { ...card };
+      if (adminSection) adminSection.value = card.section || "website";
+      if (adminUrl) adminUrl.value = card.url || "";
+      if (adminOrder) adminOrder.value = card.order || "";
+      if (adminTitle) adminTitle.value = card.title || "";
+      if (adminTags) adminTags.value = normalizeTags(card).join(", ");
+      if (adminDescription) adminDescription.value = card.description || "";
+      if (adminImage) adminImage.value = card.imageUrl || "";
+      renderAdminPreview();
+    }
+
+    function cardFromAdminForm() {
+      const section = adminSection?.value || "website";
+      const url = normalizeUrl(adminUrl?.value);
+      const tags = String(adminTags?.value || "").split(",").map(item => item.trim()).filter(Boolean);
+      const base = currentDraftCard || websiteCard(url || "#", section);
+      return {
+        ...base,
+        page: "professionalPlatforms",
+        section,
+        status: "active",
+        title: cleanText(adminTitle?.value, base.title || "Professional Platform"),
+        description: cleanText(adminDescription?.value, base.description || "Professional X Horizon collaboration platform."),
+        imageUrl: cleanText(adminImage?.value, base.imageUrl || getDefaultImage(section)),
+        url: url || base.url || "#",
+        buttonText: base.buttonText || (section === "github" ? "Open GitHub" : section === "website" ? "Open Website" : "Visit Network"),
+        tags: tags.length ? tags : normalizeTags(base),
+        order: Number(adminOrder?.value || base.order || (allCards.length + 1)),
+        accent: base.accent || (section === "github" ? "github" : section === "website" ? "purple" : "blue")
+      };
+    }
+
+    function renderAdminPreview() {
+      if (!adminPreview) return;
+      const card = cardFromAdminForm();
+      adminPreview.innerHTML = cardTemplate(card, 0);
+      activateReveal();
+    }
+
+    function setAdminStatus(message, isError = false) {
+      if (!adminStatus) return;
+      adminStatus.textContent = message || "";
+      adminStatus.style.color = isError ? "#fca5a5" : "#93c5fd";
+    }
+
+    function openAdminTools() {
+      if (!adminTools) return;
+      adminTools.classList.add("pp-admin-open", "pp-visible-reveal");
+      renderAdminResults();
+      adminTools.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function closeAdminTools() {
+      if (!adminTools) return;
+      adminTools.classList.remove("pp-admin-open");
+    }
+
+    function renderAdminResults() {
+      if (!adminResults) return;
+      const value = String(adminCardSearch?.value || "").trim().toLowerCase();
+      const cards = (allCards.length ? allCards : DEFAULT_CARDS)
+        .filter(isProfessionalPage)
+        .filter(card => !value || cardSearchText(card).includes(value))
+        .slice(0, 18);
+
+      if (!cards.length) {
+        adminResults.innerHTML = `<div class="pp-admin-result-item">No matching cards found.</div>`;
+        return;
+      }
+
+      adminResults.innerHTML = cards.map(card => `
+        <div class="pp-admin-result-item">
+          <strong>${escapeHTML(card.title || "Professional Platform")}</strong>
+          <div class="pp-admin-result-meta">
+            <span>${escapeHTML(normalizeSection(card))}</span>
+            <span>${escapeHTML(card.url || card.link || "No link")}</span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderCards(cards) {
+      [sectionMap.linkedin, sectionMap.website, sectionMap.github].forEach(target => {
+        if (target) target.innerHTML = "";
+      });
+
+      const filteredCards = cards
+        .filter(card => card && isProfessionalPage(card))
+        .sort((a, b) => Number(a.order || 9999) - Number(b.order || 9999));
+
+      const grouped = {
+        linkedin: [],
+        website: [],
+        github: []
+      };
+
+      filteredCards.forEach(card => {
+        const section = normalizeSection(card);
+        grouped[section].push(card);
+      });
+
+      Object.entries(grouped).forEach(([section, sectionCards]) => {
+        const target = sectionMap[section];
+        if (!target) return;
+
+        if (!sectionCards.length) {
+          target.innerHTML = `<div class="pp-empty">No ${section} platforms are available yet.</div>`;
+          return;
+        }
+
+        target.innerHTML = sectionCards.map((card, index) => cardTemplate(card, index)).join("");
+      });
+
+      activateReveal();
+    }
+
+    function activateTab(section) {
+      const normalized = section === "web" ? "website" : section;
+
+      ["linkedin", "website", "github"].forEach(key => {
+        const grid = sectionMap[key];
+        if (grid) grid.classList.toggle("pp-visible", key === normalized);
+      });
+
+      tabButtons.forEach(button => {
+        button.classList.toggle("pp-active", button.dataset.target === normalized);
+      });
+
+      activateReveal();
+    }
+
+    tabButtons.forEach(button => {
+      button.addEventListener("click", () => activateTab(button.dataset.target));
+    });
+
+    function initFirebase() {
+      if (dbInstance) return dbInstance;
+      const app = getFirebaseAppInstance();
+      dbInstance = getFirestore(app);
+      return dbInstance;
+    }
+
+    async function loadCards() {
+      try {
+        const db = initFirebase();
+        const cardsQuery = query(collection(db, COLLECTION_NAME), where("status", "==", "active"));
+        const snapshot = await getDocs(cardsQuery);
+        const cards = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).filter(isProfessionalPage);
+        allCards = cards.length ? cards : DEFAULT_CARDS;
+        applySearchFilter();
+        renderAdminResults();
+      } catch (error) {
+        console.error("X Horizon professional platform loading error:", error);
+        allCards = DEFAULT_CARDS;
+        applySearchFilter();
+      }
+    }
+
+    function activateReveal() {
+      const revealItems = document.querySelectorAll(".pp-reveal");
+      if (!('IntersectionObserver' in window)) {
+        revealItems.forEach(item => item.classList.add("pp-visible-reveal"));
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("pp-visible-reveal");
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.16, rootMargin: "0px 0px -10% 0px" });
+
+      revealItems.forEach(item => {
+        if (!item.classList.contains("pp-visible-reveal")) observer.observe(item);
+      });
+    }
+
+    function waitForAdminBridge() {
+      return new Promise(resolve => {
+        if (window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock === "function") {
+          resolve(window.XHorizonAdmin);
+          return;
+        }
+
+        let tries = 0;
+        const timer = setInterval(() => {
+          tries += 1;
+          if (window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock === "function") {
+            clearInterval(timer);
+            resolve(window.XHorizonAdmin);
+          } else if (tries > 12) {
+            clearInterval(timer);
+            resolve(null);
+          }
+        }, 120);
+      });
+    }
+
+    async function runSearchOrAdminUnlock() {
+      const value = String(searchInput?.value || "").trim();
+      if (!value) {
+        applySearchFilter();
+        return;
+      }
+
+      const oldLabel = searchAction ? searchAction.textContent : "";
+      if (searchAction) {
+        searchAction.disabled = true;
+        searchAction.textContent = "Checking";
+      }
+
+      try {
+        const bridge = await waitForAdminBridge();
+        if (bridge && typeof bridge.unlock === "function") {
+          let callbackDone = false;
+          const ok = await Promise.resolve(bridge.unlock(value, () => {
+            callbackDone = true;
+            if (searchInput) searchInput.value = "";
+            setAdminStatus("Admin tools opened.");
+            openAdminTools();
+            applySearchFilter();
+          }));
+
+          if (ok) {
+            if (!callbackDone) {
+              if (searchInput) searchInput.value = "";
+              setAdminStatus("Admin tools opened.");
+              openAdminTools();
+              applySearchFilter();
+            }
+            return;
+          }
+        }
+      } catch (error) {
+        console.error("X Horizon Firebase unlock failed:", error);
+      } finally {
+        if (searchAction) {
+          searchAction.disabled = false;
+          searchAction.textContent = oldLabel;
+        }
+      }
+
+      applySearchFilter();
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener("input", applySearchFilter);
+      searchInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          runSearchOrAdminUnlock();
+        }
+      });
+    }
+
+    if (searchAction) {
+      searchAction.addEventListener("click", runSearchOrAdminUnlock);
+    }
+
+    if (adminCloseBtn) {
+      adminCloseBtn.addEventListener("click", closeAdminTools);
+    }
+
+    if (adminGenerateBtn) {
+      adminGenerateBtn.addEventListener("click", async () => {
+        try {
+          setAdminStatus("Generating card...");
+          const card = await generateDraftCard();
+          fillAdminForm(card);
+          setAdminStatus("Card generated. Review it, then save.");
+        } catch (error) {
+          setAdminStatus(error.message || "Card generation failed.", true);
+        }
+      });
+    }
+
+    [adminSection, adminUrl, adminOrder, adminTitle, adminTags, adminDescription, adminImage].forEach(field => {
+      if (!field) return;
+      field.addEventListener("input", () => {
+        if (adminTitle?.value || adminUrl?.value) renderAdminPreview();
+      });
+      field.addEventListener("change", () => {
+        if (adminTitle?.value || adminUrl?.value) renderAdminPreview();
+      });
+    });
+
+    if (adminSaveBtn) {
+      adminSaveBtn.addEventListener("click", async () => {
+        try {
+          const card = cardFromAdminForm();
+          if (!card.url || card.url === "#") throw new Error("Add a valid URL before saving.");
+          if (!card.title) throw new Error("Title is required.");
+          setAdminStatus("Saving card...");
+          const db = initFirebase();
+          const payload = {
+            ...card,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          };
+          await addDoc(collection(db, COLLECTION_NAME), payload);
+          allCards = [payload, ...allCards];
+          applySearchFilter();
+          renderAdminResults();
+          setAdminStatus("Card saved successfully. It is now available on the page.");
+        } catch (error) {
+          setAdminStatus(error.message || "Card save failed. Check Firestore rules.", true);
+        }
+      });
+    }
+
+    if (adminCardSearch) {
+      adminCardSearch.addEventListener("input", renderAdminResults);
+    }
+
+
+    setTimeout(() => {
+      const loader = document.getElementById("xhLoader");
+      if (loader) loader.classList.add("done");
+    }, 2100);
+
+    activateReveal();
+    loadCards();
+  </script>

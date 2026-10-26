@@ -1,0 +1,1207 @@
+<section id="astrox-apps-preview-page" style="background:#020617;font-family:Arial,Helvetica,sans-serif;color:white;overflow:hidden;">
+<style>
+  /* X Horizon responsive layer: internal IDs stay unchanged so templates and JS keep working. */
+  #astrox-apps-preview-page{
+    background:#020617 !important;
+    font-family:Inter,Arial,Helvetica,sans-serif !important;
+    color:#f8fafc !important;
+    overflow-x:hidden !important;
+    isolation:isolate !important;
+  }
+
+  #astrox-apps-preview-page > section:first-of-type{
+    padding:128px 6% 104px !important;
+    background:
+      radial-gradient(circle at 12% 10%,rgba(37,99,235,0.30),transparent 34%),
+      radial-gradient(circle at 84% 18%,rgba(56,189,248,0.18),transparent 31%),
+      radial-gradient(circle at 50% 92%,rgba(148,163,184,0.14),transparent 35%),
+      linear-gradient(135deg,#020617 0%,#07111f 48%,#020617 100%) !important;
+  }
+
+  #astrox-apps-preview-page > section:nth-of-type(2),
+  #astrox-app-admin-panel,
+  #astrox-apps-preview-page > section:nth-of-type(4){
+    background:
+      radial-gradient(circle at 10% 0%,rgba(37,99,235,0.16),transparent 34%),
+      radial-gradient(circle at 92% 16%,rgba(148,163,184,0.10),transparent 30%),
+      #020617 !important;
+  }
+
+  #astrox-apps-preview-page h1,
+  #astrox-apps-preview-page h2,
+  #astrox-apps-preview-page h3{
+    letter-spacing:-0.035em !important;
+  }
+
+  #astrox-apps-preview-page h1{
+    background:linear-gradient(135deg,#ffffff 0%,#cbd5e1 34%,#60a5fa 68%,#f8fafc 100%) !important;
+    -webkit-background-clip:text !important;
+    background-clip:text !important;
+    color:transparent !important;
+    text-shadow:0 0 42px rgba(96,165,250,0.24) !important;
+  }
+
+  #astrox-app-search,
+  #astrox-app-search-btn{
+    min-height:64px !important;
+    height:64px !important;
+    box-sizing:border-box !important;
+  }
+
+  #astrox-app-search{
+    background:rgba(2,6,23,0.68) !important;
+    border:1px solid rgba(148,163,184,0.18) !important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.02),0 0 30px rgba(37,99,235,0.12) !important;
+  }
+
+  #astrox-app-search-btn{
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:0 42px !important;
+    background:linear-gradient(135deg,#e5e7eb,#60a5fa 45%,#2563eb) !important;
+    color:#020617 !important;
+  }
+
+  #astrox-app-grid{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    grid-auto-rows:1fr !important;
+    align-items:stretch !important;
+    gap:24px !important;
+    max-width:1120px !important;
+    margin:0 auto !important;
+  }
+
+  #astrox-app-grid .astrox-app-card{
+    height:100% !important;
+    min-height:548px !important;
+    padding:24px !important;
+    border-radius:28px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:flex-start !important;
+  }
+
+  #astrox-app-grid .astrox-app-card > div:nth-child(2){
+    height:176px !important;
+    min-height:176px !important;
+    max-height:176px !important;
+    margin-bottom:20px !important;
+  }
+
+  #astrox-app-grid .astrox-app-card h3{
+    font-size:22px !important;
+    min-height:58px !important;
+    line-height:1.2 !important;
+    margin-bottom:12px !important;
+  }
+
+  #astrox-app-grid .astrox-app-card p{
+    font-size:14px !important;
+    line-height:1.72 !important;
+    min-height:98px !important;
+    margin-bottom:20px !important;
+    overflow:hidden !important;
+    display:-webkit-box !important;
+    -webkit-line-clamp:4 !important;
+    -webkit-box-orient:vertical !important;
+  }
+
+  #astrox-app-grid .astrox-app-card > div:nth-last-child(2){
+    min-height:74px !important;
+    margin-bottom:20px !important;
+  }
+
+  #astrox-app-grid .astrox-app-card > div:last-child{
+    margin-top:auto !important;
+  }
+
+  #astrox-app-grid .astrox-app-card button,
+  #astrox-app-grid .astrox-app-card a{
+    min-height:52px !important;
+  }
+
+  @media(max-width:1080px){
+    #astrox-app-grid{max-width:100% !important;}
+    #astrox-app-grid .astrox-app-card{min-height:532px !important;}
+  }
+
+  @media(max-width:860px){
+    #astrox-apps-preview-page > section:first-of-type{padding:92px 22px 76px !important;}
+    #astrox-apps-preview-page > section:nth-of-type(2){padding:58px 22px 26px !important;}
+    #astrox-app-admin-panel{padding:58px 22px !important;}
+    #astrox-apps-preview-page h1{font-size:clamp(42px,12vw,68px) !important;}
+    #astrox-apps-preview-page h2{font-size:clamp(32px,8vw,48px) !important;}
+    #astrox-app-grid{grid-template-columns:1fr !important;gap:20px !important;}
+    #astrox-app-grid .astrox-app-card{min-height:auto !important;padding:22px !important;}
+    #astrox-app-grid .astrox-app-card > div:nth-child(2){height:180px !important;min-height:180px !important;max-height:180px !important;}
+    #astrox-app-grid .astrox-app-card h3{min-height:auto !important;font-size:21px !important;}
+    #astrox-app-grid .astrox-app-card p{min-height:auto !important;-webkit-line-clamp:unset !important;display:block !important;overflow:visible !important;}
+    #astrox-app-grid .astrox-app-card > div:nth-last-child(2){min-height:auto !important;}
+    #astrox-app-search,#astrox-app-search-btn{width:100% !important;min-height:58px !important;height:58px !important;}
+
+    #astrox-apps-preview-page .astrox-app-tab{
+      min-height:54px !important;
+      display:inline-flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+    }
+    #astrox-app-admin-panel div[style*="grid-template-columns:1.1fr"]{
+      grid-template-columns:1fr !important;
+    }
+    #astrox-app-admin-panel div[style*="position:sticky"]{
+      position:relative !important;
+      top:0 !important;
+    }
+    #astrox-app-preview-modal{
+      padding:16px !important;
+    }
+    #astrox-app-search-btn{padding:0 24px !important;}
+  }
+
+  @media(max-width:540px){
+    #astrox-apps-preview-page > section:first-of-type{padding:78px 16px 64px !important;}
+    #astrox-apps-preview-page > section:nth-of-type(2),
+    #astrox-app-admin-panel,
+    #astrox-apps-preview-page > section:nth-of-type(4){padding-left:16px !important;padding-right:16px !important;}
+    #astrox-apps-preview-page h1{font-size:39px !important;line-height:1.08 !important;}
+    #astrox-apps-preview-page p{font-size:15px !important;line-height:1.75 !important;}
+    #astrox-app-grid .astrox-app-card{border-radius:24px !important;padding:18px !important;}
+    #astrox-app-grid .astrox-app-card > div:nth-child(2){height:160px !important;min-height:160px !important;max-height:160px !important;border-radius:20px !important;}
+    #astrox-app-grid .astrox-app-card h3{font-size:19px !important;}
+    #astrox-app-grid .astrox-app-card > div:nth-last-child(2){gap:10px !important;}
+    #astrox-app-grid .astrox-app-card > div:nth-last-child(2) div div:first-child{font-size:18px !important;}
+    #astrox-app-grid .astrox-app-card > div:last-child{flex-direction:column !important;}
+    #astrox-app-grid .astrox-app-card > div:last-child a{width:100% !important;min-height:50px !important;}
+
+    #astrox-apps-preview-page .astrox-app-tab{width:100% !important;}
+    #astrox-app-preview-modal > div{border-radius:20px !important;}
+    #astrox-app-preview-modal iframe{min-height:62vh !important;}
+  }
+
+/* homepage reference main section + loader patch */
+#astrox-apps-preview-page{
+  --xh-app-ease:cubic-bezier(.16,1,.3,1);
+  --xh-app-silver:linear-gradient(135deg,#fff 0%,#c9c9c9 44%,#777 100%);
+  background:#000 !important;
+  color:#fff !important;
+  position:relative !important;
+  isolation:isolate !important;
+}
+
+.xh-loader{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:grid;
+  place-items:center;
+  z-index:9999;
+  transition:opacity .65s var(--xh-app-ease),visibility .65s var(--xh-app-ease);
+}
+.xh-loader.done{opacity:0;visibility:hidden}
+.xh-load-mark{position:relative;width:min(310px,82vw);height:118px;display:grid;place-items:center;overflow:hidden}
+.xh-load-x{position:absolute;left:42px;top:6px;font-size:96px;line-height:1;font-weight:900;letter-spacing:-.12em;color:#fff;z-index:2;text-shadow:0 0 26px rgba(255,255,255,.18)}
+.xh-load-word{position:absolute;left:112px;top:45px;font-size:22px;font-weight:900;letter-spacing:.2em;color:#eee;opacity:.18;transform:none;animation:xhWordBlink 1.7s steps(2,end) infinite,xhWordSolid .22s ease 1.7s forwards;z-index:3}
+.xh-load-line{position:absolute;left:42px;bottom:10px;width:222px;height:4px;border-radius:99px;background:#161616;overflow:hidden}
+.xh-load-line::after{content:"";display:block;height:100%;width:0;background:#d8d8d8;animation:xhLoadFill 1.7s var(--xh-app-ease) forwards}
+@keyframes xhWordBlink{0%,100%{opacity:.16}50%{opacity:.68}}
+@keyframes xhWordSolid{to{opacity:1}}
+@keyframes xhLoadFill{to{width:100%}}
+
+#astrox-apps-preview-page .astrox-home-hero{
+  position:relative !important;
+  min-height:100vh !important;
+  display:grid !important;
+  place-items:center !important;
+  text-align:center !important;
+  overflow:hidden !important;
+  background:#000 !important;
+  padding:112px 20px 82px !important;
+}
+#astrox-apps-preview-page .astrox-home-hero-bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.42),rgba(0,0,0,.75) 66%,#000 100%),
+    linear-gradient(90deg,rgba(0,0,0,.58),rgba(0,0,0,.12),rgba(0,0,0,.58)),
+    url('https://images.unsplash.com/photo-1778793576394-9386b3058dee?auto=format&fit=crop&w=2200&q=88') center/cover no-repeat;
+  filter:brightness(1.04) saturate(1.12) contrast(1.03);
+  transform:scale(1.02);
+}
+#astrox-apps-preview-page .astrox-home-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:radial-gradient(circle at 50% 48%,rgba(0,0,0,.06) 0 24%,rgba(0,0,0,.38) 68%,#000 100%);
+  pointer-events:none;
+}
+#astrox-apps-preview-page .astrox-home-hero-content{
+  position:relative;
+  z-index:2;
+  width:min(980px,calc(100% - 36px));
+  padding:82px 0 72px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  transform:translateY(-18px);
+}
+#astrox-apps-preview-page .astrox-home-search-wrap{
+  width:min(640px,100%);
+  position:relative;
+  margin:0 auto 30px;
+}
+#astrox-apps-preview-page .astrox-home-search{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(6,6,6,.88);
+  border-radius:16px;
+  padding:8px;
+  box-shadow:0 18px 70px rgba(0,0,0,.5);
+}
+#astrox-apps-preview-page .astrox-home-search #astrox-app-search{
+  flex:1 !important;
+  min-width:0 !important;
+  width:auto !important;
+  height:48px !important;
+  min-height:48px !important;
+  border-radius:12px !important;
+  background:#000 !important;
+  border:0 !important;
+  color:#fff !important;
+  padding:0 16px !important;
+  font-size:14px !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+}
+#astrox-apps-preview-page .astrox-home-search #astrox-app-search-btn{
+  min-height:48px !important;
+  height:48px !important;
+  border-radius:12px !important;
+  background:#171717 !important;
+  color:#fff !important;
+  padding:0 20px !important;
+  font-size:12px !important;
+  font-weight:900 !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+  border:0 !important;
+  box-shadow:none !important;
+  transition:transform .25s var(--xh-app-ease),background .25s var(--xh-app-ease) !important;
+}
+#astrox-apps-preview-page .astrox-home-search #astrox-app-search-btn:hover{
+  background:#242424 !important;
+  color:#fff !important;
+  transform:scale(1.035) !important;
+  box-shadow:none !important;
+}
+#astrox-apps-preview-page .astrox-home-title{
+  margin:0;
+  font-size:clamp(58px,10vw,128px) !important;
+  line-height:.84 !important;
+  letter-spacing:.02em !important;
+  text-transform:uppercase;
+  font-weight:900 !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  background:var(--xh-app-silver) !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  color:transparent !important;
+  text-shadow:none !important;
+}
+#astrox-apps-preview-page .astrox-home-title span{
+  display:inline-block;
+  color:#fff !important;
+  background:none !important;
+  -webkit-text-fill-color:#fff !important;
+}
+#astrox-apps-preview-page .astrox-home-line{
+  margin:20px 0 0;
+  color:#d7d7d7;
+  font-size:clamp(15px,2vw,22px);
+  letter-spacing:.46em;
+  text-transform:uppercase;
+}
+#astrox-apps-preview-page .astrox-home-copy{
+  max-width:780px;
+  margin:22px auto 0;
+  color:#cfcfcf;
+  font-size:15px;
+  line-height:1.75;
+}
+@media(max-width:720px){
+  #astrox-apps-preview-page .astrox-home-hero{padding:92px 12px 66px !important}
+  #astrox-apps-preview-page .astrox-home-hero-content{width:min(100% - 24px,980px);padding-top:78px;transform:translateY(-10px)}
+  #astrox-apps-preview-page .astrox-home-search{flex-direction:column;align-items:stretch}
+  #astrox-apps-preview-page .astrox-home-search #astrox-app-search,
+  #astrox-apps-preview-page .astrox-home-search #astrox-app-search-btn{width:100% !important}
+  #astrox-apps-preview-page .astrox-home-title{font-size:clamp(52px,18vw,90px) !important;letter-spacing:-.02em !important}
+  #astrox-apps-preview-page .astrox-home-line{letter-spacing:.22em;font-size:13px}
+}
+
+
+
+/* final requested patch: transparent search, white search button, compact cards */
+#astrox-apps-preview-page .astrox-home-search{
+  background:rgba(0,0,0,.22) !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+  backdrop-filter:blur(10px) !important;
+  box-shadow:0 16px 48px rgba(0,0,0,.36) !important;
+}
+#astrox-apps-preview-page .astrox-home-search #astrox-app-search{
+  background:rgba(255,255,255,.045) !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+  color:#fff !important;
+  box-shadow:none !important;
+}
+#astrox-apps-preview-page .astrox-home-search #astrox-app-search::placeholder{
+  color:rgba(255,255,255,.62) !important;
+}
+#astrox-apps-preview-page .astrox-home-search #astrox-app-search-btn,
+#astrox-apps-preview-page .astrox-home-search #astrox-app-search-btn:hover{
+  background:#fff !important;
+  color:#000 !important;
+  box-shadow:none !important;
+}
+#astrox-app-grid .astrox-app-card{
+  min-height:452px !important;
+  padding:22px !important;
+  border-radius:26px !important;
+}
+#astrox-app-grid .astrox-app-card > div:nth-child(2){
+  height:142px !important;
+  min-height:142px !important;
+  max-height:142px !important;
+  margin-bottom:16px !important;
+}
+#astrox-app-grid .astrox-app-card h3{
+  font-size:20px !important;
+  min-height:40px !important;
+  margin-bottom:8px !important;
+  line-height:1.16 !important;
+}
+#astrox-app-grid .astrox-app-card h3 + div{
+  min-height:auto !important;
+  margin-bottom:10px !important;
+  gap:8px !important;
+}
+#astrox-app-grid .astrox-app-card h3 + div div{
+  padding:7px 12px !important;
+  font-size:12px !important;
+}
+#astrox-app-grid .astrox-app-card p{
+  font-size:14px !important;
+  line-height:1.55 !important;
+  min-height:58px !important;
+  max-height:86px !important;
+  margin:0 0 8px 0 !important;
+  flex-grow:0 !important;
+  -webkit-line-clamp:3 !important;
+}
+#astrox-app-grid .astrox-app-card > div:nth-last-child(2){
+  padding-top:8px !important;
+  margin-bottom:14px !important;
+  min-height:56px !important;
+}
+#astrox-app-grid .astrox-app-card > div:nth-last-child(2) > div > div:first-child{
+  font-size:18px !important;
+}
+#astrox-app-grid .astrox-app-card > div:nth-last-child(2) > div > div:last-child{
+  font-size:12px !important;
+}
+#astrox-app-grid .astrox-app-card > div:last-child{
+  margin-top:0 !important;
+}
+#astrox-app-grid .astrox-app-card button,
+#astrox-app-grid .astrox-app-card a{
+  min-height:46px !important;
+}
+@media(max-width:860px){
+  #astrox-app-grid .astrox-app-card{min-height:auto !important;}
+  #astrox-app-grid .astrox-app-card > div:nth-child(2){height:150px !important;min-height:150px !important;max-height:150px !important;}
+}
+@media(max-width:540px){
+  #astrox-app-grid .astrox-app-card{padding:18px !important;}
+  #astrox-app-grid .astrox-app-card > div:nth-child(2){height:138px !important;min-height:138px !important;max-height:138px !important;}
+}
+
+
+
+
+
+
+/* correction: dark page background only; original cards preserved */
+#astrox-apps-preview-page{background:#000 !important;}
+#astrox-apps-preview-page > section:nth-of-type(2),
+#astrox-app-admin-panel,
+#astrox-apps-preview-page > section:nth-of-type(4){
+  background:#000 !important;
+  background-image:none !important;
+}
+#astrox-app-grid{
+  width:100% !important;
+  max-width:100% !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+}
+
+</style>
+
+  <div class="xh-loader" id="xhLoader" aria-hidden="true">
+    <div class="xh-load-mark">
+      <div class="xh-load-x">X</div>
+      <div class="xh-load-word">HORIZON</div>
+      <div class="xh-load-line"></div>
+    </div>
+  </div>
+  <script>(function(){function done(){var l=document.getElementById("xhLoader");if(l)l.classList.add("done")}document.addEventListener("DOMContentLoaded",function(){setTimeout(done,1900)});setTimeout(done,3200)})();</script>
+
+
+
+
+  
+  <section class="astrox-home-hero" style="position:relative;min-height:100vh;display:grid;place-items:center;text-align:center;overflow:hidden;background:#000;padding:112px 20px 82px;">
+    <div class="astrox-home-hero-bg" aria-hidden="true"></div>
+    <div class="astrox-home-hero-content">
+      <div class="astrox-home-search-wrap">
+        <div class="astrox-home-search">
+          <input id="astrox-app-search" type="search" placeholder="Search apps, tools, simulators" autocomplete="off">
+          <button id="astrox-app-search-btn" type="button">Search</button>
+        </div>
+      </div>
+      <h1 class="astrox-home-title"><span>APP</span> PREVIEW</h1>
+      <p class="astrox-home-line">Professional Platform</p>
+      <p class="astrox-home-copy">Explore X Horizon applications, astronomy tools, educational dashboards, observational systems and futuristic learning interfaces in one premium preview hub.</p>
+    </div>
+  </section>
+
+<section style="padding:75px 6% 30px 6%;background:#020617;position:relative;">
+    <div style="max-width:1450px;margin:auto;">
+      <div style="display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-bottom:55px;">
+        <button class="astrox-app-tab" data-section="all" style="padding:16px 32px;border:none;border-radius:16px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:0.35s ease;box-shadow:0 0 25px rgba(37,99,235,0.25);">ALL APPS</button>
+        <button class="astrox-app-tab" data-section="space" style="padding:16px 32px;border:none;border-radius:16px;background:linear-gradient(135deg,#7c3aed,#4c1d95);color:white;font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:0.35s ease;box-shadow:0 0 25px rgba(124,58,237,0.20);">SPACE APPS</button>
+        <button class="astrox-app-tab" data-section="education" style="padding:16px 32px;border:none;border-radius:16px;background:linear-gradient(135deg,#0ea5e9,#075985);color:white;font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:0.35s ease;box-shadow:0 0 25px rgba(14,165,233,0.20);">EDUCATION</button>
+        <button class="astrox-app-tab" data-section="observational" style="padding:16px 32px;border:none;border-radius:16px;background:linear-gradient(135deg,#22d3ee,#0f172a);color:white;font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:0.35s ease;box-shadow:0 0 25px rgba(34,211,238,0.18);">OBSERVATIONAL APPS</button>
+        <button class="astrox-app-tab" data-section="mobile" style="padding:16px 32px;border:none;border-radius:16px;background:linear-gradient(135deg,#10b981,#064e3b);color:white;font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:0.35s ease;box-shadow:0 0 25px rgba(16,185,129,0.18);">MOBILE</button>
+        <button class="astrox-app-tab" data-section="desktop" style="padding:16px 32px;border:none;border-radius:16px;background:linear-gradient(135deg,#94a3b8,#0f172a);color:white;font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:0.35s ease;box-shadow:0 0 25px rgba(148,163,184,0.16);">DESKTOP</button>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:35px;">
+        <div>
+          <h2 id="astrox-app-section-title" style="font-size:54px;margin:0 0 12px 0;font-family:'Orbitron',sans-serif;line-height:1.1;">FEATURED APP PREVIEWS</h2>
+          <p id="astrox-app-section-subtitle" style="font-size:18px;color:#94a3b8;line-height:1.8;margin:0;max-width:850px;">Browse approved apps, learning tools and space-tech previews from the X Horizon digital ecosystem.</p>
+        </div>
+        <div id="astrox-app-count" style="padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);color:#cbd5e1;font-size:14px;font-weight:700;">0 APPS</div>
+      </div>
+
+      <div id="astrox-app-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch;max-width:1080px;margin:0 auto;"></div>
+
+      <div id="astrox-app-empty" style="display:none;text-align:center;margin:45px auto 0 auto;max-width:760px;padding:42px 28px;border-radius:28px;background:linear-gradient(135deg,rgba(37,99,235,0.14),rgba(15,23,42,0.35));border:1px solid rgba(255,255,255,0.08);">
+        <h3 style="font-size:30px;margin:0 0 14px 0;font-family:'Orbitron',sans-serif;">NO MATCHING APPS</h3>
+        <p style="margin:0;color:#cbd5e1;line-height:1.8;font-size:16px;">Try another search term or open another app category.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="astrox-app-admin-panel" style="display:none;padding:80px 6%;background:#020617;position:relative;overflow:hidden;">
+    <div style="position:absolute;width:500px;height:500px;background:#2563eb;border-radius:50%;filter:blur(170px);opacity:0.16;top:-140px;left:-160px;"></div>
+    <div style="position:absolute;width:430px;height:430px;background:#7c3aed;border-radius:50%;filter:blur(170px);opacity:0.14;right:-140px;bottom:-150px;"></div>
+
+    <div style="max-width:1450px;margin:auto;position:relative;z-index:2;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:25px;flex-wrap:wrap;margin-bottom:35px;">
+        <div>
+          <div style="display:inline-flex;padding:10px 14px;border-radius:999px;background:rgba(34,211,238,0.10);border:1px solid rgba(34,211,238,0.18);color:#bae6fd;font-weight:800;font-size:12px;letter-spacing:1px;margin-bottom:18px;">CREATOR STUDIO</div>
+          <h2 style="font-size:52px;margin:0 0 12px 0;font-family:'Orbitron',sans-serif;line-height:1.1;">APP CARD BUILDER</h2>
+          <p style="margin:0;color:#cbd5e1;line-height:1.8;font-size:17px;max-width:850px;">Paste an app link, select the category, then save. The public X Horizon app preview cards update automatically.</p>
+        </div>
+        <button id="astrox-app-admin-close" style="padding:15px 24px;border:none;border-radius:16px;background:linear-gradient(135deg,#ef4444,#991b1b);color:white;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 0 25px rgba(239,68,68,0.28);">CLOSE TOOLS</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:28px;align-items:start;">
+        <div style="border-radius:32px;background:linear-gradient(135deg,rgba(37,99,235,0.14),rgba(15,23,42,0.30));border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(16px);padding:30px;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;">
+            <label style="display:block;">
+              <span style="display:block;color:#cbd5e1;font-weight:800;font-size:13px;margin-bottom:9px;">APP SECTION</span>
+              <select id="astrox-admin-section" style="width:100%;padding:17px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:#0f172a;color:white;outline:none;font-size:15px;">
+                <option value="space">Space Apps</option>
+                <option value="education">Education</option>
+                <option value="observational">Observational Apps</option>
+                <option value="mobile">Mobile</option>
+                <option value="desktop">Desktop</option>
+              </select>
+            </label>
+
+            <label style="display:block;">
+              <span style="display:block;color:#cbd5e1;font-weight:800;font-size:13px;margin-bottom:9px;">ORDER</span>
+              <input id="astrox-admin-order" type="number" value="1" style="width:100%;padding:17px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);color:white;outline:none;font-size:15px;box-sizing:border-box;">
+            </label>
+          </div>
+
+          <label style="display:block;margin-top:18px;">
+            <span style="display:block;color:#cbd5e1;font-weight:800;font-size:13px;margin-bottom:9px;">APP / PREVIEW LINK</span>
+            <input id="astrox-admin-url" type="text" placeholder="https://example.com/app" style="width:100%;padding:17px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);color:white;outline:none;font-size:15px;box-sizing:border-box;">
+          </label>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:18px;">
+            <label style="display:block;">
+              <span style="display:block;color:#cbd5e1;font-weight:800;font-size:13px;margin-bottom:9px;">TITLE</span>
+              <input id="astrox-admin-title" type="text" placeholder="X Horizon Sky Map" style="width:100%;padding:17px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);color:white;outline:none;font-size:15px;box-sizing:border-box;">
+            </label>
+
+            <label style="display:block;">
+              <span style="display:block;color:#cbd5e1;font-weight:800;font-size:13px;margin-bottom:9px;">PLATFORM</span>
+              <input id="astrox-admin-platform" type="text" placeholder="Observational App / Android / iOS / Desktop" style="width:100%;padding:17px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);color:white;outline:none;font-size:15px;box-sizing:border-box;">
+            </label>
+          </div>
+
+          <label style="display:block;margin-top:18px;">
+            <span style="display:block;color:#cbd5e1;font-weight:800;font-size:13px;margin-bottom:9px;">DESCRIPTION</span>
+            <textarea id="astrox-admin-description" placeholder="Professional app description..." style="width:100%;min-height:115px;resize:vertical;padding:17px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);color:white;outline:none;font-size:15px;line-height:1.7;box-sizing:border-box;"></textarea>
+          </label>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:18px;">
+            <label style="display:block;">
+              <span style="display:block;color:#cbd5e1;font-weight:800;font-size:13px;margin-bottom:9px;">IMAGE URL</span>
+              <input id="astrox-admin-image" type="text" placeholder="https://image-link.jpg" style="width:100%;padding:17px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);color:white;outline:none;font-size:15px;box-sizing:border-box;">
+            </label>
+
+            <label style="display:block;">
+              <span style="display:block;color:#cbd5e1;font-weight:800;font-size:13px;margin-bottom:9px;">PREVIEW URL</span>
+              <input id="astrox-admin-preview" type="text" placeholder="iframe preview link if different" style="width:100%;padding:17px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);color:white;outline:none;font-size:15px;box-sizing:border-box;">
+            </label>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;margin-top:18px;">
+            <label style="display:block;">
+              <span style="display:block;color:#cbd5e1;font-weight:800;font-size:13px;margin-bottom:9px;">VERSION</span>
+              <input id="astrox-admin-version" type="text" placeholder="v1.0" style="width:100%;padding:17px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);color:white;outline:none;font-size:15px;box-sizing:border-box;">
+            </label>
+
+            <label style="display:block;">
+              <span style="display:block;color:#cbd5e1;font-weight:800;font-size:13px;margin-bottom:9px;">USERS</span>
+              <input id="astrox-admin-users" type="text" placeholder="12K" style="width:100%;padding:17px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);color:white;outline:none;font-size:15px;box-sizing:border-box;">
+            </label>
+
+            <label style="display:block;">
+              <span style="display:block;color:#cbd5e1;font-weight:800;font-size:13px;margin-bottom:9px;">RATING</span>
+              <input id="astrox-admin-rating" type="text" placeholder="4.9" style="width:100%;padding:17px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);color:white;outline:none;font-size:15px;box-sizing:border-box;">
+            </label>
+          </div>
+
+          <label style="display:block;margin-top:18px;">
+            <span style="display:block;color:#cbd5e1;font-weight:800;font-size:13px;margin-bottom:9px;">TAGS</span>
+            <input id="astrox-admin-tags" type="text" placeholder="Astronomy, Simulator, Education" style="width:100%;padding:17px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);color:white;outline:none;font-size:15px;box-sizing:border-box;">
+          </label>
+
+          <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:24px;">
+            <button id="astrox-admin-autofill" style="flex:1;min-width:210px;padding:18px 22px;border:none;border-radius:18px;background:linear-gradient(135deg,#22d3ee,#0f172a);color:white;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 0 25px rgba(34,211,238,0.25);">AUTO FILL FROM LINK</button>
+            <button id="astrox-admin-save" style="flex:1;min-width:210px;padding:18px 22px;border:none;border-radius:18px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:white;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 0 30px rgba(96,165,250,0.35);">SAVE APP CARD</button>
+          </div>
+
+          <div id="astrox-admin-message" style="display:none;margin-top:18px;padding:16px 18px;border-radius:16px;background:rgba(34,197,94,0.10);border:1px solid rgba(34,197,94,0.18);color:#bbf7d0;font-size:14px;line-height:1.7;"></div>
+        </div>
+
+        <div style="border-radius:32px;background:linear-gradient(135deg,rgba(124,58,237,0.14),rgba(15,23,42,0.30));border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(16px);padding:30px;position:sticky;top:20px;">
+          <h3 style="font-size:34px;margin:0 0 16px 0;font-family:'Orbitron',sans-serif;">LIVE PREVIEW</h3>
+          <p style="color:#cbd5e1;line-height:1.8;margin:0 0 22px 0;">The preview below updates from your form before saving.</p>
+          <div id="astrox-admin-live-preview"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:115px 6%;background:#020617;text-align:center;position:relative;overflow:hidden;">
+    <div style="position:absolute;width:500px;height:500px;background:#2563eb;border-radius:50%;filter:blur(160px);opacity:0.16;top:-130px;left:-130px;"></div>
+    <div style="position:absolute;width:450px;height:450px;background:#7c3aed;border-radius:50%;filter:blur(160px);opacity:0.14;bottom:-145px;right:-120px;"></div>
+    <div style="max-width:1100px;margin:auto;padding:78px 50px;border-radius:40px;background:linear-gradient(135deg,rgba(37,99,235,0.18),rgba(124,58,237,0.16));border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(14px);transition:0.5s ease;position:relative;" onmouseover="this.style.transform='translateY(-10px) scale(1.02)';this.style.boxShadow='0 0 60px rgba(96,165,250,0.35)';" onmouseout="this.style.transform='translateY(0px) scale(1)';this.style.boxShadow='none';">
+      <h2 style="font-size:68px;line-height:1.1;margin:0 0 25px 0;font-family:'Orbitron',sans-serif;">BUILD WITH<br>X HORIZON</h2>
+      <p style="font-size:20px;line-height:1.9;color:#d4d4d4;max-width:850px;margin:auto;margin-bottom:45px;">Share your astronomy app, educational simulator, learning tool or digital space system for X Horizon review and future collaboration.</p>
+      <a href="https://astrox.odoo.com/collaborate-with-us" style="display:inline-block;padding:24px 50px;border:none;border-radius:20px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:white;font-size:17px;font-weight:800;cursor:pointer;transition:0.4s ease;box-shadow:0 0 35px rgba(96,165,250,0.45);text-decoration:none;" onmouseover="this.style.transform='scale(1.08)';this.style.letterSpacing='1px';this.style.boxShadow='0 0 70px rgba(124,58,237,0.6)';" onmouseout="this.style.transform='scale(1)';this.style.letterSpacing='0px';this.style.boxShadow='0 0 35px rgba(96,165,250,0.45)';">SUBMIT YOUR APP</a>
+    </div>
+  </section>
+
+  <div id="astrox-app-preview-modal" style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.92);z-index:999999;padding:28px;box-sizing:border-box;backdrop-filter:blur(12px);">
+    <div style="height:100%;max-width:1350px;margin:auto;border-radius:28px;background:#020617;border:1px solid rgba(255,255,255,0.12);box-shadow:0 0 80px rgba(37,99,235,0.25);overflow:hidden;display:flex;flex-direction:column;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 22px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);">
+        <div>
+          <h3 id="astrox-modal-title" style="margin:0;font-family:'Orbitron',sans-serif;font-size:22px;">APP PREVIEW</h3>
+          <p id="astrox-modal-url" style="margin:6px 0 0 0;color:#94a3b8;font-size:13px;word-break:break-all;"></p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <a id="astrox-modal-open" href="#" target="_blank" rel="noopener" style="padding:12px 16px;border-radius:14px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:white;text-decoration:none;font-size:13px;font-weight:900;">OPEN APP</a>
+          <button id="astrox-modal-close" style="padding:12px 16px;border:none;border-radius:14px;background:linear-gradient(135deg,#ef4444,#991b1b);color:white;font-size:13px;font-weight:900;cursor:pointer;">CLOSE</button>
+        </div>
+      </div>
+      <iframe id="astrox-modal-frame" src="about:blank" style="width:100%;height:100%;border:0;background:white;"></iframe>
+    </div>
+  </div>
+
+</section>
+
+<script type="module">
+(function(){
+  var fallbackFirebaseConfig = {
+    apiKey: 'AIzaSyBgwCB5yG7tBka2VYpwmcd-iAObtxQdIPk',
+    authDomain: 'learning-posts.firebaseapp.com',
+    projectId: 'learning-posts',
+    storageBucket: 'learning-posts.firebasestorage.app',
+    messagingSenderId: '400519896357',
+    appId: '1:400519896357:web:45ebf4163e0a1dd6cb0ecc',
+    measurementId: 'G-6FLXBXSRSP'
+  };
+  var firebaseConfig = window.XHORIZON_FIREBASE_CONFIG || window.XHorizonFirebaseConfig || fallbackFirebaseConfig;
+  function firebaseConfigured(cfg){
+    return cfg && cfg.apiKey && !String(cfg.apiKey).includes('YOUR_') && cfg.projectId && !String(cfg.projectId).includes('YOUR_');
+  }
+
+  var state = {
+    cards: [],
+    query: '',
+    section: 'all',
+    db: null,
+    fb: null,
+    auth: null,
+    functions: null,
+    authModule: null,
+    functionsModule: null,
+    adminOpen: false
+  };
+
+  var SECTION_THEMES = {
+    space: { glow:'rgba(124,58,237,0.22)', orb:'rgba(124,58,237,0.55)', card1:'#130a2e', card2:'#24105c', btn1:'#7c3aed', btn2:'#4c1d95', shadow:'rgba(124,58,237,0.22)', tag:'SPACE APP' },
+    education: { glow:'rgba(14,165,233,0.22)', orb:'rgba(14,165,233,0.50)', card1:'#061929', card2:'#0b4260', btn1:'#0ea5e9', btn2:'#075985', shadow:'rgba(14,165,233,0.22)', tag:'EDUCATION' },
+    observational: { glow:'rgba(34,211,238,0.20)', orb:'rgba(34,211,238,0.46)', card1:'#051d24', card2:'#0f3b46', btn1:'#22d3ee', btn2:'#0f172a', shadow:'rgba(34,211,238,0.18)', tag:'OBSERVATIONAL' },
+    mobile: { glow:'rgba(16,185,129,0.20)', orb:'rgba(16,185,129,0.44)', card1:'#061f18', card2:'#064e3b', btn1:'#10b981', btn2:'#065f46', shadow:'rgba(16,185,129,0.18)', tag:'MOBILE' },
+    desktop: { glow:'rgba(148,163,184,0.18)', orb:'rgba(148,163,184,0.38)', card1:'#10141c', card2:'#263142', btn1:'#64748b', btn2:'#0f172a', shadow:'rgba(148,163,184,0.16)', tag:'DESKTOP' }
+  };
+
+  var FALLBACK_IMAGES = {
+    space: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1200&auto=format&fit=crop',
+    education: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop',
+    observational: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop',
+    mobile: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=1200&auto=format&fit=crop',
+    desktop: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1200&auto=format&fit=crop'
+  };
+
+  var defaultCards = [
+    {
+      page:'apps', status:'active', section:'space', order:1,
+      title:'X Horizon Sky Map Preview',
+      description:'A premium sky-map preview card for constellations, star fields, deep-sky learning and X Horizon astronomy visualization tools.',
+      imageUrl:FALLBACK_IMAGES.space,
+      appUrl:'https://astrox.odoo.com/', previewUrl:'https://astrox.odoo.com/',
+      platform:'Observational App', version:'Preview', users:'X Horizon', rating:'4.9',
+      tags:['Sky Map','Astronomy'], buttonText:'PREVIEW APP'
+    },
+    {
+      page:'apps', status:'active', section:'education', order:2,
+      title:'X Horizon Learning System',
+      description:'Educational app preview for articles, learning dashboards, creator submissions and structured X Horizon space-science knowledge.',
+      imageUrl:FALLBACK_IMAGES.education,
+      appUrl:'https://astrox.odoo.com/', previewUrl:'https://astrox.odoo.com/',
+      platform:'Learning Hub', version:'Live', users:'Students', rating:'4.8',
+      tags:['Education','Research'], buttonText:'OPEN SYSTEM'
+    },
+    {
+      page:'apps', status:'active', section:'observational', order:3,
+      title:'X Horizon Observational Apps',
+      description:'Observational app preview for sky watching, celestial tracking, star maps, telescope planning and X Horizon cosmic visual analysis.',
+      imageUrl:FALLBACK_IMAGES.observational,
+      appUrl:'https://astrox.odoo.com/', previewUrl:'https://astrox.odoo.com/',
+      platform:'Observational App', version:'Beta', users:'Creators', rating:'4.7',
+      tags:['Observation','Sky Tools'], buttonText:'PREVIEW TOOL'
+    }
+  ];
+
+  function $(id){ return document.getElementById(id); }
+
+  function clean(value, fallback){
+    value = String(value == null ? '' : value).trim();
+    return value || fallback || '';
+  }
+
+  function escapeHTML(value){
+    return clean(value,'').replace(/[&<>"']/g,function(ch){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+    });
+  }
+
+  function safeUrl(value, fallback){
+    value = clean(value, fallback || '');
+    if(!value || value === '#') return value || '#';
+    if(/^https?:\/\//i.test(value)) return value;
+    return 'https://' + value.replace(/^\/+/, '');
+  }
+
+  function normalizeSection(value){
+    value = clean(value,'').toLowerCase().replace(/[\s_-]+/g,'');
+    if(value === 'web' || value === 'website' || value === 'webapp' || value === 'webtools' || value === 'tool' || value === 'tools' || value === 'observational' || value === 'observation' || value === 'observationalapps') return 'observational';
+    if(value === 'spaceapp' || value === 'astronomy') return 'space';
+    if(value === 'learn' || value === 'learning') return 'education';
+    if(['space','education','observational','mobile','desktop'].indexOf(value) !== -1) return value;
+    return 'space';
+  }
+
+  function getTags(card){
+    if(Array.isArray(card.tags)) return card.tags.filter(Boolean).slice(0,3);
+    if(typeof card.tags === 'string') return card.tags.split(',').map(function(x){return clean(x,'');}).filter(Boolean).slice(0,3);
+    var theme = SECTION_THEMES[normalizeSection(card.section)] || SECTION_THEMES.space;
+    return [theme.tag, clean(card.platform,'APP')].slice(0,2);
+  }
+
+  function cardHTML(card, compact){
+    var section = normalizeSection(card.section);
+    var theme = SECTION_THEMES[section] || SECTION_THEMES.space;
+    var image = safeUrl(card.imageUrl, FALLBACK_IMAGES[section] || FALLBACK_IMAGES.space);
+    var title = clean(card.title,'X HORIZON APP');
+    var description = clean(card.description,'Approved X Horizon application preview for learning, simulation or professional space-science tools.');
+    var appUrl = safeUrl(card.appUrl || card.url || card.link || '#', '#');
+    var previewUrl = safeUrl(card.previewUrl || card.preview || appUrl, appUrl);
+    var platform = clean(card.platform,'Observational App');
+    var version = clean(card.version,'Preview');
+    var users = clean(card.users || card.usersValue || card.metric1Value,'-');
+    var rating = clean(card.rating || card.ratingValue || card.metric3Value,'-');
+    var buttonText = clean(card.buttonText,'PREVIEW APP');
+    var tags = getTags(card);
+    while(tags.length < 2) tags.push(theme.tag);
+
+    return ''+
+    '<div class="astrox-app-card" data-section="'+escapeHTML(section)+'" data-text="'+escapeHTML((title+' '+description+' '+platform+' '+tags.join(' ')).toLowerCase())+'" data-title="'+escapeHTML(title)+'" data-preview="'+escapeHTML(previewUrl)+'" data-app="'+escapeHTML(appUrl)+'" onmouseover="this.style.transform=\'translateY(-12px) scale(1.03)\';this.style.boxShadow=\'0 0 45px '+theme.glow+'\';var img=this.querySelector(\'.creator-img\');if(img){img.style.transform=\'scale(1.08)\';}" onmouseout="this.style.transform=\'translateY(0px) scale(1)\';this.style.boxShadow=\'0 0 0px rgba(0,0,0,0)\';var img=this.querySelector(\'.creator-img\');if(img){img.style.transform=\'scale(1)\';}" style="position:relative;overflow:hidden;border-radius:30px;background:linear-gradient(135deg,'+theme.card1+','+theme.card2+');border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(16px);padding:28px;transition:0.45s ease;cursor:pointer;min-height:100%;display:flex;flex-direction:column;">'+
+      '<div style="position:absolute;width:180px;height:180px;background:'+theme.orb+';border-radius:50%;filter:blur(90px);opacity:0.18;top:-60px;right:-60px;"></div>'+
+      '<div style="position:relative;z-index:2;overflow:hidden;border-radius:24px;margin-bottom:24px;height:'+(compact?'166':'176')+'px;min-height:'+(compact?'166':'176')+'px;max-height:'+(compact?'166':'176')+'px;flex-shrink:0;background:rgba(255,255,255,0.04);">'+
+        '<img class="creator-img" src="'+escapeHTML(image)+'" style="width:100%;height:100%;object-fit:cover;transition:0.5s ease;display:block;" loading="lazy">'+
+        '<div style="position:absolute;left:14px;top:14px;padding:8px 12px;border-radius:999px;background:rgba(2,6,23,0.72);border:1px solid rgba(255,255,255,0.12);backdrop-filter:blur(10px);font-size:11px;font-weight:900;letter-spacing:0.7px;color:white;">'+escapeHTML(platform)+'</div>'+
+      '</div>'+
+      '<h3 style="font-size:'+(compact?'21':'22')+'px;margin:0 0 12px 0;font-family:\'Orbitron\',sans-serif;position:relative;z-index:2;line-height:1.2;min-height:'+(compact?'48':'58')+'px;display:flex;align-items:center;">'+escapeHTML(title)+'</h3>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;position:relative;z-index:2;min-height:42px;align-items:flex-start;">'+
+        '<div style="padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.08);font-size:13px;">'+escapeHTML(tags[0])+'</div>'+
+        '<div style="padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.08);font-size:13px;">'+escapeHTML(tags[1])+'</div>'+
+      '</div>'+
+      '<p style="font-size:15px;line-height:1.8;color:#d4d4d4;margin:0 0 24px 0;position:relative;z-index:2;min-height:'+(compact?'78':'98')+'px;flex-grow:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;">'+escapeHTML(description)+'</p>'+
+      '<div style="display:flex;justify-content:space-between;margin-bottom:24px;position:relative;z-index:2;padding-top:18px;border-top:1px solid rgba(255,255,255,0.08);min-height:80px;align-items:center;">'+
+        '<div><div style="font-size:22px;font-weight:800;">'+escapeHTML(version)+'</div><div style="font-size:13px;color:#94a3b8;">Version</div></div>'+
+        '<div><div style="font-size:22px;font-weight:800;">'+escapeHTML(users)+'</div><div style="font-size:13px;color:#94a3b8;">Users</div></div>'+
+        '<div><div style="font-size:22px;font-weight:800;">'+escapeHTML(rating)+'</div><div style="font-size:13px;color:#94a3b8;">Rating</div></div>'+
+      '</div>'+
+      '<div style="display:flex;gap:12px;position:relative;z-index:2;margin-top:auto;">'+
+        '<button class="astrox-open-preview" type="button" style="flex:1;padding:17px 14px;border:none;border-radius:18px;background:linear-gradient(135deg,'+theme.btn1+','+theme.btn2+');color:white;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 0 25px '+theme.shadow+';transition:0.35s ease;">'+escapeHTML(buttonText)+'</button>'+
+        '<a href="'+escapeHTML(appUrl)+'" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;min-width:54px;padding:0 14px;border-radius:18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);color:white;text-decoration:none;font-size:20px;font-weight:900;">↗</a>'+
+      '</div>'+
+    '</div>';
+  }
+
+  function applyFilters(){
+    var grid = $('astrox-app-grid');
+    var empty = $('astrox-app-empty');
+    var count = $('astrox-app-count');
+    if(!grid) return;
+    var cards = grid.querySelectorAll('.astrox-app-card');
+    var visible = 0;
+    var q = state.query.toLowerCase();
+    for(var i=0;i<cards.length;i++){
+      var section = cards[i].getAttribute('data-section') || '';
+      var text = cards[i].getAttribute('data-text') || '';
+      var okSection = state.section === 'all' || section === state.section;
+      var okSearch = !q || text.indexOf(q) !== -1;
+      cards[i].style.display = okSection && okSearch ? 'flex' : 'none';
+      if(okSection && okSearch) visible++;
+    }
+    if(empty) empty.style.display = visible ? 'none' : 'block';
+    if(count) count.textContent = visible + (visible === 1 ? ' APP' : ' APPS');
+  }
+
+  function setTitle(){
+    var title = $('astrox-app-section-title');
+    var sub = $('astrox-app-section-subtitle');
+    var map = {
+      all:['FEATURED APP PREVIEWS','Browse approved apps, learning tools and space-tech previews from the X Horizon digital ecosystem.'],
+      space:['SPACE APP PREVIEWS','Explore astronomy apps, sky maps, orbital viewers and cosmic visual systems.'],
+      education:['EDUCATIONAL APPS','Preview learning systems, dashboards, study tools and structured astronomy knowledge platforms.'],
+      observational:['OBSERVATIONAL APPS','Preview sky-observation apps, telescope tools, star maps and celestial tracking systems.'],
+      mobile:['MOBILE APP PREVIEWS','Preview mobile-ready apps, creator tools and portable space learning systems.'],
+      desktop:['DESKTOP APP PREVIEWS','Explore desktop-grade tools, professional software previews and advanced research systems.']
+    };
+    var data = map[state.section] || map.all;
+    if(title) title.textContent = data[0];
+    if(sub) sub.textContent = data[1];
+  }
+
+  function render(cards){
+    var grid = $('astrox-app-grid');
+    if(!grid) return;
+    var list = cards && cards.length ? cards.slice() : defaultCards.slice();
+    list.sort(function(a,b){
+      var ao = Number(a.order || 999999);
+      var bo = Number(b.order || 999999);
+      if(ao !== bo) return ao - bo;
+      return Number(b.createdAtMs || 0) - Number(a.createdAtMs || 0);
+    });
+    grid.innerHTML = list.map(function(card){ return cardHTML(card,false); }).join('');
+    bindPreviewButtons();
+    applyFilters();
+  }
+
+  function openModal(title, previewUrl, appUrl){
+    var modal = $('astrox-app-preview-modal');
+    var frame = $('astrox-modal-frame');
+    var titleEl = $('astrox-modal-title');
+    var urlEl = $('astrox-modal-url');
+    var openEl = $('astrox-modal-open');
+    if(!modal || !frame) return;
+    previewUrl = safeUrl(previewUrl || appUrl || '#','#');
+    appUrl = safeUrl(appUrl || previewUrl || '#','#');
+    if(titleEl) titleEl.textContent = title || 'APP PREVIEW';
+    if(urlEl) urlEl.textContent = previewUrl;
+    if(openEl) openEl.href = appUrl;
+    frame.src = previewUrl === '#' ? 'about:blank' : previewUrl;
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(){
+    var modal = $('astrox-app-preview-modal');
+    var frame = $('astrox-modal-frame');
+    if(frame) frame.src = 'about:blank';
+    if(modal) modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function bindPreviewButtons(){
+    var grid = $('astrox-app-grid');
+    if(!grid || grid.__previewBound) return;
+    grid.__previewBound = true;
+    grid.addEventListener('click',function(e){
+      var btn = e.target.closest ? e.target.closest('.astrox-open-preview') : null;
+      if(!btn) return;
+      var card = btn.closest('.astrox-app-card');
+      if(!card) return;
+      openModal(card.getAttribute('data-title'), card.getAttribute('data-preview'), card.getAttribute('data-app'));
+    });
+  }
+
+  function openAdmin(){
+    state.adminOpen = true;
+    document.body.classList.add('editor-on');
+    var panel = $('astrox-app-admin-panel');
+    var search = $('astrox-app-search');
+    if(panel){
+      panel.style.display = 'block';
+      panel.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    if(search) search.value = '';
+    state.query = '';
+    applyFilters();
+    updateLivePreview();
+  }
+
+  function closeAdmin(){
+    state.adminOpen = false;
+    var panel = $('astrox-app-admin-panel');
+    if(panel) panel.style.display = 'none';
+  }
+
+  function waitForUnlockSystem(){
+    return new Promise(function(resolve){
+      if(window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock === 'function') return resolve(window.XHorizonAdmin);
+      var tries = 0;
+      var timer = setInterval(function(){
+        tries++;
+        if(window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock === 'function'){
+          clearInterval(timer);
+          resolve(window.XHorizonAdmin);
+        }else if(tries > 12){
+          clearInterval(timer);
+          resolve(null);
+        }
+      },120);
+    });
+  }
+
+  async function handleSearch(){
+    var input = $('astrox-app-search');
+    var searchBtn = $('astrox-app-search-btn');
+    var value = input ? clean(input.value,'') : '';
+    if(!value){
+      state.query = '';
+      applyFilters();
+      return;
+    }
+
+    var oldLabel = searchBtn ? searchBtn.textContent : '';
+    if(searchBtn){
+      searchBtn.disabled = true;
+      searchBtn.textContent = 'Checking';
+    }
+
+    try{
+      var bridge = await waitForUnlockSystem();
+      if(bridge && typeof bridge.unlock === 'function'){
+        var callbackDone = false;
+        var ok = await Promise.resolve(bridge.unlock(value,function(){
+          callbackDone = true;
+          openAdmin();
+        }));
+        if(ok){
+          if(!callbackDone) openAdmin();
+          return;
+        }
+      }
+    }catch(err){
+      console.error('X Horizon unlock failed:', err);
+    }finally{
+      if(searchBtn){
+        searchBtn.disabled = false;
+        searchBtn.textContent = oldLabel || 'Search';
+      }
+    }
+
+    state.query = value.toLowerCase();
+    applyFilters();
+  }
+
+  function message(text, error){
+    var box = $('astrox-admin-message');
+    if(!box) return;
+    box.style.display = 'block';
+    box.style.background = error ? 'rgba(239,68,68,0.10)' : 'rgba(34,197,94,0.10)';
+    box.style.border = error ? '1px solid rgba(239,68,68,0.18)' : '1px solid rgba(34,197,94,0.18)';
+    box.style.color = error ? '#fecaca' : '#bbf7d0';
+    box.textContent = text;
+  }
+
+  function guessFromUrl(url){
+    var result = { title:'', platform:'Observational App', section:'observational', image:FALLBACK_IMAGES.observational, tags:['Observation','Sky Tools'] };
+    try{
+      var u = new URL(safeUrl(url,''));
+      var host = u.hostname.replace(/^www\./,'');
+      var root = host.split('.')[0] || host;
+      var nice = root.replace(/[-_]/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
+      result.title = nice + ' App Preview';
+      if(host.indexOf('play.google.com') !== -1){ result.platform='Android App'; result.section='mobile'; result.image=FALLBACK_IMAGES.mobile; result.tags=['Android','Mobile']; }
+      else if(host.indexOf('apps.apple.com') !== -1){ result.platform='iOS App'; result.section='mobile'; result.image=FALLBACK_IMAGES.mobile; result.tags=['iOS','Mobile']; }
+      else if(host.indexOf('github.com') !== -1){ result.platform='Open Source Tool'; result.section='observational'; result.image=FALLBACK_IMAGES.observational; result.tags=['GitHub','Open Source']; }
+      else if(host.indexOf('vercel.app') !== -1 || host.indexOf('netlify.app') !== -1 || host.indexOf('github.io') !== -1){ result.platform='Observational App'; result.section='observational'; result.image=FALLBACK_IMAGES.observational; result.tags=['Observation','Live Preview']; }
+      else if(host.indexOf('astrox') !== -1){ result.platform='X Horizon App'; result.section='space'; result.image=FALLBACK_IMAGES.space; result.tags=['X Horizon','Space App']; }
+      result.description = 'Professional preview for '+nice+', connected as an X Horizon app, learning tool or digital space-science resource.';
+    }catch(err){}
+    return result;
+  }
+
+  function autofill(){
+    var url = clean(($('astrox-admin-url')||{}).value,'');
+    if(!url){ message('Paste the app link first, then use auto fill.', true); return; }
+    var g = guessFromUrl(url);
+    if($('astrox-admin-section')) $('astrox-admin-section').value = g.section;
+    if($('astrox-admin-title') && !$('astrox-admin-title').value) $('astrox-admin-title').value = g.title;
+    if($('astrox-admin-platform') && !$('astrox-admin-platform').value) $('astrox-admin-platform').value = g.platform;
+    if($('astrox-admin-description') && !$('astrox-admin-description').value) $('astrox-admin-description').value = g.description;
+    if($('astrox-admin-image') && !$('astrox-admin-image').value) $('astrox-admin-image').value = g.image;
+    if($('astrox-admin-preview') && !$('astrox-admin-preview').value) $('astrox-admin-preview').value = url;
+    if($('astrox-admin-version') && !$('astrox-admin-version').value) $('astrox-admin-version').value = 'Preview';
+    if($('astrox-admin-users') && !$('astrox-admin-users').value) $('astrox-admin-users').value = 'New';
+    if($('astrox-admin-rating') && !$('astrox-admin-rating').value) $('astrox-admin-rating').value = '4.8';
+    if($('astrox-admin-tags') && !$('astrox-admin-tags').value) $('astrox-admin-tags').value = g.tags.join(', ');
+    message('Auto fill complete. Review the card and click Save App Card.', false);
+    updateLivePreview();
+  }
+
+  function formCard(){
+    var section = normalizeSection(($('astrox-admin-section')||{}).value);
+    var url = safeUrl(($('astrox-admin-url')||{}).value,'');
+    var guessed = guessFromUrl(url || 'https://astrox.odoo.com/');
+    var title = clean(($('astrox-admin-title')||{}).value, guessed.title || 'X Horizon App Preview');
+    var tagsText = clean(($('astrox-admin-tags')||{}).value,'');
+    var tags = tagsText ? tagsText.split(',').map(function(x){return clean(x,'');}).filter(Boolean) : guessed.tags;
+    return {
+      page:'apps',
+      status:'active',
+      section:section,
+      order:Number(clean(($('astrox-admin-order')||{}).value,'999999')),
+      title:title,
+      description:clean(($('astrox-admin-description')||{}).value, guessed.description),
+      imageUrl:safeUrl(($('astrox-admin-image')||{}).value, FALLBACK_IMAGES[section] || guessed.image),
+      appUrl:url,
+      previewUrl:safeUrl(($('astrox-admin-preview')||{}).value, url),
+      platform:clean(($('astrox-admin-platform')||{}).value, guessed.platform),
+      version:clean(($('astrox-admin-version')||{}).value,'Preview'),
+      users:clean(($('astrox-admin-users')||{}).value,'New'),
+      rating:clean(($('astrox-admin-rating')||{}).value,'4.8'),
+      tags:tags,
+      buttonText:'PREVIEW APP'
+    };
+  }
+
+  function updateLivePreview(){
+    var holder = $('astrox-admin-live-preview');
+    if(!holder) return;
+    holder.innerHTML = cardHTML(formCard(), true);
+    var btn = holder.querySelector('.astrox-open-preview');
+    if(btn){
+      btn.onclick = function(){
+        var card = holder.querySelector('.astrox-app-card');
+        if(card) openModal(card.getAttribute('data-title'), card.getAttribute('data-preview'), card.getAttribute('data-app'));
+      };
+    }
+  }
+
+  function saveCard(){
+    if(!state.db || !state.fb){ message('Connection is not ready yet. Refresh the page and try again.', true); return; }
+    var card = formCard();
+    if(!card.appUrl){ message('App link is required.', true); return; }
+    card.createdAt = state.fb.serverTimestamp();
+    state.fb.addDoc(state.fb.collection(state.db,'publicCards'), card).then(function(){
+      message('App card saved successfully. It will appear on the public page automatically.', false);
+      var fields = ['astrox-admin-url','astrox-admin-title','astrox-admin-description','astrox-admin-image','astrox-admin-preview','astrox-admin-platform','astrox-admin-version','astrox-admin-users','astrox-admin-rating','astrox-admin-tags'];
+      fields.forEach(function(id){ if($(id)) $(id).value = ''; });
+      updateLivePreview();
+    }).catch(function(err){
+      console.error(err);
+      message('Card could not be saved. Check Firestore rules for create permission.', true);
+    });
+  }
+
+  function bindUI(){
+    var search = $('astrox-app-search');
+    var searchBtn = $('astrox-app-search-btn');
+    if(search && !search.__bound){
+      search.__bound = true;
+      search.addEventListener('input',function(){
+        var value = clean(search.value,'');
+        state.query = value.toLowerCase();
+        applyFilters();
+      });
+      search.addEventListener('keydown',function(e){ if(e.key === 'Enter') handleSearch(); });
+    }
+    if(searchBtn && !searchBtn.__bound){ searchBtn.__bound = true; searchBtn.addEventListener('click',handleSearch); }
+
+    var tabs = document.querySelectorAll('.astrox-app-tab');
+    for(var i=0;i<tabs.length;i++){
+      if(tabs[i].__bound) continue;
+      tabs[i].__bound = true;
+      tabs[i].addEventListener('click',function(){
+        state.section = this.getAttribute('data-section') || 'all';
+        setTitle();
+        applyFilters();
+      });
+      tabs[i].addEventListener('mouseover',function(){ this.style.transform='translateY(-6px)'; this.style.boxShadow='0 0 35px rgba(255,255,255,0.18)'; });
+      tabs[i].addEventListener('mouseout',function(){ this.style.transform='translateY(0px)'; });
+    }
+
+    var close = $('astrox-app-admin-close');
+    if(close && !close.__bound){ close.__bound = true; close.addEventListener('click',closeAdmin); }
+    var autofillBtn = $('astrox-admin-autofill');
+    if(autofillBtn && !autofillBtn.__bound){ autofillBtn.__bound = true; autofillBtn.addEventListener('click',autofill); }
+    var saveBtn = $('astrox-admin-save');
+    if(saveBtn && !saveBtn.__bound){ saveBtn.__bound = true; saveBtn.addEventListener('click',saveCard); }
+
+    var formIds = ['astrox-admin-section','astrox-admin-order','astrox-admin-url','astrox-admin-title','astrox-admin-description','astrox-admin-image','astrox-admin-preview','astrox-admin-platform','astrox-admin-version','astrox-admin-users','astrox-admin-rating','astrox-admin-tags'];
+    formIds.forEach(function(id){
+      var el = $(id);
+      if(el && !el.__bound){ el.__bound = true; el.addEventListener('input',updateLivePreview); el.addEventListener('change',updateLivePreview); }
+    });
+
+    var modalClose = $('astrox-modal-close');
+    if(modalClose && !modalClose.__bound){ modalClose.__bound = true; modalClose.addEventListener('click',closeModal); }
+    var modal = $('astrox-app-preview-modal');
+    if(modal && !modal.__bound){
+      modal.__bound = true;
+      modal.addEventListener('click',function(e){ if(e.target === modal) closeModal(); });
+    }
+  }
+
+  Promise.all([
+    import('https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js'),
+    import('https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js'),
+    import('https://www.gstatic.com/firebasejs/12.15.0/firebase-functions.js')
+  ]).then(function(modules){
+    var appModule = modules[0];
+    var fb = modules[1];
+    var authModule = modules[2];
+    var functionsModule = modules[3];
+
+    if(!firebaseConfigured(firebaseConfig)) throw new Error('Firebase config is missing. Add window.XHORIZON_FIREBASE_CONFIG in the root config file.');
+
+    var app = appModule.getApps && appModule.getApps().length ? appModule.getApp() : appModule.initializeApp(firebaseConfig);
+    state.db = fb.getFirestore(app);
+    state.fb = fb;
+    state.authModule = authModule;
+    state.functionsModule = functionsModule;
+    state.auth = authModule.getAuth(app);
+    state.functions = functionsModule.getFunctions(app);
+
+    if(!window.XHorizonAdmin){
+      window.XHorizonAdmin = {
+        unlock: async function(key, done){
+          var cleanKey = String(key || '').trim();
+          if(!cleanKey || !state.auth || !state.functions) return false;
+          try{
+            var verifyAdminKey = functionsModule.httpsCallable(state.functions,'verifyAdminKey');
+            var result = await verifyAdminKey({ key: cleanKey });
+            var data = result && result.data ? result.data : {};
+            var customToken = data.token || data.customToken || data.firebaseToken || '';
+            if(customToken) await authModule.signInWithCustomToken(state.auth, customToken);
+            var user = state.auth.currentUser;
+            if(!user) return false;
+            var tokenResult = await user.getIdTokenResult(true);
+            var allowed = tokenResult && tokenResult.claims && tokenResult.claims.admin === true;
+            if(allowed){
+              document.body.classList.add('editor-on');
+              if(typeof done === 'function') done();
+              return true;
+            }
+            return false;
+          }catch(error){
+            console.error('X Horizon unlock failed:', error);
+            return false;
+          }
+        }
+      };
+    }
+
+    authModule.onAuthStateChanged(state.auth, async function(user){
+      if(!user) return;
+      try{
+        var tokenResult = await user.getIdTokenResult(true);
+        if(tokenResult && tokenResult.claims && tokenResult.claims.admin === true) document.body.classList.add('editor-on');
+      }catch(error){
+        console.error('State check failed:', error);
+      }
+    });
+
+    var q = fb.query(
+      fb.collection(state.db,'publicCards'),
+      fb.where('page','==','apps'),
+      fb.where('status','==','active')
+    );
+
+    fb.onSnapshot(q,function(snapshot){
+      var cards = [];
+      snapshot.forEach(function(doc){
+        var data = doc.data() || {};
+        data.id = doc.id;
+        if(data.createdAt && data.createdAt.toMillis) data.createdAtMs = data.createdAt.toMillis();
+        cards.push(data);
+      });
+      state.cards = cards;
+      render(cards);
+    },function(err){
+      console.error('X Horizon apps read error:',err);
+      render(defaultCards);
+    });
+  }).catch(function(err){
+    console.error('X Horizon apps Firebase load error:',err);
+    render(defaultCards);
+  });
+
+  bindUI();
+  setTitle();
+  render(defaultCards);
+  updateLivePreview();
+  document.addEventListener('DOMContentLoaded',function(){ bindUI(); setTitle(); updateLivePreview(); });
+})();
+</script>
