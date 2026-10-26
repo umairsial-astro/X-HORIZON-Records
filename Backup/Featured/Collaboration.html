@@ -1,0 +1,1439 @@
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X HORIZON Collaboration Center</title>
+  <style>
+    :root{
+      --ax-bg:#000000;
+      --ax-card:rgba(255,255,255,.055);
+      --ax-card-hover:rgba(255,255,255,.08);
+      --ax-border:rgba(255,255,255,.14);
+      --ax-border-soft:rgba(255,255,255,.08);
+      --ax-text:#ffffff;
+      --ax-muted:#d8d8d8;
+      --ax-green:#22c55e;
+      --ax-yellow:#facc15;
+      --ax-blue:#3b82f6;
+      --ax-red:#ef4444;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;margin:0!important;padding:0!important;width:100%;overflow-x:hidden;background:#000!important}
+    body{margin:0!important;padding:0!important;width:100%!important;max-width:100%!important;background:#000!important;color:#fff!important;font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+
+    #astroxCollaborationPage{
+      position:relative;
+      left:50%;
+      right:50%;
+      width:100vw!important;
+      max-width:100vw!important;
+      margin-left:-50vw!important;
+      margin-right:-50vw!important;
+      min-height:100vh;
+      padding:0 0 54px;
+      background:#000!important;
+      color:#fff!important;
+      isolation:isolate;
+      overflow:hidden;
+    }
+
+    #astroxCollaborationPage:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-3;
+      opacity:.24;
+      pointer-events:none;
+      background-image:
+        radial-gradient(circle,rgba(255,255,255,.48) 0 1px,transparent 1.7px),
+        radial-gradient(circle,rgba(255,255,255,.22) 0 1px,transparent 1.7px),
+        radial-gradient(circle,rgba(255,255,255,.16) 0 1px,transparent 1.6px);
+      background-size:160px 160px,240px 240px,360px 360px;
+      animation:astroxStarDrift 54s linear infinite;
+    }
+
+    #astroxCollaborationPage:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-2;
+      pointer-events:none;
+      background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.065),transparent 32%),linear-gradient(180deg,rgba(0,0,0,.03),#000 90%);
+    }
+
+    @keyframes astroxStarDrift{
+      from{background-position:0 0,80px 30px,20px 120px}
+      to{background-position:420px -260px,-300px 220px,260px 320px}
+    }
+
+    .ax-wrap{width:100%;max-width:none;margin:0;position:relative;z-index:2}
+
+    .ax-hero{
+      position:relative;
+      min-height:650px;
+      display:grid;
+      grid-template-columns:1.06fr .94fr;
+      gap:34px;
+      align-items:stretch;
+      padding:64px min(6vw,74px);
+      overflow:hidden;
+      border:1px solid var(--ax-border-soft);
+      border-left:none;
+      border-right:none;
+      border-radius:0;
+      background:
+        linear-gradient(180deg,rgba(0,0,0,.70),rgba(0,0,0,.90) 76%,#000 100%),
+        linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.58),rgba(0,0,0,.88)),
+        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=90&w=2400&auto=format&fit=crop') center/cover no-repeat!important;
+      box-shadow:none!important;
+    }
+
+    .ax-orbit-system{position:absolute;right:-120px;top:44px;width:610px;height:610px;opacity:.55;pointer-events:none}
+    .ax-orbit{position:absolute;inset:50%;border:1px solid rgba(255,255,255,.14);border-radius:50%;transform:translate(-50%,-50%) rotateX(62deg) rotateZ(14deg)}
+    .ax-orbit.o1{width:250px;height:250px;animation:axRotate 20s linear infinite}
+    .ax-orbit.o2{width:385px;height:385px;animation:axRotate 30s linear infinite reverse}
+    .ax-orbit.o3{width:520px;height:520px;animation:axRotate 42s linear infinite}
+    .ax-planet-core{position:absolute;left:50%;top:50%;width:116px;height:116px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 35% 32%,#fff 0 7%,#bfbfbf 8% 22%,#303030 38%,#000 76%);box-shadow:0 0 28px rgba(255,255,255,.12);animation:axPulse 4s ease-in-out infinite}
+    .ax-satellite-dot{position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 14px rgba(255,255,255,.25)}
+    .ax-satellite-dot.d1{left:202px;top:118px}
+    .ax-satellite-dot.d2{right:120px;bottom:195px}
+    .ax-satellite-dot.d3{left:120px;bottom:154px}
+    @keyframes axRotate{to{transform:translate(-50%,-50%) rotateX(62deg) rotateZ(374deg)}}
+    @keyframes axPulse{50%{transform:translate(-50%,-50%) scale(1.055)}}
+
+    .ax-hero-content{position:relative;z-index:3;display:flex;flex-direction:column;justify-content:center;min-height:530px}
+    .ax-kicker{display:inline-flex;width:max-content;align-items:center;gap:10px;padding:11px 16px;border-radius:999px;background:rgba(255,255,255,.055);border:1px solid var(--ax-border);color:#d8d8d8;font-size:12px;line-height:1;font-weight:900;letter-spacing:1.8px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);text-transform:uppercase}
+    .ax-kicker i{display:block;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 14px rgba(255,255,255,.2)}
+    .ax-title{margin:24px 0 0;font-family:Orbitron,Arial,Helvetica,sans-serif;font-size:clamp(46px,7.2vw,98px);line-height:.95;letter-spacing:1.5px;text-transform:uppercase;color:#fff;text-shadow:none}
+    .ax-title span{display:block;color:#fff}
+    .ax-lead{margin:26px 0 0;max-width:720px;color:#e8e8e8;font-size:19px;line-height:1.85}
+    .ax-actions{display:flex;gap:16px;flex-wrap:wrap;margin-top:34px;align-items:center}
+    .ax-btn{appearance:none;border:0;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:18px 28px;border-radius:18px;color:#fff;font-size:14px;font-weight:900;letter-spacing:.7px;transition:.3s ease;user-select:none;position:relative;overflow:hidden}
+    .ax-btn:hover{transform:translateY(-5px)}
+    .ax-btn-rules{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+    .ax-btn-apply{background:#fff!important;color:#000!important;border:0!important;box-shadow:none!important}
+    .ax-btn-apply:hover{background:#eee!important;color:#000!important}
+    .ax-btn-disabled{opacity:.62!important;cursor:not-allowed!important;filter:grayscale(.25)}
+    .ax-mini-note{color:#d8d8d8;font-size:13px;font-weight:800;letter-spacing:.4px}
+
+    .ax-hero-card,.ax-card,.ax-panel,.ax-step,.ax-rule,.ax-slot-box,.ax-quick-item,.ax-stat,.ax-applicant-card,.ax-applicant-toolbar,.ax-admin-row,.ax-rules-banner,.ax-warning,.ax-empty-applicants,.ax-status-pill,.ax-toast{
+      background:var(--ax-card)!important;
+      background-image:none!important;
+      border:1px solid var(--ax-border)!important;
+      box-shadow:none!important;
+      backdrop-filter:blur(18px)!important;
+      -webkit-backdrop-filter:blur(18px)!important;
+      color:#fff!important;
+    }
+
+    .ax-hero-card{position:relative;z-index:3;align-self:center;padding:26px;border-radius:30px}
+    .ax-hero-card h3{margin:0 0 16px;font-size:22px;font-family:Orbitron,Arial,sans-serif;line-height:1.3;color:#fff}
+    .ax-slot-box{padding:20px;border-radius:22px;margin-bottom:16px}
+    .ax-slot-top{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:14px}
+    .ax-slot-big{font-family:Orbitron,Arial,sans-serif;font-size:42px;line-height:1;font-weight:900;color:#fff}
+    .ax-slot-label{color:#fff;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1px;text-align:right}
+    .ax-progress{height:12px;width:100%;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden;border:1px solid rgba(255,255,255,.12)}
+    .ax-progress span{display:block;height:100%;width:0%;border-radius:inherit;background:#fff;transition:.45s ease}
+    .ax-slot-text{margin:14px 0 0;color:#d8d8d8;font-size:14px;line-height:1.65}
+    .ax-quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px}
+    .ax-quick-item{padding:16px;border-radius:18px}
+    .ax-quick-item strong{display:block;color:#fff;font-size:14px;margin-bottom:6px}
+    .ax-quick-item span{display:block;color:#cfcfcf;font-size:12px;line-height:1.55}
+
+    .ax-section{position:relative;margin-top:0;padding:54px min(6vw,72px);border-radius:0;background:#000!important;border:1px solid var(--ax-border-soft);border-left:none;border-right:none;box-shadow:none!important;overflow:hidden}
+    .ax-section-head{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+    .ax-section-head h2{margin:0;font-family:Orbitron,Arial,sans-serif;font-size:clamp(28px,3.8vw,46px);line-height:1.15;text-transform:uppercase;color:#fff;text-shadow:none}
+    .ax-section-head p{margin:0;max-width:620px;color:#d8d8d8;font-size:16px;line-height:1.75}
+    .ax-collab-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .ax-card{position:relative;padding:25px;border-radius:26px;overflow:hidden;transition:.3s ease;min-height:210px}
+    .ax-card:hover,.ax-applicant-card:hover,.ax-rule:hover{transform:translateY(-6px);background:var(--ax-card-hover)!important;border-color:rgba(255,255,255,.20)!important}
+    .ax-icon{width:48px;height:48px;border-radius:16px;background:#fff!important;color:#000!important;display:grid;place-items:center;margin-bottom:18px;font-size:23px;border:1px solid rgba(255,255,255,.2)}
+    .ax-card h3{margin:0 0 10px;font-size:20px;color:#fff;line-height:1.35}
+    .ax-card p{margin:0;color:#d8d8d8;font-size:14.5px;line-height:1.72}
+
+    .ax-process{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:step}
+    .ax-step{position:relative;padding:24px;border-radius:24px;min-height:190px;overflow:hidden}
+    .ax-step:before{counter-increment:step;content:"0" counter(step);position:absolute;right:18px;top:14px;font-family:Orbitron,Arial,sans-serif;font-size:34px;font-weight:900;color:rgba(255,255,255,.16)}
+    .ax-step h3{margin:0 0 10px;font-size:18px;color:#fff;position:relative;z-index:2}
+    .ax-step p{margin:0;color:#d8d8d8;font-size:14px;line-height:1.7;position:relative;z-index:2}
+
+    #astroxRulesPanel{display:none;position:relative;z-index:2;animation:axReveal .35s ease both}
+    @keyframes axReveal{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    .ax-rules-intro{display:grid;grid-template-columns:.82fr 1.18fr;gap:22px;align-items:stretch;margin-bottom:22px}
+    .ax-rules-banner{padding:30px;border-radius:28px;position:relative;overflow:hidden}
+    .ax-rules-banner h3{margin:0 0 12px;font-size:28px;font-family:Orbitron,Arial,sans-serif;line-height:1.2;color:#fff}
+    .ax-rules-banner p,.ax-warning p{margin:0;color:#d8d8d8;line-height:1.75;font-size:15px}
+    .ax-warning{padding:25px;border-radius:28px}
+    .ax-warning strong{display:block;margin-bottom:10px;color:#fff;font-size:18px}
+    .ax-rules-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .ax-rule{padding:22px;border-radius:22px;display:grid;grid-template-columns:auto 1fr;gap:15px;transition:.3s ease}
+    .ax-rule-num{width:38px;height:38px;border-radius:14px;background:#fff!important;color:#000!important;border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;font-weight:900}
+    .ax-rule h4{margin:0 0 7px;color:#fff;font-size:16px}
+    .ax-rule p{margin:0;color:#d8d8d8;font-size:14px;line-height:1.65}
+
+    .ax-eligibility{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .ax-panel{padding:28px;border-radius:28px}
+    .ax-panel h3{margin:0 0 16px;font-family:Orbitron,Arial,sans-serif;font-size:23px;color:#fff}
+    .ax-list{display:grid;gap:11px;margin:0;padding:0;list-style:none}
+    .ax-list li{display:flex;gap:11px;color:#d8d8d8;line-height:1.6;font-size:14.5px;align-items:flex-start}
+    .ax-check,.ax-cross{width:20px;height:20px;min-width:20px;border-radius:50%;display:grid;place-items:center;margin-top:2px;font-size:12px;font-weight:900;background:#fff;color:#000}
+
+    .ax-final-strip{position:relative;margin-top:0;border-radius:0;overflow:hidden;border:1px solid var(--ax-border-soft);border-left:none;border-right:none;background:#000!important;box-shadow:none!important}
+    .ax-final-strip-inner{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding:36px 42px}
+    .ax-final-strip h2{margin:0;font-family:Orbitron,Arial,sans-serif;font-size:32px;line-height:1.25;text-transform:uppercase;color:#fff}
+    .ax-final-strip p{margin:8px 0 0;max-width:720px;color:#d8d8d8;line-height:1.75;font-size:15px}
+    .ax-hidden-anchor{height:1px;width:1px;overflow:hidden;opacity:0;pointer-events:none}
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    .ax-applicant-board{position:relative;z-index:2;display:grid;gap:18px}
+    .ax-applicant-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:18px;border-radius:24px}
+    .ax-applicant-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;width:100%}
+    .ax-applicant-search-wrap{position:relative;flex:1 1 360px;min-width:min(100%,260px)}
+    .ax-applicant-search-wrap:before{content:"⌕";position:absolute;left:16px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.62);font-size:18px;pointer-events:none}
+    .ax-applicant-search{width:100%;min-height:48px;border-radius:16px;border:1px solid rgba(255,255,255,.16);background:#050505;color:#fff;outline:none;padding:13px 16px 13px 45px;font-size:14px;font-weight:800;letter-spacing:.3px;box-shadow:none;transition:.3s ease}
+    .ax-applicant-search::placeholder{color:rgba(255,255,255,.58)}
+    .ax-applicant-search:focus{border-color:rgba(255,255,255,.42);box-shadow:0 0 0 4px rgba(255,255,255,.08)}
+    .ax-applicant-stats{display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:12px;width:100%}
+    .ax-stat{padding:16px;border-radius:18px;min-height:92px}
+    .ax-stat strong{display:block;font-family:Orbitron,Arial,sans-serif;font-size:25px;line-height:1;color:#fff;margin-bottom:8px}
+    .ax-stat span{display:block;color:#d8d8d8;font-size:12px;font-weight:900;letter-spacing:.8px;text-transform:uppercase;line-height:1.45}
+    .ax-admin-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;width:100%;border-radius:16px;padding:13px 14px}
+    .ax-admin-state,.ax-admin-warning{color:#d8d8d8;font-size:13px;font-weight:900;letter-spacing:.4px;line-height:1.55}
+    .ax-admin-warning{flex:1 1 320px;font-size:12px}
+    .ax-small-btn{appearance:none;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;border-radius:14px;padding:11px 15px;font-size:12px;font-weight:900;letter-spacing:.7px;cursor:pointer;transition:.3s ease;text-transform:uppercase;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+    .ax-small-btn:hover{transform:translateY(-3px);background:rgba(255,255,255,.10)}
+    .ax-applicant-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .ax-applicant-card{position:relative;padding:21px;border-radius:24px;overflow:hidden;transition:.3s ease}
+    .ax-applicant-card:before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--ax-yellow),var(--ax-blue));opacity:1}
+    .ax-applicant-card.pending,.ax-applicant-card:not(.accepted):not(.rejected){border-color:rgba(250,204,21,.72)!important;box-shadow:0 0 0 1px rgba(59,130,246,.22) inset!important}
+    .ax-applicant-card.accepted{border-color:rgba(34,197,94,.72)!important;box-shadow:0 0 0 1px rgba(34,197,94,.20) inset!important}
+    .ax-applicant-card.rejected{border-color:rgba(239,68,68,.72)!important;box-shadow:0 0 0 1px rgba(239,68,68,.20) inset!important}
+    .ax-applicant-card.accepted:before{background:linear-gradient(90deg,#22c55e,#86efac)}
+    .ax-applicant-card.rejected:before{background:linear-gradient(90deg,#ef4444,#fca5a5)}
+    .ax-applicant-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+    .ax-applicant-no{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:16px;background:#fff;color:#000;font-family:Orbitron,Arial,sans-serif;font-weight:900}
+    .ax-status-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 11px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.9px;text-transform:uppercase}
+    .ax-status-pill:before{content:"";width:8px;height:8px;border-radius:50%;background:#facc15;box-shadow:0 0 12px rgba(250,204,21,.45)}
+    .ax-status-pill.pending,.ax-status-pill:not(.accepted):not(.rejected){color:#fde68a!important;background:rgba(250,204,21,.12)!important;border-color:rgba(250,204,21,.80)!important}
+    .ax-status-pill.accepted{color:#86efac!important;background:rgba(34,197,94,.12)!important;border-color:rgba(34,197,94,.82)!important}
+    .ax-status-pill.rejected{color:#fca5a5!important;background:rgba(239,68,68,.12)!important;border-color:rgba(239,68,68,.82)!important}
+    .ax-status-pill.accepted:before{background:#22c55e;box-shadow:0 0 12px rgba(34,197,94,.45)}
+    .ax-status-pill.rejected:before{background:#ef4444;box-shadow:0 0 12px rgba(239,68,68,.45)}
+    .ax-applicant-card h3{margin:0 0 8px;font-size:19px;color:#fff;line-height:1.35}
+    .ax-applicant-meta{display:grid;gap:8px;margin:12px 0 0;color:#d8d8d8;font-size:13.5px;line-height:1.55}
+    .ax-applicant-meta span{display:block;word-break:break-word;color:#d8d8d8}
+    .ax-applicant-meta b{color:#fff;font-weight:900}
+    .ax-applicant-meta a{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.30)}
+    .ax-applicant-extra{display:none;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);color:#d8d8d8;font-size:13px;line-height:1.65}
+    .ax-admin-unlocked .ax-applicant-extra{display:block}
+    .ax-review-actions{display:none;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
+    .ax-admin-unlocked .ax-review-actions{display:flex}
+    .ax-review-actions button{appearance:none;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.06);color:#fff;padding:9px 11px;font-size:11px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;cursor:pointer;transition:.25s ease}
+    .ax-review-actions button:hover{transform:translateY(-2px);background:rgba(255,255,255,.10)}
+    .ax-review-actions button[data-review-status="pending"]{color:#fde68a!important;border-color:rgba(250,204,21,.72)!important;background:rgba(250,204,21,.10)!important}
+    .ax-review-actions button[data-review-status="accepted"]{color:#86efac!important;border-color:rgba(34,197,94,.72)!important;background:rgba(34,197,94,.10)!important}
+    .ax-review-actions button[data-review-status="rejected"]{color:#fca5a5!important;border-color:rgba(239,68,68,.72)!important;background:rgba(239,68,68,.10)!important}
+    .ax-empty-applicants{padding:28px;border-radius:24px;border:1px dashed rgba(255,255,255,.22)!important;color:#d8d8d8;line-height:1.75;text-align:center;grid-column:1/-1}
+    .ax-toast{position:fixed;left:50%;bottom:24px;z-index:9999;transform:translateX(-50%) translateY(120px);max-width:min(92vw,620px);padding:14px 18px;border-radius:18px;background:rgba(0,0,0,.94)!important;border:1px solid rgba(255,255,255,.22)!important;color:#fff;box-shadow:0 18px 54px rgba(0,0,0,.35)!important;font-size:14px;line-height:1.5;opacity:0;pointer-events:none;transition:.35s ease}
+    .ax-toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    .ax-submit-popup{position:fixed;left:50%;top:50%;z-index:10000;width:min(92vw,590px);transform:translate(-50%,-50%) scale(.94);opacity:0;pointer-events:none;padding:0;border-radius:30px;background:linear-gradient(180deg,rgba(12,12,12,.98),rgba(0,0,0,.96));border:1px solid rgba(255,255,255,.16);box-shadow:0 34px 110px rgba(0,0,0,.72),0 0 0 1px rgba(34,197,94,.22) inset;color:#fff;text-align:left;backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);transition:opacity .25s ease,transform .25s ease}
+    .ax-submit-popup.visible{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+    .ax-submit-popup:before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at 50% 0%,rgba(34,197,94,.20),transparent 42%)}
+    .ax-submit-popup-inner{position:relative;z-index:2;padding:30px 28px 24px}
+    .ax-submit-close{position:absolute;right:16px;top:16px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;font-size:22px;line-height:1;display:grid;place-items:center;cursor:pointer;transition:.25s ease}
+    .ax-submit-close:hover{background:rgba(255,255,255,.12);transform:rotate(90deg) scale(1.04)}
+    .ax-submit-top{display:flex;gap:18px;align-items:center;padding-right:42px}
+    .ax-submit-tick{width:74px;height:74px;min-width:74px;border-radius:50%;display:grid;place-items:center;background:rgba(34,197,94,.12);border:2px solid rgba(34,197,94,.82);color:#86efac;font-size:40px;font-weight:900;line-height:1;box-shadow:0 0 34px rgba(34,197,94,.24);animation:axSubmitTickPop .42s cubic-bezier(.2,1.25,.3,1) both}
+    .ax-submit-copy h3{margin:0 0 8px;color:#fff;font-family:Orbitron,Arial,sans-serif;font-size:22px;line-height:1.25;letter-spacing:.3px}
+    .ax-submit-copy p{margin:0;color:#e5e5e5;font-size:14.5px;font-weight:800;line-height:1.7}
+    .ax-submit-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}
+    .ax-submit-ok{appearance:none;min-height:44px;padding:12px 22px;border-radius:14px;border:0;background:#ffffff;color:#000;font-size:12px;font-weight:950;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;transition:.25s ease}
+    .ax-submit-ok:hover{background:#eeeeee;transform:translateY(-2px)}
+    @keyframes axSubmitTickPop{0%{transform:scale(.45);opacity:0}70%{transform:scale(1.10);opacity:1}100%{transform:scale(1);opacity:1}}
+
+    /* Hover restoration only. No JS/Firebase/admin behavior changed. */
+    .ax-hero-card,.ax-card,.ax-panel,.ax-step,.ax-rule,.ax-slot-box,.ax-quick-item,.ax-stat,.ax-applicant-card,.ax-rules-banner,.ax-warning,.ax-final-strip-inner{transition:transform .3s ease,background .3s ease,border-color .3s ease,box-shadow .3s ease}
+    .ax-hero-card:hover,.ax-card:hover,.ax-panel:hover,.ax-step:hover,.ax-rule:hover,.ax-slot-box:hover,.ax-quick-item:hover,.ax-stat:hover,.ax-applicant-card:hover,.ax-rules-banner:hover,.ax-warning:hover{transform:translateY(-6px);background:rgba(255,255,255,.082)!important;border-color:rgba(255,255,255,.24)!important;box-shadow:0 18px 48px rgba(255,255,255,.08)!important}
+    .ax-icon,.ax-rule-num,.ax-applicant-no,.ax-check,.ax-cross{transition:transform .28s ease,background .28s ease}
+    .ax-card:hover .ax-icon,.ax-rule:hover .ax-rule-num,.ax-applicant-card:hover .ax-applicant-no,.ax-panel li:hover .ax-check,.ax-panel li:hover .ax-cross{transform:scale(1.06)}
+
+    /* External Odoo/form area support only. JS/Firebase/admin logic untouched. */
+    #collaborationForm,#astroxCollaborationForm,[data-astrox-collaboration-form],#collaborationForm .s_website_form,#collaborationForm .o_website_form,#collaborationForm form,#astroxCollaborationForm form,[data-astrox-collaboration-form] form{position:relative!important;width:100%!important;max-width:1120px!important;margin:0 auto!important;padding:32px!important;border-radius:28px!important;background:rgba(255,255,255,.055)!important;border:1px solid rgba(255,255,255,.14)!important;box-shadow:none!important;color:#fff!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
+    #collaborationForm:before,#astroxCollaborationForm:before,[data-astrox-collaboration-form]:before{content:"Complete every required field, use a real space/science platform link, and submit once. Your application status will appear in today’s review board.";display:block!important;margin:0 0 20px!important;padding:15px 17px!important;border-radius:18px!important;background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.14)!important;color:#d8d8d8!important;font-size:13px!important;font-weight:800!important;line-height:1.65!important;letter-spacing:.25px!important;box-shadow:none!important}
+    #collaborationForm .s_website_form_rows,#collaborationForm .o_website_form_rows,#astroxCollaborationForm .s_website_form_rows,#astroxCollaborationForm .o_website_form_rows,[data-astrox-collaboration-form] .s_website_form_rows,[data-astrox-collaboration-form] .o_website_form_rows{display:grid!important;gap:16px!important}
+    #collaborationForm .s_website_form_field,#collaborationForm .o_website_form_field,#collaborationForm .form-group,#collaborationForm .mb-3,#astroxCollaborationForm .s_website_form_field,#astroxCollaborationForm .o_website_form_field,#astroxCollaborationForm .form-group,#astroxCollaborationForm .mb-3,[data-astrox-collaboration-form] .s_website_form_field,[data-astrox-collaboration-form] .o_website_form_field,[data-astrox-collaboration-form] .form-group,[data-astrox-collaboration-form] .mb-3{margin:0 0 16px!important;padding:0!important}
+    #collaborationForm label,#collaborationForm .s_website_form_label,#collaborationForm .s_website_form_label_content,#astroxCollaborationForm label,#astroxCollaborationForm .s_website_form_label,#astroxCollaborationForm .s_website_form_label_content,[data-astrox-collaboration-form] label,[data-astrox-collaboration-form] .s_website_form_label,[data-astrox-collaboration-form] .s_website_form_label_content{display:block!important;margin:0 0 8px!important;color:#fff!important;font-size:13px!important;font-weight:900!important;line-height:1.35!important;letter-spacing:.55px!important;text-transform:uppercase!important;text-shadow:none!important}
+    #collaborationForm input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]),#collaborationForm select,#collaborationForm textarea,#astroxCollaborationForm input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]),#astroxCollaborationForm select,#astroxCollaborationForm textarea,[data-astrox-collaboration-form] input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]),[data-astrox-collaboration-form] select,[data-astrox-collaboration-form] textarea{width:100%!important;min-height:52px!important;padding:14px 16px!important;border-radius:16px!important;background:#050505!important;background-image:none!important;border:1px solid rgba(255,255,255,.16)!important;color:#fff!important;font-size:14px!important;font-weight:800!important;line-height:1.45!important;outline:none!important;box-shadow:none!important;transition:border-color .25s ease,background .25s ease,box-shadow .25s ease!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important}
+    #collaborationForm textarea,#astroxCollaborationForm textarea,[data-astrox-collaboration-form] textarea{min-height:132px!important;resize:vertical!important}
+    #collaborationForm input::placeholder,#collaborationForm textarea::placeholder,#astroxCollaborationForm input::placeholder,#astroxCollaborationForm textarea::placeholder,[data-astrox-collaboration-form] input::placeholder,[data-astrox-collaboration-form] textarea::placeholder{color:rgba(255,255,255,.58)!important;font-weight:700!important}
+    #collaborationForm input:focus,#collaborationForm select:focus,#collaborationForm textarea:focus,#astroxCollaborationForm input:focus,#astroxCollaborationForm select:focus,#astroxCollaborationForm textarea:focus,[data-astrox-collaboration-form] input:focus,[data-astrox-collaboration-form] select:focus,[data-astrox-collaboration-form] textarea:focus{border-color:rgba(255,255,255,.42)!important;background:#080808!important;box-shadow:0 0 0 4px rgba(255,255,255,.08)!important}
+    #collaborationForm input[type="checkbox"],#collaborationForm input[type="radio"],#astroxCollaborationForm input[type="checkbox"],#astroxCollaborationForm input[type="radio"],[data-astrox-collaboration-form] input[type="checkbox"],[data-astrox-collaboration-form] input[type="radio"]{width:18px!important;height:18px!important;accent-color:#fff!important;cursor:pointer!important}
+    #collaborationForm .form-text,#collaborationForm .text-muted,#collaborationForm .help-block,#collaborationForm small,#collaborationForm .s_website_form_mark,#astroxCollaborationForm .form-text,#astroxCollaborationForm .text-muted,#astroxCollaborationForm .help-block,#astroxCollaborationForm small,#astroxCollaborationForm .s_website_form_mark,[data-astrox-collaboration-form] .form-text,[data-astrox-collaboration-form] .text-muted,[data-astrox-collaboration-form] .help-block,[data-astrox-collaboration-form] small,[data-astrox-collaboration-form] .s_website_form_mark{display:block!important;margin-top:7px!important;color:#cfcfcf!important;font-size:12px!important;font-weight:800!important;line-height:1.55!important;opacity:1!important}
+    #collaborationForm .invalid-feedback,#collaborationForm .o_website_form_error,#astroxCollaborationForm .invalid-feedback,#astroxCollaborationForm .o_website_form_error,[data-astrox-collaboration-form] .invalid-feedback,[data-astrox-collaboration-form] .o_website_form_error{margin-top:8px!important;color:#ff6b6b!important;font-size:12px!important;font-weight:900!important;line-height:1.5!important}
+    #collaborationForm .valid-feedback,#collaborationForm .o_website_form_success,#astroxCollaborationForm .valid-feedback,#astroxCollaborationForm .o_website_form_success,[data-astrox-collaboration-form] .valid-feedback,[data-astrox-collaboration-form] .o_website_form_success{margin-top:8px!important;color:#57e389!important;font-size:12px!important;font-weight:900!important;line-height:1.5!important}
+    #collaborationForm .s_website_form_send,#collaborationForm button[type="submit"],#collaborationForm input[type="submit"],#collaborationForm [data-astrox-submit],#astroxCollaborationForm .s_website_form_send,#astroxCollaborationForm button[type="submit"],#astroxCollaborationForm input[type="submit"],#astroxCollaborationForm [data-astrox-submit],[data-astrox-collaboration-form] .s_website_form_send,[data-astrox-collaboration-form] button[type="submit"],[data-astrox-collaboration-form] input[type="submit"],[data-astrox-collaboration-form] [data-astrox-submit]{appearance:none!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:54px!important;padding:15px 28px!important;border-radius:16px!important;background:#fff!important;background-image:none!important;border:0!important;color:#000!important;font-size:13px!important;font-weight:950!important;letter-spacing:.9px!important;text-transform:uppercase!important;text-decoration:none!important;cursor:pointer!important;box-shadow:none!important;transition:transform .25s ease,background .25s ease!important}
+    #collaborationForm .s_website_form_send:hover,#collaborationForm button[type="submit"]:hover,#collaborationForm input[type="submit"]:hover,#collaborationForm [data-astrox-submit]:hover,#astroxCollaborationForm .s_website_form_send:hover,#astroxCollaborationForm button[type="submit"]:hover,#astroxCollaborationForm input[type="submit"]:hover,#astroxCollaborationForm [data-astrox-submit]:hover,[data-astrox-collaboration-form] .s_website_form_send:hover,[data-astrox-collaboration-form] button[type="submit"]:hover,[data-astrox-collaboration-form] input[type="submit"]:hover,[data-astrox-collaboration-form] [data-astrox-submit]:hover{background:#eee!important;color:#000!important;transform:translateY(-3px)!important;box-shadow:none!important}
+
+    @media(max-width:1040px){.ax-hero{grid-template-columns:1fr;padding:42px;min-height:auto}.ax-hero-content{min-height:auto}.ax-orbit-system{opacity:.30;right:-210px;top:0}.ax-collab-grid{grid-template-columns:repeat(2,1fr)}.ax-process{grid-template-columns:repeat(2,1fr)}.ax-rules-intro,.ax-eligibility{grid-template-columns:1fr}}
+    @media(max-width:720px){#astroxCollaborationPage{padding:0 0 36px}.ax-hero,.ax-section{padding:28px 18px;border-radius:0}.ax-title{font-size:46px}.ax-lead{font-size:16px}.ax-actions{align-items:stretch}.ax-btn{width:100%;padding:17px 22px}.ax-quick-grid,.ax-collab-grid,.ax-process,.ax-rules-grid,.ax-applicant-list,.ax-applicant-stats{grid-template-columns:1fr}.ax-section-head{align-items:flex-start}.ax-final-strip-inner{padding:28px}.ax-admin-row{align-items:flex-start}.ax-final-strip h2{font-size:25px}#collaborationForm,#astroxCollaborationForm,[data-astrox-collaboration-form],#collaborationForm .s_website_form,#collaborationForm .o_website_form,#collaborationForm form,#astroxCollaborationForm form,[data-astrox-collaboration-form] form{padding:22px 16px!important;border-radius:22px!important}#collaborationForm .s_website_form_send,#collaborationForm button[type="submit"],#collaborationForm input[type="submit"],#astroxCollaborationForm .s_website_form_send,#astroxCollaborationForm button[type="submit"],#astroxCollaborationForm input[type="submit"],[data-astrox-collaboration-form] .s_website_form_send,[data-astrox-collaboration-form] button[type="submit"],[data-astrox-collaboration-form] input[type="submit"]{width:100%!important}.ax-submit-popup{width:min(94vw,420px);border-radius:24px}.ax-submit-popup-inner{padding:26px 18px 20px}.ax-submit-top{display:grid;justify-items:center;text-align:center;padding-right:0}.ax-submit-tick{width:64px;height:64px;min-width:64px;font-size:34px}.ax-submit-copy h3{font-size:18px}.ax-submit-copy p{font-size:13.5px}.ax-submit-actions{justify-content:center}.ax-submit-ok{width:100%}}
+  
+    /* X Horizon loading system only. Existing page/Firebase/admin logic untouched. */
+    html:not(.ax-xh-loader-complete) #astroxCollaborationPage{
+      opacity:0!important;
+      visibility:hidden!important;
+      pointer-events:none!important;
+    }
+    html.ax-xh-loader-complete #astroxCollaborationPage{
+      opacity:1!important;
+      visibility:visible!important;
+      pointer-events:auto!important;
+      transition:opacity .35s ease!important;
+    }
+    html.ax-xh-loader-active,
+    html.ax-xh-loader-active body{
+      overflow:hidden!important;
+      background:#000!important;
+    }
+    #astroxCollaborationLoader{
+      position:fixed;
+      inset:0;
+      z-index:2147483647;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:16px;
+      background:#000!important;
+      color:#fff!important;
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      transition:opacity .42s ease,visibility .42s ease;
+    }
+    html.ax-xh-loader-complete #astroxCollaborationLoader{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+    .ax-xh-loader-brand{
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      gap:10px;
+      font-family:Orbitron,Arial,Helvetica,sans-serif;
+      line-height:1;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .ax-xh-loader-x{
+      font-size:clamp(42px,8vw,86px);
+      font-weight:950;
+      color:#fff;
+    }
+    .ax-xh-loader-horizon{
+      font-size:clamp(22px,4vw,42px);
+      font-weight:900;
+      color:#fff;
+      padding-bottom:.12em;
+      opacity:.94;
+    }
+    .ax-xh-loader-line{
+      width:min(72vw,320px);
+      height:3px;
+      background:rgba(255,255,255,.16);
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .ax-xh-loader-line span{
+      display:block;
+      width:0%;
+      height:100%;
+      background:#fff;
+      border-radius:inherit;
+      transition:width .08s linear;
+    }
+    .ax-xh-loader-percent{
+      min-height:18px;
+      color:rgba(255,255,255,.74);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:1.8px;
+      font-family:Arial,Helvetica,sans-serif;
+    }
+
+  </style>
+
+
+
+<div id="astroxCollaborationLoader" aria-label="X Horizon page loading" role="status">
+  <div class="ax-xh-loader-brand">
+    <span class="ax-xh-loader-x">X</span><span class="ax-xh-loader-horizon">HORIZON</span>
+  </div>
+  <div class="ax-xh-loader-line" aria-hidden="true"><span id="astroxLoaderLine"></span></div>
+  <div class="ax-xh-loader-percent" id="astroxLoaderPercent">0%</div>
+</div>
+<script>
+(function(){
+  'use strict';
+
+  var root = document.documentElement;
+  var loaderLine = null;
+  var loaderPercent = null;
+  var progress = 0;
+  var pageReady = false;
+  var finished = false;
+
+  root.classList.add('ax-xh-loader-active');
+  root.classList.remove('ax-xh-loader-complete');
+
+  function setProgress(value){
+    progress = Math.max(0, Math.min(100, Math.round(value)));
+    loaderLine = loaderLine || document.getElementById('astroxLoaderLine');
+    loaderPercent = loaderPercent || document.getElementById('astroxLoaderPercent');
+    if(loaderLine) loaderLine.style.width = progress + '%';
+    if(loaderPercent) loaderPercent.textContent = progress + '%';
+  }
+
+  function completeLoader(){
+    if(finished) return;
+    finished = true;
+    setProgress(100);
+    setTimeout(function(){
+      root.classList.add('ax-xh-loader-complete');
+      root.classList.remove('ax-xh-loader-active');
+    },220);
+  }
+
+  if(document.readyState === 'complete') pageReady = true;
+  window.addEventListener('load',function(){ pageReady = true; },{once:true});
+
+  setProgress(0);
+
+  var loaderTimer = setInterval(function(){
+    if(finished){
+      clearInterval(loaderTimer);
+      return;
+    }
+
+    if(progress >= 94 && !pageReady) return;
+
+    var step = progress < 55 ? 4 : progress < 82 ? 3 : 1;
+    setProgress(progress + step);
+
+    if(progress >= 100){
+      clearInterval(loaderTimer);
+      completeLoader();
+    }
+  },28);
+
+  setTimeout(function(){ pageReady = true; },2600);
+})();
+</script>
+
+
+<main id="astroxCollaborationPage">
+  <div class="ax-wrap">
+    <section class="ax-hero reveal" aria-label="X Horizon collaboration hero">
+      <div class="ax-orbit-system" aria-hidden="true">
+        <div class="ax-orbit o1"></div>
+        <div class="ax-orbit o2"></div>
+        <div class="ax-orbit o3"></div>
+        <div class="ax-planet-core"></div>
+        <div class="ax-satellite-dot d1"></div>
+        <div class="ax-satellite-dot d2"></div>
+        <div class="ax-satellite-dot d3"></div>
+      </div>
+
+      <div class="ax-hero-content">
+        <div class="ax-kicker"><i></i> X Horizon Partner Network</div>
+        <h1 class="ax-title">Collaboration <span>Center</span></h1>
+        <p class="ax-lead">A professional space-learning gateway for astronomy creators, educational platforms, student societies, simulation builders, science communities, and futuristic projects that want to connect with X Horizon.</p>
+        <div class="ax-actions">
+          <button id="astroxRulesButton" class="ax-btn ax-btn-rules" type="button" aria-expanded="false">SEE RULES</button>
+          <a id="astroxApplyLink" class="ax-btn ax-btn-apply" href="#collaborationForm">APPLY NOW</a>
+          <span class="ax-mini-note" id="astroxGateMiniNote">50 collaborations accepted per day</span>
+        </div>
+      </div>
+
+      <aside class="ax-hero-card" aria-label="Daily collaboration slots">
+        <h3>Daily Collaboration Gate</h3>
+        <div class="ax-slot-box">
+          <div class="ax-slot-top">
+            <div>
+              <div class="ax-slot-big" id="astroxRemainingSlots">50</div>
+              <div style="color:#ffffff;font-size:13px;font-weight:900;letter-spacing:1px;margin-top:6px;text-transform:uppercase;">Slots Available</div>
+            </div>
+            <div class="ax-slot-label" id="astroxSlotNumber">0 / 50<br>Delivered</div>
+          </div>
+          <div class="ax-progress"><span id="astroxSlotBar"></span></div>
+          <p class="ax-slot-text" id="astroxSlotText">Today’s collaboration forms are open. The gate closes automatically after 50 delivered forms.</p>
+        </div>
+        <div class="ax-quick-grid">
+          <div class="ax-quick-item"><strong>Platform Link</strong><span>Must support space, astronomy, research, science, or learning content.</span></div>
+          <div class="ax-quick-item"><strong>Review Standard</strong><span>Quality, safety, accuracy, and community behavior are checked.</span></div>
+          <div class="ax-quick-item"><strong>Public Trust</strong><span>No spam, fake claims, harmful redirects, or stolen content.</span></div>
+          <div class="ax-quick-item"><strong>Fair Access</strong><span>Daily limit protects the review flow from overload.</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="ax-section reveal" aria-label="Collaboration options">
+      <div class="ax-section-head"><h2>Who Can Collaborate</h2><p>X Horizon collaboration is for platforms and people who can strengthen the public understanding of space science, exploration, simulations, astronomy tools, and future careers.</p></div>
+      <div class="ax-collab-grid">
+        <article class="ax-card"><div class="ax-icon">☄</div><h3>Space Content Platforms</h3><p>Pages, websites, and channels that publish astronomy, space missions, planetary science, telescope learning, or science explainers.</p></article>
+        <article class="ax-card"><div class="ax-icon">✦</div><h3>Educational Communities</h3><p>Student groups, learning societies, school clubs, university circles, and science communities that guide learners in a decent environment.</p></article>
+        <article class="ax-card"><div class="ax-icon">◌</div><h3>Simulation &amp; Tools Builders</h3><p>Creators building sky maps, orbital systems, celestial simulations, data dashboards, learning tools, or interactive science pages.</p></article>
+        <article class="ax-card"><div class="ax-icon">▣</div><h3>Research Learners</h3><p>Individuals or groups sharing research notes, mission studies, observation projects, astrophysics concepts, or scientific resources.</p></article>
+        <article class="ax-card"><div class="ax-icon">⌁</div><h3>Media Creators</h3><p>Video creators, article writers, visual designers, and educational storytellers focused on authentic space knowledge and future exploration.</p></article>
+        <article class="ax-card"><div class="ax-icon">◎</div><h3>Opportunity Networks</h3><p>Platforms sharing scholarships, internships, events, competitions, university paths, or career guidance related to astronomy and space science.</p></article>
+      </div>
+    </section>
+
+    <section class="ax-section violet reveal" aria-label="Collaboration process">
+      <div class="ax-section-head"><h2>Review Path</h2><p>Each application enters a controlled review flow. The daily gate keeps submissions organized, numbered, and limited to 50 applications within each midnight-to-midnight daily cycle.</p></div>
+      <div class="ax-process">
+        <div class="ax-step"><h3>Submit Platform</h3><p>The collaborator provides platform name, link, category, purpose, and proof that the content supports space learning.</p></div>
+        <div class="ax-step"><h3>Check Eligibility</h3><p>X Horizon checks content type, safety, behavior, authenticity, and whether the platform matches the collaboration rules.</p></div>
+        <div class="ax-step"><h3>Review Quality</h3><p>The platform is reviewed for scientific value, useful presentation, respectful community conduct, and clean public image.</p></div>
+        <div class="ax-step"><h3>Approve Connection</h3><p>Approved collaborators can be listed, linked, or connected with X Horizon areas according to the collaboration purpose.</p></div>
+      </div>
+    </section>
+
+    <section class="ax-section reveal" id="astroxRulesSection" aria-label="Collaboration rules">
+      <div class="ax-section-head"><h2>Rules Before Applying</h2><p>Click the rules button to reveal the full collaboration code of conduct. These rules protect X Horizon, users, creators, and public trust.</p></div>
+      <div id="astroxRulesPanel">
+        <div class="ax-rules-intro">
+          <div class="ax-rules-banner"><h3>Professional Space Network</h3><p>Collaboration is not for random promotion. It is for serious platforms that add value to astronomy, space education, science learning, research awareness, simulations, or future space careers.</p></div>
+          <div class="ax-warning"><strong>Important Standard</strong><p>X Horizon may reject, pause, or remove any collaboration if the linked platform breaks safety, behavior, content, privacy, or authenticity rules. A clean platform is more important than a large audience.</p></div>
+        </div>
+        <div class="ax-rules-grid">
+          <div class="ax-rule"><div class="ax-rule-num">01</div><div><h4>Space Content Required</h4><p>The platform available to link must promote space, astronomy, physics, simulations, missions, research, science tools, or educational learning.</p></div></div>
+          <div class="ax-rule"><div class="ax-rule-num">02</div><div><h4>Decent Behavior</h4><p>Collaborators must maintain respectful language, professional interaction, and decent behavior on X Horizon and connected community spaces.</p></div></div>
+          <div class="ax-rule"><div class="ax-rule-num">03</div><div><h4>Authentic Knowledge</h4><p>No fake discoveries, misleading claims, copied posts without credit, false mission updates, or unverified scientific statements.</p></div></div>
+          <div class="ax-rule"><div class="ax-rule-num">04</div><div><h4>Safe Public Links</h4><p>Linked pages must not contain malware, scams, gambling, adult content, hate content, spam farms, or harmful redirects.</p></div></div>
+          <div class="ax-rule"><div class="ax-rule-num">05</div><div><h4>Privacy Protection</h4><p>No collaborator can misuse, expose, sell, collect, or pressure users for private information through X Horizon collaboration.</p></div></div>
+          <div class="ax-rule"><div class="ax-rule-num">06</div><div><h4>No Harassment</h4><p>Bullying, insults, discrimination, personal attacks, threats, or abusive community behavior are not accepted.</p></div></div>
+          <div class="ax-rule"><div class="ax-rule-num">07</div><div><h4>Credit Sources</h4><p>Images, mission facts, research data, telescope material, and external resources should be credited when required.</p></div></div>
+          <div class="ax-rule"><div class="ax-rule-num">08</div><div><h4>No False Representation</h4><p>A collaborator must not claim official X Horizon authority unless that role is clearly approved by X Horizon.</p></div></div>
+          <div class="ax-rule"><div class="ax-rule-num">09</div><div><h4>Quality Standard</h4><p>The platform should have a clear purpose, readable design, useful content, and a serious educational direction.</p></div></div>
+          <div class="ax-rule"><div class="ax-rule-num">10</div><div><h4>Daily Limit Respect</h4><p>Only 50 collaboration forms are accepted per day. Attempts to bypass the limit may cause rejection.</p></div></div>
+          <div class="ax-rule"><div class="ax-rule-num">11</div><div><h4>No Forced Promotion</h4><p>Collaboration must not pressure X Horizon users into joining external groups, buying services, or following unrelated pages.</p></div></div>
+          <div class="ax-rule"><div class="ax-rule-num">12</div><div><h4>X Horizon Review Rights</h4><p>X Horizon can approve, reject, remove, or recheck any collaboration to protect the platform’s mission and users.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ax-section violet reveal" aria-label="Eligibility and rejection rules">
+      <div class="ax-section-head"><h2>Eligibility Filter</h2><p>Clear filters help users understand what kind of collaboration X Horizon accepts without adding contact blocks or template filler sections.</p></div>
+      <div class="ax-eligibility">
+        <div class="ax-panel"><h3>Accepted</h3><ul class="ax-list">
+          <li><span class="ax-check">✓</span><span>Astronomy, space science, astrophysics, planetary science, and mission-learning platforms.</span></li>
+          <li><span class="ax-check">✓</span><span>Student societies, science clubs, and educational communities with decent moderation.</span></li>
+          <li><span class="ax-check">✓</span><span>Simulation, sky map, telescope, observation, data, or research-learning projects.</span></li>
+          <li><span class="ax-check">✓</span><span>Creators who publish original, credited, and useful space content.</span></li>
+          <li><span class="ax-check">✓</span><span>Opportunity platforms related to scholarships, internships, competitions, events, or careers in space fields.</span></li>
+        </ul></div>
+        <div class="ax-panel"><h3>Rejected</h3><ul class="ax-list">
+          <li><span class="ax-cross">×</span><span>Platforms with spam, fake science, adult content, hate content, scams, or harmful redirects.</span></li>
+          <li><span class="ax-cross">×</span><span>Pages that only want traffic but provide no useful space-learning value.</span></li>
+          <li><span class="ax-cross">×</span><span>Communities with harassment, abusive language, unsafe behavior, or weak moderation.</span></li>
+          <li><span class="ax-cross">×</span><span>Copied content without credit, fake NASA/agency claims, or misleading mission updates.</span></li>
+          <li><span class="ax-cross">×</span><span>Submissions after the 50-form daily gate is already full.</span></li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section class="ax-section reveal" id="astroxApplicantsSection" aria-label="Collaboration applicants list">
+      <div class="ax-section-head"><h2>Applicant Review List</h2><p>Submitted collaborators appear here as numbered review cards. Every new daily cycle starts clean at 12:00 AM, while each stored application keeps its review status in Firestore.</p></div>
+      <div class="ax-applicant-board" id="astroxApplicantBoard">
+        <div class="ax-applicant-toolbar">
+          <div class="ax-applicant-controls">
+            <div class="ax-applicant-search-wrap"><input id="astroxApplicantSearch" class="ax-applicant-search" type="search" placeholder="Search applicants" autocomplete="off" spellcheck="false" aria-label="Search applicants"></div>
+            <button type="button" class="ax-small-btn" id="astroxRefreshApplicantsBtn">Refresh</button>
+          </div>
+          <div class="ax-applicant-stats" aria-label="Applicant review statistics">
+            <div class="ax-stat"><strong id="astroxApplicantsTotal">0</strong><span>Total Applicants</span></div>
+            <div class="ax-stat"><strong id="astroxApplicantsPending">0</strong><span>Pending Review</span></div>
+            <div class="ax-stat"><strong id="astroxApplicantsAccepted">0</strong><span>Accepted</span></div>
+            <div class="ax-stat"><strong id="astroxApplicantsRejected">0</strong><span>Rejected</span></div>
+            <div class="ax-stat"><strong id="astroxResetTimer">00:00:00</strong><span>Midnight Reset Timer</span></div>
+          </div>
+          <div class="ax-admin-row">
+            <span class="ax-admin-state" id="astroxAdminState">Review mode locked</span>
+            <span class="ax-admin-warning" id="astroxAdminWarning">Admin unlock is verified through Firebase. Local search-key unlock is disabled.</span>
+            <div><button type="button" class="ax-small-btn" id="astroxAdminUnlockBtn">Admin Unlock</button></div>
+          </div>
+        </div>
+        <div class="ax-applicant-list" id="astroxApplicantsList"></div>
+      </div>
+    </section>
+
+    <div class="ax-final-strip reveal">
+      <div class="ax-final-strip-inner">
+        <div><h2>Ready to Connect With X Horizon?</h2><p>Use the collaboration form area below this page. Submitted applications will be numbered, added to the review list, and held for status review inside the daily collaboration cycle.</p></div>
+        <a id="astroxApplyLinkBottom" class="ax-btn ax-btn-apply" href="#collaborationForm">APPLY NOW</a>
+      </div>
+    </div>
+
+    <div id="astroxFormMountPoint" class="ax-hidden-anchor" aria-hidden="true"></div>
+  </div>
+</main>
+
+<script>
+(function(){
+  'use strict';
+
+  var limit = 50;
+  var dayMs = 24 * 60 * 60 * 1000;
+  var gateTimezoneOffsetMs = 5 * 60 * 60 * 1000; // Asia/Karachi midnight reset
+  var adminSessionKey = 'astrox_collaboration_admin_review_verified';
+  var adminVerified = false;
+  var adminUnlocking = false;
+  var collectionName = 'collaborationRequests';
+
+  var fallbackFirebaseConfig = {
+    apiKey: 'AIzaSyBgwCB5yG7tBka2VYpwmcd-iAObtxQdIPk',
+    authDomain: 'learning-posts.firebaseapp.com',
+    projectId: 'learning-posts',
+    storageBucket: 'learning-posts.firebasestorage.app',
+    messagingSenderId: '400519896357'
+  };
+
+  var firebaseConfig = window.XHORIZON_FIREBASE_CONFIG || fallbackFirebaseConfig;
+  window.XHORIZON_FIREBASE_CONFIG = firebaseConfig;
+
+  var fb = null;
+  var db = null;
+  var unsubscribeApplicants = null;
+  var activeApplicants = [];
+  var lastQuerySince = 0;
+  var lastListenAt = 0;
+  var connecting = true;
+  var connected = false;
+
+  function now(){ return Date.now(); }
+
+  function getCycleStartMs(baseMs){
+    baseMs = Number(baseMs) || now();
+    return Math.floor((baseMs + gateTimezoneOffsetMs) / dayMs) * dayMs - gateTimezoneOffsetMs;
+  }
+
+  function getNextCycleStartMs(baseMs){ return getCycleStartMs(baseMs) + dayMs; }
+
+  function getCycleDateKey(baseMs){
+    var local = new Date(getCycleStartMs(baseMs) + gateTimezoneOffsetMs);
+    var year = local.getUTCFullYear();
+    var month = String(local.getUTCMonth() + 1).padStart(2,'0');
+    var date = String(local.getUTCDate()).padStart(2,'0');
+    return year + '-' + month + '-' + date;
+  }
+
+  function escapeHTML(value){
+    return String(value == null ? '' : value).replace(/[&<>"]/g,function(ch){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch] || ch;
+    });
+  }
+
+  function normalizeText(value, fallback){
+    value = String(value == null ? '' : value).trim();
+    return value || fallback || '';
+  }
+
+  function normalizeUrl(value){
+    value = normalizeText(value,'');
+    if(!value) return '';
+    if(/^https?:\/\//i.test(value)) return value;
+    return 'https://' + value.replace(/^\/+/, '');
+  }
+
+  function safeCssIdent(value){
+    value = String(value == null ? '' : value);
+    if(window.CSS && typeof window.CSS.escape === 'function') return window.CSS.escape(value);
+    return value.replace(/[^a-zA-Z0-9_-]/g,function(ch){ return '\\' + ch; });
+  }
+
+  function domainFromUrl(value){
+    value = normalizeUrl(value);
+    if(!value) return '';
+    try{ return new URL(value).hostname.replace(/^www\./,''); }catch(err){ return ''; }
+  }
+
+  function formatTime(timestamp){
+    try{
+      return new Intl.DateTimeFormat('en-GB',{
+        timeZone:'Asia/Karachi',
+        day:'2-digit',
+        month:'short',
+        year:'numeric',
+        hour:'2-digit',
+        minute:'2-digit',
+        second:'2-digit'
+      }).format(new Date(Number(timestamp) || now()));
+    }catch(err){
+      return new Date(Number(timestamp) || now()).toLocaleString();
+    }
+  }
+
+  function formatRemaining(ms){
+    if(ms <= 0) return '00:00:00';
+    var totalSeconds = Math.floor(ms / 1000);
+    var hours = Math.floor(totalSeconds / 3600);
+    var minutes = Math.floor((totalSeconds % 3600) / 60);
+    var seconds = totalSeconds % 60;
+    return String(hours).padStart(2,'0') + ':' + String(minutes).padStart(2,'0') + ':' + String(seconds).padStart(2,'0');
+  }
+
+  function showToast(message){
+    var toast = document.getElementById('astroxCollaborationToast');
+    if(!toast){
+      toast = document.createElement('div');
+      toast.id = 'astroxCollaborationToast';
+      toast.className = 'ax-toast';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.classList.add('visible');
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(function(){ toast.classList.remove('visible'); }, 3600);
+  }
+
+  function showSubmitSuccessPopup(){
+    var popup = document.getElementById('astroxSubmitSuccessPopup');
+    if(!popup){
+      popup = document.createElement('div');
+      popup.id = 'astroxSubmitSuccessPopup';
+      popup.className = 'ax-submit-popup';
+      popup.setAttribute('role','status');
+      popup.setAttribute('aria-live','polite');
+      document.body.appendChild(popup);
+    }
+
+    popup.innerHTML = '' +
+      '<div class="ax-submit-popup-inner">' +
+        '<button type="button" class="ax-submit-close" aria-label="Close success message">×</button>' +
+        '<div class="ax-submit-top">' +
+          '<div class="ax-submit-tick" aria-hidden="true">✓</div>' +
+          '<div class="ax-submit-copy">' +
+            '<h3>Application Submitted</h3>' +
+            '<p>Your application has been submitted successfully. You can check your application status here before the timer ends. You will receive confirmation letter to your mail. In case of rejection you will come to know the reason on your mail.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="ax-submit-actions"><button type="button" class="ax-submit-ok">OK</button></div>' +
+      '</div>';
+
+    function closePopup(){
+      popup.classList.remove('visible');
+      clearTimeout(showSubmitSuccessPopup.timer);
+    }
+
+    var closeBtn = popup.querySelector('.ax-submit-close');
+    var okBtn = popup.querySelector('.ax-submit-ok');
+    if(closeBtn) closeBtn.onclick = closePopup;
+    if(okBtn) okBtn.onclick = closePopup;
+
+    popup.classList.add('visible');
+    clearTimeout(showSubmitSuccessPopup.timer);
+    showSubmitSuccessPopup.timer = setTimeout(closePopup, 9000);
+  }
+
+  function isAdminUnlocked(){ return adminVerified === true; }
+
+  function setStorageText(text){
+    var note = document.getElementById('astroxGateMiniNote');
+    if(note) note.textContent = text;
+  }
+
+  function getExternalFormRoot(){
+    return document.getElementById('collaborationForm') ||
+           document.getElementById('astroxCollaborationForm') ||
+           document.querySelector('[data-astrox-collaboration-form]') ||
+           document.querySelector('.s_website_form form') ||
+           document.querySelector('form.s_website_form') ||
+           document.querySelector('.o_website_form form') ||
+           document.querySelector('form.o_website_form');
+  }
+
+  function getExternalForm(){
+    var root = getExternalFormRoot();
+    if(!root) return null;
+    if(root.tagName && root.tagName.toLowerCase() === 'form') return root;
+    return root.querySelector('form');
+  }
+
+  function getExternalFormTargetHref(){
+    var root = getExternalFormRoot();
+    if(root && root.id) return '#' + root.id;
+    var form = getExternalForm();
+    if(form && form.id) return '#' + form.id;
+    return '#collaborationForm';
+  }
+
+  function scrollToExternalForm(e){
+    var root = getExternalFormRoot();
+    if(root && root.scrollIntoView){
+      if(e && e.preventDefault) e.preventDefault();
+      root.scrollIntoView({behavior:'smooth',block:'start'});
+      return false;
+    }
+    showToast('Collaboration form area was not found on this page.');
+    return true;
+  }
+
+  function updateExternalSubmitState(full){
+    var root = getExternalFormRoot();
+    if(!root) return;
+    var buttons = root.querySelectorAll('.s_website_form_send, button[type="submit"], input[type="submit"], [data-astrox-submit]');
+    for(var i=0;i<buttons.length;i++){
+      var btn = buttons[i];
+      if(!btn.getAttribute('data-astrox-original-text')) btn.setAttribute('data-astrox-original-text', btn.textContent || btn.value || 'Submit');
+      if(full){
+        btn.classList.add('ax-btn-disabled');
+        btn.setAttribute('aria-disabled','true');
+        if(btn.tagName && btn.tagName.toLowerCase() === 'input') btn.value = 'Limit Reached';
+        else btn.textContent = 'Limit Reached';
+      }else{
+        btn.classList.remove('ax-btn-disabled');
+        btn.removeAttribute('aria-disabled');
+        var original = btn.getAttribute('data-astrox-original-text') || 'Submit';
+        if(btn.tagName && btn.tagName.toLowerCase() === 'input') btn.value = original;
+        else btn.textContent = original;
+      }
+    }
+  }
+
+  function setButtonState(full){
+    var buttons = [document.getElementById('astroxApplyLink'),document.getElementById('astroxApplyLinkBottom')];
+    for(var i=0;i<buttons.length;i++){
+      var btn = buttons[i];
+      if(!btn) continue;
+      btn.setAttribute('href', getExternalFormTargetHref());
+      if(full){
+        btn.classList.add('ax-btn-disabled');
+        btn.textContent = 'LIMIT REACHED';
+        btn.onclick = function(e){
+          e.preventDefault();
+          showToast('Today\'s collaboration gate is full. It will reopen automatically at 12:00 AM.');
+          return false;
+        };
+      }else{
+        btn.classList.remove('ax-btn-disabled');
+        btn.textContent = 'APPLY NOW';
+        btn.onclick = scrollToExternalForm;
+      }
+    }
+    updateExternalSubmitState(full);
+  }
+
+  function getActiveApplicants(){
+    var since = getCycleStartMs();
+    var until = getNextCycleStartMs();
+    return activeApplicants.filter(function(app){
+      var submitted = Number(app.submittedAtMs || 0);
+      return submitted >= since && submitted < until;
+    }).sort(function(a,b){ return Number(a.submittedAtMs || 0) - Number(b.submittedAtMs || 0); }).slice(0, limit);
+  }
+
+  function getApplicantSearchValue(){
+    var search = document.getElementById('astroxApplicantSearch');
+    return normalizeText(search ? search.value : '', '').toLowerCase();
+  }
+
+  function searchableApplicantText(app){
+    var raw = app && app.rawFields ? app.rawFields : {};
+    var parts = [app.name,app.platform,app.link,app.category,app.email,app.note,app.status,raw['AGE(Years)'],raw['Age'],raw['Whatsapp Number'],raw['WhatsApp Number'],raw['Professional Platforms'],raw['Social Platforms'],raw['Select Platform Type']];
+    return parts.map(function(item){ return String(item == null ? '' : item); }).join(' ').toLowerCase();
+  }
+
+  function filterApplicants(applicants){
+    var query = getApplicantSearchValue();
+    if(!query) return applicants;
+    return applicants.filter(function(app){ return searchableApplicantText(app).indexOf(query) !== -1; });
+  }
+
+  function countByStatus(applicants,status){
+    var total = 0;
+    for(var i=0;i<applicants.length;i++) if((applicants[i].status || 'pending') === status) total++;
+    return total;
+  }
+
+  function getResetAt(){ return getNextCycleStartMs(); }
+
+  function updateTopGate(applicants){
+    var count = applicants.length;
+    var remaining = Math.max(0,limit-count);
+    var percent = Math.round((count/limit)*100);
+    var remainingBox = document.getElementById('astroxRemainingSlots');
+    var numberBox = document.getElementById('astroxSlotNumber');
+    var bar = document.getElementById('astroxSlotBar');
+    var text = document.getElementById('astroxSlotText');
+    var note = document.getElementById('astroxGateMiniNote');
+
+    if(remainingBox) remainingBox.textContent = remaining;
+    if(numberBox) numberBox.innerHTML = count + ' / ' + limit + '<br>Delivered';
+    if(bar) bar.style.width = percent + '%';
+
+    if(text){
+      if(!connected && connecting) text.textContent = 'Storage connecting. The gate will activate after Firestore connection.';
+      else if(!connected) text.textContent = 'Storage connection failed. Check Firebase config and Firestore rules.';
+      else if(remaining <= 0) text.textContent = 'Today\'s collaboration gate is full. New applications reopen automatically at 12:00 AM.';
+      else if(remaining <= 10) text.textContent = 'Only ' + remaining + ' collaboration slots are left before the 12:00 AM reset.';
+      else text.textContent = remaining + ' collaboration slots are available today. The gate resets automatically at 12:00 AM.';
+    }
+
+    if(note){
+      if(!connected && connecting) note.textContent = 'Storage connecting';
+      else if(!connected) note.textContent = 'Storage error';
+      else note.textContent = remaining <= 0 ? 'Daily limit reached' : 'Storage connected • ' + remaining + ' slots available';
+    }
+
+    setButtonState(remaining <= 0 || !connected);
+  }
+
+  function renderApplicants(){
+    var allApplicants = getActiveApplicants();
+    var applicants = filterApplicants(allApplicants);
+    var searchValue = getApplicantSearchValue();
+    var board = document.getElementById('astroxApplicantBoard');
+    var list = document.getElementById('astroxApplicantsList');
+    var total = document.getElementById('astroxApplicantsTotal');
+    var pending = document.getElementById('astroxApplicantsPending');
+    var accepted = document.getElementById('astroxApplicantsAccepted');
+    var rejected = document.getElementById('astroxApplicantsRejected');
+    var reset = document.getElementById('astroxResetTimer');
+    var adminState = document.getElementById('astroxAdminState');
+    var unlockBtn = document.getElementById('astroxAdminUnlockBtn');
+    var adminWarning = document.getElementById('astroxAdminWarning');
+    var unlocked = isAdminUnlocked();
+
+    updateTopGate(allApplicants);
+
+    if(board) board.classList.toggle('ax-admin-unlocked', unlocked);
+    if(total) total.textContent = allApplicants.length;
+    if(pending) pending.textContent = countByStatus(allApplicants,'pending');
+    if(accepted) accepted.textContent = countByStatus(allApplicants,'accepted');
+    if(rejected) rejected.textContent = countByStatus(allApplicants,'rejected');
+    if(reset) reset.textContent = formatRemaining(getResetAt() - now());
+    if(adminState) adminState.textContent = unlocked ? 'Review mode unlocked' : 'Review mode locked';
+    if(unlockBtn) unlockBtn.textContent = adminUnlocking ? 'Checking' : (unlocked ? 'Lock Review' : 'Admin Unlock');
+    if(unlockBtn) unlockBtn.disabled = adminUnlocking;
+    if(adminWarning) adminWarning.textContent = unlocked ? 'Verified through Firebase admin claims. Review actions are active.' : 'Admin unlock is verified through Firebase. Local search-key unlock is disabled.';
+
+    if(!list) return;
+
+    if(!applicants.length){
+      list.innerHTML = searchValue ? '<div class="ax-empty-applicants">No matching applications found for this search.</div>' : '<div class="ax-empty-applicants">No applications are stored in today’s Firestore cycle. New submitted forms will appear here after submission.</div>';
+      return;
+    }
+
+    list.innerHTML = applicants.map(function(app,index){
+      var status = app.status || 'pending';
+      var raw = app.rawFields || {};
+      var number = index + 1;
+      var link = app.link ? '<a href="' + escapeHTML(normalizeUrl(app.link)) + '" target="_blank" rel="noopener">' + escapeHTML(app.link) + '</a>' : 'Not provided';
+      var email = app.email ? escapeHTML(app.email) : 'Not provided';
+      var note = app.note ? escapeHTML(app.note) : 'No message added';
+      var age = raw['AGE(Years)'] || raw['Age'] || raw.age || 'Not provided';
+      var whatsapp = raw['Whatsapp Number'] || raw['WhatsApp Number'] || raw.whatsapp || 'Not provided';
+      var specificPlatform = raw['Professional Platforms'] || raw['Social Platforms'] || raw['Select Platform Type'] || app.category || 'Not provided';
+
+      return '' +
+        '<article class="ax-applicant-card ' + escapeHTML(status) + '" data-applicant-id="' + escapeHTML(app.id) + '">' +
+          '<div class="ax-applicant-head"><div class="ax-applicant-no">#' + number + '</div><span class="ax-status-pill ' + escapeHTML(status) + '">' + escapeHTML(status) + '</span></div>' +
+          '<h3>' + escapeHTML(app.platform || app.name || 'Collaboration Applicant') + '</h3>' +
+          '<div class="ax-applicant-meta">' +
+            '<span><b>Applicant:</b> ' + escapeHTML(app.name || 'Not provided') + '</span>' +
+            '<span><b>Category:</b> ' + escapeHTML(app.category || 'General Collaboration') + '</span>' +
+            '<span><b>Platform Link:</b> ' + link + '</span>' +
+            '<span><b>Submitted:</b> ' + escapeHTML(formatTime(app.submittedAtMs)) + '</span>' +
+          '</div>' +
+          '<div class="ax-applicant-extra">' +
+            '<div><b>Email:</b> ' + email + '</div>' +
+            '<div><b>WhatsApp:</b> ' + escapeHTML(whatsapp) + '</div>' +
+            '<div><b>Age:</b> ' + escapeHTML(age) + '</div>' +
+            '<div><b>Selected Platform:</b> ' + escapeHTML(specificPlatform) + '</div>' +
+            '<div><b>Message:</b> ' + note + '</div>' +
+          '</div>' +
+          '<div class="ax-review-actions" aria-label="Review actions"><button type="button" data-review-status="pending">Pending</button><button type="button" data-review-status="accepted">Accept</button><button type="button" data-review-status="rejected">Reject</button></div>' +
+        '</article>';
+    }).join('');
+  }
+
+  function pickField(fields,names){
+    for(var i=0;i<names.length;i++){
+      var key = names[i];
+      if(fields[key]) return fields[key];
+      var lower = key.toLowerCase();
+      for(var existing in fields){
+        if(Object.prototype.hasOwnProperty.call(fields, existing) && existing.toLowerCase() === lower && fields[existing]) return fields[existing];
+      }
+    }
+    return '';
+  }
+
+  function labelForControl(control){
+    if(!control) return '';
+    var label = '';
+    if(control.id){
+      var direct = document.querySelector('label[for="' + safeCssIdent(control.id) + '"]');
+      if(direct) label = direct.textContent;
+    }
+    if(!label && control.closest){
+      var wrap = control.closest('.s_website_form_field, .form-group, .mb-3, .o_website_form_field');
+      if(wrap){
+        var lab = wrap.querySelector('label, .s_website_form_label_content');
+        if(lab) label = lab.textContent;
+      }
+    }
+    return normalizeText(label,'').replace(/\*/g,'').replace(/\s+/g,' ').trim();
+  }
+
+  function collectFormFields(form){
+    var fields = {};
+    var controls = form.querySelectorAll('input, select, textarea');
+    for(var i=0;i<controls.length;i++){
+      var c = controls[i];
+      if(!c || c.disabled) continue;
+      var type = (c.type || '').toLowerCase();
+      if(type === 'submit' || type === 'button' || type === 'reset' || type === 'file') continue;
+      if((type === 'checkbox' || type === 'radio') && !c.checked) continue;
+
+      var key = c.name || c.getAttribute('data-name') || c.id || labelForControl(c) || ('field_' + i);
+      key = normalizeText(key,'field_' + i);
+      var value = '';
+      if(c.tagName && c.tagName.toLowerCase() === 'select') value = c.options && c.selectedIndex >= 0 ? c.options[c.selectedIndex].text || c.value : c.value;
+      else value = c.value;
+      value = normalizeText(value,'');
+      if(value) fields[key] = value;
+      var labelKey = labelForControl(c);
+      if(labelKey && value) fields[labelKey] = value;
+    }
+    return fields;
+  }
+
+  function getSpecificPlatform(fields){
+    var platformType = pickField(fields,['Select Platform Type','platformType','type','category']);
+    var social = pickField(fields,['Social Platforms','socialPlatform']);
+    var professional = pickField(fields,['Professional Platforms','professionalPlatform']);
+    var specific = social || professional;
+    if(platformType && specific) return platformType + ' - ' + specific;
+    return platformType || specific || 'General Collaboration';
+  }
+
+  function collectFormData(form){
+    var fields = collectFormFields(form);
+    var name = normalizeText(pickField(fields,['name','fullName','full_name','Your Name','Applicant Name','applicantName','collaboratorName','contactName','yourName','userName']),'X Horizon Applicant');
+    var link = normalizeText(pickField(fields,['Share URL of Platform','Platform URL','link','platformLink','website','url','socialLink','profileLink','pageLink','channelLink']),'');
+    var platform = normalizeText(pickField(fields,['platform','platformName','Platform Name','pageName','projectName','organization','websiteName','channelName','communityName']),'');
+
+    if(!platform){
+      var selected = pickField(fields,['Professional Platforms','Social Platforms','Select Platform Type']);
+      var domain = domainFromUrl(link);
+      platform = selected && domain ? selected + ' - ' + domain : (domain || selected || 'Collaboration Platform');
+    }
+
+    var subject = normalizeText(pickField(fields,['subject','Purpose','purpose','reason']),'');
+    var describe = normalizeText(pickField(fields,['Describe','description','message','details','about','notes']),'');
+    var note = subject && describe ? subject + ' | ' + describe : (subject || describe);
+
+    return {name:name,platform:platform,link:link,category:getSpecificPlatform(fields),email:normalizeText(pickField(fields,['email_from','email','Email','contactEmail','mail','gmail','Your Email']),''),note:normalizeText(note,''),rawFields:fields};
+  }
+
+  function buildFingerprint(data){
+    return [data.email || '',data.link || '',data.platform || '',data.name || '',data.note || ''].join('|').toLowerCase().replace(/\s+/g,' ').trim();
+  }
+
+  function validateExternalForm(form){
+    if(!form) return false;
+    var controls = form.querySelectorAll('input, select, textarea');
+    for(var i=0;i<controls.length;i++){
+      var control = controls[i];
+      if(!control || control.disabled || control.type === 'hidden') continue;
+      var wrap = control.closest ? control.closest('.s_website_form_field') : null;
+      var markedRequired = control.hasAttribute('required') || (wrap && (wrap.classList.contains('s_website_form_required') || wrap.classList.contains('s_website_form_model_required')));
+      if(markedRequired){
+        var type = (control.type || '').toLowerCase();
+        if((type === 'checkbox' || type === 'radio') && control.name){
+          var group = form.querySelectorAll('[name="' + safeCssIdent(control.name) + '"]');
+          var checked = false;
+          for(var g=0;g<group.length;g++) if(group[g].checked) checked = true;
+          if(!checked){ showToast('Please complete all required collaboration form fields first.'); return false; }
+        }else if(!normalizeText(control.value,'')){
+          showToast('Please complete all required collaboration form fields first.');
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  async function registerApplicantFromForm(form){
+    if(!db || !fb){ showToast('Firestore storage is not connected yet.'); return false; }
+
+    var applicants = getActiveApplicants();
+    if(applicants.length >= limit){
+      renderApplicants();
+      showToast('The collaboration gate is full. It will reopen automatically at 12:00 AM.');
+      return false;
+    }
+
+    if(!validateExternalForm(form)) return false;
+
+    var stamped = Number(form.getAttribute('data-astrox-last-register') || '0');
+    if(now() - stamped < 1800) return true;
+    form.setAttribute('data-astrox-last-register', String(now()));
+
+    var data = collectFormData(form);
+    var fingerprint = buildFingerprint(data);
+    for(var i=0;i<applicants.length;i++){
+      if(applicants[i].fingerprint && applicants[i].fingerprint === fingerprint){
+        showToast('This application is already stored in today’s collaboration cycle.');
+        return true;
+      }
+    }
+
+    try{
+      await fb.addDoc(fb.collection(db, collectionName), {
+        name:data.name,
+        platform:data.platform,
+        link:data.link,
+        category:data.category,
+        email:data.email,
+        note:data.note,
+        rawFields:data.rawFields || {},
+        status:'pending',
+        fingerprint:fingerprint,
+        submittedAtMs:now(),
+        submittedAt:fb.serverTimestamp(),
+        source:'astrox-collaboration-form',
+        pageUrl:window.location.href
+      });
+      showSubmitSuccessPopup();
+      try{ form.reset(); }catch(err){}
+      return true;
+    }catch(err){
+      console.error('X Horizon Firestore submit error:', err);
+      showToast('Firestore submit failed. Check Firestore rules and allowed fields.');
+      return false;
+    }
+  }
+
+  async function updateApplicantStatus(id,status){
+    id = normalizeText(id,'');
+    if(!id){ showToast('Application ID missing. Refresh the review list and try again.'); return false; }
+    if(!isAdminUnlocked()){ showToast('Admin review mode is locked.'); return false; }
+    if(['pending','accepted','rejected'].indexOf(status) === -1) return false;
+    if(!db || !fb){ showToast('Firestore storage is not connected yet.'); return false; }
+    try{
+      await fb.updateDoc(fb.doc(db, collectionName, id), {status:status,reviewedAtMs:now(),reviewedAt:fb.serverTimestamp()});
+      showToast('Applicant status updated to ' + status + '.');
+      return true;
+    }catch(err){
+      console.error('X Horizon Firestore update error:', err);
+      showToast('Status update failed. Check admin unlock and Firestore rules.');
+      return false;
+    }
+  }
+
+  function attachForm(form){
+    if(!form || form.__astroxFirestoreBound) return;
+    form.__astroxFirestoreBound = true;
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+      registerApplicantFromForm(form);
+      return false;
+    },true);
+  }
+
+  function attachExternalSubmitButtons(){
+    var root = getExternalFormRoot();
+    var form = getExternalForm();
+    if(!root || !form) return;
+    attachForm(form);
+    if(root.__astroxExternalSubmitBound) return;
+    root.__astroxExternalSubmitBound = true;
+    root.addEventListener('click',function(e){
+      var target = e.target;
+      var submit = target && target.closest ? target.closest('.s_website_form_send, button[type="submit"], input[type="submit"], [data-astrox-submit]') : null;
+      if(!submit || !root.contains(submit)) return;
+      e.preventDefault();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+      registerApplicantFromForm(form);
+      return false;
+    },true);
+  }
+
+  function scanForms(){
+    var selectors = ['#collaborationForm form','section#collaborationForm form','.s_website_form#collaborationForm form','form#collaborationForm','form#astroxCollaborationForm','form[data-astrox-collaboration-form]','form.astrox-collaboration-form','.s_website_form form','form.s_website_form','.o_website_form form','form.o_website_form'];
+    for(var s=0;s<selectors.length;s++){
+      var found = document.querySelectorAll(selectors[s]);
+      for(var i=0;i<found.length;i++) attachForm(found[i]);
+    }
+    attachExternalSubmitButtons();
+  }
+
+  function listenApplicants(){
+    if(!db || !fb) return;
+    var since = getCycleStartMs();
+    lastQuerySince = since;
+    lastListenAt = now();
+    if(unsubscribeApplicants) unsubscribeApplicants();
+    var q = fb.query(fb.collection(db, collectionName), fb.where('submittedAtMs','>=',since));
+    unsubscribeApplicants = fb.onSnapshot(q,function(snapshot){
+      connected = true;
+      connecting = false;
+      activeApplicants = snapshot.docs.map(function(d){ var data = d.data() || {}; data.id = d.id; return data; });
+      renderApplicants();
+      scanForms();
+    },function(err){
+      console.error('X Horizon Firestore listener error:', err);
+      connected = false;
+      connecting = false;
+      renderApplicants();
+      showToast('Firestore connection failed. Check rules and Firebase config.');
+    });
+  }
+
+  function waitForUnlockSystem(){
+    return new Promise(function(resolve){
+      if(window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock === 'function') return resolve(window.XHorizonAdmin);
+      var tries = 0;
+      var timer = setInterval(function(){
+        tries++;
+        if(window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock === 'function'){
+          clearInterval(timer);
+          resolve(window.XHorizonAdmin);
+        }else if(tries > 16){
+          clearInterval(timer);
+          resolve(null);
+        }
+      },120);
+    });
+  }
+
+  async function requestAdminUnlock(code){
+    var cleanCode = normalizeText(code,'');
+    if(!cleanCode){ showToast('Admin unlock warning: enter the admin key in the search bar. Verification is Firebase-only.'); return false; }
+    try{
+      var bridge = await waitForUnlockSystem();
+      if(!bridge || typeof bridge.unlock !== 'function'){
+        showToast('Admin unlock system is not ready. Check Firebase Auth and Functions setup.');
+        return false;
+      }
+      var callbackDone = false;
+      var ok = await Promise.resolve(bridge.unlock(cleanCode,function(){
+        callbackDone = true;
+        adminVerified = true;
+        sessionStorage.setItem(adminSessionKey,'firebase');
+        renderApplicants();
+      }));
+      if(ok){
+        if(!callbackDone){
+          adminVerified = true;
+          sessionStorage.setItem(adminSessionKey,'firebase');
+          renderApplicants();
+        }
+        return true;
+      }
+      return false;
+    }catch(err){
+      console.error('X Horizon admin unlock failed:', err);
+      return false;
+    }
+  }
+
+  function setupAdminBridge(app, authModule, functionsModule){
+    try{
+      if(!app || !authModule || !functionsModule) return;
+      var auth = authModule.getAuth(app);
+      var functions = functionsModule.getFunctions(app);
+      if(!window.XHorizonAdmin || typeof window.XHorizonAdmin.unlock !== 'function'){
+        window.XHorizonAdmin = {
+          unlock: async function(key, done){
+            var cleanKey = normalizeText(key,'');
+            if(!cleanKey || !auth || !functions) return false;
+            try{
+              var verifyAdminKey = functionsModule.httpsCallable(functions,'verifyAdminKey');
+              var result = await verifyAdminKey({ key: cleanKey });
+              var data = result && result.data ? result.data : {};
+              var customToken = data.token || data.customToken || data.firebaseToken || '';
+              if(customToken) await authModule.signInWithCustomToken(auth, customToken);
+              var user = auth.currentUser;
+              if(!user) return false;
+              var tokenResult = await user.getIdTokenResult(true);
+              var allowed = tokenResult && tokenResult.claims && tokenResult.claims.admin === true;
+              if(allowed){
+                adminVerified = true;
+                sessionStorage.setItem(adminSessionKey,'firebase');
+                if(typeof done === 'function') done();
+                return true;
+              }
+              return false;
+            }catch(error){
+              console.error('X Horizon unlock failed:', error);
+              return false;
+            }
+          }
+        };
+      }
+      if(typeof authModule.onAuthStateChanged === 'function'){
+        authModule.onAuthStateChanged(auth, async function(user){
+          if(!user) return;
+          try{
+            var tokenResult = await user.getIdTokenResult(true);
+            if(tokenResult && tokenResult.claims && tokenResult.claims.admin === true){
+              adminVerified = true;
+              sessionStorage.setItem(adminSessionKey,'firebase');
+              renderApplicants();
+            }
+          }catch(error){ console.error('X Horizon admin state check failed:', error); }
+        });
+      }
+    }catch(error){ console.error('X Horizon admin bridge setup failed:', error); }
+  }
+
+  async function unlockOrLockAdmin(){
+    var search = document.getElementById('astroxApplicantSearch');
+    var btn = document.getElementById('astroxAdminUnlockBtn');
+    if(isAdminUnlocked()){
+      adminVerified = false;
+      sessionStorage.removeItem(adminSessionKey);
+      renderApplicants();
+      showToast('Review mode locked.');
+      return;
+    }
+    var value = normalizeText(search ? search.value : '', '');
+    if(!value){ showToast('Admin unlock warning: type the admin key in the search bar. Local search-key unlock is disabled.'); return; }
+    if(adminUnlocking) return;
+    adminUnlocking = true;
+    renderApplicants();
+    try{
+      var ok = await requestAdminUnlock(value);
+      if(ok){ if(search) search.value = ''; showToast('Review mode unlocked by Firebase.'); }
+      else showToast('Admin unlock failed. Local search-key unlock is disabled.');
+    }finally{
+      adminUnlocking = false;
+      if(btn) btn.disabled = false;
+      renderApplicants();
+    }
+  }
+
+  function handleApplicantSearch(){ renderApplicants(); }
+
+  var rulesButton = document.getElementById('astroxRulesButton');
+  var rulesPanel = document.getElementById('astroxRulesPanel');
+  if(rulesButton && rulesPanel){
+    rulesButton.addEventListener('click',function(){
+      var open = rulesPanel.style.display === 'block';
+      rulesPanel.style.display = open ? 'none' : 'block';
+      rulesButton.textContent = open ? 'SEE RULES' : 'HIDE RULES';
+      rulesButton.setAttribute('aria-expanded',open ? 'false' : 'true');
+      if(!open) setTimeout(function(){ rulesPanel.scrollIntoView({behavior:'smooth',block:'start'}); },80);
+    });
+  }
+
+  document.addEventListener('click',function(e){
+    var reviewButton = e.target && e.target.closest ? e.target.closest('[data-review-status]') : null;
+    if(reviewButton){
+      var card = reviewButton.closest('.ax-applicant-card');
+      if(card) updateApplicantStatus(card.getAttribute('data-applicant-id'), reviewButton.getAttribute('data-review-status'));
+    }
+  });
+
+  var applicantSearch = document.getElementById('astroxApplicantSearch');
+  if(applicantSearch){
+    applicantSearch.addEventListener('input', handleApplicantSearch);
+    applicantSearch.addEventListener('change', handleApplicantSearch);
+  }
+
+  var adminBtn = document.getElementById('astroxAdminUnlockBtn');
+  if(adminBtn) adminBtn.addEventListener('click', unlockOrLockAdmin);
+
+  var refreshBtn = document.getElementById('astroxRefreshApplicantsBtn');
+  if(refreshBtn){
+    refreshBtn.addEventListener('click',function(){
+      if(db && fb) listenApplicants();
+      scanForms();
+      renderApplicants();
+      showToast('Applicant list refreshed.');
+    });
+  }
+
+  var revealItems = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var observer = new IntersectionObserver(function(entries){
+      for(var i=0;i<entries.length;i++){
+        if(entries[i].isIntersecting){
+          entries[i].target.classList.add('visible');
+          observer.unobserve(entries[i].target);
+        }
+      }
+    },{threshold:.16,rootMargin:'0px 0px -8% 0px'});
+    for(var r=0;r<revealItems.length;r++) observer.observe(revealItems[r]);
+  }else{
+    for(var j=0;j<revealItems.length;j++) revealItems[j].classList.add('visible');
+  }
+
+  if('MutationObserver' in window){
+    var formObserver = new MutationObserver(function(){ scanForms(); });
+    formObserver.observe(document.documentElement,{childList:true,subtree:true});
+  }
+
+  window.AstroXCollaborationGate = {
+    limit:limit,
+    collection:collectionName,
+    formRootId:'collaborationForm',
+    getDeliveredToday:function(){ return getActiveApplicants().length; },
+    getRemainingToday:function(){ return Math.max(0,limit-getActiveApplicants().length); },
+    getApplicants:function(){ return getActiveApplicants().slice(); },
+    getCycleStart:function(){ return getCycleStartMs(); },
+    getNextReset:function(){ return getNextCycleStartMs(); },
+    getCycleDate:function(){ return getCycleDateKey(); },
+    canSubmit:function(){ return connected && getActiveApplicants().length < limit; },
+    bindForm:function(){ scanForms(); },
+    unlockReview:function(code){ return requestAdminUnlock(code); },
+    lockReview:function(){ adminVerified = false; sessionStorage.removeItem(adminSessionKey); renderApplicants(); }
+  };
+
+  scanForms();
+  renderApplicants();
+  setStorageText('Storage connecting');
+
+  Promise.all([
+    import('https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js')
+  ]).then(function(modules){
+    var appModule = modules[0];
+    fb = modules[1];
+    var app = appModule.getApps && appModule.getApps().length ? appModule.getApp() : appModule.initializeApp(firebaseConfig);
+    db = fb.getFirestore(app);
+    Promise.all([
+      import('https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js'),
+      import('https://www.gstatic.com/firebasejs/12.15.0/firebase-functions.js')
+    ]).then(function(adminModules){
+      setupAdminBridge(app, adminModules[0], adminModules[1]);
+    }).catch(function(err){ console.error('X Horizon admin unlock SDK did not load:', err); });
+    connected = true;
+    connecting = false;
+    listenApplicants();
+    scanForms();
+    renderApplicants();
+  }).catch(function(err){
+    console.error('X Horizon Firebase load error:', err);
+    connected = false;
+    connecting = false;
+    renderApplicants();
+    showToast('Firebase SDK did not load. Check internet/CDN access and Firebase config.');
+  });
+
+  setInterval(function(){
+    var currentCycleStart = getCycleStartMs();
+    if(db && fb && (lastQuerySince !== currentCycleStart || now() - lastListenAt > 60000)) listenApplicants();
+    scanForms();
+    renderApplicants();
+  },1000);
+})();
+</script>
