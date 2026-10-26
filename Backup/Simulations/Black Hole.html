@@ -1,0 +1,963 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Horizon — Black Hole &amp; Relativity Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --hzn-bg:#000;
+    --hzn-ink:#fff;
+    --hzn-ink-80: rgba(255,255,255,.82);
+    --hzn-ink-55: rgba(255,255,255,.55);
+    --hzn-ink-38: rgba(255,255,255,.38);
+    --hzn-ink-22: rgba(255,255,255,.16);
+    --hzn-ink-10: rgba(255,255,255,.09);
+    --hzn-panel: rgba(6,6,7,.58);
+    --hzn-panel-solid:#08080a;
+    --hzn-mono:'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --hzn-sans:'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    --hzn-display:'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  }
+  .hzn-root, .hzn-root *{ box-sizing:border-box; }
+  html.hzn-lock, .hzn-root{ margin:0; padding:0; }
+  html.hzn-lock, .hzn-root, .hzn-root body{ height:100%; }
+  .hzn-root{
+    position:fixed; inset:0; background:var(--hzn-bg); overflow:hidden;
+    font-family:var(--hzn-sans); color:var(--hzn-ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  @supports (height: 100dvh){
+    .hzn-root{ height:100dvh; }
+  }
+  .hzn-root #hzn-canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none; }
+
+  .hzn-root a{ color:inherit; }
+
+  /* ---------- panel toggle ---------- */
+  .hzn-toggle{
+    position:absolute; top:16px; left:18px; z-index:30;
+    display:flex; align-items:center; gap:8px;
+    background:var(--hzn-panel); border:1px solid var(--hzn-ink-22);
+    backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%);
+    color:var(--hzn-ink-80); font-family:var(--hzn-display); font-size:11px; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; padding:9px 14px 9px 12px;
+    border-radius:999px; cursor:pointer; user-select:none;
+    animation: hzn-fade-in .9s ease both;
+    transition: border-color .2s ease, color .2s ease;
+  }
+  .hzn-toggle:hover{ border-color:var(--hzn-ink-55); color:var(--hzn-ink); }
+  .hzn-toggle:focus-visible{ outline:1px solid var(--hzn-ink); outline-offset:2px; }
+  .hzn-toggle svg{ width:13px; height:13px; flex:none; }
+
+  /* ---------- control panel ---------- */
+  .hzn-panel{
+    position:absolute; top:0; left:0; bottom:0; z-index:25;
+    width:342px; max-width:88vw;
+    background:var(--hzn-panel);
+    border-right:1px solid var(--hzn-ink-22);
+    backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%);
+    transform:translateX(-104%); transition: transform .38s cubic-bezier(.19,1,.22,1);
+    display:flex; flex-direction:column;
+  }
+  .hzn-panel.is-open{ transform:translateX(0); }
+  .hzn-panel-scroll{ overflow-y:auto; overflow-x:hidden; padding:64px 20px 26px; flex:1; }
+  .hzn-panel-scroll::-webkit-scrollbar{ width:6px; }
+  .hzn-panel-scroll::-webkit-scrollbar-thumb{ background:var(--hzn-ink-22); border-radius:3px; }
+
+  .hzn-panel-head{
+    position:absolute; top:0; left:0; right:0; height:56px; z-index:2;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 16px 0 20px; border-bottom:1px solid var(--hzn-ink-10);
+    background:linear-gradient(var(--hzn-panel-solid), rgba(8,8,10,.2));
+  }
+  .hzn-panel-title{ font-family:var(--hzn-display); font-size:13px; font-weight:600; letter-spacing:.04em; }
+  .hzn-panel-title span{ display:block; font-family:var(--hzn-sans); font-weight:400; font-size:9.5px; letter-spacing:.22em; color:var(--hzn-ink-38); text-transform:uppercase; margin-top:2px; }
+  .hzn-close{ background:none; border:1px solid var(--hzn-ink-22); color:var(--hzn-ink-55); width:26px; height:26px; border-radius:50%; cursor:pointer; font-size:13px; line-height:1; display:flex; align-items:center; justify-content:center; transition:.2s; }
+  .hzn-close:hover{ color:var(--hzn-ink); border-color:var(--hzn-ink-55); }
+
+  .hzn-group{ margin-bottom:22px; }
+  .hzn-group-label{
+    font-family:var(--hzn-display); font-size:10.5px; font-weight:600; letter-spacing:.24em;
+    text-transform:uppercase; color:var(--hzn-ink-55); margin:0 0 12px; padding-top:2px;
+    border-top:1px solid var(--hzn-ink-10); padding-top:14px;
+  }
+  .hzn-group:first-child .hzn-group-label{ border-top:none; padding-top:0; }
+
+  .hzn-stats{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px 14px;
+    background:rgba(255,255,255,.035); border:1px solid var(--hzn-ink-10); border-radius:10px;
+    padding:14px 14px 12px; margin-bottom:22px;
+  }
+  .hzn-stat{ min-width:0; }
+  .hzn-stat-k{ font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--hzn-ink-38); }
+  .hzn-stat-v{ font-family:var(--hzn-mono); font-size:12.5px; color:var(--hzn-ink); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .hzn-stat-v small{ color:var(--hzn-ink-38); font-size:10px; }
+
+  .hzn-row{ margin-bottom:15px; }
+  .hzn-row-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:7px; gap:8px; }
+  .hzn-row-label{ font-size:11.5px; color:var(--hzn-ink-80); }
+  .hzn-row-val{ font-family:var(--hzn-mono); font-size:11px; color:var(--hzn-ink-55); white-space:nowrap; }
+
+  input[type=range].hzn-slider{
+    -webkit-appearance:none; appearance:none; width:100%; height:16px; background:transparent; cursor:pointer; margin:0;
+  }
+  input[type=range].hzn-slider::-webkit-slider-runnable-track{ height:2px; background:var(--hzn-ink-22); border-radius:2px; }
+  input[type=range].hzn-slider::-moz-range-track{ height:2px; background:var(--hzn-ink-22); border-radius:2px; }
+  input[type=range].hzn-slider::-webkit-slider-thumb{
+    -webkit-appearance:none; width:12px; height:12px; margin-top:-5px; border-radius:50%;
+    background:var(--hzn-ink); border:2px solid #000; box-shadow:0 0 0 1px var(--hzn-ink-38);
+  }
+  input[type=range].hzn-slider::-moz-range-thumb{
+    width:12px; height:12px; border-radius:50%; background:var(--hzn-ink); border:2px solid #000; box-shadow:0 0 0 1px var(--hzn-ink-38);
+  }
+  input[type=range].hzn-slider:disabled{ opacity:.35; pointer-events:none; }
+  input[type=range].hzn-slider:focus-visible::-webkit-slider-thumb{ outline:1px solid var(--hzn-ink); outline-offset:2px; }
+
+  .hzn-check{ display:flex; align-items:center; justify-content:space-between; padding:8px 0; font-size:11.5px; color:var(--hzn-ink-80); border-top:1px solid var(--hzn-ink-10); }
+  .hzn-group > .hzn-check:first-of-type{ border-top:none; }
+  .hzn-switch{ position:relative; width:32px; height:18px; flex:none; }
+  .hzn-switch input{ position:absolute; inset:0; opacity:0; margin:0; cursor:pointer; }
+  .hzn-switch-track{ position:absolute; inset:0; background:var(--hzn-ink-22); border-radius:999px; transition:.2s; }
+  .hzn-switch-dot{ position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:var(--hzn-ink-55); transition:.2s; }
+  .hzn-switch input:checked + .hzn-switch-track{ background:rgba(255,255,255,.32); }
+  .hzn-switch input:checked + .hzn-switch-track + .hzn-switch-dot{ transform:translateX(14px); background:var(--hzn-ink); }
+
+  .hzn-presets{ display:flex; gap:7px; flex-wrap:wrap; margin-bottom:16px; }
+  .hzn-preset{
+    flex:1 1 auto; background:none; border:1px solid var(--hzn-ink-22); color:var(--hzn-ink-55);
+    font-family:var(--hzn-mono); font-size:10px; letter-spacing:.02em; padding:7px 8px; border-radius:7px; cursor:pointer;
+    transition:.15s;
+  }
+  .hzn-preset:hover{ border-color:var(--hzn-ink-55); color:var(--hzn-ink); }
+  .hzn-preset.is-active{ background:var(--hzn-ink); color:#000; border-color:var(--hzn-ink); }
+
+  .hzn-reset{
+    width:100%; margin-top:4px; background:none; border:1px solid var(--hzn-ink-22); color:var(--hzn-ink-55);
+    font-family:var(--hzn-sans); font-size:11px; padding:9px; border-radius:8px; cursor:pointer; transition:.15s;
+  }
+  .hzn-reset:hover{ border-color:var(--hzn-ink-55); color:var(--hzn-ink); }
+
+  .hzn-notes{ font-size:10px; line-height:1.6; color:var(--hzn-ink-38); border-top:1px solid var(--hzn-ink-10); padding-top:14px; margin-top:4px; }
+  .hzn-notes b{ color:var(--hzn-ink-55); font-weight:600; }
+
+  /* ---------- bottom hint ---------- */
+  .hzn-hint{
+    position:absolute; bottom:16px; left:0; right:0; text-align:center; z-index:5;
+    color:var(--hzn-ink-38); font:10px/1 var(--hzn-mono); letter-spacing:.28em; text-transform:uppercase;
+    pointer-events:none; animation: hzn-fade-in 1.2s ease both;
+  }
+
+  @keyframes hzn-fade-in{ from{ opacity:0; transform:translateY(-6px);} to{ opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce){
+    .hzn-panel{ transition:none; }
+    .hzn-toggle, .hzn-hint{ animation:none; }
+  }
+
+  @media (max-width:860px){
+    .hzn-panel{ width:88vw; }
+  }
+
+  /* ---------- mobile responsiveness ---------- */
+  @media (max-width:640px){
+    .hzn-toggle{
+      top: calc(14px + env(safe-area-inset-top, 0px));
+      left: calc(14px + env(safe-area-inset-left, 0px));
+      padding:10px 14px 10px 12px;
+    }
+    .hzn-hint{ bottom: calc(12px + env(safe-area-inset-bottom, 0px)); font-size:9px; letter-spacing:.2em; }
+    .hzn-close{ width:32px; height:32px; font-size:15px; }
+    .hzn-stats{ grid-template-columns:1fr; }
+    .hzn-panel-scroll{ padding:60px 16px 22px; }
+    input[type=range].hzn-slider{ height:22px; }
+    input[type=range].hzn-slider::-webkit-slider-thumb{ width:18px; height:18px; margin-top:-8px; }
+    input[type=range].hzn-slider::-moz-range-thumb{ width:18px; height:18px; }
+  }
+  @media (max-width:380px){
+    .hzn-panel{ width:100vw; max-width:100vw; }
+  }
+  body > header,
+body > .o_header,
+body > #wrapwrap > header,
+#wrapwrap > header,
+.o_main_navbar,
+.o_header_standard,
+.o_header_affix,
+header#top {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+}
+</style>
+
+
+<div class="hzn-root">
+  <canvas id="hzn-canvas"></canvas>
+
+  <button class="hzn-toggle" id="hznToggle" aria-expanded="false" aria-controls="hznPanel" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3.2"></circle><path d="M4 12h3M17 12h3M12 4v3M12 17v3M6.3 6.3l2.1 2.1M15.6 15.6l2.1 2.1M6.3 17.7l2.1-2.1M15.6 8.4l2.1-2.1"></path></svg>
+    Lab controls
+  </button>
+
+  <aside class="hzn-panel" id="hznPanel">
+    <div class="hzn-panel-head">
+      <div class="hzn-panel-title">Relativity Lab<span>Live GR parameters</span></div>
+      <button class="hzn-close" id="hznClose" aria-label="Close panel" type="button">✕</button>
+    </div>
+    <div class="hzn-panel-scroll">
+
+      <div class="hzn-stats" id="hznStats"></div>
+
+      <div class="hzn-group">
+        <div class="hzn-group-label">Black hole</div>
+        <div class="hzn-presets">
+          <button class="hzn-preset" data-preset="stellar" type="button">Stellar 10M☉</button>
+          <button class="hzn-preset" data-preset="sgra" type="button">Sgr A*</button>
+          <button class="hzn-preset" data-preset="m87" type="button">M87*</button>
+        </div>
+        <div class="hzn-row">
+          <div class="hzn-row-head"><span class="hzn-row-label">Mass</span><span class="hzn-row-val" id="vMass">10 M☉</span></div>
+          <input type="range" class="hzn-slider" id="sMass" min="0" max="10.3" step="0.01" value="1">
+        </div>
+        <div class="hzn-row">
+          <div class="hzn-row-head"><span class="hzn-row-label">Spin a<sup>*</sup> = a/M</span><span class="hzn-row-val" id="vSpin">0.00</span></div>
+          <input type="range" class="hzn-slider" id="sSpin" min="0" max="0.98" step="0.01" value="0">
+        </div>
+      </div>
+
+      <div class="hzn-group">
+        <div class="hzn-group-label">Accretion disk</div>
+        <div class="hzn-check">
+          <span>Snap inner edge to ISCO</span>
+          <label class="hzn-switch"><input type="checkbox" id="cSnap" checked=""><span class="hzn-switch-track"></span><span class="hzn-switch-dot"></span></label>
+        </div>
+        <div class="hzn-row">
+          <div class="hzn-row-head"><span class="hzn-row-label">Inner radius</span><span class="hzn-row-val" id="vDiskIn">3.0 r_s</span></div>
+          <input type="range" class="hzn-slider" id="sDiskIn" min="1.5" max="9" step="0.1" value="3">
+        </div>
+        <div class="hzn-row">
+          <div class="hzn-row-head"><span class="hzn-row-label">Outer radius</span><span class="hzn-row-val" id="vDiskOut">11.0 r_s</span></div>
+          <input type="range" class="hzn-slider" id="sDiskOut" min="4" max="30" step="0.5" value="11">
+        </div>
+        <div class="hzn-row">
+          <div class="hzn-row-head"><span class="hzn-row-label">Density / opacity</span><span class="hzn-row-val" id="vDens">0.40</span></div>
+          <input type="range" class="hzn-slider" id="sDens" min="0.1" max="0.9" step="0.01" value="0.4">
+        </div>
+        <div class="hzn-row">
+          <div class="hzn-row-head"><span class="hzn-row-label">Brightness</span><span class="hzn-row-val" id="vBright">1.00</span></div>
+          <input type="range" class="hzn-slider" id="sBright" min="0.4" max="2.5" step="0.01" value="1">
+        </div>
+        <div class="hzn-row">
+          <div class="hzn-row-head"><span class="hzn-row-label">Swirl rate</span><span class="hzn-row-val" id="vSwirl">1.00×</span></div>
+          <input type="range" class="hzn-slider" id="sSwirl" min="0" max="3" step="0.05" value="1">
+        </div>
+      </div>
+
+      <div class="hzn-group">
+        <div class="hzn-group-label">Observer</div>
+        <div class="hzn-row">
+          <div class="hzn-row-head"><span class="hzn-row-label">Distance</span><span class="hzn-row-val" id="vDist">24.0 r_s</span></div>
+          <input type="range" class="hzn-slider" id="sDist" min="6" max="55" step="0.5" value="24">
+        </div>
+        <div class="hzn-row">
+          <div class="hzn-row-head"><span class="hzn-row-label">Field of view</span><span class="hzn-row-val" id="vFov">Normal</span></div>
+          <input type="range" class="hzn-slider" id="sFov" min="0.8" max="3" step="0.05" value="1.5">
+        </div>
+      </div>
+
+      <div class="hzn-group">
+        <div class="hzn-group-label">Render</div>
+        <div class="hzn-check"><span>Doppler beaming</span><label class="hzn-switch"><input type="checkbox" id="cDoppler" checked=""><span class="hzn-switch-track"></span><span class="hzn-switch-dot"></span></label></div>
+        <div class="hzn-check"><span>Gravitational redshift</span><label class="hzn-switch"><input type="checkbox" id="cRedshift" checked=""><span class="hzn-switch-track"></span><span class="hzn-switch-dot"></span></label></div>
+        <div class="hzn-check"><span>Frame dragging (spin, approx.)</span><label class="hzn-switch"><input type="checkbox" id="cFrameDrag" checked=""><span class="hzn-switch-track"></span><span class="hzn-switch-dot"></span></label></div>
+        <div class="hzn-check"><span>Bloom / glow</span><label class="hzn-switch"><input type="checkbox" id="cBloom" checked=""><span class="hzn-switch-track"></span><span class="hzn-switch-dot"></span></label></div>
+        <div class="hzn-check"><span>Starfield</span><label class="hzn-switch"><input type="checkbox" id="cStars" checked=""><span class="hzn-switch-track"></span><span class="hzn-switch-dot"></span></label></div>
+        <div class="hzn-check"><span>Reference rings (Schwarzschild)</span><label class="hzn-switch"><input type="checkbox" id="cRings"><span class="hzn-switch-track"></span><span class="hzn-switch-dot"></span></label></div>
+        <div class="hzn-row" style="margin-top:12px;">
+          <div class="hzn-row-head"><span class="hzn-row-label">Ray quality</span><span class="hzn-row-val" id="vSteps">420 steps</span></div>
+          <input type="range" class="hzn-slider" id="sSteps" min="150" max="700" step="10" value="420">
+        </div>
+        <div class="hzn-row">
+          <div class="hzn-row-head"><span class="hzn-row-label">Bloom strength</span><span class="hzn-row-val" id="vBloom">0.70</span></div>
+          <input type="range" class="hzn-slider" id="sBloom" min="0" max="2" step="0.05" value="0.7">
+        </div>
+      </div>
+
+      <button class="hzn-reset" id="hznReset" type="button">Reset to defaults</button>
+
+      <div class="hzn-notes">
+        <b>Exact:</b> null-geodesic ray tracing (Schwarzschild), Kerr horizon / ISCO / photon-sphere formulas (Bardeen et al. 1972).<br>
+        <b>Approximate:</b> spin is rendered as weak-field frame dragging, not full Kerr ray tracing — reference rings shown are the non-spinning values. Disk colour is a visible-light remap of an idealised thin-disk model; real inner-disk emission peaks in UV/X-ray.
+      </div>
+
+    </div>
+  </aside>
+
+  <div class="hzn-hint" id="hznHint">Drag to orbit · Scroll to zoom</div>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.171.0/build/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+
+/* =========================================================================
+   PHYSICS — closed-form Schwarzschild / Kerr relations (Bardeen, Press &
+   Teukolsky 1972 for spin-dependent horizon / ISCO / photon-sphere radii).
+   Used to drive the stats readout and to keep slider ranges honest.
+   ========================================================================= */
+const G = 6.674e-11, C = 2.998e8, MSUN = 1.989e30, GEARTH = 9.80665;
+
+function schwRadiusM(Msolar){ return 2*G*(Msolar*MSUN)/(C*C); } // metres
+function iscoOverM(aStar, prograde){
+  const Z1 = 1 + Math.cbrt(1 - aStar*aStar) * (Math.cbrt(1+aStar) + Math.cbrt(1-aStar));
+  const Z2 = Math.sqrt(3*aStar*aStar + Z1*Z1);
+  const s = prograde ? -1 : 1;
+  return 3 + Z2 + s*Math.sqrt((3-Z1)*(3+Z1+2*Z2));
+}
+function photonSphereOverM(aStar, prograde){
+  const s = prograde ? -1 : 1;
+  return 2*(1 + Math.cos((2/3)*Math.acos(s*aStar)));
+}
+function horizonOverM(aStar){ return 1 + Math.sqrt(Math.max(0, 1 - aStar*aStar)); }
+function hawkingTempK(Msolar){ return 6.169e-8 / Msolar; }
+function iscoPeriodSeconds(Msolar, aStar){
+  const rs = schwRadiusM(Msolar);
+  const rIscoM = (iscoOverM(aStar, true) / 2) * rs; // metres
+  const GM = G*Msolar*MSUN;
+  return 2*Math.PI*Math.sqrt(Math.pow(rIscoM,3)/GM);
+}
+function tidalAccelAtHorizon_g(Msolar, deltaR){
+  const rs = schwRadiusM(Msolar);
+  const GM = G*Msolar*MSUN;
+  return (2*GM*deltaR/Math.pow(rs,3)) / GEARTH;
+}
+function timeDilationAt(rInRs){ return 1/Math.sqrt(Math.max(1e-6, 1 - 1/rInRs)); }
+
+function fmtLen(m){
+  if (m >= 9.46e15) return (m/9.46e15).toFixed(2)+' ly';
+  if (m >= 1.496e11) return (m/1.496e11).toFixed(3)+' AU';
+  if (m >= 1000) return (m/1000).toPrecision(3)+' km';
+  return m.toFixed(1)+' m';
+}
+function fmtTime(s){
+  if (s >= 3.156e7) return (s/3.156e7).toPrecision(3)+' yr';
+  if (s >= 86400) return (s/86400).toPrecision(3)+' days';
+  if (s >= 3600) return (s/3600).toPrecision(3)+' hr';
+  if (s >= 60) return (s/60).toPrecision(3)+' min';
+  return s.toPrecision(3)+' s';
+}
+function fmtSci(x, unit){
+  if (x === 0) return '0 '+unit;
+  const e = Math.floor(Math.log10(Math.abs(x)));
+  if (e >= -2 && e < 4) return x.toPrecision(3)+' '+unit;
+  const mant = x/Math.pow(10,e);
+  return mant.toFixed(2)+'e'+e+' '+unit;
+}
+
+/* =========================================================================
+   STATE
+   ========================================================================= */
+const isSmallScreen = window.innerWidth <= 760;
+const isLowPower = (navigator.hardwareConcurrency || 4) <= 4;
+const isConstrainedDevice = isSmallScreen || isLowPower;
+
+const DEFAULTS = {
+  massLog: 1.0, spin: 0.0,
+  diskInner: 3.0, diskOuter: 11.0, diskDensity: 0.4, diskBrightness: 1.0, swirl: 1.0,
+  obsDistance: 24.0, fov: 1.5,
+  doppler: true, redshift: true, frameDrag: true, bloom: true, stars: true, rings: false,
+  steps: isConstrainedDevice ? 260 : 420, bloomStrength: isConstrainedDevice ? 0.5 : 0.7,
+  snapIsco: true,
+};
+const state = Object.assign({}, DEFAULTS);
+
+/* =========================================================================
+   DOM
+   ========================================================================= */
+const $ = (id) => document.getElementById(id);
+const el = {
+  panel: $('hznPanel'), toggle: $('hznToggle'), close: $('hznClose'), stats: $('hznStats'),
+  sMass: $('sMass'), vMass: $('vMass'), sSpin: $('sSpin'), vSpin: $('vSpin'),
+  cSnap: $('cSnap'), sDiskIn: $('sDiskIn'), vDiskIn: $('vDiskIn'), sDiskOut: $('sDiskOut'), vDiskOut: $('vDiskOut'),
+  sDens: $('sDens'), vDens: $('vDens'), sBright: $('sBright'), vBright: $('vBright'), sSwirl: $('sSwirl'), vSwirl: $('vSwirl'),
+  sDist: $('sDist'), vDist: $('vDist'), sFov: $('sFov'), vFov: $('vFov'),
+  cDoppler: $('cDoppler'), cRedshift: $('cRedshift'), cFrameDrag: $('cFrameDrag'),
+  cBloom: $('cBloom'), cStars: $('cStars'), cRings: $('cRings'),
+  sSteps: $('sSteps'), vSteps: $('vSteps'), sBloom: $('sBloom'), vBloom: $('vBloom'),
+  reset: $('hznReset'), presets: document.querySelectorAll('.hzn-preset'),
+};
+
+function openPanel(open){
+  el.panel.classList.toggle('is-open', open);
+  el.toggle.setAttribute('aria-expanded', String(open));
+}
+el.toggle.addEventListener('click', () => openPanel(!el.panel.classList.contains('is-open')));
+el.close.addEventListener('click', () => openPanel(false));
+openPanel(window.innerWidth > 860);
+
+/* =========================================================================
+   STATS PANEL
+   ========================================================================= */
+function stat(k, v){ return '<div class="hzn-stat"><div class="hzn-stat-k">'+k+'</div><div class="hzn-stat-v">'+v+'</div></div>'; }
+function updateStats(){
+  const M = Math.pow(10, state.massLog);
+  const a = state.spin;
+  const rs = schwRadiusM(M);
+  const rHorizon = (horizonOverM(a)/2) * rs;
+  const rPhotonPro = (photonSphereOverM(a, true)/2) * rs;
+  const rIscoPro = (iscoOverM(a, true)/2) * rs;
+  const rIscoRetro = (iscoOverM(a, false)/2) * rs;
+  const tHawk = hawkingTempK(M);
+  const tIsco = iscoPeriodSeconds(M, a);
+  const tidal = tidalAccelAtHorizon_g(M, 2);
+  const dil = timeDilationAt(state.obsDistance);
+
+  el.stats.innerHTML =
+    stat('Mass', M < 1000 ? M.toFixed(1)+' M<sub>☉</sub>' : fmtSci(M,'M☉')) +
+    stat('Schwarzschild r<sub>s</sub>', fmtLen(rs)) +
+    stat('Horizon r₊', fmtLen(rHorizon)) +
+    stat('Photon sphere (pro)', fmtLen(rPhotonPro)) +
+    stat('ISCO pro / retro', (rIscoPro/rs).toFixed(2)+' / '+(rIscoRetro/rs).toFixed(2)+' r_s') +
+    stat('ISCO orbital period', fmtTime(tIsco)) +
+    stat('Hawking temperature', fmtSci(tHawk,'K')) +
+    stat('Tidal accel. @ horizon', fmtSci(tidal,'g') + ' <small>/2m</small>') +
+    stat('Time dilation @ observer', dil.toFixed(3)+'×');
+}
+
+/* =========================================================================
+   THREE.JS SETUP
+   ========================================================================= */
+const canvas = $('hzn-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:false, powerPreference:'high-performance' });
+const DPR = Math.min(window.devicePixelRatio || 1, isSmallScreen ? 1.5 : 2);
+renderer.setPixelRatio(DPR);
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene = new THREE.Scene();
+const camera = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+const quad = new THREE.Mesh(new THREE.PlaneGeometry(2,2));
+scene.add(quad);
+
+const commonVertex = `
+  varying vec2 vUv;
+  void main(){ vUv = uv; gl_Position = vec4(position,1.0); }
+`;
+
+const mainFragment = `
+precision highp float;
+uniform vec2 iResolution;
+uniform float iTime;
+uniform vec3 camPos;
+uniform mat3 camMat;
+
+uniform float uSpin;
+uniform float uDiskInner;
+uniform float uDiskOuter;
+uniform float uDiskDensity;
+uniform float uDiskBrightness;
+uniform float uBaseKelvin;
+uniform float uSwirl;
+uniform float uDoppler;
+uniform float uRedshift;
+uniform float uFrameDrag;
+uniform float uStars;
+uniform float uRings;
+uniform float uSteps;
+
+#define MAX_STEPS 900
+#define HORIZON 1.0
+
+float hash21(vec2 p){ p = fract(p*vec2(123.34,345.45)); p += dot(p,p+34.345); return fract(p.x*p.y); }
+
+float vnoise(vec2 p){
+  vec2 i = floor(p); vec2 f = fract(p); vec2 u = f*f*(3.0-2.0*f);
+  float a = hash21(i), b = hash21(i+vec2(1.0,0.0)), c = hash21(i+vec2(0.0,1.0)), d = hash21(i+vec2(1.0,1.0));
+  return mix(mix(a,b,u.x), mix(c,d,u.x), u.y);
+}
+float fbm(vec2 p){
+  float v=0.0, a=0.5;
+  for(int i=0;i<6;i++){ v += a*vnoise(p); p *= 2.02; a *= 0.5; }
+  return v;
+}
+
+vec3 starField(vec3 dir){
+  vec3 col = vec3(0.0);
+  vec3 ad = abs(dir);
+  vec2 uv;
+  if(ad.x>=ad.y && ad.x>=ad.z){ uv = vec2(dir.z,dir.y); }
+  else if(ad.y>=ad.x && ad.y>=ad.z){ uv = vec2(dir.x,dir.z); }
+  else { uv = vec2(dir.x,dir.y); }
+  uv *= 140.0;
+  vec2 g = floor(uv), f = fract(uv);
+  float r = hash21(g);
+  if(r > 0.965){
+    vec2 sp = vec2(hash21(g+1.0), hash21(g+2.0));
+    float d = length(f-sp);
+    float star = smoothstep(0.09,0.0,d);
+    float bright = (r-0.965)/0.035;
+    vec3 starc = mix(vec3(0.75,0.85,1.0), vec3(1.0,0.9,0.7), hash21(g+1.7));
+    col = starc*star*bright*1.8;
+  }
+  float neb = fbm(dir.xy*3.0+dir.z);
+  col += vec3(0.015,0.01,0.03)*smoothstep(0.55,1.0,neb);
+  return col;
+}
+
+vec3 kelvinToRGB(float K){
+  float t = clamp(K,1000.0,40000.0)/100.0;
+  float r,g,b;
+  if(t<=66.0){ r=255.0; } else { r=329.698727446*pow(t-60.0,-0.1332047592); }
+  if(t<=66.0){ g=99.4708025861*log(t)-161.1195681661; } else { g=288.1221695283*pow(t-60.0,-0.0755148492); }
+  if(t>=66.0){ b=255.0; } else if(t<=19.0){ b=0.0; } else { b=138.5177312231*log(t-10.0)-305.0447927307; }
+  return clamp(vec3(r,g,b)/255.0, 0.0, 1.0);
+}
+
+vec3 gravAccel(vec3 p, float h2){
+  float r = length(p);
+  return -1.5 * h2 * p / (r*r*r*r*r);
+}
+
+void main(){
+  vec2 uv = (gl_FragCoord.xy - 0.5*iResolution.xy) / iResolution.y;
+  vec3 dir = normalize(camMat * vec3(uv, 1.5));
+  vec3 pos = camPos;
+  vec3 vel = dir;
+
+  vec3 color = vec3(0.0);
+  float transmittance = 1.0;
+
+  vec3 h = cross(pos, vel);
+  float h2 = dot(h,h);
+
+  bool captured = false;
+  float minR = 999.0;
+
+  for(int i=0;i<MAX_STEPS;i++){
+    if(float(i) >= uSteps) break;
+    float r = length(pos);
+    minR = min(minR, r);
+    if(r < HORIZON){ captured = true; break; }
+    if(r > 60.0){ break; }
+
+    float dt = clamp(0.16*(r-0.6), 0.012, 0.28);
+
+    vec3 a1 = gravAccel(pos, h2);
+    vec3 velMid = normalize(vel + a1*dt*0.5);
+    vec3 posMid = pos + velMid*dt*0.5;
+    vec3 a2 = gravAccel(posMid, h2);
+    vec3 velNew = normalize(vel + a2*dt);
+
+    if(uFrameDrag > 0.5 && uSpin > 0.001){
+      float rr = max(length(posMid), 0.6);
+      float omegaLT = 2.0*uSpin/(rr*rr*rr);
+      float ang = omegaLT*dt;
+      float ca = cos(ang), sa = sin(ang);
+      vec3 vN = velNew;
+      velNew = normalize(vec3(vN.x*ca - vN.z*sa, vN.y, vN.x*sa + vN.z*ca));
+    }
+
+    vec3 newPos = pos + velNew*dt;
+
+    if(pos.y*newPos.y < 0.0){
+      float f = pos.y/(pos.y-newPos.y);
+      vec3 hitp = mix(pos,newPos,f);
+      float rd = length(hitp.xz);
+      if(rd > uDiskInner && rd < uDiskOuter){
+        float phi = atan(hitp.z, hitp.x);
+
+        vec3 orbDir = normalize(cross(vec3(0.0,1.0,0.0), hitp));
+        float speed = clamp(sqrt(0.5/rd), 0.0, 0.6);
+        vec3 orbVel = orbDir*speed;
+        float v2 = dot(orbVel,orbVel);
+        float gamma = 1.0/sqrt(max(1.0-v2,0.001));
+        vec3 viewDir = normalize(camPos-hitp);
+        float beta = dot(orbVel, viewDir);
+        float dopplerFac = uDoppler>0.5 ? 1.0/(gamma*(1.0-beta)) : 1.0;
+        float gravFac = uRedshift>0.5 ? sqrt(max(1.0-1.0/rd,0.0005)) : 1.0;
+        float gFactor = clamp(gravFac*dopplerFac, 0.12, 6.0);
+
+        float u = clamp(uDiskInner/rd, 0.0, 0.999);
+        float fluxShape = u*u*u*(1.0-sqrt(u));
+        float fluxNorm = clamp(fluxShape/0.05665, 0.0, 1.6);
+        float tempRel = pow(max(fluxNorm,0.0001), 0.25);
+        float localK = uBaseKelvin * tempRel;
+
+        vec3 base = kelvinToRGB(localK);
+
+        float swirl = iTime*uSwirl*1.4/sqrt(max(rd,0.5));
+        vec2 q = vec2(phi+swirl, log(max(rd,0.5))*2.0);
+        float n = fbm(q*vec2(2.5,4.0));
+        float n2 = fbm(q*vec2(5.0,8.0)+13.0);
+        float turb = 0.45 + 1.15*n*n2;
+        float fil = smoothstep(0.55,0.95,n);
+
+        float boost = clamp(pow(gFactor,3.0), 0.05, 4.0);
+        vec3 dc = base*(turb + fil*0.5)*fluxNorm*boost*uDiskBrightness;
+
+        float edgeFade = smoothstep(uDiskInner, uDiskInner+0.15, rd) * smoothstep(uDiskOuter, uDiskOuter-0.6, rd);
+        float dens = clamp(uDiskDensity*edgeFade, 0.0, 0.97);
+
+        color += dc*dens*transmittance;
+        transmittance *= 1.0 - dens*0.9;
+
+        if(uRings > 0.5){
+          float ring1 = smoothstep(0.03,0.0,abs(rd-1.5));
+          float ring2 = smoothstep(0.03,0.0,abs(rd-3.0));
+          color += vec3(0.45,0.9,1.0)*ring1*2.2*transmittance;
+          color += vec3(1.0,0.85,0.3)*ring2*2.2*transmittance;
+        }
+      }
+    }
+    vel = velNew;
+    pos = newPos;
+  }
+
+  if(!captured){
+    float ring = smoothstep(1.5,1.02,minR);
+    float ringSharp = smoothstep(1.3,1.02,minR);
+    color += vec3(1.0,0.78,0.26)*ring*ring*3.5*transmittance;
+    color += vec3(1.0,0.88,0.42)*ringSharp*4.6*transmittance;
+    if(uStars > 0.5){ color += starField(normalize(vel))*transmittance; }
+  } else {
+    color = vec3(0.0);
+  }
+
+  gl_FragColor = vec4(max(color, 0.0), 1.0);
+}
+`;
+
+const brightFragment = `
+precision highp float;
+uniform sampler2D uTex;
+uniform float uThreshold;
+varying vec2 vUv;
+void main(){
+  vec3 c = texture2D(uTex, vUv).rgb;
+  float lum = dot(c, vec3(0.2126,0.7152,0.0722));
+  float soft = smoothstep(uThreshold-0.18, uThreshold+0.18, lum);
+  gl_FragColor = vec4(c*soft, 1.0);
+}
+`;
+
+const blurFragment = `
+precision highp float;
+uniform sampler2D uTex;
+uniform vec2 uTexel;
+uniform vec2 uDir;
+varying vec2 vUv;
+void main(){
+  vec2 o1 = uDir*uTexel*1.3846153846;
+  vec2 o2 = uDir*uTexel*3.2307692308;
+  vec3 sum = texture2D(uTex, vUv).rgb*0.2270270270;
+  sum += texture2D(uTex, vUv+o1).rgb*0.3162162162;
+  sum += texture2D(uTex, vUv-o1).rgb*0.3162162162;
+  sum += texture2D(uTex, vUv+o2).rgb*0.0702702703;
+  sum += texture2D(uTex, vUv-o2).rgb*0.0702702703;
+  gl_FragColor = vec4(sum, 1.0);
+}
+`;
+
+const compositeFragment = `
+precision highp float;
+uniform sampler2D uScene;
+uniform sampler2D uBloom;
+uniform float uBloomStrength;
+varying vec2 vUv;
+void main(){
+  vec3 c = texture2D(uScene, vUv).rgb + texture2D(uBloom, vUv).rgb*uBloomStrength;
+  c = vec3(1.0) - exp(-c*1.55);
+  c = pow(c, vec3(0.95));
+  gl_FragColor = vec4(c, 1.0);
+}
+`;
+
+const uniforms = {
+  iResolution:{ value:new THREE.Vector2(window.innerWidth,window.innerHeight) },
+  iTime:{ value:0 },
+  camPos:{ value:new THREE.Vector3() },
+  camMat:{ value:new THREE.Matrix3() },
+  uSpin:{ value:0 }, uDiskInner:{ value:3.0 }, uDiskOuter:{ value:11.0 },
+  uDiskDensity:{ value:0.4 }, uDiskBrightness:{ value:1.0 }, uBaseKelvin:{ value:3200 },
+  uSwirl:{ value:1.0 }, uDoppler:{ value:1 }, uRedshift:{ value:1 }, uFrameDrag:{ value:1 },
+  uStars:{ value:1 }, uRings:{ value:0 }, uSteps:{ value:420 },
+};
+const mainMaterial = new THREE.ShaderMaterial({ uniforms, vertexShader:commonVertex, fragmentShader:mainFragment });
+
+const brightUniforms = { uTex:{ value:null }, uThreshold:{ value:0.62 } };
+const brightMaterial = new THREE.ShaderMaterial({ uniforms:brightUniforms, vertexShader:commonVertex, fragmentShader:brightFragment });
+
+const blurUniforms = { uTex:{ value:null }, uTexel:{ value:new THREE.Vector2() }, uDir:{ value:new THREE.Vector2(1,0) } };
+const blurMaterial = new THREE.ShaderMaterial({ uniforms:blurUniforms, vertexShader:commonVertex, fragmentShader:blurFragment });
+
+const compUniforms = { uScene:{ value:null }, uBloom:{ value:null }, uBloomStrength:{ value:0.7 } };
+const compMaterial = new THREE.ShaderMaterial({ uniforms:compUniforms, vertexShader:commonVertex, fragmentShader:compositeFragment });
+
+const rtOpts = { minFilter:THREE.LinearFilter, magFilter:THREE.LinearFilter, depthBuffer:false, stencilBuffer:false, type:THREE.HalfFloatType };
+let rtScene, rtA, rtB;
+function buildTargets(){
+  [rtScene, rtA, rtB].forEach(rt => rt && rt.dispose());
+  const w = Math.max(2, Math.floor(window.innerWidth*DPR));
+  const h = Math.max(2, Math.floor(window.innerHeight*DPR));
+  rtScene = new THREE.WebGLRenderTarget(w, h, rtOpts);
+  const bw = Math.max(2, Math.floor(w/2)), bh = Math.max(2, Math.floor(h/2));
+  rtA = new THREE.WebGLRenderTarget(bw, bh, rtOpts);
+  rtB = new THREE.WebGLRenderTarget(bw, bh, rtOpts);
+  blurUniforms.uTexel.value.set(1/bw, 1/bh);
+}
+buildTargets();
+
+function renderFrame(){
+  quad.material = mainMaterial;
+  renderer.setRenderTarget(rtScene);
+  renderer.render(scene, camera);
+
+  const bloomOn = state.bloom && state.bloomStrength > 0;
+  let bloomTex = rtA.texture;
+
+  if(bloomOn){
+    quad.material = brightMaterial;
+    brightUniforms.uTex.value = rtScene.texture;
+    renderer.setRenderTarget(rtA);
+    renderer.render(scene, camera);
+
+    quad.material = blurMaterial;
+    let src = rtA, dst = rtB;
+    for(let i=0;i<2;i++){
+      blurUniforms.uTex.value = src.texture; blurUniforms.uDir.value.set(1,0);
+      renderer.setRenderTarget(dst); renderer.render(scene, camera);
+      [src,dst] = [dst,src];
+      blurUniforms.uTex.value = src.texture; blurUniforms.uDir.value.set(0,1);
+      renderer.setRenderTarget(dst); renderer.render(scene, camera);
+      [src,dst] = [dst,src];
+    }
+    bloomTex = src.texture;
+  }
+
+  quad.material = compMaterial;
+  compUniforms.uScene.value = rtScene.texture;
+  compUniforms.uBloom.value = bloomTex;
+  compUniforms.uBloomStrength.value = bloomOn ? state.bloomStrength : 0;
+  renderer.setRenderTarget(null);
+  renderer.render(scene, camera);
+}
+
+/* =========================================================================
+   CAMERA ORBIT
+   ========================================================================= */
+let dragAngle = 0, dragHeight = 2.2, isDragging = false, lastX = 0, lastY = 0;
+const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+canvas.addEventListener('pointerdown', (e) => { isDragging = true; lastX = e.clientX; lastY = e.clientY; canvas.setPointerCapture(e.pointerId); });
+window.addEventListener('pointermove', (e) => {
+  if(!isDragging) return;
+  dragAngle += (e.clientX-lastX)*0.005;
+  dragHeight = Math.max(-8, Math.min(10, dragHeight - (e.clientY-lastY)*0.02));
+  lastX = e.clientX; lastY = e.clientY;
+});
+window.addEventListener('pointerup', () => { isDragging = false; });
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  state.obsDistance = Math.max(6, Math.min(55, state.obsDistance + e.deltaY*0.02));
+  el.sDist.value = state.obsDistance.toFixed(1);
+  syncLabel(el.vDist, state.obsDistance.toFixed(1)+' r_s');
+  scheduleUpdate();
+}, { passive:false });
+
+/* pinch-to-zoom (touch has no wheel event) */
+let pinchStartDist = null, pinchStartObsDist = null;
+function touchDist(touches){
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.hypot(dx, dy);
+}
+canvas.addEventListener('touchstart', (e) => {
+  if(e.touches.length === 2){
+    isDragging = false;
+    pinchStartDist = touchDist(e.touches);
+    pinchStartObsDist = state.obsDistance;
+  }
+}, { passive:true });
+canvas.addEventListener('touchmove', (e) => {
+  if(e.touches.length === 2 && pinchStartDist){
+    const dist = touchDist(e.touches);
+    const scale = pinchStartDist / Math.max(dist, 1);
+    state.obsDistance = Math.max(6, Math.min(55, pinchStartObsDist * scale));
+    el.sDist.value = state.obsDistance.toFixed(1);
+    syncLabel(el.vDist, state.obsDistance.toFixed(1)+' r_s');
+    scheduleUpdate();
+  }
+}, { passive:true });
+canvas.addEventListener('touchend', (e) => { if(e.touches.length < 2) pinchStartDist = null; });
+
+/* =========================================================================
+   UI WIRING
+   ========================================================================= */
+let updatePending = false;
+function scheduleUpdate(){
+  if(updatePending) return;
+  updatePending = true;
+  requestAnimationFrame(() => {
+    pushUniforms();
+    updateStats();
+    updatePending = false;
+  });
+}
+
+function syncLabel(node, text){ node.textContent = text; }
+
+function currentIscoRs(){ return iscoOverM(state.spin, true)/2; }
+
+function applyDiskInnerConstraint(){
+  if(state.snapIsco){
+    state.diskInner = currentIscoRs();
+    el.sDiskIn.value = state.diskInner.toFixed(2);
+    el.sDiskIn.disabled = true;
+  } else {
+    el.sDiskIn.disabled = false;
+  }
+  if(state.diskOuter < state.diskInner+1) state.diskOuter = state.diskInner+1;
+  syncLabel(el.vDiskIn, state.diskInner.toFixed(2)+' r_s');
+}
+
+function pushUniforms(){
+  const M = Math.pow(10, state.massLog);
+  uniforms.uSpin.value = state.spin;
+  uniforms.uDiskInner.value = state.diskInner;
+  uniforms.uDiskOuter.value = state.diskOuter;
+  uniforms.uDiskDensity.value = state.diskDensity;
+  uniforms.uDiskBrightness.value = state.diskBrightness;
+  uniforms.uSwirl.value = state.swirl;
+  uniforms.uDoppler.value = state.doppler ? 1:0;
+  uniforms.uRedshift.value = state.redshift ? 1:0;
+  uniforms.uFrameDrag.value = state.frameDrag ? 1:0;
+  uniforms.uStars.value = state.stars ? 1:0;
+  uniforms.uRings.value = state.rings ? 1:0;
+  uniforms.uSteps.value = state.steps;
+  const rawK = 4200 * Math.pow(M/10, -0.09);
+  uniforms.uBaseKelvin.value = Math.max(2400, Math.min(4200, rawK));
+}
+
+function fovLabel(v){
+  if(v <= 1.05) return 'Wide';
+  if(v >= 2.3) return 'Tele';
+  return 'Normal';
+}
+
+function bindSlider(input, label, onInput, fmt){
+  input.addEventListener('input', () => {
+    const v = parseFloat(input.value);
+    onInput(v);
+    syncLabel(label, fmt(v));
+    scheduleUpdate();
+  });
+}
+
+bindSlider(el.sMass, el.vMass, v => { state.massLog = v; }, v => {
+  const M = Math.pow(10, v);
+  return (M < 1000 ? M.toFixed(1) : fmtSci(M,'')) + ' M☉';
+});
+bindSlider(el.sSpin, el.vSpin, v => { state.spin = v; applyDiskInnerConstraint(); }, v => v.toFixed(2));
+bindSlider(el.sDiskIn, el.vDiskIn, v => { state.diskInner = v; }, v => v.toFixed(2)+' r_s');
+bindSlider(el.sDiskOut, el.vDiskOut, v => { state.diskOuter = Math.max(v, state.diskInner+1); }, v => state.diskOuter.toFixed(1)+' r_s');
+bindSlider(el.sDens, el.vDens, v => { state.diskDensity = v; }, v => v.toFixed(2));
+bindSlider(el.sBright, el.vBright, v => { state.diskBrightness = v; }, v => v.toFixed(2));
+bindSlider(el.sSwirl, el.vSwirl, v => { state.swirl = v; }, v => v.toFixed(2)+'×');
+bindSlider(el.sDist, el.vDist, v => { state.obsDistance = v; }, v => v.toFixed(1)+' r_s');
+bindSlider(el.sFov, el.vFov, v => { state.fov = v; }, v => fovLabel(v));
+bindSlider(el.sSteps, el.vSteps, v => { state.steps = Math.round(v); }, v => Math.round(v)+' steps');
+bindSlider(el.sBloom, el.vBloom, v => { state.bloomStrength = v; }, v => v.toFixed(2));
+
+function bindCheck(input, key){
+  input.addEventListener('change', () => { state[key] = input.checked; scheduleUpdate(); });
+}
+bindCheck(el.cDoppler,'doppler'); bindCheck(el.cRedshift,'redshift'); bindCheck(el.cFrameDrag,'frameDrag');
+bindCheck(el.cBloom,'bloom'); bindCheck(el.cStars,'stars'); bindCheck(el.cRings,'rings');
+
+el.cSnap.addEventListener('change', () => {
+  state.snapIsco = el.cSnap.checked;
+  applyDiskInnerConstraint();
+  scheduleUpdate();
+});
+
+const PRESETS = {
+  stellar: { massLog: Math.log10(10) },
+  sgra: { massLog: Math.log10(4.297e6) },
+  m87: { massLog: Math.log10(6.5e9) },
+};
+el.presets.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const p = PRESETS[btn.dataset.preset];
+    state.massLog = p.massLog;
+    el.sMass.value = state.massLog.toFixed(3);
+    el.sMass.dispatchEvent(new Event('input'));
+    el.presets.forEach(b => b.classList.toggle('is-active', b===btn));
+  });
+});
+
+el.reset.addEventListener('click', () => {
+  Object.assign(state, DEFAULTS);
+  el.sMass.value = state.massLog; el.sSpin.value = state.spin;
+  el.sDiskIn.value = state.diskInner; el.sDiskOut.value = state.diskOuter;
+  el.sDens.value = state.diskDensity; el.sBright.value = state.diskBrightness; el.sSwirl.value = state.swirl;
+  el.sDist.value = state.obsDistance; el.sFov.value = state.fov;
+  el.sSteps.value = state.steps; el.sBloom.value = state.bloomStrength;
+  el.cSnap.checked = state.snapIsco;
+  el.cDoppler.checked = state.doppler; el.cRedshift.checked = state.redshift; el.cFrameDrag.checked = state.frameDrag;
+  el.cBloom.checked = state.bloom; el.cStars.checked = state.stars; el.cRings.checked = state.rings;
+  el.presets.forEach(b => b.classList.remove('is-active'));
+  applyDiskInnerConstraint();
+  el.sMass.dispatchEvent(new Event('input'));
+});
+
+/* =========================================================================
+   ANIMATE
+   ========================================================================= */
+const clock = new THREE.Clock();
+function animate(){
+  const t = clock.getElapsedTime();
+  uniforms.iTime.value = t;
+
+  const angle = (reducedMotion ? 0 : t*0.03) + dragAngle;
+  const dist = state.obsDistance;
+  const camY = dragHeight;
+  const cp = new THREE.Vector3(Math.cos(angle)*dist, camY, Math.sin(angle)*dist);
+  uniforms.camPos.value.copy(cp);
+
+  const forward = new THREE.Vector3(0,0,0).sub(cp).normalize();
+  const right = new THREE.Vector3(0,1,0).cross(forward).normalize();
+  const up = forward.clone().cross(right).normalize();
+  const m = new THREE.Matrix3();
+  m.set(right.x, up.x, forward.x, right.y, up.y, forward.y, right.z, up.z, forward.z);
+  uniforms.camMat.value.copy(m);
+
+  renderFrame();
+  requestAnimationFrame(animate);
+}
+
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  uniforms.iResolution.value.set(window.innerWidth, window.innerHeight);
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(buildTargets, 150);
+});
+
+/* init */
+el.sSteps.value = state.steps;
+syncLabel(el.vSteps, state.steps+' steps');
+el.sBloom.value = state.bloomStrength;
+syncLabel(el.vBloom, state.bloomStrength.toFixed(2));
+applyDiskInnerConstraint();
+pushUniforms();
+updateStats();
+
+/* Defer the first heavy frame(s) so initial DOM paint (panel, toggle, hint)
+   isn't blocked by shader compilation + render-target setup happening in
+   the same tick as page load. */
+requestAnimationFrame(() => { animate(); });
+</script>
