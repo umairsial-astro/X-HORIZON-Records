@@ -1,0 +1,577 @@
+<section id="xh-media-page">
+  <style>
+    #xh-media-page,
+    #xh-media-page * {
+      box-sizing: border-box;
+    }
+
+    #xh-media-page {
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #f5f5f5;
+      background: #050505;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      position: relative;
+      isolation: isolate;
+    }
+
+    #xh-media-page a {
+      color: inherit;
+      text-decoration: none !important;
+    }
+
+    #xh-media-page img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    #xh-media-page .xh-wrap {
+      width: min(100%, 1240px);
+      margin: 0 auto;
+      padding: 0 22px;
+    }
+
+    #xh-media-page .xh-hero {
+      min-height: 64vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.97), rgba(0,0,0,0.76), rgba(0,0,0,0.30)),
+        url("https://images-assets.nasa.gov/image/PIA23122/PIA23122~large.jpg") center / cover no-repeat;
+    }
+
+    #xh-media-page .xh-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 70% 24%, rgba(255,255,255,0.06), transparent 30%),
+        linear-gradient(180deg, transparent 58%, #050505 100%);
+    }
+
+    #xh-media-page .xh-hero-inner {
+      position: relative;
+      z-index: 2;
+      width: min(100%, 820px);
+      padding: 92px 0 76px;
+    }
+
+    #xh-media-page .xh-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: #d8d8d8;
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    #xh-media-page .xh-kicker::before {
+      content: "";
+      width: 42px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #f0f0f0, transparent);
+    }
+
+    #xh-media-page .xh-title {
+      margin: 0;
+      font-size: clamp(44px, 7vw, 88px);
+      line-height: 0.95;
+      letter-spacing: -0.058em;
+      font-weight: 880;
+      color: #ffffff;
+    }
+
+    #xh-media-page .xh-title span {
+      display: block;
+      color: #e7e7e7;
+    }
+
+    #xh-media-page .xh-lead {
+      width: min(100%, 690px);
+      margin: 24px 0 0;
+      color: rgba(245,245,245,0.78);
+      font-size: clamp(16px, 1.35vw, 19px);
+    }
+
+    #xh-media-page .xh-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    #xh-media-page .xh-btn {
+      min-height: 48px;
+      padding: 13px 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      font-size: 14px;
+      font-weight: 850;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.07);
+      color: #ffffff !important;
+      text-decoration: none !important;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.22);
+      transition: transform 0.28s ease, background 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    #xh-media-page .xh-btn:hover {
+      transform: translateY(-3px);
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.62);
+      box-shadow: 0 24px 70px rgba(255,255,255,0.08);
+    }
+
+    #xh-media-page .xh-btn-primary {
+      color: #080808 !important;
+      background: #f5f5f5;
+      border-color: transparent;
+    }
+
+    #xh-media-page .xh-section {
+      padding: 58px 0;
+      position: relative;
+    }
+
+    #xh-media-page .xh-section-head {
+      width: min(100%, 790px);
+      margin: 0 auto 32px;
+      text-align: center;
+    }
+
+    #xh-media-page .xh-section-head h2 {
+      margin: 0;
+      color: #ffffff;
+      font-size: clamp(32px, 4vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.048em;
+      font-weight: 850;
+    }
+
+    #xh-media-page .xh-section-head p {
+      margin: 18px auto 0;
+      color: rgba(245,245,245,0.70);
+      font-size: 16px;
+    }
+
+    #xh-media-page .xh-category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    #xh-media-page .xh-category-card {
+      position: relative;
+      min-height: 0;
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035)),
+        rgba(12,12,12,0.92);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.30);
+      transition: transform 0.35s ease, border-color 0.35s ease, background 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    #xh-media-page .xh-category-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255,255,255,0.40);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04)),
+        rgba(16,16,16,0.96);
+      box-shadow: 0 36px 100px rgba(255,255,255,0.07);
+    }
+
+    #xh-media-page .xh-card-img {
+      height: 270px;
+      position: relative;
+      overflow: hidden;
+      background: #101010;
+    }
+
+    #xh-media-page .xh-card-img img {
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.55s ease, opacity 0.35s ease;
+    }
+
+    #xh-media-page .xh-category-card:hover .xh-card-img img {
+      transform: scale(1.055);
+      opacity: 0.92;
+    }
+
+    #xh-media-page .xh-card-img::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, transparent 42%, rgba(0,0,0,0.98) 100%),
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,0.07), transparent 38%);
+      pointer-events: none;
+    }
+
+    #xh-media-page .xh-fallback {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      color: #e7e7e7;
+      background: linear-gradient(135deg, #161616, #050505);
+    }
+
+    #xh-media-page .xh-card-body {
+      padding: 24px;
+    }
+
+    #xh-media-page .xh-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+      color: #e7e7e7;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    #xh-media-page .xh-card-body h3 {
+      margin: 0;
+      font-size: clamp(28px, 3vw, 40px);
+      line-height: 1.03;
+      letter-spacing: -0.04em;
+      color: #ffffff;
+    }
+
+    #xh-media-page .xh-card-body p {
+      margin: 16px 0 0;
+      color: rgba(245,245,245,0.70);
+      font-size: 15px;
+    }
+
+    #xh-media-page .xh-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 24px;
+      min-height: 44px;
+      padding: 11px 17px;
+      border-radius: 999px;
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.07);
+      font-size: 13px;
+      font-weight: 850;
+      transition: transform 0.28s ease, background 0.28s ease, border-color 0.28s ease;
+    }
+
+    #xh-media-page .xh-card-link,
+    #xh-media-page .xh-card-link:link,
+    #xh-media-page .xh-card-link:visited,
+    #xh-media-page .xh-card-link:hover,
+    #xh-media-page .xh-card-link:focus-visible {
+      color: #ffffff !important;
+      text-decoration: none !important;
+    }
+
+    #xh-media-page .xh-card-link:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.58);
+    }
+
+    #xh-media-page .xh-feature-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    #xh-media-page .xh-moon-card,
+    #xh-media-page .xh-video-card {
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035)),
+        rgba(12,12,12,0.92);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.30);
+    }
+
+    #xh-media-page .xh-moon-img {
+      height: 330px;
+      position: relative;
+      overflow: hidden;
+      background: #101010;
+    }
+
+    #xh-media-page .xh-moon-img img {
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #xh-media-page .xh-moon-img::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 48%, rgba(0,0,0,0.96) 100%);
+    }
+
+    #xh-media-page .xh-moon-body {
+      padding: 24px;
+    }
+
+    #xh-media-page .xh-moon-body h3,
+    #xh-media-page .xh-video-body h3 {
+      margin: 0;
+      color: #ffffff;
+      font-size: clamp(25px, 3vw, 38px);
+      line-height: 1.04;
+      letter-spacing: -0.04em;
+    }
+
+    #xh-media-page .xh-moon-body p,
+    #xh-media-page .xh-video-body p {
+      margin: 15px 0 0;
+      color: rgba(245,245,245,0.70);
+      font-size: 15px;
+    }
+
+    #xh-media-page .xh-video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #050505;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      overflow: hidden;
+    }
+
+    #xh-media-page .xh-video-frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    #xh-media-page .xh-video-body {
+      padding: 24px;
+    }
+
+    #xh-media-page .xh-reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition:
+        opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+      transition-delay: var(--xh-delay, 0ms);
+    }
+
+    #xh-media-page .xh-reveal.xh-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      #xh-media-page .xh-category-grid,
+      #xh-media-page .xh-feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #xh-media-page .xh-category-card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 620px) {
+      #xh-media-page .xh-wrap {
+        padding: 0 16px;
+      }
+
+      #xh-media-page .xh-hero-inner {
+        padding: 76px 0 60px;
+      }
+
+      #xh-media-page .xh-section {
+        padding: 58px 0;
+      }
+
+      #xh-media-page .xh-actions,
+      #xh-media-page .xh-btn,
+      #xh-media-page .xh-card-link {
+        width: 100%;
+      }
+
+      #xh-media-page .xh-btn,
+      #xh-media-page .xh-card-link {
+        justify-content: center;
+      }
+
+      #xh-media-page .xh-card-img {
+        height: 235px;
+      }
+
+      #xh-media-page .xh-moon-img {
+        height: 270px;
+      }
+
+      #xh-media-page .xh-card-body,
+      #xh-media-page .xh-moon-body,
+      #xh-media-page .xh-video-body {
+        padding: 22px;
+      }
+    }
+  </style>
+
+  <div class="xh-hero">
+    <div class="xh-wrap">
+      <div class="xh-hero-inner xh-reveal">
+        <div class="xh-kicker">X HORIZON MEDIA</div>
+        <h1 class="xh-title">Space Videos <span>&amp; History</span></h1>
+        <p class="xh-lead">
+          Watch powerful space visuals and explore the moments that shaped human space exploration.
+        </p>
+
+        <div class="xh-actions">
+          <a class="xh-btn xh-btn-primary" href="#xh-media-categories">Explore Categories</a>
+          <a class="xh-btn" href="#xh-featured-media">Featured Media</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="xh-media-categories" class="xh-section">
+    <div class="xh-wrap">
+      <div class="xh-section-head xh-reveal">
+        <div class="xh-kicker">MAIN CATEGORIES</div>
+        <h2>Media Categories</h2>
+      </div>
+
+      <div class="xh-category-grid">
+        <article class="xh-category-card xh-reveal" style="--xh-delay: 80ms;">
+          <div class="xh-card-img">
+            <img src="https://images-assets.nasa.gov/image/iss071e522460/iss071e522460~large.jpg" alt="Space videos category" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
+            <div class="xh-fallback">X HORIZON</div>
+          </div>
+          <div class="xh-card-body">
+            <div class="xh-tag">Videos</div>
+            <h3>Space Video Library</h3>
+            <p>
+              Launch coverage, mission visuals, telescope footage, astronaut clips, planetary flyovers, and science explainers.
+            </p>
+            <a class="xh-card-link" href="/videos">Open Videos →</a>
+          </div>
+        </article>
+
+        <article class="xh-category-card xh-reveal" style="--xh-delay: 180ms;">
+          <div class="xh-card-img">
+            <img src="https://images-assets.nasa.gov/image/as11-40-5874/as11-40-5874~large.jpg" alt="History timeline category" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
+            <div class="xh-fallback">X HORIZON</div>
+          </div>
+          <div class="xh-card-body">
+            <div class="xh-tag">History Timeline</div>
+            <h3>Space History Timeline</h3>
+            <p>
+              Human spaceflight milestones, Moon landing history, spacecraft achievements, discoveries, and exploration eras.
+            </p>
+            <a class="xh-card-link" href="/history">Open Timeline →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="xh-featured-media" class="xh-section">
+    <div class="xh-wrap">
+      <div class="xh-section-head xh-reveal">
+        <div class="xh-kicker">FEATURED MEDIA</div>
+        <h2>Moon Landing &amp; Space Video</h2>
+      </div>
+
+      <div class="xh-feature-grid">
+        <article class="xh-moon-card xh-reveal" style="--xh-delay: 80ms;">
+          <div class="xh-moon-img">
+            <img src="https://images-assets.nasa.gov/image/as11-40-5874/as11-40-5874~large.jpg" alt="Neil Armstrong on the Moon" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
+            <div class="xh-fallback">X HORIZON</div>
+          </div>
+          <div class="xh-moon-body">
+            <div class="xh-tag">Historic Moment</div>
+            <h3>Neil Armstrong on the Moon</h3>
+            <p>
+              Apollo 11 marked the first human steps on another world. Neil Armstrong and Buzz Aldrin walked on the lunar surface while Michael Collins orbited above in Columbia.
+            </p>
+            <a class="xh-card-link" href="/x-horizon-history-timeline">View Timeline →</a>
+          </div>
+        </article>
+
+        <article class="xh-video-card xh-reveal" style="--xh-delay: 180ms;">
+          <div class="xh-video-frame">
+            <iframe src="https://www.youtube-nocookie.com/embed/21X5lGlDOfg" title="NASA Live" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+            </iframe>
+          </div>
+          <div class="xh-video-body">
+            <div class="xh-tag">Space Video</div>
+            <h3>NASA Live Space Stream</h3>
+            <p>
+              A clean video frame for mission coverage, live space programming, launch streams, science updates, and exploration broadcasts.
+            </p>
+            <a class="xh-card-link" href="/x-horizon-videos">More Videos →</a>
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      var root = document.getElementById("xh-media-page");
+      if (!root) return;
+
+      var revealItems = root.querySelectorAll(".xh-reveal");
+
+      if (!("IntersectionObserver" in window)) {
+        revealItems.forEach(function (item) {
+          item.classList.add("xh-visible");
+        });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("xh-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.16,
+        rootMargin: "0px 0px -8% 0px"
+      });
+
+      revealItems.forEach(function (item) {
+        observer.observe(item);
+      });
+    })();
+  </script>
+</section>
