@@ -1,0 +1,1903 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stellar Sky — Standalone</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; background: #000; color: #e5e5e5; font-family: ui-sans-serif, system-ui, sans-serif; overflow: hidden; }
+  #sky { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: block; cursor: grab; touch-action: none; }
+  .title { position: fixed; top: 16px; left: 16px; z-index: 10; pointer-events: none; }
+  .title b { display:block; font-size: 14px; letter-spacing: .04em; }
+  .title span { display:block; font-size: 10px; color: #737373; text-transform: uppercase; letter-spacing: .12em; }
+  .hud { position: fixed; top: 16px; right: 16px; text-align: right; font-size: 11px; font-family: ui-monospace, monospace; color: #a3a3a3; line-height: 1.5; z-index: 10; pointer-events: none; }
+  .hint { position: fixed; bottom: 16px; right: 16px; font-size: 10px; color: #525252; z-index: 10; pointer-events: none; }
+  .info { position: fixed; right: 16px; top: 90px; width: 280px; max-width: calc(100vw - 32px); background: rgba(0,0,0,0.85); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; backdrop-filter: blur(10px); z-index: 11; display: none; }
+  .info .hd { display:flex; justify-content: space-between; align-items: flex-start; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .info .hd b { font-size: 13px; }
+  .info .hd .t { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: #737373; margin-top: 2px; }
+  .info .hd .x { cursor: pointer; color: #737373; font-size: 14px; line-height: 1; }
+  .info .bd { padding: 10px 12px; font-size: 11px; font-family: ui-monospace, monospace; }
+  .info .bd .r { display:flex; justify-content: space-between; gap: 8px; padding: 2px 0; }
+  .info .bd .r .l { color: #737373; }
+  .info .bd .d { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); font-family: ui-sans-serif, system-ui, sans-serif; font-size: 11px; color: #a3a3a3; line-height: 1.5; }
+  .panel { position: fixed; left: 16px; bottom: 16px; width: 300px; max-width: calc(100vw - 32px); max-height: calc(100vh - 32px); overflow-y: auto; background: rgba(0,0,0,0.82); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; backdrop-filter: blur(10px); padding: 14px; z-index: 10; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.2) transparent; }
+  .panel::-webkit-scrollbar { width: 6px; }
+  .panel::-webkit-scrollbar-track { background: transparent; }
+  .panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 3px; }
+  .panel.minimized { overflow: hidden; padding-bottom: 14px; }
+  .panel.minimized > *:not(.panelhead) { display: none !important; }
+  .panelhead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; user-select: none; }
+  .panelhead b { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: #a3a3a3; }
+  .panelhead .min-btn { font-size: 13px; color: #737373; padding: 2px 6px; border-radius: 6px; }
+  .panelhead .min-btn:hover { background: rgba(255,255,255,0.08); }
+  .fsbtn { position: fixed; right: 16px; bottom: 16px; z-index: 10; width: 34px; height: 34px; border-radius: 10px; background: rgba(0,0,0,0.82); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: #a3a3a3; font-size: 15px; cursor: pointer; display:flex; align-items:center; justify-content:center; }
+  .fsbtn:hover { color: #fff; background: rgba(255,255,255,0.08); }
+  .panel h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: #a3a3a3; margin: 12px 0 6px; }
+  .panel h3:first-child { margin-top: 0; }
+  .panel label { font-size: 11px; color: #a3a3a3; display:block; margin-bottom: 3px; }
+  .row { display:flex; gap: 8px; align-items: center; }
+  .row > div { flex: 1; }
+  input[type=number], input[type=datetime-local], input[type=text] { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e5e5e5; border-radius: 8px; padding: 6px 8px; font-size: 12px; }
+  .searchmsg { font-size: 10px; color: #737373; margin-top: 6px; display: none; }
+  .btn { background: #fff; color: #000; border: 0; border-radius: 8px; padding: 7px 10px; font-size: 12px; cursor: pointer; }
+  .btn.ghost { background: transparent; color: #d4d4d4; border: 1px solid rgba(255,255,255,0.15); }
+  .btn:hover { opacity: .85; }
+  .spd { display:flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .spd button { font-size: 10px; padding: 3px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: transparent; color: #a3a3a3; cursor: pointer; }
+  .spd button.on { background: #fff; color: #000; border-color: #fff; }
+  .toggles { display:flex; flex-wrap: wrap; gap: 10px; }
+  .toggle { display:flex; align-items:center; gap:4px; font-size:11px; color:#d4d4d4; cursor: pointer; }
+  .sep { height: 1px; background: rgba(255,255,255,0.08); margin: 12px 0; }
+  .panel h3.ch { cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+  .panel h3.ch .arrow { font-size: 9px; color: #525252; }
+  .modebody { display: none; }
+  .modebody.open { display: block; }
+  .readout { font-size: 10px; font-family: ui-monospace, monospace; color: #a3a3a3; line-height: 1.6; margin-top: 6px; }
+  .readout .l { color: #737373; }
+  select { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e5e5e5; border-radius: 8px; padding: 6px 8px; font-size: 12px; }
+  select option { background: #16171a; color: #e5e5e5; }
+  .fovrow { display:flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .fovrow button { font-size: 10px; padding: 3px 7px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: transparent; color: #a3a3a3; cursor: pointer; }
+  .fovrow button.on { background: #fff; color: #000; border-color: #fff; }
+  .resultlist { max-height: 220px; overflow-y: auto; margin-top: 8px; }
+  .resultitem { display:flex; justify-content: space-between; gap: 6px; padding: 5px 6px; border-radius: 6px; cursor: pointer; font-size: 11px; }
+  .resultitem:hover { background: rgba(255,255,255,0.06); }
+  .resultitem .l { color: #737373; font-size: 10px; }
+  .cursorcoords { position: fixed; left: 16px; top: 64px; font-size: 10px; font-family: ui-monospace, monospace; color: #737373; z-index: 10; pointer-events: none; line-height: 1.5; display: none; }
+</style>
+
+
+    <canvas id="sky"></canvas>
+    <div class="title"><b>Stellar Sky</b><span>Standalone Astronomical Simulation</span></div>
+    <div class="hud" id="hud"></div>
+    <div class="cursorcoords" id="cursorcoords"></div>
+    <div class="info" id="info"></div>
+    <div class="hint">Drag to pan · Scroll to zoom · Click an object for info</div>
+    <div class="panel" id="panel">
+    <div class="panelhead" id="panelHead"><b>Controls</b><span class="min-btn" id="minBtn">−</span></div>
+    <h3>Search</h3>
+    <div class="row">
+      <div><input type="text" id="search" placeholder="Sirius, M42, Jupiter…"></div>
+      <button class="btn" id="searchBtn">Go</button>
+    </div>
+    <div class="searchmsg" id="searchMsg"></div>
+    <div class="sep"></div>
+    <h3>Date &amp; Time</h3>
+    <input type="datetime-local" id="dt">
+    <div class="row" style="margin-top:6px">
+      <button class="btn" id="play" style="flex:1">Play</button>
+      <button class="btn ghost" id="now" style="flex:1">Now</button>
+    </div>
+    <div class="spd" id="speeds"></div>
+    <h3>Location</h3>
+    <div class="row">
+      <div><label>Latitude (°)</label><input type="number" id="lat" step="0.1"></div>
+      <div><label title="East is positive, West is negative">Longitude (°)</label><input type="number" id="lon" step="0.1" title="East is positive, West is negative"></div>
+    </div>
+    <button class="btn ghost" id="geo" style="width:100%;margin-top:8px">Use My Location</button>
+    <h3>Display</h3>
+    <div class="toggles">
+      <label class="toggle">Alt/Az Grid <input type="checkbox" id="t-grid" checked=""></label>
+      <label class="toggle">Constellations <input type="checkbox" id="t-lines" checked=""></label>
+      <label class="toggle">Labels <input type="checkbox" id="t-labels" checked=""></label>
+      <label class="toggle">Ecliptic <input type="checkbox" id="t-ecl" checked=""></label>
+    </div>
+    <div class="fovrow" id="fovPresets"></div>
+
+    <div class="sep"></div>
+    <h3>Sky Conditions</h3>
+    <label>Light Pollution (Bortle Scale)</label>
+    <select id="bortle">
+      <option value="1">Bortle 1 — Excellent dark sky</option>
+      <option value="2">Bortle 2 — Typical dark sky</option>
+      <option value="3">Bortle 3 — Rural sky</option>
+      <option value="4" selected="">Bortle 4 — Rural/suburban transition</option>
+      <option value="5">Bortle 5 — Suburban sky</option>
+      <option value="6">Bortle 6 — Bright suburban sky</option>
+      <option value="7">Bortle 7 — Suburban/urban transition</option>
+      <option value="8">Bortle 8 — City sky</option>
+      <option value="9">Bortle 9 — Inner-city sky</option>
+    </select>
+    <div class="readout" id="skyReadout"></div>
+
+    <div class="sep"></div>
+    <h3 class="ch" id="telHeader">Telescope <span class="arrow" id="telArrow">▸</span></h3>
+    <div class="modebody" id="telBody">
+      <label>Preset</label>
+      <select id="telPreset">
+        <option value="naked">Naked Eye</option>
+        <option value="binoculars">Binoculars (10×50)</option>
+        <option value="small">Small Telescope (70mm, f/10)</option>
+        <option value="amateur" selected="">Amateur Telescope (200mm, f/6)</option>
+        <option value="large">Large Telescope (300mm, f/5)</option>
+        <option value="custom">Custom</option>
+      </select>
+      <div class="row" style="margin-top:6px">
+        <div><label>Aperture (mm)</label><input type="number" id="telAperture" step="1"></div>
+        <div><label>Focal Length (mm)</label><input type="number" id="telFocal" step="1"></div>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <div><label>Eyepiece Focal (mm)</label><input type="number" id="epFocal" step="1" value="20"></div>
+        <div><label>Eyepiece AFOV (°)</label><input type="number" id="epAfov" step="1" value="50"></div>
+      </div>
+      <div class="readout" id="telReadout"></div>
+    </div>
+
+    <h3 class="ch" id="obsHeader">Observation Mode <span class="arrow" id="obsArrow">▸</span></h3>
+    <div class="modebody" id="obsBody">
+      <div class="row">
+        <div><label>Sort By</label><select id="obsSort">
+          <option value="alt">Highest Altitude</option>
+          <option value="mag">Brightest</option>
+          <option value="quality">Best Visibility</option>
+          <option value="type">Object Type</option>
+        </select></div>
+      </div>
+      <button class="btn ghost" id="obsRun" style="width:100%;margin-top:8px">What Can I Observe Tonight?</button>
+      <div class="resultlist" id="obsResults"></div>
+    </div>
+
+    <h3 class="ch" id="measHeader">Measure <span class="arrow" id="measArrow">▸</span></h3>
+    <div class="modebody" id="measBody">
+      <label class="toggle"><input type="checkbox" id="measToggle"> Measurement Mode (click two objects)</label>
+      <div class="readout" id="measReadout">Select a first object, then a second, to measure the angle between them.</div>
+    </div>
+
+    <h3 class="ch" id="eventsHeader">Events <span class="arrow" id="eventsArrow">▸</span></h3>
+    <div class="modebody" id="eventsBody">
+      <div class="readout">Scans the next 90 days for planetary oppositions and close conjunctions (&lt;5° apart). Solar/lunar eclipse prediction is not implemented — none are shown or claimed.</div>
+      <button class="btn ghost" id="eventsRun" style="width:100%;margin-top:8px">Scan Next 90 Days</button>
+      <div class="resultlist" id="eventsResults"></div>
+    </div>
+
+    <div class="sep"></div>
+    <button class="btn ghost" id="reset" style="width:100%">Reset View</button>
+  </div>
+  <button class="fsbtn" id="fsBtn" title="Toggle fullscreen">⛶</button>
+
+<script>
+"use strict";
+// ============================================================================
+// STELLAR SKY — Astronomy engine
+// Coordinate conventions used throughout this file (documented per §13 of the spec):
+//   • Right Ascension (RA) is expressed in HOURS (0–24h), Declination (Dec) in DEGREES (-90..+90).
+//   • Altitude is measured in degrees from the horizon (0°) to the zenith (+90°).
+//   • Azimuth is measured in degrees from North (0°), increasing through East (90°) — the
+//     standard astronomical/navigational convention — and is what feeds the N/E/S/W markers.
+//   • Longitude is EAST-POSITIVE (standard astronomical convention: e.g. Karachi ≈ +67°).
+//     A location west of Greenwich should be entered as a negative value.
+//   • Unless noted otherwise, star/deep-sky catalogue coordinates are J2000.0 mean equatorial
+//     coordinates (the standard modern reference epoch); planet/Sun/Moon coordinates below are
+//     computed directly for the observation date from orbital elements referred to the mean
+//     ecliptic and equinox of date.
+// ============================================================================
+
+// ===================== Time / Julian Date =====================
+// JS Date.getTime() already fully accounts for the Gregorian calendar and leap years, so the
+// Julian Date conversion below is exact (not an approximation), for any date the Date object
+// itself can represent.
+const DEG = Math.PI / 180, RAD = 180 / Math.PI;
+const clamp = (x,a,b) => Math.max(a, Math.min(b, x));
+const dateToJD = d => d.getTime() / 86400000 + 2440587.5;
+const AU_KM = 149597870.7, EARTH_RADIUS_KM = 6371;
+
+// ===================== Sidereal Time =====================
+// Mean Greenwich Sidereal Time via the standard IAU 1982 polynomial (accurate to a small fraction
+// of a second of time near the present era). Apparent sidereal time (which is what actually governs
+// where objects appear) additionally requires the "equation of the equinoxes" nutation correction —
+// see updatePrecessionNutation() below — added in lstHours().
+function gmstHours(jd){ const D = jd - 2451545.0; let g = 18.697374558 + 24.06570982441908 * D; return ((g % 24) + 24) % 24; }
+function lstHours(jd, lon, prec){ return (((gmstHours(jd) + (prec ? prec.eqEquinoxHrs : 0) + lon / 15) % 24) + 24) % 24; }
+
+// ===================== Coordinate Transformations =====================
+function equatorialToHorizontal(raH, decD, latD, lstH){
+  const H = ((lstH - raH) * 15) * DEG, dec = decD * DEG, lat = latD * DEG;
+  const sinAlt = Math.sin(lat)*Math.sin(dec) + Math.cos(lat)*Math.cos(dec)*Math.cos(H);
+  const alt = Math.asin(clamp(sinAlt,-1,1)); const cosAlt = Math.cos(alt);
+  let az; if (Math.abs(cosAlt) < 1e-10) az = 0;
+  else { const s = (-Math.cos(dec)*Math.sin(H))/cosAlt, c = (Math.sin(dec)-Math.sin(lat)*sinAlt)/(Math.cos(lat)*cosAlt); az = Math.atan2(s,c); }
+  return { alt, az };
+}
+// Converts ecliptic (lonR, latR, radians) to equatorial RA/Dec, given the mean obliquity of the
+// ecliptic (obliR, radians) that applies at the relevant date — see meanObliquityDeg() below.
+// Passing an explicit obliquity (rather than a fixed J2000 constant) keeps this consistent with
+// the precession/nutation handling elsewhere in the file.
+function eclipticToEquatorial(lonR, latR, obliR){
+  const sL = Math.sin(latR), cL = Math.cos(latR), sN = Math.sin(lonR), cN = Math.cos(lonR);
+  const sDec = sL*Math.cos(obliR) + cL*Math.sin(obliR)*sN;
+  const dec = Math.asin(clamp(sDec,-1,1)); const cDec = Math.cos(dec);
+  let ra; if (Math.abs(cDec) < 1e-10) ra = 0;
+  else { const y = sN*Math.cos(obliR) - (sL/cL)*Math.sin(obliR), x = cN; ra = Math.atan2(y,x); }
+  let raD = ((ra*RAD % 360)+360)%360; return { ra: raD/15, dec: dec*RAD };
+}
+
+// ===================== Precession / Nutation =====================
+// Star and deep-sky catalogue coordinates in this file are J2000.0. To show RA/Dec that are
+// correct for the selected observation date, we:
+//   1) Precess the J2000 mean position to the mean equinox of date using the rigorous IAU 1976
+//      precession formulas (Meeus, "Astronomical Algorithms", ch. 21) — the dominant effect,
+//      growing to tens of arcminutes per century.
+//   2) Fold nutation's main *observable* effect into sidereal time via the "equation of the
+//      equinoxes" (Meeus ch. 22, low-accuracy series, good to ~0.5″), rather than rotating every
+//      catalogue object individually — nutation's direct effect on any single star's RA/Dec
+//      (≲1–2″) is far below what this simulation can visually resolve, so absorbing it into time
+//      keeps the per-object cost down while still correctly shifting every object's altitude/
+//      azimuth together, which is what nutation actually does to the observed sky.
+// Mean obliquity of the ecliptic, in degrees, as a function of T = Julian centuries from J2000.0
+// (Meeus eq. 22.2, truncated to the cubic term — valid for many millennia around the present).
+function meanObliquityDeg(T){ return 23.439291111 - 0.0130041667*T - 1.63889e-7*T*T + 5.03611e-7*T*T*T; }
+const _precCache = { day: null };
+function updatePrecessionNutation(jd){
+  const day = Math.floor(jd);
+  if (_precCache.day === day) return _precCache;
+  const T = (jd - 2451545.0) / 36525;
+  const zetaR  = (2306.2181*T + 0.30188*T*T + 0.017998*T*T*T) / 3600 * DEG;
+  const zR     = (2306.2181*T + 1.09468*T*T + 0.018203*T*T*T) / 3600 * DEG;
+  const thetaR = (2004.3109*T - 0.42665*T*T - 0.041833*T*T*T) / 3600 * DEG;
+  // Low-accuracy nutation series (Meeus ch. 22): four dominant terms, good to ~0.5″.
+  const Om = (125.04452 - 1934.136261*T) * DEG;
+  const Ls = (280.4665 + 36000.7698*T) * DEG;
+  const Lm = (218.3165 + 481267.8813*T) * DEG;
+  const dPsiArcsec = -17.20*Math.sin(Om) - 1.32*Math.sin(2*Ls) - 0.23*Math.sin(2*Lm) + 0.21*Math.sin(2*Om);
+  const dEpsArcsec =   9.20*Math.cos(Om) + 0.57*Math.cos(2*Ls) + 0.10*Math.cos(2*Lm) - 0.09*Math.cos(2*Om);
+  const obliMeanR = meanObliquityDeg(T) * DEG;
+  const obliTrueR = obliMeanR + (dEpsArcsec/3600)*DEG;
+  const eqEquinoxHrs = (dPsiArcsec * Math.cos(obliTrueR)) / 15 / 3600; // Meeus eq. 11.1, in time-hours
+  _precCache.day = day; _precCache.T = T; _precCache.zetaR = zetaR; _precCache.zR = zR; _precCache.thetaR = thetaR;
+  _precCache.obliMeanR = obliMeanR; _precCache.obliTrueR = obliTrueR; _precCache.eqEquinoxHrs = eqEquinoxHrs;
+  return _precCache;
+}
+// Precesses a J2000.0 mean equatorial position (raH hours, decD degrees) to the mean equinox of
+// the date described by `prec` (from updatePrecessionNutation). Meeus eq. 21.4 — rigorous, closed-form.
+function precessJ2000ToDate(raH, decD, prec){
+  const ra0 = raH*15*DEG, dec0 = decD*DEG;
+  const A = Math.cos(dec0) * Math.sin(ra0 + prec.zetaR);
+  const B = Math.cos(prec.thetaR)*Math.cos(dec0)*Math.cos(ra0+prec.zetaR) - Math.sin(prec.thetaR)*Math.sin(dec0);
+  const C = Math.sin(prec.thetaR)*Math.cos(dec0)*Math.cos(ra0+prec.zetaR) + Math.cos(prec.thetaR)*Math.sin(dec0);
+  let ra = Math.atan2(A,B) + prec.zR;
+  const dec = Math.asin(clamp(C,-1,1));
+  ra = ((ra%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
+  return { ra: ra*RAD/15, dec: dec*RAD };
+}
+
+// ===================== Atmospheric Refraction =====================
+// Bennett (1982) refraction formula for a standard atmosphere (10°C, 1010 hPa). Valid from the
+// horizon to the zenith; below about -1° true altitude the object is well below the horizon and
+// the formula is no longer meaningful, so no correction is applied there (per spec §3).
+function refractionDeg(trueAltDeg){
+  if (trueAltDeg < -1) return 0;
+  const h = Math.max(trueAltDeg, -1);
+  const Rarcmin = 1.02 / Math.tan(DEG*(h + 10.3/(h+5.11)));
+  return Rarcmin/60;
+}
+function apparentAltDeg(trueAltDeg){ return trueAltDeg + refractionDeg(trueAltDeg); }
+function solveKepler(Md, e){ let M = ((Md%360)+360)%360*DEG, E = M;
+  for (let i=0;i<30;i++){ const d = (E - e*Math.sin(E) - M)/(1 - e*Math.cos(E)); E -= d; if (Math.abs(d)<1e-9) break; } return E; }
+function sunEcliptic(jd){ const d = jd - 2451543.5, w = (282.9404 + 4.70935e-5*d)*DEG, e = 0.016709 - 1.151e-9*d, M = 356.0470 + 0.9856002585*d;
+  const E = solveKepler(M,e), xv = Math.cos(E)-e, yv = Math.sqrt(1-e*e)*Math.sin(E), v = Math.atan2(yv,xv), r = Math.hypot(xv,yv);
+  return { lon: v + w, r }; }
+const earthHeliocentric = jd => { const s = sunEcliptic(jd); return { x: -s.r*Math.cos(s.lon), y: -s.r*Math.sin(s.lon), z: 0 }; };
+const PLANETS = {
+  mercury: { N:[48.331,3.24587e-5], i:[7.004,1.8518e-5], w:[29.124,1.01444e-5], a:0.387098, e:[0.205635,5.59e-10], M:[168.6562,4.092334436036] },
+  venus:   { N:[76.6799,2.46590e-5], i:[3.3946,2.10e-8], w:[54.891,1.38374e-5], a:0.723330, e:[0.006773,-1.302e-9], M:[48.0052,1.602130224457] },
+  mars:    { N:[49.5574,2.11081e-5], i:[1.8497,-1.78e-8], w:[286.502,2.92961e-5], a:1.523688, e:[0.093405,2.516e-9], M:[18.6021,0.524020776643] },
+  jupiter: { N:[100.4542,2.76854e-5], i:[1.3030,-1.557e-7], w:[273.877,1.64505e-5], a:5.20256, e:[0.048498,4.469e-9], M:[19.8950,0.0830853001] },
+  saturn:  { N:[113.6634,2.38980e-5], i:[2.4886,-1.081e-7], w:[339.3939,2.97681e-5], a:9.55475, e:[0.055546,-9.499e-9], M:[316.9670,0.0334442282] },
+  uranus:  { N:[74.0005,1.3978e-5], i:[0.7733,1.9e-8], w:[96.6612,3.0565e-5], a:19.18171, e:[0.047318,7.45e-9], M:[142.5905,0.011725806] },
+  neptune: { N:[131.7806,3.0173e-5], i:[1.7700,-2.55e-7], w:[272.8461,-6.027e-6], a:30.05826, e:[0.008606,2.15e-9], M:[260.2471,0.005995147] },
+};
+function planetHeliocentric(jd, name){ const el = PLANETS[name], d = jd - 2451543.5;
+  const N=(el.N[0]+el.N[1]*d)*DEG, i=(el.i[0]+el.i[1]*d)*DEG, w=(el.w[0]+el.w[1]*d)*DEG, a=el.a, e=el.e[0]+el.e[1]*d, M=el.M[0]+el.M[1]*d;
+  const E=solveKepler(M,e), xv=a*(Math.cos(E)-e), yv=a*Math.sqrt(1-e*e)*Math.sin(E), v=Math.atan2(yv,xv), r=Math.hypot(xv,yv), arg=v+w;
+  const lon=N+Math.atan2(Math.sin(arg)*Math.cos(i), Math.cos(arg));
+  const lat=Math.asin(clamp(Math.sin(arg)*Math.sin(i),-1,1));
+  return { x:r*Math.cos(lat)*Math.cos(lon), y:r*Math.cos(lat)*Math.sin(lon), z:r*Math.sin(lat), r, a, e };
+}
+function moonGeocentricEcliptic(jd){ const d=jd-2451543.5, N=(125.1228-5.24323e-6*d)*DEG, i=5.1454*DEG, w=(318.0634+1.64790e-5*d)*DEG, a=60.2666, e=0.054900, M=115.3654+13.064992950988*d;
+  const E=solveKepler(M,e), xv=a*(Math.cos(E)-e), yv=a*Math.sqrt(1-e*e)*Math.sin(E), v=Math.atan2(yv,xv), r=Math.hypot(xv,yv), arg=v+w;
+  const lon=N+Math.atan2(Math.sin(arg)*Math.cos(i), Math.cos(arg));
+  const lat=Math.asin(clamp(Math.sin(arg)*Math.sin(i),-1,1));
+  return { lon, lat, r };
+}
+const PLANET_INFO = {
+  mercury:{label:"Mercury",color:"#9a9a9a",size:2.4,mag:0.5}, venus:{label:"Venus",color:"#ece4c4",size:4.2,mag:-4.0},
+  mars:{label:"Mars",color:"#e07050",size:2.8,mag:0.0}, jupiter:{label:"Jupiter",color:"#d8c4a0",size:4.0,mag:-2.0},
+  saturn:{label:"Saturn",color:"#e8d6a8",size:3.4,mag:0.4},
+  uranus:{label:"Uranus",color:"#9fd9e0",size:2.0,mag:5.7}, neptune:{label:"Neptune",color:"#5b7fe0",size:1.8,mag:7.8},
+};
+const PLANET_DESC = {
+  Mercury: "The smallest and innermost planet. It has virtually no atmosphere, so its surface swings between extreme heat and cold.",
+  Venus: "Similar in size to Earth but shrouded in a thick, corrosive carbon-dioxide atmosphere that traps heat, making it the hottest planet.",
+  Mars: "The 'Red Planet.' A thin CO₂ atmosphere, polar ice caps, and the largest volcano (Olympus Mons) and canyon system in the solar system.",
+  Jupiter: "The largest planet, a gas giant with a powerful magnetic field, dozens of moons, and the long-lived Great Red Spot storm.",
+  Saturn: "A gas giant famous for its broad, bright ring system made of countless particles of ice and rock.",
+  Uranus: "An ice giant that rotates on its side (axial tilt ~98°), with a faint ring system and a pale cyan color from atmospheric methane.",
+  Neptune: "The most distant known major planet, an ice giant with the fastest winds recorded in the solar system and a deep blue color.",
+};
+// Standard IAU/NASA planetary fact-sheet constants (physical properties — these do NOT change
+// with the observation date, unlike the calculated RA/Dec/distance/phase rows above them in the
+// info panel). Moon counts are the most likely figures to go stale, since new small moons are
+// confirmed by the IAU Minor Planet Center every year or two — they're phrased as approximate and
+// dated for that reason rather than stated as permanently fixed.
+const PLANET_PHYSICAL = {
+  Mercury: { massEarth:0.0553, rotationDays:58.646, orbitalPeriodDays:87.969, atmosphere:"Virtually none — trace exosphere of O, Na, H, He", moons:"0", meanTempC:"-173 to 427 (extreme day/night swing)" },
+  Venus:   { massEarth:0.815, rotationDays:-243.025, orbitalPeriodDays:224.701, atmosphere:"Thick CO₂ (~96.5%) with sulfuric-acid clouds", moons:"0", meanTempC:"≈464 (hottest planet — runaway greenhouse effect)" },
+  Mars:    { massEarth:0.107, rotationDays:1.02595, orbitalPeriodDays:686.980, atmosphere:"Thin CO₂ (~95%)", moons:"2 (Phobos, Deimos)", meanTempC:"≈-63 (ranges roughly -140 to 20)" },
+  Jupiter: { massEarth:317.8, rotationDays:0.41354, orbitalPeriodDays:4332.59, atmosphere:"H₂/He with ammonia-ice clouds", moons:"≈100 known (as of early 2026; revised often as small moons are confirmed)", meanTempC:"≈-108 (cloud tops)" },
+  Saturn:  { massEarth:95.2, rotationDays:0.444, orbitalPeriodDays:10759.22, atmosphere:"H₂/He", moons:"285 known (as of March 2026; revised often as small moons are confirmed)", meanTempC:"≈-138 (cloud tops)" },
+  Uranus:  { massEarth:14.5, rotationDays:-0.71833, orbitalPeriodDays:30688.5, atmosphere:"H₂/He/CH₄ (methane gives its blue-green color)", moons:"28 known (as of 2024)", meanTempC:"≈-195 (cloud tops)" },
+  Neptune: { massEarth:17.1, rotationDays:0.6713, orbitalPeriodDays:60182, atmosphere:"H₂/He/CH₄", moons:"16 known (as of 2024)", meanTempC:"≈-201 (cloud tops)" },
+};
+const SUN_PHYSICAL = { massSolar:1, rotationDays:"≈25 (equator; varies with latitude — the Sun is not a solid body)", ageGyr:4.6, tempSurfaceK:5778, tempCoreK:"≈15,000,000", spectralType:"G2V" };
+const MOON_PHYSICAL = { massEarth:0.0123, orbitalPeriodDays:27.322, rotationDays:27.322, tempRangeC:"-173 to 127" };
+// Known physical radii (km) — standard IAU-adopted equatorial radii, used only to compute angular
+// diameters. These are established physical constants, not fitted or invented values.
+const SUN_RADIUS_KM = 695700, MOON_RADIUS_KM = 1737.4;
+const BODY_RADIUS_KM = { Mercury:2439.7, Venus:6051.8, Mars:3396.2, Jupiter:71492, Saturn:60268, Uranus:25559, Neptune:24764 };
+const angularDiameterArcsec = (radiusKm, distKm) => 2*Math.atan(radiusKm/distKm)*RAD*3600;
+// Apparent-magnitude formulas as a function of r (heliocentric distance, AU), delta (geocentric
+// distance, AU) and alpha (Sun-planet-Earth phase angle, degrees). These are the standard
+// low-order polynomial fits from Meeus, "Astronomical Algorithms" ch. 41. They are explicit
+// approximations: Saturn's formula here omits the ring-tilt brightness contribution (which needs
+// the ring plane's orientation, not modeled here), and higher-order phase terms for Uranus/Neptune
+// are omitted as negligible at their near-zero phase angles from Earth.
+const PLANET_MAG_FN = {
+  mercury: (r,d,a) => -0.42 + 5*Math.log10(r*d) + 0.0380*a - 0.000273*a*a + 0.000002*a*a*a,
+  venus:   (r,d,a) => -4.40 + 5*Math.log10(r*d) + 0.0009*a + 0.000239*a*a - 0.00000065*a*a*a,
+  mars:    (r,d,a) => -1.52 + 5*Math.log10(r*d) + 0.016*a,
+  jupiter: (r,d,a) => -9.40 + 5*Math.log10(r*d) + 0.005*a,
+  saturn:  (r,d)   => -8.88 + 5*Math.log10(r*d), // ring contribution omitted — see comment above
+  uranus:  (r,d)   => -7.19 + 5*Math.log10(r*d),
+  neptune: (r,d)   => -6.87 + 5*Math.log10(r*d),
+};
+// ===================== Solar / Lunar / Planetary Calculations (per-date positions) =====================
+// Computes Sun, all seven other planets, and the Moon for a given Julian Date. `prec` (from
+// updatePrecessionNutation) supplies the mean obliquity of date used to turn each body's ecliptic
+// position into equatorial RA/Dec. This is the single, expensive-ish per-frame computation for the
+// whole solar system; it is deliberately done once per frame and the result (`out`) reused by both
+// the visibility/sky-brightness model and the renderer, rather than recomputed per object.
+function getSolarSystem(jd, prec){ const out=[]; const s=sunEcliptic(jd), sunEq=eclipticToEquatorial(s.lon,0,prec.obliMeanR);
+  const sunMag = -26.74 + 5*Math.log10(s.r); // apparent magnitude varies slightly with Earth-Sun distance over the year
+  const sunAngDiamArcsec = angularDiameterArcsec(SUN_RADIUS_KM, s.r*AU_KM);
+  out.push({name:"Sun",ra:sunEq.ra,dec:sunEq.dec,isSun:true,color:"#fff7d6",size:7,distAU:s.r,mag:sunMag,angDiamArcsec:sunAngDiamArcsec});
+  const earth=earthHeliocentric(jd);
+  for (const k of Object.keys(PLANETS)){ const p=planetHeliocentric(jd,k), gx=p.x-earth.x, gy=p.y-earth.y, gz=p.z-earth.z;
+    const lon=Math.atan2(gy,gx), lat=Math.atan2(gz,Math.hypot(gx,gy)), eq=eclipticToEquatorial(lon,lat,prec.obliMeanR);
+    const distAU=Math.hypot(gx,gy,gz);
+    // Phase angle at the planet (Sun-planet-Earth), via the law of cosines on the three known
+    // distances: r = Sun-planet, distAU = Earth-planet, s.r = Sun-Earth.
+    const cosAlpha = clamp((p.r*p.r + distAU*distAU - s.r*s.r)/(2*p.r*distAU), -1, 1);
+    const alphaDeg = Math.acos(cosAlpha)*RAD;
+    const illum = (1+cosAlpha)/2;
+    const mag = PLANET_MAG_FN[k](p.r, distAU, alphaDeg);
+    const angDiamArcsec = angularDiameterArcsec(BODY_RADIUS_KM[PLANET_INFO[k].label], distAU*AU_KM);
+    out.push({name:PLANET_INFO[k].label,ra:eq.ra,dec:eq.dec,isPlanet:true,color:PLANET_INFO[k].color,size:PLANET_INFO[k].size,
+      mag,illum,phaseAngleDeg:alphaDeg,distAU,helioDistAU:p.r,orbitA:p.a,orbitE:p.e,angDiamArcsec}); }
+  const m=moonGeocentricEcliptic(jd), moonEq=eclipticToEquatorial(m.lon,m.lat,prec.obliMeanR);
+  const sv=[Math.cos(sunEq.dec*DEG)*Math.cos(sunEq.ra*15*DEG),Math.cos(sunEq.dec*DEG)*Math.sin(sunEq.ra*15*DEG),Math.sin(sunEq.dec*DEG)];
+  const mv=[Math.cos(moonEq.dec*DEG)*Math.cos(moonEq.ra*15*DEG),Math.cos(moonEq.dec*DEG)*Math.sin(moonEq.ra*15*DEG),Math.sin(moonEq.dec*DEG)];
+  const ce=clamp(sv[0]*mv[0]+sv[1]*mv[1]+sv[2]*mv[2],-1,1), elong=Math.acos(ce), illum=(1-ce)/2;
+  const phaseDeg=(((m.lon-s.lon)*RAD)%360+360)%360;
+  const alphaDeg=180-elong*RAD, moonMag=-12.73+0.026*Math.abs(alphaDeg)+4e-9*Math.pow(alphaDeg,4);
+  const moonDistKm = m.r*EARTH_RADIUS_KM;
+  const moonAngDiamArcsec = angularDiameterArcsec(MOON_RADIUS_KM, moonDistKm);
+  out.push({name:"Moon",ra:moonEq.ra,dec:moonEq.dec,isMoon:true,color:"#e8e8e0",size:6,illum,elong,phaseDeg,distKm:moonDistKm,mag:moonMag,angDiamArcsec:moonAngDiamArcsec});
+  return out;
+}
+function makeProjector(view){ const az0=view.az0*DEG, alt0=view.alt0*DEG, halfFov=(view.fov/2)*DEG, tanHalf=Math.tan(halfFov/2);
+  const v0=[Math.cos(alt0)*Math.sin(az0),Math.cos(alt0)*Math.cos(az0),Math.sin(alt0)];
+  let up=[0,0,1]; const dz=up[0]*v0[0]+up[1]*v0[1]+up[2]*v0[2];
+  up=[up[0]-dz*v0[0],up[1]-dz*v0[1],up[2]-dz*v0[2]]; const ul=Math.hypot(up[0],up[1],up[2])||1; up=[up[0]/ul,up[1]/ul,up[2]/ul];
+  const right=[v0[1]*up[2]-v0[2]*up[1], v0[2]*up[0]-v0[0]*up[2], v0[0]*up[1]-v0[1]*up[0]];
+  const visThresh=Math.cos(halfFov*1.02);
+  return (alt,az)=>{ const v=[Math.cos(alt)*Math.sin(az),Math.cos(alt)*Math.cos(az),Math.sin(alt)];
+    const d=v[0]*v0[0]+v[1]*v0[1]+v[2]*v0[2], f=2/(1+d);
+    const px=f*(v[0]-d*v0[0]), py=f*(v[1]-d*v0[1]), pz=f*(v[2]-d*v0[2]);
+    let x=(px*right[0]+py*right[1]+pz*right[2])/tanHalf, y=(px*up[0]+py*up[1]+pz*up[2])/tanHalf;
+    const mm=Math.hypot(x,y); if (mm>30){ x=(x/mm)*30; y=(y/mm)*30; }
+    return { x, y, visible: d > visThresh }; };
+}
+function bvToColor(bv){ const stops=[[-0.4,[155,176,255]],[-0.2,[170,191,255]],[0.0,[215,224,255]],[0.2,[245,244,255]],[0.4,[255,244,234]],[0.6,[255,233,200]],[0.8,[255,210,161]],[1.0,[255,186,120]],[1.2,[255,166,90]],[1.4,[255,150,80]],[1.6,[255,135,70]],[1.8,[255,120,60]],[2.0,[255,100,50]]];
+  if (bv<=stops[0][0]) return stops[0][1]; if (bv>=stops[stops.length-1][0]) return stops[stops.length-1][1];
+  for (let i=0;i<stops.length-1;i++){ if (bv>=stops[i][0]&&bv<=stops[i+1][0]){ const t=(bv-stops[i][0])/(stops[i+1][0]-stops[i][0]), a=stops[i][1],b=stops[i+1][1]; return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t]; } } return [255,255,255]; }
+// Inverse of makeProjector's stereographic-style projection: given normalized screen coordinates
+// (x,y — same convention makeProjector's output uses), recovers the (alt,az) they correspond to.
+// Rebuilds the same view basis makeProjector does, then inverts the exponential-map relationship
+// r = 2·tan(θ/2) between angular distance from view-center θ and projected radius r.
+function invProject(view, x, y){
+  const az0=view.az0*DEG, alt0=view.alt0*DEG, halfFov=(view.fov/2)*DEG, tanHalf=Math.tan(halfFov/2);
+  const v0=[Math.cos(alt0)*Math.sin(az0),Math.cos(alt0)*Math.cos(az0),Math.sin(alt0)];
+  let up=[0,0,1]; const dz=up[0]*v0[0]+up[1]*v0[1]+up[2]*v0[2];
+  up=[up[0]-dz*v0[0],up[1]-dz*v0[1],up[2]-dz*v0[2]]; const ul=Math.hypot(up[0],up[1],up[2])||1; up=[up[0]/ul,up[1]/ul,up[2]/ul];
+  const right=[v0[1]*up[2]-v0[2]*up[1], v0[2]*up[0]-v0[0]*up[2], v0[0]*up[1]-v0[1]*up[0]];
+  const xt = x*tanHalf, yt = y*tanHalf, r = Math.hypot(xt,yt);
+  let v;
+  if (r < 1e-9){ v = v0; }
+  else {
+    const theta = 2*Math.atan(r/2), ct=Math.cos(theta), st=Math.sin(theta);
+    const ux=xt/r, uy=yt/r;
+    const dirx=ux*right[0]+uy*up[0], diry=ux*right[1]+uy*up[1], dirz=ux*right[2]+uy*up[2];
+    v = [ v0[0]*ct+dirx*st, v0[1]*ct+diry*st, v0[2]*ct+dirz*st ];
+  }
+  return { alt: Math.asin(clamp(v[2],-1,1)), az: ((Math.atan2(v[0],v[1]))+2*Math.PI)%(2*Math.PI) };
+}
+// Horizontal (alt/az) to equatorial (RA/Dec), the dual of equatorialToHorizontal above — used only
+// by the live cursor-coordinates readout (mousemove is never in the per-frame render hot path).
+function horizontalToEquatorial(altR, azR, latD, lstH){
+  const lat = latD*DEG;
+  const sinDec = Math.sin(lat)*Math.sin(altR) + Math.cos(lat)*Math.cos(altR)*Math.cos(azR);
+  const dec = Math.asin(clamp(sinDec,-1,1)); const cosDec = Math.cos(dec);
+  let H = 0;
+  if (Math.abs(cosDec) > 1e-10){
+    const sinH = -Math.sin(azR)*Math.cos(altR)/cosDec;
+    const cosH = (Math.sin(altR) - Math.sin(lat)*sinDec)/(Math.cos(lat)*cosDec);
+    H = Math.atan2(sinH, cosH);
+  }
+  let raH = lstH - (H*RAD)/15; raH = ((raH%24)+24)%24;
+  return { ra: raH, dec: dec*RAD };
+}
+
+// ===================== Visibility & Sky Brightness (approximate) =====================
+// A deliberately simple, physically-motivated model — NOT a photometric sky-brightness model —
+// used only to decide roughly how visible an object is right now. It intentionally ignores light
+// pollution, aerosols, cloud cover, and real sky photometry (e.g. Krisciunas & Schaefer 1991),
+// which a genuine sky-brightness model would include; those factors can swing real limiting
+// magnitude by several magnitudes in either direction. Treat the numbers here as illustrative.
+function airmass(appAltDeg){ // Pickering (2002) approximation, well-behaved all the way to the horizon
+  if (appAltDeg <= -0.5) return 40;
+  const h = Math.max(appAltDeg, -0.5);
+  return 1 / Math.sin(DEG*(h + 244/(165+47*Math.pow(h,1.1))));
+}
+const EXTINCTION_MAG_PER_AIRMASS = 0.20; // typical clear-sky broadband extinction coefficient
+function extinctionMag(appAltDeg){ return EXTINCTION_MAG_PER_AIRMASS * (airmass(appAltDeg) - 1); }
+// Approximate naked-eye limiting magnitude (NELM) by Bortle dark-sky-scale class, drawn from the
+// widely published Bortle (2001) scale descriptions. Real light pollution varies by direction and
+// isn't captured by one number — these are illustrative midpoints for a simplified single-value
+// model, not a measured quantity.
+const BORTLE_NELM = { 1:7.8, 2:7.3, 3:6.6, 4:6.3, 5:5.6, 6:5.0, 7:4.5, 8:4.0, 9:3.5 };
+// Telescopic limiting-magnitude gain over the naked eye, from the standard aperture-ratio estimate
+// gain = 5·log10(D_telescope / D_pupil) with a 7mm fully dark-adapted pupil. A commonly used
+// estimate, not a guarantee — real limiting magnitude also depends on optics quality, sky
+// conditions, and observer experience.
+function telescopeLimitingMagGain(apertureMm){ if (!apertureMm || apertureMm<=7) return 0; return 5*Math.log10(apertureMm/7); }
+// Approximate naked-eye (or, with apertureMm, telescopic) limiting magnitude of the sky given the
+// Sun's and Moon's current altitude, the Moon's illuminated fraction, and a dark-sky baseline
+// (defaults to 6.5 — a dark, rural, moonless sky — when no Bortle-scale baseline is supplied).
+function skyLimitingMagnitude(sunAltDeg, moonAltDeg, moonIllum, darkSkyNELM, apertureMm){
+  const base = darkSkyNELM !== undefined ? darkSkyNELM : 6.5;
+  let lim = base;
+  if (sunAltDeg > -18){
+    const t = clamp((sunAltDeg + 18) / 18, 0, 1);
+    lim = base - t*10.5;
+    if (sunAltDeg > 0) lim = -4 - sunAltDeg*0.4;
+  }
+  if (moonAltDeg > 0 && moonIllum > 0) lim -= moonIllum*moonIllum * 4.5 * clamp(moonAltDeg/90, 0, 1);
+  if (apertureMm) lim += telescopeLimitingMagGain(apertureMm);
+  return lim;
+}
+// Standard twilight bands, defined by the Sun's true (geometric) altitude.
+function twilightState(sunAltDeg){
+  if (sunAltDeg > -0.833) return "Day";
+  if (sunAltDeg > -6) return "Civil twilight";
+  if (sunAltDeg > -12) return "Nautical twilight";
+  if (sunAltDeg > -18) return "Astronomical twilight";
+  return "Night";
+}
+// Plain-language visibility classification for the info panel (spec §9): distinguishes below
+// horizon, visible, difficult, and above-horizon-but-too-faint. This is purely informational text
+// in the info panel — it never affects how brightly anything is drawn on the canvas, which always
+// renders at full brightness regardless of sky conditions (matching the original simulation).
+function visibilityStatusText(effMag, limitMag, appAltDeg){
+  if (appAltDeg <= 0) return "Below horizon";
+  if (effMag <= limitMag - 1) return "Visible under current conditions";
+  if (effMag <= limitMag + 1) return "Above horizon, but difficult to see under current sky brightness";
+  return "Above horizon, but too faint under current sky brightness";
+}
+
+// ===================== Rise / Set (approximate) =====================
+// Finds the approximate (within a few minutes) times an object's true altitude crosses a
+// reference altitude h0 — which itself already folds in average refraction and, for the Moon,
+// parallax (Meeus ch. 15 convention) — by coarse sampling plus linear interpolation across the
+// crossing. This is adequate for a visual sky simulator, not an almanac-grade computation (a
+// rigorous algorithm would iterate to convergence rather than sample-and-interpolate).
+function riseSetTimes(getRaDecAtDate, h0Deg, centerDate, lat, lon){
+  const stepMin = 6, nSteps = 240; // ±12 hours in 6-minute steps
+  const startMs = centerDate.getTime() - 12*3600*1000;
+  let prevAlt = null, prevT = null, rise = null, set = null;
+  for (let i=0;i<=nSteps;i++){
+    const t = new Date(startMs + i*stepMin*60000);
+    const jd = dateToJD(t), prec = updatePrecessionNutation(jd), lst = lstHours(jd, lon, prec);
+    const rd = getRaDecAtDate(jd, prec);
+    const h = equatorialToHorizontal(rd.ra, rd.dec, lat, lst);
+    const altDeg = h.alt*RAD;
+    if (prevAlt !== null){
+      if (prevAlt < h0Deg && altDeg >= h0Deg && !rise){ const f=(h0Deg-prevAlt)/(altDeg-prevAlt); rise = new Date(prevT.getTime()+f*(t.getTime()-prevT.getTime())); }
+      if (prevAlt >= h0Deg && altDeg < h0Deg && !set){ const f=(prevAlt-h0Deg)/(prevAlt-altDeg); set = new Date(prevT.getTime()+f*(t.getTime()-prevT.getTime())); }
+    }
+    prevAlt = altDeg; prevT = t;
+  }
+  return { rise, set };
+}
+const _riseSetCache = { key: null, value: null };
+function getRiseSetCached(bodyKey, getRaDecAtDate, h0Deg, centerDate, lat, lon){
+  const cacheKey = bodyKey+":"+Math.floor(centerDate.getTime()/300000)+":"+lat.toFixed(2)+":"+lon.toFixed(2);
+  if (_riseSetCache.key === cacheKey) return _riseSetCache.value;
+  const value = riseSetTimes(getRaDecAtDate, h0Deg, centerDate, lat, lon);
+  _riseSetCache.key = cacheKey; _riseSetCache.value = value;
+  return value;
+}
+function fmtTimeShort(d){ if (!d) return "Not available"; return d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}); }
+
+// ===================== Transit / Observing-Quality Helpers =====================
+// Transit (culmination) occurs when local hour angle = 0, i.e. when sidereal time equals the
+// object's RA. Rather than sampling like riseSetTimes above, this refines a direct linear estimate
+// a couple of times — cheap, and more than accurate enough at the sub-minute level this simulator
+// needs. raHoursFn(jd, prec) should return the object's RA (hours) at that instant; for stars and
+// deep-sky objects (whose precessed "of date" RA barely moves over a day) it's fine for this to
+// just return the already-precessed constant RA.
+function estimateTransitTime(raHoursFn, centerDate, lon){
+  let t = centerDate.getTime();
+  for (let iter=0; iter<3; iter++){
+    const jd = dateToJD(new Date(t)), prec = updatePrecessionNutation(jd);
+    const lst = lstHours(jd, lon, prec);
+    const ra = raHoursFn(jd, prec);
+    let diffHrs = ra - lst; diffHrs = ((diffHrs+12)%24+24)%24-12; // shortest signed path to nearest transit
+    t += diffHrs * 3600000 / 1.0027379; // sidereal-to-solar rate
+  }
+  return new Date(t);
+}
+// Altitude at upper culmination: sin(alt) = cos(lat-dec), i.e. alt = 90° - |lat-dec|. Standard
+// spherical-astronomy result; negative values mean the object never rises at this latitude.
+function transitAltitudeDeg(latDeg, decDeg){ return 90 - Math.abs(latDeg - decDeg); }
+function visibilityQuality(maxAltDeg){
+  if (maxAltDeg <= 0) return "Never rises at this latitude";
+  if (maxAltDeg >= 60) return "Excellent — passes high overhead";
+  if (maxAltDeg >= 30) return "Good — comfortably clear of the horizon";
+  if (maxAltDeg >= 10) return "Fair — stays low, more affected by haze and extinction";
+  return "Poor — barely clears the horizon";
+}
+// Builds the shared "observing info" rows (transit time, max altitude, visibility quality, and —
+// for naked-eye targets — approximate airmass) reused by the Star/Planet/Sun/Moon/deep-sky
+// branches of buildInfoHTML below.
+function buildObservingRows(raHoursFn, decDeg, sky, appAltDeg, opticalTarget){
+  let out = "";
+  const transitT = estimateTransitTime(raHoursFn, sky.cur, sky.lon);
+  out += row("Transit Time (approx.)", fmtTimeShort(transitT));
+  const maxAlt = transitAltitudeDeg(sky.lat, decDeg);
+  out += row("Max Altitude (at transit)", isFinite(maxAlt) ? `${clamp(maxAlt,-90,90).toFixed(1)}°` : "Not available");
+  if (opticalTarget){
+    out += row("Visibility Quality", visibilityQuality(maxAlt));
+    if (appAltDeg > 0) out += row("Approx. Airmass", airmass(appAltDeg).toFixed(2));
+  }
+  return out;
+}
+
+// ===================== Telescope / Eyepiece Calculator =====================
+// Naked eye is special-cased since "magnification" isn't a telescope-focal/eyepiece-focal ratio
+// for unaided viewing. Everything else uses the standard amateur-astronomy formulas:
+//   magnification = telescope focal length / eyepiece focal length
+//   true FOV = eyepiece apparent FOV / magnification
+//   exit pupil = aperture / magnification
+//   resolution (Dawes limit, arcsec) = 116 / aperture(mm)
+// These are standard textbook approximations, not manufacturer-specified performance guarantees.
+function currentTelescopeStats(){
+  const t = state.telescope;
+  if (t.preset === "naked"){
+    return { magnification:1, trueFovDeg:180, exitPupilMm:t.apertureMm, resolutionArcsec:60, apertureMm:t.apertureMm, isNaked:true };
+  }
+  const magnification = t.focalLengthMm / t.eyepieceFocalMm;
+  const trueFovDeg = t.eyepieceAfovDeg / magnification;
+  const exitPupilMm = t.apertureMm / magnification;
+  const resolutionArcsec = 116 / t.apertureMm; // Dawes limit
+  return { magnification, trueFovDeg, exitPupilMm, resolutionArcsec, apertureMm:t.apertureMm, isNaked:false };
+}
+// Great-circle angular separation between two RA(h)/Dec(°) positions, in degrees.
+function angularSepDeg(ra1H,dec1D,ra2H,dec2D){
+  const r1=ra1H*15*DEG, d1=dec1D*DEG, r2=ra2H*15*DEG, d2=dec2D*DEG;
+  const c = clamp(Math.sin(d1)*Math.sin(d2)+Math.cos(d1)*Math.cos(d2)*Math.cos(r1-r2), -1, 1);
+  return Math.acos(c)*RAD;
+}
+
+// ===================== Observation Mode =====================
+// Builds a candidate list (Sun/Moon/planets + bright named stars (mag<3, to keep the list focused)
+// + all deep-sky objects) with current altitude, effective magnitude, transit/max-altitude, and
+// visibility classification — all computed on demand (button press), never per render frame.
+function computeObservationCandidates(){
+  const cur = internalDate, jd = dateToJD(cur), prec = updatePrecessionNutation(jd);
+  const lst = lstHours(jd, state.location.lon, prec), lat = state.location.lat;
+  const eqNow = (raH,decD) => equatorialToHorizontal(raH, decD, lat, lst);
+  const sky = currentSkyContext();
+  const list = [];
+  const ss = getSolarSystem(jd, prec);
+  for (const o of ss){
+    const a = eqNow(o.ra, o.dec);
+    const appAltDeg = apparentAltDeg(a.alt*RAD);
+    const effMag = (o.mag!==undefined?o.mag:0) + (appAltDeg>0?extinctionMag(appAltDeg):0);
+    const key = o.isSun ? "sun" : o.isMoon ? "moon" : Object.keys(PLANET_INFO).find(k=>PLANET_INFO[k].label===o.name);
+    list.push({ name:o.name, type:o.isSun?"Sun":o.isMoon?"Moon":"Planet", mag:o.mag, effMag, altDeg:appAltDeg, maxAltDeg:transitAltitudeDeg(lat, o.dec), searchKey:key });
+  }
+  for (const s of STARS){ if (s.mag > 3.0) continue;
+    const sp = precessJ2000ToDate(s.ra, s.dec, prec); const a = eqNow(sp.ra, sp.dec);
+    const appAltDeg = apparentAltDeg(a.alt*RAD);
+    const effMag = s.mag + (appAltDeg>0?extinctionMag(appAltDeg):0);
+    list.push({ name:s.name, type:"Star", mag:s.mag, effMag, altDeg:appAltDeg, maxAltDeg:transitAltitudeDeg(lat, sp.dec), searchKey:s.name.toLowerCase() });
+  }
+  for (const d of DEEP_SKY){
+    const dp = precessJ2000ToDate(d.ra, d.dec, prec); const a = eqNow(dp.ra, dp.dec);
+    const appAltDeg = apparentAltDeg(a.alt*RAD);
+    const baseMag = d.mag!==undefined ? d.mag : 8;
+    const effMag = baseMag + (appAltDeg>0?extinctionMag(appAltDeg):0);
+    list.push({ name:d.name, type:d.type, mag:d.mag, effMag, altDeg:appAltDeg, maxAltDeg:transitAltitudeDeg(lat, dp.dec), searchKey:d.name.toLowerCase() });
+  }
+  for (const c of list){
+    c.visStatus = visibilityStatusText(c.effMag, sky.limMag, c.altDeg);
+    c.observable = c.altDeg > 0 && c.effMag <= sky.limMag + 1;
+  }
+  return list;
+}
+
+// ===================== Astronomical Events (conjunctions & oppositions) =====================
+// Deliberately limited scope: superior-planet oppositions (detected as a local maximum in
+// elongation from the Sun within the scan window) and planet-planet/planet-Moon conjunctions
+// (closest approach below 5°, sampled daily). Solar/lunar eclipse prediction is NOT implemented —
+// it requires node/Besselian-element calculations well beyond this simulator's scope, so none are
+// shown or claimed, per spec §24's "only display events the calculations actually support".
+function scanEvents(){
+  const results = [];
+  const startMs = internalDate.getTime();
+  const nDays = 90;
+  const daily = [];
+  for (let d=0; d<=nDays; d++){
+    const t = new Date(startMs + d*86400000);
+    const jd = dateToJD(t), prec = updatePrecessionNutation(jd);
+    daily.push({ t, ss: getSolarSystem(jd, prec) });
+  }
+  const sunOf = day => day.ss.find(o=>o.isSun);
+  const bodyOf = (day,name) => day.ss.find(o=>o.name===name);
+  for (const name of ["Mars","Jupiter","Saturn","Uranus","Neptune"]){
+    const elongs = daily.map(day => angularSepDeg(bodyOf(day,name).ra,bodyOf(day,name).dec, sunOf(day).ra,sunOf(day).dec));
+    let bestIdx=-1, bestElong=-1;
+    for (let i=1;i<elongs.length-1;i++){ if (elongs[i]>elongs[i-1] && elongs[i]>=elongs[i+1] && elongs[i]>bestElong){ bestElong=elongs[i]; bestIdx=i; } }
+    if (bestIdx>0 && bestElong>170) results.push({ type:"Opposition", name, date:daily[bestIdx].t, detail:`${name} at opposition (elongation ≈${bestElong.toFixed(1)}° from the Sun) — well placed for observation all night.` });
+  }
+  const bodyNames = daily[0].ss.filter(o=>!o.isSun).map(o=>o.name);
+  for (let i=0;i<bodyNames.length;i++) for (let j=i+1;j<bodyNames.length;j++){
+    const nameA=bodyNames[i], nameB=bodyNames[j];
+    let minSep=999, minIdx=-1;
+    for (let d=0; d<daily.length; d++){
+      const a=bodyOf(daily[d],nameA), b=bodyOf(daily[d],nameB);
+      const sep = angularSepDeg(a.ra,a.dec,b.ra,b.dec);
+      if (sep<minSep){ minSep=sep; minIdx=d; }
+    }
+    if (minSep<5 && minIdx>0 && minIdx<daily.length-1) results.push({ type:"Conjunction", name:`${nameA} – ${nameB}`, date:daily[minIdx].t, detail:`${nameA} and ${nameB} pass within ${minSep.toFixed(1)}° of each other.` });
+  }
+  results.sort((a,b)=>a.date-b.date);
+  return results;
+}
+
+// ===================== Star Catalog =====================
+const STARS = [
+  { name:"Sirius",ra:6.7525,dec:-16.716,mag:-1.46,bv:0.00},{ name:"Canopus",ra:6.3992,dec:-52.696,mag:-0.74,bv:0.15},
+  { name:"Arcturus",ra:14.2610,dec:19.182,mag:-0.05,bv:1.23},{ name:"RigilKentaurus",ra:14.6600,dec:-60.835,mag:-0.27,bv:0.71},
+  { name:"Vega",ra:18.6156,dec:38.784,mag:0.03,bv:0.00},{ name:"Capella",ra:5.2772,dec:45.998,mag:0.08,bv:0.80},
+  { name:"Rigel",ra:5.2423,dec:-8.202,mag:0.13,bv:-0.03},{ name:"Procyon",ra:7.6550,dec:5.225,mag:0.34,bv:0.42},
+  { name:"Betelgeuse",ra:5.9195,dec:7.407,mag:0.42,bv:1.85},{ name:"Achernar",ra:1.6286,dec:-57.237,mag:0.45,bv:-0.16},
+  { name:"Hadar",ra:14.0637,dec:-60.373,mag:0.61,bv:-0.23},{ name:"Altair",ra:19.8464,dec:8.868,mag:0.77,bv:0.22},
+  { name:"Aldebaran",ra:4.5987,dec:16.509,mag:0.85,bv:1.54},{ name:"Antares",ra:16.4901,dec:-26.432,mag:1.09,bv:1.83},
+  { name:"Spica",ra:13.4199,dec:-11.161,mag:0.98,bv:-0.23},{ name:"Pollux",ra:7.7553,dec:28.026,mag:1.14,bv:1.00},
+  { name:"Fomalhaut",ra:22.9608,dec:-29.622,mag:1.16,bv:0.09},{ name:"Deneb",ra:20.6905,dec:45.280,mag:1.25,bv:0.09},
+  { name:"Mimosa",ra:12.7953,dec:-59.689,mag:1.25,bv:-0.23},{ name:"Regulus",ra:10.1393,dec:11.967,mag:1.36,bv:-0.11},
+  { name:"Adhara",ra:6.9770,dec:-28.972,mag:1.50,bv:-0.21},{ name:"Castor",ra:7.5766,dec:31.888,mag:1.58,bv:0.03},
+  { name:"Shaula",ra:17.5601,dec:-37.104,mag:1.62,bv:-0.22},{ name:"Gacrux",ra:12.5194,dec:-57.113,mag:1.63,bv:1.59},
+  { name:"Bellatrix",ra:5.4183,dec:6.350,mag:1.64,bv:-0.22},{ name:"Elnath",ra:5.4382,dec:28.608,mag:1.65,bv:-0.13},
+  { name:"Miaplacidus",ra:9.2200,dec:-70.040,mag:1.67,bv:0.03},{ name:"Alnilam",ra:5.6036,dec:-1.202,mag:1.69,bv:-0.18},
+  { name:"Alnair",ra:22.1372,dec:-46.961,mag:1.74,bv:-0.07},{ name:"Alnitak",ra:5.6793,dec:-1.943,mag:1.74,bv:-0.22},
+  { name:"Alioth",ra:12.9005,dec:55.960,mag:1.76,bv:-0.02},{ name:"Mirfak",ra:3.4054,dec:49.861,mag:1.79,bv:0.48},
+  { name:"Dubhe",ra:11.0625,dec:61.751,mag:1.79,bv:1.07},{ name:"Wezen",ra:7.1399,dec:-26.393,mag:1.83,bv:1.03},
+  { name:"KausAustralis",ra:18.4000,dec:-34.385,mag:1.85,bv:-0.03},{ name:"Avior",ra:8.3752,dec:-59.510,mag:1.86,bv:1.28},
+  { name:"Alkaid",ra:13.7923,dec:49.313,mag:1.86,bv:-0.10},{ name:"Sargas",ra:17.6210,dec:-42.998,mag:1.86,bv:0.40},
+  { name:"Menkalinan",ra:5.9921,dec:44.947,mag:1.90,bv:0.03},{ name:"Atria",ra:16.8110,dec:-69.028,mag:1.91,bv:1.45},
+  { name:"Alhena",ra:6.6285,dec:16.399,mag:1.93,bv:0.00},{ name:"Peacock",ra:20.4275,dec:-56.735,mag:1.94,bv:1.06},
+  { name:"Alsephina",ra:8.9600,dec:-54.700,mag:1.96,bv:0.02},{ name:"Mirzam",ra:6.3783,dec:-17.956,mag:1.98,bv:-0.24},
+  { name:"Alphard",ra:9.4596,dec:-8.659,mag:1.99,bv:1.39},{ name:"Hamal",ra:2.1196,dec:23.462,mag:2.00,bv:1.16},
+  { name:"Polaris",ra:2.5302,dec:89.264,mag:1.98,bv:0.64},{ name:"Diphda",ra:0.1730,dec:17.987,mag:2.04,bv:1.02},
+  { name:"Mizar",ra:13.3988,dec:54.926,mag:2.04,bv:0.13},{ name:"Nunki",ra:18.9200,dec:-26.300,mag:2.05,bv:-0.13},
+  { name:"Mirach",ra:1.1623,dec:35.621,mag:2.05,bv:1.58},{ name:"Alpheratz",ra:0.1398,dec:29.090,mag:2.06,bv:-0.11},
+  { name:"Kochab",ra:14.8451,dec:74.156,mag:2.08,bv:1.47},{ name:"Rasalhague",ra:17.5823,dec:12.560,mag:2.08,bv:0.16},
+  { name:"Algol",ra:3.1361,dec:40.956,mag:2.12,bv:-0.05},{ name:"Almach",ra:2.0649,dec:42.330,mag:2.10,bv:1.37},
+  { name:"Denebola",ra:11.8177,dec:14.572,mag:2.13,bv:0.09},{ name:"Muhlifain",ra:12.6900,dec:-49.000,mag:2.20,bv:-0.02},
+  { name:"Naos",ra:8.0600,dec:-40.000,mag:2.21,bv:-0.27},{ name:"Aspidiske",ra:9.2800,dec:-59.275,mag:2.21,bv:0.19},
+  { name:"Mintaka",ra:5.5333,dec:-0.300,mag:2.23,bv:-0.22},{ name:"Caph",ra:0.1530,dec:59.150,mag:2.27,bv:0.34},
+  { name:"Schedar",ra:0.6750,dec:56.537,mag:2.24,bv:1.19},{ name:"Sadr",ra:20.3705,dec:40.257,mag:2.23,bv:0.71},
+  { name:"Dschubba",ra:16.0056,dec:-22.622,mag:2.29,bv:-0.12},{ name:"Menkent",ra:14.1100,dec:-36.370,mag:2.06,bv:1.01},
+  { name:"Acrux",ra:12.4433,dec:-63.099,mag:0.77,bv:-0.24},{ name:"Becrux",ra:12.7953,dec:-59.689,mag:1.25,bv:-0.23},
+  { name:"Decrux",ra:12.5150,dec:-59.599,mag:2.79,bv:-0.30},{ name:"Merak",ra:11.0307,dec:56.382,mag:2.37,bv:0.03},
+  { name:"Phecda",ra:11.8970,dec:53.695,mag:2.44,bv:0.00},{ name:"Megrez",ra:12.2570,dec:57.033,mag:3.31,bv:0.08},
+  { name:"Saiph",ra:5.7959,dec:-9.670,mag:2.09,bv:-0.18},{ name:"Meissa",ra:5.5910,dec:9.934,mag:3.39,bv:-0.22},
+  { name:"Sheliak",ra:18.8344,dec:33.363,mag:3.52,bv:0.00},{ name:"Sulafat",ra:18.9826,dec:32.690,mag:3.25,bv:-0.06},
+  { name:"Gienah",ra:20.7702,dec:33.970,mag:2.48,bv:1.03},{ name:"Albireo",ra:19.5121,dec:27.960,mag:3.18,bv:1.13},
+  { name:"DeltaCyg",ra:19.7496,dec:45.131,mag:2.87,bv:0.00},{ name:"Algieba",ra:10.3329,dec:19.842,mag:2.61,bv:1.13},
+  { name:"Zosma",ra:11.2353,dec:20.524,mag:2.56,bv:0.02},{ name:"Chertan",ra:11.2373,dec:15.430,mag:3.33,bv:0.13},
+  { name:"Adhafera",ra:10.2790,dec:23.417,mag:3.43,bv:0.05},{ name:"PiSco",ra:15.9810,dec:-26.114,mag:2.89,bv:-0.18},
+  { name:"Lesath",ra:17.5083,dec:-37.296,mag:2.69,bv:-0.22},{ name:"TauSco",ra:16.5980,dec:-28.216,mag:2.82,bv:-0.25},
+  { name:"Alcyone",ra:3.7910,dec:24.105,mag:2.87,bv:-0.04},{ name:"ZetaTau",ra:5.6280,dec:21.143,mag:3.00,bv:-0.19},
+  { name:"Aludra",ra:7.6600,dec:-29.300,mag:2.45,bv:-0.08},{ name:"Wasat",ra:7.3350,dec:21.982,mag:3.50,bv:0.49},
+  { name:"Mebsuta",ra:6.7320,dec:25.131,mag:3.06,bv:0.98},{ name:"Tejat",ra:6.3820,dec:22.514,mag:2.87,bv:1.60},
+  { name:"Alzirr",ra:6.6330,dec:16.899,mag:3.36,bv:1.00},{ name:"Markab",ra:23.0793,dec:15.205,mag:2.49,bv:-0.04},
+  { name:"Scheat",ra:23.0628,dec:28.083,mag:2.42,bv:1.66},{ name:"Algenib",ra:0.2206,dec:15.184,mag:2.83,bv:-0.19},
+  { name:"Enif",ra:21.7364,dec:9.875,mag:2.39,bv:1.52},{ name:"DeltaAnd",ra:0.6550,dec:30.861,mag:3.27,bv:1.20},
+  { name:"Tarazed",ra:19.7710,dec:10.613,mag:2.72,bv:1.51},{ name:"Alshain",ra:19.9217,dec:6.407,mag:3.71,bv:0.92},
+  { name:"ZetaAql",ra:19.1370,dec:13.864,mag:3.43,bv:-0.11},{ name:"ThetaAql",ra:19.2890,dec:-0.822,mag:3.36,bv:0.05},
+  { name:"Izar",ra:14.7334,dec:27.074,mag:2.35,bv:0.97},{ name:"Muphrid",ra:13.8700,dec:18.597,mag:2.68,bv:0.81},
+  { name:"Nekkar",ra:15.0300,dec:40.391,mag:3.39,bv:0.97},{ name:"Seginus",ra:14.5340,dec:38.308,mag:3.04,bv:-0.05},
+  { name:"Alphecca",ra:15.5780,dec:26.715,mag:2.22,bv:0.00},{ name:"Almaaz",ra:5.0330,dec:41.075,mag:3.57,bv:0.00},
+  { name:"IotaAur",ra:5.9290,dec:33.166,mag:2.69,bv:1.16},{ name:"Eltanin",ra:17.9430,dec:51.489,mag:2.23,bv:1.52},
+  { name:"Rastaban",ra:17.3090,dec:52.301,mag:2.79,bv:-0.07},{ name:"Thuban",ra:14.0730,dec:64.376,mag:3.65,bv:-0.12},
+  { name:"Errai",ra:23.9930,dec:77.632,mag:3.21,bv:1.27},{ name:"Alderamin",ra:21.3090,dec:62.586,mag:2.45,bv:0.25},
+  { name:"Alfirk",ra:21.5620,dec:57.492,mag:3.15,bv:-0.04},{ name:"Ankaa",ra:0.6580,dec:-42.306,mag:2.40,bv:1.09},
+  { name:"Suhail",ra:9.7990,dec:-43.432,mag:2.23,bv:1.65},{ name:"Regor",ra:8.1580,dec:-47.336,mag:1.86,bv:-0.15},
+  { name:"Sabik",ra:17.1730,dec:15.425,mag:2.43,bv:0.16},{ name:"Rasalgethi",ra:17.2440,dec:14.390,mag:3.06,bv:1.95},
+  { name:"Kornephoros",ra:16.4900,dec:21.490,mag:2.78,bv:0.81},{ name:"Pherkad",ra:15.3454,dec:71.834,mag:3.00,bv:-0.05},
+  { name:"GammaCas",ra:0.9450,dec:60.717,mag:2.15,bv:-0.15},{ name:"Ruchbah",ra:1.4300,dec:60.235,mag:2.68,bv:0.16},
+  { name:"Segin",ra:1.9100,dec:63.670,mag:3.38,bv:-0.15},{ name:"Homam",ra:22.7100,dec:10.831,mag:3.41,bv:0.00},
+  { name:"Matar",ra:22.1690,dec:15.346,mag:2.93,bv:0.00},{ name:"Arneb",ra:5.3200,dec:-17.823,mag:2.20,bv:0.21},
+  { name:"Nihal",ra:5.5000,dec:-20.848,mag:2.80,bv:1.10},{ name:"Phact",ra:5.7700,dec:-34.074,mag:2.60,bv:-0.12},
+  { name:"Wazn",ra:5.8300,dec:-35.756,mag:3.10,bv:1.40},{ name:"AlphaLupi",ra:14.7800,dec:-47.388,mag:2.30,bv:-0.18},
+  { name:"BetaLupi",ra:14.9000,dec:-43.133,mag:2.70,bv:-0.07},{ name:"BetaArae",ra:16.7310,dec:-55.510,mag:2.80,bv:1.45},
+  { name:"AlphaArae",ra:17.5100,dec:-49.876,mag:2.90,bv:-0.18},{ name:"BetaTrA",ra:16.4600,dec:-63.430,mag:2.80,bv:1.50},
+  { name:"GammaTrA",ra:15.8710,dec:-68.900,mag:2.90,bv:1.30},{ name:"AlphaTuc",ra:22.3100,dec:-60.260,mag:2.90,bv:1.10},
+  { name:"BetaGru",ra:22.7100,dec:-46.884,mag:2.10,bv:1.60},{ name:"GammaGru",ra:21.8810,dec:-37.660,mag:3.00,bv:1.10},
+  { name:"BetaHyi",ra:0.4590,dec:-77.255,mag:2.80,bv:0.96},{ name:"AlphaHyi",ra:2.1900,dec:-61.570,mag:2.90,bv:0.30},
+  { name:"BetaPav",ra:20.2700,dec:-66.200,mag:3.42,bv:1.50},{ name:"AlphaPic",ra:6.8200,dec:-54.700,mag:3.27,bv:0.35},
+  { name:"BetaCar",ra:9.4500,dec:-69.710,mag:1.70,bv:0.00},{ name:"IotaCar",ra:9.3000,dec:-59.250,mag:2.20,bv:1.20},
+  { name:"ThetaCar",ra:10.7400,dec:-64.390,mag:2.70,bv:-0.22},{ name:"UpsilonCar",ra:9.5200,dec:-65.070,mag:3.00,bv:0.20},
+  { name:"PiPup",ra:6.9700,dec:-37.100,mag:2.70,bv:1.60},{ name:"Tureis",ra:8.0700,dec:-24.300,mag:2.80,bv:0.45},
+  { name:"TauPup",ra:6.8300,dec:-50.610,mag:2.90,bv:1.20},{ name:"KappaVel",ra:9.3600,dec:-55.010,mag:2.50,bv:-0.18},
+  { name:"MuVel",ra:10.5600,dec:-49.420,mag:2.70,bv:1.50},{ name:"DeltaVel",ra:8.7450,dec:-54.708,mag:1.90,bv:0.04},
+  { name:"EpsilonVel",ra:9.2300,dec:-40.630,mag:2.40,bv:1.30},{ name:"BetaVol",ra:7.8200,dec:-66.140,mag:3.10,bv:1.10},
+  { name:"AlphaMus",ra:12.6200,dec:-69.330,mag:2.70,bv:-0.16},{ name:"SigmaOct",ra:22.3300,dec:-88.950,mag:5.40,bv:0.60},
+  { name:"Sheratan",ra:1.9100,dec:20.808,mag:2.64,bv:0.05},{ name:"Mesarthim",ra:1.8900,dec:19.294,mag:3.88,bv:0.05},
+  { name:"Alrescha",ra:1.5060,dec:2.764,mag:3.82,bv:0.48},{ name:"Menkar",ra:3.0400,dec:4.090,mag:2.53,bv:1.64},
+  { name:"BatenKaitos",ra:1.9100,dec:-10.335,mag:3.74,bv:1.40},{ name:"Unukalhai",ra:15.7400,dec:6.421,mag:2.63,bv:1.10},
+  { name:"Cebalrai",ra:17.7200,dec:4.567,mag:2.76,bv:1.10},{ name:"YedPrior",ra:16.2400,dec:-3.694,mag:2.74,bv:1.20},
+  { name:"GienahCrv",ra:12.2700,dec:-17.541,mag:2.58,bv:-0.08},{ name:"Kraz",ra:12.5700,dec:-23.396,mag:2.65,bv:0.89},
+  { name:"Algorab",ra:12.5000,dec:-16.515,mag:2.94,bv:-0.04},{ name:"Zubenelgenubi",ra:14.8500,dec:-16.042,mag:2.75,bv:0.15},
+  { name:"Zubeneschamali",ra:15.2800,dec:-9.383,mag:2.61,bv:0.30},{ name:"KausMedia",ra:18.3200,dec:-29.828,mag:2.70,bv:1.00},
+  { name:"KausBorealis",ra:18.7800,dec:-25.421,mag:2.81,bv:1.00},{ name:"Alnasl",ra:18.0500,dec:-30.424,mag:3.51,bv:1.00},
+  { name:"Ascella",ra:19.0400,dec:-29.880,mag:2.59,bv:-0.05},{ name:"DenebAlgedi",ra:21.4700,dec:-16.127,mag:2.81,bv:0.09},
+  { name:"Dabih",ra:20.3000,dec:-14.781,mag:3.05,bv:0.30},{ name:"Sadalmelik",ra:22.0900,dec:-0.319,mag:2.95,bv:0.47},
+  { name:"Sadalsuud",ra:21.5300,dec:-5.571,mag:2.91,bv:0.47},{ name:"Skat",ra:22.9200,dec:-15.821,mag:3.27,bv:0.08},
+  { name:"CorCaroli",ra:12.9300,dec:38.303,mag:2.80,bv:0.31},{ name:"Muscida",ra:8.5000,dec:60.718,mag:3.35,bv:0.00},
+  { name:"Talitha",ra:8.2400,dec:48.042,mag:3.04,bv:0.21},{ name:"TaniaBorealis",ra:10.3200,dec:42.914,mag:3.45,bv:0.21},
+  { name:"TaniaAustralis",ra:10.4000,dec:41.500,mag:3.05,bv:1.30},{ name:"AlulaAustralis",ra:11.3100,dec:31.530,mag:3.79,bv:0.59},
+  { name:"AlulaBorealis",ra:11.2900,dec:33.094,mag:3.52,bv:1.30},{ name:"Edasich",ra:15.4100,dec:58.966,mag:3.31,bv:1.50},
+  { name:"Grumium",ra:17.1200,dec:56.873,mag:3.74,bv:1.00},{ name:"Altais",ra:19.2100,dec:67.661,mag:3.07,bv:1.00},
+  { name:"Gomeisa",ra:7.4000,dec:8.289,mag:2.89,bv:-0.07},{ name:"Atik",ra:3.7300,dec:32.288,mag:3.83,bv:-0.18},
+  { name:"Hassaleh",ra:5.0300,dec:43.823,mag:2.99,bv:0.50},{ name:"Hoedus",ra:5.1100,dec:41.234,mag:3.17,bv:-0.16},
+  { name:"Acubens",ra:8.9700,dec:11.857,mag:4.25,bv:0.40},{ name:"Tarf",ra:8.3200,dec:9.185,mag:3.53,bv:1.00},
+  { name:"Porrima",ra:12.6900,dec:-1.449,mag:2.74,bv:0.36},{ name:"Vindemiatrix",ra:13.0200,dec:10.959,mag:2.83,bv:0.94},
+  { name:"Zavijava",ra:11.8400,dec:1.765,mag:3.59,bv:0.55},{ name:"Auva",ra:12.2600,dec:3.397,mag:3.39,bv:1.50},
+  { name:"Heze",ra:13.5500,dec:-0.595,mag:3.37,bv:0.12},{ name:"Syrma",ra:14.3200,dec:-5.990,mag:4.07,bv:0.96},
+  { name:"Mufrid",ra:13.7500,dec:41.400,mag:3.05,bv:0.56},{ name:"Alkalurops",ra:14.7300,dec:37.388,mag:4.31,bv:0.58},
+  { name:"Mira",ra:2.3200,dec:-3.065,mag:3.00,bv:1.42},{ name:"Kaffaljidhma",ra:0.7100,dec:3.243,mag:3.54,bv:0.06},
+  { name:"Alya",ra:18.8600,dec:4.620,mag:4.60,bv:0.16},{ name:"YedPosterior",ra:16.3400,dec:-4.700,mag:3.23,bv:1.00},
+  { name:"Cursa",ra:2.7900,dec:-5.090,mag:2.79,bv:0.10},{ name:"Acamar",ra:2.9700,dec:-40.305,mag:2.91,bv:0.00},
+  { name:"Zaurak",ra:2.9700,dec:-13.500,mag:2.97,bv:1.60},{ name:"Rana",ra:3.7300,dec:-9.800,mag:3.54,bv:1.10},
+  { name:"Azha",ra:1.5700,dec:-8.900,mag:3.89,bv:1.50},{ name:"HyadumII",ra:4.3300,dec:15.625,mag:3.65,bv:1.00},
+  { name:"Ain",ra:4.4770,dec:19.180,mag:3.53,bv:1.50},{ name:"Hatysa",ra:5.6000,dec:-5.400,mag:3.60,bv:-0.20},
+  { name:"Yildun",ra:19.2700,dec:67.660,mag:3.07,bv:0.00},{ name:"Aldhibah",ra:17.1300,dec:65.700,mag:3.07,bv:-0.10},
+  { name:"Sadalachbia",ra:22.5200,dec:-1.400,mag:3.85,bv:0.05},{ name:"Zubenelakrab",ra:15.5600,dec:-14.800,mag:3.90,bv:1.00},
+  { name:"Brachium",ra:15.0400,dec:-25.300,mag:3.30,bv:1.50},{ name:"Miram",ra:2.9100,dec:55.900,mag:3.80,bv:1.50},{ name:"Menkib",ra:3.9700,dec:31.900,mag:2.84,bv:-0.20}
+  ,{ name:"Misam",ra:3.5400,dec:44.900,mag:3.80,bv:0.50},{ name:"Marsic",ra:17.4200,dec:36.800,mag:3.16,bv:1.40}
+  ,{ name:"Rutilicus",ra:16.7500,dec:38.900,mag:3.53,bv:0.90},{ name:"Han",ra:16.6200,dec:-10.600,mag:2.54,bv:-0.20}
+  ,{ name:"Guai",ra:15.7200,dec:15.700,mag:3.67,bv:0.10},{ name:"Nusakan",ra:15.7200,dec:29.100,mag:3.68,bv:0.20}
+  ,{ name:"Diadem",ra:13.1800,dec:17.300,mag:4.32,bv:0.30},{ name:"Asterion",ra:12.4900,dec:41.400,mag:4.26,bv:0.00}
+  ,{ name:"Zaniah",ra:12.7000,dec:-1.400,mag:3.89,bv:0.00},{ name:"Minchir",ra:13.5600,dec:-31.600,mag:4.30,bv:1.20}
+  ,{ name:"Alkes",ra:10.6300,dec:-18.300,mag:4.08,bv:1.00},{ name:"Praecipua",ra:10.9000,dec:34.200,mag:3.83,bv:1.00}
+  ,{ name:"AsellusAustralis",ra:8.7500,dec:18.200,mag:3.94,bv:1.00},{ name:"AsellusBorealis",ra:8.8900,dec:21.500,mag:4.66,bv:0.20}
+  ,{ name:"Beid",ra:4.2700,dec:-6.800,mag:4.01,bv:0.90},{ name:"Keid",ra:4.2700,dec:-7.300,mag:4.43,bv:1.00}
+  ,{ name:"Sualocin",ra:20.6200,dec:15.900,mag:3.77,bv:-0.10},{ name:"Rotanev",ra:20.6200,dec:14.600,mag:3.63,bv:0.10}
+  ,{ name:"Kitalpha",ra:21.5300,dec:5.200,mag:3.92,bv:0.00},{ name:"Persian",ra:20.6200,dec:-47.300,mag:3.11,bv:1.10}
+  ,{ name:"Mothallah",ra:1.8800,dec:29.600,mag:3.42,bv:0.30},{ name:"Deltotum",ra:2.1000,dec:35.000,mag:3.00,bv:0.00}
+  ,{ name:"Acrab",ra:16.2939,dec:-19.805,mag:2.56,bv:-0.07}
+  // --- Additional stars supporting the 42 previously-missing IAU constellations (below) ---
+  ,{ name:"AlphaAnt",ra:10.4530,dec:-31.067,mag:4.25,bv:1.34},{ name:"IotaAnt",ra:10.9480,dec:-37.137,mag:4.60,bv:0.96}
+  ,{ name:"AlphaAps",ra:14.7980,dec:-79.033,mag:3.83,bv:1.49},{ name:"GammaAps",ra:16.5570,dec:-78.900,mag:3.89,bv:1.02}
+  ,{ name:"AlphaCae",ra:4.6770,dec:-41.867,mag:4.45,bv:0.28},{ name:"BetaCae",ra:4.7000,dec:-37.150,mag:5.05,bv:0.36}
+  ,{ name:"AlphaCam",ra:4.9020,dec:66.342,mag:4.29,bv:-0.09},{ name:"BetaCam",ra:5.0570,dec:60.443,mag:4.03,bv:0.86}
+  ,{ name:"Algedi",ra:20.3020,dec:-12.545,mag:3.57,bv:0.77}
+  ,{ name:"AlphaCha",ra:8.3090,dec:-76.920,mag:4.07,bv:0.98},{ name:"GammaCha",ra:10.5920,dec:-78.613,mag:4.11,bv:1.60}
+  ,{ name:"AlphaCir",ra:14.7080,dec:-64.983,mag:3.19,bv:0.25},{ name:"BetaCir",ra:15.2900,dec:-58.800,mag:4.07,bv:0.20}
+  ,{ name:"BetaCom",ra:13.1980,dec:27.878,mag:4.26,bv:0.57}
+  ,{ name:"AlphaCrA",ra:19.1550,dec:-37.904,mag:4.10,bv:0.06},{ name:"BetaCrA",ra:19.1670,dec:-39.340,mag:4.11,bv:1.30}
+  ,{ name:"BetaCrt",ra:11.1930,dec:-22.826,mag:4.46,bv:0.22},{ name:"GammaCrt",ra:11.4150,dec:-17.686,mag:4.06,bv:0.20},{ name:"DeltaCrt",ra:11.3220,dec:-14.778,mag:3.56,bv:0.98}
+  ,{ name:"AlphaDor",ra:4.5650,dec:-55.045,mag:3.27,bv:0.03},{ name:"BetaDor",ra:5.5600,dec:-62.481,mag:3.76,bv:0.71}
+  ,{ name:"GammaEqu",ra:21.1720,dec:10.133,mag:4.69,bv:0.28},{ name:"DeltaEqu",ra:21.2420,dec:10.008,mag:4.49,bv:0.32}
+  ,{ name:"AlphaFor",ra:3.2020,dec:-28.987,mag:3.87,bv:0.53},{ name:"BetaFor",ra:2.8230,dec:-32.408,mag:4.46,bv:0.98}
+  ,{ name:"AlphaHor",ra:4.2340,dec:-42.293,mag:3.85,bv:0.92},{ name:"DeltaHor",ra:4.2560,dec:-46.084,mag:4.93,bv:0.27}
+  ,{ name:"BetaInd",ra:20.9130,dec:-58.454,mag:3.65,bv:1.60}
+  ,{ name:"AlphaLac",ra:22.5220,dec:50.284,mag:3.77,bv:0.03},{ name:"BetaLac",ra:22.3940,dec:52.226,mag:4.43,bv:0.94}
+  ,{ name:"BetaLMi",ra:10.4640,dec:36.708,mag:4.21,bv:0.92}
+  ,{ name:"AlphaLyn",ra:9.3500,dec:34.392,mag:3.14,bv:1.55},{ name:"Lyn38",ra:9.3130,dec:36.805,mag:3.82,bv:0.03}
+  ,{ name:"AlphaMen",ra:6.1700,dec:-74.753,mag:5.09,bv:0.57},{ name:"BetaMen",ra:5.0420,dec:-71.300,mag:5.31,bv:0.48}
+  ,{ name:"AlphaMic",ra:20.8330,dec:-33.783,mag:4.90,bv:0.98},{ name:"GammaMic",ra:21.0220,dec:-32.259,mag:4.67,bv:0.86}
+  ,{ name:"AlphaMon",ra:7.6870,dec:-9.550,mag:3.94,bv:1.05},{ name:"BetaMon",ra:6.4800,dec:-7.033,mag:3.74,bv:-0.13},{ name:"GammaMon",ra:6.2480,dec:-6.267,mag:3.98,bv:1.55}
+  ,{ name:"BetaMus",ra:12.7720,dec:-68.108,mag:3.05,bv:-0.16},{ name:"GammaMus",ra:12.5420,dec:-72.133,mag:3.84,bv:-0.18}
+  ,{ name:"Gamma2Nor",ra:16.3300,dec:-50.153,mag:4.02,bv:1.10},{ name:"EpsilonNor",ra:16.4530,dec:-47.554,mag:4.47,bv:-0.10}
+  ,{ name:"NuOct",ra:21.6920,dec:-77.390,mag:3.76,bv:1.10},{ name:"BetaOct",ra:22.7700,dec:-81.383,mag:4.13,bv:0.10}
+  ,{ name:"BetaPhe",ra:1.1020,dec:-46.719,mag:3.31,bv:0.90},{ name:"GammaPhe",ra:1.4730,dec:-43.318,mag:3.41,bv:1.56}
+  ,{ name:"BetaPic",ra:5.7880,dec:-51.067,mag:3.85,bv:0.17}
+  ,{ name:"EtaPsc",ra:1.5250,dec:15.346,mag:3.62,bv:0.98}
+  ,{ name:"EpsilonPsA",ra:22.6790,dec:-27.043,mag:4.17,bv:-0.05}
+  ,{ name:"AlphaPyx",ra:8.7250,dec:-33.187,mag:3.68,bv:-0.19},{ name:"BetaPyx",ra:8.6700,dec:-35.309,mag:4.03,bv:0.86}
+  ,{ name:"AlphaRet",ra:4.2400,dec:-62.474,mag:3.35,bv:0.90},{ name:"BetaRet",ra:3.7370,dec:-64.807,mag:3.85,bv:1.08}
+  ,{ name:"AlphaSge",ra:19.6690,dec:18.014,mag:4.37,bv:0.85},{ name:"DeltaSge",ra:19.7900,dec:18.534,mag:3.68,bv:1.61},{ name:"GammaSge",ra:19.9800,dec:19.492,mag:3.51,bv:1.57}
+  ,{ name:"AlphaScl",ra:0.9770,dec:-29.357,mag:4.30,bv:-0.08},{ name:"BetaScl",ra:23.5500,dec:-37.817,mag:4.37,bv:-0.11}
+  ,{ name:"AlphaSct",ra:18.5870,dec:-8.244,mag:3.85,bv:1.27},{ name:"BetaSct",ra:18.7870,dec:-4.750,mag:4.22,bv:0.98}
+  ,{ name:"AlphaSex",ra:10.1320,dec:-0.372,mag:4.49,bv:-0.07},{ name:"BetaSex",ra:10.5000,dec:-0.633,mag:5.09,bv:-0.14}
+  ,{ name:"AlphaTel",ra:18.4490,dec:-45.967,mag:3.51,bv:-0.10},{ name:"ZetaTel",ra:18.4800,dec:-49.067,mag:4.13,bv:1.04}
+  ,{ name:"GammaTuc",ra:23.2880,dec:-58.233,mag:3.99,bv:0.32}
+  ,{ name:"AlphaVol",ra:9.0380,dec:-66.400,mag:4.00,bv:0.11},{ name:"Gamma2Vol",ra:7.1470,dec:-70.500,mag:3.78,bv:0.52}
+  ,{ name:"AlphaVul",ra:19.4780,dec:24.667,mag:4.44,bv:1.53},{ name:"Vul1",ra:19.1920,dec:21.150,mag:4.77,bv:-0.11}
+];
+const DEEP_SKY = [
+  { name:"Sagittarius A*",ra:17.7611,dec:-29.0078,type:"Black Hole",mag:0,desc:"The supermassive black hole (~4.15 million solar masses) at the center of the Milky Way galaxy." },
+  { name:"M31 Andromeda Galaxy",ra:0.7125,dec:41.269,type:"Galaxy",mag:3.4,desc:"Nearest large spiral galaxy, ~2.5 million light-years away; on a collision course with the Milky Way." },
+  { name:"M33 Triangulum Galaxy",ra:1.5647,dec:30.660,type:"Galaxy",mag:5.7,desc:"Third-largest galaxy in the Local Group, a small spiral visible in dark skies." },
+  { name:"M81 Bode's Galaxy",ra:9.9289,dec:69.066,type:"Galaxy",mag:6.9,desc:"Grand-design spiral galaxy in Ursa Major, about 12 million light-years away." },
+  { name:"M82 Cigar Galaxy",ra:9.9317,dec:69.679,type:"Galaxy",mag:8.4,desc:"Starburst galaxy undergoing intense star formation, near M81." },
+  { name:"M51 Whirlpool Galaxy",ra:13.4967,dec:47.304,type:"Galaxy",mag:8.4,desc:"Iconic interacting pair of spiral galaxies, ~23 million light-years away." },
+  { name:"M104 Sombrero Galaxy",ra:12.6611,dec:-11.623,type:"Galaxy",mag:8.0,desc:"Unusual galaxy with a bright nucleus and a dark dust lane, resembling a sombrero." },
+  { name:"Centaurus A",ra:13.4180,dec:-43.019,type:"Galaxy",mag:6.8,desc:"Radio galaxy and the closest active galactic nucleus, ~13 million light-years away." },
+  { name:"M106",ra:12.4342,dec:47.303,type:"Galaxy",mag:8.4,desc:"Seyfert spiral galaxy in Canes Venatici with an anomalous spiral arm." },
+  { name:"M77",ra:2.7028,dec:-0.013,type:"Galaxy",mag:8.9,desc:"Active Seyfert galaxy in Cetus, one of the largest known spiral galaxies." },
+  { name:"LMC Large Magellanic Cloud",ra:5.2300,dec:-69.750,type:"Galaxy",mag:0.9,desc:"Satellite galaxy of the Milky Way, visible to the naked eye in southern skies." },
+  { name:"SMC Small Magellanic Cloud",ra:0.5200,dec:-73.100,type:"Galaxy",mag:2.2,desc:"Dwarf satellite galaxy of the Milky Way, near the LMC." },
+  { name:"M42 Orion Nebula",ra:5.5900,dec:-5.388,type:"Nebula",mag:4.0,desc:"Bright emission nebula and stellar nursery in Orion's sword, ~1344 light-years away." },
+  { name:"M1 Crab Nebula",ra:5.5750,dec:22.014,type:"Nebula",mag:8.4,desc:"Supernova remnant from a star observed in 1054 AD; contains the Crab Pulsar." },
+  { name:"M8 Lagoon Nebula",ra:18.0640,dec:-24.382,type:"Nebula",mag:6.0,desc:"Emission nebula in Sagittarius with an open cluster embedded in it." },
+  { name:"M20 Trifid Nebula",ra:18.0270,dec:-23.030,type:"Nebula",mag:6.3,desc:"Combination emission, reflection, and dark nebula divided into three lobes by dust lanes." },
+  { name:"M16 Eagle Nebula",ra:18.3180,dec:-13.787,type:"Nebula",mag:6.0,desc:"Star-forming nebula famous for the 'Pillars of Creation' Hubble image." },
+  { name:"M17 Omega Nebula",ra:18.3480,dec:-16.156,type:"Nebula",mag:6.0,desc:"Also called the Swan Nebula; a bright H II region in Sagittarius." },
+  { name:"NGC 3372 Carina Nebula",ra:10.7200,dec:-59.683,type:"Nebula",mag:1.0,desc:"Vast star-forming region in the southern sky, home to Eta Carinae." },
+  { name:"NGC 7000 North America Nebula",ra:20.9470,dec:44.340,type:"Nebula",mag:4.0,desc:"Large emission nebula resembling the shape of North America, in Cygnus." },
+  { name:"M45 Pleiades",ra:3.7910,dec:24.105,type:"Open Cluster",mag:1.6,desc:"The Seven Sisters; a bright open star cluster in Taurus, ~444 light-years away." },
+  { name:"Hyades",ra:4.3900,dec:15.500,type:"Open Cluster",mag:0.5,desc:"Nearest open star cluster to Earth, forming the V-shape of Taurus's face." },
+  { name:"M44 Beehive Cluster",ra:8.6670,dec:19.670,type:"Open Cluster",mag:3.7,desc:"Open cluster (Praesepe) in Cancer, one of the nearest open clusters." },
+  { name:"M7 Ptolemy Cluster",ra:17.9040,dec:-34.793,type:"Open Cluster",mag:3.3,desc:"Bright open cluster in Scorpius, visible to the naked eye." },
+  { name:"M6 Butterfly Cluster",ra:17.6600,dec:-32.253,type:"Open Cluster",mag:4.2,desc:"Open cluster in Scorpius shaped roughly like a butterfly." },
+  { name:"Omega Centauri",ra:13.4320,dec:-47.290,type:"Globular Cluster",mag:3.7,desc:"Largest globular cluster in the Milky Way, containing ~10 million stars." },
+  { name:"47 Tucanae",ra:0.4050,dec:-72.080,type:"Globular Cluster",mag:4.0,desc:"Second-brightest globular cluster, near the SMC." },
+  { name:"M13 Hercules Cluster",ra:16.6900,dec:36.461,type:"Globular Cluster",mag:5.8,desc:"Bright globular cluster in Hercules, ~22,000 light-years away." },
+  { name:"M22",ra:18.4530,dec:-23.903,type:"Globular Cluster",mag:5.1,desc:"One of the brightest globular clusters, in Sagittarius." },
+  { name:"M5",ra:15.2900,dec:2.081,type:"Globular Cluster",mag:5.7,desc:"Globular cluster in Serpens, among the oldest known." },
+  { name:"M3",ra:13.7030,dec:28.377,type:"Globular Cluster",mag:6.2,desc:"Globular cluster in Canes Venatici with ~500,000 stars." },
+  { name:"M2",ra:21.5640,dec:-0.823,type:"Globular Cluster",mag:6.5,desc:"Globular cluster in Aquarius, ~33,000 light-years away." },
+  { name:"M15",ra:21.4990,dec:12.167,type:"Globular Cluster",mag:6.2,desc:"Densely packed globular cluster in Pegasus." },
+  { name:"NGC 6752",ra:19.1760,dec:-59.982,type:"Globular Cluster",mag:5.4,desc:"Third-brightest globular cluster, in Pavo." },
+  { name:"IC 2602 Southern Pleiades",ra:10.6600,dec:-64.420,type:"Open Cluster",mag:2.5,desc:"Open cluster in Carina, similar to the Pleiades but in the southern sky." },
+  { name:"Jewel Box",ra:12.9080,dec:-60.320,type:"Open Cluster",mag:4.2,desc:"Bright open cluster in Crux with strikingly colored stars." },
+  { name:"Double Cluster",ra:2.3200,dec:57.130,type:"Open Cluster",mag:4.3,desc:"Pair of open clusters (h & chi Persei) in Perseus, a naked-eye sight." },
+  { name:"M11 Wild Duck Cluster",ra:18.8620,dec:-6.270,type:"Open Cluster",mag:6.3,desc:"Dense open cluster in Scutum, one of the richest open clusters." },
+  { name:"M41",ra:6.7700,dec:-20.756,type:"Open Cluster",mag:4.5,desc:"Open cluster in Canis Major, recorded by Aristotle." },
+  { name:"M35",ra:6.1640,dec:24.333,type:"Open Cluster",mag:5.1,desc:"Open cluster in Gemini, ~2800 light-years away." },
+  { name:"M101 Pinwheel Galaxy",ra:14.0300,dec:54.350,type:"Galaxy",mag:7.9,desc:"Large face-on spiral galaxy in Ursa Major, ~21 million light-years away." },
+  { name:"M64 Black Eye Galaxy",ra:12.8700,dec:21.670,type:"Galaxy",mag:8.5,desc:"Spiral galaxy in Coma Berenices with a prominent dark dust band." },
+  { name:"M63 Sunflower Galaxy",ra:13.2600,dec:42.030,type:"Galaxy",mag:8.6,desc:"Spiral galaxy in Canes Venatici with a patchy, flocculent appearance." },
+  { name:"M94",ra:12.8500,dec:41.120,type:"Galaxy",mag:8.2,desc:"Compact spiral galaxy in Canes Venatici with a bright inner ring." },
+  { name:"NGC 253 Sculptor Galaxy",ra:0.7960,dec:-25.290,type:"Galaxy",mag:7.2,desc:"Bright starburst galaxy in Sculptor, the brightest in the Sculptor Group." },
+  { name:"M83 Southern Pinwheel",ra:13.6500,dec:-29.870,type:"Galaxy",mag:7.5,desc:"Barred spiral galaxy in Hydra, one of the brightest in the southern sky." },
+  { name:"M87 Virgo A",ra:12.5100,dec:12.390,type:"Galaxy",mag:8.6,desc:"Giant elliptical galaxy in Virgo; its core hosts a supermassive black hole and a relativistic jet." },
+  { name:"M49",ra:12.8700,dec:8.000,type:"Galaxy",mag:8.3,desc:"Giant elliptical galaxy in the Virgo Cluster, ~56 million light-years away." },
+  { name:"M27 Dumbbell Nebula",ra:19.9700,dec:22.720,type:"Planetary Nebula",mag:7.4,desc:"Planetary nebula in Vulpecula, the first such nebula ever discovered." },
+  { name:"M57 Ring Nebula",ra:18.8900,dec:33.030,type:"Planetary Nebula",mag:8.8,desc:"Planetary nebula in Lyra resembling a smoke ring, ~2300 light-years away." },
+  { name:"M78",ra:5.8000,dec:0.080,type:"Nebula",mag:8.3,desc:"Reflection nebula in Orion, the brightest in a small group of reflection nebulae." },
+  { name:"NGC 2024 Flame Nebula",ra:5.6800,dec:-1.850,type:"Nebula",mag:7.0,desc:"Emission nebula in Orion near Alnitak, glowing with a flame-like shape." },
+  { name:"M37",ra:5.7900,dec:32.550,type:"Open Cluster",mag:6.2,desc:"Richest open cluster in Auriga, with a prominent red giant near its center." },
+  { name:"M38",ra:5.5000,dec:35.850,type:"Open Cluster",mag:7.4,desc:"Open cluster in Auriga, sometimes called the Starfish Cluster." },
+  { name:"M36",ra:5.6000,dec:34.140,type:"Open Cluster",mag:6.3,desc:"Compact open cluster in Auriga, ~4100 light-years away." },
+  { name:"M34",ra:2.6700,dec:42.750,type:"Open Cluster",mag:5.5,desc:"Open cluster in Perseus, visible to the naked eye under dark skies." },
+  { name:"M52",ra:23.3900,dec:61.600,type:"Open Cluster",mag:5.0,desc:"Rich open cluster in Cassiopeia, ~5000 light-years away." },
+  { name:"NGC 457 Owl Cluster",ra:1.7900,dec:58.290,type:"Open Cluster",mag:6.4,desc:"Open cluster in Cassiopeia shaped like an owl with two bright 'eyes'." },
+  { name:"M4",ra:16.3900,dec:-26.530,type:"Globular Cluster",mag:5.9,desc:"Globular cluster in Scorpius, the closest to Earth at ~7200 light-years." },
+  { name:"M10",ra:16.9200,dec:-4.100,type:"Globular Cluster",mag:6.6,desc:"Globular cluster in Ophiuchus, ~14000 light-years away." },
+  { name:"M12",ra:16.8900,dec:-1.570,type:"Globular Cluster",mag:6.1,desc:"Globular cluster in Ophiuchus, loosely concentrated for its type." },
+  { name:"M28",ra:18.4500,dec:-24.870,type:"Globular Cluster",mag:6.8,desc:"Globular cluster in Sagittarius, ~18000 light-years away." },
+  { name:"M54",ra:18.8000,dec:-30.480,type:"Globular Cluster",mag:7.6,desc:"Globular cluster in Sagittarius belonging to the Sagittarius dwarf galaxy." },
+  { name:"M48",ra:8.2300,dec:-5.750,type:"Open Cluster",mag:5.5,desc:"Open cluster in Hydra, ~1500 light-years away." },
+  { name:"M50",ra:7.0500,dec:-8.330,type:"Open Cluster",mag:6.3,desc:"Open cluster in Monoceros, ~3000 light-years away." },
+  { name:"M93",ra:7.7800,dec:-23.860,type:"Open Cluster",mag:6.0,desc:"Open cluster in Puppis, ~3400 light-years away." },
+  { name:"M46",ra:7.6800,dec:-14.800,type:"Open Cluster",mag:6.1,desc:"Open cluster in Puppis containing the planetary nebula NGC 2438." },
+  { name:"M47",ra:7.6000,dec:-14.480,type:"Open Cluster",mag:4.4,desc:"Bright open cluster in Puppis, visible to the naked eye." },
+  { name:"M67",ra:8.8400,dec:11.800,type:"Open Cluster",mag:6.9,desc:"Old open cluster in Cancer, among the oldest known at ~4 billion years." },
+  { name:"M29",ra:20.3800,dec:38.530,type:"Open Cluster",mag:6.6,desc:"Small open cluster in Cygnus, ~6000 light-years away." },
+  { name:"M39",ra:21.5300,dec:48.430,type:"Open Cluster",mag:4.6,desc:"Large, loose open cluster in Cygnus, ~800 light-years away." },
+  { name:"M19",ra:17.2700,dec:-26.270,type:"Globular Cluster",mag:6.8,desc:"Globular cluster in Ophiuchus, one of the most flattened known." },
+  { name:"M62",ra:16.9900,dec:-30.110,type:"Globular Cluster",mag:6.5,desc:"Globular cluster in Ophiuchus with an irregular, asymmetric core." },
+  { name:"M56",ra:19.2700,dec:30.180,type:"Globular Cluster",mag:8.3,desc:"Globular cluster in Lyra, ~32000 light-years away." },
+  { name:"M71",ra:19.8800,dec:18.780,type:"Globular Cluster",mag:8.2,desc:"Globular cluster in Sagitta, unusually loose for a globular." }
+  ,{ name:"NGC 2903 Leo Galaxy",ra:9.5200,dec:21.500,type:"Galaxy",mag:9.0,desc:"Barred spiral galaxy in Leo, ~30 million light-years away." }
+  ,{ name:"NGC 2403 Camelopardalis Galaxy",ra:7.5700,dec:65.600,type:"Galaxy",mag:8.4,desc:"Intermediate spiral galaxy in Camelopardalis, ~8 million light-years away." }
+  ,{ name:"NGC 6946 Fireworks Galaxy",ra:20.5900,dec:60.100,type:"Galaxy",mag:8.8,desc:"Spiral galaxy on the Cygnus-Cepheus border with an unusually high supernova rate." }
+  ,{ name:"IC 342 Hidden Galaxy",ra:3.7000,dec:68.100,type:"Galaxy",mag:7.7,desc:"Large face-on spiral in Camelopardalis, dimmed by the Milky Way's dust." }
+  ,{ name:"NGC 1365 Fornax Barred Spiral",ra:3.4800,dec:-36.000,type:"Galaxy",mag:9.3,desc:"Prominent barred spiral galaxy in the Fornax Cluster." }
+  ,{ name:"NGC 1316 Fornax Galaxy",ra:3.3700,dec:-37.200,type:"Galaxy",mag:8.4,desc:"Lenticular radio galaxy in Fornax, the brightest in the Fornax Cluster." }
+  ,{ name:"NGC 55 Sculptor Galaxy",ra:0.2400,dec:-39.500,type:"Galaxy",mag:7.9,desc:"Edge-on barred spiral galaxy in Sculptor, ~6 million light-years away." }
+  ,{ name:"NGC 300 Sculptor Spiral",ra:0.9500,dec:-37.700,type:"Galaxy",mag:8.1,desc:"Nearby spiral galaxy in Sculptor, ~6 million light-years away." }
+  ,{ name:"NGC 4565 Needle Galaxy",ra:12.5600,dec:26.000,type:"Galaxy",mag:9.6,desc:"Edge-on spiral galaxy in Coma Berenices, famously needle-shaped." }
+  ,{ name:"NGC 891 Silver Coin Galaxy",ra:2.3800,dec:42.300,type:"Galaxy",mag:10.0,desc:"Edge-on spiral galaxy in Andromeda, ~30 million light-years away." }
+  ,{ name:"NGC 7331 Deer Lick Galaxy",ra:22.6000,dec:34.200,type:"Galaxy",mag:9.5,desc:"Bright unbarred spiral galaxy in Pegasus, ~40 million light-years away." }
+  ,{ name:"NGC 4449 CVn Dwarf Galaxy",ra:12.2800,dec:44.100,type:"Galaxy",mag:9.6,desc:"Irregular dwarf galaxy in Canes Venatici, a Magellanic-type system." }
+  ,{ name:"3C 273",ra:12.4853,dec:2.0525,type:"Quasar",mag:12.9,desc:"The first quasar ever identified (1963) and the optically brightest known; its light left the object roughly 2.4 billion years ago." }
+  ,{ name:"NGC 6543 Cat's Eye Nebula",ra:17.9758,dec:66.633,type:"Planetary Nebula",mag:8.1,desc:"Planetary nebula in Draco with an intricate, layered structure revealed by Hubble imaging, ~3300 light-years away." }
+];
+// Splits a catalogue name like "M31 Andromeda Galaxy" into its formal catalogue designation
+// ("M31") and common name ("Andromeda Galaxy"), using only the text already present in the
+// catalogue above — no new facts are introduced by this step, just restructuring.
+function parseDesignation(name){
+  const m = name.match(/^(M\s?\d+|NGC\s?\d+|IC\s?\d+)\b\s*(.*)$/i);
+  if (!m) return { designation: null, commonName: name };
+  return { designation: m[1].toUpperCase().replace(/\s+/g,' '), commonName: m[2] || name };
+}
+// (extractDistanceLy(), which parses a light-year figure out of an object's description text,
+// is defined later alongside the other info-panel helpers and is used by both.)
+// Curated supplementary facts for a subset of the most iconic, well-documented deep-sky objects
+// in the catalogue above. Populated only where the figures are well established and widely cited;
+// every other catalogue object simply falls back to "Not available" for these fields rather
+// than having values invented for it (spec §18).
+const DEEP_SKY_EXTRA = {
+  "M31 Andromeda Galaxy": { angularSizeArcmin: 190, discovery: "Recorded by the Persian astronomer Al-Sufi in 964 AD; first described telescopically by Simon Marius in 1612.", notable: "The nearest large spiral galaxy to the Milky Way; the two galaxies are expected to merge in roughly 4–5 billion years." },
+  "M42 Orion Nebula": { angularSizeArcmin: 65, discovery: "First described telescopically by Nicolas-Claude Fabri de Peiresc in 1610.", notable: "Bright enough to see with the naked eye; an active stellar nursery containing the young Trapezium Cluster." },
+  "M45 Pleiades": { angularSizeArcmin: 110, discovery: "Known since antiquity; catalogued by Charles Messier in 1769.", notable: "A young, hot open cluster whose brightest stars are still wrapped in wisps of blue reflection nebulosity." },
+  "Omega Centauri": { angularSizeArcmin: 36, discovery: "Catalogued by Edmond Halley in 1677.", notable: "The largest and brightest globular cluster in the Milky Way; likely the stripped core of a dwarf galaxy long ago absorbed by our own." },
+  "M13 Hercules Cluster": { angularSizeArcmin: 20, discovery: "Discovered by Edmond Halley in 1714; catalogued by Messier in 1764.", notable: "Contains several hundred thousand stars and was the target of the 1974 Arecibo radio message." },
+  "M87 Virgo A": { angularSizeArcmin: 7, discovery: "Discovered by Charles Messier in 1781.", notable: "Its central supermassive black hole was the subject of the Event Horizon Telescope's first-ever black-hole image, released in 2019." },
+  "Centaurus A": { angularSizeArcmin: 25, discovery: "Discovered by James Dunlop in 1826.", notable: "The nearest prominent active galaxy to Earth, split by a dramatic dark dust lane thought to be the remnant of a past galaxy merger." },
+  "M51 Whirlpool Galaxy": { angularSizeArcmin: 11, discovery: "Discovered by Charles Messier in 1773.", notable: "One of the clearest examples of a grand-design spiral, its shape sharpened by ongoing interaction with its companion galaxy NGC 5195." },
+  "M104 Sombrero Galaxy": { angularSizeArcmin: 9, discovery: "Discovered by Pierre Méchain in 1781.", notable: "Named for its broad central bulge and thick dust lane, resembling a wide-brimmed hat seen edge-on." },
+  "LMC Large Magellanic Cloud": { angularSizeArcmin: 650, discovery: "Known since antiquity in the southern hemisphere; named for Ferdinand Magellan's crew, who documented it during their 1519 circumnavigation.", notable: "The most massive satellite galaxy of the Milky Way, and host to the closest supernova observed in modern times, SN 1987A." },
+  "M8 Lagoon Nebula": { angularSizeArcmin: 90, discovery: "Catalogued by Charles Messier in 1764.", notable: "One of only two star-forming nebulae bright enough to be seen with the naked eye from mid-northern latitudes, the other being M42." },
+  "M16 Eagle Nebula": { angularSizeArcmin: 35, discovery: "Discovered by Jean-Philippe de Chéseaux in 1745–46; catalogued by Messier in 1764.", notable: "Home to the 'Pillars of Creation', columns of gas and dust sculpted by radiation from nearby young stars, famously imaged by Hubble in 1995." },
+  "M1 Crab Nebula": { angularSizeArcmin: 6, discovery: "First recorded by English astronomer John Bevis in 1731.", notable: "The expanding remnant of a supernova documented by Chinese and other astronomers in 1054 AD; its central pulsar spins about 30 times per second." },
+  "47 Tucanae": { angularSizeArcmin: 31, discovery: "Catalogued by Nicolas-Louis de Lacaille in 1751.", notable: "The second-brightest globular cluster in the sky, easily visible to the naked eye from the southern hemisphere." },
+  "M57 Ring Nebula": { angularSizeArcmin: 1.4, discovery: "Discovered by Antoine Darquier de Pellepoix in 1779.", notable: "A planetary nebula formed from the outer layers of a dying Sun-like star, with the exposed stellar core visible at its center in larger telescopes." },
+  "Sagittarius A*": { distanceLy: 26000, massMsun: 4.15e6, hostGalaxy: "Milky Way", discovery: "Its radio emission was discovered by Karl Jansky in 1933 and localized precisely by Bruce Balick and Robert Brown in 1974; its supermassive nature was confirmed via decades of stellar-orbit tracking.", notable: "The Event Horizon Telescope released the first direct image of its immediate surroundings in 2022." },
+  "3C 273": { discovery: "Identified as a quasar in 1963 by Maarten Schmidt, who recognized its spectral lines as highly redshifted hydrogen — the discovery that established quasars as extremely distant, extremely luminous objects.", notable: "Powered by a supermassive black hole (estimated at several hundred million solar masses) actively accreting matter at the center of a distant galaxy." },
+  "NGC 6543 Cat's Eye Nebula": { angularSizeArcmin: 0.3, discovery: "Discovered by William Herschel in 1786; the first planetary nebula to have its spectrum examined (by William Huggins in 1864), which helped establish that such nebulae are gaseous.", notable: "Its central star is itself a tight binary, thought to be responsible for the nebula's unusually complex, layered shell structure." },
+};
+const CONSTELLATIONS = [
+  { name:"Orion",lines:[["Betelgeuse","Bellatrix"],["Bellatrix","Mintaka"],["Mintaka","Alnilam"],["Alnilam","Alnitak"],["Alnitak","Saiph"],["Saiph","Rigel"],["Rigel","Mintaka"],["Betelgeuse","Alnitak"],["Meissa","Alnitak"]] },
+  { name:"Ursa Major",lines:[["Dubhe","Merak"],["Merak","Phecda"],["Phecda","Megrez"],["Megrez","Dubhe"],["Megrez","Alioth"],["Alioth","Mizar"],["Mizar","Alkaid"]] },
+  { name:"Cassiopeia",lines:[["Caph","Schedar"],["Schedar","GammaCas"],["GammaCas","Ruchbah"],["Ruchbah","Segin"]] },
+  { name:"Cygnus",lines:[["Deneb","Sadr"],["Sadr","Albireo"],["Sadr","Gienah"],["Sadr","DeltaCyg"]] },
+  { name:"Lyra",lines:[["Vega","Sheliak"],["Vega","Sulafat"],["Sheliak","Sulafat"]] },
+  { name:"Leo",lines:[["Regulus","Algieba"],["Algieba","Adhafera"],["Regulus","Chertan"],["Chertan","Zosma"],["Zosma","Denebola"],["Denebola","Chertan"]] },
+  { name:"Scorpius",lines:[["Acrab","Dschubba"],["Dschubba","PiSco"],["PiSco","Antares"],["Antares","TauSco"],["TauSco","Shaula"],["Shaula","Lesath"],["Shaula","Sargas"]] },
+  { name:"Taurus",lines:[["Aldebaran","Elnath"],["Aldebaran","ZetaTau"],["Aldebaran","Alcyone"]] },
+  { name:"Canis Major",lines:[["Sirius","Mirzam"],["Sirius","Adhara"],["Adhara","Wezen"],["Wezen","Aludra"],["Wezen","Sirius"]] },
+  { name:"Gemini",lines:[["Castor","Pollux"],["Pollux","Alhena"],["Castor","Mebsuta"],["Mebsuta","Tejat"],["Tejat","Alzirr"],["Alzirr","Alhena"]] },
+  { name:"Pegasus",lines:[["Markab","Scheat"],["Scheat","Alpheratz"],["Alpheratz","Algenib"],["Algenib","Markab"],["Markab","Enif"]] },
+  { name:"Andromeda",lines:[["Alpheratz","Mirach"],["Mirach","Almach"],["Mirach","DeltaAnd"]] },
+  { name:"Crux",lines:[["Acrux","Gacrux"],["Acrux","Becrux"],["Becrux","Decrux"],["Decrux","Gacrux"]] },
+  { name:"Aquila",lines:[["Altair","Tarazed"],["Altair","Alshain"],["Altair","ZetaAql"],["ZetaAql","ThetaAql"]] },
+  { name:"Bootes",lines:[["Arcturus","Izar"],["Arcturus","Muphrid"],["Izar","Nekkar"],["Nekkar","Seginus"],["Seginus","Arcturus"]] },
+  { name:"Auriga",lines:[["Capella","Menkalinan"],["Capella","Almaaz"],["Menkalinan","IotaAur"],["Menkalinan","Elnath"]] },
+  { name:"Draco",lines:[["Eltanin","Rastaban"],["Eltanin","Thuban"],["Thuban","Alioth"]] },
+  { name:"Cepheus",lines:[["Alderamin","Alfirk"],["Alfirk","Errai"]] },
+  { name:"Hercules",lines:[["Rasalgethi","Kornephoros"]] },
+  { name:"Ophiuchus",lines:[["Rasalhague","Sabik"]] },
+  { name:"Ursa Minor",lines:[["Polaris","Kochab"],["Kochab","Pherkad"]] },
+  { name:"Corvus",lines:[["GienahCrv","Kraz"],["Kraz","Algorab"],["Algorab","DeltaCyg"]] },
+  { name:"Libra",lines:[["Zubenelgenubi","Zubeneschamali"]] },
+  { name:"Sagittarius",lines:[["KausAustralis","KausMedia"],["KausMedia","KausBorealis"],["KausAustralis","Alnasl"],["Ascella","Nunki"]] }
+  ,{ name:"Perseus",lines:[["Mirfak","Miram"],["Mirfak","Menkib"],["Mirfak","Misam"],["Algol","Misam"],["Atik","Menkib"]] }
+  ,{ name:"Triangulum",lines:[["Mothallah","Deltotum"]] }
+  ,{ name:"Delphinus",lines:[["Sualocin","Rotanev"]] }
+  ,{ name:"Serpens",lines:[["Unukalhai","Guai"],["Guai","Alya"]] }
+  ,{ name:"Corona Borealis",lines:[["Alphecca","Nusakan"]] }
+  ,{ name:"Canes Venatici",lines:[["CorCaroli","Asterion"]] }
+  ,{ name:"Virgo",lines:[["Spica","Zaniah"],["Zaniah","Porrima"],["Porrima","Zavijava"],["Vindemiatrix","Auva"]] }
+  ,{ name:"Hydra",lines:[["Alphard","Minchir"]] }
+  ,{ name:"Cancer",lines:[["Acubens","AsellusAustralis"],["AsellusAustralis","AsellusBorealis"],["Tarf","Acubens"]] }
+  ,{ name:"Eridanus",lines:[["Cursa","Azha"],["Azha","Acamar"],["Zaurak","Beid"],["Beid","Keid"]] }
+  ,{ name:"Grus",lines:[["Alnair","BetaGru"],["BetaGru","GammaGru"]] }
+  ,{ name:"Triangulum Australe",lines:[["Atria","BetaTrA"],["BetaTrA","GammaTrA"]] }
+  ,{ name:"Vela",lines:[["KappaVel","DeltaVel"],["DeltaVel","Regor"]] }
+  ,{ name:"Carina",lines:[["Miaplacidus","Aspidiske"],["Aspidiske","Regor"],["Regor","Alsephina"]] }
+  ,{ name:"Centaurus",lines:[["RigilKentaurus","Hadar"],["Hadar","Menkent"]] }
+  ,{ name:"Lupus",lines:[["AlphaLupi","BetaLupi"]] }
+  ,{ name:"Ara",lines:[["AlphaArae","BetaArae"]] }
+  ,{ name:"Pavo",lines:[["Peacock","BetaPav"]] }
+  ,{ name:"Hydrus",lines:[["AlphaHyi","BetaHyi"]] }
+  ,{ name:"Columba",lines:[["Phact","Wazn"]] }
+  ,{ name:"Lepus",lines:[["Arneb","Nihal"]] }
+  ,{ name:"Canis Minor",lines:[["Procyon","Gomeisa"]] }
+];
+// --- The 42 constellations below complete the full IAU set of 88 (46 were already present above). ---
+CONSTELLATIONS.push(
+  { name:"Antlia", lines:[["AlphaAnt","IotaAnt"]] },
+  { name:"Apus", lines:[["AlphaAps","GammaAps"]] },
+  { name:"Aquarius", lines:[["Sadalmelik","Sadalsuud"],["Sadalsuud","Sadalachbia"],["Sadalachbia","Skat"]] },
+  { name:"Aries", lines:[["Hamal","Sheratan"],["Sheratan","Mesarthim"]] },
+  { name:"Caelum", lines:[["AlphaCae","BetaCae"]] },
+  { name:"Camelopardalis", lines:[["AlphaCam","BetaCam"]] },
+  { name:"Capricornus", lines:[["Algedi","Dabih"],["Dabih","DenebAlgedi"]] },
+  { name:"Cetus", lines:[["Menkar","Kaffaljidhma"],["Kaffaljidhma","Mira"],["Mira","BatenKaitos"],["BatenKaitos","Diphda"]] },
+  { name:"Chamaeleon", lines:[["AlphaCha","GammaCha"]] },
+  { name:"Circinus", lines:[["AlphaCir","BetaCir"]] },
+  { name:"Coma Berenices", lines:[["Diadem","BetaCom"]] },
+  { name:"Corona Australis", lines:[["AlphaCrA","BetaCrA"]] },
+  { name:"Crater", lines:[["Alkes","BetaCrt"],["BetaCrt","GammaCrt"],["GammaCrt","DeltaCrt"]] },
+  { name:"Dorado", lines:[["AlphaDor","BetaDor"]] },
+  { name:"Equuleus", lines:[["Kitalpha","GammaEqu"],["GammaEqu","DeltaEqu"]] },
+  { name:"Fornax", lines:[["AlphaFor","BetaFor"]] },
+  { name:"Horologium", lines:[["AlphaHor","DeltaHor"]] },
+  { name:"Indus", lines:[["Persian","BetaInd"]] },
+  { name:"Lacerta", lines:[["AlphaLac","BetaLac"]] },
+  { name:"Leo Minor", lines:[["Praecipua","BetaLMi"]] },
+  { name:"Lynx", lines:[["AlphaLyn","Lyn38"]] },
+  { name:"Mensa", lines:[["AlphaMen","BetaMen"]] },
+  { name:"Microscopium", lines:[["AlphaMic","GammaMic"]] },
+  { name:"Monoceros", lines:[["BetaMon","GammaMon"],["BetaMon","AlphaMon"]] },
+  { name:"Musca", lines:[["AlphaMus","BetaMus"],["AlphaMus","GammaMus"]] },
+  { name:"Norma", lines:[["Gamma2Nor","EpsilonNor"]] },
+  { name:"Octans", lines:[["SigmaOct","NuOct"],["NuOct","BetaOct"]] },
+  { name:"Phoenix", lines:[["Ankaa","BetaPhe"],["BetaPhe","GammaPhe"]] },
+  { name:"Pictor", lines:[["AlphaPic","BetaPic"]] },
+  { name:"Pisces", lines:[["Alrescha","EtaPsc"]] },
+  { name:"Piscis Austrinus", lines:[["Fomalhaut","EpsilonPsA"]] },
+  { name:"Puppis", lines:[["Naos","PiPup"],["PiPup","Tureis"]] },
+  { name:"Pyxis", lines:[["AlphaPyx","BetaPyx"]] },
+  { name:"Reticulum", lines:[["AlphaRet","BetaRet"]] },
+  { name:"Sagitta", lines:[["AlphaSge","DeltaSge"],["DeltaSge","GammaSge"]] },
+  { name:"Sculptor", lines:[["AlphaScl","BetaScl"]] },
+  { name:"Scutum", lines:[["AlphaSct","BetaSct"]] },
+  { name:"Sextans", lines:[["AlphaSex","BetaSex"]] },
+  { name:"Telescopium", lines:[["AlphaTel","ZetaTel"]] },
+  { name:"Tucana", lines:[["AlphaTuc","GammaTuc"]] },
+  { name:"Volans", lines:[["AlphaVol","BetaVol"],["BetaVol","Gamma2Vol"]] },
+  { name:"Vulpecula", lines:[["AlphaVul","Vul1"]] }
+);
+const STAR_BY = {}; STARS.forEach(s => STAR_BY[s.name] = s);
+
+// ===================== Object Search Index =====================
+// Built once at load time. Each entry carries every string a user might reasonably type (full
+// name, and — for deep-sky objects — the bare catalogue code, e.g. "m31" for "M31 Andromeda
+// Galaxy") so search/slew (spec §8) supports both names and catalogue designations.
+function buildSearchIndex(){
+  const idx = [];
+  for (const s of STARS) idx.push({ names:[s.name.toLowerCase()], type:"star", key:s.name });
+  for (const d of DEEP_SKY){
+    const names = [d.name.toLowerCase()];
+    const { designation } = parseDesignation(d.name);
+    if (designation) names.push(designation.toLowerCase().replace(/\s+/g,''));
+    idx.push({ names, type:"deepsky", key:d.name });
+  }
+  for (const k of Object.keys(PLANETS)) idx.push({ names:[k, PLANET_INFO[k].label.toLowerCase()], type:"planet", key:k });
+  idx.push({ names:["sun"], type:"sun", key:"sun" });
+  idx.push({ names:["moon"], type:"moon", key:"moon" });
+  // Constellations: only the name is indexed here — CONST_CENTROID (used to actually locate one)
+  // is defined further down the file, but that's fine since it's only looked up later, at search
+  // time (slewToSearchResult), well after the whole script has finished its initial run.
+  for (const c of CONSTELLATIONS) idx.push({ names:[c.name.toLowerCase()], type:"constellation", key:c.name });
+  return idx;
+}
+const SEARCH_INDEX = buildSearchIndex();
+// Case-insensitive match, tolerant of spacing (e.g. "m 31" ~ "m31"). Prefers an exact match, then
+// a prefix match, then a substring match, in that order.
+function findSearchMatch(qRaw){
+  const q = (qRaw||"").trim().toLowerCase(); if (!q) return null;
+  const qNoSpace = q.replace(/\s+/g,'');
+  let exact=null, starts=null, contains=null;
+  for (const e of SEARCH_INDEX){
+    for (const n of e.names){
+      const nNoSpace = n.replace(/\s+/g,'');
+      if (n===q || nNoSpace===qNoSpace){ exact = e; break; }
+      if (!starts && (n.startsWith(q) || nNoSpace.startsWith(qNoSpace))) starts = e;
+      if (!contains && (n.includes(q) || nNoSpace.includes(qNoSpace))) contains = e;
+    }
+    if (exact) break;
+  }
+  return exact || starts || contains;
+}
+
+// ===================== State =====================
+const state = {
+  date: new Date(),
+  location: { lat: 24.86, lon: 67.00 },
+  view: { az0: 0, alt0: 45, fov: 90 },
+  settings: { grid: true, lines: true, labels: true, ecliptic: true },
+  playing: false,
+  speed: 1,
+  selected: null,
+  bortle: 4,
+  telescope: { preset: "amateur", apertureMm: 200, focalLengthMm: 1200, eyepieceFocalMm: 20, eyepieceAfovDeg: 50 },
+  measure: { active: false, points: [] },
+};
+const TELESCOPE_PRESETS = {
+  // Representative/typical specs for each class of instrument — illustrative preset values, not
+  // measurements of any specific real product.
+  naked:      { apertureMm: 7,   focalLengthMm: null, eyepieceFocalMm: null, eyepieceAfovDeg: null, label: "Naked Eye" },
+  binoculars: { apertureMm: 50,  focalLengthMm: 200,  eyepieceFocalMm: 20,   eyepieceAfovDeg: 65,   label: "Binoculars (10×50)" },
+  small:      { apertureMm: 70,  focalLengthMm: 700,  eyepieceFocalMm: 20,   eyepieceAfovDeg: 50,   label: "Small Telescope (70mm, f/10)" },
+  amateur:    { apertureMm: 200, focalLengthMm: 1200, eyepieceFocalMm: 20,   eyepieceAfovDeg: 50,   label: "Amateur Telescope (200mm, f/6)" },
+  large:      { apertureMm: 300, focalLengthMm: 1500, eyepieceFocalMm: 20,   eyepieceAfovDeg: 50,   label: "Large Telescope (300mm, f/5)" },
+};
+const SPEEDS = [{label:"1s/s",v:1},{label:"1m/s",v:60},{label:"1h/s",v:3600},{label:"1d/s",v:86400},{label:"1wk/s",v:604800}];
+
+// ===================== UI wiring =====================
+const canvas = document.getElementById("sky");
+const ctx = canvas.getContext("2d");
+const hud = document.getElementById("hud");
+const info = document.getElementById("info");
+const dtInput = document.getElementById("dt");
+const latInput = document.getElementById("lat");
+const lonInput = document.getElementById("lon");
+const playBtn = document.getElementById("play");
+const nowBtn = document.getElementById("now");
+const geoBtn = document.getElementById("geo");
+const resetBtn = document.getElementById("reset");
+const speedsWrap = document.getElementById("speeds");
+const searchInput = document.getElementById("search");
+const searchBtn = document.getElementById("searchBtn");
+const searchMsg = document.getElementById("searchMsg");
+
+function pad(n){ return String(n).padStart(2,"0"); }
+function toLocalInputValue(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`; }
+function syncInputs(){ dtInput.value = toLocalInputValue(state.date); latInput.value = state.location.lat; lonInput.value = state.location.lon; }
+syncInputs();
+dtInput.addEventListener("change", () => {
+  if (!dtInput.value) return;
+  const parsed = new Date(dtInput.value);
+  if (isNaN(parsed.getTime())) { syncInputs(); return; } // invalid date typed — revert the field, keep current state
+  state.date = parsed;
+});
+latInput.addEventListener("change", () => {
+  const v = parseFloat(latInput.value);
+  if (isFinite(v)) state.location.lat = clamp(v, -90, 90); // out-of-range/garbage input is ignored, not silently zeroed
+  syncInputs();
+});
+lonInput.addEventListener("change", () => {
+  const v = parseFloat(lonInput.value);
+  if (isFinite(v)) state.location.lon = ((v + 180) % 360 + 360) % 360 - 180; // wrap into [-180, 180]; East remains positive
+  syncInputs();
+});
+playBtn.addEventListener("click", () => { state.playing = !state.playing; playBtn.textContent = state.playing ? "Pause" : "Play"; });
+nowBtn.addEventListener("click", () => { state.date = new Date(); syncInputs(); });
+resetBtn.addEventListener("click", () => { state.view = { az0: 0, alt0: 45, fov: 90 }; });
+geoBtn.addEventListener("click", () => { if (!navigator.geolocation) return; geoBtn.textContent = "Locating…"; navigator.geolocation.getCurrentPosition(p => { state.location = { lat: p.coords.latitude, lon: p.coords.longitude }; syncInputs(); geoBtn.textContent = "Use My Location"; }, () => { geoBtn.textContent = "Use My Location"; }); });
+SPEEDS.forEach(s => { const b = document.createElement("button"); b.textContent = s.label; if (s.v === state.speed) b.classList.add("on"); b.addEventListener("click", () => { state.speed = s.v; [...speedsWrap.children].forEach(x => x.classList.remove("on")); b.classList.add("on"); }); speedsWrap.appendChild(b); });
+["grid","lines","labels","ecl"].forEach(k => { const el = document.getElementById("t-"+k); el.addEventListener("change", () => { state.settings[k === "ecl" ? "ecliptic" : k] = el.checked; }); });
+searchBtn.addEventListener("click", doSearch);
+searchInput.addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); });
+
+// --- Panel minimize toggle ---
+const panelEl = document.getElementById("panel"), minBtn = document.getElementById("minBtn");
+document.getElementById("panelHead").addEventListener("click", () => {
+  const min = panelEl.classList.toggle("minimized");
+  minBtn.textContent = min ? "+" : "−";
+});
+
+// --- Fullscreen toggle ---
+const fsBtn = document.getElementById("fsBtn");
+fsBtn.addEventListener("click", () => {
+  if (!document.fullscreenElement){ if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(()=>{}); }
+  else { if (document.exitFullscreen) document.exitFullscreen().catch(()=>{}); }
+});
+document.addEventListener("fullscreenchange", () => { fsBtn.textContent = document.fullscreenElement ? "⛶" : "⛶"; fsBtn.title = document.fullscreenElement ? "Exit fullscreen" : "Toggle fullscreen"; });
+
+// --- FOV presets ---
+const FOV_PRESETS = [ {label:"Naked Eye", v:100}, {label:"120°", v:120}, {label:"90°", v:90}, {label:"60°", v:60}, {label:"30°", v:30}, {label:"10°", v:10}, {label:"5°", v:5}, {label:"2°", v:2}, {label:"1°", v:1} ];
+const fovPresetsWrap = document.getElementById("fovPresets");
+FOV_PRESETS.forEach(p => { const b = document.createElement("button"); b.textContent = p.label;
+  b.addEventListener("click", () => { state.view = { az0:state.view.az0, alt0:state.view.alt0, fov: clamp(p.v, 0.2, 130) }; [...fovPresetsWrap.children].forEach(x=>x.classList.remove("on")); b.classList.add("on"); });
+  fovPresetsWrap.appendChild(b); });
+const scopeFovBtn = document.createElement("button"); scopeFovBtn.textContent = "Scope FOV";
+scopeFovBtn.addEventListener("click", () => { const tfov = currentTelescopeStats().trueFovDeg;
+  if (isFinite(tfov) && tfov > 0){ state.view = { az0:state.view.az0, alt0:state.view.alt0, fov: clamp(tfov, 0.05, 130) }; [...fovPresetsWrap.children].forEach(x=>x.classList.remove("on")); scopeFovBtn.classList.add("on"); } });
+fovPresetsWrap.appendChild(scopeFovBtn);
+
+// --- Collapsible sections ---
+function makeCollapsible(headerId, bodyId, arrowId){
+  const header=document.getElementById(headerId), body=document.getElementById(bodyId), arrow=document.getElementById(arrowId);
+  header.addEventListener("click", () => { const open = body.classList.toggle("open"); arrow.textContent = open ? "▾" : "▸"; });
+}
+makeCollapsible("telHeader","telBody","telArrow");
+makeCollapsible("obsHeader","obsBody","obsArrow");
+makeCollapsible("measHeader","measBody","measArrow");
+makeCollapsible("eventsHeader","eventsBody","eventsArrow");
+
+// --- Sky Conditions (Bortle scale) ---
+const bortleSel = document.getElementById("bortle");
+function updateSkyReadout(){ const nelm = BORTLE_NELM[state.bortle];
+  document.getElementById("skyReadout").innerHTML = `Dark-sky naked-eye limit: ≈ mag ${nelm.toFixed(1)}<br>Combined with Sun/Moon altitude and the selected telescope in every object's Visibility line.`; }
+bortleSel.addEventListener("change", () => { state.bortle = parseInt(bortleSel.value, 10) || 4; updateSkyReadout(); });
+updateSkyReadout();
+
+// --- Telescope calculator ---
+const telPresetSel=document.getElementById("telPreset"), telApertureInp=document.getElementById("telAperture"), telFocalInp=document.getElementById("telFocal"), epFocalInp=document.getElementById("epFocal"), epAfovInp=document.getElementById("epAfov");
+function updateTelescopeReadout(){
+  const s = currentTelescopeStats(); const refLimMag = 6.5 + telescopeLimitingMagGain(s.apertureMm);
+  const box = document.getElementById("telReadout");
+  if (s.isNaked){ box.innerHTML = `Magnification: 1× (unaided)<br>Field of View: whole sky<br>Exit Pupil: ≈${s.apertureMm.toFixed(0)} mm (dark-adapted)<br>Resolution: ≈60″ (typical visual acuity)<br>Ref. Limiting Mag. (dark sky): ${refLimMag.toFixed(1)}`; }
+  else { box.innerHTML = `Magnification: ${s.magnification.toFixed(0)}×<br>True Field of View: ${s.trueFovDeg<1 ? (s.trueFovDeg*60).toFixed(1)+"′" : s.trueFovDeg.toFixed(2)+"°"}<br>Exit Pupil: ${s.exitPupilMm.toFixed(1)} mm${s.exitPupilMm>7?" (larger than the eye's pupil — some light is wasted)":""}<br>Resolution (Dawes limit): ≈${s.resolutionArcsec.toFixed(2)}″<br>Ref. Limiting Mag. (dark sky): ${refLimMag.toFixed(1)}`; }
+}
+function applyTelescopePreset(key){
+  const p = TELESCOPE_PRESETS[key]; if (!p) return;
+  state.telescope.preset = key; state.telescope.apertureMm = p.apertureMm;
+  if (p.focalLengthMm) state.telescope.focalLengthMm = p.focalLengthMm;
+  if (p.eyepieceFocalMm) state.telescope.eyepieceFocalMm = p.eyepieceFocalMm;
+  if (p.eyepieceAfovDeg) state.telescope.eyepieceAfovDeg = p.eyepieceAfovDeg;
+  telApertureInp.value = state.telescope.apertureMm;
+  telFocalInp.value = state.telescope.focalLengthMm || "";
+  epFocalInp.value = state.telescope.eyepieceFocalMm || "";
+  epAfovInp.value = state.telescope.eyepieceAfovDeg || "";
+  const disable = key === "naked"; [telFocalInp, epFocalInp, epAfovInp].forEach(el => el.disabled = disable);
+  updateTelescopeReadout();
+}
+telPresetSel.addEventListener("change", () => applyTelescopePreset(telPresetSel.value));
+[telApertureInp, telFocalInp, epFocalInp, epAfovInp].forEach(el => el.addEventListener("input", () => {
+  const v = parseFloat(el.value); if (!isFinite(v) || v<=0) return;
+  if (el===telApertureInp) state.telescope.apertureMm=v; else if (el===telFocalInp) state.telescope.focalLengthMm=v;
+  else if (el===epFocalInp) state.telescope.eyepieceFocalMm=v; else if (el===epAfovInp) state.telescope.eyepieceAfovDeg=v;
+  telPresetSel.value = "custom"; state.telescope.preset = "custom"; updateTelescopeReadout();
+}));
+applyTelescopePreset(state.telescope.preset);
+
+// --- Observation Mode ---
+function runObservationMode(){
+  const sortBy = document.getElementById("obsSort").value;
+  let list = computeObservationCandidates().filter(c => c.observable);
+  if (sortBy==="alt") list.sort((a,b)=>b.altDeg-a.altDeg);
+  else if (sortBy==="mag") list.sort((a,b)=>a.effMag-b.effMag);
+  else if (sortBy==="quality") list.sort((a,b)=>b.maxAltDeg-a.maxAltDeg);
+  else if (sortBy==="type") list.sort((a,b)=>a.type.localeCompare(b.type) || a.effMag-b.effMag);
+  list = list.slice(0, 40);
+  const wrap = document.getElementById("obsResults"); wrap.innerHTML = "";
+  if (list.length === 0){ wrap.innerHTML = '<div class="readout">Nothing suitable found above the horizon under current conditions.</div>'; return; }
+  for (const c of list){
+    const item = document.createElement("div"); item.className = "resultitem";
+    item.innerHTML = `<span>${c.name}</span><span class="l">${c.type} · mag ${c.mag!==undefined?c.mag.toFixed(1):"—"} · alt ${c.altDeg.toFixed(0)}°</span>`;
+    item.addEventListener("click", () => { const match = findSearchMatch(c.searchKey); if (match) slewToSearchResult(match); });
+    wrap.appendChild(item);
+  }
+}
+document.getElementById("obsRun").addEventListener("click", runObservationMode);
+
+// --- Measure Mode ---
+document.getElementById("measToggle").addEventListener("change", e => { state.measure.active = e.target.checked; state.measure.points = []; updateMeasureReadout(); });
+
+// --- Events (conjunctions & oppositions) ---
+document.getElementById("eventsRun").addEventListener("click", () => {
+  const results = scanEvents(); const wrap = document.getElementById("eventsResults"); wrap.innerHTML = "";
+  if (results.length === 0){ wrap.innerHTML = '<div class="readout">No oppositions or close (&lt;5°) conjunctions found in the next 90 days.</div>'; return; }
+  for (const ev of results){ const item = document.createElement("div"); item.className = "resultitem"; item.title = ev.detail;
+    item.innerHTML = `<span>${ev.type}: ${ev.name}</span><span class="l">${ev.date.toLocaleDateString()}</span>`; wrap.appendChild(item); }
+});
+
+// --- Live cursor coordinates ---
+canvas.addEventListener("mousemove", e => {
+  const r = canvas.getBoundingClientRect(), mx = e.clientX-r.left, my = e.clientY-r.top;
+  const w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
+  const scale = Math.min(w,h)/2, cx = w/2, cy = h/2;
+  const nx = (mx-cx)/scale, ny = -(my-cy)/scale;
+  const inv = invProject(state.view, nx, ny);
+  const jd = dateToJD(internalDate), prec = updatePrecessionNutation(jd), lst = lstHours(jd, state.location.lon, prec);
+  const eqd = horizontalToEquatorial(inv.alt, inv.az, state.location.lat, lst);
+  const con = nearestConstellation(eqd.ra, eqd.dec);
+  const box = document.getElementById("cursorcoords"); box.style.display = "block";
+  box.innerHTML = `Alt ${(inv.alt*RAD).toFixed(1)}°  Az ${(((inv.az*RAD)%360+360)%360).toFixed(1)}°<br>RA ${fmtRA(eqd.ra)}  Dec ${fmtDec(eqd.dec)}${con?`<br>${con}`:""}`;
+});
+canvas.addEventListener("mouseleave", () => { document.getElementById("cursorcoords").style.display = "none"; });
+
+function fmtRA(ra){ const h=Math.floor(ra), m=Math.floor((ra-h)*60), s=Math.floor(((ra-h)*60-m)*60); return `${h}h ${pad(m)}m ${pad(s)}s`; }
+function fmtDec(dec){ const sign=dec>=0?"+":"-", a=Math.abs(dec), d=Math.floor(a), m=Math.floor((a-d)*60); return `${sign}${d}° ${pad(m)}′`; }
+const TYPE_LABELS = { Star:"Star", Sun:"The Sun", Moon:"The Moon", Planet:"Planet", Galaxy:"Galaxy", Nebula:"Nebula", Cluster:"Star Cluster", "Open Cluster":"Open Star Cluster", "Globular Cluster":"Globular Star Cluster", "Planetary Nebula":"Planetary Nebula", Quasar:"Quasar", Pulsar:"Pulsar", "Black Hole":"Black Hole" };
+// Maps any of the (possibly more specific) catalogue types above onto one of the four visual
+// treatments the renderer already knows how to draw, so new/finer-grained types never need new
+// drawing code and never silently fail to render.
+function visualStyleFor(type){
+  if (type === "Galaxy") return "Galaxy";
+  if (type === "Nebula" || type === "Planetary Nebula") return "Nebula";
+  if (type === "Cluster" || type === "Open Cluster" || type === "Globular Cluster") return "Cluster";
+  if (type === "Black Hole" || type === "Quasar" || type === "Pulsar") return "BlackHole";
+  return "Nebula"; // safe fallback for any future type
+}
+
+// ---- Info-panel helpers (scientific data derivation) ----
+function row(label, value){ return `<div class="r"><span class="l">${label}</span><span>${value}</span></div>`; }
+function descRow(text){ return `<div class="d">${text}</div>`; }
+function sectionHeader(label){ return `<div class="r" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);color:#737373;text-transform:uppercase;letter-spacing:.08em;font-size:9px">${label}</div>`; }
+function sourcesRow(text){ return `<div style="font-size:9px;color:#525252;margin-top:6px;font-family:ui-sans-serif, system-ui, sans-serif">Data sources: ${text}</div>`; }
+function fmtKm(km){ if (!isFinite(km)) return "—"; if (km >= 1e6) return (km/1e6).toFixed(1) + " million km"; return Math.round(km).toLocaleString() + " km"; }
+function fmtLy(ly){ if (!isFinite(ly)) return "—"; if (ly >= 1e6) return (ly/1e6).toFixed(2) + " million ly"; if (ly >= 1000) return Math.round(ly).toLocaleString() + " ly"; return ly.toFixed(1) + " ly"; }
+function bvToSpectral(bv){ if (bv==null) return null; if (bv < -0.3) return "O"; if (bv < 0.0) return "B"; if (bv < 0.3) return "A"; if (bv < 0.58) return "F"; if (bv < 0.81) return "G"; if (bv < 1.4) return "K"; return "M"; }
+function bvToTemp(bv){ if (bv==null) return null; const b = Math.max(-0.4, Math.min(2.0, bv)); return 4600 * ( 1/(0.92*b + 1.7) + 1/(0.92*b + 0.62) ); }
+function extractDistanceLy(desc){ if (!desc) return null; const m = desc.match(/([\d,]+(?:\.\d+)?)\s*(million\s*)?light-years/i); if (!m) return null; const num = parseFloat(m[1].replace(/,/g,"")); if (isNaN(num)) return null; return m[2] ? num*1e6 : num; }
+function moonPhaseName(deg){ if (deg===undefined) return null; const d=((deg%360)+360)%360;
+  if (d<22.5||d>=337.5) return "New Moon"; if (d<67.5) return "Waxing Crescent"; if (d<112.5) return "First Quarter";
+  if (d<157.5) return "Waxing Gibbous"; if (d<202.5) return "Full Moon"; if (d<247.5) return "Waning Gibbous";
+  if (d<292.5) return "Last Quarter"; return "Waning Crescent"; }
+// Approximate nearest-constellation lookup, built once from the centroid of each constellation's own figure stars.
+const CONST_CENTROID = (() => { const map = {};
+  for (const c of CONSTELLATIONS){ const names = new Set(); for (const [a,b] of c.lines){ names.add(a); names.add(b); }
+    let x=0,y=0,z=0,n=0; names.forEach(nm => { const s = STAR_BY[nm]; if(!s) return; const raR=s.ra*15*DEG, decR=s.dec*DEG;
+      x+=Math.cos(decR)*Math.cos(raR); y+=Math.cos(decR)*Math.sin(raR); z+=Math.sin(decR); n++; });
+    if (n>0){ const len=Math.hypot(x,y,z)||1; map[c.name]={x:x/len,y:y/len,z:z/len}; } }
+  return map; })();
+function nearestConstellation(raH, decD){ const raR=raH*15*DEG, decR=decD*DEG;
+  const vx=Math.cos(decR)*Math.cos(raR), vy=Math.cos(decR)*Math.sin(raR), vz=Math.sin(decR);
+  let best=null, bd=-Infinity; for (const nm in CONST_CENTROID){ const c=CONST_CENTROID[nm]; const dot=vx*c.x+vy*c.y+vz*c.z; if (dot>bd){ bd=dot; best=nm; } } return best; }
+// Curated approximate distances (light-years) for well-established named stars; omitted where not confidently known.
+const STAR_DIST_LY = { Sirius:8.6, Canopus:310, Arcturus:37, RigilKentaurus:4.37, Vega:25, Capella:43, Rigel:860, Procyon:11.5,
+  Betelgeuse:548, Achernar:139, Hadar:390, Altair:17, Aldebaran:65, Antares:550, Spica:250, Pollux:34, Fomalhaut:25, Deneb:2600,
+  Mimosa:280, Becrux:280, Regulus:79, Adhara:430, Castor:51, Shaula:570, Gacrux:88, Bellatrix:250, Elnath:130, Miaplacidus:113,
+  Alnilam:2000, Alnair:101, Alnitak:800, Alioth:81, Mirfak:590, Dubhe:123, Wezen:1800, KausAustralis:143, Avior:630, Alkaid:101,
+  Sargas:270, Menkalinan:82, Atria:391, Alhena:109, Peacock:179, Mirzam:500, Alphard:177, Hamal:66, Polaris:433, Diphda:96,
+  Mizar:78, Nunki:228, Mirach:200, Alpheratz:97, Kochab:130, Rasalhague:47, Algol:93, Almach:350, Denebola:36, Naos:1080,
+  Mintaka:900, Caph:55, Schedar:228, Sadr:1800, Dschubba:400, Menkent:61, Acrux:320, Merak:79.7, Phecda:84, Megrez:58,
+  Saiph:650, Sheliak:960, Sulafat:620, Gienah:72, Albireo:380, DenebAlgedi:39, Eltanin:154, Rastaban:380, Thuban:303,
+  Alderamin:49, Enif:690, Scheat:196, Markab:133, Algenib:390, Sadalmelik:758, Sadalsuud:612, Skat:160, Zubenelgenubi:77,
+  Zubeneschamali:185, KausMedia:306, Ankaa:82, Suhail:545, Regor:840, Sabik:88, Rasalgethi:360, Kornephoros:148, Pherkad:487,
+  GammaCas:550, Ruchbah:99, Izar:210, Muphrid:37, Nekkar:320, Seginus:85, Alphecca:75, Mira:300, Cursa:89, Acamar:160,
+  Zaurak:221, Menkar:220, Unukalhai:74, Cebalrai:82, GienahCrv:165, Algorab:86, Sheratan:60, Alrescha:310 };
+// Curated physical properties (radius/mass/luminosity, in solar units — R☉/M☉/L☉) for only the
+// brightest, best-documented named stars, drawn from widely-cited published figures. Every other
+// star in the catalogue correctly has no entry here and falls back to "Not available" rather than
+// an invented figure — several of these (Betelgeuse, Antares, Deneb in particular) are themselves
+// only known to within a wide margin due to real observational uncertainty, which the values below
+// are rounded to reflect rather than implying false precision.
+const STAR_PHYSICAL = {
+  Sirius:      { radiusSolar:1.71,  massSolar:2.02, luminositySolar:25.4 },
+  Canopus:     { radiusSolar:71,    massSolar:8.5,  luminositySolar:10700 },
+  Arcturus:    { radiusSolar:25.4,  massSolar:1.08, luminositySolar:170 },
+  RigilKentaurus:{ radiusSolar:1.22,massSolar:1.07, luminositySolar:1.5 },
+  Vega:        { radiusSolar:2.36,  massSolar:2.1,  luminositySolar:40 },
+  Capella:     { radiusSolar:11.98, massSolar:2.57, luminositySolar:79, note:"Brightest of two giant stars in a close binary system" },
+  Rigel:       { radiusSolar:78.9,  massSolar:21,   luminositySolar:120000 },
+  Procyon:     { radiusSolar:2.05,  massSolar:1.5,  luminositySolar:6.9 },
+  Betelgeuse:  { radiusSolar:764,   massSolar:16.5, luminositySolar:126000, note:"A pulsating red supergiant — radius and luminosity are only known approximately and vary" },
+  Achernar:    { radiusSolar:7.3,   massSolar:6.7,  luminositySolar:3150, note:"An extremely fast rotator, notably flattened rather than spherical" },
+  Altair:      { radiusSolar:1.9,   massSolar:1.86, luminositySolar:10.6, note:"A fast rotator, notably flattened rather than spherical" },
+  Aldebaran:   { radiusSolar:44.2,  massSolar:1.16, luminositySolar:439 },
+  Antares:     { radiusSolar:680,   massSolar:13,   luminositySolar:75900, note:"A pulsating red supergiant — radius and luminosity are only known approximately and vary" },
+  Pollux:      { radiusSolar:9.06,  massSolar:1.91, luminositySolar:43 },
+  Fomalhaut:   { radiusSolar:1.84,  massSolar:1.92, luminositySolar:16.6 },
+  Deneb:       { radiusSolar:203,   massSolar:19,   luminositySolar:196000, note:"Distance and physical size carry significant published uncertainty" },
+  Regulus:     { radiusSolar:3.13,  massSolar:3.8,  luminositySolar:288, note:"A fast rotator, notably flattened rather than spherical" },
+  Polaris:     { radiusSolar:37.5,  massSolar:5.4,  luminositySolar:2500, note:"A classical Cepheid variable, currently within about 1° of the north celestial pole" },
+  Mizar:       { radiusSolar:2.4,   massSolar:2.2,  luminositySolar:33, note:"The bright component of a well-known multiple star system" },
+};
+
+function planetPhaseName(illum){
+  if (illum===undefined) return null;
+  if (illum >= 0.98) return "Full"; if (illum <= 0.02) return "New";
+  if (illum >= 0.75) return "Gibbous"; if (illum >= 0.25) return "Quarter (roughly half-lit)";
+  return "Crescent";
+}
+function fmtArcsec(a){ if (!isFinite(a)) return "Not available"; if (a >= 60) return (a/60).toFixed(2)+"′"; return a.toFixed(1)+"″"; }
+// Recomputes the current Sun/Moon altitude and the approximate sky limiting magnitude on demand
+// (only while the info panel is open, a few times a second — not a per-render-frame cost) so the
+// panel can report a real "visibility under current conditions" state (spec §9) independent of
+// the main render loop's internals.
+function currentSkyContext(){
+  const cur = internalDate, jd = dateToJD(cur), prec = updatePrecessionNutation(jd);
+  const lst = lstHours(jd, state.location.lon, prec), lat = state.location.lat;
+  const eqNow = (raH,decD) => equatorialToHorizontal(raH, decD, lat, lst);
+  const ss = getSolarSystem(jd, prec);
+  const sun = ss.find(o=>o.isSun), moon = ss.find(o=>o.isMoon);
+  const sunAltDeg = eqNow(sun.ra, sun.dec).alt*RAD, moonAltDeg = eqNow(moon.ra, moon.dec).alt*RAD;
+  const limMag = skyLimitingMagnitude(sunAltDeg, moonAltDeg, moon.illum, BORTLE_NELM[state.bortle], state.telescope.apertureMm);
+  return { jd, prec, lat, lon: state.location.lon, cur, sunAltDeg, moonAltDeg, limMag };
+}
+function buildInfoHTML(d){
+  const trueAltDeg = d.alt*RAD, appAltDeg = apparentAltDeg(trueAltDeg);
+  const above = appAltDeg > 0; // real-world horizon crossing accounts for atmospheric refraction
+  let rows = row("Right Ascension", fmtRA(d.ra)) + row("Declination", fmtDec(d.dec)) +
+    row("Altitude (geometric)", `${trueAltDeg.toFixed(1)}°`);
+  if (Math.abs(appAltDeg-trueAltDeg) > 0.02) rows += row("Altitude (apparent, refraction-corrected)", `${appAltDeg.toFixed(1)}°`);
+  const azNormDeg = (((d.az*RAD)%360)+360)%360;
+  rows += row("Azimuth", `${azNormDeg.toFixed(1)}° (from N, through E)`);
+  const con = nearestConstellation(d.ra, d.dec);
+  if (con) rows += row("Constellation", con);
+  let sources = "";
+
+  if (d.type === "Star"){
+    const magKnown = d.mag !== undefined && isFinite(d.mag);
+    const magForCalc = magKnown ? d.mag : 99; // safe faint fallback so downstream math never sees undefined/NaN
+    rows += row("Apparent Magnitude", magKnown ? d.mag.toFixed(2) : "Not available");
+    const effMag = magForCalc + extinctionMag(appAltDeg);
+    const distLy = STAR_DIST_LY[d.name]; rows += row("Distance", distLy ? fmtLy(distLy) : "Not available");
+    const spec = bvToSpectral(d.bv), temp = bvToTemp(d.bv);
+    rows += row("Spectral Class (approx.)", spec || "Not available");
+    rows += row("Est. Surface Temp.", temp ? Math.round(temp/100)*100 + " K" : "Not available");
+    if (d.bv !== undefined) rows += row("Color Index (B−V)", d.bv.toFixed(2));
+    if (d.pmraMasYr !== undefined || d.pmdecMasYr !== undefined) rows += row("Proper Motion", `${(d.pmraMasYr||0).toFixed(1)} / ${(d.pmdecMasYr||0).toFixed(1)} mas/yr (RA/Dec)`);
+    const phys = STAR_PHYSICAL[d.name];
+    rows += sectionHeader("Physical Properties");
+    rows += row("Radius", phys ? `≈ ${phys.radiusSolar.toLocaleString()} R☉` : "Not available");
+    rows += row("Mass", phys ? `≈ ${phys.massSolar.toLocaleString()} M☉` : "Not available");
+    rows += row("Luminosity", phys ? `≈ ${phys.luminositySolar.toLocaleString()} L☉` : "Not available");
+    const sky = currentSkyContext();
+    rows += sectionHeader("Observing Info");
+    rows += row("Visibility", magKnown ? visibilityStatusText(effMag, sky.limMag, appAltDeg) : "Not available");
+    rows += buildObservingRows((jd2,prec2)=>d.ra, d.dec, sky, appAltDeg, true);
+    const descBits = [magKnown ? `A magnitude ${d.mag.toFixed(2)} star` : "A star"];
+    if (con) descBits.push(`in the constellation ${con}`);
+    if (spec && temp) descBits.push(`with an estimated surface temperature near ${Math.round(temp/100)*100} K (spectral class ${spec}, derived from its B−V color index)`);
+    rows += descRow(descBits.join(" ") + (phys && phys.note ? ` ${phys.note}.` : "."));
+    sources = "IAU-adopted constants · Meeus, <i>Astronomical Algorithms</i> · curated reference figures (published Hipparcos/SIMBAD-type values)";
+  } else if (d.type === "Sun"){
+    rows += row("Apparent Magnitude", d.mag!==undefined ? d.mag.toFixed(2) : "-26.74");
+    if (d.distAU) rows += row("Distance from Earth", `${d.distAU.toFixed(4)} AU (${fmtKm(d.distAU*AU_KM)})`);
+    if (d.angDiamArcsec) rows += row("Apparent Angular Diameter", fmtArcsec(d.angDiamArcsec));
+    rows += row("Sky State", twilightState(trueAltDeg));
+    rows += row("Status", above ? "Above horizon — daytime at this location" : "Below horizon — nighttime at this location");
+    rows += sectionHeader("Physical Properties");
+    rows += row("Radius", fmtKm(SUN_RADIUS_KM) + " (≈109 × Earth)");
+    rows += row("Mass", `≈ ${SUN_PHYSICAL.massSolar} M☉ (≈333,000 × Earth)`);
+    rows += row("Spectral Type", SUN_PHYSICAL.spectralType);
+    rows += row("Surface Temperature", `≈ ${SUN_PHYSICAL.tempSurfaceK.toLocaleString()} K`);
+    rows += row("Core Temperature", `${SUN_PHYSICAL.tempCoreK} K`);
+    rows += row("Rotation Period", SUN_PHYSICAL.rotationDays);
+    rows += row("Age", `≈ ${SUN_PHYSICAL.ageGyr} billion years`);
+    const sky = currentSkyContext();
+    const sunRaFn = (jd2,prec2)=>{ const s=sunEcliptic(jd2); return eclipticToEquatorial(s.lon,0,prec2.obliMeanR).ra; };
+    const rs = getRiseSetCached("sun", (jd2,prec2)=>{ const s=sunEcliptic(jd2); return eclipticToEquatorial(s.lon,0,prec2.obliMeanR); }, -0.8333, sky.cur, sky.lat, sky.lon);
+    rows += sectionHeader("Observing Info");
+    rows += row("Sunrise (approx.)", fmtTimeShort(rs.rise)); rows += row("Sunset (approx.)", fmtTimeShort(rs.set));
+    rows += buildObservingRows(sunRaFn, d.dec, sky, appAltDeg, true);
+    rows += descRow("The Sun is a G-type main-sequence star (G2V) that supplies, via nuclear fusion in its core, essentially all the light and heat driving Earth's climate and weather.");
+    sources = "IAU/NASA solar fact sheet · Meeus, <i>Astronomical Algorithms</i>";
+  } else if (d.type === "Moon"){
+    if (d.distKm) rows += row("Distance from Earth", fmtKm(d.distKm));
+    if (d.angDiamArcsec) rows += row("Apparent Angular Diameter", fmtArcsec(d.angDiamArcsec));
+    if (d.illum !== undefined) rows += row("Illuminated", (d.illum*100).toFixed(0)+"%");
+    const phase = moonPhaseName(d.phaseDeg); if (phase) rows += row("Phase", phase);
+    if (d.mag !== undefined && isFinite(d.mag)) rows += row("Apparent Magnitude (approx.)", d.mag.toFixed(1));
+    rows += row("Status", above ? "Above horizon" : "Below horizon");
+    rows += sectionHeader("Physical Properties");
+    rows += row("Radius", fmtKm(MOON_RADIUS_KM) + " (≈0.27 × Earth)");
+    rows += row("Mass", `≈ ${MOON_PHYSICAL.massEarth} × Earth`);
+    rows += row("Orbital Period", `≈ ${MOON_PHYSICAL.orbitalPeriodDays} days (sidereal)`);
+    rows += row("Rotation Period", `≈ ${MOON_PHYSICAL.rotationDays} days (tidally locked to Earth)`);
+    rows += row("Surface Temp. Range", `${MOON_PHYSICAL.tempRangeC} °C`);
+    const sky = currentSkyContext();
+    const moonNow = moonGeocentricEcliptic(sky.jd);
+    const moonDistKmNow = moonNow.r*EARTH_RADIUS_KM;
+    const moonParallaxDeg = Math.asin(clamp(EARTH_RADIUS_KM/moonDistKmNow,-1,1))*RAD;
+    const moonH0 = 0.7275*moonParallaxDeg - 0.34; // Meeus 15.1 — average lunar parallax allowance
+    const moonRaFn = (jd2,prec2)=>{ const m=moonGeocentricEcliptic(jd2); return eclipticToEquatorial(m.lon,m.lat,prec2.obliMeanR).ra; };
+    const rs = getRiseSetCached("moon", (jd2,prec2)=>{ const m=moonGeocentricEcliptic(jd2); return eclipticToEquatorial(m.lon,m.lat,prec2.obliMeanR); }, moonH0, sky.cur, sky.lat, sky.lon);
+    rows += sectionHeader("Observing Info");
+    rows += row("Moonrise (approx.)", fmtTimeShort(rs.rise)); rows += row("Moonset (approx.)", fmtTimeShort(rs.set));
+    rows += buildObservingRows(moonRaFn, d.dec, sky, appAltDeg, true);
+    rows += descRow(`Earth's only natural satellite${phase?`, currently in its ${phase.toLowerCase()} phase`:""}. Its illuminated fraction and brightness cycle over a synodic month of about 29.5 days as it orbits Earth.`);
+    sources = "IAU/NASA lunar fact sheet · Meeus, <i>Astronomical Algorithms</i>";
+  } else if (d.type === "Planet"){
+    if (d.mag !== undefined) rows += row("Apparent Magnitude (approx.)", d.mag.toFixed(1));
+    if (d.illum !== undefined) rows += row("Illuminated Fraction", (d.illum*100).toFixed(0)+"%");
+    const ph = planetPhaseName(d.illum); if (ph) rows += row("Phase", ph);
+    if (d.phaseAngleDeg !== undefined) rows += row("Sun-Planet-Earth Phase Angle", d.phaseAngleDeg.toFixed(1)+"°");
+    if (d.angDiamArcsec) rows += row("Apparent Angular Diameter", fmtArcsec(d.angDiamArcsec));
+    if (d.distAU) rows += row("Distance from Earth", `${d.distAU.toFixed(3)} AU (${fmtKm(d.distAU*AU_KM)})`);
+    if (d.helioDistAU) rows += row("Distance from Sun", `${d.helioDistAU.toFixed(3)} AU`);
+    if (d.orbitA){ const periodY = Math.pow(d.orbitA, 1.5); rows += row("Orbital Period", `≈ ${periodY.toFixed(2)} years`); rows += row("Semi-major Axis", `${d.orbitA.toFixed(3)} AU`); }
+    if (d.orbitE !== undefined) rows += row("Orbital Eccentricity", d.orbitE.toFixed(4));
+    const phys = PLANET_PHYSICAL[d.name], radKm = BODY_RADIUS_KM[d.name];
+    rows += sectionHeader("Physical Properties");
+    rows += row("Radius (equatorial)", radKm ? fmtKm(radKm) : "Not available");
+    rows += row("Mass", phys ? `≈ ${phys.massEarth.toLocaleString()} × Earth` : "Not available");
+    if (phys) rows += row("Rotation Period", `${Math.abs(phys.rotationDays).toFixed(2)} days${phys.rotationDays<0?" (retrograde)":""}`);
+    rows += row("Atmosphere", phys ? phys.atmosphere : "Not available");
+    rows += row("Known Moons", phys ? phys.moons : "Not available");
+    rows += row("Mean Temperature", phys ? phys.meanTempC + " °C" : "Not available");
+    const sky = currentSkyContext();
+    const effMag = (d.mag!==undefined ? d.mag : 0) + extinctionMag(appAltDeg);
+    const planetRaFn = (jd2,prec2)=>{ const ss2 = getSolarSystem(jd2, prec2); const o2 = ss2.find(x=>x.name===d.name); return o2 ? o2.ra : d.ra; };
+    rows += sectionHeader("Observing Info");
+    rows += row("Visibility", visibilityStatusText(effMag, sky.limMag, appAltDeg));
+    rows += buildObservingRows(planetRaFn, d.dec, sky, appAltDeg, true);
+    if (PLANET_DESC[d.name]) rows += descRow(PLANET_DESC[d.name]);
+    sources = "IAU/NASA JPL planetary fact sheets · Meeus, <i>Astronomical Algorithms</i>";
+  } else { // deep-sky: Galaxy, Nebula, Cluster, Open/Globular Cluster, Planetary Nebula, Quasar, Black Hole
+    const { designation, commonName } = parseDesignation(d.name);
+    if (designation) { rows += row("Catalogue Designation", designation); rows += row("Common Name", commonName || "Not available"); }
+    const extra = DEEP_SKY_EXTRA[d.name] || {};
+    if (d.type !== "Black Hole" && d.mag !== undefined) rows += row("Apparent Magnitude", d.mag.toFixed(1));
+    const dly = extra.distanceLy || extractDistanceLy(d.desc); rows += row("Distance", dly ? fmtLy(dly) : "Not available");
+    rows += row("Angular Size", extra.angularSizeArcmin ? extra.angularSizeArcmin.toFixed(extra.angularSizeArcmin<10?1:0)+"′" : "Not available");
+    rows += row("Discovery", extra.discovery || "Not available");
+    const deepSkyRaFn = (jd2,prec2)=>d.ra; // precession is negligible over a single day's transit search
+    const sky = currentSkyContext();
+    if (d.type !== "Black Hole"){
+      const effMag = (d.mag!==undefined ? d.mag : 8) + extinctionMag(appAltDeg);
+      rows += sectionHeader("Observing Info");
+      rows += row("Visibility", visibilityStatusText(effMag, sky.limMag, appAltDeg));
+      rows += buildObservingRows(deepSkyRaFn, d.dec, sky, appAltDeg, true);
+    } else {
+      rows += sectionHeader("Observing Info");
+      rows += buildObservingRows(deepSkyRaFn, d.dec, sky, appAltDeg, false);
+    }
+    if (d.type === "Black Hole"){
+      const massMsun = extra.massMsun || 4.15e6;
+      const rs_km = 2.95 * massMsun; // Schwarzschild radius (km) ≈ 2.95 km × mass in solar masses
+      rows += sectionHeader("Physical Properties");
+      rows += row("Estimated Mass", `≈ ${(massMsun/1e6).toFixed(2)} million M☉`);
+      rows += row("Host Galaxy", extra.hostGalaxy || "Milky Way");
+      rows += row("Schwarzschild Radius", "≈ " + fmtKm(rs_km));
+      rows += row("Optical Visibility", "Not directly visible in ordinary light — a black hole emits none of its own; the marker shown is a schematic position indicator, not an image.");
+      rows += row("Detection Evidence", "Inferred from radio and X-ray emission from infalling matter, and from tracking the orbits of stars whose motion is gravitationally bound to it.");
+    }
+    if (extra.notable) rows += descRow(extra.notable);
+    if (d.desc) rows += descRow(d.desc);
+    sources = "Messier/NGC/IC catalogues · published discovery records · Meeus, <i>Astronomical Algorithms</i>";
+  }
+  rows += sourcesRow(sources);
+  return `<div class="hd"><div><b>${d.name}</b><div class="t">${TYPE_LABELS[d.type]||d.type}</div></div><div style="display:flex;align-items:flex-start;gap:8px"><div class="x" id="centerBtn" title="Center view on this object">⌖</div><div class="x" id="ix">×</div></div></div><div class="bd">${rows}</div>`;
+}
+function updatePanel(d){
+  let html;
+  try { html = buildInfoHTML(d); }
+  catch (err) {
+    console.warn("Stellar Sky: couldn't build the full info panel for this object — showing a minimal fallback.", err);
+    html = `<div class="hd"><div><b>${d.name||"Unknown object"}</b><div class="t">${TYPE_LABELS[d.type]||d.type||""}</div></div><div class="x" id="ix">×</div></div><div class="bd">${row("Note","Some details for this object could not be displayed.")}</div>`;
+  }
+  info.innerHTML = html;
+  info.style.display = "block";
+  document.getElementById("ix").addEventListener("click", () => { info.style.display = "none"; state.selected = null; });
+  const centerBtn = document.getElementById("centerBtn");
+  if (centerBtn) centerBtn.addEventListener("click", () => {
+    state.view = { az0: ((d.az*RAD)+360)%360, alt0: clamp(d.alt*RAD, -89, 89), fov: state.view.fov };
+  });
+}
+function showInfo(d){ state.selected = { type: d.type, name: d.name }; updatePanel(d); }
+// Single entry point for clicking/tapping an object in the sky (used by both mouse click and
+// touch tap below). When Measure Mode is off (the default), this is exactly the original
+// click-to-select behavior. When it's on, clicks collect measurement points instead of opening
+// the info panel — an opt-in mode that never changes default click behavior.
+function selectObject(d){
+  if (state.measure.active){ addMeasurePoint(d); return; }
+  showInfo(d);
+}
+function addMeasurePoint(d){
+  state.measure.points.push({ name:d.name, ra:d.ra, dec:d.dec, alt:d.alt, az:d.az });
+  if (state.measure.points.length > 2) state.measure.points.shift();
+  updateMeasureReadout();
+}
+function updateMeasureReadout(){
+  const box = document.getElementById("measReadout"); if (!box) return;
+  const pts = state.measure.points;
+  if (pts.length === 0){ box.textContent = "Select a first object, then a second, to measure the angle between them."; return; }
+  if (pts.length === 1){ box.textContent = `First object: ${pts[0].name}. Select a second object to measure.`; return; }
+  const [a,b] = pts;
+  const sepDeg = angularSepDeg(a.ra, a.dec, b.ra, b.dec);
+  const ra1=a.ra*15*DEG, dec1=a.dec*DEG, ra2=b.ra*15*DEG, dec2=b.dec*DEG;
+  const dRa = ra2-ra1;
+  const y = Math.sin(dRa)*Math.cos(dec2);
+  const x = Math.cos(dec1)*Math.sin(dec2) - Math.sin(dec1)*Math.cos(dec2)*Math.cos(dRa);
+  const bearingDeg = ((Math.atan2(y,x)*RAD)+360)%360;
+  const altDiffDeg = (b.alt-a.alt)*RAD;
+  const raDiffH = (((b.ra-a.ra)+12)%24+24)%24-12;
+  const decDiffDeg = b.dec-a.dec;
+  box.innerHTML = `${a.name} ↔ ${b.name}<br>Angular Separation: ${sepDeg.toFixed(2)}°<br>Bearing (from ${a.name}, N→E): ${bearingDeg.toFixed(0)}°<br>Altitude Difference: ${altDiffDeg.toFixed(1)}°<br>RA Difference: ${raDiffH.toFixed(2)}h<br>Dec Difference: ${decDiffDeg.toFixed(2)}°`;
+}
+function refreshSelectedInfo(eq, ss, prec){
+  const sel = state.selected; if (!sel) return; let d = null;
+  if (sel.type === "Star"){ const s = STAR_BY[sel.name]; if (s){ const sp = precessJ2000ToDate(s.ra, s.dec, prec); const a = eq(sp.ra, sp.dec); d = { name:s.name, type:"Star", mag:s.mag, ra:sp.ra, dec:sp.dec, alt:a.alt, az:a.az, bv:s.bv, pmraMasYr:s.pmraMasYr, pmdecMasYr:s.pmdecMasYr }; } }
+  else if (sel.type === "Galaxy" || sel.type === "Nebula" || sel.type === "Cluster" || sel.type === "Black Hole"){
+    const o = DEEP_SKY.find(x => x.name === sel.name); if (o){ const sp = precessJ2000ToDate(o.ra, o.dec, prec); const a = eq(sp.ra, sp.dec); d = { name:o.name, type:o.type, mag:o.mag, ra:sp.ra, dec:sp.dec, alt:a.alt, az:a.az, desc:o.desc }; } }
+  else { const o = ss.find(x => x.name === sel.name); if (o){ const a = eq(o.ra, o.dec);
+    d = { name:o.name, type:o.isSun?"Sun":o.isMoon?"Moon":"Planet", ra:o.ra, dec:o.dec, alt:a.alt, az:a.az, illum:o.illum, mag:o.mag, distAU:o.distAU, distKm:o.distKm, helioDistAU:o.helioDistAU, orbitA:o.orbitA, orbitE:o.orbitE, phaseDeg:o.phaseDeg, angDiamArcsec:o.angDiamArcsec, phaseAngleDeg:o.phaseAngleDeg }; } }
+  if (d) updatePanel(d);
+}
+
+// ===================== Object Search / Slew (execution) =====================
+// Builds the same kind of `d` object the click/tap handler produces (see hitList below), so the
+// existing selection + periodic-refresh machinery (showInfo/refreshSelectedInfo) works unchanged.
+function slewToSearchResult(e){
+  const cur = internalDate, jd = dateToJD(cur), prec = updatePrecessionNutation(jd);
+  const lst = lstHours(jd, state.location.lon, prec), lat = state.location.lat;
+  const eqNow = (raH,decD) => equatorialToHorizontal(raH, decD, lat, lst);
+  if (e.type === "constellation"){
+    // A constellation isn't a single point object, so it has no natural fit in the per-object info
+    // panel — center the view on it (same view-centering every other search result uses) and
+    // confirm via the search message instead of opening a mismatched panel.
+    const c = CONST_CENTROID[e.key]; if (!c) return;
+    const decR = Math.asin(clamp(c.z,-1,1)), raR = Math.atan2(c.y, c.x);
+    const raH = (((raR*RAD)%360)+360)%360/15;
+    const a = eqNow(raH, decR*RAD);
+    state.view = { az0: ((a.az*RAD)+360)%360, alt0: clamp(a.alt*RAD, -89, 89), fov: state.view.fov };
+    searchMsg.textContent = `Centered on ${e.key}.`; searchMsg.style.display = "block";
+    return;
+  }
+  let d = null;
+  if (e.type === "star"){
+    const s = STAR_BY[e.key]; const sp = precessJ2000ToDate(s.ra, s.dec, prec); const a = eqNow(sp.ra, sp.dec);
+    d = { name:s.name, type:"Star", mag:s.mag, ra:sp.ra, dec:sp.dec, alt:a.alt, az:a.az, bv:s.bv };
+  } else if (e.type === "deepsky"){
+    const o = DEEP_SKY.find(x=>x.name===e.key); const sp = precessJ2000ToDate(o.ra, o.dec, prec); const a = eqNow(sp.ra, sp.dec);
+    d = { name:o.name, type:o.type, mag:o.mag, ra:sp.ra, dec:sp.dec, alt:a.alt, az:a.az, desc:o.desc };
+  } else {
+    const ss = getSolarSystem(jd, prec);
+    const wanted = e.type === "planet" ? PLANET_INFO[e.key].label : (e.type === "sun" ? "Sun" : "Moon");
+    const o = ss.find(x=>x.name===wanted); const a = eqNow(o.ra, o.dec);
+    d = { name:o.name, type:o.isSun?"Sun":o.isMoon?"Moon":"Planet", ra:o.ra, dec:o.dec, alt:a.alt, az:a.az,
+      illum:o.illum, mag:o.mag, distAU:o.distAU, distKm:o.distKm, helioDistAU:o.helioDistAU, orbitA:o.orbitA, orbitE:o.orbitE,
+      phaseDeg:o.phaseDeg, angDiamArcsec:o.angDiamArcsec, phaseAngleDeg:o.phaseAngleDeg };
+  }
+  state.view = { az0: ((d.az*RAD)+360)%360, alt0: clamp(d.alt*RAD, -89, 89), fov: state.view.fov };
+  showInfo(d);
+}
+function doSearch(){
+  const q = searchInput.value;
+  const match = findSearchMatch(q);
+  if (match){ slewToSearchResult(match); if (match.type !== "constellation") searchMsg.style.display = "none"; }
+  else { searchMsg.textContent = `No match found for "${q}".`; searchMsg.style.display = "block"; }
+}
+
+// ===================== Render =====================
+let hitList = [];
+let internalDate = new Date(state.date);
+let lastFrame = performance.now();
+let hudAcc = 0;
+let infoAcc = 0;
+
+// Coarse, cheap heuristic for "this is a phone or otherwise modest device" — used only to trim
+// the pixel-ratio cap a little on such devices. Never changes anything about desktop rendering.
+const IS_LOW_POWER_DEVICE = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
+  Math.min(window.screen.width || window.innerWidth, window.screen.height || window.innerHeight) < 700;
+
+function renderFrame(now){
+  const dt = (now - lastFrame) / 1000; lastFrame = now;
+  if (state.playing) internalDate = new Date(internalDate.getTime() + state.speed * dt * 1000); else internalDate = state.date;
+  const cur = internalDate;
+
+  const dpr = Math.min(window.devicePixelRatio || 1, IS_LOW_POWER_DEVICE ? 1.5 : 2);
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (w === 0 || h === 0) { return; }
+  if (canvas.width !== Math.round(w*dpr) || canvas.height !== Math.round(h*dpr)) { canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr); }
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+
+  const jd = dateToJD(cur);
+  const prec = updatePrecessionNutation(jd);           // precession angles + equation of equinoxes, cached per calendar day
+  const lst = lstHours(jd, state.location.lon, prec);  // apparent sidereal time (includes nutation's equinox correction)
+  const lat = state.location.lat;
+  const proj = makeProjector(state.view);
+  const scale = Math.min(w, h) / 2, cx = w/2, cy = h/2;
+  hitList = [];
+  const eq = (raH, decD) => equatorialToHorizontal(raH, decD, lat, lst);
+
+  ctx.fillStyle = "#000"; ctx.fillRect(0, 0, w, h);
+  const HSTEPS = 240;
+
+  // Solar system positions: computed once per frame and reused below both by the info-panel
+  // live-refresh (refreshSelectedInfo) and by the solar-system drawing pass — never recomputed twice.
+  const ss = getSolarSystem(jd, prec);
+
+  // ===================== Zoom Level-of-Detail (LOD) =====================
+  // zoomT runs 0 (widest FOV) .. 1 (tightest zoom). It drives two things: (1) starMagCutoff below,
+  // which lets the star loop skip the expensive precession+refraction+projection work entirely for
+  // stars fainter than the cutoff — computed BEFORE any of that work runs, not after — so a much
+  // larger catalogue can be added later without redoing per-frame work for stars that wouldn't be
+  // shown anyway; and (2) the star/deep-sky label thresholds a bit further down, so zooming in
+  // reveals labels for objects that are always too numerous to label at a wide field of view.
+  // The cutoff is set generously (6.0 at the very widest) so today's catalogue — whose faintest
+  // entries are around mag 5.4 — stays fully visible at every normal zoom level; it only starts
+  // trimming anything once a future, much larger catalogue adds meaningfully fainter stars.
+  const zoomT = 1 - clamp((state.view.fov - 1) / (120 - 1), 0, 1);
+  const starMagCutoff = 6.0 + zoomT * 3.0;
+  const starLabelLimit = 1.8 + zoomT * 4.5;
+
+  // Precompute this frame's star screen positions once — precession to date and refraction-
+  // corrected projection — and cache them on each star object (`_` prefixed fields). The
+  // constellation-line pass, the star-dot pass, and the star-label pass below all reuse this
+  // instead of repeating the same transform three times per star per frame (§15).
+  // NOTE: rendering opacity is intentionally NOT modulated by the sky-brightness model — stars,
+  // lines, and planets are always drawn at full brightness, exactly as in the original simulation.
+  // The sky-brightness/limiting-magnitude science (extinctionMag/skyLimitingMagnitude, computed
+  // on demand via currentSkyContext()) still drives the "Visibility" and observing-info text in
+  // the info panel — it's just no longer tied to how bright anything is drawn on the canvas.
+  for (const s of STARS){
+    if (s.mag > starMagCutoff){ s._visible = false; continue; } // cheap LOD skip, before any trig
+    const sp = precessJ2000ToDate(s.ra, s.dec, prec);
+    const a = eq(sp.ra, sp.dec);
+    const appDeg = apparentAltDeg(a.alt*RAD);
+    const p = proj(appDeg*DEG, a.az);
+    s._visible = p.visible; s._sx = cx+p.x*scale; s._sy = cy-p.y*scale;
+    s._alt = a.alt; s._az = a.az; s._raDate = sp.ra; s._decDate = sp.dec;
+  }
+
+  // alt/az grid — a fixed geometric reference frame, so it is intentionally NOT refraction-shifted.
+  if (state.settings.grid){
+    ctx.strokeStyle = "rgba(180,190,210,0.10)"; ctx.lineWidth = 1;
+    for (let alt=15; alt<=75; alt+=15){ ctx.beginPath(); let st=false;
+      for (let i=0;i<=120;i++){ const az=(i/120)*Math.PI*2, p=proj(alt*DEG,az);
+        if (p.visible){ const sx=cx+p.x*scale, sy=cy-p.y*scale; if(!st){ctx.moveTo(sx,sy);st=true}else ctx.lineTo(sx,sy);} else st=false; } ctx.stroke(); }
+    for (let azD=0; azD<360; azD+=30){ ctx.beginPath(); let st=false;
+      for (let alt=0; alt<=88; alt+=2){ const p=proj(alt*DEG, azD*DEG);
+        if (p.visible){ const sx=cx+p.x*scale, sy=cy-p.y*scale; if(!st){ctx.moveTo(sx,sy);st=true}else ctx.lineTo(sx,sy);} else st=false; } ctx.stroke(); }
+  }
+
+  // ecliptic — uses the mean obliquity of date (instead of a fixed J2000 value) for consistency
+  // with the rest of the of-date coordinate handling, and is refraction-shifted like real objects
+  // near it (Sun, Moon, planets all lie close to this line).
+  if (state.settings.ecliptic){
+    ctx.strokeStyle = "rgba(200,180,120,0.25)"; ctx.lineWidth = 1; ctx.beginPath(); let st=false;
+    for (let lon=0; lon<=360; lon+=2){ const lr=lon*DEG, dec=Math.asin(Math.sin(prec.obliMeanR)*Math.sin(lr)); let raD=Math.atan2(Math.sin(lr)*Math.cos(prec.obliMeanR),Math.cos(lr))*RAD; raD=((raD%360)+360)%360; const a=eq(raD/15, dec*RAD);
+      const appDeg = apparentAltDeg(a.alt*RAD);
+      const p=proj(appDeg*DEG,a.az); if(p.visible){ const sx=cx+p.x*scale, sy=cy-p.y*scale; if(!st){ctx.moveTo(sx,sy);st=true}else ctx.lineTo(sx,sy);} else st=false; }
+    ctx.stroke();
+  }
+
+  // constellation lines — reuse the star position cache above so lines always land exactly on the
+  // (precessed, refraction-corrected) star dots drawn further down.
+  if (state.settings.lines){
+    ctx.strokeStyle = "rgba(120,140,180,0.30)"; ctx.lineWidth = 1;
+    for (const c of CONSTELLATIONS){ for (const [a,b] of c.lines){ const sa=STAR_BY[a], sb=STAR_BY[b]; if(!sa||!sb) continue;
+      if (!sa._visible||!sb._visible) continue;
+      ctx.beginPath(); ctx.moveTo(sa._sx, sa._sy); ctx.lineTo(sb._sx, sb._sy); ctx.stroke(); } }
+  }
+
+  // deep-sky
+  const dsLabelLimit = 3 + zoomT * 9; // wider FOV -> only brightest labels shown; tighter zoom reveals fainter ones
+  for (const d of DEEP_SKY){
+    const dp = precessJ2000ToDate(d.ra, d.dec, prec);
+    const a = eq(dp.ra, dp.dec);
+    const appDeg = apparentAltDeg(a.alt*RAD);
+    const p = proj(appDeg*DEG, a.az); if(!p.visible) continue;
+    const sx=cx+p.x*scale, sy=cy-p.y*scale; const size=Math.max(2.5,(6.5-(d.mag||6))*0.7);
+    const vstyle = visualStyleFor(d.type); // maps finer-grained catalogue types onto the 4 original visual treatments
+    if (vstyle==="Galaxy"){ ctx.strokeStyle="rgba(150,160,190,0.6)"; ctx.fillStyle="rgba(150,160,190,0.12)"; ctx.lineWidth=1; ctx.beginPath(); ctx.ellipse(sx,sy,size*1.6,size*0.7,0.5,0,Math.PI*2); ctx.fill(); ctx.stroke(); }
+    else if (vstyle==="Nebula"){ const g=ctx.createRadialGradient(sx,sy,0,sx,sy,size*2.2); g.addColorStop(0,"rgba(120,200,180,0.5)"); g.addColorStop(1,"rgba(120,200,180,0)"); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sx,sy,size*2.2,0,Math.PI*2); ctx.fill(); }
+    else if (vstyle==="Cluster"){ ctx.strokeStyle="rgba(200,200,210,0.6)"; ctx.lineWidth=1; ctx.setLineDash([2,2]); ctx.beginPath(); ctx.arc(sx,sy,size*1.3,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]); }
+    else if (vstyle==="BlackHole"){ ctx.strokeStyle="rgba(255,150,60,0.9)"; ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(sx,sy,size+3,0,Math.PI*2); ctx.stroke(); ctx.fillStyle="#000"; ctx.beginPath(); ctx.arc(sx,sy,size,0,Math.PI*2); ctx.fill(); ctx.strokeStyle="rgba(255,150,60,0.5)"; ctx.lineWidth=0.8; ctx.beginPath(); ctx.arc(sx,sy,size+6,0,Math.PI*2); ctx.stroke(); }
+    if (state.settings.labels && (d.mag===undefined || d.mag<=dsLabelLimit)){ ctx.fillStyle="rgba(180,190,205,0.7)"; ctx.font="10px ui-sans-serif, system-ui, sans-serif"; ctx.fillText(d.name, sx+size+4, sy+3); }
+    hitList.push({x:sx,y:sy,r:Math.max(12,size+6),data:{name:d.name,type:d.type,mag:d.mag,ra:dp.ra,dec:dp.dec,alt:a.alt,az:a.az,desc:d.desc}});
+  }
+
+  // stars — drawn from the per-frame cache computed above; visual style is unchanged, only the
+  // position (precession + refraction) and opacity (sky brightness) are new.
+  ctx.lineCap = "round";
+  for (const s of STARS){ if (!s._visible) continue;
+    const sx=s._sx, sy=s._sy; const r=Math.max(0.5,(6.0-s.mag)*0.85); const col=bvToColor(s.bv); const cs=`rgb(${col[0]|0},${col[1]|0},${col[2]|0})`;
+    if (s.mag<2.2){ const g=ctx.createRadialGradient(sx,sy,0,sx,sy,r*6); g.addColorStop(0,`rgba(${col[0]|0},${col[1]|0},${col[2]|0},0.55)`); g.addColorStop(1,"rgba(0,0,0,0)"); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sx,sy,r*6,0,Math.PI*2); ctx.fill(); }
+    ctx.fillStyle=cs; ctx.beginPath(); ctx.arc(sx,sy,r,0,Math.PI*2); ctx.fill();
+    if (s.mag<0.8){ ctx.strokeStyle=`rgba(${col[0]|0},${col[1]|0},${col[2]|0},0.5)`; ctx.lineWidth=0.6; const sp=r*4; ctx.beginPath(); ctx.moveTo(sx-sp,sy); ctx.lineTo(sx+sp,sy); ctx.moveTo(sx,sy-sp); ctx.lineTo(sx,sy+sp); ctx.stroke(); }
+    hitList.push({x:sx,y:sy,r:Math.max(9,r+4),data:{name:s.name,type:"Star",mag:s.mag,ra:s._raDate,dec:s._decDate,alt:s._alt,az:s._az,bv:s.bv,pmraMasYr:s.pmraMasYr,pmdecMasYr:s.pmdecMasYr}});
+  }
+
+  // solar system — reuses `ss` computed once above.
+  for (const o of ss){ const a=eq(o.ra,o.dec); const appDeg=apparentAltDeg(a.alt*RAD); const p=proj(appDeg*DEG,a.az); if(!p.visible) continue;
+    const sx=cx+p.x*scale, sy=cy-p.y*scale;
+    if (o.isSun){ const g=ctx.createRadialGradient(sx,sy,0,sx,sy,o.size*5); g.addColorStop(0,"rgba(255,247,214,0.9)"); g.addColorStop(0.3,"rgba(255,240,180,0.4)"); g.addColorStop(1,"rgba(0,0,0,0)"); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(sx,sy,o.size*5,0,Math.PI*2); ctx.fill(); ctx.fillStyle="#fff7d6"; ctx.beginPath(); ctx.arc(sx,sy,o.size,0,Math.PI*2); ctx.fill(); }
+    else if (o.isMoon){ const r=o.size; ctx.fillStyle="#111"; ctx.beginPath(); ctx.arc(sx,sy,r+1,0,Math.PI*2); ctx.fill(); ctx.fillStyle=o.color; ctx.beginPath(); ctx.arc(sx,sy,r,0,Math.PI*2); ctx.fill();
+      const k=1-2*o.illum, sR=Math.abs(k)*r, dir=o.elong<Math.PI?1:-1; ctx.save(); ctx.beginPath(); ctx.arc(sx,sy,r,0,Math.PI*2); ctx.clip(); ctx.fillStyle="#000";
+      if (o.illum>0.01 && o.illum<0.99){ ctx.beginPath(); ctx.ellipse(sx+dir*(r-sR),sy,sR,r,0,0,Math.PI*2); ctx.fill(); } ctx.restore();
+      ctx.strokeStyle="rgba(232,232,224,0.4)"; ctx.lineWidth=0.5; ctx.beginPath(); ctx.arc(sx,sy,r,0,Math.PI*2); ctx.stroke(); }
+    else { ctx.fillStyle=o.color; ctx.beginPath(); ctx.arc(sx,sy,o.size,0,Math.PI*2); ctx.fill();
+      if (o.name==="Saturn"){ ctx.strokeStyle="rgba(232,214,168,0.6)"; ctx.lineWidth=1; ctx.beginPath(); ctx.ellipse(sx,sy,o.size*1.8,o.size*0.7,-0.4,0,Math.PI*2); ctx.stroke(); } }
+    if (state.settings.labels){ ctx.fillStyle="rgba(220,220,230,0.85)"; ctx.font="11px ui-sans-serif, system-ui, sans-serif"; ctx.fillText(o.name, sx+o.size+4, sy+3); }
+    hitList.push({x:sx,y:sy,r:Math.max(11,o.size+6),data:{name:o.name,type:o.isSun?"Sun":o.isMoon?"Moon":"Planet",ra:o.ra,dec:o.dec,alt:a.alt,az:a.az,illum:o.illum,mag:o.mag,distAU:o.distAU,distKm:o.distKm,helioDistAU:o.helioDistAU,orbitA:o.orbitA,orbitE:o.orbitE,phaseDeg:o.phaseDeg,angDiamArcsec:o.angDiamArcsec,phaseAngleDeg:o.phaseAngleDeg}});
+  }
+
+  // star labels — reuse the same per-frame cache used by the star-dot pass above.
+  if (state.settings.labels){ ctx.font="10px ui-sans-serif, system-ui, sans-serif"; ctx.fillStyle="rgba(200,205,220,0.7)";
+    for (const s of STARS){ if (s.mag>starLabelLimit) continue; if (!s._visible) continue; ctx.fillText(s.name, s._sx+6, s._sy+3); } }
+
+  // cardinal directions
+  ctx.font="bold 13px ui-sans-serif, system-ui, sans-serif"; ctx.fillStyle="rgba(230,230,235,0.9)";
+  [["N",0],["E",90],["S",180],["W",270]].forEach(([lab,azD]) => { const p=proj(0, azD*DEG); if(p.visible){ const sx=cx+p.x*scale, sy=cy-p.y*scale, dx=p.x, dy=p.y, len=Math.hypot(dx,dy)||1; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(lab, sx+(dx/len)*14, sy-(dy/len)*14); } });
+  ctx.textAlign="start"; ctx.textBaseline="alphabetic";
+
+  // horizon line — the true geometric horizon (alt=0), left unrefracted by definition.
+  ctx.strokeStyle="rgba(200,205,220,0.35)"; ctx.lineWidth=1; ctx.beginPath();
+  for (let i=0;i<=HSTEPS;i++){ const az=(i/HSTEPS)*Math.PI*2, p=proj(0,az); const sx=cx+p.x*scale, sy=cy-p.y*scale; if(i===0) ctx.moveTo(sx,sy); else ctx.lineTo(sx,sy); }
+  ctx.stroke();
+
+  // Measure Mode connecting line — only drawn when explicitly turned on and two points selected;
+  // re-projected fresh every frame from the stored RA/Dec so it tracks correctly as time/view change.
+  if (state.measure.active && state.measure.points.length === 2){
+    const [pa, pb] = state.measure.points;
+    const ea = eq(pa.ra, pa.dec), eb = eq(pb.ra, pb.dec);
+    const pA = proj(apparentAltDeg(ea.alt*RAD)*DEG, ea.az), pB = proj(apparentAltDeg(eb.alt*RAD)*DEG, eb.az);
+    if (pA.visible && pB.visible){
+      ctx.strokeStyle = "rgba(255,210,90,0.75)"; ctx.lineWidth = 1; ctx.setLineDash([5,4]);
+      ctx.beginPath(); ctx.moveTo(cx+pA.x*scale, cy-pA.y*scale); ctx.lineTo(cx+pB.x*scale, cy-pB.y*scale); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  hudAcc += dt;
+  if (hudAcc > 0.2){ hudAcc = 0;
+    hud.innerHTML = `${cur.toLocaleString()}<br>LST ${lst.toFixed(2)}h<br>Az ${(state.view.az0).toFixed(0)}° · Alt ${state.view.alt0.toFixed(0)}° · FOV ${state.view.fov.toFixed(0)}°`;
+  }
+  infoAcc += dt;
+  if (infoAcc > 0.25){ infoAcc = 0;
+    if (state.selected && info.style.display === "block") refreshSelectedInfo(eq, ss, prec);
+  }
+}
+// Outer render loop: runs one frame of renderFrame() and always reschedules the next one, even if
+// this frame threw partway through. A single bad frame (e.g. a momentary NaN from some edge case)
+// should never permanently freeze the simulation — it should just be skipped, with the sim
+// recovering cleanly on the very next frame.
+function render(now){
+  try { renderFrame(now); }
+  catch (err) { console.warn("Stellar Sky: skipped a render frame due to an error (recovering on next frame):", err); }
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+// ===================== Interaction =====================
+let drag = null, moved = false;
+canvas.addEventListener("mousedown", e => { drag = {x:e.clientX,y:e.clientY,az0:state.view.az0,alt0:state.view.alt0}; moved=false; canvas.style.cursor="grabbing"; });
+window.addEventListener("mousemove", e => { if(!drag) return; const dx=e.clientX-drag.x, dy=e.clientY-drag.y; if(Math.abs(dx)+Math.abs(dy)>4) moved=true;
+  const k = state.view.fov / Math.min(canvas.clientWidth, canvas.clientHeight);
+  let az0 = drag.az0 - dx*k*0.6, alt0 = drag.alt0 + dy*k*0.6;
+  az0 = ((az0%360)+360)%360; alt0 = Math.max(-89, Math.min(89, alt0));
+  state.view = { az0, alt0, fov: state.view.fov };
+});
+window.addEventListener("mouseup", () => { drag=null; canvas.style.cursor="grab"; });
+canvas.addEventListener("wheel", e => { e.preventDefault(); let fov = state.view.fov + e.deltaY*0.04; fov = Math.max(0.2, Math.min(130, fov)); state.view = { az0: state.view.az0, alt0: state.view.alt0, fov }; }, { passive:false });
+canvas.addEventListener("click", e => { if(moved) return; const r = canvas.getBoundingClientRect(); const mx=e.clientX-r.left, my=e.clientY-r.top; let best=null, bd=Infinity;
+  for (const h of hitList){ const d=Math.hypot(h.x-mx,h.y-my); if(d<h.r && d<bd){ bd=d; best=h; } } if(best) selectObject(best.data); });
+
+// ---- Touch: one-finger pan, pinch zoom, tap to select (desktop mouse controls above are unchanged) ----
+let touchDrag = null, touchPinch = null, touchMoved = false;
+function selectAtClient(clientX, clientY){
+  const r = canvas.getBoundingClientRect(); const mx = clientX - r.left, my = clientY - r.top;
+  let best = null, bd = Infinity;
+  for (const h of hitList){ const d = Math.hypot(h.x - mx, h.y - my); if (d < h.r && d < bd){ bd = d; best = h; } }
+  if (best) selectObject(best.data);
+}
+canvas.addEventListener("touchstart", e => {
+  if (e.touches.length === 1){ const t = e.touches[0]; touchDrag = {x:t.clientX,y:t.clientY,az0:state.view.az0,alt0:state.view.alt0}; touchMoved = false; touchPinch = null; }
+  else if (e.touches.length === 2){ touchDrag = null; touchMoved = true; const dx = e.touches[0].clientX-e.touches[1].clientX, dy = e.touches[0].clientY-e.touches[1].clientY; touchPinch = { dist: Math.hypot(dx,dy)||1, fov0: state.view.fov }; }
+  e.preventDefault();
+}, { passive:false });
+canvas.addEventListener("touchmove", e => {
+  if (e.touches.length === 1 && touchDrag){
+    const t = e.touches[0]; const dx = t.clientX-touchDrag.x, dy = t.clientY-touchDrag.y;
+    if (Math.abs(dx)+Math.abs(dy) > 4) touchMoved = true;
+    const k = state.view.fov / Math.min(canvas.clientWidth, canvas.clientHeight);
+    let az0 = touchDrag.az0 - dx*k*0.6, alt0 = touchDrag.alt0 + dy*k*0.6;
+    az0 = ((az0%360)+360)%360; alt0 = Math.max(-89, Math.min(89, alt0));
+    state.view = { az0, alt0, fov: state.view.fov };
+  } else if (e.touches.length === 2 && touchPinch){
+    const dx = e.touches[0].clientX-e.touches[1].clientX, dy = e.touches[0].clientY-e.touches[1].clientY;
+    const dist = Math.hypot(dx,dy)||1; let fov = touchPinch.fov0 * (touchPinch.dist / dist);
+    fov = Math.max(0.2, Math.min(130, fov));
+    state.view = { az0: state.view.az0, alt0: state.view.alt0, fov };
+  }
+  e.preventDefault();
+}, { passive:false });
+canvas.addEventListener("touchend", e => {
+  if (e.touches.length === 0){
+    if (touchDrag && !touchMoved) selectAtClient(touchDrag.x, touchDrag.y);
+    touchDrag = null; touchPinch = null;
+  } else if (e.touches.length === 1){
+    const t = e.touches[0]; touchDrag = {x:t.clientX,y:t.clientY,az0:state.view.az0,alt0:state.view.alt0}; touchPinch = null; touchMoved = true;
+  }
+  e.preventDefault();
+}, { passive:false });
+canvas.addEventListener("touchcancel", () => { touchDrag = null; touchPinch = null; }, { passive:true });
+</script>
