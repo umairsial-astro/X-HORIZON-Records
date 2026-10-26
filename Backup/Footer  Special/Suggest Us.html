@@ -1,0 +1,1542 @@
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X Horizon | Suggestion Board</title>
+  <meta name="description" content="X Horizon community suggestion, upgrade, issue, and improvement board.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+  
+  <script src="/xhorizon-admin-config.js"></script>
+
+  <style>
+    :root{
+      --bg:#000;
+      --panel:#070707;
+      --panel2:#101010;
+      --panel3:#171717;
+      --text:#fff;
+      --soft:#cfcfcf;
+      --muted:#969696;
+      --line:rgba(255,255,255,.10);
+      --glass:rgba(255,255,255,.045);
+      --white:#fff;
+      --danger:#ff7171;
+      --success:#8fffb4;
+      --warning:#ffd36d;
+      --max:1180px;
+      --display:'Space Grotesk',Arial,Helvetica,sans-serif;
+      --ease:cubic-bezier(.16,1,.3,1);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:#000;color:#fff;overflow-x:hidden}
+    body{margin:0;background:#000;color:#fff;font-family:var(--display);overflow-x:hidden;line-height:1.5}
+    a{color:inherit;text-decoration:none}
+    button,input,select,textarea{font-family:inherit;border:0;outline:0}
+    button{cursor:pointer}
+    input,select,textarea{width:100%}
+
+    .xh-loader{position:fixed;inset:0;background:#000;display:grid;place-items:center;z-index:9999;transition:opacity .65s var(--ease),visibility .65s var(--ease)}
+    .xh-loader.done{opacity:0;visibility:hidden}
+    .xh-load-mark{position:relative;width:min(310px,82vw);height:118px;display:grid;place-items:center;overflow:hidden}
+    .xh-load-x{position:absolute;left:42px;top:6px;font-size:96px;line-height:1;font-weight:900;letter-spacing:-.12em;color:#fff;z-index:2;text-shadow:0 0 26px rgba(255,255,255,.18)}
+    .xh-load-word{position:absolute;left:112px;top:45px;font-size:22px;font-weight:900;letter-spacing:.2em;color:#eee;opacity:.18;animation:xhWordBlink 1.7s steps(2,end) infinite,xhWordSolid .22s ease 1.7s forwards;z-index:3}
+    .xh-load-line{position:absolute;left:42px;bottom:10px;width:222px;height:4px;border-radius:99px;background:#161616;overflow:hidden}
+    .xh-load-line::after{content:"";display:block;height:100%;width:0;background:#d8d8d8;animation:xhLoadFill 1.7s var(--ease) forwards}
+    @keyframes xhWordBlink{0%,100%{opacity:.16}50%{opacity:.68}}
+    @keyframes xhWordSolid{to{opacity:1}}
+    @keyframes xhLoadFill{to{width:100%}}
+
+    .xh-live-bg{position:fixed;inset:0;z-index:0;background:#000;overflow:hidden;pointer-events:none}
+    .xh-live-bg::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.46) 0 1px,transparent 1.5px),radial-gradient(circle,rgba(255,255,255,.24) 0 1px,transparent 1.5px);background-size:150px 150px,230px 230px;background-position:20px 40px,95px 12px;opacity:.30;animation:xhStarDriftRef 46s linear infinite}
+    .xh-glow{position:absolute;border-radius:50%;filter:blur(50px);background:radial-gradient(circle,rgba(255,255,255,.09),transparent 70%)}
+    .xh-g1{width:560px;height:560px;top:-180px;left:-140px;animation:xhDriftA 38s ease-in-out infinite}
+    .xh-g2{width:480px;height:480px;bottom:-160px;right:-100px;animation:xhDriftB 44s ease-in-out infinite}
+    .xh-g3{width:420px;height:420px;top:40%;left:50%;animation:xhDriftC 50s ease-in-out infinite}
+    @keyframes xhStarDriftRef{from{transform:translate3d(0,0,0)}to{transform:translate3d(-150px,150px,0)}}
+    @keyframes xhDriftA{0%,100%{transform:translate(0,0)}50%{transform:translate(70px,50px)}}
+    @keyframes xhDriftB{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-46px)}}
+    @keyframes xhDriftC{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,40px)}}
+
+    .xh-page{position:relative;z-index:1;min-height:100vh;background:transparent}
+    .xh-shell{width:min(var(--max),calc(100% - 40px));margin:0 auto}
+    .xh-hero{position:relative;min-height:100vh;padding:108px 20px 76px;display:grid;place-items:center;text-align:center;overflow:hidden;background:#000}
+    .xh-hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(0,0,0,.28),rgba(0,0,0,.64) 68%,#000 100%),url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=90&w=2200&auto=format&fit=crop') center/cover no-repeat;filter:brightness(.82) saturate(1.02) contrast(1.04);transform:scale(1.01)}
+    .xh-hero::before{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;z-index:3;background:linear-gradient(90deg,transparent,rgba(255,255,255,.86),transparent);box-shadow:0 0 30px rgba(255,255,255,.45);pointer-events:none}
+    .xh-hero::after{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(circle at 50% 48%,rgba(0,0,0,.04) 0 24%,rgba(0,0,0,.45) 72%,#000 100%);pointer-events:none}
+    .xh-hero-content{position:relative;z-index:4;width:min(720px,calc(100% - 34px));padding:48px 0 42px;transform:translateY(-20px);display:flex;flex-direction:column;align-items:center}
+    .xh-search-wrap{width:min(500px,90vw);position:relative;margin:0 auto 23px}
+    .xh-search{display:flex;background:rgba(255,255,255,.045);border-radius:14px;padding:6px;gap:6px;box-shadow:none;backdrop-filter:blur(12px)}
+    .xh-search input{flex:1;min-width:0;height:46px;min-height:46px;border-radius:10px;background:transparent;color:#fff;padding:0 14px;font-size:13px}
+    .xh-search input::placeholder{color:rgba(255,255,255,.58)}
+    .xh-search button,.xh-btn,.xh-small-btn{min-height:46px;border-radius:10px;background:#fff;color:#000;padding:0 20px;font-size:12px;font-weight:700;letter-spacing:.04em;transition:transform .25s var(--ease),background .25s var(--ease),opacity .25s var(--ease)}
+    .xh-search button:hover,.xh-btn:hover,.xh-small-btn:hover{background:#e7e7e7;color:#000;transform:scale(1.04)}
+    .xh-search button:disabled{opacity:.65;cursor:wait}
+    .xh-results{display:none;position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:20;background:#070707;border-radius:14px;padding:8px;text-align:left;max-height:320px;overflow:auto;box-shadow:0 22px 60px rgba(0,0,0,.48)}
+    .xh-results.show{display:block}
+    .xh-result-item{display:block;padding:12px;border-radius:10px;background:#111;margin-bottom:6px;color:#fff;cursor:pointer}
+    .xh-result-item:last-child{margin-bottom:0}
+    .xh-result-item:hover{background:#1a1a1a}
+    .xh-result-item strong{display:block;font-size:13px}
+    .xh-result-item span{display:block;font-size:12px;color:#b8b8b8;margin-top:3px}
+    .xh-title{display:flex;align-items:baseline;justify-content:center;gap:16px;margin:0;font-family:var(--display);font-size:clamp(31px,4.7vw,56px);line-height:1;letter-spacing:.01em;font-weight:500;text-transform:none;color:#cfcfcf}
+    .xh-title span{display:inline-block;font-size:clamp(56px,8.5vw,92px);font-weight:700;line-height:.9;letter-spacing:-.02em;color:#fff}
+    .xh-hero-line{margin:18px 0 0;color:#cfcfcf;font-size:clamp(14px,1.48vw,18px);line-height:1.7;letter-spacing:.24em;text-transform:uppercase;font-weight:400;max-width:680px}
+    .xh-hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+    .xh-hero-actions .xh-btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;min-height:50px;padding:0 26px;font-size:13px;text-transform:none}
+    .xh-hero-actions .xh-btn:nth-child(2){background:rgba(255,255,255,.045);color:#fff}
+    .xh-hero-actions .xh-btn:nth-child(2):hover{background:rgba(255,255,255,.075);color:#fff}
+
+    .xh-section{position:relative;padding:68px 0;background:#000}
+    .xh-section.compact{padding:42px 0}
+    .xh-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:24px}
+    .xh-head h2{margin:0;font-size:clamp(26px,3.4vw,38px);letter-spacing:-.02em;line-height:1.1;font-weight:600}
+    .xh-head p{margin:8px 0 0;max-width:720px;color:#cfcfcf;font-size:14px;line-height:1.65}
+    .xh-kicker{display:inline-flex;align-items:center;gap:8px;background:#101010;border-radius:999px;padding:8px 11px;color:#dcdcdc;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+    .xh-dot{width:7px;height:7px;border-radius:50%;background:#dcdcdc;box-shadow:0 0 14px rgba(255,255,255,.24)}
+
+    .xh-marquee{overflow:hidden;background:#080808;border-radius:18px;padding:12px;white-space:nowrap}
+    .xh-marquee span{display:inline-block;padding-right:36px;color:#dcdcdc;font-weight:900;letter-spacing:.12em;text-transform:uppercase;animation:xhTicker 28s linear infinite}
+    @keyframes xhTicker{to{transform:translateX(-50%)}}
+
+    .xh-grid{display:grid;grid-template-columns:1fr;gap:18px;align-items:start;max-width:960px;margin:0 auto}
+    .xh-panel{background:#050505;border-radius:22px;padding:24px;overflow:hidden;position:relative;box-shadow:none}
+    .xh-panel h3{margin:0 0 10px;font-size:clamp(22px,3vw,34px);letter-spacing:-.035em;line-height:1}
+    .xh-panel p{margin:0;color:#c7c7c7;font-size:14px;line-height:1.65}
+    .xh-form{display:grid;gap:15px}
+    .xh-field label{display:block;margin:0 0 8px;color:#e8e8e8;font-size:13px;font-weight:700}
+    .xh-field input,.xh-field select,.xh-field textarea,.xh-admin-controls input,.xh-admin-controls select{background:#000;color:#fff;border-radius:12px;min-height:46px;padding:0 13px;font-size:14px}
+    .xh-field textarea{min-height:116px;padding-top:13px;resize:vertical}
+    .xh-field input:focus,.xh-field select:focus,.xh-field textarea:focus{box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)}
+    .xh-form-row{display:grid;grid-template-columns:1fr;gap:13px}
+    .xh-hint{color:var(--muted);font-size:13px;line-height:1.55;margin-top:2px}
+    .xh-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+    .xh-stat{background:#050505;border-radius:18px;padding:18px;min-height:118px;display:flex;flex-direction:column;justify-content:space-between}
+    .xh-stat strong{display:block;font-size:clamp(28px,4vw,48px);line-height:1;letter-spacing:-.08em}
+    .xh-stat span{font-size:12px;color:#bcbcbc;line-height:1.45}
+
+    .xh-filters{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px}
+    .xh-filter-btn{background:#0b0b0b;color:#dce7f7;border-radius:999px;padding:9px 12px;cursor:pointer;font-size:13px}
+    .xh-filter-btn.active,.xh-filter-btn:hover{background:#fff;color:#000}
+    .xh-suggestions{display:grid;gap:14px}
+    .xh-suggestion-card{background:#0b0b0b;border-radius:20px;padding:18px;transition:transform .25s var(--ease),background .25s var(--ease)}
+    .xh-suggestion-card:hover{transform:translateY(-4px) scale(1.01);background:#141414}
+    .xh-suggestion-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+    .xh-badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+    .xh-badge{display:inline-flex;align-items:center;padding:6px 9px;border-radius:999px;font-size:12px;font-weight:700;background:rgba(255,255,255,.08);color:#dce7f7}
+    .xh-badge.new{background:rgba(143,255,180,.12);color:var(--success)}
+    .xh-badge.update{background:rgba(255,255,255,.14);color:#fff}
+    .xh-badge.remove{background:rgba(255,93,93,.14);color:#ffbaba}
+    .xh-badge.status{color:#fff2c2;background:rgba(255,211,109,.13)}
+    .xh-badge.priority{background:rgba(255,255,255,.16);color:#fff}
+    .xh-suggestion-card h3{margin:0 0 8px;font-size:20px;letter-spacing:-.02em;line-height:1.15}
+    .xh-meta{color:var(--muted);font-size:13px;margin-bottom:10px;line-height:1.55}
+    .xh-suggestion-card p{color:#dce7f7;line-height:1.65;margin:8px 0;font-size:14px}
+    .xh-target{padding:10px 12px;border-radius:12px;background:#000;color:#cbd8ea;word-break:break-word;font-size:13px;margin:12px 0}
+    .xh-suggestion-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .xh-useful-count{color:#dce7f7;font-weight:700;font-size:14px}
+    .xh-btn.dark,.xh-small-btn.dark{background:rgba(255,255,255,.045);color:#fff}
+    .xh-btn.dark:hover,.xh-small-btn.dark:hover{background:rgba(255,255,255,.075);color:#fff}
+    .xh-btn.danger,.xh-small-btn.danger{background:#331012;color:#ffd6d6}
+    .xh-btn.danger:hover,.xh-small-btn.danger:hover{background:#461417;color:#fff}
+    .xh-small-btn{min-height:38px;border-radius:11px;padding:0 13px;font-size:12px}
+    .xh-empty{color:var(--muted);text-align:center;padding:24px;background:#050505;border-radius:18px}
+    .xh-admin-panel{display:none;margin-top:26px}
+    .xh-admin-panel.active{display:block}
+    .xh-admin-grid{display:grid;gap:12px}
+    .xh-admin-card{background:#050505;border-radius:16px;padding:14px}
+    .xh-admin-controls{display:grid;grid-template-columns:1fr 120px auto auto;gap:10px;align-items:center;margin-top:12px}
+    .xh-toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:#fff;color:#000;padding:12px 15px;border-radius:12px;z-index:1000;opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease);font-weight:800}
+    .xh-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .xh-footer{position:relative;z-index:1;padding:46px 0 70px;color:#aaa;text-align:center;background:#000}
+
+    .xh-reveal{opacity:0;transform:translateY(28px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
+    .xh-reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* User layout patch: black content sections and vertical board/form order */
+    .xh-section,.xh-section.compact{background:#000}
+    .xh-grid{grid-template-columns:1fr;max-width:960px;margin:0 auto}
+    .xh-panel,.xh-suggestion-card,.xh-admin-card,.xh-empty,.xh-stat,.xh-target,.xh-marquee,.xh-filter-btn{background:#050505}
+    .xh-form-row{grid-template-columns:1fr}
+
+
+    a,a:visited,a:hover,a:focus,a:active,.xh-btn,.xh-small-btn,.xh-result-item,button,[role="button"],input[type="button"],input[type="submit"]{text-decoration:none!important;cursor:pointer!important;pointer-events:auto!important;-webkit-tap-highlight-color:transparent!important}
+
+    @media(max-width:900px){
+      .xh-grid{grid-template-columns:1fr}
+      .xh-form-row{grid-template-columns:1fr}
+      .xh-stats{grid-template-columns:1fr}
+      .xh-admin-controls{grid-template-columns:1fr}
+      .xh-head{display:block}
+    }
+    @media(max-width:720px){
+      .xh-shell{width:min(100% - 24px,var(--max))}
+      .xh-hero{padding:96px 14px 64px}
+      .xh-hero-content{width:min(100%,calc(100% - 10px));padding:42px 0 36px;transform:translateY(-10px)}
+      .xh-search{flex-direction:column;align-items:stretch}
+      .xh-search input,.xh-search button{width:100%}
+      .xh-title{gap:10px;font-size:clamp(26px,8vw,42px)}
+      .xh-title span{font-size:clamp(48px,16vw,76px)}
+      .xh-hero-line{font-size:12px;letter-spacing:.16em}
+      .xh-hero-actions .xh-btn{min-height:46px;padding:0 20px}
+      .xh-section{padding:50px 0}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .xh-live-bg::before,.xh-glow,.xh-marquee span{animation:none!important}
+    }
+
+
+    /* light black sections + translucent blurry public posts patch */
+    .xh-section,
+    .xh-section.compact,
+    .xh-footer{
+      background:#060606 !important;
+    }
+    .xh-section:nth-of-type(even){
+      background:#090909 !important;
+    }
+    .xh-panel,
+    .xh-stat,
+    .xh-empty,
+    .xh-marquee,
+    .xh-filter-btn{
+      background:#0d0d0d !important;
+      box-shadow:none !important;
+    }
+    .xh-panel{
+      border-radius:24px !important;
+    }
+    .xh-kicker{
+      background:#141414 !important;
+    }
+    .xh-field input,
+    .xh-field select,
+    .xh-field textarea,
+    .xh-admin-controls input,
+    .xh-admin-controls select,
+    .xh-target{
+      background:#111 !important;
+    }
+    .xh-suggestion-card{
+      background:rgba(255,255,255,.075) !important;
+      backdrop-filter:blur(16px) !important;
+      -webkit-backdrop-filter:blur(16px) !important;
+      border:1px solid rgba(255,255,255,.08) !important;
+      box-shadow:none !important;
+    }
+    .xh-suggestion-card:hover{
+      background:rgba(255,255,255,.105) !important;
+      transform:translateY(-3px) scale(1.008) !important;
+    }
+    .xh-suggestion-card p,
+    .xh-useful-count,
+    .xh-target{
+      color:#f1f1f1 !important;
+    }
+    .xh-meta{
+      color:#c7c7c7 !important;
+    }
+    .xh-suggestion-card .xh-target{
+      background:rgba(255,255,255,.08) !important;
+      backdrop-filter:blur(10px) !important;
+      -webkit-backdrop-filter:blur(10px) !important;
+    }
+
+  
+
+/* FINAL_TAB_INPUT_VISIBILITY_FIX */
+.xh-filter-btn,
+.xh-filter-btn:visited,
+.xh-filter-btn:focus,
+.xh-filter-btn:active{
+  color:#f5f5f5 !important;
+  background:rgba(255,255,255,.075) !important;
+  backdrop-filter:blur(14px) !important;
+  -webkit-backdrop-filter:blur(14px) !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.xh-filter-btn.active,
+.xh-filter-btn:hover{
+  color:#fff !important;
+  background:rgba(255,255,255,.16) !important;
+  backdrop-filter:blur(16px) !important;
+  -webkit-backdrop-filter:blur(16px) !important;
+}
+.xh-filter-btn.active *,
+.xh-filter-btn:hover *{
+  color:#fff !important;
+}
+.xh-field input,
+.xh-field select,
+.xh-field textarea,
+.xh-admin-controls input,
+.xh-admin-controls select{
+  background:rgba(255,255,255,.07) !important;
+  color:#fff !important;
+  backdrop-filter:blur(16px) !important;
+  -webkit-backdrop-filter:blur(16px) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  box-shadow:none !important;
+}
+.xh-field input::placeholder,
+.xh-field textarea::placeholder,
+.xh-admin-controls input::placeholder{
+  color:rgba(255,255,255,.62) !important;
+}
+.xh-field input:focus,
+.xh-field select:focus,
+.xh-field textarea:focus,
+.xh-admin-controls input:focus,
+.xh-admin-controls select:focus{
+  background:rgba(255,255,255,.105) !important;
+  color:#fff !important;
+  border-color:rgba(255,255,255,.18) !important;
+  box-shadow:none !important;
+}
+.xh-field select option,
+.xh-admin-controls select option{
+  background:#111 !important;
+  color:#fff !important;
+}
+
+  
+
+/* PREMIUM_SUGGESTION_CARD_TEMPLATE_PATCH */
+.xh-suggestions{
+  grid-template-columns:1fr !important;
+  gap:18px !important;
+}
+.xh-suggestion-card{
+  position:relative !important;
+  overflow:hidden !important;
+  padding:0 !important;
+  border-radius:26px !important;
+  background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.055)) !important;
+  backdrop-filter:blur(20px) !important;
+  -webkit-backdrop-filter:blur(20px) !important;
+  border:1px solid rgba(255,255,255,.11) !important;
+  box-shadow:0 18px 70px rgba(0,0,0,.26) !important;
+}
+.xh-suggestion-card::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:-1px !important;
+  background:radial-gradient(circle at 16% 0%,rgba(255,255,255,.18),transparent 34%),radial-gradient(circle at 94% 24%,rgba(255,255,255,.08),transparent 28%) !important;
+  pointer-events:none !important;
+}
+.xh-suggestion-card:hover{
+  background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.075)) !important;
+  transform:translateY(-5px) scale(1.01) !important;
+}
+.xh-card-accent{
+  position:absolute !important;
+  left:0 !important;
+  top:0 !important;
+  bottom:0 !important;
+  width:4px !important;
+  background:linear-gradient(180deg,#fff,rgba(255,255,255,.22)) !important;
+  opacity:.86 !important;
+}
+.xh-card-update .xh-card-accent{background:linear-gradient(180deg,#fff,rgba(255,255,255,.32)) !important;}
+.xh-card-new .xh-card-accent{background:linear-gradient(180deg,#9fffc1,rgba(159,255,193,.28)) !important;}
+.xh-card-remove .xh-card-accent{background:linear-gradient(180deg,#ff9a9a,rgba(255,154,154,.28)) !important;}
+.xh-priority-card .xh-card-accent{width:6px !important;box-shadow:0 0 22px rgba(255,255,255,.28) !important;}
+.xh-card-head,
+.xh-card-body,
+.xh-card-footer{
+  position:relative !important;
+  z-index:2 !important;
+}
+.xh-card-head{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:16px !important;
+  padding:18px 18px 0 22px !important;
+}
+.xh-card-pills{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:8px !important;
+  align-items:center !important;
+}
+.xh-type,
+.xh-status-pill,
+.xh-priority-pill{
+  display:inline-flex !important;
+  align-items:center !important;
+  min-height:30px !important;
+  padding:0 11px !important;
+  border-radius:999px !important;
+  font-size:11px !important;
+  line-height:1 !important;
+  font-weight:800 !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+  color:#fff !important;
+  background:rgba(255,255,255,.105) !important;
+  backdrop-filter:blur(12px) !important;
+  -webkit-backdrop-filter:blur(12px) !important;
+}
+.xh-type.new{color:#bcffd0 !important;background:rgba(143,255,180,.14) !important;}
+.xh-type.update{color:#fff !important;background:rgba(255,255,255,.14) !important;}
+.xh-type.remove{color:#ffd1d1 !important;background:rgba(255,113,113,.15) !important;}
+.xh-status-pill{color:#fff0bd !important;background:rgba(255,211,109,.13) !important;}
+.xh-priority-pill{color:#000 !important;background:#fff !important;}
+.xh-vote-orb{
+  flex:0 0 auto !important;
+  width:76px !important;
+  height:76px !important;
+  border-radius:50% !important;
+  display:grid !important;
+  place-items:center !important;
+  text-align:center !important;
+  background:rgba(255,255,255,.12) !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  box-shadow:inset 0 0 0 6px rgba(255,255,255,.035) !important;
+}
+.xh-vote-orb strong{
+  display:block !important;
+  font-size:24px !important;
+  line-height:1 !important;
+  letter-spacing:-.06em !important;
+  color:#fff !important;
+}
+.xh-vote-orb span{
+  display:block !important;
+  margin-top:-18px !important;
+  font-size:10px !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+  color:rgba(255,255,255,.72) !important;
+}
+.xh-card-body{padding:10px 22px 18px !important;}
+.xh-card-title{
+  margin:0 0 8px !important;
+  font-size:clamp(22px,3vw,34px) !important;
+  line-height:1.05 !important;
+  letter-spacing:-.045em !important;
+  font-weight:700 !important;
+  color:#fff !important;
+}
+.xh-card-meta{
+  margin:0 0 16px !important;
+  color:rgba(255,255,255,.68) !important;
+  font-size:13px !important;
+}
+.xh-card-block{
+  margin-top:10px !important;
+  padding:14px !important;
+  border-radius:17px !important;
+  background:rgba(255,255,255,.075) !important;
+  backdrop-filter:blur(12px) !important;
+  -webkit-backdrop-filter:blur(12px) !important;
+}
+.xh-card-block small{
+  display:block !important;
+  margin-bottom:6px !important;
+  color:rgba(255,255,255,.58) !important;
+  font-size:10px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+}
+.xh-card-block span,
+.xh-card-block p{
+  display:block !important;
+  margin:0 !important;
+  color:#f4f4f4 !important;
+  font-size:14px !important;
+  line-height:1.62 !important;
+  word-break:break-word !important;
+}
+.xh-target-block span{
+  font-family:Arial,Helvetica,sans-serif !important;
+  color:#fff !important;
+}
+.xh-card-footer{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  padding:14px 18px 18px 22px !important;
+  background:rgba(0,0,0,.16) !important;
+}
+.xh-card-footer .xh-small-btn{
+  min-height:42px !important;
+  border-radius:13px !important;
+  padding:0 16px !important;
+  background:#fff !important;
+  color:#000 !important;
+  font-weight:800 !important;
+}
+.xh-card-footer .xh-small-btn.dark,
+.xh-card-footer .xh-small-btn:disabled{
+  background:rgba(255,255,255,.10) !important;
+  color:#fff !important;
+  opacity:1 !important;
+  cursor:not-allowed !important;
+}
+.xh-useful-count{
+  color:rgba(255,255,255,.75) !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+  letter-spacing:.06em !important;
+  text-transform:uppercase !important;
+  text-align:right !important;
+}
+@media(max-width:720px){
+  .xh-card-head{padding:16px 16px 0 20px !important;}
+  .xh-card-body{padding:10px 18px 16px !important;}
+  .xh-card-footer{align-items:stretch !important;flex-direction:column !important;padding:14px 16px 16px 20px !important;}
+  .xh-card-footer .xh-small-btn{width:100% !important;}
+  .xh-useful-count{text-align:left !important;}
+  .xh-vote-orb{width:66px !important;height:66px !important;}
+  .xh-vote-orb strong{font-size:22px !important;}
+}
+
+  
+
+/* CLEAN_CONTENT_INSIDE_CARD_PATCH */
+.xh-suggestion-card{
+  padding:0 !important;
+  border-radius:24px !important;
+  background:rgba(255,255,255,.07) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(18px) !important;
+  -webkit-backdrop-filter:blur(18px) !important;
+  box-shadow:none !important;
+}
+.xh-suggestion-card::before{
+  background:linear-gradient(135deg,rgba(255,255,255,.10),transparent 42%) !important;
+}
+.xh-card-clean-head{
+  position:relative !important;
+  z-index:2 !important;
+  display:flex !important;
+  justify-content:space-between !important;
+  gap:16px !important;
+  padding:18px 18px 12px 24px !important;
+}
+.xh-card-clean-tags{
+  display:flex !important;
+  gap:8px !important;
+  flex-wrap:wrap !important;
+  align-items:flex-start !important;
+}
+.xh-card-vote-box{
+  min-width:76px !important;
+  border-radius:18px !important;
+  background:rgba(0,0,0,.30) !important;
+  padding:10px 12px !important;
+  text-align:center !important;
+}
+.xh-card-vote-box strong{
+  display:block !important;
+  color:#fff !important;
+  font-size:28px !important;
+  line-height:1 !important;
+  letter-spacing:-.06em !important;
+}
+.xh-card-vote-box span{
+  display:block !important;
+  margin-top:4px !important;
+  color:rgba(255,255,255,.68) !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  letter-spacing:.10em !important;
+  text-transform:uppercase !important;
+}
+.xh-card-request{
+  position:relative !important;
+  z-index:2 !important;
+  padding:4px 24px 16px !important;
+}
+.xh-card-request small{
+  display:block !important;
+  margin-bottom:8px !important;
+  color:rgba(255,255,255,.58) !important;
+  font-size:10px !important;
+  font-weight:900 !important;
+  letter-spacing:.14em !important;
+  text-transform:uppercase !important;
+}
+.xh-card-request h3{
+  margin:0 !important;
+  color:#fff !important;
+  font-size:clamp(19px,2.4vw,28px) !important;
+  line-height:1.18 !important;
+  letter-spacing:-.025em !important;
+  font-weight:700 !important;
+}
+.xh-card-info-list{
+  position:relative !important;
+  z-index:2 !important;
+  display:grid !important;
+  gap:8px !important;
+  padding:0 18px 16px 24px !important;
+}
+.xh-info-line{
+  display:grid !important;
+  grid-template-columns:140px minmax(0,1fr) !important;
+  gap:14px !important;
+  align-items:start !important;
+  background:rgba(0,0,0,.24) !important;
+  border-radius:16px !important;
+  padding:13px 14px !important;
+}
+.xh-info-line b{
+  color:rgba(255,255,255,.62) !important;
+  font-size:11px !important;
+  line-height:1.35 !important;
+  letter-spacing:.10em !important;
+  text-transform:uppercase !important;
+}
+.xh-info-line span{
+  color:#f4f4f4 !important;
+  font-size:14px !important;
+  line-height:1.55 !important;
+  word-break:break-word !important;
+}
+.xh-card-bottom{
+  position:relative !important;
+  z-index:2 !important;
+  padding:14px 18px 18px 24px !important;
+  background:rgba(0,0,0,.20) !important;
+}
+.xh-priority-meter{
+  height:7px !important;
+  border-radius:999px !important;
+  overflow:hidden !important;
+  background:rgba(255,255,255,.10) !important;
+  margin-bottom:11px !important;
+}
+.xh-priority-meter div{
+  height:100% !important;
+  border-radius:999px !important;
+  background:#fff !important;
+}
+.xh-card-bottom-row{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  margin-bottom:12px !important;
+}
+.xh-card-author{
+  color:rgba(255,255,255,.62) !important;
+  font-size:12px !important;
+  line-height:1.4 !important;
+}
+.xh-card-bottom .xh-small-btn{
+  width:100% !important;
+  min-height:44px !important;
+  border-radius:14px !important;
+  background:#fff !important;
+  color:#000 !important;
+  font-weight:900 !important;
+}
+.xh-card-bottom .xh-small-btn.dark,
+.xh-card-bottom .xh-small-btn:disabled{
+  background:rgba(255,255,255,.10) !important;
+  color:#fff !important;
+}
+.xh-useful-count{
+  white-space:nowrap !important;
+  color:#fff !important;
+  text-align:right !important;
+}
+@media(max-width:720px){
+  .xh-card-clean-head{padding:16px 14px 10px 20px !important;}
+  .xh-card-request{padding:4px 20px 14px !important;}
+  .xh-card-info-list{padding:0 14px 14px 20px !important;}
+  .xh-info-line{grid-template-columns:1fr !important;gap:5px !important;}
+  .xh-card-bottom{padding:13px 14px 16px 20px !important;}
+  .xh-card-bottom-row{align-items:flex-start !important;flex-direction:column !important;gap:4px !important;}
+  .xh-useful-count{text-align:left !important;}
+}
+
+  </style>
+
+
+  <div class="xh-loader" id="xhLoader" aria-hidden="true">
+    <div class="xh-load-mark">
+      <div class="xh-load-x">X</div>
+      <div class="xh-load-word">HORIZON</div>
+      <div class="xh-load-line"></div>
+    </div>
+  </div>
+
+  <div class="xh-live-bg" aria-hidden="true">
+    <span class="xh-glow xh-g1"></span>
+    <span class="xh-glow xh-g2"></span>
+    <span class="xh-glow xh-g3"></span>
+  </div>
+
+  <div class="xh-page" id="xhPage">
+    <main>
+      <section class="xh-hero xh-editable" id="home">
+        <div class="xh-hero-bg"></div>
+        <div class="xh-hero-content">
+          <div class="xh-search-wrap">
+            <div class="xh-search">
+              <input id="xhSearch" type="search" placeholder="Search suggestions" autocomplete="off">
+              <button id="xhSearchButton" type="button">Search</button>
+            </div>
+            <div class="xh-results" id="xhResults"></div>
+          </div>
+
+          <h1 class="xh-title"><span>X</span> Horizon Suggestions</h1>
+          <p class="xh-hero-line">Post upgrades, fixes, removals, and issues for community review</p>
+          <div class="xh-hero-actions">
+            <a class="xh-btn" href="#suggestionForm">Post Suggestion</a>
+            <a class="xh-btn" href="#prioritySection">View 200+ Priority</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="xh-section compact" aria-label="Accepted and under progress updates">
+        <div class="xh-shell">
+          <div class="xh-marquee xh-reveal" id="statusMarquee">
+            <span>No accepted suggestions yet · Community updates will appear here · No accepted suggestions yet · Community updates will appear here · </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="xh-section" id="submit">
+        <div class="xh-shell">
+          <div class="xh-grid">
+            <aside class="xh-panel xh-reveal">
+              <div class="xh-kicker"><span class="xh-dot"></span> Board Status</div>
+              <h3>200 useful votes create priority.</h3>
+              <p>When a suggestion reaches 200 useful votes, it automatically appears in the community priority section. Accepted or under-progress items appear in the top marquee.</p>
+              <div class="xh-stats">
+                <div class="xh-stat"><strong id="totalPosts">0</strong><span>Total suggestions</span></div>
+                <div class="xh-stat"><strong id="priorityPosts">0</strong><span>200+ useful</span></div>
+                <div class="xh-stat"><strong id="acceptedPosts">0</strong><span>Accepted/progress</span></div>
+              </div>
+            </aside>
+
+            <form class="xh-panel xh-form xh-reveal" id="suggestionForm">
+              <div class="xh-head">
+                <div>
+                  <div class="xh-kicker"><span class="xh-dot"></span> Community Form</div>
+                  <h2>Create suggestion</h2>
+                  <p>Use exact page or section wording so the fix is easy to understand.</p>
+                </div>
+              </div>
+
+              <div class="xh-form-row">
+                <div class="xh-field">
+                  <label for="name">Name</label>
+                  <input id="name" name="name" type="text" placeholder="Enter your name" maxlength="60" required="">
+                </div>
+
+                <div class="xh-field">
+                  <label for="fixType">What type of fix do you want?</label>
+                  <select id="fixType" name="fixType" required="">
+                    <option value="New">New</option>
+                    <option value="Update">Update</option>
+                    <option value="Remove">Remove</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="xh-field">
+                <label for="target">Share the exact page URL or mention the exact section</label>
+                <input id="target" name="target" type="text" placeholder="Example: /courses or Homepage hero section" maxlength="220" required="">
+              </div>
+
+              <div class="xh-field">
+                <label for="action">What do you want to do with it?</label>
+                <textarea id="action" name="action" placeholder="Explain the change, upgrade, removal, or issue clearly" maxlength="1200" required=""></textarea>
+              </div>
+
+              <div class="xh-field">
+                <label for="reason">Reason</label>
+                <textarea id="reason" name="reason" placeholder="Why is this needed?" maxlength="900" required=""></textarea>
+              </div>
+
+              <div class="xh-field">
+                <label for="manage">Manage what you want</label>
+                <textarea id="manage" name="manage" placeholder="Add priority, extra details, expected result, or any instruction" maxlength="900"></textarea>
+              </div>
+
+              <button class="xh-btn" type="submit">Submit Suggestion</button>
+              <p class="xh-hint">Public users can submit and vote useful. Approved managers can update status, adjust useful count, hide spam, or remove posts after unlock.</p>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="xh-section" id="prioritySection">
+        <div class="xh-shell">
+          <div class="xh-head xh-reveal">
+            <div>
+              <div class="xh-kicker"><span class="xh-dot"></span> Community Priority</div>
+              <h2>Community Priority Suggestions</h2>
+              <p>Suggestions with 200 useful votes appear here automatically.</p>
+            </div>
+          </div>
+          <div class="xh-suggestions xh-reveal" id="priorityList"></div>
+        </div>
+      </section>
+
+      <section class="xh-section" id="latest">
+        <div class="xh-shell">
+          <div class="xh-head xh-reveal">
+            <div>
+              <div class="xh-kicker"><span class="xh-dot"></span> Latest Posts</div>
+              <h2>Latest Suggestions</h2>
+              <p>Vote useful only when the suggestion is clear and improves X Horizon.</p>
+            </div>
+          </div>
+
+          <div class="xh-filters xh-reveal" id="filters">
+            <button class="xh-filter-btn active" type="button" data-filter="All">All</button>
+            <button class="xh-filter-btn" type="button" data-filter="New">New</button>
+            <button class="xh-filter-btn" type="button" data-filter="Update">Update</button>
+            <button class="xh-filter-btn" type="button" data-filter="Remove">Remove</button>
+            <button class="xh-filter-btn" type="button" data-filter="Accepted">Accepted</button>
+            <button class="xh-filter-btn" type="button" data-filter="Under Progress">Under Progress</button>
+          </div>
+
+          <div class="xh-suggestions xh-reveal" id="suggestionList"></div>
+        </div>
+      </section>
+
+      <section class="xh-section">
+        <div class="xh-shell">
+          <section class="xh-panel xh-admin-panel" id="adminPanel" aria-hidden="true">
+            <div class="xh-head">
+              <div>
+                <div class="xh-kicker"><span class="xh-dot"></span> Control Access</div>
+                <h2>Control Panel</h2>
+                <p>Unlocked only through the hero search bar. Manage status, useful count, visibility, and posts.</p>
+              </div>
+              <button class="xh-btn danger" id="lockAdmin" type="button">Lock Panel</button>
+            </div>
+            <div class="xh-admin-grid" id="adminList"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+  <div class="xh-toast" id="xhToast"></div>
+
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAnalytics, isSupported as analyticsSupported } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+    import { getAuth, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+    import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, query, where, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = window.XHORIZON_FIREBASE_CONFIG || window.XHorizonFirebaseConfig || {
+      apiKey: "AIzaSyAHcR5KPQcn4bCAnRHRVvshwge65ilqFjs",
+      authDomain: "astro-x-08.firebaseapp.com",
+      projectId: "astro-x-08",
+      storageBucket: "astro-x-08.firebasestorage.app",
+      messagingSenderId: "707443922110",
+      appId: "1:707443922110:web:ed5c454960051092edfaef",
+      measurementId: "G-4S9NDS5V92"
+    };
+
+    function configured(cfg){
+      return cfg && cfg.apiKey && cfg.projectId && !String(cfg.apiKey).includes("YOUR_") && !String(cfg.projectId).includes("YOUR_");
+    }
+
+    let app = null;
+    let auth = null;
+    let functions = null;
+    let db = null;
+
+    try {
+      if (configured(firebaseConfig)) {
+        app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        functions = getFunctions(app);
+        db = getFirestore(app);
+        analyticsSupported().then(ok => { if (ok) getAnalytics(app); }).catch(() => {});
+      }
+    } catch (error) {
+      console.error("Firebase initialization failed:", error);
+    }
+
+    const COLLECTION_NAME = "xhorizon_suggestions";
+
+    function toSuggestion(id, data){
+      const createdRaw = data.createdAt;
+      let createdAt = new Date().toISOString();
+      try {
+        if (createdRaw && typeof createdRaw.toDate === "function") createdAt = createdRaw.toDate().toISOString();
+        else if (typeof createdRaw === "string") createdAt = createdRaw;
+        else if (createdRaw && typeof createdRaw.seconds === "number") createdAt = new Date(createdRaw.seconds * 1000).toISOString();
+      } catch (error) {}
+      return {
+        id,
+        name: data.name || "Anonymous",
+        type: data.type || data.fixType || "Update",
+        fixType: data.fixType || data.type || "Update",
+        target: data.target || "",
+        action: data.action || "",
+        reason: data.reason || "",
+        manage: data.manage || "",
+        useful: Number(data.useful || 0),
+        status: data.status || "Pending Review",
+        hidden: Boolean(data.hidden),
+        createdAt
+      };
+    }
+
+    window.XHorizonFirestoreReady = Boolean(db);
+    window.XHorizonSuggestionsStore = {
+      ready: Boolean(db),
+      subscribe(callback, onError){
+        if (!db) return null;
+
+        /*
+          Public Firestore rules allow reading only visible documents.
+          This query MUST include hidden == false, otherwise Firestore rejects
+          the stream because an unfiltered collection query could return hidden/admin-only posts.
+        */
+        const q = query(collection(db, COLLECTION_NAME), where("hidden", "==", false));
+
+        return onSnapshot(q, snapshot => {
+          const items = snapshot.docs
+            .map(item => toSuggestion(item.id, item.data()))
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+          callback(items);
+        }, error => {
+          console.error("Suggestion stream failed:", error);
+          if (typeof onError === "function") onError(error);
+        });
+      },
+      async create(data){
+        if (!db) throw new Error("Firestore is not ready");
+        return addDoc(collection(db, COLLECTION_NAME), {
+          name: data.name || "Anonymous",
+          fixType: data.fixType || data.type || "Update",
+          type: data.type || data.fixType || "Update",
+          target: data.target || "",
+          action: data.action || "",
+          reason: data.reason || "",
+          manage: data.manage || "",
+          useful: 0,
+          status: "Pending Review",
+          hidden: false,
+          createdAt: serverTimestamp()
+        });
+      },
+      async vote(id){
+        if (!db) throw new Error("Firestore is not ready");
+        return updateDoc(doc(db, COLLECTION_NAME, id), { useful: increment(1) });
+      },
+      async update(id, patch){
+        if (!db) throw new Error("Firestore is not ready");
+        return updateDoc(doc(db, COLLECTION_NAME, id), patch);
+      },
+      async remove(id){
+        if (!db) throw new Error("Firestore is not ready");
+        return deleteDoc(doc(db, COLLECTION_NAME, id));
+      }
+    };
+
+    if (configured(firebaseConfig) && !window.XHorizonAdmin) {
+      window.XHorizonAdmin = {
+        async unlock(key, done) {
+          const cleanKey = String(key || "").trim();
+          if (!cleanKey) return false;
+
+          if (auth && functions) {
+            try {
+              const verifyAdminKey = httpsCallable(functions, "verifyAdminKey");
+              const result = await verifyAdminKey({ key: cleanKey });
+              const data = result && result.data ? result.data : {};
+              const customToken = data.token || data.customToken || data.firebaseToken || "";
+              if (customToken) await signInWithCustomToken(auth, customToken);
+              const user = auth.currentUser;
+              if (user) {
+                const tokenResult = await user.getIdTokenResult(true);
+                const allowed = tokenResult && tokenResult.claims && tokenResult.claims.admin === true;
+                if (allowed) {
+                  if (typeof done === "function") done();
+                  return true;
+                }
+              }
+            } catch (error) {
+              console.warn("Firebase admin function unlock not available:", error);
+            }
+          }
+
+          const config = window.XHORIZON_ADMIN_CONFIG || window.XHorizonAdminConfig || window.XHorizonAdminLocalConfig || {};
+          const localKey = String(config.searchUnlockKey || config.adminSearchKey || config.unlockKey || "").trim();
+          if (localKey && cleanKey === localKey) {
+            if (typeof done === "function") done();
+            return true;
+          }
+          return false;
+        }
+      };
+    }
+
+    (function(){
+      "use strict";
+
+      const STORAGE_KEY = "xhorizon_suggestions_v2_reference_theme";
+      const VOTES_KEY = "xhorizon_suggestion_votes_v2_reference_theme";
+      const ADMIN_SESSION_KEY = "xhorizon_suggestion_admin_unlocked_reference_theme";
+
+      let activeFilter = "All";
+      let suggestions = loadLocalSuggestions();
+      let votes = loadVotes();
+      let unsubscribe = null;
+
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+      const els = {
+        loader: $("#xhLoader"),
+        form: $("#suggestionForm"),
+        search: $("#xhSearch"),
+        searchButton: $("#xhSearchButton"),
+        results: $("#xhResults"),
+        list: $("#suggestionList"),
+        priorityList: $("#priorityList"),
+        adminPanel: $("#adminPanel"),
+        adminList: $("#adminList"),
+        lockAdmin: $("#lockAdmin"),
+        filters: $("#filters"),
+        totalPosts: $("#totalPosts"),
+        priorityPosts: $("#priorityPosts"),
+        acceptedPosts: $("#acceptedPosts"),
+        marquee: $("#statusMarquee"),
+        toast: $("#xhToast")
+      };
+
+      setTimeout(() => { if (els.loader) els.loader.classList.add("done"); }, 2100);
+      setTimeout(() => { if (els.loader) els.loader.classList.add("done"); }, 3400);
+
+      const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            revealObs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .12, rootMargin: "0px 0px -40px 0px" });
+      $$(".xh-reveal").forEach(el => revealObs.observe(el));
+
+      function isAdmin() {
+        return sessionStorage.getItem(ADMIN_SESSION_KEY) === "yes";
+      }
+
+      function setAdminMode(state, silent) {
+        if (state) {
+          sessionStorage.setItem(ADMIN_SESSION_KEY, "yes");
+          document.body.classList.add("editor-on");
+          if (els.adminPanel) {
+            els.adminPanel.classList.add("active");
+            els.adminPanel.setAttribute("aria-hidden", "false");
+          }
+          if (!silent) showToast("Panel unlocked");
+          render();
+          setTimeout(() => { if (els.adminPanel) els.adminPanel.scrollIntoView({ behavior:"smooth", block:"start" }); }, 120);
+        } else {
+          sessionStorage.removeItem(ADMIN_SESSION_KEY);
+          document.body.classList.remove("editor-on");
+          if (els.adminPanel) {
+            els.adminPanel.classList.remove("active");
+            els.adminPanel.setAttribute("aria-hidden", "true");
+          }
+          if (!silent) showToast("Panel locked");
+          render();
+        }
+      }
+
+      function waitForUnlockSystem(){
+        return new Promise(resolve => {
+          if (window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock === "function") return resolve(window.XHorizonAdmin);
+          let tries = 0;
+          const timer = setInterval(() => {
+            tries++;
+            if (window.XHorizonAdmin && typeof window.XHorizonAdmin.unlock === "function") {
+              clearInterval(timer);
+              resolve(window.XHorizonAdmin);
+            } else if (tries > 14) {
+              clearInterval(timer);
+              resolve(null);
+            }
+          }, 120);
+        });
+      }
+
+      async function checkAdminUnlock(value){
+        const key = String(value || "").trim();
+        if (!key) return false;
+        try {
+          const bridge = await waitForUnlockSystem();
+          if (bridge && typeof bridge.unlock === "function") {
+            let callbackDone = false;
+            const ok = await Promise.resolve(bridge.unlock(key, () => {
+              callbackDone = true;
+              setAdminMode(true);
+            }));
+            if (ok) {
+              if (!callbackDone) setAdminMode(true);
+              return true;
+            }
+          }
+        } catch (error) {
+          console.error("Admin bridge unlock failed:", error);
+        }
+        return false;
+      }
+
+      function loadLocalSuggestions() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+          if (Array.isArray(saved) && saved.length) return saved;
+        } catch (error) {}
+        return [];
+      }
+
+      function loadVotes() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(VOTES_KEY) || "{}");
+          return saved && typeof saved === "object" ? saved : {};
+        } catch (error) {
+          return {};
+        }
+      }
+
+      function saveLocalSuggestions() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(suggestions));
+      }
+
+      function saveVotes() {
+        localStorage.setItem(VOTES_KEY, JSON.stringify(votes));
+      }
+
+      function cryptoId() {
+        if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+        return "s_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+      }
+
+      function escapeHTML(value) {
+        return String(value || "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function clean(value) {
+        return String(value || "").trim().replace(/\s+/g, " ");
+      }
+
+      function fullClean(value) {
+        return String(value || "").trim();
+      }
+
+      function formatDate(iso) {
+        try {
+          return new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+        } catch (error) {
+          return "";
+        }
+      }
+
+      function typeClass(type) {
+        return String(type || "").toLowerCase().replace(/\s+/g, "-");
+      }
+
+      function statusText(status) {
+        return status || "Pending Review";
+      }
+
+      function visibleSuggestions() {
+        return suggestions.filter(item => !item.hidden || isAdmin());
+      }
+
+      function renderSuggestionCard(item) {
+        const voted = Boolean(votes[item.id]);
+        const priority = Number(item.useful || 0) >= 200;
+        const cleanStatus = statusText(item.status);
+        const useful = Number(item.useful || 0);
+        const leftToPriority = Math.max(200 - Math.min(useful, 200), 0);
+        const progress = Math.min(Math.round((useful / 200) * 100), 100);
+        return `
+          <article class="xh-suggestion-card xh-card-${typeClass(item.type)} ${priority ? "xh-priority-card" : ""}" data-id="${escapeHTML(item.id)}">
+            <div class="xh-card-accent" aria-hidden="true"></div>
+
+            <div class="xh-card-clean-head">
+              <div class="xh-card-clean-tags">
+                <span class="xh-type ${typeClass(item.type)}">${escapeHTML(item.type)}</span>
+                <span class="xh-status-pill">${escapeHTML(cleanStatus)}</span>
+                ${priority ? `<span class="xh-priority-pill">200+ Priority</span>` : ""}
+              </div>
+              <div class="xh-card-vote-box">
+                <strong>${useful}</strong>
+                <span>useful</span>
+              </div>
+            </div>
+
+            <div class="xh-card-request">
+              <small>Requested change</small>
+              <h3>${escapeHTML(item.action)}</h3>
+            </div>
+
+            <div class="xh-card-info-list">
+              <div class="xh-info-line">
+                <b>Page / Section</b>
+                <span>${escapeHTML(item.target)}</span>
+              </div>
+              <div class="xh-info-line">
+                <b>Reason</b>
+                <span>${escapeHTML(item.reason)}</span>
+              </div>
+              ${item.manage ? `<div class="xh-info-line"><b>Extra</b><span>${escapeHTML(item.manage)}</span></div>` : ""}
+            </div>
+
+            <div class="xh-card-bottom">
+              <div class="xh-priority-meter" aria-label="Useful vote progress">
+                <div style="width:${progress}%"></div>
+              </div>
+              <div class="xh-card-bottom-row">
+                <span class="xh-card-author">${escapeHTML(item.name)} · ${formatDate(item.createdAt)}</span>
+                <span class="xh-useful-count">${priority ? "Priority reached" : `${leftToPriority} useful left`}</span>
+              </div>
+              <button class="xh-small-btn ${voted ? "dark" : ""}" type="button" data-action="useful" data-id="${escapeHTML(item.id)}" ${voted ? "disabled" : ""}>${voted ? "Marked Useful" : "Mark Useful"}</button>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderAdminCard(item) {
+        return `
+          <div class="xh-admin-card" data-id="${escapeHTML(item.id)}">
+            <strong>${escapeHTML(item.action)}</strong>
+            <p>${escapeHTML(item.reason)}</p>
+            <div class="xh-meta">${escapeHTML(item.target)} · ${Number(item.useful || 0)} useful</div>
+            <div class="xh-admin-controls">
+              <select data-admin="status">
+                ${["Pending Review","Accepted","Under Progress","Completed","Rejected"].map(status => `<option value="${status}" ${statusText(item.status) === status ? "selected" : ""}>${status}</option>`).join("")}
+              </select>
+              <input data-admin="useful" type="number" min="0" step="1" value="${Number(item.useful || 0)}">
+              <button class="xh-small-btn dark" type="button" data-admin-action="toggleHide">${item.hidden ? "Show" : "Hide"}</button>
+              <button class="xh-small-btn danger" type="button" data-admin-action="delete">Delete</button>
+            </div>
+          </div>
+        `;
+      }
+
+      function render() {
+        const all = visibleSuggestions().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const filtered = all.filter(item => {
+          if (activeFilter === "All") return true;
+          if (["New", "Update", "Remove"].includes(activeFilter)) return item.type === activeFilter || item.fixType === activeFilter;
+          return statusText(item.status) === activeFilter;
+        });
+
+        const priority = all.filter(item => Number(item.useful || 0) >= 200 && !item.hidden)
+          .sort((a, b) => Number(b.useful || 0) - Number(a.useful || 0));
+
+        if (els.list) els.list.innerHTML = filtered.length ? filtered.map(renderSuggestionCard).join("") : `<div class="xh-empty">No suggestions found.</div>`;
+        if (els.priorityList) els.priorityList.innerHTML = priority.length ? priority.map(renderSuggestionCard).join("") : `<div class="xh-empty">No suggestion has reached 200 useful votes yet.</div>`;
+
+        if (isAdmin() && els.adminList) {
+          els.adminList.innerHTML = suggestions.length ? suggestions.map(renderAdminCard).join("") : `<div class="xh-empty">No items yet.</div>`;
+        }
+
+        if (els.totalPosts) els.totalPosts.textContent = suggestions.filter(item => !item.hidden).length;
+        if (els.priorityPosts) els.priorityPosts.textContent = suggestions.filter(item => !item.hidden && Number(item.useful || 0) >= 200).length;
+        if (els.acceptedPosts) els.acceptedPosts.textContent = suggestions.filter(item => !item.hidden && ["Accepted","Under Progress"].includes(statusText(item.status))).length;
+        renderMarquee();
+      }
+
+      function renderMarquee() {
+        if (!els.marquee) return;
+        const items = suggestions.filter(item => !item.hidden && ["Accepted", "Under Progress"].includes(statusText(item.status)));
+        const text = items.length
+          ? items.map(item => `${statusText(item.status)}: ${item.action}`).join("  ·  ")
+          : "No accepted suggestions yet · Community updates will appear here";
+        els.marquee.innerHTML = `<span>${escapeHTML(text)} · ${escapeHTML(text)} · </span>`;
+      }
+
+      function showToast(message) {
+        if (!els.toast) return;
+        els.toast.textContent = message;
+        els.toast.classList.add("show");
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => els.toast.classList.remove("show"), 1800);
+      }
+
+      function usingFirestore(){
+        return window.XHorizonSuggestionsStore && window.XHorizonSuggestionsStore.ready;
+      }
+
+      function startFirestore(){
+        const store = window.XHorizonSuggestionsStore;
+        if (!store || !store.ready) {
+          render();
+          return;
+        }
+        unsubscribe = store.subscribe(items => {
+          suggestions = items;
+          render();
+        }, () => {
+          showToast("Visible suggestions loading fixed: check Rules if still empty");
+          render();
+        });
+      }
+
+      async function submitSuggestion(event) {
+        event.preventDefault();
+        const data = new FormData(els.form);
+        const suggestion = {
+          id: cryptoId(),
+          name: clean(data.get("name")) || "Anonymous",
+          type: clean(data.get("fixType")),
+          fixType: clean(data.get("fixType")),
+          target: clean(data.get("target")),
+          action: fullClean(data.get("action")),
+          reason: fullClean(data.get("reason")),
+          manage: fullClean(data.get("manage")),
+          useful: 0,
+          status: "Pending Review",
+          hidden: false,
+          createdAt: new Date().toISOString()
+        };
+
+        if (!suggestion.type || !suggestion.target || !suggestion.action || !suggestion.reason) {
+          showToast("Complete required fields");
+          return;
+        }
+
+        try {
+          if (usingFirestore()) {
+            await window.XHorizonSuggestionsStore.create(suggestion);
+          } else {
+            suggestions.unshift(suggestion);
+            saveLocalSuggestions();
+            render();
+          }
+          els.form.reset();
+          showToast("Suggestion posted");
+          const latest = document.getElementById("latest");
+          if (latest) latest.scrollIntoView({ behavior: "smooth", block: "start" });
+        } catch (error) {
+          console.error("Submit failed:", error);
+          showToast("Firebase rules blocked submit");
+        }
+      }
+
+      async function markUseful(id) {
+        if (votes[id]) {
+          showToast("Already marked useful");
+          return;
+        }
+
+        const item = suggestions.find(entry => entry.id === id);
+        if (!item) return;
+
+        try {
+          votes[id] = true;
+          saveVotes();
+          if (usingFirestore()) {
+            await window.XHorizonSuggestionsStore.vote(id);
+          } else {
+            item.useful = Number(item.useful || 0) + 1;
+            saveLocalSuggestions();
+            render();
+          }
+          showToast(Number(item.useful || 0) + 1 >= 200 ? "Community priority reached" : "Marked useful");
+        } catch (error) {
+          delete votes[id];
+          saveVotes();
+          console.error("Useful vote failed:", error);
+          showToast("Firebase rules blocked vote");
+        }
+      }
+
+      function runSearch(queryText) {
+        const value = String(queryText || "").trim().toLowerCase();
+        if (els.results) els.results.innerHTML = "";
+
+        if (!value) {
+          if (els.results) els.results.classList.remove("show");
+          render();
+          return;
+        }
+
+        const matches = visibleSuggestions().filter(item => {
+          return [item.name, item.type, item.fixType, item.target, item.action, item.reason, item.manage, item.status]
+            .some(entry => String(entry || "").toLowerCase().includes(value));
+        }).slice(0, 8);
+
+        matches.forEach(item => {
+          const node = document.createElement("button");
+          node.type = "button";
+          node.className = "xh-result-item";
+          node.innerHTML = `<strong>${escapeHTML(item.action).slice(0, 82)}${item.action.length > 82 ? "..." : ""}</strong><span>${escapeHTML(item.type)} · ${Number(item.useful || 0)} useful</span>`;
+          node.addEventListener("click", () => {
+            activeFilter = "All";
+            $$(".xh-filter-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.filter === "All"));
+            render();
+            if (els.results) els.results.classList.remove("show");
+            const card = document.querySelector(`[data-id="${CSS.escape(item.id)}"]`);
+            if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+          });
+          if (els.results) els.results.appendChild(node);
+        });
+
+        if (!matches.length && els.results) {
+          els.results.innerHTML = `<div class="xh-result-item"><strong>No result</strong><span>Try another search word.</span></div>`;
+        }
+
+        if (els.results) els.results.classList.add("show");
+      }
+
+      async function handleSearch() {
+        const value = els.search.value.trim();
+        if (!value) {
+          runSearch("");
+          return;
+        }
+
+        const oldLabel = els.searchButton.textContent;
+        els.searchButton.disabled = true;
+        els.searchButton.textContent = "Checking";
+
+        try {
+          const unlocked = await checkAdminUnlock(value);
+          if (unlocked) {
+            els.search.value = "";
+            if (els.results) els.results.classList.remove("show");
+            return;
+          }
+        } finally {
+          els.searchButton.disabled = false;
+          els.searchButton.textContent = oldLabel;
+        }
+
+        runSearch(value);
+      }
+
+      function handleListClick(event) {
+        const usefulButton = event.target.closest("[data-action='useful']");
+        if (usefulButton) markUseful(usefulButton.dataset.id);
+      }
+
+      function handleFilters(event) {
+        const button = event.target.closest(".xh-filter-btn");
+        if (!button) return;
+        activeFilter = button.dataset.filter;
+        $$(".xh-filter-btn").forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        render();
+      }
+
+      async function handleAdminChange(event) {
+        const card = event.target.closest(".xh-admin-card");
+        if (!card) return;
+        const item = suggestions.find(entry => entry.id === card.dataset.id);
+        if (!item) return;
+
+        try {
+          if (event.target.matches("[data-admin='status']")) {
+            const status = event.target.value;
+            if (usingFirestore()) await window.XHorizonSuggestionsStore.update(item.id, { status });
+            else { item.status = status; saveLocalSuggestions(); render(); }
+            showToast("Status updated");
+          }
+
+          if (event.target.matches("[data-admin='useful']")) {
+            const useful = Math.max(0, Number(event.target.value || 0));
+            if (usingFirestore()) await window.XHorizonSuggestionsStore.update(item.id, { useful });
+            else { item.useful = useful; saveLocalSuggestions(); render(); }
+            showToast("Useful count updated");
+          }
+        } catch (error) {
+          console.error("Admin update failed:", error);
+          showToast("Admin rules blocked update");
+        }
+      }
+
+      async function handleAdminClick(event) {
+        const action = event.target.closest("[data-admin-action]");
+        if (!action) return;
+        const card = event.target.closest(".xh-admin-card");
+        const item = suggestions.find(entry => entry.id === card.dataset.id);
+        if (!item) return;
+
+        try {
+          if (action.dataset.adminAction === "toggleHide") {
+            const hidden = !item.hidden;
+            if (usingFirestore()) await window.XHorizonSuggestionsStore.update(item.id, { hidden });
+            else { item.hidden = hidden; saveLocalSuggestions(); render(); }
+            showToast(hidden ? "Suggestion hidden" : "Suggestion visible");
+          }
+
+          if (action.dataset.adminAction === "delete") {
+            if (usingFirestore()) await window.XHorizonSuggestionsStore.remove(item.id);
+            else {
+              suggestions = suggestions.filter(entry => entry.id !== item.id);
+              delete votes[item.id];
+              saveVotes();
+              saveLocalSuggestions();
+              render();
+            }
+            showToast("Suggestion deleted");
+          }
+        } catch (error) {
+          console.error("Admin action failed:", error);
+          showToast("Admin rules blocked action");
+        }
+      }
+
+      if (els.form) els.form.addEventListener("submit", submitSuggestion);
+      if (els.searchButton) els.searchButton.addEventListener("click", handleSearch);
+      if (els.search) els.search.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          handleSearch();
+        }
+      });
+      if (els.search) els.search.addEventListener("input", () => runSearch(els.search.value));
+      document.addEventListener("click", event => {
+        if (!event.target.closest(".xh-search-wrap") && els.results) els.results.classList.remove("show");
+      });
+      if (els.list) els.list.addEventListener("click", handleListClick);
+      if (els.priorityList) els.priorityList.addEventListener("click", handleListClick);
+      if (els.filters) els.filters.addEventListener("click", handleFilters);
+      if (els.adminList) els.adminList.addEventListener("change", handleAdminChange);
+      if (els.adminList) els.adminList.addEventListener("click", handleAdminClick);
+      if (els.lockAdmin) els.lockAdmin.addEventListener("click", () => setAdminMode(false));
+      window.addEventListener("xh-admin-authenticated", () => setAdminMode(true, true));
+
+      if (auth) {
+        onAuthStateChanged(auth, async function(user) {
+          if (!user) return;
+          try {
+            const tokenResult = await user.getIdTokenResult(true);
+            if (tokenResult && tokenResult.claims && tokenResult.claims.admin === true) {
+              window.dispatchEvent(new CustomEvent("xh-admin-authenticated"));
+            }
+          } catch (error) {
+            console.error("State check failed:", error);
+          }
+        });
+      }
+
+      startFirestore();
+      if (isAdmin()) setAdminMode(true, true);
+      else render();
+
+      window.addEventListener("beforeunload", () => { if (typeof unsubscribe === "function") unsubscribe(); });
+    })();
+  </script></div>
