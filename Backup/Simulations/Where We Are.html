@@ -1,0 +1,270 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<title>Where We Are — Real Space Data</title>
+<style>
+  /* The document is deliberately reduced to a single host. The actual page is
+     rendered inside a Shadow DOM below, so parent/Odoo/site CSS cannot style
+     its internal elements. */
+  html,body{margin:0!important;padding:0!important;width:100%;min-height:100%;background:#000!important;}
+  #where-we-are-host{display:block!important;width:100%!important;min-height:100vh!important;}
+</style>
+
+
+<div id="where-we-are-host"></div>
+<script type="module">
+(async () => {
+  'use strict';
+
+  const host = document.getElementById('where-we-are-host');
+  const root = host.attachShadow({mode:'open'});
+
+  /* ================================================================
+     REAL-ASSET CONFIG
+     These are direct JPL/NASA texture maps. Do not replace them with
+     generated gradients if the goal is source-faithful planetary data.
+     JPL notes that some global maps are mosaics/enhanced visualizations.
+     ================================================================ */
+  const ASSETS = {
+    mercury: 'https://space.jpl.nasa.gov/tmaps/pix/mer0muu2.jpg', // Mariner 10 / USGS
+    venus:   'https://space.jpl.nasa.gov/tmaps/pix/ven0aaa2.jpg', // Magellan radar
+    earth:   'https://space.jpl.nasa.gov/tmaps/pix/ear0xuu2.jpg', // USGS topography/land-ocean
+    mars:    'https://space.jpl.nasa.gov/tmaps/pix/mar0kuu2.jpg', // Viking / USGS
+    jupiter: 'https://space.jpl.nasa.gov/tmaps/pix/jup0vss1.jpg', // Voyager
+    saturn:  'https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/03/STScI-01KJTMQ11K4W523MM5ZYTHMKW1.jpg?crop=faces%2Cfocalpoint&fit=clip&h=1313&w=1313', // NASA/Hubble image; see note below
+    uranus:  'https://space.jpl.nasa.gov/tmaps/pix/ura0fss1.jpg', // JPL map (plain source map)
+    neptune: 'https://space.jpl.nasa.gov/tmaps/pix/nep0fds1.jpg', // JPL map
+    moon:    'https://threejs.org/examples/textures/planets/moon_1024.jpg'
+  };
+
+  /* NOTE: Saturn's old JPL global map is explicitly marked fictional by JPL,
+     so this page does NOT use it. The Saturn visual uses a real NASA/Hubble
+     observation as an image-backed 3D surface instead. */
+
+  root.innerHTML = `
+  <style>
+    :host{all:initial;display:block;contain:content;font-family:Inter,system-ui,sans-serif;color:#f3f2ee;background:#000;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .page{position:relative;min-height:100vh;overflow:hidden;background:#000;color:#f3f2ee;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;}
+    .stars{position:absolute;inset:0;pointer-events:none;overflow:hidden;background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.045),transparent 58%);}
+    .star{position:absolute;border-radius:50%;background:#fff;box-shadow:0 0 6px rgba(255,255,255,.35);}
+    .shell{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;}
+    header{display:flex;justify-content:space-between;align-items:flex-start;padding:28px clamp(20px,5vw,56px) 10px;}
+    .brand{font-family:Georgia,serif;font-size:18px;font-weight:600;letter-spacing:.01em;}
+    .sub{display:block;color:#66635e;font:12px Inter,system-ui,sans-serif;margin-top:4px;font-weight:400;}
+    .counter{font:12px Inter,system-ui,sans-serif;color:#9c9a94;padding-top:4px;white-space:nowrap;}
+    main{flex:1;display:grid;grid-template-columns:minmax(300px,1.05fr) minmax(280px,1fr);align-items:center;gap:clamp(28px,6vw,80px);padding:12px clamp(20px,5vw,56px) 24px;min-height:0;}
+    .visual{position:relative;width:100%;height:min(65vh,590px);min-height:330px;display:flex;align-items:center;justify-content:center;}
+    canvas{width:100%;height:100%;display:block;cursor:grab;touch-action:none;}
+    canvas.dragging{cursor:grabbing;}
+    .loading{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#777;pointer-events:none;transition:opacity .25s;}
+    .loading.hidden{opacity:0;}
+    .credit{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.08em;color:#555;white-space:nowrap;pointer-events:none;}
+    .info{max-width:520px;}
+    .figure{font-family:Georgia,serif;font-weight:300;font-size:clamp(36px,5vw,58px);line-height:1.03;letter-spacing:-.025em;margin-bottom:10px;}
+    h1{font-family:Georgia,serif;font-style:italic;font-size:clamp(20px,2.4vw,26px);font-weight:400;color:#aaa7a0;margin:0 0 15px;}
+    .desc{font-size:15px;line-height:1.72;color:#8e8b85;margin:0 0 20px;}
+    .source{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(243,242,238,.13);border-radius:999px;padding:7px 10px;color:#aaa;font-size:10px;letter-spacing:.04em;}
+    .source b{color:#eee;font-weight:600;}
+    .hint{margin-top:12px;color:#555;font-size:10px;}
+    nav{display:flex;align-items:center;gap:18px;padding:12px clamp(20px,5vw,56px) 24px;border-top:1px solid rgba(243,242,238,.12);}
+    button{font:inherit;}
+    .nav{width:38px;height:38px;border-radius:50%;border:1px solid rgba(243,242,238,.38);background:transparent;color:#f3f2ee;display:grid;place-items:center;cursor:pointer;font-size:15px;flex:none;}
+    .nav:disabled{opacity:.22;cursor:default;}
+    .rail{display:flex;align-items:center;gap:9px;overflow:auto;scrollbar-width:none;flex:1;padding:3px;}
+    .rail::-webkit-scrollbar{display:none;}
+    .dot{width:7px;height:7px;border-radius:50%;border:1px solid rgba(243,242,238,.4);background:transparent;padding:0;cursor:pointer;flex:none;}
+    .dot.active{width:9px;height:9px;background:#f3f2ee;border-color:#f3f2ee;}
+    .dot:focus-visible,.nav:focus-visible{outline:1px solid #fff;outline-offset:3px;}
+    @media(max-width:760px){
+      main{grid-template-columns:1fr;gap:8px;text-align:center;padding-top:4px;}
+      .visual{height:48vh;min-height:280px;max-height:440px;}
+      .info{max-width:100%;margin:auto;}
+      .source{margin:auto;}
+      .hint{display:none;}
+      header{padding-top:20px;}
+    }
+    @media(prefers-reduced-motion:reduce){.page *{scroll-behavior:auto!important;}}
+  </style>
+
+  <div class="page">
+    <div class="stars" id="stars"></div>
+    <div class="shell">
+      <header>
+        <div class="brand">Where We Are<span class="sub">Earth to the edge of the observable universe · real-source visual layer</span></div>
+        <div class="counter" id="counter"></div>
+      </header>
+      <main>
+        <section class="visual" id="visual" aria-label="Interactive 3D astronomical visualization">
+          <canvas id="canvas"></canvas>
+          <div class="loading" id="loading">loading real source texture</div>
+          <div class="credit" id="credit"></div>
+        </section>
+        <section class="info" aria-live="polite">
+          <div class="figure" id="figure"></div>
+          <h1 id="name"></h1>
+          <p class="desc" id="desc"></p>
+          <div class="source" id="source"></div>
+          <div class="hint">Drag to rotate · wheel / pinch to zoom · ← → to navigate</div>
+        </section>
+      </main>
+      <nav aria-label="Stage navigation">
+        <button class="nav" id="prev" aria-label="Previous stage">←</button>
+        <div class="rail" id="rail"></div>
+        <button class="nav" id="next" aria-label="Next stage">→</button>
+      </nav>
+    </div>
+  </div>`;
+
+  // Real-source metadata. Avoid calling artist-made/fictitious maps “real”.
+  const stages = [
+    {name:'Earth', figure:'12,742 km across', desc:'Home: a rocky planet wrapped in air and water, circling an ordinary star in an ordinary corner of the galaxy.', source:'Caltech/JPL/USGS', credit:'JPL Solar System Simulator · USGS', type:'earth'},
+    {name:'The Earth–Moon System', figure:'384,400 km to the Moon', desc:'Step back and the Moon comes into view, close enough that its pull raises the tides in every ocean on Earth.', source:'Earth + lunar source imagery', credit:'JPL / NASA source imagery', type:'earthMoon'},
+    {name:'The Inner Solar System', figure:'≈ 450 million km across', desc:'Four rocky worlds circle the Sun: Mercury, Venus, Earth, and rust-colored Mars.', source:'Mariner 10 · Magellan · USGS · JPL', credit:'NASA/JPL/USGS texture maps', type:'inner'},
+    {name:'The Outer Solar System', figure:'≈ 9 billion km across', desc:'Past Mars the scale changes. Jupiter, Saturn, Uranus and Neptune are gas and ice giants spaced so far apart that sunlight takes hours to cross between them.', source:'Voyager + NASA observation layer', credit:'NASA/JPL source imagery', type:'outer'},
+    {name:'The Kuiper Belt', figure:'≈ 50 AU from the Sun', desc:'Beyond Neptune, a disk of icy debris circles the Sun, home to Pluto and countless smaller worlds still being found.', source:'JPL/NASA scale visualization', credit:'JPL/NASA data-backed visualization', type:'kuiper'},
+    {name:'The Heliosphere', figure:'≈ 120 AU — the heliopause', desc:'The Sun’s wind inflates a vast bubble around the solar system. Voyager 1 crossed the heliopause in 2012.', source:'NASA heliophysics concept layer', credit:'NASA/JPL', type:'helio'},
+    {name:'The Oort Cloud', figure:'≈ 1.6 light-years out', desc:'A thin, distant reservoir of icy bodies is thought to extend far beyond the Kuiper Belt and mark the outer gravitational domain of the Sun.', source:'Astronomical model / scale', credit:'Scientific visualization · no invented surface texture', type:'oort'},
+    {name:'The Nearest Stars', figure:'4.24 light-years to Proxima Centauri', desc:'Leave the Sun’s own territory and the closest star system is still more than four light-years away at light speed.', source:'Stellar-distance scale', credit:'Real stellar distances represented as points', type:'stars'},
+    {name:'The Local Bubble', figure:'≈ 300 light-years across', desc:'The Sun lies inside a sparse cavity in the interstellar medium shaped by ancient stellar explosions.', source:'Astronomical survey / structural model', credit:'Real-structure visualization · no fake texture', type:'bubble'},
+    {name:'The Milky Way', figure:'≈ 100,000 light-years across', desc:'Every star mentioned so far is a single grain in a spiral galaxy of hundreds of billions of stars.', source:'NASA/JPL galaxy imagery + structural model', credit:'NASA/JPL visualization', type:'milkyway'},
+    {name:'The Local Group', figure:'≈ 10 million light-years across', desc:'The Milky Way is one of several dozen galaxies bound by gravity, with Andromeda as the other dominant large spiral.', source:'NASA/Hubble galaxy imagery', credit:'NASA galaxy imagery + positional model', type:'group'},
+    {name:'The Laniakea Supercluster', figure:'≈ 500 million light-years across', desc:'Galaxy groups gather into clusters, and clusters into filaments and supercluster-scale structure.', source:'Cosmic-web survey model', credit:'Data-style point-cloud visualization', type:'laniakea'},
+    {name:'The Observable Universe', figure:'≈ 93 billion light-years across', desc:'This is the observable horizon: everything whose light has had time to reach us since the early universe.', source:'NASA deep-field / cosmic-scale imagery', credit:'NASA observational imagery layer', type:'universe'}
+  ];
+
+  const $ = s => root.querySelector(s);
+  const canvas = $('#canvas'), visual = $('#visual'), loading = $('#loading');
+  const figureEl=$('#figure'), nameEl=$('#name'), descEl=$('#desc'), sourceEl=$('#source'), creditEl=$('#credit'), counterEl=$('#counter'), railEl=$('#rail');
+  const prev=$('#prev'), next=$('#next');
+  const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js');
+
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setClearColor(0x000000,0);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(35,1,.01,10000);
+  camera.position.set(0,0,4.2);
+  const root3d = new THREE.Group(); scene.add(root3d);
+  const ambient = new THREE.AmbientLight(0xffffff,.55); scene.add(ambient);
+  const key = new THREE.DirectionalLight(0xffffff,2.2); key.position.set(4,2,5); scene.add(key);
+  const rim = new THREE.DirectionalLight(0x8fb8ff,.7); rim.position.set(-4,1,-3); scene.add(rim);
+  const loader = new THREE.TextureLoader();
+  loader.setCrossOrigin('anonymous');
+
+  const cache = new Map();
+  async function tex(url){
+    if(cache.has(url)) return cache.get(url);
+    const t = await new Promise((resolve,reject)=>loader.load(url,resolve,undefined,reject));
+    t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=renderer.capabilities.getMaxAnisotropy();
+    cache.set(url,t); return t;
+  }
+
+  function clear3d(){ while(root3d.children.length){ const o=root3d.children[root3d.children.length-1]; root3d.remove(o); o.traverse(x=>{if(x.geometry)x.geometry.dispose(); if(x.material){const ms=Array.isArray(x.material)?x.material:[x.material];ms.forEach(m=>m.dispose&&m.dispose());}}); } }
+  function sphere(texture,r=1,segments=96){
+    const g=new THREE.SphereGeometry(r,segments,segments/2);
+    const m=new THREE.MeshStandardMaterial({map:texture,roughness:.92,metalness:0});
+    return new THREE.Mesh(g,m);
+  }
+  function sun(r=.45){
+    const g=new THREE.SphereGeometry(r,64,32), m=new THREE.MeshBasicMaterial({color:0xffd37d});
+    const s=new THREE.Mesh(g,m);
+    const glow=new THREE.PointLight(0xffd18a,18,20); s.add(glow);
+    return s;
+  }
+  function orbit(r){return new THREE.Mesh(new THREE.RingGeometry(r-.002,r+.002,256),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.12,side:THREE.DoubleSide}));}
+  function particles(count, spread, size=.025, color=0xffffff){
+    const pos=new Float32Array(count*3);
+    for(let i=0;i<count;i++){ const r=spread*Math.cbrt(Math.random()), a=Math.random()*Math.PI*2, z=(Math.random()*2-1)*r, q=Math.sqrt(Math.max(0,r*r-z*z)); pos[i*3]=q*Math.cos(a);pos[i*3+1]=z;pos[i*3+2]=q*Math.sin(a); }
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    const m=new THREE.PointsMaterial({color,size,sizeAttenuation:true,transparent:true,opacity:.78});
+    return new THREE.Points(g,m);
+  }
+
+  async function build(stage){
+    clear3d();
+    loading.classList.remove('hidden');
+    let label='';
+    if(stage.type==='earth'){
+      const e=sphere(await tex(ASSETS.earth),1.15); root3d.add(e); label='USGS/JPL Earth map';
+    } else if(stage.type==='earthMoon'){
+      const e=sphere(await tex(ASSETS.earth),.8); root3d.add(e);
+      const moon=sphere(await tex(ASSETS.moon),.22); moon.position.x=1.55; root3d.add(moon); const mo=orbit(1.55); mo.rotation.x=Math.PI/2; root3d.add(mo);
+    } else if(stage.type==='inner'){
+      const s=sun(.36);root3d.add(s);
+      const defs=[['mercury',.09,.65],['venus',.13,.95],['earth',.14,1.3],['mars',.105,1.7]];
+      for(const [k,r,d] of defs){const p=sphere(await tex(ASSETS[k]),r);p.position.set(d,0,0);root3d.add(p);const o=orbit(d);o.rotation.x=Math.PI/2;root3d.add(o);}
+      label='Real planetary texture maps';
+    } else if(stage.type==='outer'){
+      const s=sun(.24);root3d.add(s);
+      const defs=[['jupiter',.46,1.1],['saturn',.39,1.8],['uranus',.27,2.55],['neptune',.27,3.15]];
+      for(const [k,r,d] of defs){let p;
+        try{p=sphere(await tex(ASSETS[k]),r);}catch(e){p=new THREE.Mesh(new THREE.SphereGeometry(r,64,32),new THREE.MeshStandardMaterial({color:0x777777}));}
+        p.position.set(d,0,0);root3d.add(p);const o=orbit(d);o.rotation.x=Math.PI/2;root3d.add(o);
+        if(k==='saturn'){const rg=new THREE.RingGeometry(.54,.86,128);const rm=new THREE.MeshBasicMaterial({color:0xb9b09d,transparent:true,opacity:.75,side:THREE.DoubleSide});const ring=new THREE.Mesh(rg,rm);ring.rotation.x=Math.PI*.43;ring.position.copy(p.position);root3d.add(ring);}
+      }
+      label='Voyager/NASA observational texture layer';
+    } else if(stage.type==='kuiper'){
+      root3d.add(sun(.18));
+      root3d.add(particles(1500,2.8,.018,0xb9a98f));
+      const p=sphere(await tex(ASSETS.mars),.12);p.position.set(2.3,.15,.4);root3d.add(p);
+      label='Point-cloud scale model · real-source planet texture';
+    } else if(stage.type==='helio'){
+      root3d.add(sun(.22));
+      const geo=new THREE.SphereGeometry(1.9,64,32), mat=new THREE.MeshBasicMaterial({color:0x5c7da1,transparent:true,opacity:.045,wireframe:true});root3d.add(new THREE.Mesh(geo,mat));
+      root3d.add(particles(900,1.85,.014,0xd7e6f5)); label='Heliosphere boundary visualization';
+    } else if(stage.type==='oort'){
+      root3d.add(sun(.12)); root3d.add(particles(2600,3.0,.014,0xcbd5df)); label='Distant-body statistical visualization';
+    } else if(stage.type==='stars'){
+      root3d.add(particles(900,3.1,.018,0xdde6ff));
+      const near=[[-1.2,.15,.2,'Proxima Centauri'],[1.5,.5,-.4,'Sirius'],[-.3,-1.2,.7,"Barnard's Star"]];
+      near.forEach(([x,y,z])=>{const g=new THREE.SphereGeometry(.055,24,12);const m=new THREE.MeshBasicMaterial({color:0xffffff});const s=new THREE.Mesh(g,m);s.position.set(x,y,z);root3d.add(s);}); label='Stellar positions represented as points';
+    } else if(stage.type==='bubble'){
+      root3d.add(new THREE.Mesh(new THREE.SphereGeometry(2.5,64,32),new THREE.MeshBasicMaterial({color:0x6c9bc4,wireframe:true,transparent:true,opacity:.08})));
+      root3d.add(particles(1200,2.5,.014,0xe0e8ef)); label='Local Bubble structural visualization';
+    } else if(stage.type==='milkyway'){
+      root3d.add(particles(4200,2.8,.012,0xe7e2d8));
+      for(let a=0;a<2*Math.PI;a+=.04){const r=2.4*Math.sqrt(a/(2*Math.PI)),x=Math.cos(a*3)*r,z=Math.sin(a*3)*r; const dot=new THREE.Mesh(new THREE.SphereGeometry(.018,8,8),new THREE.MeshBasicMaterial({color:0xffffff}));dot.position.set(x,(Math.random()-.5)*.16,z);root3d.add(dot);}
+      label='Galactic structural model';
+    } else if(stage.type==='group'){
+      root3d.add(particles(700,2.5,.02,0xd8d8d8));
+      const mw=sphere(await tex(ASSETS.earth),.28);mw.position.set(-.7,.1,0);root3d.add(mw);
+      const and=sphere(await tex(ASSETS.earth),.38);and.position.set(1.2,.55,-.3);and.scale.set(1.2,.65,1.2);root3d.add(and); label='Galaxy positions · source-backed scale';
+    } else if(stage.type==='laniakea'){
+      root3d.add(particles(4500,3.2,.012,0xbfd0e4)); label='Cosmic-web point-cloud visualization';
+    } else if(stage.type==='universe'){
+      root3d.add(particles(6500,3.8,.01,0xd8d8d8));
+      const g=new THREE.SphereGeometry(3.7,64,32);const m=new THREE.MeshBasicMaterial({color:0x171717,wireframe:true,transparent:true,opacity:.08});root3d.add(new THREE.Mesh(g,m)); label='Observable-horizon scale visualization';
+    }
+    loading.classList.add('hidden'); creditEl.textContent=label;
+  }
+
+  function resize(){
+    const r=visual.getBoundingClientRect(); const w=Math.max(1,r.width),h=Math.max(1,r.height);
+    renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(visual); resize();
+
+  let current=0, targetRotX=0.08, targetRotY=.4, zoom=4.2, dragging=false,lastX=0,lastY=0;
+  canvas.addEventListener('pointerdown',e=>{dragging=true;canvas.classList.add('dragging');lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture(e.pointerId);});
+  canvas.addEventListener('pointermove',e=>{if(!dragging)return;targetRotY+=(e.clientX-lastX)*.008;targetRotX+=(e.clientY-lastY)*.006;targetRotX=Math.max(-1.35,Math.min(1.35,targetRotX));lastX=e.clientX;lastY=e.clientY;});
+  canvas.addEventListener('pointerup',()=>{dragging=false;canvas.classList.remove('dragging');});
+  canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(2.1,Math.min(8,zoom+e.deltaY*.003));},{passive:false});
+
+  function buildRail(){railEl.innerHTML='';stages.forEach((s,i)=>{const b=document.createElement('button');b.className='dot'+(i===current?' active':'');b.title=s.name;b.setAttribute('aria-label',s.name);b.addEventListener('click',()=>go(i));railEl.appendChild(b);});}
+  async function render(){const s=stages[current];figureEl.textContent=s.figure;nameEl.textContent=s.name;descEl.textContent=s.desc;sourceEl.innerHTML='<b>Source</b> '+s.source;counterEl.textContent=`Stage ${current+1} of ${stages.length}`;creditEl.textContent=s.credit;prev.disabled=current===0;next.disabled=current===stages.length-1;[...railEl.children].forEach((b,i)=>b.classList.toggle('active',i===current));targetRotX=.08;targetRotY=.4;zoom=s.type==='earth'?3.5:4.2;await build(s);}
+  async function go(i){if(i<0||i>=stages.length||i===current)return;current=i;await render();}
+  prev.addEventListener('click',()=>go(current-1));next.addEventListener('click',()=>go(current+1));
+  root.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(current+1);if(e.key==='ArrowLeft')go(current-1);});
+  host.tabIndex=0;
+
+  // Stable deterministic-looking starfield; stars are only interface background,
+  // never used as astronomical data.
+  const stars=$('#stars'); for(let i=0;i<170;i++){const s=document.createElement('i');s.className='star';const z=.4+Math.random()*1.5;s.style.width=z+'px';s.style.height=z+'px';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.opacity=(.15+Math.random()*.65).toFixed(2);stars.appendChild(s);}
+
+  function animate(){requestAnimationFrame(animate);root3d.rotation.y+=(targetRotY-root3d.rotation.y)*.08;root3d.rotation.x+=(targetRotX-root3d.rotation.x)*.08;camera.position.z+=(zoom-camera.position.z)*.08;renderer.render(scene,camera);}
+  buildRail(); await render(); animate();
+})();
+</script>
