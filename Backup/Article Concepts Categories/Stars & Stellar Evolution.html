@@ -1,0 +1,554 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X Horizon — Stars &amp; Stellar Evolution</title>
+<meta name="description" content="X Horizon Stars and Stellar Evolution: 46 explained topics, each unlocked by timed quizzes.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+:root{--xh-ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;background:#000!important;color:#fff!important;font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+
+/* loader */
+.xh-loader{position:fixed;inset:0;z-index:100000;display:grid;place-items:center;background:#000;transition:opacity .65s var(--xh-ease),visibility .65s var(--xh-ease)}
+.xh-loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.xh-load-mark{position:relative;width:min(310px,82vw);height:118px;display:grid;place-items:center;overflow:hidden}
+.xh-load-x{position:absolute;left:42px;top:6px;z-index:2;color:#fff;font-size:96px;line-height:1;font-weight:900;letter-spacing:-.12em}
+.xh-load-word{position:absolute;left:112px;top:45px;z-index:3;color:#eee;font-size:22px;font-weight:900;letter-spacing:.2em;opacity:.18;line-height:1}
+.xh-loader.loading .xh-load-word{animation:xhBlink .42s steps(2,end) infinite}
+.xh-loader.ready .xh-load-word{opacity:1!important;animation:none!important;color:#fff}
+.xh-load-line{position:absolute;left:42px;bottom:10px;width:222px;height:4px;border-radius:99px;background:#161616;overflow:hidden}
+.xh-load-fill{display:block;width:0;height:100%;background:#d8d8d8}
+@keyframes xhBlink{0%,100%{opacity:.16}50%{opacity:.76}}
+
+/* page */
+#xhuc-page{position:relative;min-height:100vh;background:#000;color:#fff;overflow:hidden;isolation:isolate}
+#xhuc-page::before{content:"";position:fixed;inset:0;z-index:-5;background-image:radial-gradient(circle,rgba(255,255,255,.44) 0 1px,transparent 1.5px),radial-gradient(circle,rgba(255,255,255,.22) 0 1px,transparent 1.5px);background-size:150px 150px,230px 230px;background-position:20px 40px,95px 12px;opacity:.28;animation:xhDrift 46s linear infinite;pointer-events:none}
+@keyframes xhDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-150px,150px,0)}}
+.xhuc-hidden{display:none!important}
+.xhuc-shell{width:min(1240px,calc(100% - 34px));margin:0 auto}
+#xhuc-page a{color:inherit;text-decoration:none}
+
+/* hero */
+.xhuc-hero{position:relative;min-height:100vh;display:grid;place-items:center;text-align:center;padding:126px 20px 76px;overflow:hidden;isolation:isolate}
+.xhuc-hero::before{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.62) 68%,#000 100%),url("https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/496/Sun_Emits_Flare.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=1200&w=1600") center/cover no-repeat;filter:brightness(.78) saturate(.98) contrast(1.02)}
+.xhuc-hero::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,transparent,rgba(255,255,255,.86),transparent) left bottom/100% 2px no-repeat,radial-gradient(circle at 50% 50%,rgba(0,0,0,.03) 0 24%,rgba(0,0,0,.38) 72%,#000 100%);pointer-events:none}
+.xhuc-hero-in{position:relative;z-index:3;width:min(720px,100%);display:flex;flex-direction:column;align-items:center}
+.xhuc-search{width:min(520px,100%);display:flex;background:rgba(255,255,255,.045);border-radius:14px;padding:6px;margin:0 auto 30px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.xhuc-search input{flex:1;min-width:0;height:46px;border:0;outline:0;border-radius:10px;background:transparent;color:#fff;-webkit-text-fill-color:#fff;padding:0 14px;font-size:13px;font-weight:700;letter-spacing:.02em;color-scheme:dark}
+.xhuc-search input::placeholder{color:rgba(255,255,255,.62);-webkit-text-fill-color:rgba(255,255,255,.62)}
+.xhuc-title{margin:0 0 14px;max-width:680px;color:#fff;font-size:clamp(36px,6.2vw,72px);line-height:.92;letter-spacing:-.032em;font-weight:800}
+.xhuc-title span{display:block;margin-top:2px}
+.xhuc-lead{max-width:560px;margin:0;color:#cfcfcf;font-size:clamp(14px,1.45vw,17px);line-height:1.6;letter-spacing:.02em}
+.xhuc-prog{width:min(520px,100%);margin-top:24px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.045);text-align:left}
+.xhuc-prog-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:9px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#cfcfcf}
+.xhuc-prog-top b{color:#fff}
+.xhuc-line{height:6px;border-radius:99px;background:#1a1a1a;overflow:hidden}
+.xhuc-line i{display:block;height:100%;width:0;border-radius:inherit;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.25);transition:width .7s var(--xh-ease)}
+.xhuc-done-msg{margin:12px 0 0;color:#fff;font-size:13px;line-height:1.5}
+.xhuc-done-msg a{text-decoration:underline!important}
+
+/* cards */
+.xhuc-grid-section{padding:58px 0 86px;background:#000}
+.xhuc-section-head{display:flex;justify-content:space-between;gap:22px;align-items:end;margin-bottom:22px}
+.xhuc-section-head h2{margin:0;font-size:clamp(28px,4vw,48px);letter-spacing:-.045em;line-height:1.02}
+.xhuc-section-head p{margin:0;color:#cfcfcf;max-width:520px;line-height:1.55}
+.xhuc-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.xhuc-card{min-height:455px;background:#0b0b0b;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;transition:transform .22s ease,background .22s ease}
+.xhuc-card:hover{background:#141414;transform:translateY(-4px) scale(1.01)}
+.xhuc-card-media{height:190px;background:#050505;position:relative;overflow:hidden}
+.xhuc-card-media img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.92) saturate(1.03);transition:transform .35s ease,filter .3s ease}
+.xhuc-card:hover .xhuc-card-media img{transform:scale(1.045);filter:brightness(1.02) saturate(1.08)}
+.xhuc-card-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.76));pointer-events:none}
+.xhuc-card-id,.xhuc-badge{position:absolute;top:12px;z-index:2;background:rgba(0,0,0,.68);border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;color:#fff}
+.xhuc-card-id{left:12px}.xhuc-badge{right:12px}
+.xhuc-card-body{padding:19px;display:flex;flex-direction:column;flex:1}
+.xhuc-card h3{margin:0 0 9px;font-size:22px;line-height:1.05;letter-spacing:-.03em}
+.xhuc-card p{margin:0;color:#cfcfcf;line-height:1.55;font-size:14px}
+.xhuc-source{margin-top:14px;font-size:11px;color:#a8a8a8;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.xhuc-card-actions{margin-top:auto;padding-top:18px}
+.xhuc-btn{display:inline-flex;align-items:center;justify-content:center;width:100%;border:0;border-radius:12px;background:#fff;color:#000;padding:14px;font-size:13px;font-weight:800;cursor:pointer;transition:.2s ease}
+.xhuc-btn:hover{background:#e7e7e7;transform:translateY(-2px)}
+.xhuc-btn.alt{background:#111;color:#fff}.xhuc-btn.alt:hover{background:#181818}
+.xhuc-btn:disabled{background:#161616;color:#777;cursor:not-allowed;transform:none}
+.xhuc-card.is-locked .xhuc-card-media img{filter:grayscale(1) brightness(.35)}
+.xhuc-card.is-locked h3,.xhuc-card.is-locked p{opacity:.55}
+.xhuc-empty{grid-column:1/-1;background:#0b0b0b;border-radius:18px;color:#cfcfcf;padding:24px;text-align:center}
+
+/* article */
+.xhuc-article{display:none;min-height:100vh;background:#000;position:relative}
+.xhuc-article.xhuc-active{display:block}
+.xhuc-ahero{position:relative;min-height:400px;display:flex;align-items:flex-end;overflow:hidden}
+.xhuc-ahero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.4),#000 100%),var(--img) center/cover no-repeat;filter:saturate(.95)}
+.xhuc-atop{position:relative;z-index:1;padding:64px 0 32px}
+.xhuc-back{border:0;background:#111;color:#fff;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;margin-bottom:20px}
+.xhuc-back:hover{background:#181818}
+.xhuc-atitle{margin:0;font-size:clamp(34px,6.5vw,76px);letter-spacing:-.04em;line-height:.95;max-width:980px}
+.xhuc-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.xhuc-pill{background:rgba(255,255,255,.07);border-radius:999px;color:#dedede;padding:8px 12px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.xhuc-abody{max-width:900px;padding:34px 0 92px}
+.xhuc-alead{font-size:clamp(18px,2.2vw,22px);line-height:1.6;color:#fff;margin:0 0 10px}
+.xhuc-sec{background:#0b0b0b;border-radius:20px;padding:24px;margin:14px 0}
+.xhuc-sec h3{margin:0 0 10px;font-size:22px;letter-spacing:-.02em}
+.xhuc-sec p{margin:0;color:#d6d6d6;line-height:1.8;font-size:16px}
+.xhuc-sec ul{margin:0;padding-left:20px;color:#d6d6d6;line-height:1.8;font-size:16px}
+.xhuc-qcta p{margin-bottom:16px}
+.xhq-row{display:flex;gap:10px;flex-wrap:wrap}
+.xhq-row .xhuc-btn{width:auto;min-width:200px}
+
+/* quiz overlay */
+.xhuc-quiz{position:fixed;inset:0;z-index:100001;background:#000;display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto;-webkit-user-select:none;user-select:none}
+.xhq-box{width:min(760px,100%)}
+.xhq-k{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#a8a8a8;margin-bottom:12px}
+.xhq-k.bad{color:#ff9a9a}
+.xhq-box h2{margin:0 0 18px;font-size:clamp(26px,4vw,44px);letter-spacing:-.03em;line-height:1.1}
+.xhq-rules{margin:0 0 22px;padding-left:20px;color:#d6d6d6;line-height:1.8}
+.xhq-p{color:#cfcfcf;line-height:1.7;margin:0 0 22px}
+.xhq-top{display:flex;justify-content:space-between;color:#cfcfcf;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.xhq-top b{color:#fff;font-size:18px}
+.xhq-bar{height:5px;border-radius:99px;background:#1a1a1a;overflow:hidden;margin-bottom:26px}
+.xhq-bar i{display:block;height:100%;width:100%;background:#fff}
+.xhq-q{margin:0 0 22px;font-size:clamp(19px,2.6vw,27px);line-height:1.4;font-weight:700;white-space:pre-line}
+.xhq-opts{display:grid;gap:10px}
+.xhq-opt{text-align:left;border:0;border-radius:14px;background:#0b0b0b;color:#fff;padding:16px 18px;font-size:15px;line-height:1.5;cursor:pointer;transition:.15s ease}
+.xhq-opt:hover{background:#181818}
+.xhq-opt.xhq-pick{background:#fff;color:#000}
+.xhq-score{font-size:clamp(46px,9vw,84px);font-weight:900;letter-spacing:-.04em;margin:0 0 6px}
+.xhq-note{margin-top:14px;color:#ff9a9a;font-size:13px;min-height:18px}
+.xhq-btn{border:0;border-radius:12px;background:#fff;color:#000;padding:14px 22px;font-size:13px;font-weight:800;cursor:pointer}
+.xhq-btn:hover{background:#e7e7e7}
+.xhq-btn.alt{background:#111;color:#fff}.xhq-btn.alt:hover{background:#181818}
+
+@media(max-width:1050px){.xhuc-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){
+.xhuc-hero{padding:106px 14px 64px;min-height:100svh}
+.xhuc-cards{grid-template-columns:1fr}.xhuc-card{min-height:420px}
+.xhuc-section-head{display:block}.xhuc-section-head p{margin-top:10px}
+.xhuc-ahero{min-height:340px}.xhuc-sec{padding:18px}
+.xhq-row .xhuc-btn,.xhq-btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.xh-loader.loading .xh-load-word,#xhuc-page::before{animation:none}}
+
+/* levels, pictures, equations, history */
+.xhuc-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px}
+.xhuc-tab{border:0;border-radius:12px;background:#111;color:#cfcfcf;padding:12px 20px;font-size:13px;font-weight:800;cursor:pointer;transition:.15s ease}
+.xhuc-tab:hover{background:#181818}
+.xhuc-tab.on{background:#fff;color:#000}
+.xhuc-tab.lock{opacity:.55}
+.xhuc-lvmsg{color:#ff9a9a;font-size:13px;min-height:18px;margin:0 0 10px}
+.xhuc-figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:14px 0}
+.xhuc-fig{margin:0;background:#0b0b0b;border-radius:18px;overflow:hidden}
+.xhuc-fig img{width:100%;height:220px;object-fit:cover;display:block;background:#050505}
+.xhuc-fig figcaption{padding:12px 14px;color:#cfcfcf;font-size:13px;line-height:1.5}
+.xhuc-tex{overflow-x:auto;padding:14px 4px;font-family:Consolas,monospace;color:#fff;font-size:15px}
+.xhuc-tex .katex{font-size:1.25em}
+.xhuc-tl{list-style:none;margin:0;padding:0;border-left:2px solid #222}
+.xhuc-tl li{position:relative;padding:0 0 16px 22px;color:#d6d6d6;line-height:1.7;font-size:15px}
+.xhuc-tl li::before{content:"";position:absolute;left:-6px;top:8px;width:10px;height:10px;border-radius:50%;background:#fff}
+.xhuc-tl b{color:#fff;margin-right:10px}
+.xhuc-sec p+p{margin-top:10px}
+.xhuc-lvchips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.xhuc-lvchips span{background:#111;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800;color:#8a8a8a}
+.xhuc-lvchips span.on{background:#fff;color:#000}
+.xhq-nav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:24px}
+.xhq-un{color:#a8a8a8;font-size:13px}
+.xhq-btn:disabled{opacity:.4;cursor:not-allowed}
+@media(max-width:700px){.xhuc-fig img{height:200px}.xhq-nav{flex-wrap:wrap}.xhq-nav .xhq-btn{flex:1}}
+
+/* single reading box */
+.xhuc-doc{background:#0b0b0b;border-radius:22px;padding:clamp(20px,4vw,42px);margin:14px 0}
+.xhuc-doc h3{margin:32px 0 10px;font-size:22px;letter-spacing:-.02em;line-height:1.25}
+.xhuc-doc h3:first-child{margin-top:0}
+.xhuc-doc p{margin:0 0 14px;color:#d6d6d6;line-height:1.85;font-size:16px}
+.xhuc-doc ul:not(.xhuc-tl),.xhuc-doc ol{margin:0 0 14px;padding-left:22px;color:#d6d6d6;line-height:1.8;font-size:16px}
+.xhuc-doc .xhuc-tl{margin:0 0 14px}
+.xhuc-eqb{margin:20px 0;padding:2px 0 2px 18px;border-left:2px solid #2a2a2a}
+.xhuc-eqt{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#a8a8a8}
+.xhuc-doc .xhuc-eqb p{font-size:15px;color:#cfcfcf}
+.xhuc-refs li{font-size:14px;color:#a8a8a8;line-height:1.7}
+</style>
+
+<div class="xh-loader loading" id="xhLoader" aria-hidden="true">
+  <div class="xh-load-mark">
+    <div class="xh-load-x">X</div>
+    <div class="xh-load-word">HORIZON</div>
+    <div class="xh-load-line"><span class="xh-load-fill" id="xhLoadFill"></span></div>
+  </div>
+</div>
+<script>
+(function(){
+  var l=document.getElementById("xhLoader"),f=document.getElementById("xhLoadFill");if(!l||!f)return;
+  var s=Date.now(),d=1750,c=false;
+  function fin(){if(c)return;c=true;f.style.width="100%";l.className=l.className.replace(/\bloading\b/g,"").trim()+" ready";setTimeout(function(){l.className+=" done"},420)}
+  function fr(){var p=Math.min(100,Math.round((Date.now()-s)/d*100));f.style.width=p+"%";if(p>=100){fin();return}requestAnimationFrame(fr)}
+  if(document.readyState==="complete")requestAnimationFrame(fr);else document.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(fr)});
+  setTimeout(fin,3200);
+})();
+</script>
+
+<div id="xhuc-page">
+  <main id="xhuc-main">
+    <section class="xhuc-hero">
+      <div class="xhuc-hero-in">
+        <div class="xhuc-search"><input id="xhuc-search" type="search" autocomplete="off" placeholder="Search Star, Nova, Supernova, Pulsar..." aria-label="Search topics"></div>
+        <h1 class="xhuc-title">Stars <span>&amp; Stellar Evolution</span></h1>
+        <p class="xhuc-lead">Explore how stars form, shine, change and die, from protostars and main-sequence stars to supernovae, neutron stars, binaries and light curves. Read each topic, then pass its quizzes to unlock the next one.</p>
+        <div class="xhuc-prog" aria-label="Category progress">
+          <div class="xhuc-prog-top"><span>Your progress</span><b id="xhuc-count">0 / 46 completed</b></div>
+          <div class="xhuc-line"><i id="xhuc-fill"></i></div>
+          <p class="xhuc-done-msg xhuc-hidden" id="xhuc-done-msg">Category complete! Go back to the <a href="/concepts">Concepts page</a> to claim your certificate.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="xhuc-grid-section">
+      <div class="xhuc-shell">
+        <div class="xhuc-section-head">
+          <h2>Stars &amp; Stellar Evolution Topics</h2>
+          <p>Topics unlock in order. Open an article, study it, then take the timed quiz at the bottom to unlock the next card.</p>
+        </div>
+        <div id="xhuc-cards" class="xhuc-cards" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <section id="xhuc-article" class="xhuc-article" aria-live="polite"></section>
+  <div id="xhuc-quiz" class="xhuc-quiz xhuc-hidden" role="dialog" aria-modal="true" aria-label="Topic quiz"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var SLUG = "star-stellar-formation";   /* must match the card link on the main page: /star-stellar-formation */
+  var CAT_NAME = "Stars and Stellar Evolution";
+  var MAIN_URL = "/concepts";
+  var KEY = "xhLearnProgressV1", LKEY = "xhLvl_" + SLUG;
+  var NEXT_AFTER = "A";              /* quiz level that completes a topic and unlocks the next card: "E", "N" or "A" */
+  var LV = [["E", "Easy"], ["N", "Normal"], ["A", "Advanced"]];
+  var TIME = { E: 240, N: 420, A: 600 };   /* seconds for the WHOLE quiz */
+  var FALLBACK = "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ultra-deep-field-jpg.webp?w=1200";
+
+  /* ---------- shared progress API (same contract as the main page) ---------- */
+  function ld() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function put(d) { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} document.dispatchEvent(new Event("xhprogress")); }
+  window.XHProgress = window.XHProgress || {
+    get: function (s) { return ld()[s] || { r: [], n: 0 }; },
+    read: function (s, id, total) { var d = ld(), e = d[s] = d[s] || { r: [], n: 0 }; if (total) e.n = total; if (id && e.r.indexOf(id) < 0) e.r.push(id); put(d); },
+    set: function (s, read, total) { var d = ld(), r = [], i; for (i = 0; i < read; i++) r.push("#" + i); d[s] = { r: r, n: total }; put(d); },
+    reset: function () { put({}); }
+  };
+
+  var T = [];
+  var I = {"STE-001": "https://science.nasa.gov/wp-content/uploads/2023/04/m5hst2048-jpg.webp?w=2048", "STE-002": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2022/07/STScI-01GA6KKWG229B16K4Q38CH3BXS.png?crop=faces%2Cfocalpoint&fit=clip&h=8441&w=14575", "STE-003": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2024/07/STScI-01J0BY6PAJXJ34084103H43036.png?crop=faces%2Cfocalpoint&fit=clip&h=1719&w=2160", "STE-004": "https://science.nasa.gov/wp-content/uploads/2024/05/hubble-hptau-wfc3-1-flat-finalok.jpg?w=2048", "STE-005": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/404/Main_Sequence-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=567&w=566", "STE-006": "https://www.nasa.gov/wp-content/uploads/2023/03/126852main_image_feature_401_ys_full.jpg?w=1041", "STE-007": "https://images-assets.nasa.gov/image/PIA17669/PIA17669~orig.jpg", "STE-008": "https://science.nasa.gov/wp-content/uploads/2023/09/stsci-01f3n9k6pr8b5y9cz2qd7asqpt-1.png", "STE-009": "https://science.nasa.gov/wp-content/uploads/2020/10/red-giant-star-surrounded-by-bubble-of-gas.webp", "STE-010": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/405/Red_Giant-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=1186&w=1186", "STE-011": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/releases/1997/10/STScI-01EVVK6THZJQ4A8GP6N8CREKQH.tif?w=2000", "STE-012": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/406/White_Dwarf-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=576&w=1024", "STE-013": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/409/brown_dwarf-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=675&w=1200", "STE-014": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/407/Neutron_Stars-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=642&w=800", "STE-015": "https://www.nasa.gov/wp-content/uploads/2025/08/msh1552.jpg?w=2048", "STE-016": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/releases/2025/04/STScI-01JQSDXJ6079K1HM6D6FRER23B.tif?w=2000", "STE-017": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/338/The_Helix_Nebula-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=599&w=800", "STE-018": "https://chandra.harvard.edu/photo/2017/casa_life/casa_life_elements_sub.jpg", "STE-019": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/04/2e.Magnetosphere_image-1.jpg?crop=faces%2Cfocalpoint&fit=clip&h=1440&w=2560", "STE-020": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/496/Sun_Emits_Flare.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=1024&w=1024", "STE-021": "https://science.nasa.gov/wp-content/uploads/2023/04/ngc6087_wfc3_ir_bwcrop_final-jpg.webp?w=1495", "STE-022": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/releases/2007/05/STScI-01EVVJ6ZA0NW7WVXR3Y6EMXWTJ.jpg?crop=faces%2Cfocalpoint&fit=clip&h=1583&w=1500", "STE-023": "https://science.nasa.gov/wp-content/uploads/2020/10/hubble-ngc2031-jpg.webp", "STE-024": "https://science.nasa.gov/wp-content/uploads/2024/02/m44-acs-1-color-2-final.jpg?w=2019", "STE-025": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/releases/2011/05/STScI-01EVT4QRQ6V51N62BYAM8DBW82.jpg?crop=faces%2Cfocalpoint&fit=clip&h=2005&w=2606", "STE-026": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/412/Sextuple_System-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=1130&w=2000", "STE-027": "https://chandra.harvard.edu/photo/2010/chcyg/chcyg_lg.jpg", "STE-028": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/releases/2003/09/STScI-01EVT907B6PKP8FTP4BA2F32QQ.jpg?crop=faces%2Cfocalpoint&fit=clip&h=545&w=700", "STE-029": "https://chandra.harvard.edu/photo/2001/v1494aql/aquilae_spectrum.jpg", "STE-030": "https://chandra.harvard.edu/photo/2000/0065/0065_optical.jpg", "STE-031": "https://chandra.harvard.edu/photo/2001/v1494aql/aquilae_illustration_bl.jpg", "STE-032": "https://chandra.harvard.edu/photo/2017/v745/v745_lg.jpg", "STE-033": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/2023/09/nova.jpg?crop=faces%2Cfocalpoint&fit=clip&h=576&w=1024", "STE-034": "https://chandra.harvard.edu/photo/2015/gkper/gkper_lg.jpg", "STE-035": "https://www.nasa.gov/wp-content/uploads/2024/06/findhercules-nsn896.jpg?w=896", "STE-036": "https://heasarc.gsfc.nasa.gov/Images/objects/cvs/cv_art4_annotated.jpg", "STE-037": "https://chandra.harvard.edu/photo/2017/raqr/raqr_lg.jpg", "STE-038": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/releases/2025/08/STScI-01K1TXEFK7AAF8H2AJ37BPG1FD.tif?w=900", "STE-039": "https://science.nasa.gov/wp-content/uploads/2020/10/image-of-a-supernova.webp", "STE-040": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/glast/news/2026/supercharged-supernovae/sigmap_optical_montage.png?crop=faces%2Cfocalpoint&fit=clip&h=2160&w=2665", "STE-041": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2023/10/STScI-01HAWERGS3J80EB4NMEFF4S3T3.png?crop=faces%2Cfocalpoint&fit=clip&h=1561&w=2525", "STE-042": "https://chandra.harvard.edu/photo/2000/0065/0065_xray.jpg", "STE-043": "https://svs.gsfc.nasa.gov/vis/a010000/a010700/a010740/JetFormation_still.png", "STE-044": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/stars/SunAsABeachBall_same.png?crop=faces%2Cfocalpoint&fit=clip&h=2250&w=4000", "STE-045": "https://svs.gsfc.nasa.gov/vis/a010000/a011500/a011545/pf-1920.jpg", "STE-046": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/outreach/migrated/2025/STScI-01K5VMKA6FRGK25H1SX6ZETRMH.jpg?crop=faces%2Cfocalpoint&fit=clip&h=2837&w=3840"};
+function P(n) { return I["STE-" + n]; }
+T.push({"id": "STE-001", "t": "Star", "src": "NASA Solar Dynamics Observatory Sun visual", "img": "https://science.nasa.gov/wp-content/uploads/2023/04/m5hst2048-jpg.webp?w=2048", "d": "A massive self-gravitating sphere of plasma that shines by releasing energy from nuclear fusion in its core or earlier gravitational contraction."});
+T.push({"id": "STE-002", "t": "Star Formation", "src": "NASA Webb Carina Nebula star-forming region", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2022/07/STScI-01GA6KKWG229B16K4Q38CH3BXS.png?crop=faces%2Cfocalpoint&fit=clip&h=8441&w=14575", "d": "The birth of stars inside cold gas and dust clouds, where gravity compresses material into dense cores and young stellar objects."});
+T.push({"id": "STE-003", "t": "Protostar", "src": "NASA Webb L1527 protostar image", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2024/07/STScI-01J0BY6PAJXJ34084103H43036.png?crop=faces%2Cfocalpoint&fit=clip&h=1719&w=2160", "d": "A very young forming star still gathering mass from a surrounding envelope, disk, and outflow system."});
+T.push({"id": "STE-004", "t": "T Tauri Star", "src": "NASA Hubble HP Tau T Tauri star", "img": "https://science.nasa.gov/wp-content/uploads/2024/05/hubble-hptau-wfc3-1-flat-finalok.jpg?w=2048", "d": "A very young variable star still settling toward the main sequence, often surrounded by dust, gas, disks, jets, or reflection nebulosity."});
+T.push({"id": "STE-005", "t": "Main Sequence Star", "src": "NASA main sequence star visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/404/Main_Sequence-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=567&w=566", "d": "A stable star that fuses hydrogen into helium in its core, the longest and most common phase of stellar life."});
+T.push({"id": "STE-006", "t": "Red Dwarf", "src": "NASA Hubble Proxima Centauri red dwarf visual", "img": "https://www.nasa.gov/wp-content/uploads/2023/03/126852main_image_feature_401_ys_full.jpg?w=1041", "d": "A small, cool, long-lived main sequence star with low mass and low luminosity, making up a large fraction of stars in the galaxy."});
+T.push({"id": "STE-007", "t": "Yellow Dwarf", "src": "NASA SDO Sun yellow dwarf visual", "img": "https://images-assets.nasa.gov/image/PIA17669/PIA17669~orig.jpg", "d": "A Sun-like G-type main sequence star that fuses hydrogen in its core and shines with yellow-white light over billions of years."});
+T.push({"id": "STE-008", "t": "Blue Giant", "src": "NASA Hubble AG Carinae blue giant visual", "img": "https://science.nasa.gov/wp-content/uploads/2023/09/stsci-01f3n9k6pr8b5y9cz2qd7asqpt-1.png", "d": "A hot, massive, highly luminous blue star that burns fuel rapidly and strongly shapes its surroundings with radiation and winds."});
+T.push({"id": "STE-009", "t": "Red Giant", "src": "NASA Hubble red giant U Camelopardalis image", "img": "https://science.nasa.gov/wp-content/uploads/2020/10/red-giant-star-surrounded-by-bubble-of-gas.webp", "d": "A swollen late-stage star that has expanded after exhausting much of the hydrogen fuel in its core."});
+T.push({"id": "STE-010", "t": "Supergiant", "src": "NASA red giant and supergiant stellar evolution visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/405/Red_Giant-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=1186&w=1186", "d": "An enormous luminous evolved star with a huge radius, intense mass loss, and a short final lifetime before collapse or explosion."});
+T.push({"id": "STE-011", "t": "Hypergiant", "src": "NASA Hubble luminous massive star visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/releases/1997/10/STScI-01EVVK6THZJQ4A8GP6N8CREKQH.tif?w=2000", "d": "One of the most luminous and massive evolved star classes, with extreme instability, powerful winds, and heavy mass loss."});
+T.push({"id": "STE-012", "t": "White Dwarf", "src": "NASA white dwarf visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/406/White_Dwarf-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=576&w=1024", "d": "A dense stellar remnant left after a Sun-like star sheds its outer layers and exposes its compact core."});
+T.push({"id": "STE-013", "t": "Brown Dwarf", "src": "NASA brown dwarf visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/409/brown_dwarf-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=675&w=1200", "d": "A substellar object too massive to be a planet but too small to sustain long-term hydrogen fusion like a normal star."});
+T.push({"id": "STE-014", "t": "Neutron Star", "src": "NASA Chandra Vela pulsar and neutron star visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/407/Neutron_Stars-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=642&w=800", "d": "An ultra-dense collapsed core formed after some massive stars explode as supernovae."});
+T.push({"id": "STE-015", "t": "Pulsar", "src": "NASA Chandra / MSH 15-52", "img": "https://www.nasa.gov/wp-content/uploads/2025/08/msh1552.jpg?w=2048", "d": "A rapidly rotating neutron star whose radiation beams sweep across space like a cosmic lighthouse."});
+T.push({"id": "STE-016", "t": "Magnetar", "src": "NASA Hubble magnetar field", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/releases/2025/04/STScI-01JQSDXJ6079K1HM6D6FRER23B.tif?w=2000", "d": "A neutron star with an extreme magnetic field capable of powerful high-energy bursts."});
+T.push({"id": "STE-017", "t": "Stellar Core", "src": "NASA SDO solar core/fusion context visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/338/The_Helix_Nebula-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=599&w=800", "d": "The dense central region of a star where pressure, temperature, fusion, and later collapse control the star’s evolution."});
+T.push({"id": "STE-018", "t": "Stellar Fusion", "src": "NASA Chandra Cas A elements", "img": "https://chandra.harvard.edu/photo/2017/casa_life/casa_life_elements_sub.jpg", "d": "The process where light atomic nuclei combine under intense heat and pressure, releasing the energy that powers stars."});
+T.push({"id": "STE-019", "t": "Stellar Wind", "src": "NASA magnetosphere / solar wind visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/04/2e.Magnetosphere_image-1.jpg?crop=faces%2Cfocalpoint&fit=clip&h=1440&w=2560", "d": "A stream of particles flowing outward from a star, carrying mass, momentum, magnetic fields, and energy into space."});
+T.push({"id": "STE-020", "t": "Solar Mass", "src": "NASA Sun solar mass reference visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/496/Sun_Emits_Flare.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=1024&w=1024", "d": "The mass of the Sun used as a standard unit for comparing stars, remnants, galaxies, and many astrophysical systems."});
+T.push({"id": "STE-021", "t": "Luminosity", "src": "NASA Hubble luminous star visual", "img": "https://science.nasa.gov/wp-content/uploads/2023/04/ngc6087_wfc3_ir_bwcrop_final-jpg.webp?w=1495", "d": "The total power a star emits as light and radiation, controlled mainly by its size, temperature, and evolutionary stage."});
+T.push({"id": "STE-022", "t": "Hertzsprung-Russell Diagram", "src": "NASA Hubble Hertzsprung-Russell diagram visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/releases/2007/05/STScI-01EVVJ6ZA0NW7WVXR3Y6EMXWTJ.jpg?crop=faces%2Cfocalpoint&fit=clip&h=1583&w=1500", "d": "A graph of stellar brightness and temperature that reveals main sequence stars, giants, supergiants, and white dwarfs."});
+T.push({"id": "STE-023", "t": "Stellar Classification", "src": "NASA Hubble star cluster image", "img": "https://science.nasa.gov/wp-content/uploads/2020/10/hubble-ngc2031-jpg.webp", "d": "The system astronomers use to group stars by temperature, color, spectral features, luminosity, and evolutionary state."});
+T.push({"id": "STE-024", "t": "Stellar Magnitude", "src": "NASA Hubble star field and cluster visual", "img": "https://science.nasa.gov/wp-content/uploads/2024/02/m44-acs-1-color-2-final.jpg?w=2019", "d": "A brightness scale for stars, describing apparent brightness from Earth and intrinsic brightness when distance is known."});
+T.push({"id": "STE-025", "t": "Variable Star", "src": "NASA Hubble Cepheid variable light curve visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/releases/2011/05/STScI-01EVT4QRQ6V51N62BYAM8DBW82.jpg?crop=faces%2Cfocalpoint&fit=clip&h=2005&w=2606", "d": "A star whose brightness changes over time because of pulsation, eclipses, eruptions, rotation, or binary interaction."});
+T.push({"id": "STE-026", "t": "Binary Star", "src": "NASA multiple-star system visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/internal_resources/412/Sextuple_System-1.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=1130&w=2000", "d": "A pair of stars gravitationally bound to each other, orbiting a shared center of mass and often exchanging energy or material."});
+T.push({"id": "STE-027", "t": "Binary Star System", "src": "NASA multiple star system visual", "img": "https://chandra.harvard.edu/photo/2010/chcyg/chcyg_lg.jpg", "d": "Two stars gravitationally bound to each other, often influencing each other’s evolution through orbital motion or material exchange."});
+T.push({"id": "STE-028", "t": "Eclipsing Binary", "src": "NASA Hubble light curve and variable star visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/releases/2003/09/STScI-01EVT907B6PKP8FTP4BA2F32QQ.jpg?crop=faces%2Cfocalpoint&fit=clip&h=545&w=700", "d": "A binary system aligned so one star passes in front of the other, creating periodic dips in measured brightness."});
+T.push({"id": "STE-029", "t": "Spectroscopic Binary", "src": "NASA multiple star system visual", "img": "https://chandra.harvard.edu/photo/2001/v1494aql/aquilae_spectrum.jpg", "d": "A binary star detected through shifting spectral lines caused by orbital motion and the Doppler effect."});
+T.push({"id": "STE-030", "t": "Optical Binary", "src": "NASA/Chandra Sirius A & B optical image", "img": "https://chandra.harvard.edu/photo/2000/0065/0065_optical.jpg", "d": "Two stars that appear close together in the sky from our viewpoint but may not be gravitationally bound."});
+T.push({"id": "STE-031", "t": "Mass Transfer", "src": "NASA Chandra illustration", "img": "https://chandra.harvard.edu/photo/2001/v1494aql/aquilae_illustration_bl.jpg", "d": "A process in close binaries where material flows from one star to another, often powering disks, novae, or X-ray emission."});
+T.push({"id": "STE-032", "t": "Roche Lobe", "src": "NASA Chandra V745 Sco model", "img": "https://chandra.harvard.edu/photo/2017/v745/v745_lg.jpg", "d": "The gravitational boundary around a star in a binary system; material can overflow it and stream toward the companion."});
+T.push({"id": "STE-033", "t": "Nova", "src": "NASA nova visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/2023/09/nova.jpg?crop=faces%2Cfocalpoint&fit=clip&h=576&w=1024", "d": "A sudden brightening caused when an accreting white dwarf ignites accumulated surface material without destroying the star."});
+T.push({"id": "STE-034", "t": "Classical Nova", "src": "NASA Chandra / Hubble GK Persei", "img": "https://chandra.harvard.edu/photo/2015/gkper/gkper_lg.jpg", "d": "A nova eruption observed as a single major brightening event from a white dwarf accreting matter in a close binary system."});
+T.push({"id": "STE-035", "t": "Recurrent Nova", "src": "NASA nova visual", "img": "https://www.nasa.gov/wp-content/uploads/2024/06/findhercules-nsn896.jpg?w=896", "d": "A nova system that has been observed erupting more than once as material repeatedly accumulates on a white dwarf."});
+T.push({"id": "STE-036", "t": "Dwarf Nova", "src": "NASA HEASARC cataclysmic variable system", "img": "https://heasarc.gsfc.nasa.gov/Images/objects/cvs/cv_art4_annotated.jpg", "d": "A cataclysmic variable where bright outbursts are usually driven by instability in the accretion disk around a white dwarf."});
+T.push({"id": "STE-037", "t": "Symbiotic Nova", "src": "NASA Chandra R Aquarii", "img": "https://chandra.harvard.edu/photo/2017/raqr/raqr_lg.jpg", "d": "A nova-like eruption in a symbiotic binary, often involving a white dwarf accreting material from an evolved companion star."});
+T.push({"id": "STE-038", "t": "Helium Nova", "src": "NASA white dwarf visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/releases/2025/08/STScI-01K1TXEFK7AAF8H2AJ37BPG1FD.tif?w=900", "d": "A rare nova-like eruption involving helium-rich material on an accreting white dwarf."});
+T.push({"id": "STE-039", "t": "Supernova", "src": "NASA supernova image", "img": "https://science.nasa.gov/wp-content/uploads/2020/10/image-of-a-supernova.webp", "d": "A catastrophic stellar explosion that can mark the death of a massive star or the disruption of a white dwarf."});
+T.push({"id": "STE-040", "t": "Hypernova", "src": "NASA Fermi supercharged supernova visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/glast/news/2026/supercharged-supernovae/sigmap_optical_montage.png?crop=faces%2Cfocalpoint&fit=clip&h=2160&w=2665", "d": "An exceptionally energetic stellar explosion, often connected with massive stars and some long-duration gamma-ray bursts."});
+T.push({"id": "STE-041", "t": "Kilonova", "src": "NASA Webb GRB 230307A kilonova image", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2023/10/STScI-01HAWERGS3J80EB4NMEFF4S3T3.png?crop=faces%2Cfocalpoint&fit=clip&h=1561&w=2525", "d": "A short-lived explosion produced by compact-object mergers, especially neutron star mergers, creating heavy elements."});
+T.push({"id": "STE-042", "t": "Chandrasekhar Limit", "src": "NASA/Chandra Sirius B white dwarf image", "img": "https://chandra.harvard.edu/photo/2000/0065/0065_xray.jpg", "d": "The maximum mass near which a white dwarf cannot remain stable against gravitational collapse, central to Type Ia supernova physics."});
+T.push({"id": "STE-043", "t": "Stellar Particles", "src": "NASA neutron star particle outflow visual", "img": "https://svs.gsfc.nasa.gov/vis/a010000/a010700/a010740/JetFormation_still.png", "d": "Energetic particles and plasma associated with stars, winds, remnants, jets, and compact-object environments."});
+T.push({"id": "STE-044", "t": "Stellar Evolution", "src": "NASA stellar sizes and evolution visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/universe/stars/SunAsABeachBall_same.png?crop=faces%2Cfocalpoint&fit=clip&h=2250&w=4000", "d": "The full life path of a star from birth in gas clouds through fusion phases, expansion, remnants, and explosive endings."});
+T.push({"id": "STE-045", "t": "Cosmic Rays", "src": "NASA Fermi / SVS gamma-ray sky", "img": "https://svs.gsfc.nasa.gov/vis/a010000/a011500/a011545/pf-1920.jpg", "d": "High-energy charged particles from space, often linked to supernova remnants, massive-star explosions, and compact objects."});
+T.push({"id": "STE-046", "t": "Light Curve", "src": "NASA Hubble light curve visual", "img": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/outreach/migrated/2025/STScI-01K5VMKA6FRGK25H1SX6ZETRMH.jpg?crop=faces%2Cfocalpoint&fit=clip&h=2837&w=3840", "d": "A graph showing how an object’s brightness changes with time, used to study variable stars, binaries, novae, and supernovae."});
+
+
+  T.sort(function (a, b) { return a.id < b.id ? -1 : 1; });
+
+  /* ---------- merge level data ---------- */
+  T.forEach(function (c) {
+    var E = c.E || {}, N = c.N || {}, A = c.A || {};
+    c.pics = (c.pics && c.pics.length) ? c.pics : [[c.img, c.t + " — " + c.src]];
+    var ef = (E.f && E.f.length > 2) ? E.f : [c.d];
+    var nf = (N.f && N.f.length > 2) ? N.f : ef;
+    c.L = {
+      E: { s: E.s || [["Overview", c.d]], ex: E.ex || [], eq: [], h: [], r: [], f: ef },
+      N: { s: N.s || E.s || [["Overview", c.d]], ex: N.ex || [], eq: N.eq || [], h: N.h || [], r: [], f: nf },
+      A: { s: A.s || [], ex: A.ex || [], eq: A.eq || [], h: A.h || [], r: A.r || [], f: (A.f && A.f.length > 2) ? A.f : nf }
+    };
+  });
+
+  /* ---------- helpers ---------- */
+  var $ = function (id) { return document.getElementById(id); };
+  var grid = $("xhuc-cards"), search = $("xhuc-search"), mainEl = $("xhuc-main"), art = $("xhuc-article"), qz = $("xhuc-quiz");
+  var cur = -1, curL = "E", Q = null;
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function uniq(a) { return a.filter(function (x, i) { return a.indexOf(x) === i; }); }
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function lvName(L) { return LV.filter(function (x) { return x[0] === L; })[0][1]; }
+  function fmt(s) { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); }
+  function done() { var all = T.map(function (c) { return c.id; }); return window.XHProgress.get(SLUG).r.filter(function (x) { return all.indexOf(x) > -1; }); }
+  window.xhucImg = function (el) { if (el && el.src !== FALLBACK) el.src = FALLBACK; };
+
+  function lvAll() { try { return JSON.parse(localStorage.getItem(LKEY)) || {}; } catch (e) { return {}; } }
+  function lvOk(id, L) { return !!((lvAll()[id] || {})[L]) || done().indexOf(id) > -1; }
+  function lvSet(id, L) {
+    var a = lvAll(); (a[id] = a[id] || {})[L] = 1;
+    try { localStorage.setItem(LKEY, JSON.stringify(a)); } catch (e) {}
+    if (L === NEXT_AFTER) window.XHProgress.read(SLUG, id, T.length);
+  }
+  function prevL(L) { return L === "N" ? "E" : L === "A" ? "N" : null; }
+  function nextL(L) { return L === "E" ? "N" : L === "N" ? "A" : null; }
+  function tabOpen(i, L) { return L === "E" || lvOk(T[i].id, prevL(L)); }
+  function topicOpen(i) { return i === 0 || done().indexOf(T[i - 1].id) > -1; }
+  function renderTex() {
+    if (!window.katex) return;
+    [].forEach.call(document.querySelectorAll(".xhuc-tex[data-tex]"), function (el) {
+      try { window.katex.render(el.getAttribute("data-tex"), el, { displayMode: true, throwOnError: false }); el.removeAttribute("data-tex"); } catch (e) {}
+    });
+  }
+
+  /* ---------- cards + progress ---------- */
+  function renderCards(q) {
+    var d = done(), f = String(q || "").trim().toLowerCase(), html = "";
+    T.forEach(function (c, i) {
+      if (f && (c.t + " " + c.d).toLowerCase().indexOf(f) < 0) return;
+      var ok = d.indexOf(c.id) > -1, open = topicOpen(i), lock = !open && !ok;
+      html += '<article class="xhuc-card' + (lock ? " is-locked" : "") + '"><div class="xhuc-card-media"><span class="xhuc-card-id">' + c.id + "</span>" +
+        (ok ? '<span class="xhuc-badge">Completed ✓</span>' : lock ? '<span class="xhuc-badge">Locked</span>' : "") +
+        '<img src="' + esc(c.img) + '" alt="' + esc(c.t) + ' visual reference" loading="lazy" onerror="xhucImg(this)"></div>' +
+        '<div class="xhuc-card-body"><h3>' + esc(c.t) + "</h3><p>" + esc(c.d) + '</p><div class="xhuc-source">' + esc(c.src) + "</div>" +
+        '<div class="xhuc-lvchips">' + LV.map(function (x) { return "<span" + (lvOk(c.id, x[0]) ? ' class="on"' : "") + ">" + x[1] + "</span>"; }).join("") + "</div>" +
+        '<div class="xhuc-card-actions"><button class="xhuc-btn" type="button" data-open="' + i + '"' + (lock ? " disabled" : "") + ">" +
+        (ok ? "Review article" : lock ? "Pass the previous topic to unlock" : (lvOk(c.id, "E") ? "Continue learning" : "Open article")) + "</button></div></div></article>";
+    });
+    grid.innerHTML = html || '<div class="xhuc-empty">No topics match this search.</div>';
+    var n = d.length, p = Math.round(n / T.length * 100);
+    $("xhuc-count").textContent = n + " / " + T.length + " completed";
+    $("xhuc-fill").style.width = p + "%";
+    $("xhuc-done-msg").classList.toggle("xhuc-hidden", n < T.length);
+  }
+
+  /* ---------- article with Easy / Normal / Advanced tabs ---------- */
+  function artHTML(i, L) {
+    var c = T[i], d = c.L[L], ok = lvOk(c.id, L), nl = nextL(L), nq = buildQuiz(i, L).length, pass = Math.ceil(nq * 0.7);
+    var figs = c.pics.slice(0, L === "E" ? 1 : L === "N" ? 2 : 3);
+    var h = '<div class="xhuc-ahero" style="--img:url(\'' + esc(c.img) + '\')"><div class="xhuc-shell xhuc-atop"><button class="xhuc-back" id="xhuc-back" type="button">← Back to topics</button>' +
+      '<h2 class="xhuc-atitle">' + esc(c.t) + '</h2><div class="xhuc-meta"><span class="xhuc-pill">' + c.id + '</span><span class="xhuc-pill">' + lvName(L) + ' level</span><span class="xhuc-pill">' + esc(c.src) + "</span></div></div></div>" +
+      '<div class="xhuc-shell xhuc-abody"><div class="xhuc-tabs">' +
+      LV.map(function (x) { return '<button class="xhuc-tab' + (x[0] === L ? " on" : "") + (tabOpen(i, x[0]) ? "" : " lock") + '" type="button" data-lv="' + x[0] + '">' + x[1] + (lvOk(c.id, x[0]) ? " ✓" : (tabOpen(i, x[0]) ? "" : " 🔒")) + "</button>"; }).join("") +
+      '</div><div class="xhuc-lvmsg" id="xhuc-lvmsg"></div><p class="xhuc-alead">' + esc(c.d) + "</p>";
+    h += '<div class="xhuc-figs">' + figs.map(function (p) {
+      return '<figure class="xhuc-fig"><img src="' + esc(p[0]) + '" alt="' + esc(p[1]) + '" loading="lazy" onerror="this.parentNode.parentNode&&this.parentNode.parentNode.removeChild(this.parentNode)"><figcaption>' + esc(p[1]) + "</figcaption></figure>";
+    }).join("") + "</div>";
+    h += '<article class="xhuc-doc">';
+    d.s.forEach(function (s) { h += "<h3>" + esc(s[0]) + "</h3><p>" + esc(s[1]) + "</p>"; });
+    d.eq.forEach(function (e) {
+      h += '<div class="xhuc-eqb"><div class="xhuc-eqt">' + esc(e[0]) + '</div><div class="xhuc-tex" data-tex="' + esc(e[1]) + '">' + esc(e[1]) + "</div><p>" + esc(e[2]) + "</p></div>";
+    });
+    if (d.ex.length) h += "<h3>" + (L === "E" ? "Everyday example" : "Worked example") + "</h3>" + d.ex.map(function (e) { return "<p><b>" + esc(e[0]) + ".</b> " + esc(e[1]) + "</p>"; }).join("");
+    if (d.h.length) h += '<h3>History of the idea</h3><ul class="xhuc-tl">' + d.h.map(function (e) { return "<li><b>" + esc(e[0]) + "</b>" + esc(e[1]) + "</li>"; }).join("") + "</ul>";
+    h += "<h3>Key takeaways</h3><ul>" + d.f.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>";
+    if (d.r && d.r.length) h += '<h3>Key references</h3><ol class="xhuc-refs">' + d.r.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ol>";
+    h += "</article>";
+    h += '<div class="xhuc-sec xhuc-qcta"><h3>' + (ok ? lvName(L) + " quiz passed ✓" : lvName(L) + " quiz") + "</h3><p>" +
+      (ok ? (nl ? "Well done. The " + lvName(nl) + " stage is open." : "You have finished every stage of this topic.")
+          : nq + " questions generated from this " + lvName(L) + " article. You have " + fmt(TIME[L]) + " minutes for the whole quiz. Score " + pass + " of " + nq + " or more to pass. It runs in full screen and is cancelled if you switch tabs.") +
+      '</p><div class="xhq-row"><button class="xhuc-btn" id="xhuc-startq" type="button">' + (ok ? "Retake quiz" : "Take the " + lvName(L) + " quiz") + "</button>" +
+      (ok && nl ? '<button class="xhuc-btn alt" id="xhuc-nextlv" type="button">Go to ' + lvName(nl) + "</button>" : "") +
+      (ok && !nl && i < T.length - 1 && done().indexOf(c.id) > -1 ? '<button class="xhuc-btn alt" id="xhuc-nexttopic" type="button">Open next topic</button>' : "") + "</div></div></div>";
+    return h;
+  }
+  function showArticle(i, L) {
+    cur = i; curL = L; art.innerHTML = artHTML(i, L);
+    $("xhuc-back").onclick = function () { closeArticle(); };
+    $("xhuc-startq").onclick = function () { quizIntro(i, L); };
+    var nx = $("xhuc-nexttopic"); if (nx) nx.onclick = function () { openArticle(i + 1, "E"); };
+    var nl = $("xhuc-nextlv"); if (nl) nl.onclick = function () { showArticle(i, nextL(L)); window.scrollTo({ top: 0, behavior: "smooth" }); };
+    [].forEach.call(art.querySelectorAll(".xhuc-tab"), function (b) {
+      b.onclick = function () {
+        var l = b.getAttribute("data-lv");
+        if (!tabOpen(i, l)) { $("xhuc-lvmsg").textContent = "Pass the " + lvName(prevL(l)) + " quiz to unlock the " + lvName(l) + " stage."; return; }
+        showArticle(i, l);
+      };
+    });
+    renderTex();
+  }
+  function openArticle(i, L) {
+    var lv = L || (!lvOk(T[i].id, "E") ? "E" : !lvOk(T[i].id, "N") ? "N" : "A");
+    showArticle(i, lv); mainEl.classList.add("xhuc-hidden"); art.classList.add("xhuc-active"); window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  function closeArticle(scrollIdx) {
+    cur = -1; art.classList.remove("xhuc-active"); art.innerHTML = ""; mainEl.classList.remove("xhuc-hidden"); renderCards(search.value);
+    var cards = grid.querySelectorAll(".xhuc-card"), el = typeof scrollIdx === "number" ? cards[scrollIdx] : null;
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" }); else window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ---------- quiz generated from the level data (one timer for the whole quiz) ---------- */
+  function buildQuiz(i, L) {
+    var c = T[i], d = c.L[L], n = L === "E" ? 5 : L === "N" ? 6 : 7;
+    var others = T.filter(function (_, k) { return k !== i; });
+    function foreign() { var f = null, g = 0; while (g++ < 40) { f = pick(pick(others).L[L].f); if (d.f.indexOf(f) < 0) return f; } return f; }
+    function wrongFacts() { var w = []; while (w.length < 3) { var f = foreign(); if (w.indexOf(f) < 0) w.push(f); } return w; }
+    function trueQ(fact) { return { q: "Which statement is true about " + c.t + "?", a: fact, o: shuffle([fact].concat(wrongFacts())) }; }
+    function oddQ() { var a = foreign(); return { q: "Which statement does NOT belong to " + c.t + "?", a: a, o: shuffle([a].concat(shuffle(d.f).slice(0, 3))) }; }
+    function descQ() { return { q: "Which concept does this description refer to?\n“" + c.d + "”", a: c.t, o: shuffle([c.t].concat(shuffle(others).slice(0, 3).map(function (o) { return o.t; }))) }; }
+    function eqQ(k) {
+      var e = d.eq[k], pool = uniq(others.reduce(function (acc, o) { return acc.concat(o.L[L].eq.map(function (x) { return x[0]; })); }, [])).filter(function (x) { return x !== e[0]; });
+      if (pool.length < 3) return null;
+      return { q: "Which relation belongs to the " + lvName(L) + " treatment of " + c.t + "?", a: e[0], o: shuffle([e[0]].concat(shuffle(pool).slice(0, 3))) };
+    }
+    /* every attempt draws a random subset of topics from the level data, a random question type for each, random wrong answers and a random order */
+    var slots = d.f.map(function (_, k) { return { t: "f", k: k }; });
+    if (L === "E") slots.push({ t: "desc" });
+    if (L !== "E") d.eq.forEach(function (_, k) { slots.push({ t: "eq", k: k }); });
+    var odd = 0;
+    var qs = shuffle(slots).slice(0, n).map(function (s) {
+      if (s.t === "desc") return descQ();
+      if (s.t === "eq") return eqQ(s.k);
+      if (odd < 2 && d.f.length >= 4 && Math.random() < 0.4) { odd++; return oddQ(); }
+      return trueQ(d.f[s.k]);
+    }).filter(Boolean);
+    return shuffle(qs);
+  }
+  function showQ(html) { qz.innerHTML = '<div class="xhq-box">' + html + "</div>"; qz.classList.remove("xhuc-hidden"); }
+  function inFS() { return document.fullscreenElement || document.webkitFullscreenElement; }
+
+  function quizIntro(i, L) {
+    var c = T[i], n = buildQuiz(i, L).length, pass = Math.ceil(n * 0.7);
+    showQ('<div class="xhq-k">' + lvName(L) + " quiz · " + c.id + "</div><h2>" + esc(c.t) + "</h2>" +
+      '<ul class="xhq-rules"><li>' + n + " questions generated from the " + lvName(L) + " article.</li>" +
+      "<li>Total time for the whole quiz: " + fmt(TIME[L]) + " minutes. You can move between questions and change answers until you submit or time runs out.</li>" +
+      "<li>Pass mark: " + pass + " of " + n + " correct.</li>" +
+      "<li>The quiz runs in full screen. Switching tab, minimising the window or leaving full screen cancels it.</li></ul>" +
+      '<div class="xhq-row"><button class="xhq-btn" id="xhq-go" type="button">Start quiz</button><button class="xhq-btn alt" id="xhq-x" type="button">Not now</button></div><div class="xhq-note" id="xhq-note"></div>');
+    $("xhq-go").onclick = function () { startQuiz(i, L); };
+    $("xhq-x").onclick = closeQuiz;
+  }
+  async function startQuiz(i, L) {
+    var rf = qz.requestFullscreen || qz.webkitRequestFullscreen, fs = false;
+    if (rf) {
+      try { await rf.call(qz); fs = true; }
+      catch (e) { var n = $("xhq-note"); if (n) n.textContent = "Full screen is required for the quiz. Please allow it and press Start again."; return; }
+    }
+    Q = { i: i, L: L, qs: buildQuiz(i, L), n: 0, ans: [], fs: fs, on: true, t0: Date.now(), end: Date.now() + TIME[L] * 1000, tm: null };
+    document.addEventListener("visibilitychange", onVis);
+    window.addEventListener("blur", onBlur);
+    document.addEventListener("fullscreenchange", onFs);
+    document.addEventListener("webkitfullscreenchange", onFs);
+    document.addEventListener("contextmenu", noCtx);
+    document.addEventListener("copy", noCtx);
+    renderQ();
+    Q.tm = setInterval(tick, 250);
+  }
+  function tick() {
+    if (!Q || !Q.on) return;
+    var left = (Q.end - Date.now()) / 1000, t = $("xhq-time"), f = $("xhq-fill");
+    if (t) t.textContent = fmt(left); if (f) f.style.width = Math.max(0, left / TIME[Q.L] * 100) + "%";
+    if (left <= 0) submitQuiz();
+  }
+  function renderQ() {
+    var q = Q.qs[Q.n], sel = Q.ans[Q.n], last = Q.n === Q.qs.length - 1, un = Q.qs.length - Q.ans.filter(function (a) { return a != null; }).length;
+    showQ('<div class="xhq-top"><span>Question ' + (Q.n + 1) + " / " + Q.qs.length + '</span><b id="xhq-time">' + fmt((Q.end - Date.now()) / 1000) + '</b></div><div class="xhq-bar"><i id="xhq-fill"></i></div>' +
+      '<h3 class="xhq-q">' + esc(q.q) + '</h3><div class="xhq-opts">' +
+      q.o.map(function (o, k) { return '<button class="xhq-opt' + (sel === k ? " xhq-pick" : "") + '" type="button" data-k="' + k + '">' + esc(o) + "</button>"; }).join("") + "</div>" +
+      '<div class="xhq-nav"><button class="xhq-btn alt" id="xhq-prev" type="button"' + (Q.n ? "" : " disabled") + '>Previous</button><span class="xhq-un">' + un + " unanswered</span>" +
+      (last ? '<button class="xhq-btn" id="xhq-sub" type="button">Submit quiz</button>' : '<button class="xhq-btn" id="xhq-next" type="button">Next</button>') + "</div>");
+    [].forEach.call(qz.querySelectorAll(".xhq-opt"), function (b) { b.onclick = function () { Q.ans[Q.n] = +b.getAttribute("data-k"); renderQ(); }; });
+    $("xhq-prev").onclick = function () { if (Q.n > 0) { Q.n--; renderQ(); } };
+    var nx = $("xhq-next"); if (nx) nx.onclick = function () { Q.n++; renderQ(); };
+    var sb = $("xhq-sub"); if (sb) sb.onclick = submitQuiz;
+    tick();
+  }
+  function endQuiz() {
+    if (!Q) return;
+    Q.on = false; clearInterval(Q.tm);
+    document.removeEventListener("visibilitychange", onVis);
+    window.removeEventListener("blur", onBlur);
+    document.removeEventListener("fullscreenchange", onFs);
+    document.removeEventListener("webkitfullscreenchange", onFs);
+    document.removeEventListener("contextmenu", noCtx);
+    document.removeEventListener("copy", noCtx);
+    if (inFS()) { var p = (document.exitFullscreen || document.webkitExitFullscreen).call(document); if (p && p.catch) p.catch(function () {}); }
+  }
+  function submitQuiz() {
+    if (!Q || !Q.on) return;
+    var i = Q.i, L = Q.L, n = Q.qs.length, need = Math.ceil(n * 0.7), timeUp = Q.end - Date.now() <= 0, sc = 0;
+    Q.qs.forEach(function (q, k) { if (Q.ans[k] != null && q.o[Q.ans[k]] === q.a) sc++; });
+    endQuiz();
+    var pass = sc >= need, id = T[i].id, nl = nextL(L), topicDone = false, last = i === T.length - 1;
+    if (pass) { lvSet(id, L); topicDone = done().indexOf(id) > -1; renderCards(search.value); }
+    var msg;
+    if (!pass) msg = (timeUp ? "Time ran out. " : "") + "You need " + need + " correct answers to pass. Review the article and try again; each attempt uses a fresh set of questions.";
+    else if (topicDone) msg = last ? "You have completed every topic in " + CAT_NAME + ". Return to the Concepts page to see your progress and certificate." : "Topic complete. Next topic unlocked: <b>" + esc(T[i + 1].t) + "</b>.";
+    else msg = nl ? "Well done. The <b>" + lvName(nl) + "</b> stage is now unlocked." : "Well done.";
+    showQ('<div class="xhq-k' + (pass ? "" : " bad") + '">' + (pass ? "Quiz passed" : "Not passed") + '</div><p class="xhq-score">' + sc + " / " + n + '</p><p class="xhq-p">' + msg + "</p>" +
+      '<div class="xhq-row">' + (pass ? '<button class="xhq-btn" id="xhq-c" type="button">Continue</button>' : '<button class="xhq-btn" id="xhq-r" type="button">Try again</button><button class="xhq-btn alt" id="xhq-b" type="button">Back to article</button>') + "</div>");
+    if (pass) $("xhq-c").onclick = function () {
+      qz.classList.add("xhuc-hidden"); qz.innerHTML = "";
+      if (topicDone) closeArticle(last ? undefined : i + 1);
+      else if (nl) { showArticle(i, nl); window.scrollTo({ top: 0, behavior: "smooth" }); }
+      else showArticle(i, L);
+    };
+    else { $("xhq-r").onclick = function () { quizIntro(i, L); }; $("xhq-b").onclick = closeQuiz; }
+  }
+  function cancelQuiz(reason) {
+    if (!Q || !Q.on) return;
+    var i = Q.i, L = Q.L; endQuiz();
+    showQ('<div class="xhq-k bad">Quiz cancelled</div><h2>' + esc(reason) + '</h2><p class="xhq-p">No score was saved. You can start a new attempt with a fresh set of questions.</p>' +
+      '<div class="xhq-row"><button class="xhq-btn" id="xhq-r" type="button">Try again</button><button class="xhq-btn alt" id="xhq-b" type="button">Back to article</button></div>');
+    $("xhq-r").onclick = function () { quizIntro(i, L); }; $("xhq-b").onclick = closeQuiz;
+  }
+  function closeQuiz() {
+    if (Q && Q.on) endQuiz();
+    qz.classList.add("xhuc-hidden"); qz.innerHTML = "";
+    if (cur >= 0) showArticle(cur, curL);
+  }
+  function grace() { return Q && Date.now() - Q.t0 > 900; }
+  function onVis() { if (document.hidden && Q && Q.on) cancelQuiz("You switched tabs or minimised the window."); }
+  function onBlur() { if (grace()) cancelQuiz("The quiz window lost focus."); }
+  function onFs() { if (Q && Q.on && Q.fs && !inFS() && grace()) cancelQuiz("You left full screen."); }
+  function noCtx(e) { if (Q && Q.on) e.preventDefault(); }
+
+  /* ---------- wire up ---------- */
+  grid.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("[data-open]");
+    if (b && !b.disabled) openArticle(+b.getAttribute("data-open"));
+  });
+  search.addEventListener("input", function () { renderCards(search.value); });
+  window.addEventListener("storage", function (e) { if (e.key === KEY || e.key === LKEY) renderCards(search.value); });
+  window.addEventListener("load", renderTex);
+
+  window.XHProgress.read(SLUG, null, T.length);   /* tell the main page how many topics this category has */
+  renderCards("");
+})();
+
+</script>
