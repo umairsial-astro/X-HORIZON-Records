@@ -1,0 +1,520 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X Horizon — Platform Rules for Users</title>
+<meta name="description" content="X Horizon platform rules explained for users: what is allowed, what is not allowed, how to post, how to report, and what happens after rule violations.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{
+  --bg:#000;
+  --panel:#070707;
+  --panel2:#111;
+  --panel3:#161616;
+  --text:#fff;
+  --soft:#d8d8d8;
+  --muted:#9f9f9f;
+  --line:rgba(255,255,255,.10);
+  --line2:rgba(255,255,255,.18);
+  --max:1220px;
+  --font:'Inter',Arial,Helvetica,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box}
+html{background:#000;color:#fff;scroll-behavior:smooth;overflow-x:hidden}
+body{margin:0;background:#000;color:#fff;font-family:var(--font);line-height:1.5;overflow-x:hidden}
+body:not(.xh-ready){overflow:hidden}
+button,input,select,textarea{font-family:inherit;border:0;outline:0}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.xh-shell{width:min(var(--max),calc(100% - 40px));margin:0 auto}
+.xh-page{position:relative;z-index:1;min-height:100vh;background:transparent;opacity:0;visibility:hidden;transition:opacity .55s var(--ease),visibility .55s var(--ease)}
+body.xh-ready .xh-page{opacity:1;visibility:visible}
+
+/* Loader */
+.xh-loader{position:fixed;inset:0;z-index:99999;background:#000;display:grid;place-items:center;transition:opacity .65s var(--ease),visibility .65s var(--ease)}
+.xh-loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.xh-load-mark{position:relative;width:min(330px,84vw);height:124px;display:grid;place-items:center;overflow:hidden}
+.xh-load-x{position:absolute;left:38px;top:4px;font-size:98px;line-height:1;font-weight:900;letter-spacing:-.12em;color:#fff;text-shadow:0 0 26px rgba(255,255,255,.18)}
+.xh-load-word{position:absolute;left:112px;top:45px;font-size:22px;font-weight:900;letter-spacing:.2em;color:#eee;opacity:.16;animation:xhWordBlink 1.8s steps(2,end) infinite,xhWordSolid .25s ease 2.1s forwards}
+.xh-load-line{position:absolute;left:38px;right:38px;bottom:10px;height:4px;border-radius:999px;background:#151515;overflow:hidden}
+.xh-load-line span{display:block;width:100%;height:100%;background:#f2f2f2;transform:scaleX(0);transform-origin:left center;animation:xhLoadFill 2.25s linear forwards}
+@keyframes xhLoadFill{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+@keyframes xhWordBlink{0%,100%{opacity:.15}50%{opacity:.72}}
+@keyframes xhWordSolid{to{opacity:1}}
+
+/* Stars */
+.xh-live-bg{position:fixed;inset:0;z-index:0;background:#000;overflow:hidden;pointer-events:none}
+.xh-live-bg::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.46) 0 1px,transparent 1.5px),radial-gradient(circle,rgba(255,255,255,.24) 0 1px,transparent 1.5px);background-size:150px 150px,230px 230px;background-position:20px 40px,95px 12px;opacity:.28;animation:xhStarDrift 46s linear infinite}
+.xh-glow{position:absolute;border-radius:50%;filter:blur(58px);background:radial-gradient(circle,rgba(255,255,255,.08),transparent 70%)}
+.xh-g1{width:560px;height:560px;top:-180px;left:-140px;animation:xhDriftA 38s ease-in-out infinite}
+.xh-g2{width:480px;height:480px;bottom:-160px;right:-100px;animation:xhDriftB 44s ease-in-out infinite}
+.xh-g3{width:420px;height:420px;top:42%;left:48%;animation:xhDriftC 50s ease-in-out infinite}
+@keyframes xhStarDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-150px,150px,0)}}
+@keyframes xhDriftA{0%,100%{transform:translate(0,0)}50%{transform:translate(70px,50px)}}
+@keyframes xhDriftB{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-46px)}}
+@keyframes xhDriftC{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,40px)}}
+
+/* Hero */
+.xh-hero{position:relative;min-height:100vh;padding:108px 20px 82px;display:grid;place-items:center;text-align:center;overflow:hidden;background:#000}
+.xh-hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.75) 67%,#000 100%),url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=90&w=2400&auto=format&fit=crop') center/cover no-repeat;filter:brightness(.68) saturate(.9) contrast(1.05);transform:scale(1.01)}
+.xh-hero::before{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;z-index:3;background:linear-gradient(90deg,transparent,rgba(255,255,255,.82),transparent);box-shadow:0 0 30px rgba(255,255,255,.45)}
+.xh-hero::after{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(circle at 50% 45%,rgba(0,0,0,.02) 0 23%,rgba(0,0,0,.52) 72%,#000 100%)}
+.xh-hero-content{position:relative;z-index:4;width:min(960px,calc(100% - 28px));display:flex;flex-direction:column;align-items:center;transform:translateY(-10px)}
+.xh-search-wrap{width:min(600px,96vw);position:relative;margin:0 auto 26px}
+.xh-search{display:flex;align-items:center;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);border-radius:15px;padding:7px;backdrop-filter:blur(14px);box-shadow:0 24px 70px rgba(0,0,0,.28)}
+.xh-search input{flex:1;height:48px;min-width:0;border-radius:12px;background:transparent;color:#fff;padding:0 14px;font-size:14px}
+.xh-search input::placeholder{color:rgba(255,255,255,.62)}
+.xh-search i{width:44px;text-align:center;color:#fff;opacity:.86;font-size:15px;order:2;flex:0 0 44px}
+.xh-results{display:none;position:absolute;left:0;right:0;top:calc(100% + 9px);z-index:25;background:rgba(7,7,7,.96);border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:8px;text-align:left;max-height:340px;overflow:auto;box-shadow:0 26px 80px rgba(0,0,0,.48);backdrop-filter:blur(14px)}
+.xh-results.show{display:block}
+.xh-result-item{display:block;width:100%;text-align:left;padding:13px;border-radius:12px;background:rgba(255,255,255,.045);color:#fff;margin-bottom:7px}
+.xh-result-item:last-child{margin-bottom:0}
+.xh-result-item strong{display:block;font-size:13px;line-height:1.25}
+.xh-result-item span{display:block;margin-top:4px;font-size:12px;color:#bdbdbd}
+.xh-title{margin:0;font-size:clamp(50px,8vw,112px);line-height:.9;letter-spacing:-.07em;font-weight:900;color:#fff}
+.xh-title span{display:block;margin-bottom:12px;font-size:clamp(15px,2vw,22px);letter-spacing:.42em;text-transform:uppercase;color:#e5e5e5;font-weight:700}
+.xh-hero-line{margin:22px auto 0;color:#d1d1d1;font-size:clamp(13px,1.45vw,17px);line-height:1.8;letter-spacing:.18em;text-transform:uppercase;font-weight:500;max-width:850px}
+.xh-hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:30px}
+.xh-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:50px;border-radius:12px;background:#fff;color:#000!important;padding:0 25px;font-size:13px;font-weight:800;letter-spacing:.03em;transition:transform .25s var(--ease),background .25s var(--ease)}
+.xh-btn:hover{background:#e8e8e8;transform:scale(1.035)}
+.xh-btn.secondary{background:rgba(255,255,255,.06)!important;color:#fff!important;border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(10px)}
+.xh-btn.secondary *{color:#fff!important}
+
+/* Layout */
+.xh-section{position:relative;padding:66px 0;background:transparent}
+.xh-section.compact{padding:42px 0}
+.xh-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:28px}
+.xh-head h2{margin:0;font-size:clamp(26px,3.4vw,42px);letter-spacing:-.04em;line-height:1.05;font-weight:850}
+.xh-head p{margin:0;max-width:620px;color:#cfcfcf;font-size:14px;line-height:1.7}
+.xh-kicker{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.055);border-radius:999px;padding:8px 11px;color:#e1e1e1;font-size:11px;font-weight:850;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.xh-dot{width:7px;height:7px;border-radius:50%;background:#e5e5e5;box-shadow:0 0 14px rgba(255,255,255,.24)}
+.xh-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.xh-tab{min-height:44px;border-radius:999px;padding:0 16px;background:rgba(255,255,255,.055);color:#fff;font-size:12px;font-weight:800;letter-spacing:.04em;display:inline-flex;align-items:center;gap:8px;transition:background .2s ease,transform .2s ease}
+.xh-tab.active,.xh-tab:hover{background:#fff!important;color:#000!important;transform:translateY(-2px)}
+.xh-tab.active *,.xh-tab:hover *{color:#000!important}
+
+/* User-facing content types */
+.xh-user-summary{border-radius:28px;background:rgba(7,7,7,.92);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden}
+.xh-summary-line{display:grid;grid-template-columns:68px 230px 1fr;gap:18px;align-items:start;padding:22px;border-bottom:1px solid rgba(255,255,255,.08)}
+.xh-summary-line:last-child{border-bottom:0}
+.xh-circle{width:48px;height:48px;border-radius:50%;background:#fff!important;color:#000!important;display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+.xh-circle *{color:#000!important}
+.xh-summary-line h3{margin:0;font-size:20px;letter-spacing:-.03em;line-height:1.05}
+.xh-summary-line p{margin:0;color:#d0d0d0;font-size:14px;line-height:1.75}
+.xh-mini-label{display:inline-flex;align-items:center;min-height:25px;border-radius:999px;background:rgba(255,255,255,.07);padding:0 10px;color:#e9e9e9;font-size:10px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;margin-top:10px}
+
+.xh-rules-layout{display:grid;grid-template-columns:330px minmax(0,1fr);gap:18px;align-items:start}
+.xh-rule-nav{position:sticky;top:18px;background:rgba(7,7,7,.92);border-radius:24px;padding:10px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.xh-rule-tab{width:100%;text-align:left;display:flex;align-items:center;gap:12px;min-height:54px;border-radius:16px;background:transparent;color:#fff;padding:0 13px;margin-bottom:5px;transition:background .2s ease,transform .2s ease}
+.xh-rule-tab:last-child{margin-bottom:0}
+.xh-rule-tab i{width:34px;height:34px;border-radius:50%;background:#fff!important;color:#000!important;display:grid;place-items:center;flex:0 0 auto}
+.xh-rule-tab i *{color:#000!important}
+.xh-rule-tab span{font-size:13px;font-weight:850}
+.xh-rule-tab small{display:block;color:#aaa;font-size:11px;margin-top:2px}
+.xh-rule-tab.active,.xh-rule-tab:hover{background:#141414;transform:translateX(2px)}
+.xh-rule-list{display:grid;gap:10px}
+.xh-rule-item{border-radius:20px;background:rgba(7,7,7,.92);border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);overflow:hidden}
+.xh-rule-head{width:100%;display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;text-align:left;background:transparent;color:#fff;padding:16px 18px}
+.xh-rule-head strong{font-size:18px;line-height:1.12;letter-spacing:-.025em}
+.xh-rule-head span span{display:block;margin-top:4px;color:#bababa;font-size:12px;line-height:1.45}
+.xh-rule-head em{font-style:normal;display:inline-flex;align-items:center;min-height:28px;border-radius:999px;background:rgba(255,255,255,.07);padding:0 10px;font-size:10px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#e9e9e9}
+.xh-rule-toggle{width:40px;height:40px;border-radius:50%;background:#fff!important;color:#000!important;display:grid;place-items:center;transition:transform .22s ease}
+.xh-rule-toggle *{color:#000!important}
+.xh-rule-item.open .xh-rule-toggle{transform:rotate(45deg)}
+.xh-rule-body{display:none;padding:0 18px 18px 86px;color:#d6d6d6;font-size:13px;line-height:1.72}
+.xh-rule-item.open .xh-rule-body{display:block}
+.xh-rule-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.xh-info{border-radius:14px;background:rgba(255,255,255,.045);padding:13px}
+.xh-info b{display:block;color:#fff;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.xh-info.wide{grid-column:1/-1}
+
+.xh-table{border-radius:24px;background:rgba(7,7,7,.92);overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.xh-table-row{display:grid;grid-template-columns:180px 1fr 1fr 1fr;border-bottom:1px solid rgba(255,255,255,.08)}
+.xh-table-row:last-child{border-bottom:0}
+.xh-table-cell{padding:16px;color:#d2d2d2;font-size:13px;line-height:1.62}
+.xh-table-cell b{display:block;color:#fff;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.xh-table-label{background:#111;color:#fff;font-weight:850}
+.xh-flow{border-radius:24px;background:rgba(7,7,7,.92);padding:10px 22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.xh-step{display:grid;grid-template-columns:58px 1fr 170px;gap:16px;align-items:start;padding:19px 0;border-bottom:1px solid rgba(255,255,255,.08);position:relative}
+.xh-step:last-child{border-bottom:0}
+.xh-step::before{content:"";position:absolute;left:28px;top:76px;bottom:-11px;width:2px;background:linear-gradient(180deg,rgba(255,255,255,.46),transparent)}
+.xh-step:last-child::before{display:none}
+.xh-step h3{margin:0 0 6px;font-size:20px;letter-spacing:-.03em}
+.xh-step p{margin:0;color:#cfcfcf;font-size:13px;line-height:1.7}
+.xh-step-tag{justify-self:end;display:inline-flex;align-items:center;min-height:32px;border-radius:999px;background:#151515;padding:0 12px;color:#eee;font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+.xh-scenarios{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.xh-scenario{background:rgba(7,7,7,.92);border-radius:22px;padding:18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.xh-scenario h3{margin:0 0 10px;font-size:20px;letter-spacing:-.03em}
+.xh-scenario p{margin:0;color:#cfcfcf;font-size:13px;line-height:1.68}
+.xh-scenario .xh-mini-label{margin-top:14px}
+.xh-checks{border-radius:24px;background:rgba(7,7,7,.92);padding:18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.xh-check-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.xh-check{display:flex;gap:11px;align-items:flex-start;padding:14px;border-radius:16px;background:rgba(255,255,255,.04);color:#d8d8d8;font-size:13px;line-height:1.55}
+.xh-check i{margin-top:2px;color:#fff}
+
+/* Console */
+.xh-control{display:none;position:fixed;inset:auto 18px 18px auto;width:min(470px,calc(100% - 36px));max-height:min(790px,calc(100vh - 36px));z-index:1000;background:rgba(8,8,8,.96);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:18px;box-shadow:0 28px 90px rgba(0,0,0,.55);backdrop-filter:blur(18px);overflow:auto}
+body.xh-unlocked .xh-control{display:block}
+.xh-control-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.xh-control-title{font-weight:900;font-size:14px;letter-spacing:.12em;text-transform:uppercase}
+.xh-control-note{margin-top:5px;color:#bdbdbd;font-size:12px;line-height:1.5}
+.xh-control-close{width:38px;height:38px;border-radius:50%;background:#fff!important;color:#000!important;display:grid;place-items:center}
+.xh-control-close *{color:#000!important}
+.xh-form{display:grid;gap:10px}
+.xh-label{display:block;margin:0 0 7px;color:#e8e8e8;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.xh-input,.xh-textarea,.xh-select{width:100%;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;padding:0 13px}
+.xh-input,.xh-select{height:44px}
+.xh-select option{background:#080808;color:#fff}
+.xh-textarea{min-height:82px;padding-top:12px;resize:vertical;line-height:1.5}
+.xh-control-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.xh-mini-btn{min-height:42px;border-radius:12px;background:#fff!important;color:#000!important;font-size:12px;font-weight:900;display:flex;gap:8px;align-items:center;justify-content:center}
+.xh-mini-btn *{color:#000!important}
+.xh-mini-btn.dark{background:#171717!important;color:#fff!important}
+.xh-mini-btn.dark *{color:#fff!important}
+.xh-toast{position:fixed;left:50%;bottom:22px;z-index:9999;transform:translateX(-50%) translateY(20px);max-width:min(430px,calc(100% - 44px));padding:12px 15px;border-radius:12px;background:#111;color:#fff;font-size:13px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
+.xh-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.xh-reveal{opacity:0;transform:translateY(28px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
+.xh-reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:1080px){
+  .xh-rules-layout{grid-template-columns:1fr}
+  .xh-rule-nav{position:relative;top:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .xh-table-row{grid-template-columns:1fr}
+  .xh-table-label{border-bottom:1px solid rgba(255,255,255,.08)}
+  .xh-step{grid-template-columns:58px 1fr}
+  .xh-step-tag{grid-column:2;justify-self:start}
+}
+@media(max-width:760px){
+  .xh-shell{width:min(100% - 24px,var(--max))}
+  .xh-hero{padding:96px 14px 66px}
+  .xh-title{font-size:clamp(42px,15vw,82px)}
+  .xh-hero-line{font-size:12px;letter-spacing:.14em}
+  .xh-head{display:block}.xh-head p{margin-top:12px}
+  .xh-section{padding:52px 0}
+  .xh-summary-line{grid-template-columns:50px 1fr;gap:12px}
+  .xh-summary-line p{grid-column:1/-1}
+  .xh-rule-nav,.xh-rule-grid,.xh-scenarios,.xh-check-grid{grid-template-columns:1fr}
+  .xh-rule-head{grid-template-columns:48px 1fr;gap:10px}
+  .xh-rule-head em{grid-column:2;justify-self:start}
+  .xh-rule-toggle{grid-column:1/-1;justify-self:start}
+  .xh-rule-body{padding:0 16px 16px}
+  .xh-control{inset:auto 10px 10px 10px;width:auto}
+}
+@media(prefers-reduced-motion:reduce){.xh-live-bg::before,.xh-glow,.xh-load-word,.xh-load-line span{animation:none!important}.xh-load-line span{transform:scaleX(1)}}
+</style>
+
+
+<div class="xh-loader" id="xhLoader" aria-hidden="true"><div class="xh-load-mark"><div class="xh-load-x">X</div><div class="xh-load-word">HORIZON</div><div class="xh-load-line"><span></span></div></div></div>
+<div class="xh-live-bg" aria-hidden="true"><span class="xh-glow xh-g1"></span><span class="xh-glow xh-g2"></span><span class="xh-glow xh-g3"></span></div>
+
+<div class="xh-page" id="xhPage">
+<main>
+<section class="xh-hero" id="home">
+  <div class="xh-hero-bg"></div>
+  <div class="xh-hero-content">
+    <div class="xh-search-wrap">
+      <div class="xh-search"><input id="xhSearch" type="search" placeholder="Search rules, posts, privacy, reports, safety" autocomplete="off"><i class="fa-solid fa-magnifying-glass"></i></div>
+      <div class="xh-results" id="xhResults"></div>
+    </div>
+    <h1 class="xh-title"><span>X Horizon</span>Platform Rules</h1>
+    <p class="xh-hero-line">Understand what you can do, what is not allowed, how to stay safe, and how X Horizon handles reports.</p>
+    <div class="xh-hero-actions">
+      <a class="xh-btn" href="#rules"><i class="fa-solid fa-list-check"></i> Read Rules</a>
+      <a class="xh-btn secondary" href="#reporting"><i class="fa-solid fa-flag"></i> How to Report</a>
+    </div>
+  </div>
+</section>
+
+<section class="xh-section" id="quick-understand">
+  <div class="xh-shell">
+    <div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> User guide</div><h2>Understand the platform in 4 simple rules</h2></div><p>This page is written for users. It explains how to post, learn, discuss, report, and stay safe on X Horizon.</p></div>
+    <div class="xh-user-summary xh-reveal">
+      <div class="xh-summary-line"><div class="xh-circle">01</div><div><h3>Be respectful</h3><span class="xh-mini-label">Community</span></div><p>Ask questions, debate ideas, and correct mistakes without insulting, humiliating, threatening, or targeting anyone.</p></div>
+      <div class="xh-summary-line"><div class="xh-circle">02</div><div><h3>Keep it space-related</h3><span class="xh-mini-label">Relevance</span></div><p>Posts should connect to astronomy, space science, missions, telescopes, observations, simulations, courses, tools, or X Horizon features.</p></div>
+      <div class="xh-summary-line"><div class="xh-circle">03</div><div><h3>Do not mislead people</h3><span class="xh-mini-label">Accuracy</span></div><p>Big claims need sources. Fiction, theories, AI images, and guesses must be labeled clearly so users do not confuse them with real science.</p></div>
+      <div class="xh-summary-line"><div class="xh-circle">04</div><div><h3>Protect safety and privacy</h3><span class="xh-mini-label">Safety</span></div><p>Never share private information or unsafe instructions involving lasers, Sun viewing, rockets, batteries, chemicals, or dangerous equipment.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="xh-section compact" id="rules">
+  <div class="xh-shell">
+    <div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> Rulebook</div><h2 id="chapterTitle">Respect &amp; Behavior</h2></div><p id="chapterText">Choose a section and open each rule to understand what users can do, what is not allowed, and what happens if a rule is broken.</p></div>
+    <div class="xh-rules-layout xh-reveal">
+      <div class="xh-rule-nav" id="ruleNav"></div>
+      <div class="xh-rule-list" id="ruleList"></div>
+    </div>
+  </div>
+</section>
+
+<section class="xh-section" id="allowed-table">
+  <div class="xh-shell">
+    <div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> Quick decision</div><h2>Allowed, needs review, removed</h2></div><p>This table helps users quickly know what is okay and what may be restricted.</p></div>
+    <div class="xh-table xh-reveal" id="permissionTable"></div>
+  </div>
+</section>
+
+<section class="xh-section" id="posting-check">
+  <div class="xh-shell">
+    <div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> Before posting</div><h2>Check your post before sharing</h2></div><p>Use this checklist to make sure your post helps other users instead of confusing them.</p></div>
+    <div class="xh-checks xh-reveal">
+      <div class="xh-check-grid">
+        <div class="xh-check"><i class="fa-solid fa-check"></i><span>Is your post related to space, science, observation, missions, or X Horizon?</span></div>
+        <div class="xh-check"><i class="fa-solid fa-check"></i><span>Did you add enough context so others can understand your question or answer?</span></div>
+        <div class="xh-check"><i class="fa-solid fa-check"></i><span>If you make a big claim, did you include a reliable source or say it is only your opinion?</span></div>
+        <div class="xh-check"><i class="fa-solid fa-check"></i><span>If your content includes an image, is it real, relevant, and not misleading?</span></div>
+        <div class="xh-check"><i class="fa-solid fa-check"></i><span>Did you avoid sharing personal information, private messages, passwords, exact addresses, or student details?</span></div>
+        <div class="xh-check"><i class="fa-solid fa-check"></i><span>Does your post avoid dangerous instructions or unsafe equipment advice?</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="xh-section" id="reporting">
+  <div class="xh-shell">
+    <div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> Reports</div><h2>How to report a problem</h2></div><p>Reporting helps keep the platform safe. Report only real rule problems, not people you simply disagree with.</p></div>
+    <div class="xh-flow xh-reveal">
+      <div class="xh-step"><div class="xh-circle">01</div><div><h3>Choose the reason</h3><p>Pick the closest reason: harassment, unsafe advice, fake science, scam link, private information, copied content, or off-topic spam.</p></div><span class="xh-step-tag">Report</span></div>
+      <div class="xh-step"><div class="xh-circle">02</div><div><h3>Add short context</h3><p>Explain what rule is broken. Keep it simple: what happened, where it happened, and why it is risky.</p></div><span class="xh-step-tag">Explain</span></div>
+      <div class="xh-step"><div class="xh-circle">03</div><div><h3>The report is reviewed</h3><p>X Horizon checks the post, context, source links, severity, and whether the user has repeated the same issue.</p></div><span class="xh-step-tag">Review</span></div>
+      <div class="xh-step"><div class="xh-circle">04</div><div><h3>Action is taken if needed</h3><p>The post may be corrected, hidden, removed, or the account may be restricted if the issue is serious.</p></div><span class="xh-step-tag">Action</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="xh-section" id="examples">
+  <div class="xh-shell">
+    <div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> Examples</div><h2>Common situations explained</h2></div><p>These examples help users understand how the rules work in real posts.</p></div>
+    <div class="xh-scenarios xh-reveal" id="scenarioGrid"></div>
+  </div>
+</section>
+
+<section class="xh-section" id="consequences">
+  <div class="xh-shell">
+    <div class="xh-head xh-reveal"><div><div class="xh-kicker"><span class="xh-dot"></span> Consequences</div><h2>What happens when rules are broken</h2></div><p>Most small mistakes can be fixed. Serious safety, privacy, scam, or harassment problems are handled faster.</p></div>
+    <div class="xh-flow xh-reveal">
+      <div class="xh-step"><div class="xh-circle">01</div><div><h3>Reminder</h3><p>For small mistakes such as unclear title, wrong tag, or missing source.</p></div><span class="xh-step-tag">Light</span></div>
+      <div class="xh-step"><div class="xh-circle">02</div><div><h3>Edit request</h3><p>For posts that can become useful after adding source, safety note, context, or better wording.</p></div><span class="xh-step-tag">Fix</span></div>
+      <div class="xh-step"><div class="xh-circle">03</div><div><h3>Post hidden or removed</h3><p>For misleading, unsafe, copied, abusive, spam, or private-information content.</p></div><span class="xh-step-tag">Remove</span></div>
+      <div class="xh-step"><div class="xh-circle">04</div><div><h3>Account restriction</h3><p>For repeated abuse, threats, scams, impersonation, doxxing, or dangerous instructions.</p></div><span class="xh-step-tag">Restrict</span></div>
+    </div>
+  </div>
+</section>
+</main>
+</div>
+
+<section class="xh-control" id="signalConsole" aria-hidden="true">
+  <div class="xh-control-head">
+    <div><div class="xh-control-title">Signal Console</div><div class="xh-control-note">Add or preview user-facing platform rules.</div></div>
+    <button class="xh-control-close" id="lockConsole" type="button" aria-label="Lock"><i class="fa-solid fa-lock"></i></button>
+  </div>
+  <div class="xh-form">
+    <div><label class="xh-label" for="editCategory">Section</label><select class="xh-select" id="editCategory"><option value="behavior">Respect &amp; Behavior</option><option value="posting">Posting Rules</option><option value="accuracy">Science &amp; Accuracy</option><option value="privacy">Privacy &amp; Safety</option><option value="reports">Reports &amp; Consequences</option><option value="accounts">Account Use</option></select></div>
+    <div><label class="xh-label" for="editTitle">Rule title</label><input class="xh-input" id="editTitle" placeholder="User-facing rule title"></div>
+    <div><label class="xh-label" for="editLevel">Severity</label><select class="xh-select" id="editLevel"><option>Basic</option><option>Important</option><option>Serious</option><option>Critical</option></select></div>
+    <div><label class="xh-label" for="editSummary">Short summary</label><textarea class="xh-textarea" id="editSummary" placeholder="Short explanation shown in rule header"></textarea></div>
+    <div><label class="xh-label" for="editAllowed">What users can do</label><textarea class="xh-textarea" id="editAllowed" placeholder="Allowed behavior"></textarea></div>
+    <div><label class="xh-label" for="editBlocked">What is not allowed</label><textarea class="xh-textarea" id="editBlocked" placeholder="Blocked behavior"></textarea></div>
+    <div><label class="xh-label" for="editAction">What happens</label><textarea class="xh-textarea" id="editAction" placeholder="Warning, edit request, removal, restriction..."></textarea></div>
+    <div><label class="xh-label" for="editTags">Tags</label><input class="xh-input" id="editTags" placeholder="Comma separated"></div>
+    <div class="xh-control-actions"><button class="xh-mini-btn" id="addItem" type="button"><i class="fa-solid fa-plus"></i> Add</button><button class="xh-mini-btn dark" id="previewItem" type="button"><i class="fa-solid fa-eye"></i> Preview</button><button class="xh-mini-btn dark" id="resetItems" type="button"><i class="fa-solid fa-rotate-left"></i> Reset</button></div>
+  </div>
+</section>
+<div class="xh-toast" id="xhToast">Done</div>
+
+<script type="application/json" id="xhSeedData">
+{
+  "behavior":[
+    {"order":"B1","title":"Respect other users","level":"Critical","summary":"Treat everyone as a learner. Do not attack people personally.","allowed":"Ask questions, disagree, correct mistakes, and explain your view calmly.","blocked":"Harassment, hate, threats, bullying, mocking beginners, or insulting people instead of discussing ideas.","action":"Abusive content may be removed. Serious or repeated abuse can restrict the account.","tags":["Respect","Behavior","Community"]},
+    {"order":"B2","title":"Debate ideas, not people","level":"Important","summary":"Strong disagreement is allowed when it stays focused on the topic.","allowed":"Say why an answer is wrong, add a source, show a calculation, or explain a better method.","blocked":"Name-calling, dogpiling, humiliating users, or following someone across posts to provoke them.","action":"Comments may be edited, hidden, or removed if they become personal attacks.","tags":["Debate","Learning","Respect"]},
+    {"order":"B3","title":"Keep language clean and safe","level":"Important","summary":"Use clear words that make the platform welcoming and readable.","allowed":"Direct feedback, serious criticism, and correction written in a respectful way.","blocked":"Sexual harassment, violent threats, abusive slurs, repeated profanity toward users, or aggressive intimidation.","action":"The platform can remove the content and limit posting access if needed.","tags":["Tone","Safety","Comments"]},
+    {"order":"B4","title":"Do not impersonate others","level":"Serious","summary":"Do not pretend to be another person, official agency, astronaut, teacher, moderator, or X Horizon staff.","allowed":"Fan accounts or opinion posts are allowed when they are clearly labeled and not misleading.","blocked":"Fake official announcements, false badges, fake staff claims, or misleading identity information.","action":"The account or content may be renamed, removed, or restricted.","tags":["Identity","Trust","Impersonation"]}
+  ],
+  "posting":[
+    {"order":"P1","title":"Post useful space-related content","level":"Basic","summary":"Posts should help users learn or discuss space, astronomy, missions, observation, or X Horizon.","allowed":"Questions, guides, observations, telescope help, mission discussion, course feedback, tool ideas, and science explanations.","blocked":"Random spam, unrelated promotion, repeated low-effort posts, or content that has nothing to do with the platform.","action":"Off-topic posts may be moved, hidden, or removed.","tags":["Posting","Relevance","Learning"]},
+    {"order":"P2","title":"Use clear titles","level":"Basic","summary":"A good title helps other users understand your post quickly.","allowed":"Titles like 'Need help with Moon photo focus' or 'Why does Mars look red?'","blocked":"Clickbait, all-caps shouting, misleading titles, or titles unrelated to the post.","action":"You may be asked to edit the title, or the post may be renamed/hidden.","tags":["Title","Clarity","Search"]},
+    {"order":"P3","title":"Do not spam","level":"Serious","summary":"Do not flood the platform with repeated posts, links, ads, or irrelevant content.","allowed":"Share relevant resources or links when they help the discussion.","blocked":"Repeated promotions, scam links, fake giveaways, mass comments, duplicate posts, or link dumping.","action":"Spam is removed and accounts may be restricted.","tags":["Spam","Links","Quality"]},
+    {"order":"P4","title":"Credit copied material","level":"Important","summary":"Do not claim someone else’s article, image, lesson, or observation as your own.","allowed":"Summarize in your own words, quote small parts when needed, and credit/link the original source.","blocked":"Copy-pasting full articles, book pages, paid content, stolen images, or removing credit from someone’s work.","action":"Copied content may be removed or sent back for rewriting with credit.","tags":["Credit","Copyright","Images"]}
+  ],
+  "accuracy":[
+    {"order":"S1","title":"Add sources for big claims","level":"Important","summary":"If you claim a discovery, mission update, space event, or physics fact, support it with a reliable source.","allowed":"Use sources from space agencies, universities, textbooks, peer-reviewed papers, public mission pages, or clear calculations.","blocked":"Fake facts, viral screenshots, AI-generated claims, unsourced mission news, or conspiracy claims presented as truth.","action":"Unsourced claims may be labeled, questioned, hidden, or removed if misleading.","tags":["Sources","Science","Facts"]},
+    {"order":"S2","title":"Label opinions, guesses, and fiction","level":"Basic","summary":"Speculation is allowed, but it must not look like confirmed science.","allowed":"Use labels like opinion, theory, idea, fiction, concept, not confirmed, or possible explanation.","blocked":"Posting fiction as real news, fake astronaut logs, fake discoveries, or invented mission alerts.","action":"The content may be relabeled, moved, or removed if it misleads users.","tags":["Speculation","Fiction","Labels"]},
+    {"order":"S3","title":"Be honest about images","level":"Important","summary":"Images should not trick users about what is real, edited, AI-generated, or captured by telescope.","allowed":"Share telescope images with equipment/context, concept art with labels, and AI images clearly marked as AI.","blocked":"Stolen images, AI images presented as real, fake telescope captures, or irrelevant pictures used to mislead.","action":"The image may be removed or require a label/source.","tags":["Images","AI","Astrophotography"]},
+    {"order":"S4","title":"Use units and context in calculations","level":"Basic","summary":"Numbers should include units, assumptions, and a simple explanation.","allowed":"Show formulas, units, constants, and what the calculation estimates.","blocked":"Fake precision, unitless numbers, misleading conversions, or calculations used to confuse beginners.","action":"Users may be asked to add units or correct the calculation.","tags":["Units","Math","Physics"]}
+  ],
+  "privacy":[
+    {"order":"PR1","title":"Do not share private information","level":"Critical","summary":"Protect your own privacy and other users’ privacy.","allowed":"Share broad, non-sensitive context only when useful, such as country/region for sky visibility.","blocked":"Phone numbers, exact addresses, private emails, school records, passwords, tokens, private messages, or personal data of others.","action":"Private information is removed quickly and serious cases can restrict accounts.","tags":["Privacy","Personal Data","Safety"]},
+    {"order":"PR2","title":"Stay safe with Sun viewing","level":"Critical","summary":"The Sun can permanently damage eyes and equipment if viewed unsafely.","allowed":"Discuss certified solar filters, safe eclipse glasses, projection methods, and supervised safety guidance.","blocked":"Telling users to look directly at the Sun, use unsafe DIY filters, or point telescopes at the Sun without proper protection.","action":"Unsafe solar advice may be removed immediately.","tags":["Sun","Eclipse","Eye Safety"]},
+    {"order":"PR3","title":"No unsafe equipment instructions","level":"Critical","summary":"Some topics can hurt people if explained as step-by-step instructions.","allowed":"General education about rockets, lasers, batteries, electricity, pressure systems, and spacecraft safety.","blocked":"Dangerous build instructions, explosive mixtures, laser misuse, unsafe battery modification, or bypassing safety rules.","action":"Dangerous content is removed and severe cases may restrict the account.","tags":["Lasers","Rockets","Batteries"]},
+    {"order":"PR4","title":"Protect young learners","level":"Critical","summary":"X Horizon should stay safe for students and younger learners.","allowed":"Public, age-appropriate learning and respectful classroom-style discussion.","blocked":"Private contact pressure, grooming behavior, sexual comments, personal data requests, or harassment of minors.","action":"Severe violations are removed immediately and accounts may be blocked.","tags":["Students","Minors","Protection"]}
+  ],
+  "reports":[
+    {"order":"R1","title":"Report real rule problems","level":"Basic","summary":"Use reports to protect the platform, not to silence people you disagree with.","allowed":"Report harassment, scams, dangerous advice, fake science, privacy exposure, spam, or copied content.","blocked":"False reports, revenge reports, mass-reporting correct information, or using reports to attack someone.","action":"Bad-faith report abuse can be ignored or restricted.","tags":["Reports","Fairness","Safety"]},
+    {"order":"R2","title":"Small mistakes can be fixed","level":"Basic","summary":"Not every mistake leads to punishment.","allowed":"Edit a title, add a source, correct wording, add safety warning, or clarify speculation.","blocked":"Refusing to fix repeated misleading or unsafe posts after warnings.","action":"The platform may ask for edits before hiding or removing the post.","tags":["Correction","Learning","Edits"]},
+    {"order":"R3","title":"Serious abuse gets stronger action","level":"Serious","summary":"Threats, scams, harassment, doxxing, impersonation, and dangerous instructions are treated more strictly.","allowed":"Appeal respectfully if you believe action was a mistake.","blocked":"Threatening moderators, repeating removed content, ban evasion, or continuing abuse after warning.","action":"Content may be removed and account access may be limited.","tags":["Consequences","Restriction","Appeal"]},
+    {"order":"R4","title":"Appeals must be respectful","level":"Important","summary":"If your content is removed, explain calmly why you think it should be reviewed.","allowed":"Give context, provide sources, accept mistakes, and explain what you will fix.","blocked":"Threats, insults, repeated appeal spam, or attacking users/moderators.","action":"Abusive appeals may be closed without further review.","tags":["Appeals","Review","Respect"]}
+  ],
+  "accounts":[
+    {"order":"A1","title":"Use your account honestly","level":"Important","summary":"Do not use accounts to manipulate the platform.","allowed":"Use your account for learning, posting, saving progress, and joining discussions.","blocked":"Fake reviews, vote manipulation, ban evasion, mass spam accounts, or pretending to be multiple people to win arguments.","action":"Fake activity may be removed and accounts may be restricted.","tags":["Accounts","Honesty","Spam"]},
+    {"order":"A2","title":"Keep login details private","level":"Critical","summary":"Never share passwords, account tokens, recovery codes, or private login links.","allowed":"Use official login/recovery methods and keep account information private.","blocked":"Asking other users for passwords, sharing credentials, or posting private access details.","action":"Sensitive data is removed quickly and suspicious behavior may be restricted.","tags":["Login","Security","Privacy"]},
+    {"order":"A3","title":"Do not use bots for abuse","level":"Serious","summary":"Automation must not damage discussions, ratings, reports, or content quality.","allowed":"Normal browsing and approved helpful tools that do not spam or manipulate the platform.","blocked":"Spam bots, fake rating systems, report flooding, scraping abuse, mass comments, or automated harassment.","action":"Bot abuse can be blocked, removed, and restricted.","tags":["Bots","Automation","Abuse"]},
+    {"order":"A4","title":"Follow section purpose","level":"Basic","summary":"Each part of X Horizon has a purpose, and posts should fit where they are placed.","allowed":"Use course areas for learning, community areas for discussion, tools for calculations/simulations, and feedback areas for bugs/ideas.","blocked":"Posting the same thing everywhere, hiding promotion inside learning sections, or misusing report/feedback tools.","action":"Posts may be moved, merged, or removed if placed incorrectly.","tags":["Sections","Navigation","Quality"]}
+  ]
+}
+</script>
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+const fallbackFirebaseConfig={apiKey:"AIzaSyAHcR5KPQcn4bCAnRHRVvshwge65ilqFjs",authDomain:"astro-x-08.firebaseapp.com",projectId:"astro-x-08",storageBucket:"astro-x-08.firebasestorage.app",messagingSenderId:"707443922110",appId:"1:707443922110:web:ed5c454960051092edfaef",measurementId:"G-4S9NDS5V92"};
+const firebaseConfig=window.XHORIZON_FIREBASE_CONFIG||window.XHorizonFirebaseConfig||fallbackFirebaseConfig;
+function configured(cfg){return cfg&&cfg.apiKey&&!String(cfg.apiKey).includes("YOUR_")&&cfg.projectId&&!String(cfg.projectId).includes("YOUR_");}
+let app=null,auth=null,functions=null;
+try{if(configured(firebaseConfig)){app=getApps().length?getApps()[0]:initializeApp(firebaseConfig);auth=getAuth(app);functions=getFunctions(app);}}catch(error){console.error("Firebase initialization failed:",error);}
+if(configured(firebaseConfig)&&!window.XHorizonAdmin){window.XHorizonAdmin={async unlock(key,done){const cleanKey=String(key||"").trim();if(!cleanKey||!auth||!functions)return false;try{const verifyAdminKey=httpsCallable(functions,"verifyAdminKey");const result=await verifyAdminKey({key:cleanKey});const data=result&&result.data?result.data:{};const customToken=data.token||data.customToken||data.firebaseToken||"";if(customToken)await signInWithCustomToken(auth,customToken);const user=auth.currentUser;if(!user)return false;const tokenResult=await user.getIdTokenResult(true);const allowed=tokenResult&&tokenResult.claims&&tokenResult.claims.admin===true;if(allowed){document.body.classList.add("xh-unlocked");if(typeof done==="function")done();return true;}return false;}catch(error){console.error("X Horizon unlock failed:",error);return false;}}};}
+if(auth){onAuthStateChanged(auth,async user=>{if(!user)return;try{const tokenResult=await user.getIdTokenResult(true);if(tokenResult&&tokenResult.claims&&tokenResult.claims.admin===true)document.body.classList.add("xh-unlocked");}catch(error){console.error("State check failed:",error);}});}
+window.XH_LOCK=async function(){try{if(auth&&auth.currentUser)await signOut(auth);}catch(error){console.error(error);}document.body.classList.remove("xh-unlocked");};
+</script>
+
+<script>
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s);const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const toastEl=$('#xhToast');
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');setTimeout(()=>toastEl.classList.remove('show'),1800)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function hideLoader(){const l=$('#xhLoader');if(l)l.classList.add('done');document.body.classList.add('xh-ready')}
+window.addEventListener('load',()=>setTimeout(hideLoader,2400));
+setTimeout(hideLoader,3900);
+
+const revealObs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+$$('.xh-reveal').forEach(el=>revealObs.observe(el));
+
+const seed=JSON.parse($('#xhSeedData').textContent||'{}');
+const storageKey='xhPlatformRulesForUsersV1';
+let data=loadData();
+let currentSection='behavior';
+
+function loadData(){try{return JSON.parse(localStorage.getItem(storageKey)||'null')||seed}catch(e){return seed}}
+function saveData(){localStorage.setItem(storageKey,JSON.stringify(data))}
+function allItems(){return Object.keys(data).flatMap(k=>(data[k]||[]).map((x,i)=>({...x,section:k,idx:i})))}
+function sectionTitle(ch){return {behavior:'Respect & Behavior',posting:'Posting Rules',accuracy:'Science & Accuracy',privacy:'Privacy & Safety',reports:'Reports & Consequences',accounts:'Account Use'}[ch]||'Platform Rules'}
+function sectionText(ch){return {
+behavior:'How users should treat each other during discussion and correction.',
+posting:'What users can post and how to keep posts useful.',
+accuracy:'How to avoid fake science, misleading images, and unsupported claims.',
+privacy:'How to protect personal information and avoid unsafe advice.',
+reports:'How users can report problems and what happens after violations.',
+accounts:'How users should use accounts honestly and safely.'
+}[ch]||''}
+function iconFor(ch){return {behavior:'fa-handshake-angle',posting:'fa-pen-to-square',accuracy:'fa-atom',privacy:'fa-shield-heart',reports:'fa-flag',accounts:'fa-user-check'}[ch]||'fa-list-check'}
+
+function render(){
+  $('#chapterTitle').textContent=sectionTitle(currentSection);
+  $('#chapterText').textContent=sectionText(currentSection);
+  renderNav();
+  renderRules();
+  renderTables();
+  renderScenarios();
+}
+function renderNav(){
+  const sections=['behavior','posting','accuracy','privacy','reports','accounts'];
+  $('#ruleNav').innerHTML=sections.map(ch=>`<button class="xh-rule-tab ${ch===currentSection?'active':''}" type="button" data-section="${ch}"><i class="fa-solid ${iconFor(ch)}"></i><span>${esc(sectionTitle(ch))}<small>${esc((data[ch]||[]).length)} rules</small></span></button>`).join('');
+}
+function renderRules(){
+  const items=data[currentSection]||[];
+  $('#ruleList').innerHTML=items.map((item,idx)=>ruleTemplate(item,currentSection,idx)).join('') || '<div class="xh-rule-item open"><button class="xh-rule-head"><span class="xh-circle">00</span><span><strong>No rules yet</strong><span>Add one from the Signal Console.</span></span><em>Empty</em></button></div>';
+}
+function ruleTemplate(item,ch,idx){
+  const tags=(item.tags||[]).map(t=>`<span class="xh-mini-label">${esc(t)}</span>`).join('');
+  return `<article class="xh-rule-item ${idx===0?'open':''}">
+    <button class="xh-rule-head" type="button" data-toggle-rule>
+      <span class="xh-circle">${esc(item.order||String(idx+1).padStart(2,'0'))}</span>
+      <span><strong>${esc(item.title)}</strong><span>${esc(item.summary||'')}</span></span>
+      <em>${esc(item.level||'Basic')}</em>
+      <span class="xh-rule-toggle"><i class="fa-solid fa-plus"></i></span>
+    </button>
+    <div class="xh-rule-body">
+      <div class="xh-rule-grid">
+        <div class="xh-info"><b>What users can do</b>${esc(item.allowed||'Safe, useful, respectful platform behavior.')}</div>
+        <div class="xh-info"><b>Not allowed</b>${esc(item.blocked||'Behavior that harms trust, safety, privacy, or learning.')}</div>
+        <div class="xh-info wide"><b>What happens</b>${esc(item.action||'The platform may ask for edits, hide content, remove content, or restrict accounts depending on severity.')}</div>
+      </div>
+      <div>${tags}</div>
+    </div>
+  </article>`;
+}
+function renderTables(){
+  const rows=[
+    ['Allowed','Respectful questions, sourced answers, telescope help, mission discussion, observations, learning feedback.','Keep visible and encourage helpful replies.','Safe'],
+    ['Needs edit','Missing source, unclear title, wrong section, speculation not labeled, image needs context, small mistake.','Ask user to edit or add clarification.','Fix'],
+    ['Removed','Harassment, hate, scam links, copied content, unsafe instructions, fake official claims, private information.','Hide or remove content quickly.','Remove'],
+    ['Restricted','Repeated abuse, threats, doxxing, impersonation, bot spam, dangerous behavior, evading previous action.','Limit account access or block further abuse.','Restrict']
+  ];
+  $('#permissionTable').innerHTML=rows.map(r=>`<div class="xh-table-row"><div class="xh-table-cell xh-table-label">${esc(r[0])}</div><div class="xh-table-cell"><b>Meaning</b>${esc(r[1])}</div><div class="xh-table-cell"><b>Platform response</b>${esc(r[2])}</div><div class="xh-table-cell"><b>Status</b>${esc(r[3])}</div></div>`).join('');
+}
+function renderScenarios(){
+  const s=[
+    ['User posts a question about telescope focus','Allowed. Other users should ask for telescope model, target, eyepiece/camera, and sky conditions.','Allowed'],
+    ['User posts a fake “NASA confirmed aliens” image','Needs source or removal. Big claims must be verified and images must not mislead users.','Review / Remove'],
+    ['User insults a beginner for asking a simple question','Not allowed. Correction is welcome, humiliation is not.','Remove'],
+    ['User shares unsafe solar viewing advice','Remove quickly or correct with certified solar-filter safety information.','Critical'],
+    ['User shares a space-fiction story','Allowed if labeled as fiction or concept, not presented as real science.','Allowed with label'],
+    ['User reports someone just because they disagree','Not a valid report. Reports are for real rule issues, not debate control.','Rejected']
+  ];
+  $('#scenarioGrid').innerHTML=s.map(x=>`<article class="xh-scenario"><h3>${esc(x[0])}</h3><p>${esc(x[1])}</p><span class="xh-mini-label">${esc(x[2])}</span></article>`).join('');
+}
+
+document.addEventListener('click',e=>{
+  const section=e.target.closest('[data-section]');
+  if(section){currentSection=section.dataset.section;render();return}
+  const toggle=e.target.closest('[data-toggle-rule]');
+  if(toggle){toggle.closest('.xh-rule-item').classList.toggle('open');return}
+});
+
+const search=$('#xhSearch'),results=$('#xhResults');
+function runSearch(q){
+  const value=String(q||'').trim().toLowerCase();results.innerHTML='';
+  if(!value){results.classList.remove('show');return}
+  const matches=allItems().filter(x=>[x.title,x.summary,x.allowed,x.blocked,x.action,x.level,(x.tags||[]).join(' '),sectionTitle(x.section)].join(' ').toLowerCase().includes(value)).slice(0,12);
+  if(!matches.length){results.innerHTML='<button class="xh-result-item" type="button"><strong>No result</strong><span>Try respect, post, source, privacy, safety, report, or account.</span></button>';results.classList.add('show');return}
+  results.innerHTML=matches.map((x,i)=>`<button class="xh-result-item" type="button" data-search-index="${i}"><strong>${esc(x.title)}</strong><span>${esc(sectionTitle(x.section))} · ${esc(x.level||'Basic')}</span></button>`).join('');
+  results.classList.add('show');
+  $$('[data-search-index]',results).forEach((btn,i)=>btn.addEventListener('click',()=>{const item=matches[i];currentSection=item.section;render();setTimeout(()=>{const rules=$$('.xh-rule-item');rules.forEach(c=>c.classList.remove('open'));if(rules[item.idx])rules[item.idx].classList.add('open')},0);document.querySelector('#rules').scrollIntoView({behavior:'smooth'});results.classList.remove('show');search.value=''}));
+}
+function waitForUnlockSystem(){return new Promise(resolve=>{if(window.XHorizonAdmin&&typeof window.XHorizonAdmin.unlock==='function')return resolve(window.XHorizonAdmin);let tries=0;const timer=setInterval(()=>{tries++;if(window.XHorizonAdmin&&typeof window.XHorizonAdmin.unlock==='function'){clearInterval(timer);resolve(window.XHorizonAdmin)}else if(tries>12){clearInterval(timer);resolve(null)}},120)})}
+async function handleSearchSubmit(){
+  const value=search.value.trim();
+  if(!value){runSearch('');return}
+  search.disabled=true;
+  try{const bridge=await waitForUnlockSystem();if(bridge&&typeof bridge.unlock==='function'){const ok=await Promise.resolve(bridge.unlock(value,()=>{document.body.classList.add('xh-unlocked');toast('Signal Console opened')}));if(ok){search.value='';results.classList.remove('show');return}}}catch(error){console.error('Unlock failed:',error)}finally{search.disabled=false}
+  runSearch(value);
+}
+search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();handleSearchSubmit()}});
+search.addEventListener('input',()=>runSearch(search.value));
+document.addEventListener('click',e=>{if(!e.target.closest('.xh-search-wrap'))results.classList.remove('show')});
+
+function readConsoleItem(){
+  const cat=$('#editCategory').value;
+  return {
+    order:String((data[cat]||[]).length+1).padStart(2,'0'),
+    title:$('#editTitle').value.trim()||'New User Rule',
+    level:$('#editLevel').value,
+    summary:$('#editSummary').value.trim()||'Useful user-facing rule summary.',
+    allowed:$('#editAllowed').value.trim()||'Safe, useful, respectful platform behavior.',
+    blocked:$('#editBlocked').value.trim()||'Behavior that harms trust, safety, privacy, or learning.',
+    action:$('#editAction').value.trim()||'The platform may ask for edits, hide content, remove content, or restrict accounts depending on severity.',
+    tags:$('#editTags').value.split(',').map(s=>s.trim()).filter(Boolean)
+  };
+}
+function clearConsole(){['editTitle','editSummary','editAllowed','editBlocked','editAction','editTags'].forEach(id=>$('#'+id).value='');$('#editLevel').value='Basic'}
+$('#previewItem').addEventListener('click',()=>{const cat=$('#editCategory').value;currentSection=cat;render();const stack=$('#ruleList');stack.insertAdjacentHTML('afterbegin',ruleTemplate(readConsoleItem(),cat,0));stack.querySelector('.xh-rule-item').classList.add('open');document.querySelector('#rules').scrollIntoView({behavior:'smooth'});toast('Preview shown')});
+$('#addItem').addEventListener('click',()=>{const cat=$('#editCategory').value;data[cat]=data[cat]||[];data[cat].push(readConsoleItem());saveData();currentSection=cat;render();clearConsole();toast('Rule added')});
+$('#resetItems').addEventListener('click',()=>{data=JSON.parse(JSON.stringify(seed));saveData();render();toast('Platform rules reset')});
+$('#lockConsole').addEventListener('click',()=>{if(window.XH_LOCK)window.XH_LOCK();else document.body.classList.remove('xh-unlocked');toast('Locked')});
+render();
+})();
+</script>
