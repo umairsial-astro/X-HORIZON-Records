@@ -1,0 +1,1447 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X HORIZON Live Events</title>
+<style>
+  html,body{margin:0!important;padding:0!important;width:100%!important;background:#000!important;overflow-x:hidden!important;overflow-y:auto!important}
+  #xhLiveFrame{display:block;width:100%;height:700px;min-height:0;border:0!important;margin:0!important;padding:0!important;background:#000!important;overflow:hidden!important}
+</style>
+
+
+<iframe id="xhLiveFrame" title="X HORIZON Live Events" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot; /&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+&lt;meta name=&quot;color-scheme&quot; content=&quot;dark&quot; /&gt;
+&lt;title&gt;X HORIZON Live Events&lt;/title&gt;
+&lt;style&gt;
+  :root{
+    color-scheme: dark;
+    forced-color-adjust: none;
+    --bg:#000;--panel:#0a0a0a;--panel2:#111;--border:#262626;--border2:#525252;
+    --text:#fff;--muted:#a3a3a3;--muted2:#737373;--muted3:#525252;--red:#dc2626;--amber:#f59e0b;--blue:#60a5fa;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,&quot;Segoe UI&quot;,Roboto,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  :focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:6px}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .wrap{max-width:1280px;margin:0 auto;padding:24px 16px 40px}
+  @media(min-width:640px){.wrap{padding:40px 24px}}
+
+  /* ---------- Header ---------- */
+  .header{display:flex;flex-direction:column;gap:12px}
+  .header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand .logo{display:flex;height:36px;width:36px;flex-shrink:0;align-items:center;justify-content:center;border-radius:12px;background:#fff;color:#000}
+  .brand h1{font-size:22px;font-weight:700;letter-spacing:.02em}
+  @media(min-width:640px){.brand h1{font-size:26px}}
+  .brand-sub{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);margin-top:2px}
+  .header-clocks{display:flex;gap:18px}
+  .clock-block{display:flex;flex-direction:column;align-items:flex-end}
+  .clock-label{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted3)}
+  .clock-value{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;color:#e5e5e5;font-variant-numeric:tabular-nums}
+  .sub{font-size:13px;color:var(--muted2)}
+  .actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .conn-dot{font-size:11px;color:#4ade80;white-space:nowrap}
+  .updated{font-size:12px;color:var(--muted3)}
+  .src-tag{display:inline-flex;align-items:center;font-size:11px;color:var(--muted3);border:1px solid var(--border);border-radius:6px;padding:3px 8px 3px 6px}
+  .src-tag .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:5px}
+  .src-tag.live{color:#4ade80;border-color:#14532d}
+  .src-tag.cached{color:#fbbf24;border-color:#78350f}
+  .src-tag.snapshot{color:var(--muted2);border-color:var(--border)}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);padding:8px 12px;font-size:14px;color:#e5e5e5;cursor:pointer;transition:.2s;font-family:inherit}
+  .btn:hover{border-color:var(--border2);background:#1f1f1f}
+  .btn:disabled{opacity:.6;cursor:default}
+  .btn svg{width:16px;height:16px}
+  .btn.spinning svg{animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .error{margin-top:16px;display:flex;align-items:center;gap:8px;border-radius:8px;border:1px solid #7f1d1d;background:rgba(127,29,29,.4);padding:12px 16px;font-size:14px;color:#fca5a5}
+  .notice{margin-top:16px;display:flex;align-items:center;gap:8px;border-radius:8px;border:1px solid #78350f;background:rgba(120,53,15,.25);padding:10px 14px;font-size:13px;color:#fbbf24}
+  .notice svg{width:16px;height:16px;flex-shrink:0}
+
+  /* ---------- Status overview ---------- */
+  .stat-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:24px}
+  @media(min-width:640px){.stat-bar{grid-template-columns:repeat(6,1fr)}}
+  .stat-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:10px;border:1px solid var(--border);background:var(--panel);padding:12px 6px;text-align:center;transition:.15s}
+  .stat-btn:hover{border-color:var(--border2)}
+  .stat-btn.active{border-color:#fff;background:#171717}
+  .stat-value{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+  .stat-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2)}
+
+  /* ---------- Search + filters ---------- */
+  .controls-bar{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+  .search-wrap{position:relative;display:flex}
+  .search-input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:10px 36px 10px 12px;color:#fff;font-size:14px;font-family:inherit}
+  .search-input::placeholder{color:var(--muted3)}
+  .search-clear{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--muted2);font-size:18px;cursor:pointer;padding:6px 10px;line-height:1;border-radius:6px}
+  .search-clear:hover{color:#fff}
+  .filter-group{display:flex;gap:8px;flex-wrap:wrap}
+  .filter-select{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:#e5e5e5;font-size:12.5px;font-family:inherit;max-width:100%}
+  .date-tabs{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .date-tab{all:unset;box-sizing:border-box;cursor:pointer;flex-shrink:0;font-size:12px;border:1px solid var(--border);border-radius:999px;padding:7px 14px;color:var(--muted);transition:.15s;white-space:nowrap}
+  .date-tab:hover{border-color:var(--border2)}
+  .date-tab.active{background:#fff;color:#000;border-color:#fff}
+
+  .label{display:flex;align-items:center;gap:8px;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);margin-bottom:12px}
+  .label svg{width:14px;height:14px}
+
+  /* ---------- Main stage ---------- */
+  .stage{position:relative;overflow:hidden;border-radius:24px;border:1px solid var(--border);background:var(--panel)}
+  .media{position:relative;aspect-ratio:16/9;width:100%;overflow:hidden;background:#000}
+  .media .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.4}
+  .media .grad{position:absolute;inset:0;background:linear-gradient(to top,#000,rgba(0,0,0,.6),rgba(0,0,0,.3))}
+  .badge-live{position:absolute;top:16px;left:16px;display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--red);z-index:2}
+  .badge-live .dot{height:8px;width:8px;border-radius:50%;background:#fff;animation:pulse 1.5s infinite}
+  .badge-unknown{position:absolute;top:16px;left:16px;display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#000;background:var(--amber);z-index:2}
+  .badge-unknown svg{width:14px;height:14px}
+  .badge-next{border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.4);padding:4px 12px;border-radius:999px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;backdrop-filter:blur(4px);display:inline-flex;align-items:center;gap:6px}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .stage-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px;z-index:2}
+  .play-btn{display:flex;height:64px;width:64px;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(4px)}
+  .play-btn svg{width:28px;height:28px;fill:#fff}
+  .watch-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500}
+  .stage-sources{position:absolute;left:16px;bottom:16px;z-index:7;display:flex;align-items:center;gap:6px;flex-wrap:wrap;max-width:calc(100% - 32px)}
+  .stage-source-mini{display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 9px;border:1px solid rgba(255,255,255,.28);border-radius:8px;background:rgba(0,0,0,.72);color:#fff;cursor:pointer;font:600 11px/1 ui-sans-serif,system-ui,sans-serif;backdrop-filter:blur(5px)}
+  .stage-source-mini:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.55)}
+  .stage-source-mini svg{width:13px;height:13px;flex:0 0 auto}
+  .stage-source-mini.official{border-color:rgba(74,222,128,.45)}
+  .stage-source-mini.external{color:#d4d4d4}
+  .stage-source-label{font-size:10px;color:var(--muted2);margin-right:2px;text-transform:uppercase;letter-spacing:.08em}
+  .stage-source-playing{position:absolute;right:16px;bottom:16px;z-index:7;display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:7px;background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.2);font-size:10px;color:#d4d4d4}
+  .no-stream{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2}
+  .countdown{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  .cd-block{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;background:rgba(20,20,20,.8);border:1px solid var(--border);padding:8px 12px;min-width:64px}
+  .cd-block .v{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:30px;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+  .cd-block .l{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);margin-top:4px}
+  .countdown-compact{font-family:ui-monospace,monospace;font-size:14px;letter-spacing:.05em;color:#d4d4d4}
+  .stage-body{padding:20px 24px}
+  .tags{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+  .tag{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.05em}
+  .tag-launch{background:#fff;color:#000}
+  .tag-event{background:#262626;color:#e5e5e5;border:1px solid #404040}
+  .tag-delayed{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.4)}
+  .tag-unknown{background:rgba(245,158,11,.1);color:#fbbf24;border:1px solid rgba(245,158,11,.3)}
+  .tag-live-mini{background:rgba(220,38,38,.15);color:#fca5a5;border:1px solid rgba(220,38,38,.4)}
+  .tag svg{width:12px;height:12px}
+  .status-pill{border-radius:999px;border:1px solid #404040;padding:4px 10px;font-size:11px;color:#d4d4d4}
+  .stage-body h2{margin-top:12px;font-size:22px;font-weight:600;line-height:1.2}
+  @media(min-width:640px){.stage-body h2{font-size:26px}}
+  .meta{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;font-size:14px;color:var(--muted)}
+  .meta span{display:inline-flex;align-items:center;gap:6px}
+  .meta svg{width:14px;height:14px}
+  .tplus{margin-top:16px;display:inline-flex;align-items:center;gap:8px;border-radius:8px;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);padding:8px 12px;font-size:12px;color:#fca5a5}
+  .sched{margin-top:16px;font-size:14px;color:var(--muted2)}
+  .desc{margin-top:16px;font-size:14px;line-height:1.6;color:var(--muted);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+
+  /* ---------- Grid + history ---------- */
+  .section-block h2{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:600}
+  .section-block h2 svg{width:16px;height:16px}
+  .pending-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+  .count{font-size:14px;font-weight:400;color:var(--muted2)}
+  .grid{display:grid;grid-template-columns:1fr;gap:16px}
+  @media(min-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}}
+  @media(min-width:1280px){.grid{grid-template-columns:repeat(4,1fr)}}
+  .card{all:unset;box-sizing:border-box;cursor:pointer;display:block;position:relative;overflow:hidden;border-radius:16px;border:1px solid var(--border);background:var(--panel);transition:.3s;width:100%}
+  .card:hover{border-color:var(--border2);transform:translateY(-4px)}
+  .card-media{position:relative;height:144px;overflow:hidden;background:#111}
+  .card-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.8;transition:.5s}
+  .card:hover .card-media img{transform:scale(1.05)}
+  .card-media .cgrad{position:absolute;inset:0;background:linear-gradient(to top,#0a0a0a,rgba(10,10,10,.4),transparent)}
+  .card-media .ph{position:absolute;inset:0;display:flex;height:100%;align-items:center;justify-content:center;color:#454545;
+    background:
+      radial-gradient(1.5px 1.5px at 20% 30%, #555 50%, transparent 51%),
+      radial-gradient(1px 1px at 70% 65%, #444 50%, transparent 51%),
+      radial-gradient(1px 1px at 50% 85%, #3a3a3a 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 85% 20%, #555 50%, transparent 51%),
+      radial-gradient(1px 1px at 12% 75%, #3a3a3a 50%, transparent 51%),
+      radial-gradient(ellipse at 30% 20%, #161616 0%, #070707 70%);
+  }
+  .card-media .ph svg{width:36px;height:36px}
+  .card-tag{position:absolute;top:12px;left:12px}
+  .card-body{padding:16px;text-align:left}
+  .card-body h3{font-size:14px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card-meta{margin-top:8px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;font-size:12px;color:var(--muted)}
+  .card-meta span{display:inline-flex;align-items:center;gap:4px}
+  .card-meta svg{width:12px;height:12px}
+  .card-foot{margin-top:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px}
+  .stream-flag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:var(--blue)}
+  .stream-flag .d{height:6px;width:6px;border-radius:50%;background:var(--blue)}
+  .card-date{margin-top:8px;font-size:11px;color:var(--muted3);display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .empty{border-radius:16px;border:1px solid var(--border);background:var(--panel);padding:56px 24px;text-align:center;color:var(--muted2)}
+
+  .history-list{display:flex;flex-direction:column;gap:8px}
+  .history-item{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:grid;grid-template-columns:1.6fr auto auto;gap:4px 16px;align-items:center;border:1px solid var(--border);border-radius:10px;background:var(--panel);padding:12px 14px;font-size:13px}
+  .history-item:hover{border-color:var(--border2)}
+  .history-item.cancelled{opacity:.55}
+  .history-name{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .history-result{color:var(--muted);font-size:12px;text-align:right}
+  .history-date{color:var(--muted3);font-size:12px;text-align:right;white-space:nowrap}
+  .history-meta{grid-column:1/-1;color:var(--muted3);font-size:11px}
+  .history-more{text-align:center;color:var(--muted3);font-size:12px;padding:6px}
+  @media(max-width:640px){.history-item{grid-template-columns:1fr auto}.history-meta{grid-column:1/-1}}
+
+  footer{margin-top:64px;border-top:1px solid #111;padding-top:24px;text-align:center;font-size:12px;color:var(--muted3)}
+
+  /* ---------- Modal ---------- */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .modal-overlay[hidden]{display:none}
+  .modal-panel{position:relative;max-width:640px;width:100%;max-height:86vh;overflow-y:auto;background:var(--panel);border:1px solid var(--border2);border-radius:20px;padding:28px 24px}
+  .modal-close{position:absolute;top:14px;right:14px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;width:34px;height:34px;color:#fff;font-size:18px;cursor:pointer;line-height:1}
+  .modal-close:hover{border-color:var(--border2)}
+  .modal-panel h2{font-size:19px;padding-right:44px;font-weight:600;line-height:1.3}
+  .modal-rows{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+  .modal-row{display:flex;justify-content:space-between;gap:16px;font-size:13px;border-bottom:1px solid #1a1a1a;padding-bottom:8px}
+  .modal-row-label{color:var(--muted2);flex-shrink:0}
+  .modal-row-value{color:#e5e5e5;text-align:right}
+  .modal-desc{margin-top:16px;font-size:14px;line-height:1.6;color:var(--muted)}
+  .modal-embed{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;margin-top:8px;background:#000}
+  .modal-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .modal-webcast{margin-top:16px}
+  .modal-actions{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+
+  /* ---------- Main-stage fullscreen control ---------- */
+  .stage-fullscreen-btn{position:absolute;top:16px;right:16px;z-index:6;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;border:1px solid rgba(255,255,255,.28);border-radius:9px;background:rgba(0,0,0,.58);color:#fff;cursor:pointer;backdrop-filter:blur(4px);transition:.2s}
+  .stage-fullscreen-btn:hover{border-color:rgba(255,255,255,.65);background:rgba(255,255,255,.12)}
+  .stage-fullscreen-btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
+  .stage-fullscreen-btn svg{width:17px;height:17px;pointer-events:none}
+  .stage:fullscreen{border-radius:0;width:100vw;height:100vh;background:#000}
+  .stage:fullscreen .media{height:100%;aspect-ratio:auto}
+  .stage:fullscreen .stage-body{display:none}
+  .stage:fullscreen .stage-fullscreen-btn{top:18px;right:18px}
+    @media(prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+    .card:hover{transform:none}
+  }
+  @media(max-width:380px){
+    .cd-block{min-width:52px;padding:6px 8px}
+    .cd-block .v{font-size:22px}
+    .modal-overlay{padding:10px}
+    .modal-panel{padding:22px 16px}
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;wrap&quot; id=&quot;app&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+/* =========================================================================
+   X HORIZON LIVE — SPACE OPERATIONS &amp; EVENT CENTER
+   (single standalone file — no build step, no server, no framework)
+
+   Architecture summary (unchanged core, extended shell):
+   - CONFIG isolates every endpoint/tunable.
+   - Every raw API/snapshot record becomes ONE normalized event shape.
+   - Live status is a state machine (classifyEvent), never inferred from
+     &quot;scheduled time has passed&quot; alone:
+       CANCELLED / SCRUBBED  (terminal, always wins)
+       COMPLETED             (explicit success/failure status)
+       LIVE                  (explicit webcast_live flag, or explicit
+                              &quot;in flight&quot;-style status text)
+       DELAYED               (explicit delayed/hold status)
+       UPCOMING / STARTING   (scheduled time still ahead)
+       UNKNOWN_LIVE          (scheduled time passed, nothing confirms
+                              live or completed — fallback only)
+       COMPLETED (fallback)  (UNKNOWN_LIVE too long with no confirmation)
+   - Data has three tiers: LIVE (fresh fetch) -&gt; CACHED (last successful
+     fetch) -&gt; SNAPSHOT (embedded). A failed refresh never blanks the page.
+   - Rendering is now split into a persistent SHELL (header controls,
+     search box, filter selects, modal skeleton — built once) and
+     targeted CONTENT CONTAINERS (main stage / grid / history / stat
+     numbers) that are only replaced when the thing they show actually
+     changes. This means typing in search, or a background countdown
+     tick, never destroys an active video iframe or steals input focus.
+   - The 1s ticker only patches countdown/timer/clock text nodes unless
+     the computed &quot;signature&quot; (main event + phase + data tier) changes.
+   ========================================================================= */
+
+// ---------------------------------------------------------------------
+// 1. CONFIG
+// ---------------------------------------------------------------------
+const CONFIG = Object.freeze({
+  API_BASE: 'https://lldev.thespacedevs.com/2.3.0', // Launch Library 2 sends CORS headers — no proxy needed for the primary attempt
+  PROXY_URL: 'https://api.allorigins.win/raw?url=', // fallback ONLY, used if the direct request fails
+  LAUNCHES_PATH: '/launches/upcoming/?limit=20&amp;ordering=net&amp;mode=detailed',
+  EVENTS_PATH: '/events/upcoming/?limit=20&amp;ordering=date',
+  REFRESH_INTERVAL_MS: 10 * 60 * 1000,
+  TICK_INTERVAL_MS: 1000,
+  REQUEST_TIMEOUT_MS: 12000,
+  STARTING_WINDOW_MS: 15 * 60 * 1000,
+  UNCONFIRMED_LIVE_WINDOW_MS: 3 * 60 * 60 * 1000,
+  SEARCH_DEBOUNCE_MS: 200,
+  HISTORY_LIMIT: 24
+});
+
+async function fetchJson(path){
+  const directUrl = CONFIG.API_BASE + path;
+  try {
+    const res = await fetchWithTimeout(directUrl, CONFIG.REQUEST_TIMEOUT_MS);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return JSON.parse(await res.text());
+  } catch (directErr) {
+    if (!CONFIG.PROXY_URL) throw directErr;
+    const proxied = CONFIG.PROXY_URL + encodeURIComponent(directUrl);
+    const res2 = await fetchWithTimeout(proxied, CONFIG.REQUEST_TIMEOUT_MS);
+    if (!res2.ok) throw new Error('HTTP ' + res2.status + ' via proxy');
+    return JSON.parse(await res2.text());
+  }
+}
+
+// ---------------------------------------------------------------------
+// 2. Embedded fallback snapshot
+// ---------------------------------------------------------------------
+const SNAPSHOT = [{&quot;id&quot;:&quot;launch-521f3a1c-f977-4306-9b7f-495858719adf&quot;,&quot;type&quot;:&quot;launch&quot;,&quot;name&quot;:&quot;Falcon Heavy | Nancy Grace Roman Space Telescope&quot;,&quot;description&quot;:&quot;The Nancy Grace Roman Space Telescope is a NASA infrared space telescope with a 2.4 m (7.9 ft) wide field of view primary mirror and two scientific instruments.&quot;,&quot;net&quot;:&quot;2026-08-30T11:26:00Z&quot;,&quot;image_url&quot;:&quot;https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon_heavy_image_20220129192819.jpeg&quot;,&quot;agency&quot;:&quot;SpaceX&quot;,&quot;location&quot;:&quot;Kennedy Space Center, FL, USA&quot;,&quot;status&quot;:&quot;Go for Launch&quot;,&quot;vid_urls&quot;:[&quot;https://x.com/i/broadcasts/1jxXgBanvZeJZ&quot;],&quot;mission_type&quot;:&quot;Astrophysics&quot;,&quot;orbit&quot;:&quot;Sun-Earth L2&quot;,&quot;rocket_name&quot;:&quot;Falcon Heavy&quot;},{&quot;id&quot;:&quot;launch-1b23eb18-e06e-4058-9b42-e95ca0980511&quot;,&quot;type&quot;:&quot;launch&quot;,&quot;name&quot;:&quot;Spectrum | Onward and Upward&quot;,&quot;description&quot;:&quot;Second test flight of the Isar Spectrum launch vehicle.&quot;,&quot;net&quot;:&quot;2026-08-31T00:00:00Z&quot;,&quot;image_url&quot;:&quot;https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/spectrum_on_the_image_20250321072643.jpeg&quot;,&quot;agency&quot;:&quot;Isar Aerospace&quot;,&quot;location&quot;:&quot;Andøya Spaceport&quot;,&quot;status&quot;:&quot;To Be Determined&quot;,&quot;vid_urls&quot;:[&quot;https://www.youtube.com/watch?v=Ss1DUqLjecc&quot;,&quot;https://www.youtube.com/watch?v=uUc2d_NPBN0&quot;],&quot;mission_type&quot;:&quot;Test Flight&quot;,&quot;orbit&quot;:&quot;Sun-Synchronous Orbit&quot;,&quot;rocket_name&quot;:&quot;Spectrum&quot;},{&quot;id&quot;:&quot;launch-dc570565-4dcf-4ab9-8174-bf88efef477f&quot;,&quot;type&quot;:&quot;launch&quot;,&quot;name&quot;:&quot;Long March 12A | Flight 2&quot;,&quot;description&quot;:&quot;Second test launch of CASC/SAST Long March 12A rocket. Payload identities are TBD.&quot;,&quot;net&quot;:&quot;2026-08-31T00:00:00Z&quot;,&quot;image_url&quot;:&quot;https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/long_march_12a__image_20251224005749.jpg&quot;,&quot;agency&quot;:&quot;China Aerospace Science and Technology Corporation&quot;,&quot;location&quot;:&quot;Jiuquan Satellite Launch Center, People's Republic of China&quot;,&quot;status&quot;:&quot;To Be Determined&quot;,&quot;vid_urls&quot;:[],&quot;mission_type&quot;:&quot;Test Flight&quot;,&quot;orbit&quot;:&quot;Low Earth Orbit&quot;,&quot;rocket_name&quot;:&quot;Long March 12A&quot;},{&quot;id&quot;:&quot;launch-ab3c1e6c-03fe-48a7-b6ce-30c79569bdfb&quot;,&quot;type&quot;:&quot;launch&quot;,&quot;name&quot;:&quot;Angara 1.2 | Kosmos (Unknown Payload)&quot;,&quot;description&quot;:&quot;Unknown classified satellite(s) for the Russian military.&quot;,&quot;net&quot;:&quot;2026-08-31T00:00:00Z&quot;,&quot;image_url&quot;:&quot;https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/angara25201.2_image_20190224012254.jpeg&quot;,&quot;agency&quot;:&quot;Russian Space Forces&quot;,&quot;location&quot;:&quot;Plesetsk Cosmodrome, Russian Federation&quot;,&quot;status&quot;:&quot;To Be Determined&quot;,&quot;vid_urls&quot;:[],&quot;mission_type&quot;:&quot;Government/Top Secret&quot;,&quot;orbit&quot;:&quot;Unknown&quot;,&quot;rocket_name&quot;:&quot;Angara 1.2&quot;},{&quot;id&quot;:&quot;launch-a927b2f9-f9a5-4196-9abb-2e275e4a6b96&quot;,&quot;type&quot;:&quot;launch&quot;,&quot;name&quot;:&quot;Pallas-1 | Demo Flight&quot;,&quot;description&quot;:&quot;First test launch of Galactic Energy Pallas-1 rocket.&quot;,&quot;net&quot;:&quot;2026-08-31T00:00:00Z&quot;,&quot;image_url&quot;:null,&quot;agency&quot;:&quot;Galactic Energy&quot;,&quot;location&quot;:&quot;Jiuquan Satellite Launch Center, People's Republic of China&quot;,&quot;status&quot;:&quot;To Be Determined&quot;,&quot;vid_urls&quot;:[],&quot;mission_type&quot;:&quot;Test Flight&quot;,&quot;orbit&quot;:&quot;Unknown&quot;,&quot;rocket_name&quot;:&quot;Pallas-1&quot;},{&quot;id&quot;:&quot;launch-9e27a1ed-e81a-4918-b32b-0380cf3a9f8f&quot;,&quot;type&quot;:&quot;launch&quot;,&quot;name&quot;:&quot;Mir | Demo Flight&quot;,&quot;description&quot;:&quot;First orbital full version launch of the South Korean military small satellite launch vehicle.&quot;,&quot;net&quot;:&quot;2026-08-31T00:00:00Z&quot;,&quot;image_url&quot;:&quot;https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/south2520korea_image_20231204145331.png&quot;,&quot;agency&quot;:&quot;Agency for Defense Development&quot;,&quot;location&quot;:&quot;Sea Launch&quot;,&quot;status&quot;:&quot;To Be Determined&quot;,&quot;vid_urls&quot;:[],&quot;mission_type&quot;:&quot;Test Flight&quot;,&quot;orbit&quot;:&quot;Low Earth Orbit&quot;,&quot;rocket_name&quot;:&quot;Mir&quot;},{&quot;id&quot;:&quot;event-1017&quot;,&quot;type&quot;:&quot;event&quot;,&quot;name&quot;:&quot;Juice Earth Flyby&quot;,&quot;description&quot;:&quot;Third flyby of ESA Jupiter Icy Moons Explorer (Juice) mission on its way to the Jovian system.&quot;,&quot;net&quot;:&quot;2026-09-30T00:00:00Z&quot;,&quot;image_url&quot;:&quot;https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/255bauto255d__image_20240307192047.jpeg&quot;,&quot;agency&quot;:null,&quot;location&quot;:&quot;Earth&quot;,&quot;status&quot;:&quot;Flyby&quot;,&quot;vid_urls&quot;:[],&quot;mission_type&quot;:&quot;Flyby&quot;,&quot;orbit&quot;:null,&quot;rocket_name&quot;:null},{&quot;id&quot;:&quot;event-394&quot;,&quot;type&quot;:&quot;event&quot;,&quot;name&quot;:&quot;BepiColombo Mercury Orbit Insertion&quot;,&quot;description&quot;:&quot;Orbital insertion around Mercury of the ESA-JAXA BepiColombo mission.&quot;,&quot;net&quot;:&quot;2026-11-30T00:00:00Z&quot;,&quot;image_url&quot;:&quot;https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/bepicolombo_at__image_20240306080108.jpeg&quot;,&quot;agency&quot;:null,&quot;location&quot;:&quot;Mercury&quot;,&quot;status&quot;:&quot;Orbital Insertion&quot;,&quot;vid_urls&quot;:[],&quot;mission_type&quot;:&quot;Orbital Insertion&quot;,&quot;orbit&quot;:null,&quot;rocket_name&quot;:null},{&quot;id&quot;:&quot;event-384&quot;,&quot;type&quot;:&quot;event&quot;,&quot;name&quot;:&quot;Solar Orbiter Venus Flyby&quot;,&quot;description&quot;:&quot;Solar Orbiter, a partnership between ESA and NASA, will perform a gravity assist maneuver with Venus.&quot;,&quot;net&quot;:&quot;2026-12-24T00:00:00Z&quot;,&quot;image_url&quot;:&quot;https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/solar_orbiter_v_image_20210930071353.png&quot;,&quot;agency&quot;:null,&quot;location&quot;:&quot;Venus&quot;,&quot;status&quot;:&quot;Flyby&quot;,&quot;vid_urls&quot;:[],&quot;mission_type&quot;:&quot;Flyby&quot;,&quot;orbit&quot;:null,&quot;rocket_name&quot;:null}];
+
+// ---------------------------------------------------------------------
+// 3. Small utilities
+// ---------------------------------------------------------------------
+const pad2 = n =&gt; String(n).padStart(2, '0');
+const esc = s =&gt; String(s || '').replace(/[&amp;&lt;&gt;&quot;]/g, c =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '&quot;': '&amp;quot;' }[c]));
+const trim = (s, n = 280) =&gt; (s &amp;&amp; s.length &gt; n) ? (s.slice(0, n).trim() + '\u2026') : (s || '');
+const toUrls = arr =&gt; (arr || []).map(v =&gt; typeof v === 'string' ? v : (v &amp;&amp; v.url)).filter(Boolean);
+const imgOf = img =&gt; { if (!img) return null; if (typeof img === 'string') return img; return img.image_url || img.thumbnail_url || null; };
+
+function safeUrl(raw){
+  if (raw == null) return null;
+  let s = String(raw).trim();
+  if (!s) return null;
+  let m = s.match(/^\[[^\]]*\]\((https?:\/\/[^\s)]+)\)$/i);
+  if (m) s = m[1];
+  m = s.match(/^[\[(](https?:\/\/[^\s)\]]+)[\])]$/i);
+  if (m) s = m[1];
+  try {
+    const u = new URL(s);
+    if (u.protocol !== 'http:' &amp;&amp; u.protocol !== 'https:') return null;
+    return u.href;
+  } catch (e) { return null; }
+}
+
+function youtubeEmbed(url){
+  if (!url) return null;
+  const m = String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|live\/|shorts\/|v\/))([\w-]{11})/);
+  return m ? ('https://www.youtube.com/embed/' + m[1] + '?autoplay=1&amp;rel=0&amp;modestbranding=1') : null;
+}
+
+function diffParts(targetMs, nowMs){
+  let d = Math.max(0, targetMs - nowMs);
+  const days = Math.floor(d / 86400000); d -= days * 86400000;
+  const hours = Math.floor(d / 3600000); d -= hours * 3600000;
+  const minutes = Math.floor(d / 60000); d -= minutes * 60000;
+  const seconds = Math.floor(d / 1000);
+  return { days, hours, minutes, seconds };
+}
+function elapsedParts(fromMs, nowMs){
+  let d = Math.max(0, nowMs - fromMs);
+  const hours = Math.floor(d / 3600000); d -= hours * 3600000;
+  const minutes = Math.floor(d / 60000); d -= minutes * 60000;
+  const seconds = Math.floor(d / 1000);
+  return { hours, minutes, seconds };
+}
+function formatNet(iso){
+  try { return new Date(iso).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+  catch (e) { return String(iso); }
+}
+function formatUtc(iso){
+  try {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return 'Unknown';
+    return d.toISOString().slice(0, 19).replace('T', ' ') + ' UTC';
+  } catch (e) { return 'Unknown'; }
+}
+function formatLocalFull(iso){
+  try {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return 'Unknown';
+    return d.toLocaleString(undefined, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  } catch (e) { return 'Unknown'; }
+}
+
+// Local-calendar-day bucket relative to &quot;now&quot; — used by the date-range tabs.
+function dateBucket(scheduledTime, nowMs){
+  const t = new Date(scheduledTime).getTime();
+  if (isNaN(t)) return 'INVALID';
+  const d = new Date(t), n = new Date(nowMs);
+  const dMid = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  const nMid = new Date(n.getFullYear(), n.getMonth(), n.getDate()).getTime();
+  const dayDiff = Math.round((dMid - nMid) / 86400000);
+  if (dayDiff &lt; 0) return 'PAST';
+  if (dayDiff === 0) return 'TODAY';
+  if (dayDiff === 1) return 'TOMORROW';
+  if (dayDiff &lt;= 6) return 'NEXT7';
+  return 'LATER';
+}
+
+function classifyStatus(text){
+  if (!text) return 'UNKNOWN';
+  const s = String(text);
+  if (/cancel/i.test(s)) return 'CANCELLED';
+  if (/scrub/i.test(s)) return 'SCRUBBED';
+  if (/partial failure/i.test(s)) return 'FAILURE';
+  if (/failure/i.test(s)) return 'FAILURE';
+  if (/success/i.test(s)) return 'SUCCESS';
+  if (/in[\s-]?flight|ongoing|underway/i.test(s)) return 'IN_FLIGHT';
+  if (/^live$/i.test(s)) return 'IN_FLIGHT';
+  if (/delay/i.test(s)) return 'DELAYED';
+  if (/hold/i.test(s)) return 'HOLD';
+  if (/go for launch/i.test(s) || /^go$/i.test(s)) return 'GO';
+  if (/to be determined/i.test(s) || /^tbd$/i.test(s)) return 'TBD';
+  return 'UNKNOWN';
+}
+
+const IC = {
+  satellite: '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M13 7 9 3 5 7l4 4&quot;/&gt;&lt;path d=&quot;m17 11 4 4-4 4-4-4&quot;/&gt;&lt;path d=&quot;m8 12-4 4 4 4 4-4&quot;/&gt;&lt;path d=&quot;m16 6 4-2-2 4&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;2.5&quot;/&gt;&lt;/svg&gt;',
+  refresh: '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8&quot;/&gt;&lt;path d=&quot;M21 3v5h-5&quot;/&gt;&lt;path d=&quot;M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16&quot;/&gt;&lt;path d=&quot;M3 21v-5h5&quot;/&gt;&lt;/svg&gt;',
+  rocket: '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z&quot;/&gt;&lt;path d=&quot;m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z&quot;/&gt;&lt;path d=&quot;M9 12H4s.55-3.18 2-4c1.62-.91 5 0 5 0&quot;/&gt;&lt;path d=&quot;M12 15v5s3.18-.55 4-2c.91-1.62 0-5 0-5&quot;/&gt;&lt;/svg&gt;',
+  radio: '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M4.9 19.1C1 15.2 1 8.8 4.9 4.9&quot;/&gt;&lt;path d=&quot;M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;2&quot;/&gt;&lt;path d=&quot;M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5&quot;/&gt;&lt;path d=&quot;M19.1 4.9C23 8.8 23 15.2 19.1 19.1&quot;/&gt;&lt;/svg&gt;',
+  pin: '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;10&quot; r=&quot;3&quot;/&gt;&lt;/svg&gt;',
+  building: '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;rect width=&quot;16&quot; height=&quot;20&quot; x=&quot;4&quot; y=&quot;2&quot; rx=&quot;2&quot;/&gt;&lt;path d=&quot;M9 22v-4h6v4&quot;/&gt;&lt;path d=&quot;M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01&quot;/&gt;&lt;/svg&gt;',
+  orbit: '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;3&quot;/&gt;&lt;ellipse cx=&quot;12&quot; cy=&quot;12&quot; rx=&quot;11&quot; ry=&quot;5&quot; transform=&quot;rotate(45 12 12)&quot;/&gt;&lt;/svg&gt;',
+  play: '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;currentColor&quot;&gt;&lt;path d=&quot;M8 5v14l11-7z&quot;/&gt;&lt;/svg&gt;',
+  external: '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6&quot;/&gt;&lt;polyline points=&quot;15 3 21 3 21 9&quot;/&gt;&lt;line x1=&quot;10&quot; y1=&quot;14&quot; x2=&quot;21&quot; y2=&quot;3&quot;/&gt;&lt;/svg&gt;',
+  warning: '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z&quot;/&gt;&lt;line x1=&quot;12&quot; y1=&quot;9&quot; x2=&quot;12&quot; y2=&quot;13&quot;/&gt;&lt;line x1=&quot;12&quot; y1=&quot;17&quot; x2=&quot;12.01&quot; y2=&quot;17&quot;/&gt;&lt;/svg&gt;',
+  clock: '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/&gt;&lt;polyline points=&quot;12 6 12 12 16 14&quot;/&gt;&lt;/svg&gt;',
+  history: '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M3 3v5h5&quot;/&gt;&lt;path d=&quot;M3.05 13A9 9 0 1 0 6 5.3L3 8&quot;/&gt;&lt;path d=&quot;M12 7v5l4 2&quot;/&gt;&lt;/svg&gt;'
+};
+
+// ---------------------------------------------------------------------
+// 4. Normalization
+// ---------------------------------------------------------------------
+function normalizeLaunch(l){
+  try {
+    if (!l || l.id == null || !l.name) return null;
+    const netDate = l.net;
+    if (!netDate || isNaN(new Date(netDate).getTime())) return null;
+    const rawVideos = [...toUrls(l.vid_urls), ...toUrls(l.mission &amp;&amp; l.mission.vid_urls)];
+    const webcastUrls = rawVideos.map(safeUrl).filter(Boolean);
+    const statusName = (l.status &amp;&amp; l.status.name) || null;
+    let statusCategory = classifyStatus(statusName);
+    if (statusCategory === 'UNKNOWN' &amp;&amp; l.inhold) statusCategory = 'HOLD';
+    return {
+      id: 'launch-' + l.id,
+      type: 'launch',
+      name: String(l.name).trim(),
+      description: trim((l.mission &amp;&amp; l.mission.description) || (l.status &amp;&amp; l.status.description) || ''),
+      scheduledTime: netDate,
+      imageUrl: safeUrl(imgOf(l.image)),
+      agency: (l.launch_service_provider &amp;&amp; l.launch_service_provider.name) || null,
+      location: (l.pad &amp;&amp; ((l.pad.location &amp;&amp; l.pad.location.name) || l.pad.name)) || null,
+      status: statusName,
+      statusCategory: statusCategory,
+      webcastUrl: webcastUrls[0] || null,
+      webcastUrls: webcastUrls,
+      webcastLive: typeof l.webcast_live === 'boolean' ? l.webcast_live : null,
+      hasWebcast: webcastUrls.length &gt; 0,
+      missionType: (l.mission &amp;&amp; l.mission.type) || null,
+      orbit: (l.mission &amp;&amp; l.mission.orbit &amp;&amp; l.mission.orbit.name) || null,
+      rocketName: (l.rocket &amp;&amp; l.rocket.configuration &amp;&amp; l.rocket.configuration.name) || null,
+      sourceUrl: safeUrl(l.url)
+    };
+  } catch (e) { return null; }
+}
+
+function normalizeEvent(e){
+  try {
+    if (!e || e.id == null || !e.name) return null;
+    const netDate = e.date;
+    if (!netDate || isNaN(new Date(netDate).getTime())) return null;
+    const webcastUrls = toUrls(e.vid_urls).map(safeUrl).filter(Boolean);
+    const tn = (e.type &amp;&amp; typeof e.type === 'object') ? e.type.name : e.type;
+    return {
+      id: 'event-' + e.id,
+      type: 'event',
+      name: String(e.name).trim(),
+      description: trim(e.description || ''),
+      scheduledTime: netDate,
+      imageUrl: safeUrl(imgOf(e.image)),
+      agency: null,
+      location: e.location || null,
+      status: tn || null,
+      statusCategory: classifyStatus(tn),
+      webcastUrl: webcastUrls[0] || null,
+      webcastUrls: webcastUrls,
+      webcastLive: typeof e.webcast_live === 'boolean' ? e.webcast_live : null,
+      hasWebcast: webcastUrls.length &gt; 0,
+      missionType: tn || null,
+      orbit: null,
+      rocketName: null,
+      sourceUrl: safeUrl(e.url)
+    };
+  } catch (e2) { return null; }
+}
+
+function normalizeSnapshotItem(s){
+  try {
+    if (!s || !s.id || !s.name || !s.net || isNaN(new Date(s.net).getTime())) return null;
+    const webcastUrls = (s.vid_urls || []).map(safeUrl).filter(Boolean);
+    const rawId = String(s.id).replace(/^(launch|event)-/, '');
+    const sourceUrl = safeUrl(CONFIG.API_BASE + '/' + (s.type === 'event' ? 'events' : 'launches') + '/' + rawId + '/');
+    return {
+      id: s.id,
+      type: s.type === 'event' ? 'event' : 'launch',
+      name: String(s.name).trim(),
+      description: trim(s.description || ''),
+      scheduledTime: s.net,
+      imageUrl: safeUrl(s.image_url),
+      agency: s.agency || null,
+      location: s.location || null,
+      status: s.status || null,
+      statusCategory: classifyStatus(s.status),
+      webcastUrl: webcastUrls[0] || null,
+      webcastUrls: webcastUrls,
+      webcastLive: null,
+      hasWebcast: webcastUrls.length &gt; 0,
+      missionType: s.mission_type || null,
+      orbit: s.orbit || null,
+      rocketName: s.rocket_name || null,
+      sourceUrl: sourceUrl
+    };
+  } catch (e) { return null; }
+}
+
+function dedupe(list){
+  const seen = new Map();
+  for (const ev of list) { if (ev &amp;&amp; ev.id &amp;&amp; !seen.has(ev.id)) seen.set(ev.id, ev); }
+  return Array.from(seen.values());
+}
+
+// ---------------------------------------------------------------------
+// 5. Live-state classification and main-stage selection
+// ---------------------------------------------------------------------
+const OFFICIAL_HOSTS = [
+  'nasa.gov','esa.int','spacex.com','blueorigin.com','rocketlabusa.com','ulalaunch.com',
+  'isaraerospace.com','jaxa.jp','global.jaxa.jp','cnsa.gov.cn','isro.gov.in','roscosmos.ru',
+  'khrunichev.ru','arianespace.com','northropgrumman.com','lockheedmartin.com','boeing.com'
+];
+function sourceHost(url){
+  try { return new URL(url).hostname.replace(/^www\./,'').toLowerCase(); } catch(e) { return ''; }
+}
+function isOfficialSource(url){
+  const h = sourceHost(url);
+  return !!h &amp;&amp; OFFICIAL_HOSTS.some(x =&gt; h === x || h.endsWith('.' + x));
+}
+function sourceLabel(url, index){
+  const h = sourceHost(url);
+  if (isOfficialSource(url)) return 'Official';
+  if (/youtube\.com|youtu\.be/i.test(h)) return index === 0 ? 'Video' : 'Video ' + (index + 1);
+  if (/x\.com|twitter\.com/i.test(h)) return 'X';
+  return h ? h.replace(/^www\./,'').split('.')[0] : 'Source ' + (index + 1);
+}
+function getSourceList(ev){
+  const urls = Array.from(new Set((ev.webcastUrls || []).map(safeUrl).filter(Boolean)));
+  return urls.map((url,index) =&gt; ({ url, official:isOfficialSource(url), label:sourceLabel(url,index), embed:youtubeEmbed(url) }))
+    .sort((a,b) =&gt; Number(b.official) - Number(a.official));
+}
+function primaryPlayableSource(ev){
+  const list = getSourceList(ev);
+  return list.find(x =&gt; x.embed) || null;
+}
+function sourceButtonsHTML(ev){
+  const list = getSourceList(ev);
+  if (!list.length) return '';
+  return '&lt;div class=&quot;stage-sources&quot; aria-label=&quot;Event coverage sources&quot;&gt;' +
+    '&lt;span class=&quot;stage-source-label&quot;&gt;Coverage&lt;/span&gt;' +
+    list.slice(0,4).map((s,i) =&gt; s.embed
+      ? '&lt;button type=&quot;button&quot; class=&quot;stage-source-mini' + (s.official ? ' official' : '') + '&quot; data-play-source=&quot;' + esc(s.url) + '&quot; title=&quot;Play ' + esc(s.label) + ' on this page&quot;&gt;' + IC.play + esc(s.label) + '&lt;/button&gt;'
+      : '&lt;a class=&quot;stage-source-mini external&quot; href=&quot;' + esc(s.url) + '&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; title=&quot;Open ' + esc(s.label) + '&quot;&gt;' + IC.external + esc(s.label) + '&lt;/a&gt;'
+    ).join('') + '&lt;/div&gt;';
+}
+function sourcePlayHTML(ev){
+  const first = primaryPlayableSource(ev);
+  return first ? '&lt;div class=&quot;stage-overlay&quot; id=&quot;sourceChooser&quot;&gt;&lt;span class=&quot;play-btn&quot;&gt;' + IC.play + '&lt;/span&gt;&lt;span class=&quot;watch-link&quot;&gt;Select a source below to play here&lt;/span&gt;&lt;/div&gt;' : '&lt;div class=&quot;stage-overlay&quot;&gt;&lt;span class=&quot;no-stream&quot;&gt;No in-page playable source linked&lt;/span&gt;&lt;/div&gt;';
+}
+
+function classifyEvent(ev, nowMs){
+  const cat = ev.statusCategory;
+  if (cat === 'CANCELLED') return { phase: 'CANCELLED' };
+  if (cat === 'SCRUBBED') return { phase: 'SCRUBBED' };
+  if (cat === 'SUCCESS' || cat === 'FAILURE') return { phase: 'COMPLETED', confirmed: true };
+
+  const confirmedLive = ev.webcastLive === true || cat === 'IN_FLIGHT';
+  if (confirmedLive) return { phase: 'LIVE', confirmed: true };
+
+  if (cat === 'DELAYED' || cat === 'HOLD') return { phase: 'DELAYED' };
+
+  const schedMs = new Date(ev.scheduledTime).getTime();
+  if (isNaN(schedMs)) return { phase: 'UNKNOWN' };
+  const delta = nowMs - schedMs;
+
+  if (delta &lt; -CONFIG.STARTING_WINDOW_MS) return { phase: 'UPCOMING' };
+  if (delta &lt; 0) return { phase: 'STARTING' };
+
+  // Once the scheduled start has passed, a linked webcast is treated as the
+  // active coverage window. This prevents the old &quot;Status Unknown&quot; dead zone
+  // and keeps the Live counter aligned with the main stage.
+  if (delta &lt;= CONFIG.UNCONFIRMED_LIVE_WINDOW_MS &amp;&amp; ev.hasWebcast) {
+    return { phase: 'LIVE', inferred: true };
+  }
+  if (delta &lt;= CONFIG.UNCONFIRMED_LIVE_WINDOW_MS) return { phase: 'UNKNOWN_LIVE' };
+  return { phase: 'COMPLETED', confirmed: false };
+}
+
+function selectMainStage(classified){
+  const live = classified.filter(c =&gt; c.phase === 'LIVE');
+  if (live.length){
+    live.sort((a, b) =&gt; {
+      const aw = a.ev.hasWebcast ? 0 : 1, bw = b.ev.hasWebcast ? 0 : 1;
+      if (aw !== bw) return aw - bw;
+      return new Date(a.ev.scheduledTime) - new Date(b.ev.scheduledTime);
+    });
+    return live[0];
+  }
+  const unknownLive = classified.filter(c =&gt; c.phase === 'UNKNOWN_LIVE');
+  if (unknownLive.length){
+    unknownLive.sort((a, b) =&gt; new Date(b.ev.scheduledTime) - new Date(a.ev.scheduledTime));
+    return unknownLive[0];
+  }
+  const upcoming = classified.filter(c =&gt; c.phase === 'UPCOMING' || c.phase === 'STARTING' || c.phase === 'DELAYED');
+  if (upcoming.length){
+    upcoming.sort((a, b) =&gt; new Date(a.ev.scheduledTime) - new Date(b.ev.scheduledTime));
+    return upcoming[0];
+  }
+  return null;
+}
+
+function phaseLabel(phase){
+  switch (phase){
+    case 'LIVE': return 'Live Now';
+    case 'UNKNOWN_LIVE': return 'Live Coverage';
+    case 'STARTING': return 'Starting Soon';
+    case 'UPCOMING': return 'Upcoming';
+    case 'DELAYED': return 'Delayed';
+    case 'COMPLETED': return 'Completed';
+    case 'CANCELLED': return 'Cancelled';
+    case 'SCRUBBED': return 'Scrubbed';
+    default: return 'Unknown';
+  }
+}
+
+function computeCounts(classified){
+  const counts = { LIVE: 0, STARTING: 0, UPCOMING: 0, DELAYED: 0, UNKNOWN_LIVE: 0, COMPLETED: 0, CANCELLED: 0, TOTAL: classified.length };
+  for (const c of classified){
+    if (c.phase === 'CANCELLED' || c.phase === 'SCRUBBED') counts.CANCELLED++;
+    else if (counts[c.phase] !== undefined) counts[c.phase]++;
+  }
+  return counts;
+}
+
+// ---------------------------------------------------------------------
+// 6. Search / filter helpers (pure — no DOM access, easy to test)
+// ---------------------------------------------------------------------
+function matchesSearch(ev, q){
+  if (!q) return true;
+  const hay = [ev.name, ev.agency, ev.location, ev.rocketName, ev.missionType, ev.orbit, ev.status].filter(Boolean).join(' ').toLowerCase();
+  return hay.indexOf(q.toLowerCase()) !== -1;
+}
+
+function matchesFilters(item, uiState, nowMs){
+  const ev = item.ev, phase = item.phase;
+  if (uiState.statusFilter !== 'ALL'){
+    if (uiState.statusFilter === 'CANCELLED'){ if (phase !== 'CANCELLED' &amp;&amp; phase !== 'SCRUBBED') return false; }
+    else if (phase !== uiState.statusFilter) return false;
+  }
+  if (uiState.typeFilter !== 'ALL' &amp;&amp; ev.type !== uiState.typeFilter) return false;
+  if (uiState.webcastFilter === 'YES' &amp;&amp; !ev.hasWebcast) return false;
+  if (uiState.webcastFilter === 'NO' &amp;&amp; ev.hasWebcast) return false;
+  if (uiState.providerFilter !== 'ALL' &amp;&amp; ev.agency !== uiState.providerFilter) return false;
+  if (uiState.dateView !== 'ALL' &amp;&amp; dateBucket(ev.scheduledTime, nowMs) !== uiState.dateView) return false;
+  if (!matchesSearch(ev, uiState.search)) return false;
+  return true;
+}
+
+function computeFilteredGrid(classified, uiState, nowMs){
+  return classified.filter(item =&gt; matchesFilters(item, uiState, nowMs))
+    .sort((a, b) =&gt; new Date(a.ev.scheduledTime) - new Date(b.ev.scheduledTime));
+}
+
+function computeHistory(classified, limit){
+  return classified
+    .filter(c =&gt; c.phase === 'COMPLETED' || c.phase === 'CANCELLED' || c.phase === 'SCRUBBED')
+    .sort((a, b) =&gt; new Date(b.ev.scheduledTime) - new Date(a.ev.scheduledTime))
+    .slice(0, limit || 24);
+}
+
+// ---------------------------------------------------------------------
+// 7. Notification-ready transition detection (no notifications fired —
+//    this just tracks phase changes so a future feature can hook in
+//    without touching the classification/render pipeline).
+// ---------------------------------------------------------------------
+let prevPhaseMap = new Map();
+function detectTransitions(classified){
+  const transitions = [];
+  const nextMap = new Map();
+  for (const c of classified){
+    nextMap.set(c.ev.id, c.phase);
+    const prev = prevPhaseMap.get(c.ev.id);
+    if (prev === undefined) transitions.push({ id: c.ev.id, from: null, to: c.phase, isNew: true });
+    else if (prev !== c.phase) transitions.push({ id: c.ev.id, from: prev, to: c.phase, isNew: false });
+  }
+  prevPhaseMap = nextMap;
+  return transitions;
+}
+function handleEventTransitions(transitions){
+  // Intentionally a no-op today. A future notification feature can
+  // subscribe here — e.g. Notification API calls gated by phase — without
+  // touching classification, selection, or rendering code.
+}
+
+// ---------------------------------------------------------------------
+// 8. Data state
+// ---------------------------------------------------------------------
+let events = dedupe(SNAPSHOT.map(normalizeSnapshotItem).filter(Boolean));
+let dataState = 'snapshot';
+let lastGoodEvents = null;
+let lastSuccessAt = null;
+let lastFetchFailed = false;
+let refreshing = false;
+let now = Date.now();
+let lastSignature = null;
+
+let uiState = { search: '', statusFilter: 'ALL', typeFilter: 'ALL', webcastFilter: 'ALL', providerFilter: 'ALL', dateView: 'ALL' };
+let searchDebounceTimer = null;
+let lastClassified = [];
+let lastMain = null;
+let lastCounts = { LIVE: 0, STARTING: 0, UPCOMING: 0, DELAYED: 0, UNKNOWN_LIVE: 0, COMPLETED: 0, CANCELLED: 0, TOTAL: 0 };
+let lastProviderKey = null;
+let lastRenderedMainSig = null;
+let openModalId = null;
+let lastFocusedBeforeModal = null;
+let shellBuilt = false;
+
+function fetchWithTimeout(url, ms){
+  const controller = new AbortController();
+  const timer = setTimeout(() =&gt; controller.abort(), ms);
+  return fetch(url, { signal: controller.signal }).finally(() =&gt; clearTimeout(timer));
+}
+
+async function fetchEvents(){
+  if (refreshing) return;
+  refreshing = true;
+  updateHeaderSync();
+  try {
+    const [ld, ed] = await Promise.all([
+      fetchJson(CONFIG.LAUNCHES_PATH),
+      fetchJson(CONFIG.EVENTS_PATH)
+    ]);
+    const launches = (ld.results || []).map(normalizeLaunch).filter(Boolean);
+    const evs = (ed.results || []).map(normalizeEvent).filter(Boolean);
+    const merged = dedupe([...launches, ...evs]);
+    if (!merged.length) throw new Error('No valid events in response');
+    events = merged;
+    lastGoodEvents = merged;
+    dataState = 'live';
+    lastSuccessAt = new Date();
+    lastFetchFailed = false;
+  } catch (err) {
+    lastFetchFailed = true;
+    if (lastGoodEvents) { events = lastGoodEvents; dataState = 'cached'; }
+    else { dataState = 'snapshot'; }
+  }
+  refreshing = false;
+  guardedFullRender();
+}
+
+// ---------------------------------------------------------------------
+// 9. Rendering — shell (built once) + targeted content containers
+// ---------------------------------------------------------------------
+function setText(id, val){ const el = document.getElementById(id); if (el) el.textContent = val; }
+function setHtml(id, val){ const el = document.getElementById(id); if (el) el.innerHTML = val; }
+
+function headerShellHTML(){
+  return '&lt;header class=&quot;header&quot;&gt;&lt;div class=&quot;header-top&quot;&gt;' +
+    '&lt;div class=&quot;brand&quot;&gt;&lt;span class=&quot;logo&quot; aria-hidden=&quot;true&quot;&gt;' + IC.satellite + '&lt;/span&gt;' +
+    '&lt;div&gt;&lt;h1&gt;X HORIZON&lt;/h1&gt;&lt;p class=&quot;brand-sub&quot;&gt;Live Space Events&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;' +
+    '&lt;div class=&quot;header-clocks&quot;&gt;' +
+    '&lt;div class=&quot;clock-block&quot;&gt;&lt;span class=&quot;clock-label&quot;&gt;UTC&lt;/span&gt;&lt;span class=&quot;clock-value&quot; id=&quot;utcClock&quot;&gt;--:--:--&lt;/span&gt;&lt;/div&gt;' +
+    '&lt;div class=&quot;clock-block&quot;&gt;&lt;span class=&quot;clock-label&quot;&gt;Local&lt;/span&gt;&lt;span class=&quot;clock-value&quot; id=&quot;localClock&quot;&gt;--:--:--&lt;/span&gt;&lt;/div&gt;' +
+    '&lt;/div&gt;&lt;/div&gt;' +
+    '&lt;p class=&quot;sub&quot;&gt;Live launches, missions and major astronomy events — with in-page playback when a linked playable source is available.&lt;/p&gt;' +
+    '&lt;div class=&quot;actions&quot;&gt;' +
+    '&lt;span class=&quot;conn-dot&quot; id=&quot;connDot&quot; aria-live=&quot;polite&quot;&gt;\u25CF Online&lt;/span&gt;' +
+    '&lt;span class=&quot;updated&quot; id=&quot;updatedText&quot; aria-live=&quot;polite&quot;&gt;Not yet synced&lt;/span&gt;' +
+    '&lt;span class=&quot;src-tag snapshot&quot; id=&quot;srcTag&quot; aria-live=&quot;polite&quot;&gt;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt;Snapshot&lt;/span&gt;' +
+    '&lt;button class=&quot;btn&quot; id=&quot;refreshBtn&quot; aria-label=&quot;Refresh launch data&quot;&gt;' + IC.refresh + ' Refresh&lt;/button&gt;' +
+    '&lt;/div&gt;&lt;/header&gt;&lt;div id=&quot;noticeContainer&quot;&gt;&lt;/div&gt;';
+}
+
+function statBarShellHTML(){
+  const stats = [
+    ['LIVE', 'statLive', 'Live Now'],
+    ['STARTING', 'statStarting', 'Starting Soon'],
+    ['UPCOMING', 'statUpcoming', 'Upcoming'],
+    ['DELAYED', 'statDelayed', 'Delayed'],
+    ['COMPLETED', 'statCompleted', 'Completed'],
+    ['ALL', 'statTotal', 'Total Events']
+  ];
+  return '&lt;section class=&quot;stat-bar&quot; id=&quot;statBar&quot; aria-label=&quot;Event status overview&quot;&gt;' +
+    stats.map(s =&gt; '&lt;button type=&quot;button&quot; class=&quot;stat-btn' + (s[0] === 'ALL' ? ' active' : '') + '&quot; data-filter=&quot;' + s[0] + '&quot; aria-pressed=&quot;' + (s[0] === 'ALL' ? 'true' : 'false') + '&quot;&gt;&lt;span class=&quot;stat-value&quot; id=&quot;' + s[1] + '&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;stat-label&quot;&gt;' + s[2] + '&lt;/span&gt;&lt;/button&gt;').join('') +
+    '&lt;/section&gt;';
+}
+
+function controlsBarShellHTML(){
+  return '&lt;section class=&quot;controls-bar&quot; aria-label=&quot;Search and filters&quot;&gt;' +
+    '&lt;div class=&quot;search-wrap&quot;&gt;&lt;label class=&quot;sr-only&quot; for=&quot;searchInput&quot;&gt;Search events&lt;/label&gt;' +
+    '&lt;input type=&quot;search&quot; id=&quot;searchInput&quot; class=&quot;search-input&quot; placeholder=&quot;Search by name, provider, location, rocket\u2026&quot; autocomplete=&quot;off&quot;&gt;' +
+    '&lt;button type=&quot;button&quot; class=&quot;search-clear&quot; id=&quot;searchClear&quot; aria-label=&quot;Clear search&quot;&gt;\u00D7&lt;/button&gt;&lt;/div&gt;' +
+    '&lt;div class=&quot;filter-group&quot;&gt;' +
+    '&lt;label class=&quot;sr-only&quot; for=&quot;statusFilterSel&quot;&gt;Status&lt;/label&gt;' +
+    '&lt;select id=&quot;statusFilterSel&quot; class=&quot;filter-select&quot;&gt;' +
+    '&lt;option value=&quot;ALL&quot;&gt;All Statuses&lt;/option&gt;&lt;option value=&quot;LIVE&quot;&gt;Live&lt;/option&gt;&lt;option value=&quot;STARTING&quot;&gt;Starting Soon&lt;/option&gt;' +
+    '&lt;option value=&quot;UPCOMING&quot;&gt;Upcoming&lt;/option&gt;&lt;option value=&quot;DELAYED&quot;&gt;Delayed&lt;/option&gt;&lt;option value=&quot;UNKNOWN_LIVE&quot;&gt;Live Coverage&lt;/option&gt;' +
+    '&lt;option value=&quot;COMPLETED&quot;&gt;Completed&lt;/option&gt;&lt;option value=&quot;CANCELLED&quot;&gt;Cancelled / Scrubbed&lt;/option&gt;&lt;/select&gt;' +
+    '&lt;label class=&quot;sr-only&quot; for=&quot;typeFilterSel&quot;&gt;Type&lt;/label&gt;' +
+    '&lt;select id=&quot;typeFilterSel&quot; class=&quot;filter-select&quot;&gt;&lt;option value=&quot;ALL&quot;&gt;All Types&lt;/option&gt;&lt;option value=&quot;launch&quot;&gt;Launches&lt;/option&gt;&lt;option value=&quot;event&quot;&gt;Space Events&lt;/option&gt;&lt;/select&gt;' +
+    '&lt;label class=&quot;sr-only&quot; for=&quot;webcastFilterSel&quot;&gt;Webcast&lt;/label&gt;' +
+    '&lt;select id=&quot;webcastFilterSel&quot; class=&quot;filter-select&quot;&gt;&lt;option value=&quot;ALL&quot;&gt;Any Webcast&lt;/option&gt;&lt;option value=&quot;YES&quot;&gt;Webcast Available&lt;/option&gt;&lt;option value=&quot;NO&quot;&gt;No Webcast&lt;/option&gt;&lt;/select&gt;' +
+    '&lt;label class=&quot;sr-only&quot; for=&quot;providerFilterSel&quot;&gt;Provider&lt;/label&gt;' +
+    '&lt;select id=&quot;providerFilterSel&quot; class=&quot;filter-select&quot;&gt;&lt;option value=&quot;ALL&quot;&gt;All Providers&lt;/option&gt;&lt;/select&gt;' +
+    '&lt;/div&gt;' +
+    '&lt;div class=&quot;date-tabs&quot; id=&quot;dateTabs&quot; role=&quot;group&quot; aria-label=&quot;Date range&quot;&gt;' +
+    '&lt;button type=&quot;button&quot; class=&quot;date-tab active&quot; data-range=&quot;ALL&quot; aria-pressed=&quot;true&quot;&gt;All Dates&lt;/button&gt;' +
+    '&lt;button type=&quot;button&quot; class=&quot;date-tab&quot; data-range=&quot;TODAY&quot; aria-pressed=&quot;false&quot;&gt;Today&lt;/button&gt;' +
+    '&lt;button type=&quot;button&quot; class=&quot;date-tab&quot; data-range=&quot;TOMORROW&quot; aria-pressed=&quot;false&quot;&gt;Tomorrow&lt;/button&gt;' +
+    '&lt;button type=&quot;button&quot; class=&quot;date-tab&quot; data-range=&quot;NEXT7&quot; aria-pressed=&quot;false&quot;&gt;Next 7 Days&lt;/button&gt;' +
+    '&lt;button type=&quot;button&quot; class=&quot;date-tab&quot; data-range=&quot;LATER&quot; aria-pressed=&quot;false&quot;&gt;Later&lt;/button&gt;' +
+    '&lt;/div&gt;&lt;/section&gt;';
+}
+
+function modalShellHTML(){
+  return '&lt;div class=&quot;modal-overlay&quot; id=&quot;modalOverlay&quot; hidden&gt;' +
+    '&lt;div class=&quot;modal-panel&quot; role=&quot;dialog&quot; aria-modal=&quot;true&quot; aria-labelledby=&quot;modalTitleText&quot; id=&quot;modalPanel&quot;&gt;' +
+    '&lt;button type=&quot;button&quot; class=&quot;modal-close&quot; id=&quot;modalCloseBtn&quot; aria-label=&quot;Close event details&quot;&gt;\u00D7&lt;/button&gt;' +
+    '&lt;div id=&quot;modalBody&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;';
+}
+
+function buildShell(){
+  const app = document.getElementById('app');
+  if (!app) return;
+  app.innerHTML = headerShellHTML() +
+    statBarShellHTML() +
+    controlsBarShellHTML() +
+    '&lt;section style=&quot;margin-top:32px&quot;&gt;&lt;div class=&quot;label&quot;&gt;' + IC.radio + ' Main Stage&lt;/div&gt;&lt;div id=&quot;mainStageContainer&quot;&gt;&lt;/div&gt;&lt;/section&gt;' +
+    '&lt;section class=&quot;section-block&quot; style=&quot;margin-top:48px&quot;&gt;&lt;div class=&quot;pending-head&quot;&gt;&lt;h2&gt;' + IC.rocket + ' Events &lt;span class=&quot;count&quot; id=&quot;gridCount&quot;&gt;(0)&lt;/span&gt;&lt;/h2&gt;&lt;/div&gt;&lt;div id=&quot;gridContainer&quot;&gt;&lt;/div&gt;&lt;/section&gt;' +
+    '&lt;section class=&quot;section-block&quot; style=&quot;margin-top:48px&quot;&gt;&lt;div class=&quot;pending-head&quot;&gt;&lt;h2&gt;' + IC.history + ' Event History &lt;span class=&quot;count&quot; id=&quot;historyCount&quot;&gt;(0)&lt;/span&gt;&lt;/h2&gt;&lt;/div&gt;&lt;div id=&quot;historyContainer&quot; class=&quot;history-list&quot;&gt;&lt;/div&gt;&lt;/section&gt;' +
+    '&lt;footer&gt;Data from The Space Devs Launch Library \u00B7 auto-refreshes every ' + Math.round(CONFIG.REFRESH_INTERVAL_MS / 60000) + ' minutes \u00B7 times shown in UTC and your local timezone&lt;/footer&gt;' +
+    modalShellHTML();
+  attachShellListeners();
+}
+
+function getMainStageElement(){
+  return document.querySelector('#mainStageContainer .stage');
+}
+
+function updateMainStageFullscreenButton(){
+  const btn = document.getElementById('mainStageFullscreenBtn');
+  if (!btn) return;
+  const active = document.fullscreenElement === getMainStageElement();
+  btn.setAttribute('aria-label', active ? 'Exit fullscreen' : 'Enter fullscreen');
+  btn.setAttribute('title', active ? 'Exit fullscreen' : 'Fullscreen');
+  btn.innerHTML = active
+    ? '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;m9 3-6 6&quot;/&gt;&lt;path d=&quot;M3 3v6h6&quot;/&gt;&lt;path d=&quot;m15 21 6-6&quot;/&gt;&lt;path d=&quot;M21 21v-6h-6&quot;/&gt;&lt;/svg&gt;'
+    : '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M8 3H3v5&quot;/&gt;&lt;path d=&quot;M3 3l6 6&quot;/&gt;&lt;path d=&quot;M16 3h5v5&quot;/&gt;&lt;path d=&quot;m21 3-6 6&quot;/&gt;&lt;path d=&quot;M8 21H3v-5&quot;/&gt;&lt;path d=&quot;m3 21 6-6&quot;/&gt;&lt;path d=&quot;M16 21h5v-5&quot;/&gt;&lt;path d=&quot;m21 21-6-6&quot;/&gt;&lt;/svg&gt;';
+}
+
+async function toggleMainStageFullscreen(){
+  const stage = getMainStageElement();
+  if (!stage) return;
+  try {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    } else if (stage.requestFullscreen) {
+      await stage.requestFullscreen();
+    }
+  } catch (err) {
+    console.warn('X HORIZON fullscreen unavailable', err);
+  }
+  updateMainStageFullscreenButton();
+}
+
+function attachShellListeners(){
+  document.addEventListener('click', e =&gt; {
+    const btn = e.target.closest('#mainStageFullscreenBtn');
+    if (btn) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleMainStageFullscreen();
+    }
+  });
+  document.addEventListener('fullscreenchange', updateMainStageFullscreenButton);
+
+  const refreshBtn = document.getElementById('refreshBtn');
+  if (refreshBtn) refreshBtn.addEventListener('click', () =&gt; fetchEvents());
+
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) searchInput.addEventListener('input', () =&gt; {
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(() =&gt; { uiState.search = searchInput.value; guardedRenderResults(); }, CONFIG.SEARCH_DEBOUNCE_MS);
+  });
+  const searchClear = document.getElementById('searchClear');
+  if (searchClear) searchClear.addEventListener('click', () =&gt; {
+    if (searchInput) { searchInput.value = ''; searchInput.focus(); }
+    uiState.search = '';
+    guardedRenderResults();
+  });
+
+  const bindSelect = (id, key) =&gt; {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('change', () =&gt; { uiState[key] = el.value; guardedRenderResults(); });
+  };
+  bindSelect('statusFilterSel', 'statusFilter');
+  bindSelect('typeFilterSel', 'typeFilter');
+  bindSelect('webcastFilterSel', 'webcastFilter');
+  bindSelect('providerFilterSel', 'providerFilter');
+
+  const dateTabsWrap = document.getElementById('dateTabs');
+  if (dateTabsWrap) dateTabsWrap.addEventListener('click', e =&gt; {
+    const btn = e.target.closest('.date-tab');
+    if (!btn) return;
+    uiState.dateView = btn.getAttribute('data-range');
+    dateTabsWrap.querySelectorAll('.date-tab').forEach(b =&gt; {
+      const a = b === btn; b.classList.toggle('active', a); b.setAttribute('aria-pressed', a ? 'true' : 'false');
+    });
+    guardedRenderResults();
+  });
+
+  const statBar = document.getElementById('statBar');
+  if (statBar) statBar.addEventListener('click', e =&gt; {
+    const btn = e.target.closest('.stat-btn');
+    if (!btn) return;
+    uiState.statusFilter = btn.getAttribute('data-filter');
+    const sel = document.getElementById('statusFilterSel');
+    if (sel) sel.value = uiState.statusFilter;
+    guardedRenderResults();
+  });
+
+  document.addEventListener('click', e =&gt; {
+    const sourceBtn = e.target.closest('[data-play-source]');
+    if (!sourceBtn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const url = sourceBtn.getAttribute('data-play-source');
+    const embed = youtubeEmbed(url);
+    const media = document.querySelector('#mainStageContainer .media');
+    if (!media || !embed) return;
+    const old = media.querySelector('#mainStreamFrame');
+    if (old) old.remove();
+    const frame = document.createElement('iframe');
+    frame.id = 'mainStreamFrame';
+    frame.src = embed;
+    frame.title = 'Live coverage';
+    frame.allow = 'accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
+    frame.allowFullscreen = true;
+    media.appendChild(frame);
+    const chooser = media.querySelector('#sourceChooser');
+    if (chooser) chooser.remove();
+    let playing = media.querySelector('.stage-source-playing');
+    if (!playing) {
+      playing = document.createElement('div');
+      playing.className = 'stage-source-playing';
+      media.appendChild(playing);
+    }
+    playing.textContent = 'Playing ' + (sourceBtn.textContent || 'source').trim();
+  });
+
+  document.addEventListener('click', e =&gt; {
+    const btn = e.target.closest('[data-modal-source]');
+    if (!btn) return;
+    const url = btn.getAttribute('data-modal-source');
+    const embed = youtubeEmbed(url);
+    const box = document.querySelector('#modalBody .modal-embed');
+    if (!embed || !box) return;
+    box.innerHTML = '&lt;iframe src=&quot;' + esc(embed) + '&quot; title=&quot;Live coverage&quot; allow=&quot;accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture&quot; allowfullscreen&gt;&lt;/iframe&gt;';
+  });
+
+  const gridContainer = document.getElementById('gridContainer');
+  if (gridContainer) gridContainer.addEventListener('click', e =&gt; {
+    const el = e.target.closest('[data-open-id]');
+    if (el) openModal(el.getAttribute('data-open-id'));
+  });
+  const historyContainer = document.getElementById('historyContainer');
+  if (historyContainer) historyContainer.addEventListener('click', e =&gt; {
+    const el = e.target.closest('[data-open-id]');
+    if (el) openModal(el.getAttribute('data-open-id'));
+  });
+
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+  const modalOverlay = document.getElementById('modalOverlay');
+  if (modalOverlay) modalOverlay.addEventListener('click', e =&gt; { if (e.target.id === 'modalOverlay') closeModal(); });
+
+  window.addEventListener('online', updateConnDot);
+  window.addEventListener('offline', updateConnDot);
+}
+
+function updateConnDot(){
+  const dot = document.getElementById('connDot');
+  if (!dot) return;
+  const online = navigator.onLine;
+  dot.textContent = online ? '\u25CF Online' : '\u25CB Offline';
+  dot.style.color = online ? '#4ade80' : '#737373';
+}
+
+function updateClocks(){
+  const d = new Date(now);
+  setText('utcClock', d.toISOString().slice(11, 19) + ' UTC');
+  setText('localClock', d.toLocaleTimeString());
+}
+
+function updateHeaderSync(){
+  const stateLabel = dataState === 'live' ? 'Live Data' : (dataState === 'cached' ? 'Cached Data' : 'Snapshot');
+  setText('updatedText', lastSuccessAt ? 'Last sync ' + lastSuccessAt.toLocaleTimeString() : 'Not yet synced');
+  const tag = document.getElementById('srcTag');
+  if (tag) { tag.className = 'src-tag ' + dataState; tag.innerHTML = '&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt;' + esc(stateLabel); }
+  const btn = document.getElementById('refreshBtn');
+  if (btn) {
+    btn.classList.toggle('spinning', refreshing);
+    btn.disabled = refreshing;
+    btn.setAttribute('aria-busy', refreshing ? 'true' : 'false');
+    btn.innerHTML = IC.refresh + ' ' + (refreshing ? 'Refreshing\u2026' : 'Refresh');
+  }
+  const notice = document.getElementById('noticeContainer');
+  if (notice) {
+    notice.innerHTML = lastFetchFailed
+      ? '&lt;div class=&quot;notice&quot; role=&quot;status&quot;&gt;' + IC.warning + ' Live synchronization unavailable \u2014 showing ' + (dataState === 'cached' ? 'cached' : 'snapshot') + ' data.&lt;/div&gt;'
+      : '';
+  }
+}
+
+function renderStatOverview(counts){
+  setText('statLive', counts.LIVE);
+  setText('statStarting', counts.STARTING);
+  setText('statUpcoming', counts.UPCOMING);
+  setText('statDelayed', counts.DELAYED);
+  setText('statCompleted', counts.COMPLETED);
+  setText('statTotal', counts.TOTAL);
+  document.querySelectorAll('.stat-btn').forEach(btn =&gt; {
+    const key = btn.getAttribute('data-filter');
+    const active = uiState.statusFilter === key;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+}
+
+function mainCountdownHTML(scheduledTime, nowMs){
+  const { days, hours, minutes, seconds } = diffParts(new Date(scheduledTime).getTime(), nowMs);
+  if (days === 0 &amp;&amp; hours === 0 &amp;&amp; minutes === 0 &amp;&amp; seconds === 0){
+    return '&lt;div class=&quot;countdown&quot; id=&quot;mainCountdown&quot;&gt;&lt;div class=&quot;cd-block&quot; style=&quot;min-width:96px&quot;&gt;&lt;span class=&quot;v&quot;&gt;T-0&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;';
+  }
+  const blocks = [['Days', 'mainCdDays', days], ['Hrs', 'mainCdHrs', hours], ['Min', 'mainCdMin', minutes], ['Sec', 'mainCdSec', seconds]];
+  return '&lt;div class=&quot;countdown&quot; id=&quot;mainCountdown&quot;&gt;' + blocks.map(b =&gt; '&lt;div class=&quot;cd-block&quot;&gt;&lt;span class=&quot;v&quot; id=&quot;' + b[1] + '&quot;&gt;' + pad2(b[2]) + '&lt;/span&gt;&lt;span class=&quot;l&quot;&gt;' + b[0] + '&lt;/span&gt;&lt;/div&gt;').join('') + '&lt;/div&gt;';
+}
+
+function compactCountdownHTML(ev, nowMs){
+  const { days, hours, minutes, seconds } = diffParts(new Date(ev.scheduledTime).getTime(), nowMs);
+  const label = (days === 0 &amp;&amp; hours === 0 &amp;&amp; minutes === 0 &amp;&amp; seconds === 0) ? 'T-0' : ((days &gt; 0 ? days + 'd ' : '') + pad2(hours) + ':' + pad2(minutes) + ':' + pad2(seconds));
+  return '&lt;span class=&quot;countdown-compact&quot; data-cid=&quot;' + esc(ev.id) + '&quot;&gt;' + label + '&lt;/span&gt;';
+}
+
+function stageHTML(main){
+  if (!main){
+    return '&lt;div class=&quot;stage&quot; style=&quot;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:96px 24px;text-align:center&quot;&gt;' +
+      '&lt;div style=&quot;color:#404040&quot;&gt;' + IC.rocket + '&lt;/div&gt;' +
+      '&lt;p style=&quot;margin-top:16px;color:var(--muted2)&quot;&gt;No event is currently live.&lt;/p&gt;' +
+      '&lt;p style=&quot;font-size:14px;color:var(--muted3)&quot;&gt;No upcoming event scheduled.&lt;/p&gt;&lt;/div&gt;';
+  }
+  const ev = main.ev, phase = main.phase;
+  const nowMs = now;
+  const schedMs = new Date(ev.scheduledTime).getTime();
+  const bg = ev.imageUrl ? '&lt;img class=&quot;bg&quot; aria-hidden=&quot;true&quot; alt=&quot;&quot; src=&quot;' + esc(ev.imageUrl) + '&quot; onerror=&quot;this.remove()&quot;&gt;' : '';
+  const grad = '&lt;div class=&quot;grad&quot;&gt;&lt;/div&gt;';
+  const sources = sourceButtonsHTML(ev);
+  let badge = '', body = '', infoBlock = '';
+
+  if (phase === 'LIVE'){
+    badge = '&lt;div class=&quot;badge-live&quot; aria-live=&quot;polite&quot;&gt;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt;' + (main.inferred ? 'Live Coverage' : 'Live Now') + '&lt;/div&gt;';
+    body = sourcePlayHTML(ev);
+    const { hours, minutes, seconds } = elapsedParts(schedMs, nowMs);
+    infoBlock = '&lt;div class=&quot;tplus&quot; id=&quot;mainTPlus&quot;&gt;T+ ' + pad2(hours) + ':' + pad2(minutes) + ':' + pad2(seconds) + '&lt;/div&gt;';
+  } else if (phase === 'UNKNOWN_LIVE'){
+    badge = '&lt;div class=&quot;badge-live&quot; aria-live=&quot;polite&quot;&gt;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt;Live Coverage&lt;/div&gt;';
+    body = sourcePlayHTML(ev);
+    infoBlock = '&lt;p class=&quot;sched&quot;&gt;Scheduled coverage window is active. Choose a source below to play it here.&lt;/p&gt;';
+  } else if (phase === 'DELAYED'){
+    if (schedMs &gt; nowMs){
+      body = '&lt;div class=&quot;stage-overlay&quot;&gt;&lt;span class=&quot;badge-next&quot;&gt;' + IC.clock + ' Delayed&lt;/span&gt;' + mainCountdownHTML(ev.scheduledTime, nowMs) + '&lt;/div&gt;';
+      infoBlock = '&lt;p class=&quot;sched&quot;&gt;New target time: ' + esc(formatNet(ev.scheduledTime)) + '&lt;/p&gt;';
+    } else {
+      body = '&lt;div class=&quot;stage-overlay&quot;&gt;&lt;span class=&quot;badge-next&quot;&gt;' + IC.clock + ' Delayed&lt;/span&gt;&lt;span class=&quot;no-stream&quot;&gt;Awaiting new time&lt;/span&gt;&lt;/div&gt;';
+      infoBlock = '&lt;p class=&quot;sched&quot;&gt;Delayed — an updated time has not been published yet.&lt;/p&gt;';
+    }
+  } else {
+    const pillText = phase === 'STARTING' ? 'Starting Soon' : 'Up Next';
+    body = '&lt;div class=&quot;stage-overlay&quot;&gt;&lt;span class=&quot;badge-next&quot;&gt;' + pillText + '&lt;/span&gt;' + mainCountdownHTML(ev.scheduledTime, nowMs) + '&lt;/div&gt;';
+    infoBlock = '&lt;p class=&quot;sched&quot;&gt;Scheduled for ' + esc(formatNet(ev.scheduledTime)) + (ev.hasWebcast ? ' — source play buttons are ready below.' : ' — waiting for a coverage source.') + '&lt;/p&gt;';
+  }
+
+  const fullscreenBtn = '&lt;button type=&quot;button&quot; class=&quot;stage-fullscreen-btn&quot; id=&quot;mainStageFullscreenBtn&quot; aria-label=&quot;Enter fullscreen&quot; title=&quot;Fullscreen&quot;&gt;' +
+    '&lt;svg aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;path d=&quot;M8 3H3v5&quot;/&gt;&lt;path d=&quot;M3 3l6 6&quot;/&gt;&lt;path d=&quot;M16 3h5v5&quot;/&gt;&lt;path d=&quot;m21 3-6 6&quot;/&gt;&lt;path d=&quot;M8 21H3v-5&quot;/&gt;&lt;path d=&quot;m3 21 6-6&quot;/&gt;&lt;path d=&quot;M16 21h5v-5&quot;/&gt;&lt;path d=&quot;m21 21-6-6&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;';
+  const mediaInner = bg + grad + badge + fullscreenBtn + body + sources;
+  const tagCls = ev.type === 'launch' ? 'tag tag-launch' : 'tag tag-event';
+  const tagIcon = ev.type === 'launch' ? IC.rocket : IC.radio;
+  const meta = [];
+  if (ev.agency) meta.push('&lt;span&gt;' + IC.building + esc(ev.agency) + '&lt;/span&gt;');
+  if (ev.location) meta.push('&lt;span&gt;' + IC.pin + esc(ev.location) + '&lt;/span&gt;');
+  if (ev.rocketName) meta.push('&lt;span&gt;' + IC.rocket + esc(ev.rocketName) + '&lt;/span&gt;');
+  if (ev.orbit) meta.push('&lt;span&gt;' + IC.orbit + esc(ev.orbit) + '&lt;/span&gt;');
+
+  return '&lt;div class=&quot;stage&quot;&gt;&lt;div class=&quot;media&quot;&gt;' + mediaInner + '&lt;/div&gt;&lt;div class=&quot;stage-body&quot;&gt;' +
+    '&lt;div class=&quot;tags&quot;&gt;&lt;span class=&quot;' + tagCls + '&quot;&gt;' + tagIcon + esc(ev.type) + '&lt;/span&gt;' +
+    (ev.status ? '&lt;span class=&quot;status-pill&quot;&gt;' + esc(ev.status) + '&lt;/span&gt;' : '') + '&lt;/div&gt;' +
+    '&lt;h2&gt;' + esc(ev.name) + '&lt;/h2&gt;' +
+    (meta.length ? '&lt;div class=&quot;meta&quot;&gt;' + meta.join('') + '&lt;/div&gt;' : '') +
+    infoBlock +
+    (ev.description ? '&lt;p class=&quot;desc&quot;&gt;' + esc(ev.description) + '&lt;/p&gt;' : '') +
+    '&lt;/div&gt;&lt;/div&gt;';
+}
+
+function renderMainStage(main){
+  const sig = main ? [main.ev.id, main.phase, main.ev.webcastLive, main.ev.webcastUrl].join('~') : 'none';
+  if (sig === lastRenderedMainSig) return; // don't destroy an active iframe/media unnecessarily
+  lastRenderedMainSig = sig;
+  const container = document.getElementById('mainStageContainer');
+  if (container) container.innerHTML = stageHTML(main);
+}
+
+function cardHTML(item){
+  const ev = item.ev, phase = item.phase;
+  const tagCls = ev.type === 'launch' ? 'tag tag-launch' : 'tag tag-event';
+  const tagIcon = ev.type === 'launch' ? IC.rocket : IC.radio;
+  const media = '&lt;div class=&quot;ph&quot;&gt;' + IC.rocket + '&lt;/div&gt;' + (ev.imageUrl ? '&lt;img src=&quot;' + esc(ev.imageUrl) + '&quot; alt=&quot;' + esc(ev.name) + '&quot; loading=&quot;lazy&quot; onerror=&quot;this.remove()&quot;&gt;' : '');
+  const meta = [];
+  if (ev.agency) meta.push('&lt;span&gt;' + IC.building + esc(ev.agency) + '&lt;/span&gt;');
+  if (ev.location) meta.push('&lt;span&gt;' + IC.pin + esc(ev.location) + '&lt;/span&gt;');
+  if (ev.rocketName) meta.push('&lt;span&gt;' + IC.rocket + esc(ev.rocketName) + '&lt;/span&gt;');
+  let phaseTag = '';
+  if (phase === 'DELAYED') phaseTag = ' &lt;span class=&quot;tag tag-delayed&quot;&gt;' + IC.clock + 'Delayed&lt;/span&gt;';
+  else if (phase === 'STARTING') phaseTag = ' &lt;span class=&quot;tag tag-unknown&quot;&gt;Starting&lt;/span&gt;';
+  else if (phase === 'UNKNOWN_LIVE') phaseTag = ' &lt;span class=&quot;tag tag-live-mini&quot;&gt;' + IC.satellite + 'Live Coverage&lt;/span&gt;';
+  else if (phase === 'LIVE') phaseTag = ' &lt;span class=&quot;tag tag-live-mini&quot;&gt;' + IC.satellite + 'Live&lt;/span&gt;';
+  else if (phase === 'COMPLETED') phaseTag = ' &lt;span class=&quot;tag tag-event&quot;&gt;' + esc(ev.status || 'Completed') + '&lt;/span&gt;';
+  const countdownOrTime = (phase === 'UPCOMING' || phase === 'STARTING' || phase === 'DELAYED')
+    ? compactCountdownHTML(ev, now)
+    : '&lt;span class=&quot;countdown-compact&quot;&gt;' + esc(formatNet(ev.scheduledTime)) + '&lt;/span&gt;';
+  return '&lt;button type=&quot;button&quot; class=&quot;card&quot; data-open-id=&quot;' + esc(ev.id) + '&quot; aria-label=&quot;View details for ' + esc(ev.name) + '&quot;&gt;' +
+    '&lt;div class=&quot;card-media&quot;&gt;' + media + '&lt;div class=&quot;cgrad&quot;&gt;&lt;/div&gt;&lt;span class=&quot;card-tag ' + tagCls + '&quot;&gt;' + tagIcon + esc(ev.type) + '&lt;/span&gt;&lt;/div&gt;' +
+    '&lt;div class=&quot;card-body&quot;&gt;&lt;h3&gt;' + esc(ev.name) + '&lt;/h3&gt;' +
+    (meta.length ? '&lt;div class=&quot;card-meta&quot;&gt;' + meta.join('') + '&lt;/div&gt;' : '') +
+    '&lt;div class=&quot;card-foot&quot;&gt;' + countdownOrTime + (ev.hasWebcast ? '&lt;span class=&quot;stream-flag&quot;&gt;&lt;span class=&quot;d&quot;&gt;&lt;/span&gt;Webcast&lt;/span&gt;' : '') + '&lt;/div&gt;' +
+    '&lt;p class=&quot;card-date&quot;&gt;' + esc(formatNet(ev.scheduledTime)) + phaseTag + '&lt;/p&gt;&lt;/div&gt;&lt;/button&gt;';
+}
+
+function resetFilters(){
+  uiState = { search: '', statusFilter: 'ALL', typeFilter: 'ALL', webcastFilter: 'ALL', providerFilter: 'ALL', dateView: 'ALL' };
+  const si = document.getElementById('searchInput'); if (si) si.value = '';
+  const ss = document.getElementById('statusFilterSel'); if (ss) ss.value = 'ALL';
+  const ts = document.getElementById('typeFilterSel'); if (ts) ts.value = 'ALL';
+  const ws = document.getElementById('webcastFilterSel'); if (ws) ws.value = 'ALL';
+  const ps = document.getElementById('providerFilterSel'); if (ps) ps.value = 'ALL';
+  document.querySelectorAll('.date-tab').forEach(b =&gt; {
+    const a = b.getAttribute('data-range') === 'ALL'; b.classList.toggle('active', a); b.setAttribute('aria-pressed', a ? 'true' : 'false');
+  });
+  guardedRenderResults();
+}
+
+function renderGrid(items){
+  const container = document.getElementById('gridContainer');
+  if (!container) return;
+  setText('gridCount', '(' + items.length + ')');
+  if (!items.length){
+    const filtersActive = uiState.search || uiState.statusFilter !== 'ALL' || uiState.typeFilter !== 'ALL' || uiState.webcastFilter !== 'ALL' || uiState.providerFilter !== 'ALL' || uiState.dateView !== 'ALL';
+    container.innerHTML = filtersActive
+      ? '&lt;div class=&quot;empty&quot;&gt;No matching events.&lt;br&gt;&lt;button class=&quot;btn&quot; id=&quot;clearFiltersBtn&quot; style=&quot;margin-top:12px&quot;&gt;Clear filters&lt;/button&gt;&lt;/div&gt;'
+      : '&lt;div class=&quot;empty&quot;&gt;No events to show right now.&lt;/div&gt;';
+    const cb = document.getElementById('clearFiltersBtn');
+    if (cb) cb.addEventListener('click', resetFilters);
+    return;
+  }
+  container.innerHTML = '&lt;div class=&quot;grid&quot;&gt;' + items.map(cardHTML).join('') + '&lt;/div&gt;';
+}
+
+function historyItemHTML(item){
+  const ev = item.ev, phase = item.phase;
+  const resultLabel = phase === 'CANCELLED' ? 'Cancelled' : phase === 'SCRUBBED' ? 'Scrubbed' : (ev.status || 'Completed');
+  const cls = (phase === 'CANCELLED' || phase === 'SCRUBBED') ? 'history-item cancelled' : 'history-item';
+  const meta = [];
+  if (ev.agency) meta.push(esc(ev.agency));
+  if (ev.location) meta.push(esc(ev.location));
+  return '&lt;button type=&quot;button&quot; class=&quot;' + cls + '&quot; data-open-id=&quot;' + esc(ev.id) + '&quot; aria-label=&quot;View details for ' + esc(ev.name) + '&quot;&gt;' +
+    '&lt;span class=&quot;history-name&quot;&gt;' + esc(ev.name) + '&lt;/span&gt;' +
+    '&lt;span class=&quot;history-result&quot;&gt;' + esc(resultLabel) + '&lt;/span&gt;' +
+    '&lt;span class=&quot;history-date&quot;&gt;' + esc(formatNet(ev.scheduledTime)) + '&lt;/span&gt;' +
+    (meta.length ? '&lt;span class=&quot;history-meta&quot;&gt;' + meta.join(' \u00B7 ') + '&lt;/span&gt;' : '') +
+    '&lt;/button&gt;';
+}
+
+function renderHistory(items){
+  const container = document.getElementById('historyContainer');
+  if (!container) return;
+  setText('historyCount', '(' + items.length + ')');
+  container.innerHTML = items.length
+    ? items.map(historyItemHTML).join('')
+    : '&lt;div class=&quot;empty&quot; style=&quot;padding:32px&quot;&gt;No completed or cancelled events yet.&lt;/div&gt;';
+}
+
+function updateProviderFilterOptions(classified){
+  const set = new Set();
+  classified.forEach(c =&gt; { if (c.ev.agency) set.add(c.ev.agency); });
+  const list = Array.from(set).sort();
+  const key = list.join('|');
+  if (key === lastProviderKey) return;
+  lastProviderKey = key;
+  const sel = document.getElementById('providerFilterSel');
+  if (!sel) return;
+  const current = uiState.providerFilter;
+  sel.innerHTML = '&lt;option value=&quot;ALL&quot;&gt;All Providers&lt;/option&gt;' + list.map(p =&gt; '&lt;option value=&quot;' + esc(p) + '&quot;&gt;' + esc(p) + '&lt;/option&gt;').join('');
+  if (list.indexOf(current) !== -1) sel.value = current;
+  else { sel.value = 'ALL'; uiState.providerFilter = 'ALL'; }
+}
+
+// ---------------------------------------------------------------------
+// 10. Event details modal
+// ---------------------------------------------------------------------
+function modalBodyHTML(ev, phase){
+  const list = getSourceList(ev);
+  const playable = list.find(s =&gt; s.embed) || null;
+  let webcastBlock = '';
+  if (playable) webcastBlock = '&lt;div class=&quot;modal-embed&quot;&gt;&lt;iframe src=&quot;' + esc(playable.embed) + '&quot; title=&quot;' + esc(ev.name) + ' webcast&quot; allow=&quot;accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture&quot; allowfullscreen&gt;&lt;/iframe&gt;&lt;/div&gt;';
+  else if (list.length) webcastBlock = '&lt;div class=&quot;modal-actions&quot;&gt;' + list.map(s =&gt; '&lt;a class=&quot;btn&quot; href=&quot;' + esc(s.url) + '&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;' + IC.external + ' ' + esc(s.label) + '&lt;/a&gt;').join('') + '&lt;/div&gt;';
+  else webcastBlock = '&lt;span class=&quot;no-stream&quot;&gt;No webcast linked&lt;/span&gt;';
+
+  const sourceRows = list.length &gt; 1 ? '&lt;div class=&quot;modal-actions&quot;&gt;' + list.slice(1).map(s =&gt; s.embed
+    ? '&lt;button type=&quot;button&quot; class=&quot;btn&quot; data-modal-source=&quot;' + esc(s.url) + '&quot;&gt;' + IC.play + ' ' + esc(s.label) + '&lt;/button&gt;'
+    : '&lt;a class=&quot;btn&quot; href=&quot;' + esc(s.url) + '&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;' + IC.external + ' ' + esc(s.label) + '&lt;/a&gt;'
+  ).join('') + '&lt;/div&gt;' : '';
+
+  const rows = [];
+  rows.push(['Status', esc(phaseLabel(phase)) + (ev.status ? ' &lt;span class=&quot;status-pill&quot; style=&quot;margin-left:6px&quot;&gt;' + esc(ev.status) + '&lt;/span&gt;' : '')]);
+  if (phase === 'LIVE') rows.push(['Elapsed', '&lt;span id=&quot;modalTPlus&quot;&gt;T+ 00:00:00&lt;/span&gt;']);
+  rows.push(['Scheduled (UTC)', esc(formatUtc(ev.scheduledTime))]);
+  rows.push(['Scheduled (Local)', esc(formatLocalFull(ev.scheduledTime))]);
+  if (ev.missionType) rows.push(['Mission Type', esc(ev.missionType)]);
+  if (ev.agency) rows.push(['Provider', esc(ev.agency)]);
+  if (ev.location) rows.push(['Location', esc(ev.location)]);
+  if (ev.rocketName) rows.push(['Rocket', esc(ev.rocketName)]);
+  if (ev.orbit) rows.push(['Orbit', esc(ev.orbit)]);
+
+  const rowsHTML = rows.map(r =&gt; '&lt;div class=&quot;modal-row&quot;&gt;&lt;span class=&quot;modal-row-label&quot;&gt;' + r[0] + '&lt;/span&gt;&lt;span class=&quot;modal-row-value&quot;&gt;' + r[1] + '&lt;/span&gt;&lt;/div&gt;').join('');
+  const tagCls = ev.type === 'launch' ? 'tag tag-launch' : 'tag tag-event';
+  const tagIcon = ev.type === 'launch' ? IC.rocket : IC.radio;
+
+  return '&lt;h2 id=&quot;modalTitleText&quot;&gt;' + esc(ev.name) + '&lt;/h2&gt;' +
+    '&lt;div class=&quot;tags&quot; style=&quot;margin-top:8px&quot;&gt;&lt;span class=&quot;' + tagCls + '&quot;&gt;' + tagIcon + esc(ev.type) + '&lt;/span&gt;&lt;/div&gt;' +
+    '&lt;div class=&quot;modal-rows&quot;&gt;' + rowsHTML + '&lt;/div&gt;' +
+    (ev.description ? '&lt;p class=&quot;modal-desc&quot;&gt;' + esc(ev.description) + '&lt;/p&gt;' : '') +
+    '&lt;div class=&quot;modal-webcast&quot;&gt;' + webcastBlock + '&lt;/div&gt;' + sourceRows +
+    '&lt;div class=&quot;modal-actions&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;btn&quot; id=&quot;modalShareBtn&quot;&gt;' + IC.external + ' Share&lt;/button&gt;' +
+    (ev.sourceUrl ? '&lt;a class=&quot;btn&quot; href=&quot;' + esc(ev.sourceUrl) + '&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Source Data&lt;/a&gt;' : '') +
+    '&lt;/div&gt;';
+}
+
+async function shareEvent(ev, phase){
+  const text = ev.name + ' \u2014 ' + phaseLabel(phase) + ' \u2014 ' + formatUtc(ev.scheduledTime);
+  const shareData = { title: 'X HORIZON: ' + ev.name, text: text };
+  if (ev.sourceUrl) shareData.url = ev.sourceUrl;
+  try {
+    if (navigator.share) { await navigator.share(shareData); return; }
+  } catch (e) { /* user cancelled or share failed; fall through to clipboard */ }
+  try {
+    const clip = text + (ev.sourceUrl ? ('\n' + ev.sourceUrl) : '');
+    await navigator.clipboard.writeText(clip);
+    const btn = document.getElementById('modalShareBtn');
+    if (btn) { const orig = btn.textContent; btn.textContent = 'Copied!'; setTimeout(() =&gt; { btn.textContent = orig; }, 1500); }
+  } catch (e2) { /* clipboard unavailable — nothing more we can safely do */ }
+}
+
+function bindModalShareButton(ev, phase){
+  const shareBtn = document.getElementById('modalShareBtn');
+  if (shareBtn) shareBtn.addEventListener('click', () =&gt; shareEvent(ev, phase));
+}
+
+function openModal(id){
+  const item = lastClassified.find(c =&gt; c.ev.id === id);
+  if (!item) return;
+  openModalId = id;
+  lastFocusedBeforeModal = document.activeElement;
+  setHtml('modalBody', modalBodyHTML(item.ev, item.phase));
+  bindModalShareButton(item.ev, item.phase);
+  const overlay = document.getElementById('modalOverlay');
+  if (overlay) overlay.hidden = false;
+  const closeBtn = document.getElementById('modalCloseBtn');
+  if (closeBtn) closeBtn.focus();
+  document.addEventListener('keydown', onModalKeydown);
+}
+
+function closeModal(){
+  const overlay = document.getElementById('modalOverlay');
+  if (overlay) overlay.hidden = true;
+  openModalId = null;
+  document.removeEventListener('keydown', onModalKeydown);
+  if (lastFocusedBeforeModal &amp;&amp; typeof lastFocusedBeforeModal.focus === 'function') lastFocusedBeforeModal.focus();
+}
+
+function refreshModalIfOpen(){
+  if (!openModalId) return;
+  const item = lastClassified.find(c =&gt; c.ev.id === openModalId);
+  if (!item) { closeModal(); return; }
+  setHtml('modalBody', modalBodyHTML(item.ev, item.phase));
+  bindModalShareButton(item.ev, item.phase);
+}
+
+function onModalKeydown(e){
+  if (e.key === 'Escape') { closeModal(); return; }
+  if (e.key === 'Tab'){
+    const panel = document.getElementById('modalPanel');
+    if (!panel) return;
+    const focusables = panel.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex=&quot;-1&quot;])');
+    if (!focusables.length) return;
+    const first = focusables[0], last = focusables[focusables.length - 1];
+    if (e.shiftKey &amp;&amp; document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey &amp;&amp; document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+}
+
+// ---------------------------------------------------------------------
+// 11. Orchestration
+// ---------------------------------------------------------------------
+function recomputeCore(){
+  lastClassified = events.map(ev =&gt; Object.assign({ ev: ev }, classifyEvent(ev, now)));
+  lastMain = selectMainStage(lastClassified);
+  lastCounts = computeCounts(lastClassified);
+  const transitions = detectTransitions(lastClassified);
+  if (transitions.length) handleEventTransitions(transitions);
+  const m = lastMain ? [lastMain.ev.id, lastMain.phase, lastMain.ev.webcastLive, lastMain.ev.webcastUrl, (lastMain.ev.webcastUrls||[]).join('|')].join('~') : 'none';
+  const c = lastClassified.map(x =&gt; x.ev.id + ':' + x.phase).join(',');
+  return [m, c, dataState, lastFetchFailed, refreshing].join('||');
+}
+
+function renderResults(){
+  renderStatOverview(lastCounts);
+  renderMainStage(lastMain);
+  renderGrid(computeFilteredGrid(lastClassified, uiState, now));
+  renderHistory(computeHistory(lastClassified, CONFIG.HISTORY_LIMIT));
+  updateProviderFilterOptions(lastClassified);
+  refreshModalIfOpen();
+}
+
+function guardedRenderResults(){
+  try { renderResults(); } catch (err) { console.error('X HORIZON render error', err); }
+}
+
+function updateLiveNumbers(){
+  const nowMs = now;
+  if (lastMain){
+    const ev = lastMain.ev, phase = lastMain.phase;
+    const schedMs = new Date(ev.scheduledTime).getTime();
+    if (phase === 'UPCOMING' || phase === 'STARTING' || (phase === 'DELAYED' &amp;&amp; schedMs &gt; nowMs)){
+      const { days, hours, minutes, seconds } = diffParts(schedMs, nowMs);
+      if (document.getElementById('mainCdDays')){
+        setText('mainCdDays', pad2(days)); setText('mainCdHrs', pad2(hours)); setText('mainCdMin', pad2(minutes)); setText('mainCdSec', pad2(seconds));
+        if (days === 0 &amp;&amp; hours === 0 &amp;&amp; minutes === 0 &amp;&amp; seconds === 0){
+          const cd = document.getElementById('mainCountdown');
+          if (cd) cd.innerHTML = '&lt;div class=&quot;cd-block&quot; style=&quot;min-width:96px&quot;&gt;&lt;span class=&quot;v&quot;&gt;T-0&lt;/span&gt;&lt;/div&gt;';
+        }
+      }
+    } else if (phase === 'LIVE'){
+      const { hours, minutes, seconds } = elapsedParts(schedMs, nowMs);
+      setText('mainTPlus', 'T+ ' + pad2(hours) + ':' + pad2(minutes) + ':' + pad2(seconds));
+    }
+  }
+  document.querySelectorAll('[data-cid]').forEach(node =&gt; {
+    const id = node.getAttribute('data-cid');
+    const item = lastClassified.find(c =&gt; c.ev.id === id);
+    if (!item) return;
+    const { days, hours, minutes, seconds } = diffParts(new Date(item.ev.scheduledTime).getTime(), nowMs);
+    node.textContent = (days === 0 &amp;&amp; hours === 0 &amp;&amp; minutes === 0 &amp;&amp; seconds === 0) ? 'T-0' : ((days &gt; 0 ? days + 'd ' : '') + pad2(hours) + ':' + pad2(minutes) + ':' + pad2(seconds));
+  });
+  if (openModalId &amp;&amp; lastMain &amp;&amp; lastMain.ev.id === openModalId &amp;&amp; lastMain.phase === 'LIVE'){
+    const { hours, minutes, seconds } = elapsedParts(new Date(lastMain.ev.scheduledTime).getTime(), nowMs);
+    setText('modalTPlus', 'T+ ' + pad2(hours) + ':' + pad2(minutes) + ':' + pad2(seconds));
+  }
+}
+
+function ensureShell(){ if (!shellBuilt) { buildShell(); shellBuilt = true; } }
+
+function fullRender(){
+  ensureShell();
+  lastSignature = recomputeCore();
+  updateHeaderSync();
+  updateClocks();
+  updateConnDot();
+  renderResults();
+}
+
+function guardedFullRender(){
+  try { fullRender(); }
+  catch (err){
+    console.error('X HORIZON fatal render error', err);
+    const app = document.getElementById('app');
+    if (app){
+      app.innerHTML = '&lt;div class=&quot;empty&quot;&gt;Something went wrong displaying live events.&lt;br&gt;&lt;button class=&quot;btn&quot; id=&quot;reloadBtn&quot; style=&quot;margin-top:16px&quot;&gt;Reload page&lt;/button&gt;&lt;/div&gt;';
+      const rb = document.getElementById('reloadBtn');
+      if (rb) rb.addEventListener('click', () =&gt; location.reload());
+    }
+  }
+}
+
+function tick(){
+  now = Date.now();
+  try {
+    const sig = recomputeCore();
+    updateClocks();
+    if (sig !== lastSignature){
+      lastSignature = sig;
+      renderResults();
+    } else {
+      updateLiveNumbers();
+    }
+  } catch (err){ console.error('X HORIZON tick error', err); }
+}
+
+// ---------------------------------------------------------------------
+// 12. Boot
+// ---------------------------------------------------------------------
+guardedFullRender();
+fetchEvents();
+setInterval(tick, CONFIG.TICK_INTERVAL_MS);
+setInterval(fetchEvents, CONFIG.REFRESH_INTERVAL_MS);
+&lt;/script&gt;
+&lt;script&gt;
+(function(){
+  function reportHeight(){
+    try {
+      const h = Math.max(
+        document.documentElement.scrollHeight,
+        document.body ? document.body.scrollHeight : 0,
+        document.documentElement.offsetHeight,
+        document.body ? document.body.offsetHeight : 0
+      );
+      parent.postMessage({type:'xh-live-height', height:h}, '*');
+    } catch(e) {}
+  }
+  window.addEventListener('load', reportHeight);
+  window.addEventListener('resize', reportHeight);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.documentElement);
+  setTimeout(reportHeight, 250);
+  setTimeout(reportHeight, 1000);
+})();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; clipboard-write" allowfullscreen="" referrerpolicy="strict-origin-when-cross-origin" scrolling="no"></iframe>
+<script>
+(function(){
+  var frame=document.getElementById('xhLiveFrame');
+  function setHeight(h){
+    if(!h || h<200) return;
+    frame.style.height=Math.max(700,Math.ceil(h))+'px';
+  }
+  window.addEventListener('message',function(e){
+    if(e.source!==frame.contentWindow || !e.data || e.data.type!=='xh-live-height') return;
+    setHeight(e.data.height);
+  });
+  window.addEventListener('resize',function(){
+    if(frame.contentWindow) frame.contentWindow.postMessage({type:'xh-live-resize'},'*');
+  });
+})();
+</script>

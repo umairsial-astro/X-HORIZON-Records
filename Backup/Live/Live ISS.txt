@@ -1,0 +1,1541 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="X Horizon Orbital Command — real-time ISS position, telemetry, ground track, footprint, terminator, crew, overflight predictions and NASA live downlink.">
+<title>ISS Live — X Horizon Orbital Command</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+
+<style>
+  :root{
+    --black:#000000;
+    --panel:rgba(255,255,255,.045);
+    --panel-strong:rgba(255,255,255,.075);
+    --border:rgba(255,255,255,.14);
+    --border-soft:rgba(255,255,255,.075);
+    --white:#FFFFFF;
+    --soft:rgba(255,255,255,.76);
+    --muted:rgba(255,255,255,.50);
+    --dim:rgba(255,255,255,.32);
+    --cyan:#FFFFFF;
+    --cyan-text:#F2F2F2;
+    --cyan-dim:rgba(255,255,255,.30);
+    --amber:#FFC773;
+    --sun:#FFD873;
+    --green:#8CFFCB;
+    --red:#FF7A85;
+    --shadow:0 24px 70px rgba(0,0,0,.68);
+    --inner:inset 0 1px 0 rgba(255,255,255,.06), inset 0 -1px 0 rgba(255,255,255,.02);
+    --display:'Big Shoulders Display', sans-serif;
+    --body:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --r-lg:16px;
+    --r-md:12px;
+    --r-sm:8px;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; min-height:100%; background:#000; }
+  body{
+    color:var(--white);
+    font-family:var(--body);
+    background:
+      radial-gradient(ellipse 1200px 500px at 50% -10%, rgba(255,255,255,.06), transparent 60%),
+      #000;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){ *,*:before,*:after{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+
+  noscript{ display:block; padding:1rem; text-align:center; color:var(--white); background:#090909; }
+  a,button{ font-family:inherit; }
+  a:focus-visible,button:focus-visible{ outline:2px solid var(--cyan); outline-offset:2px; border-radius:4px; }
+
+  .oc-shell{ width:min(1520px, 100%); margin:0 auto; padding:clamp(.75rem,1.6vw,1.5rem); position:relative; z-index:1; }
+
+  /* ---------- Top bar ---------- */
+  .oc-topbar{ display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.55rem .2rem .9rem; border-bottom:1px solid var(--border-soft); margin-bottom:1rem; flex-wrap:wrap; }
+  .oc-brand{ display:flex; align-items:center; gap:.6rem; }
+  .oc-brand-mark{ width:30px; height:30px; border:1px solid var(--border); border-radius:7px; display:grid; place-items:center; font-family:var(--mono); font-size:.72rem; color:var(--cyan); background:var(--panel); flex:none; }
+  .oc-brand-name{ font-family:var(--display); font-weight:800; letter-spacing:.04em; font-size:1rem; text-transform:uppercase; color:var(--white); }
+  .oc-brand-tag{ font-family:var(--mono); font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--cyan-text); border:1px solid var(--cyan-dim); padding:.28rem .55rem; border-radius:999px; background:rgba(255,255,255,.06); }
+  .oc-topbar-note{ font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); }
+
+  /* ---------- Hero ---------- */
+  .oc-hero{ display:flex; justify-content:space-between; align-items:flex-end; gap:1.4rem; flex-wrap:wrap; padding:.2rem .2rem 1.1rem; }
+  .oc-eyebrow{ display:inline-flex; align-items:center; gap:.5rem; font-family:var(--mono); font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--cyan-text); margin-bottom:.6rem; }
+  .oc-dot{ width:7px; height:7px; border-radius:999px; background:var(--cyan); box-shadow:0 0 12px rgba(255,255,255,.85); animation:oc-pulse 1.8s ease-in-out infinite; flex:none; }
+  @keyframes oc-pulse{ 50%{ opacity:.35; transform:scale(.75); } }
+  .oc-title{ margin:0 0 .5rem; font-family:var(--display); font-weight:700; letter-spacing:.005em; font-size:clamp(1.9rem,3.6vw,3.05rem); line-height:1; color:#fff; }
+  .oc-subtitle{ margin:0; color:var(--soft); font-size:.92rem; max-width:56ch; line-height:1.5; }
+  .oc-status{ display:flex; align-items:center; gap:.9rem; flex-wrap:wrap; }
+  .oc-status-live{ display:flex; align-items:center; gap:.5rem; font-family:var(--mono); font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; }
+  .oc-status-updated{ font-family:var(--mono); font-size:.72rem; color:var(--muted); }
+
+  .live-dot{ display:inline-flex; align-items:center; gap:.4px; }
+  .live-dot:before{ content:""; width:8px; height:8px; border-radius:999px; background:var(--muted); display:inline-block; }
+  .live-dot.ok{ color:var(--green); }
+  .live-dot.ok:before{ background:var(--green); box-shadow:0 0 14px rgba(140,255,203,.85); animation:oc-pulse 1.8s ease-in-out infinite; }
+  .live-dot.warn{ color:var(--amber); }
+  .live-dot.warn:before{ background:var(--amber); }
+  .live-dot.bad{ color:var(--red); }
+  .live-dot.bad:before{ background:var(--red); }
+
+  /* ---------- Ticker strip ---------- */
+  .oc-ticker{ display:flex; flex-wrap:wrap; gap:0; border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft); margin-bottom:1rem; }
+  .oc-ticker-item{ flex:1 1 160px; padding:.75rem 1.05rem; border-right:1px solid var(--border-soft); min-width:0; }
+  .oc-ticker-item:last-child{ border-right:0; }
+  .oc-ticker-label{ display:block; font-family:var(--mono); font-size:.64rem; letter-spacing:.15em; text-transform:uppercase; color:var(--dim); margin-bottom:.32rem; }
+  .oc-ticker-value{ display:block; font-family:var(--mono); font-size:.98rem; font-weight:600; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .oc-ticker-note{ display:block; margin-top:.22rem; font-size:.68rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  /* ---------- Generic panel ---------- */
+  .oc-panel{
+    border:1px solid var(--border-soft);
+    background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012));
+    border-radius:var(--r-lg);
+    padding:1.05rem;
+    box-shadow:var(--shadow), var(--inner);
+    position:relative;
+    min-width:0;
+  }
+  .oc-panel-head{ display:flex; justify-content:space-between; align-items:center; gap:.7rem; margin-bottom:.9rem; flex-wrap:wrap; }
+  .oc-panel-title{ margin:0; font-family:var(--display); text-transform:uppercase; letter-spacing:.1em; font-size:.88rem; color:var(--soft); font-weight:700; }
+  .oc-panel-kicker{ display:block; font-family:var(--mono); font-size:.63rem; letter-spacing:.18em; text-transform:uppercase; color:var(--cyan-text); margin-bottom:.3rem; }
+  .oc-live-chip{ display:inline-flex; align-items:center; gap:.4rem; font-family:var(--mono); font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); border:1px solid var(--border-soft); border-radius:999px; padding:.32rem .62rem; }
+
+  .oc-btn{
+    border:1px solid var(--border);
+    color:var(--white);
+    background:rgba(255,255,255,.04);
+    border-radius:999px;
+    padding:.44rem .74rem;
+    font-size:.67rem;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:.35rem;
+    transition:background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .oc-btn:hover{ background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.4); }
+  .oc-btn.is-active{ background:rgba(255,255,255,.16); border-color:rgba(255,255,255,.55); color:var(--cyan-text); }
+
+  /* ---------- Map ---------- */
+  .oc-toolbar{ display:flex; gap:.4rem; flex-wrap:wrap; justify-content:flex-end; }
+  .oc-map-shell{ position:relative; overflow:hidden; border-radius:var(--r-md); border:1px solid var(--border); background:#020304; }
+  #map{ height:640px; min-height:480px; width:100%; background:linear-gradient(180deg,#050607,#000); }
+  #map .leaflet-tile-pane{ filter:grayscale(.85) brightness(.5) contrast(1.3); }
+  #map .leaflet-overlay-pane svg{ filter:drop-shadow(0 0 10px rgba(255,255,255,.18)); }
+  #map .leaflet-control-layers,#map .leaflet-bar a{ background:rgba(0,0,0,.62)!important; color:#fff!important; border-color:var(--border)!important; }
+  #map .leaflet-control-layers-expanded{ border:1px solid var(--border)!important; color:#fff; }
+  #map .leaflet-control-attribution{ background:rgba(0,0,0,.55)!important; color:var(--muted)!important; font-size:.6rem!important; }
+  #map .leaflet-control-attribution a{ color:#fff!important; }
+  .leaflet-container{ background:#000; font-family:var(--body); }
+  .leaflet-control-zoom a{ background:rgba(0,0,0,.6)!important; color:var(--white)!important; border-color:var(--border)!important; }
+  .leaflet-control-zoom a:hover{ background:rgba(255,255,255,.12)!important; }
+  .leaflet-popup-content-wrapper,.leaflet-popup-tip{ background:rgba(0,0,0,.82); color:var(--white); border:1px solid var(--border); }
+  .leaflet-popup-content{ font-family:var(--mono); font-size:.76rem; }
+
+  .oc-corner{ position:absolute; width:22px; height:22px; z-index:5; pointer-events:none; opacity:.75; }
+  .oc-corner.tl{ top:10px; left:10px; border-top:1.5px solid var(--cyan); border-left:1.5px solid var(--cyan); }
+  .oc-corner.tr{ top:10px; right:10px; border-top:1.5px solid var(--cyan); border-right:1.5px solid var(--cyan); }
+  .oc-corner.bl{ bottom:10px; left:10px; border-bottom:1.5px solid var(--cyan); border-left:1.5px solid var(--cyan); }
+  .oc-corner.br{ bottom:10px; right:10px; border-bottom:1.5px solid var(--cyan); border-right:1.5px solid var(--cyan); }
+
+  .oc-map-overlay{ position:absolute; left:12px; right:12px; bottom:12px; display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem; pointer-events:none; z-index:450; }
+  .overlay-card{ border-radius:var(--r-sm); padding:.6rem .7rem; background:rgba(0,0,0,.6); border:1px solid var(--border-soft); }
+  .overlay-card span{ display:block; color:var(--dim); text-transform:uppercase; letter-spacing:.1em; font-size:.6rem; font-family:var(--mono); margin-bottom:.3rem; }
+  .overlay-card strong{ display:block; color:#fff; font-size:.82rem; font-family:var(--mono); font-weight:600; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+
+  .map-legend{ position:absolute; left:12px; top:12px; z-index:452; border-radius:var(--r-sm); padding:.6rem .7rem; display:grid; gap:.32rem; background:rgba(0,0,0,.6); border:1px solid var(--border-soft); min-width:190px; }
+  .legend-row{ display:flex; align-items:center; gap:.5rem; color:var(--soft); font-size:.7rem; font-family:var(--mono); }
+  .legend-swatch{ width:20px; flex:none; display:inline-block; }
+  .legend-swatch.line{ height:2px; background:#fff; }
+  .legend-swatch.line.future{ background:repeating-linear-gradient(90deg,#fff 0 5px,transparent 5px 9px); }
+  .legend-swatch.line.term{ height:2px; background:repeating-linear-gradient(90deg,var(--amber) 0 5px,transparent 5px 9px); }
+  .legend-swatch.dot{ width:9px; height:9px; border-radius:999px; }
+  .legend-swatch.dot.iss{ background:var(--cyan); box-shadow:0 0 8px rgba(255,255,255,.8); }
+  .legend-swatch.dot.sun{ background:var(--sun); box-shadow:0 0 8px rgba(255,216,115,.8); }
+  .legend-swatch.circle{ width:14px; height:14px; border-radius:999px; border:1.4px dashed rgba(255,255,255,.55); }
+
+  .iss-reticle-icon,.leaflet-div-icon{ background:transparent!important; border:none!important; }
+  .reticle{ position:relative; width:46px; height:46px; }
+  .reticle:before,.reticle:after{ content:""; position:absolute; inset:5px; border:1px solid rgba(255,255,255,.95); border-radius:50%; box-shadow:0 0 20px rgba(255,255,255,.7); }
+  .reticle:after{ inset:0; opacity:.55; animation:reticle-pulse 2s ease-out infinite; }
+  .reticle svg{ position:absolute; inset:8px; filter:drop-shadow(0 0 7px rgba(255,255,255,.85)); }
+  @keyframes reticle-pulse{ from{ transform:scale(.7); opacity:.8; } to{ transform:scale(1.85); opacity:0; } }
+
+  .map-fallback{ min-height:480px; display:grid; place-items:center; padding:2rem; text-align:center; color:var(--soft); background:#000; }
+  .map-fallback strong{ display:block; color:#fff; font-family:var(--display); font-size:1.6rem; text-transform:uppercase; letter-spacing:.06em; margin-bottom:.5rem; }
+
+  /* ---------- Sections / rows ---------- */
+  .oc-main{ display:grid; gap:.9rem; }
+  .oc-section-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:.8rem; margin-bottom:.9rem; flex-wrap:wrap; }
+  .oc-section-title{ margin:0; font-family:var(--display); font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:1.35rem; color:#fff; }
+  .oc-row-2{ display:grid; grid-template-columns:1fr 1fr; gap:.9rem; align-items:start; }
+
+  /* ---------- Telemetry cards ---------- */
+  .oc-tele-primary{ display:grid; grid-template-columns:repeat(4,1fr); gap:.65rem; margin-bottom:.65rem; }
+  .oc-tele-card{ border:1px solid var(--border-soft); background:var(--panel); border-radius:var(--r-md); padding:1rem 1.05rem; min-height:110px; }
+  .oc-tele-card .k{ display:block; font-family:var(--mono); font-size:.64rem; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); margin-bottom:.55rem; }
+  .oc-value{ display:block; font-family:var(--mono); font-variant-numeric:tabular-nums; color:#fff; }
+  .oc-tele-card .oc-value{ font-size:clamp(1.1rem,1.8vw,1.5rem); font-weight:600; text-shadow:0 0 18px rgba(255,255,255,.14); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .oc-tele-secondary{ display:grid; grid-template-columns:repeat(4,1fr); gap:.6rem; }
+  .oc-tele-card.small{ min-height:86px; padding:.85rem .95rem; }
+  .oc-tele-card.small .oc-value{ font-size:1.02rem; }
+  .oc-tele-card em{ display:block; font-style:normal; margin-top:.4rem; color:var(--muted); font-size:.7rem; line-height:1.35; }
+
+  .loading .oc-value{ animation:oc-shimmer 1.5s ease-in-out infinite; }
+  @keyframes oc-shimmer{ 50%{ opacity:.4; } }
+
+  /* ---------- Status list / spec sheet ---------- */
+  .oc-status-list{ display:grid; gap:0; }
+  .oc-status-row{ display:flex; justify-content:space-between; align-items:baseline; gap:1rem; padding:.56rem 0; border-bottom:1px solid var(--border-soft); }
+  .oc-status-row:last-child{ border-bottom:0; }
+  .oc-status-row .label{ color:var(--muted); font-size:.82rem; }
+  .oc-status-row .oc-value{ font-size:.86rem; font-weight:500; text-align:right; }
+
+  /* ---------- Nadir ---------- */
+  .oc-nadir-visual{ position:relative; display:flex; justify-content:center; padding:.4rem 0 .9rem; }
+  .nadir-map{ width:180px; height:180px; border-radius:50%; overflow:hidden; border:1px solid var(--border); background:#050607; }
+  .nadir-map .leaflet-control-container{ display:none; }
+  .nadir-crosshair{ position:absolute; top:.4rem; left:50%; transform:translateX(-50%); width:180px; height:180px; display:grid; place-items:center; pointer-events:none; }
+  .nadir-crosshair svg{ width:180px; height:180px; }
+  .nadir-note{ margin:0 0 .8rem; color:var(--muted); font-size:.72rem; line-height:1.4; text-align:center; }
+
+  /* ---------- Position history table ---------- */
+  .oc-table-wrap{ overflow-x:auto; border-radius:var(--r-sm); border:1px solid var(--border-soft); }
+  table.oc-table{ width:100%; border-collapse:collapse; min-width:520px; font-family:var(--mono); font-size:.78rem; }
+  table.oc-table thead th{ text-align:left; padding:.6rem .8rem; color:var(--dim); font-size:.63rem; letter-spacing:.12em; text-transform:uppercase; border-bottom:1px solid var(--border); background:rgba(255,255,255,.02); white-space:nowrap; }
+  table.oc-table tbody td{ padding:.52rem .8rem; color:var(--soft); border-bottom:1px solid var(--border-soft); white-space:nowrap; }
+  table.oc-table tbody tr:last-child td{ border-bottom:0; }
+  table.oc-table tbody tr.is-newest td{ color:#fff; background:rgba(255,255,255,.06); }
+  table.oc-table tbody tr.is-newest td:first-child{ box-shadow:inset 2px 0 0 var(--cyan); }
+
+  /* ---------- Overflight ---------- */
+  .pass-list{ display:grid; gap:.5rem; margin-bottom:.7rem; }
+  .pass-item{ border:1px solid var(--border-soft); background:var(--panel); border-radius:var(--r-sm); padding:.68rem .74rem; display:grid; gap:.3rem; }
+  .pass-item strong{ font-family:var(--mono); font-size:.82rem; color:#fff; }
+  .pass-item span{ color:var(--soft); font-size:.75rem; line-height:1.35; }
+  .oc-pass-meta{ display:flex; gap:1.2rem; flex-wrap:wrap; margin:.7rem 0; padding:.7rem 0; border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft); }
+  .oc-pass-meta div{ min-width:120px; }
+  .oc-pass-meta .label{ display:block; font-family:var(--mono); font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); margin-bottom:.25rem; }
+  .pass-actions{ display:flex; gap:.45rem; justify-content:flex-end; flex-wrap:wrap; }
+
+  /* ---------- Crew ---------- */
+  .crew-list{ display:grid; gap:.48rem; max-height:280px; overflow:auto; padding-right:.2rem; }
+  .crew-person{ border:1px solid var(--border-soft); background:var(--panel); border-radius:var(--r-sm); padding:.62rem .72rem; display:flex; justify-content:space-between; gap:.8rem; }
+  .crew-person strong{ font-weight:600; color:#fff; font-size:.84rem; }
+  .crew-person span{ font-family:var(--mono); color:var(--soft); font-size:.72rem; }
+
+  /* ---------- NASA video ---------- */
+  .video-frame{ position:relative; border-radius:var(--r-md); overflow:hidden; background:#000; border:1px solid var(--border); }
+  .video-tag{ position:absolute; top:12px; left:12px; z-index:3; font-family:var(--mono); font-size:.63rem; letter-spacing:.1em; color:#fff; background:rgba(0,0,0,.65); border:1px solid var(--border); padding:.34rem .55rem; border-radius:999px; }
+  .video-wrapper{ position:relative; width:100%; padding-top:42%; min-height:340px; }
+  .video-wrapper iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-source-row{ display:flex; gap:.4rem; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+  .video-status{ margin-top:.65rem; color:var(--muted); font-size:.74rem; font-family:var(--mono); }
+  .oc-note{ margin:.75rem 0 0; color:var(--muted); font-size:.78rem; line-height:1.5; }
+
+  /* ---------- Data sources ---------- */
+  .oc-source-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:.65rem; margin-bottom:1rem; }
+  .oc-source-card{ border:1px solid var(--border-soft); background:var(--panel); border-radius:var(--r-md); padding:.9rem .95rem; }
+  .oc-source-card .cat{ display:flex; align-items:center; gap:.45rem; font-family:var(--mono); font-size:.63rem; letter-spacing:.14em; text-transform:uppercase; color:var(--cyan-text); margin-bottom:.5rem; }
+  .oc-source-card .status-dot{ width:7px; height:7px; border-radius:999px; background:var(--muted); flex:none; }
+  .oc-source-card .status-dot.ok{ background:var(--green); box-shadow:0 0 8px rgba(140,255,203,.8); }
+  .oc-source-card .status-dot.warn{ background:var(--amber); }
+  .oc-source-card .status-dot.bad{ background:var(--red); }
+  .oc-source-card h3{ margin:0 0 .35rem; font-size:.92rem; color:#fff; font-family:var(--body); font-weight:600; }
+  .oc-source-card p{ margin:0; color:var(--muted); font-size:.76rem; line-height:1.45; }
+
+  .oc-diag-list{ display:grid; grid-template-columns:repeat(2,1fr); gap:0 1.5rem; }
+  .oc-diag-row{ display:flex; justify-content:space-between; gap:1rem; padding:.5rem 0; border-bottom:1px solid var(--border-soft); }
+  .oc-diag-row .label{ color:var(--muted); font-size:.78rem; }
+  .oc-diag-row .oc-value{ font-size:.78rem; }
+
+  .oc-source-note{ margin-top:.9rem; padding:.7rem .78rem; border-radius:var(--r-sm); border:1px solid var(--border-soft); background:rgba(0,0,0,.3); color:var(--muted); font-size:.75rem; line-height:1.5; }
+
+  /* ---------- System log ---------- */
+  .mission-log{ display:grid; gap:.42rem; max-height:150px; overflow:auto; padding-right:.2rem; }
+  .mission-event{ border:1px solid var(--border-soft); background:var(--panel); border-radius:var(--r-sm); padding:.5rem .62rem; color:var(--muted); font-size:.73rem; line-height:1.35; font-family:var(--mono); }
+  .mission-event code{ color:var(--cyan-text); }
+
+  /* ---------- Footer ---------- */
+  .oc-footer{ margin-top:1.2rem; padding:1rem .2rem 1.4rem; border-top:1px solid var(--border-soft); color:var(--dim); font-size:.72rem; text-align:center; }
+
+  /* ---------- Low power mode ---------- */
+  body.low-power .oc-panel{ box-shadow:0 10px 30px rgba(0,0,0,.55), var(--inner); }
+  body.low-power .oc-dot{ animation:none; }
+  body.low-power .live-dot.ok:before{ animation:none; }
+  body.low-power .reticle:after{ animation:none; opacity:.3; }
+  body.low-power #map .leaflet-overlay-pane svg{ filter:none; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:1160px){
+    .oc-row-2{ grid-template-columns:1fr; }
+    .oc-tele-primary,.oc-tele-secondary{ grid-template-columns:repeat(2,1fr); }
+    .oc-source-grid{ grid-template-columns:repeat(2,1fr); }
+  }
+  @media (max-width:760px){
+    .oc-shell{ padding:.6rem; }
+    .oc-title{ font-size:2rem; }
+    #map{ height:480px; min-height:380px; }
+    .oc-map-overlay{ grid-template-columns:repeat(2,1fr); left:8px; right:8px; bottom:8px; }
+    .map-legend{ left:8px; top:8px; min-width:0; }
+    .oc-ticker-item{ flex:1 1 45%; border-bottom:1px solid var(--border-soft); }
+    .oc-toolbar{ width:100%; overflow-x:auto; flex-wrap:nowrap; justify-content:flex-start; padding-bottom:.2rem; }
+    .oc-btn{ flex:0 0 auto; }
+    .oc-diag-list{ grid-template-columns:1fr; }
+    .video-wrapper{ padding-top:56.25%; min-height:230px; }
+  }
+  @media (max-width:520px){
+    #map{ height:420px; }
+    .oc-map-overlay{ grid-template-columns:1fr 1fr; }
+    .oc-tele-primary,.oc-tele-secondary{ grid-template-columns:1fr 1fr; }
+    .oc-source-grid{ grid-template-columns:1fr; }
+    .oc-hero{ align-items:flex-start; }
+    .oc-status{ width:100%; }
+  }
+</style>
+
+<noscript>This ISS tracker needs JavaScript enabled for live telemetry, map path, orbit count and crew data.</noscript>
+
+<main class="oc-shell loading" id="app" data-xh-version="orbital-command-2026">
+
+  <div class="oc-topbar">
+    <div class="oc-brand">
+      <span class="oc-brand-mark" aria-hidden="true">XH</span>
+      <span class="oc-brand-name">X Horizon</span>
+      <span class="oc-brand-tag">Orbital Command</span>
+    </div>
+    <span class="oc-topbar-note">Live Operations Module · /live</span>
+  </div>
+
+  <section class="oc-hero" aria-label="ISS live status overview">
+    <div class="oc-hero-text">
+      <span class="oc-eyebrow"><i class="oc-dot" aria-hidden="true"></i>Live · Orbital Tracking</span>
+      <h1 class="oc-title">International Space Station</h1>
+      <p class="oc-subtitle">Real-time orbital position, telemetry and ground-track intelligence.</p>
+    </div>
+    <div class="oc-status">
+      <span class="oc-status-live live-dot warn" id="headerLiveDot"><span id="headerLiveText">Connecting</span></span>
+      <span class="oc-status-updated" id="headerUpdated">Awaiting first frame</span>
+      <button class="oc-btn" id="unitBtn" type="button" aria-label="Toggle distance units between kilometres and miles">KM</button>
+    </div>
+  </section>
+
+  <section class="oc-ticker" aria-label="Quick status">
+    <div class="oc-ticker-item">
+      <span class="oc-ticker-label">Signal</span>
+      <span class="oc-value oc-ticker-value live-dot warn" id="signalText">Connecting</span>
+      <span class="oc-ticker-note" id="sourceText">Live source starting</span>
+    </div>
+    <div class="oc-ticker-item">
+      <span class="oc-ticker-label">UTC Clock</span>
+      <span class="oc-value oc-ticker-value" id="utcClock">Starting</span>
+      <span class="oc-ticker-note">Universal frame time</span>
+    </div>
+    <div class="oc-ticker-item">
+      <span class="oc-ticker-label">Orbit Count</span>
+      <span class="oc-value oc-ticker-value" id="orbitCount">Calculating</span>
+      <span class="oc-ticker-note" id="orbitPhase">Current revolution</span>
+    </div>
+    <div class="oc-ticker-item">
+      <span class="oc-ticker-label">Crew / Researchers</span>
+      <span class="oc-value oc-ticker-value" id="crewCount">Loading</span>
+      <span class="oc-ticker-note">Live people aboard ISS</span>
+    </div>
+  </section>
+
+  <div class="oc-main">
+
+    
+    <section class="oc-panel" aria-label="ISS map and orbital path">
+      <div class="oc-panel-head">
+        <div>
+          <span class="oc-panel-kicker">Earth Module</span>
+          <h2 class="oc-panel-title">Live Ground Track</h2>
+        </div>
+        <div class="oc-toolbar">
+          <button class="oc-btn is-active" id="pathBtn" type="button" aria-pressed="true">Path On</button>
+          <button class="oc-btn is-active" id="footprintBtn" type="button" aria-pressed="true">Footprint On</button>
+          <button class="oc-btn is-active" id="terminatorBtn" type="button" aria-pressed="true">Terminator On</button>
+          <button class="oc-btn" id="followBtn" type="button" aria-pressed="false">Follow Off</button>
+          <button class="oc-btn" id="recenterBtn" type="button">Recenter</button>
+        </div>
+      </div>
+      <div class="oc-map-shell">
+        <span class="oc-corner tl" aria-hidden="true"></span>
+        <span class="oc-corner tr" aria-hidden="true"></span>
+        <span class="oc-corner bl" aria-hidden="true"></span>
+        <span class="oc-corner br" aria-hidden="true"></span>
+        <div id="map" aria-label="Live map showing the current and near-future ground track of the International Space Station"></div>
+        <div class="oc-map-overlay" aria-label="Live position summary">
+          <div class="overlay-card"><span>Latitude</span><strong class="oc-value" id="oLat">Locking…</strong></div>
+          <div class="overlay-card"><span>Longitude</span><strong class="oc-value" id="oLon">Locking…</strong></div>
+          <div class="overlay-card"><span>Altitude</span><strong class="oc-value" id="oAlt">Locking…</strong></div>
+          <div class="overlay-card"><span>Velocity</span><strong class="oc-value" id="oVel">Locking…</strong></div>
+        </div>
+        <div class="map-legend" aria-label="Map legend">
+          <div class="legend-row"><i class="legend-swatch dot iss" aria-hidden="true"></i><span>ISS position</span></div>
+          <div class="legend-row"><i class="legend-swatch line" aria-hidden="true"></i><span>Orbit path</span></div>
+          <div class="legend-row"><i class="legend-swatch circle" aria-hidden="true"></i><span>Coverage footprint</span></div>
+          <div class="legend-row"><i class="legend-swatch dot sun" aria-hidden="true"></i><span>Subsolar point</span></div>
+          <div class="legend-row"><i class="legend-swatch line term" aria-hidden="true"></i><span>Day / night line</span></div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section class="oc-panel" id="telemetry" aria-labelledby="telemetryTitle">
+      <div class="oc-section-head">
+        <div>
+          <span class="oc-panel-kicker">Dashboard</span>
+          <h2 class="oc-section-title" id="telemetryTitle">Live Telemetry</h2>
+        </div>
+        <span class="oc-live-chip"><i class="oc-dot" aria-hidden="true"></i>Streaming</span>
+      </div>
+      <div class="oc-tele-primary">
+        <div class="oc-tele-card"><span class="k">Latitude</span><strong class="oc-value" id="teleLat">—</strong></div>
+        <div class="oc-tele-card"><span class="k">Longitude</span><strong class="oc-value" id="teleLon">—</strong></div>
+        <div class="oc-tele-card"><span class="k">Altitude</span><strong class="oc-value" id="teleAlt">—</strong></div>
+        <div class="oc-tele-card"><span class="k">Velocity</span><strong class="oc-value" id="teleVel">—</strong></div>
+      </div>
+      <div class="oc-tele-secondary">
+        <div class="oc-tele-card small"><span class="k">Visibility</span><strong class="oc-value" id="teleVis">—</strong><em id="teleVisNote">Sunlight / shadow from telemetry.</em></div>
+        <div class="oc-tele-card small"><span class="k">Footprint</span><strong class="oc-value" id="teleFootprint">—</strong><em>Ground coverage diameter.</em></div>
+        <div class="oc-tele-card small"><span class="k">Orbital period</span><strong class="oc-value" id="teleOrbitalPeriod">—</strong><em>From current TLE mean motion.</em></div>
+        <div class="oc-tele-card small"><span class="k">Orbit / revolution</span><strong class="oc-value" id="teleOrbit">—</strong><em>Completed revs since TLE epoch.</em></div>
+      </div>
+    </section>
+
+    <div class="oc-row-2">
+      
+      <section class="oc-panel" id="orbitalStatus" aria-labelledby="orbitalStatusTitle">
+        <div class="oc-panel-head">
+          <div><span class="oc-panel-kicker">Spec Sheet</span><h2 class="oc-panel-title" id="orbitalStatusTitle">Orbital Status</h2></div>
+        </div>
+        <div class="oc-status-list">
+          <div class="oc-status-row"><span class="label">Altitude</span><strong class="oc-value" id="statusAlt">—</strong></div>
+          <div class="oc-status-row"><span class="label">Velocity</span><strong class="oc-value" id="statusVel">—</strong></div>
+          <div class="oc-status-row"><span class="label">Orbital period</span><strong class="oc-value" id="statusPeriod">—</strong></div>
+          <div class="oc-status-row"><span class="label">Inclination</span><strong class="oc-value" id="statusIncl">—</strong></div>
+          <div class="oc-status-row"><span class="label">Latitude</span><strong class="oc-value" id="statusLat">—</strong></div>
+          <div class="oc-status-row"><span class="label">Longitude</span><strong class="oc-value" id="statusLon">—</strong></div>
+          <div class="oc-status-row"><span class="label">Footprint radius</span><strong class="oc-value" id="statusFootprint">—</strong></div>
+          <div class="oc-status-row"><span class="label">Day / night</span><strong class="oc-value" id="statusDayNight">—</strong></div>
+          <div class="oc-status-row"><span class="label">Orbit / revolution</span><strong class="oc-value" id="statusOrbit">—</strong></div>
+        </div>
+      </section>
+
+      
+      <section class="oc-panel" id="nadir" aria-labelledby="nadirTitle">
+        <span class="oc-corner tl" aria-hidden="true"></span>
+        <span class="oc-corner br" aria-hidden="true"></span>
+        <div class="oc-panel-head">
+          <div><span class="oc-panel-kicker">Instrument View</span><h2 class="oc-panel-title" id="nadirTitle">View From ISS — Nadir</h2></div>
+        </div>
+        <div class="oc-nadir-visual">
+          <div id="nadirMap" class="nadir-map" aria-label="Real satellite imagery of the ground point directly beneath the ISS right now"></div>
+          <div class="nadir-crosshair" aria-hidden="true">
+            <svg viewBox="0 0 120 120" fill="none">
+              <circle cx="60" cy="60" r="58" stroke="rgba(255,255,255,.32)" stroke-width="1.2"></circle>
+              <circle cx="60" cy="60" r="38" stroke="rgba(255,255,255,.45)" stroke-width="1" stroke-dasharray="3 5"></circle>
+              <path d="M60 4v14M60 102v14M4 60h14M102 60h14" stroke="rgba(255,255,255,.55)" stroke-width="1.3"></path>
+              <circle cx="60" cy="60" r="4" fill="#FFFFFF"></circle>
+              <circle cx="60" cy="60" r="9" stroke="#FFFFFF" stroke-width="1.4"></circle>
+            </svg>
+          </div>
+        </div>
+        <p class="nadir-note">Live Esri satellite imagery centered on the ISS ground track — not an onboard camera feed (no public live nadir camera API exists).</p>
+        <div class="oc-status-list">
+          <div class="oc-status-row"><span class="label">Sub-satellite point</span><strong class="oc-value" id="nadirLatLon">—</strong></div>
+          <div class="oc-status-row"><span class="label">Altitude</span><strong class="oc-value" id="nadirAlt">—</strong></div>
+          <div class="oc-status-row"><span class="label">Day / night</span><strong class="oc-value" id="nadirDayNight">—</strong></div>
+        </div>
+      </section>
+    </div>
+
+    
+    <section class="oc-panel" id="positionHistory" aria-labelledby="posHistTitle">
+      <div class="oc-panel-head">
+        <div><span class="oc-panel-kicker">Telemetry Console</span><h2 class="oc-panel-title" id="posHistTitle">Position Updates</h2></div>
+        <span class="oc-live-chip"><i class="oc-dot" aria-hidden="true"></i><span id="posHistoryUpdated">Awaiting first frame</span></span>
+      </div>
+      <div class="oc-table-wrap">
+        <table class="oc-table">
+          <thead>
+            <tr><th scope="col">UTC</th><th scope="col">Lat</th><th scope="col">Lon</th><th scope="col">Alt</th><th scope="col">Velocity</th></tr>
+          </thead>
+          <tbody id="posHistoryBody">
+            <tr><td colspan="5">Awaiting first telemetry frame…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="oc-row-2">
+      
+      <section class="oc-panel" id="overflight" aria-labelledby="overflightTitle">
+        <div class="oc-panel-head">
+          <div><span class="oc-panel-kicker">Local Prediction</span><h2 class="oc-panel-title" id="overflightTitle">Next Overflight</h2></div>
+          <button class="oc-btn" id="passBtn" type="button">Scan</button>
+        </div>
+        <div class="pass-list" id="passList">
+          <div class="pass-item"><strong>Location permission needed</strong><span>Allow location to estimate upcoming ISS overflight windows near you.</span></div>
+        </div>
+        <div class="oc-pass-meta">
+          <div><span class="label">Scan status</span><strong class="oc-value" id="passMode">Needs location</strong></div>
+          <div><span class="label">Pass geometry</span><strong class="oc-value" id="passGeometry">Elevation ≥10°</strong></div>
+          <div><span class="label">Ground distance</span><strong class="oc-value" id="groundDistance">Hidden</strong></div>
+          <div><span class="label">Line-of-sight</span><strong class="oc-value" id="slantRange">Hidden</strong></div>
+        </div>
+        <div class="pass-actions">
+          <button class="oc-btn" id="locBtn" type="button">Use my location</button>
+        </div>
+      </section>
+
+      
+      <section class="oc-panel" id="crew" aria-labelledby="crewTitle">
+        <div class="oc-panel-head">
+          <div><span class="oc-panel-kicker">Mission Information</span><h2 class="oc-panel-title" id="crewTitle">Crew Aboard ISS</h2></div>
+          <span class="oc-live-chip" id="crewCountPanel">Loading</span>
+        </div>
+        <div class="crew-list" id="crewList">
+          <div class="crew-person"><strong>Loading live crew…</strong><span>ISS</span></div>
+        </div>
+      </section>
+    </div>
+
+    
+    <section class="oc-panel" id="nasaLive" aria-label="ISS live video">
+      <div class="oc-panel-head">
+        <div><span class="oc-panel-kicker">Downlink</span><h2 class="oc-panel-title">NASA Live Video</h2></div>
+        <div class="video-source-row" aria-label="Video source controls">
+          <button class="oc-btn video-source is-active" type="button" data-video="https://www.youtube.com/embed/live_stream?channel=UCLA_DiR1FfKNvjuUpBHmylQ&amp;autoplay=1&amp;mute=1&amp;playsinline=1&amp;rel=0" data-label="NASA channel live stream" aria-pressed="true">NASA Live</button>
+          <button class="oc-btn video-source" type="button" data-video="https://www.youtube-nocookie.com/embed/awQzjn72bI0?autoplay=1&amp;mute=1&amp;playsinline=1&amp;rel=0&amp;modestbranding=1" data-label="NASA HD Earth view" aria-pressed="false">HD Earth</button>
+          <button class="oc-btn video-source" type="button" data-video="https://www.youtube-nocookie.com/embed/M3HKLzjvKPc?autoplay=1&amp;mute=1&amp;playsinline=1&amp;rel=0&amp;modestbranding=1" data-label="NASA ISS interior / Earth view" aria-pressed="false">ISS Feed</button>
+          <a class="oc-btn" href="https://www.youtube.com/channel/UCLA_DiR1FfKNvjuUpBHmylQ/live" target="_blank" rel="noopener">Open</a>
+        </div>
+      </div>
+      <div class="video-frame">
+        <span class="video-tag" id="videoTag">NASA LIVE STREAM</span>
+        <div class="video-wrapper">
+          <iframe id="issVideo" src="https://www.youtube.com/embed/live_stream?channel=UCLA_DiR1FfKNvjuUpBHmylQ&amp;autoplay=1&amp;mute=1&amp;playsinline=1&amp;rel=0" title="Live high-definition views from the International Space Station" allow="autoplay; encrypted-media; picture-in-picture; web-share; fullscreen" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        </div>
+      </div>
+      <div class="video-status" id="videoStatus">Muted autoplay is enabled. If the browser blocks autoplay, press play inside the frame or switch source.</div>
+      <p class="oc-note">The default source follows whatever NASA is currently broadcasting live on its channel, so it keeps working even after any single video ID ends. The live feed can still show black screens, blue screens, or color bars during relay handovers, orbital night, camera switching, or NASA scheduling changes.</p>
+    </section>
+
+    
+    <section class="oc-panel" id="dataSources" aria-labelledby="dataSourcesTitle">
+      <div class="oc-panel-head">
+        <div><span class="oc-panel-kicker">Reliability</span><h2 class="oc-panel-title" id="dataSourcesTitle">Data Sources &amp; Diagnostics</h2></div>
+      </div>
+      <div class="oc-source-grid">
+        <div class="oc-source-card">
+          <span class="cat"><i class="status-dot" id="sourceLiveDot" aria-hidden="true"></i>Live Data</span>
+          <h3>wheretheiss.at</h3>
+          <p>Primary real-time position, altitude, velocity and visibility, polled every 5 seconds. Status: <span id="sourceLiveText">—</span>.</p>
+        </div>
+        <div class="oc-source-card">
+          <span class="cat"><i class="status-dot" id="sourceRefDot" aria-hidden="true"></i>Reference</span>
+          <h3>Open Notify</h3>
+          <p>Fallback position API and the live crew roster (astros.json). Used automatically if the primary source is unreachable.</p>
+        </div>
+        <div class="oc-source-card">
+          <span class="cat"><i class="status-dot ok" aria-hidden="true"></i>NASA</span>
+          <h3>NASA Live Video</h3>
+          <p>Direct NASA ISS HD Earth-viewing and channel streams, embedded with manual source switching above.</p>
+        </div>
+        <div class="oc-source-card">
+          <span class="cat"><i class="status-dot ok" aria-hidden="true"></i>Orbital Elements</span>
+          <h3>Two-Line Element (TLE)</h3>
+          <p>Used for orbit count, orbital period and inclination in the Orbital Status panel.</p>
+        </div>
+      </div>
+      <div class="oc-diag-list">
+        <div class="oc-diag-row"><span class="label">Data age</span><strong class="oc-value" id="dataAge">Waiting</strong></div>
+        <div class="oc-diag-row"><span class="label">Frame time</span><strong class="oc-value" id="frameTime">Awaiting first frame.</strong></div>
+        <div class="oc-diag-row"><span class="label">Last latency</span><strong class="oc-value" id="latency">Pending</strong></div>
+        <div class="oc-diag-row"><span class="label">TLE epoch</span><strong class="oc-value" id="tleEpoch">Pending</strong></div>
+        <div class="oc-diag-row"><span class="label">Ground track mode</span><strong class="oc-value" id="pathMode">Past + future orbit</strong></div>
+        <div class="oc-diag-row"><span class="label">Footprint layer</span><strong class="oc-value" id="footprintMode">Visible</strong></div>
+        <div class="oc-diag-row"><span class="label">Terminator layer</span><strong class="oc-value" id="terminatorMode">Visible</strong></div>
+        <div class="oc-diag-row"><span class="label">Prediction quality</span><strong class="oc-value" id="predictionQuality">Live API sampled</strong></div>
+      </div>
+      <div class="oc-source-note">Live position uses wheretheiss.at first and Open Notify as fallback. Local overflight windows are sampled from future ISS positions using elevation-angle geometry. ESA and other agency feeds are not currently integrated into this page. Use official mission tools for operational decisions.</div>
+    </section>
+
+    
+    <section class="oc-panel" id="systemLog" aria-labelledby="systemLogTitle">
+      <div class="oc-panel-head"><div><span class="oc-panel-kicker">Console</span><h2 class="oc-panel-title" id="systemLogTitle">System Log</h2></div></div>
+      <div class="mission-log" id="missionLog">
+        <div class="mission-event"><code>BOOT</code> Waiting for first live telemetry frame.</div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="oc-footer">X Horizon — Orbital Command · Data is for situational awareness only, not for operational or navigational use.</div>
+</main>
+
+<script>
+//<![CDATA[
+(function(){
+  'use strict';
+  var current = document.querySelector('.oc-shell[data-xh-version="orbital-command-2026"]');
+  if(!current) return;
+  document.querySelectorAll('.oc-shell').forEach(function(node){
+    if(node !== current) node.remove();
+  });
+})();
+//]]>
+</script>
+
+<script>
+//<![CDATA[
+function bootISS(){
+  'use strict';
+
+  var ISS_ID = 25544;
+  var POLL_MS = 5000;
+  var ISS_COLOR = '#FFFFFF';
+  var ISS_COLOR_SOFT = '#E8E8E8';
+  var PATH_COLOR = '#FFFFFF';
+  var TERM_COLOR = '#FFC773';
+  var SUN_COLOR = '#FFD873';
+
+  var state = {
+    unit:'km',
+    pathVisible:true,
+    footprintVisible:true,
+    terminatorVisible:true,
+    follow:false,
+    map:null,
+    marker:null,
+    nadirMap:null,
+    nadirHasCentered:false,
+    userLoc:null,
+    lastLatLng:null,
+    lastData:null,
+    lastSource:'—',
+    retryDelay:POLL_MS,
+    retryCount:0,
+    hasCentered:false,
+    liveTrail:[],
+    liveTrailMax:110,
+    trailLayers:[],
+    pastLayer:null,
+    futureLayer:null,
+    footprintLayer:null,
+    terminatorLayer:null,
+    sunLayer:null,
+    pathMarkers:[],
+    tle:null,
+    animFrame:null,
+    latencyMs:null,
+    passScanBusy:false,
+    passWindows:[],
+    missionEvents:[],
+    lowPower:false,
+    lastGoodFrame:null,
+    primaryFailures:0,
+    fallbackFailures:0,
+    positionHistory:[],
+    positionHistoryMax:14
+  };
+
+  function el(id){ return document.getElementById(id); }
+  function setText(id, text){ var n = el(id); if(n) n.textContent = text; }
+  function nowSec(){ return Math.floor(Date.now()/1000); }
+  function km2mi(km){ return km * 0.621371; }
+  function fmtNumber(n, d){ return Number(n).toLocaleString(undefined, { maximumFractionDigits:d, minimumFractionDigits:d }); }
+  function fmtDist(km){ if(km == null || isNaN(km)) return '—'; return state.unit === 'km' ? fmtNumber(km,1)+' km' : fmtNumber(km2mi(km),1)+' mi'; }
+  function fmtSpeed(kmh){ if(kmh == null || isNaN(kmh)) return '—'; return state.unit === 'km' ? Math.round(kmh).toLocaleString()+' km/h' : Math.round(km2mi(kmh)).toLocaleString()+' mph'; }
+  function fmtLat(lat){ return Math.abs(lat).toFixed(4)+'° '+(lat >= 0 ? 'N':'S'); }
+  function fmtLon(lon){ return Math.abs(lon).toFixed(4)+'° '+(lon >= 0 ? 'E':'W'); }
+  function safeText(value){ return value == null || value === '' ? '—' : String(value); }
+
+  function detectLowPower(){
+    var nav = navigator || {};
+    var saveData = !!(nav.connection && nav.connection.saveData);
+    var lowCore = nav.hardwareConcurrency && nav.hardwareConcurrency <= 4;
+    var mobile = matchMedia('(max-width: 760px)').matches || (nav.maxTouchPoints && nav.maxTouchPoints > 1);
+    var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    state.lowPower = !!(saveData || lowCore || mobile || reduced);
+    document.body.classList.toggle('low-power', state.lowPower);
+  }
+
+  function logMission(code, message){
+    var stamp = new Date().toISOString().slice(11,19);
+    state.missionEvents.unshift({ code:code, message:message, stamp:stamp });
+    state.missionEvents = state.missionEvents.slice(0, 8);
+    var box = el('missionLog');
+    if(!box) return;
+    box.innerHTML = '';
+    state.missionEvents.forEach(function(item){
+      var div = document.createElement('div');
+      div.className = 'mission-event';
+      div.innerHTML = '<code>'+item.code+'</code> '+item.stamp+' UTC · '+item.message;
+      box.appendChild(div);
+    });
+  }
+
+  function localTimeText(seconds){
+    var d = new Date(seconds * 1000);
+    return d.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) + ' local / ' + d.toISOString().slice(11,16) + ' UTC';
+  }
+
+  function horizonRadiusKm(altKm){
+    var R = 6371;
+    var h = Number(altKm || 420);
+    return R * Math.acos(R / (R + h));
+  }
+
+  function initMap(){
+    if(!window.L){
+      var mapBox = el('map');
+      if(mapBox) mapBox.innerHTML = '<div class="map-fallback"><div><strong>Map engine unavailable</strong><p>Live telemetry can still load, but the Earth map requires Leaflet.</p></div></div>';
+      setSignal('warn','Map offline','Leaflet unavailable');
+      return false;
+    }
+    state.map = L.map('map', {
+      worldCopyJump:true,
+      minZoom:2,
+      maxZoom:7,
+      zoomControl:true,
+      preferCanvas:true
+    }).setView([18, 0], 2);
+
+    var earthImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution:'Earth imagery &copy; Esri, Maxar, Earthstar Geographics, GIS User Community',
+      maxZoom:17
+    }).addTo(state.map);
+
+    var darkFallback = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution:'&copy; OpenStreetMap &copy; CARTO',
+      subdomains:'abcd',
+      maxZoom:19
+    });
+
+    var labelOverlay = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
+      attribution:'Labels &copy; OpenStreetMap &copy; CARTO',
+      subdomains:'abcd',
+      maxZoom:19,
+      opacity:.6
+    }).addTo(state.map);
+
+    var tileErrors = 0;
+    earthImagery.on('tileerror', function(){
+      tileErrors++;
+      if(tileErrors >= 6 && !state.map.hasLayer(darkFallback)){
+        darkFallback.addTo(state.map);
+        labelOverlay.bringToFront();
+        logMission('EARTH', 'Satellite Earth tiles failed; dark Earth fallback loaded.');
+      }
+    });
+    earthImagery.on('load', function(){
+      if(tileErrors < 6) logMission('EARTH', 'Satellite Earth module loaded.');
+    });
+
+    drawEarthGrid();
+
+    L.control.layers(
+      { 'Satellite Earth': earthImagery, 'Dark Earth fallback': darkFallback },
+      { 'Place labels': labelOverlay },
+      { position:'bottomleft', collapsed:true }
+    ).addTo(state.map);
+
+    var icon = L.divIcon({
+      className:'iss-reticle-icon',
+      html:'<div class="reticle"><svg viewBox="0 0 30 30" fill="none"><path d="M15 2v7M15 21v7M2 15h7M21 15h7" stroke="'+ISS_COLOR_SOFT+'" stroke-width="1.6" stroke-linecap="round"/><circle cx="15" cy="15" r="5.5" stroke="'+ISS_COLOR+'" stroke-width="2"/><circle cx="15" cy="15" r="2" fill="'+ISS_COLOR+'"/></svg></div>',
+      iconSize:[46,46], iconAnchor:[23,23]
+    });
+    state.marker = L.marker([0,0], { icon:icon, zIndexOffset:1000 }).addTo(state.map);
+    state.marker.bindPopup('ISS live position');
+    setTimeout(function(){ state.map.invalidateSize(); }, 250);
+    return true;
+  }
+
+  function initNadirMap(){
+    if(!window.L){ return false; }
+    var box = el('nadirMap');
+    if(!box) return false;
+    state.nadirMap = L.map('nadirMap', {
+      zoomControl:false,
+      attributionControl:false,
+      dragging:false,
+      scrollWheelZoom:false,
+      doubleClickZoom:false,
+      boxZoom:false,
+      keyboard:false,
+      touchZoom:false,
+      fadeAnimation:false,
+      inertia:false
+    }).setView([0, 0], 5);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom:17
+    }).addTo(state.nadirMap);
+    setTimeout(function(){ if(state.nadirMap) state.nadirMap.invalidateSize(); }, 250);
+    return true;
+  }
+
+  function updateNadirMap(lat, lon){
+    if(!state.nadirMap) return;
+    if(!state.nadirHasCentered){
+      state.nadirMap.setView([lat, lon], 5, { animate:false });
+      state.nadirHasCentered = true;
+    } else {
+      state.nadirMap.setView([lat, lon], state.nadirMap.getZoom(), { animate:false });
+    }
+  }
+
+
+  function drawEarthGrid(){
+    if(!state.map || !window.L) return;
+    var gridLayers = [];
+    for(var lat=-60; lat<=60; lat+=30){
+      gridLayers.push(L.polyline([ [lat,-180], [lat,180] ], { color:'#FFFFFF', weight:.6, opacity:.14, dashArray:'4 12', interactive:false }));
+    }
+    for(var lon=-150; lon<=180; lon+=30){
+      gridLayers.push(L.polyline([ [-85,lon], [85,lon] ], { color:'#FFFFFF', weight:.6, opacity:.10, dashArray:'4 12', interactive:false }));
+    }
+    state.earthGrid = L.layerGroup(gridLayers).addTo(state.map);
+  }
+
+  function splitDateline(points){
+    if(!points.length) return [];
+    var segments = [[points[0]]];
+    for(var i=1; i<points.length; i++){
+      var prev = points[i-1], curr = points[i];
+      if(Math.abs(curr[1]-prev[1]) > 180){ segments.push([curr]); }
+      else { segments[segments.length-1].push(curr); }
+    }
+    return segments.filter(function(seg){ return seg.length > 1; });
+  }
+
+  function clearLayerGroup(layers){
+    if(!state.map) return;
+    layers.forEach(function(layer){ if(layer && state.map.hasLayer(layer)) state.map.removeLayer(layer); });
+  }
+
+  function renderLiveTrailLayer(){
+    if(!state.map || !window.L) return;
+    clearLayerGroup(state.trailLayers);
+    state.trailLayers = [];
+    if(!state.pathVisible || state.liveTrail.length < 2) return;
+    splitDateline(state.liveTrail).forEach(function(seg){
+      var line = L.polyline(seg, { color:ISS_COLOR, weight:4.2, opacity:1, lineCap:'round' }).addTo(state.map);
+      state.trailLayers.push(line);
+    });
+  }
+
+  function drawLiveTrail(lat, lon){
+    if(!state.map || !window.L) return;
+    state.liveTrail.push([lat, lon]);
+    if(state.liveTrail.length > state.liveTrailMax) state.liveTrail.shift();
+    renderLiveTrailLayer();
+  }
+
+  function seedLiveTrail(pastPositions){
+    if(!state.pathVisible || state.liveTrail.length || !pastPositions || !pastPositions.length) return;
+    state.liveTrail = pastPositions.slice(-state.liveTrailMax);
+    renderLiveTrailLayer();
+  }
+
+  function drawPath(past, future){
+    if(!state.map || !window.L) return;
+    if(state.pastLayer){ state.map.removeLayer(state.pastLayer); state.pastLayer = null; }
+    if(state.futureLayer){ state.map.removeLayer(state.futureLayer); state.futureLayer = null; }
+    clearLayerGroup(state.pathMarkers); state.pathMarkers = [];
+    if(!state.pathVisible) return;
+
+    var pastGroups = [];
+    splitDateline(past).forEach(function(seg){
+      pastGroups.push(L.polyline(seg, { color:PATH_COLOR, weight:3.2, opacity:.9, lineCap:'round' }));
+    });
+    var futureGroups = [];
+    splitDateline(future).forEach(function(seg){
+      futureGroups.push(L.polyline(seg, { color:PATH_COLOR, weight:2.8, opacity:.72, dashArray:'8 10', lineCap:'round' }));
+    });
+    state.pastLayer = L.layerGroup(pastGroups).addTo(state.map);
+    state.futureLayer = L.layerGroup(futureGroups).addTo(state.map);
+
+    if(past.length){
+      var start = L.circleMarker(past[0], { radius:4, color:ISS_COLOR_SOFT, weight:1, fillColor:ISS_COLOR_SOFT, fillOpacity:.7 }).addTo(state.map);
+      state.pathMarkers.push(start);
+    }
+    if(future.length){
+      var end = L.circleMarker(future[future.length-1], { radius:4, color:PATH_COLOR, weight:1, fillColor:PATH_COLOR, fillOpacity:.72 }).addTo(state.map);
+      state.pathMarkers.push(end);
+    }
+  }
+
+  function drawFootprint(d){
+    if(!state.map || !window.L) return;
+    if(state.footprintLayer){ state.map.removeLayer(state.footprintLayer); state.footprintLayer = null; }
+    if(!state.footprintVisible || !d || d.footprint == null || isNaN(d.footprint)) return;
+    var radiusKm = Math.max(250, Number(d.footprint) / 2);
+    state.footprintLayer = L.circle([d.lat, d.lon], {
+      radius: radiusKm * 1000,
+      color: '#FFFFFF',
+      weight: 1.3,
+      opacity: .45,
+      fillColor: '#FFFFFF',
+      fillOpacity: .05,
+      dashArray: '8 10',
+      interactive: false
+    }).addTo(state.map);
+  }
+
+  function solarDeclinationAndSubLon(date){
+    var start = Date.UTC(date.getUTCFullYear(), 0, 0);
+    var day = (date.getTime() - start) / 86400000;
+    var gamma = 2 * Math.PI / 365 * (day - 1 + (date.getUTCHours() - 12) / 24);
+    var decl = 0.006918 - 0.399912*Math.cos(gamma) + 0.070257*Math.sin(gamma) - 0.006758*Math.cos(2*gamma) + 0.000907*Math.sin(2*gamma) - 0.002697*Math.cos(3*gamma) + 0.00148*Math.sin(3*gamma);
+    var utcHours = date.getUTCHours() + date.getUTCMinutes()/60 + date.getUTCSeconds()/3600;
+    var subLon = ((180 - utcHours * 15 + 540) % 360) - 180;
+    return { decl: decl, subLon: subLon };
+  }
+
+  function drawTerminator(){
+    if(!state.map || !window.L) return;
+    if(state.terminatorLayer){ state.map.removeLayer(state.terminatorLayer); state.terminatorLayer = null; }
+    if(!state.terminatorVisible) return;
+    var s = solarDeclinationAndSubLon(new Date());
+    var points = [];
+    var deg = Math.PI / 180;
+    if(Math.abs(Math.tan(s.decl)) < 0.02){
+      var lon = ((s.subLon + 90 + 540) % 360) - 180;
+      points.push([-89, lon]); points.push([89, lon]);
+    } else {
+      for(var lonDeg=-180; lonDeg<=180; lonDeg+=2){
+        var ha = (lonDeg - s.subLon) * deg;
+        var lat = Math.atan(-Math.cos(ha) / Math.tan(s.decl)) / deg;
+        if(isFinite(lat)) points.push([Math.max(-89, Math.min(89, lat)), lonDeg]);
+      }
+    }
+    state.terminatorLayer = L.polyline(points, { color: TERM_COLOR, weight: 1.7, opacity: .68, dashArray: '12 10', interactive:false }).addTo(state.map);
+  }
+
+  function drawSun(){
+    if(!state.map || !window.L) return;
+    if(state.sunLayer){ state.map.removeLayer(state.sunLayer); state.sunLayer = null; }
+    if(!state.terminatorVisible) return;
+    var s = solarDeclinationAndSubLon(new Date());
+    var lat = Math.max(-89, Math.min(89, s.decl * 180 / Math.PI));
+    var lon = s.subLon;
+    state.sunLayer = L.circleMarker([lat, lon], {
+      radius:6, color:SUN_COLOR, weight:1.4, fillColor:SUN_COLOR, fillOpacity:.9, interactive:false
+    }).addTo(state.map);
+  }
+
+  function animateMarkerTo(lat, lon, duration){
+    if(!state.marker) return;
+    var start = state.lastLatLng || [lat, lon];
+    var startTime = performance.now();
+    var targetLon = lon;
+    var startLon = start[1];
+    if(Math.abs(targetLon - startLon) > 180){
+      if(targetLon > startLon) startLon += 360;
+      else targetLon += 360;
+    }
+    if(state.animFrame) cancelAnimationFrame(state.animFrame);
+    function step(ts){
+      var t = Math.min(1, (ts-startTime)/duration);
+      var ease = t < .5 ? 2*t*t : -1+(4-2*t)*t;
+      var curLat = start[0] + (lat-start[0])*ease;
+      var curLon = startLon + (targetLon-startLon)*ease;
+      curLon = ((curLon + 540) % 360) - 180;
+      state.marker.setLatLng([curLat, curLon]);
+      if(t < 1) state.animFrame = requestAnimationFrame(step);
+    }
+    state.animFrame = requestAnimationFrame(step);
+  }
+
+  function haversine(lat1, lon1, lat2, lon2){
+    var R = 6371;
+    var toRad = Math.PI/180;
+    var dLat = (lat2-lat1)*toRad;
+    var dLon = (lon2-lon1)*toRad;
+    var a = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(lat1*toRad)*Math.cos(lat2*toRad)*Math.sin(dLon/2)*Math.sin(dLon/2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+  function slantRangeKm(groundKm, altKm){
+    if(groundKm == null || altKm == null) return null;
+    var R = 6371;
+    var central = groundKm / R;
+    return Math.sqrt(R*R + (R+altKm)*(R+altKm) - 2*R*(R+altKm)*Math.cos(central));
+  }
+
+  function elevationDeg(groundKm, altKm){
+    if(groundKm == null || altKm == null || !isFinite(groundKm) || !isFinite(altKm)) return null;
+    var R = 6371;
+    var central = groundKm / R;
+    var satR = R + altKm;
+    var range = Math.sqrt(R*R + satR*satR - 2*R*satR*Math.cos(central));
+    if(!range) return null;
+    var up = satR * Math.cos(central) - R;
+    return Math.asin(Math.max(-1, Math.min(1, up / range))) * 180 / Math.PI;
+  }
+
+  function qualityFromElevation(maxEl){
+    if(maxEl >= 60) return 'Excellent';
+    if(maxEl >= 35) return 'Strong';
+    if(maxEl >= 20) return 'Good';
+    return 'Low pass';
+  }
+
+  function setSignal(mode, text, source){
+    var sig = el('signalText');
+    if(sig){ sig.classList.remove('ok','warn','bad'); sig.classList.add(mode); sig.textContent = text; }
+    setText('sourceText', source || state.lastSource || '—');
+    var headerDot = el('headerLiveDot');
+    if(headerDot){ headerDot.classList.remove('ok','warn','bad'); headerDot.classList.add(mode); }
+    setText('headerLiveText', text);
+  }
+
+  function updateSourceStatus(){
+    var liveDot = el('sourceLiveDot');
+    if(liveDot){
+      liveDot.classList.remove('ok','warn','bad');
+      liveDot.classList.add(state.primaryFailures === 0 ? 'ok' : (state.primaryFailures < 3 ? 'warn' : 'bad'));
+    }
+    setText('sourceLiveText', state.primaryFailures === 0 ? 'Nominal' : (state.primaryFailures < 3 ? 'Degraded' : 'Unavailable'));
+    var refDot = el('sourceRefDot');
+    if(refDot){
+      refDot.classList.remove('ok','warn','bad');
+      refDot.classList.add(state.fallbackFailures === 0 ? 'ok' : 'warn');
+    }
+  }
+
+  function updateAgeDisplays(){
+    var d = state.lastData;
+    if(!d){ setText('dataAge','—'); setText('headerUpdated','Awaiting first frame'); return; }
+    var age = Math.max(0, nowSec()-d.timestamp);
+    setText('dataAge', age + ' sec');
+    setText('headerUpdated', 'Updated '+age+'s ago');
+  }
+
+  function renderTelemetry(){
+    var d = state.lastData;
+    if(!d) return;
+
+    var latTxt = fmtLat(d.lat), lonTxt = fmtLon(d.lon), altTxt = fmtDist(d.alt), velTxt = fmtSpeed(d.vel);
+    var visTxt = d.vis ? (d.vis === 'daylight' ? 'Sunlight' : 'Eclipse') : '—';
+    var footTxt = fmtDist(d.footprint);
+
+    setText('oLat', latTxt); setText('oLon', lonTxt); setText('oAlt', altTxt); setText('oVel', velTxt);
+
+    setText('teleLat', latTxt); setText('teleLon', lonTxt); setText('teleAlt', altTxt); setText('teleVel', velTxt);
+    setText('teleVis', visTxt);
+    setText('teleVisNote', d.vis ? 'Telemetry reports ISS is in '+(d.vis === 'daylight' ? 'daylight.' : 'orbital night.') : 'Not available from fallback source.');
+    setText('teleFootprint', footTxt);
+
+    setText('statusAlt', altTxt); setText('statusVel', velTxt); setText('statusLat', latTxt); setText('statusLon', lonTxt);
+    setText('statusFootprint', footTxt);
+    setText('statusDayNight', d.vis ? (d.vis === 'daylight' ? 'Daylight' : 'Eclipse') : '—');
+
+    setText('nadirLatLon', latTxt+' / '+lonTxt);
+    setText('nadirAlt', altTxt);
+    setText('nadirDayNight', d.vis ? (d.vis === 'daylight' ? 'Day' : 'Night') : '—');
+    updateNadirMap(d.lat, d.lon);
+
+    drawFootprint(d);
+    setText('footprintMode', state.footprintVisible ? 'Visible' : 'Hidden');
+    setText('terminatorMode', state.terminatorVisible ? 'Visible' : 'Hidden');
+
+    var sourceLabel = state.lastSource || '—';
+    setText('frameTime', d.timestamp ? 'Frame: '+new Date(d.timestamp*1000).toISOString().replace('T',' ').replace('.000Z',' UTC')+' · '+sourceLabel+(d.estimated ? ' · estimated altitude/velocity' : '') : 'Awaiting first telemetry frame.');
+    setText('latency', state.latencyMs == null ? '—' : Math.round(state.latencyMs)+' ms');
+
+    if(state.userLoc){
+      var ground = haversine(state.userLoc[0], state.userLoc[1], d.lat, d.lon);
+      setText('groundDistance', fmtDist(ground));
+      var range = slantRangeKm(ground, d.alt);
+      setText('slantRange', range == null ? '—' : fmtDist(range));
+    }
+
+    renderOrbitCount();
+    drawTerminator();
+    drawSun();
+  }
+
+  function parseTleEpoch(line1){
+    if(!line1 || line1.length < 32) return null;
+    var yy = parseInt(line1.slice(18,20),10);
+    var day = parseFloat(line1.slice(20,32));
+    if(isNaN(yy) || isNaN(day)) return null;
+    var year = yy < 57 ? 2000 + yy : 1900 + yy;
+    var start = Date.UTC(year,0,1,0,0,0);
+    return new Date(start + (day - 1) * 86400000);
+  }
+
+  function parseTle(tle){
+    if(!tle || !tle.line1 || !tle.line2) return null;
+    var parts = tle.line2.trim().split(/\s+/);
+    var meanMotion = parseFloat(parts[7]);
+    var revAtEpoch = parseInt(String(parts[8] || '').replace(/\D/g,''),10);
+    var inclination = parseFloat(parts[2]);
+    var epoch = parseTleEpoch(tle.line1);
+    if(!meanMotion || !revAtEpoch || !epoch) return null;
+    return { meanMotion:meanMotion, revAtEpoch:revAtEpoch, epoch:epoch, inclination:inclination };
+  }
+
+  function renderOrbitCount(){
+    if(!state.tle) return;
+    var elapsedDays = (Date.now() - state.tle.epoch.getTime()) / 86400000;
+    var rev = state.tle.revAtEpoch + elapsedDays * state.tle.meanMotion;
+    var complete = Math.floor(rev);
+    var phase = ((rev - complete) * 100);
+    var periodMin = 1440 / state.tle.meanMotion;
+
+    setText('orbitCount', complete.toLocaleString());
+    setText('orbitPhase', phase.toFixed(1)+'% through current orbit');
+    setText('tleEpoch', state.tle.epoch.toISOString().slice(0,16).replace('T',' ')+' UTC');
+    setText('teleOrbitalPeriod', periodMin.toFixed(1)+' min');
+    setText('teleOrbit', complete.toLocaleString()+' · '+phase.toFixed(0)+'%');
+    setText('statusPeriod', periodMin.toFixed(1)+' min');
+    setText('statusIncl', isFinite(state.tle.inclination) ? state.tle.inclination.toFixed(2)+'°' : '—');
+    setText('statusOrbit', complete.toLocaleString()+' rev · '+phase.toFixed(0)+'% complete');
+  }
+
+  function fetchJSON(url, timeoutMs){
+    var controller = new AbortController();
+    var timer = setTimeout(function(){ controller.abort(); }, timeoutMs || 9000);
+    var started = performance.now();
+    return fetch(url, { signal:controller.signal, cache:'no-store' }).then(function(res){
+      clearTimeout(timer);
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      state.latencyMs = performance.now() - started;
+      return res.json();
+    }).catch(function(err){ clearTimeout(timer); throw err; });
+  }
+
+  function fetchJSONAny(urls, timeoutMs){
+    var index = 0;
+    function next(){
+      if(index >= urls.length) return Promise.reject(new Error('All endpoints failed'));
+      return fetchJSON(urls[index++], timeoutMs).catch(next);
+    }
+    return next();
+  }
+
+  function normalizePosition(d, source){
+    var prev = state.lastGoodFrame || state.lastData || {};
+    var alt = d.altitude == null ? prev.alt : Number(d.altitude);
+    var vel = d.velocity == null ? prev.vel : Number(d.velocity);
+    if(alt == null || isNaN(alt)) alt = 420;
+    if(vel == null || isNaN(vel)) vel = 27600;
+    var footprint = d.footprint == null ? horizonRadiusKm(alt) * 2 : Number(d.footprint);
+    return {
+      lat:Number(d.latitude), lon:Number(d.longitude), alt:alt, vel:vel,
+      vis:d.visibility || null, footprint:footprint, timestamp:Number(d.timestamp) || nowSec(), source:source,
+      estimated: d.altitude == null || d.velocity == null || d.footprint == null
+    };
+  }
+
+  function fetchPrimary(){
+    var ts = nowSec();
+    return fetchJSONAny([
+      'https://api.wheretheiss.at/v1/satellites/'+ISS_ID+'?units=kilometers&timestamp='+ts,
+      'https://api.wheretheiss.at/v1/satellites/'+ISS_ID+'?units=kilometers'
+    ], 9000).then(function(d){
+      state.primaryFailures = 0;
+      return normalizePosition(d, 'WTIA primary');
+    }).catch(function(err){ state.primaryFailures++; throw err; });
+  }
+
+  function fetchFallback(){
+    return fetchJSONAny([
+      'https://api.open-notify.org/iss-now.json'
+    ], 9000).then(function(d){
+      state.fallbackFailures = 0;
+      return normalizePosition({
+        latitude:parseFloat(d.iss_position.latitude),
+        longitude:parseFloat(d.iss_position.longitude),
+        timestamp:Number(d.timestamp)
+      }, 'Open Notify fallback + estimated altitude');
+    }).catch(function(err){ state.fallbackFailures++; throw err; });
+  }
+
+  function renderPositionHistoryTable(){
+    var body = el('posHistoryBody');
+    if(!body) return;
+    if(!state.positionHistory.length){
+      body.innerHTML = '<tr><td colspan="5">Awaiting first telemetry frame…</td></tr>';
+      return;
+    }
+    body.innerHTML = '';
+    state.positionHistory.forEach(function(row, idx){
+      var tr = document.createElement('tr');
+      if(idx === 0) tr.className = 'is-newest';
+      var timeStr = new Date(row.ts*1000).toISOString().slice(11,19)+' UTC';
+      [timeStr, fmtLat(row.lat), fmtLon(row.lon), fmtDist(row.alt), fmtSpeed(row.vel)].forEach(function(val){
+        var td = document.createElement('td');
+        td.textContent = val;
+        tr.appendChild(td);
+      });
+      body.appendChild(tr);
+    });
+  }
+
+  function addPositionHistory(data){
+    state.positionHistory.unshift({ ts:data.timestamp, lat:data.lat, lon:data.lon, alt:data.alt, vel:data.vel });
+    if(state.positionHistory.length > state.positionHistoryMax) state.positionHistory.length = state.positionHistoryMax;
+    renderPositionHistoryTable();
+    setText('posHistoryUpdated', 'Last update '+new Date(data.timestamp*1000).toISOString().slice(11,19)+' UTC');
+  }
+
+  function updatePosition(data){
+    state.retryCount = 0;
+    state.retryDelay = POLL_MS;
+    state.lastSource = data.source;
+    state.lastGoodFrame = data;
+    setSignal(data.estimated ? 'warn' : 'ok', data.estimated ? 'Fallback lock' : 'Signal lock', data.source);
+    updateSourceStatus();
+
+    animateMarkerTo(data.lat, data.lon, Math.max(1200, POLL_MS-600));
+    drawLiveTrail(data.lat, data.lon);
+    state.lastLatLng = [data.lat, data.lon];
+
+    if(state.map && !state.hasCentered){ state.map.setView([data.lat, data.lon], 3); state.hasCentered = true; }
+    if(state.map && state.follow){ state.map.panTo([data.lat, data.lon], { animate:true, duration:.8 }); }
+    if(state.marker) state.marker.setPopupContent('ISS · '+fmtLat(data.lat)+', '+fmtLon(data.lon)+'<br>'+safeText(data.source));
+
+    state.lastData = data;
+    renderTelemetry();
+    addPositionHistory(data);
+    updateAgeDisplays();
+    document.getElementById('app').classList.remove('loading');
+    setText('predictionQuality', data.estimated ? 'Fallback with estimates' : 'Live API direct');
+    logMission('LOCK', 'Live frame from '+data.source+' at '+fmtLat(data.lat)+', '+fmtLon(data.lon)+'.');
+  }
+
+  function poll(){
+    fetchPrimary().catch(function(){ return fetchFallback(); }).then(updatePosition).catch(function(){
+      state.retryCount++;
+      updateSourceStatus();
+      if(state.lastGoodFrame){
+        setSignal('warn', 'Using last frame', 'Retry '+state.retryCount+' · APIs unavailable');
+        setText('predictionQuality', 'Cached last frame');
+        logMission('CACHE', 'Live APIs unavailable; holding last good ISS frame.');
+      } else {
+        setSignal('bad', 'Signal lost', 'Retry '+state.retryCount);
+        setText('predictionQuality', 'No live frame');
+      }
+      state.retryDelay = Math.min(30000, Math.round(state.retryDelay * 1.45));
+    }).then(function(){ setTimeout(poll, state.retryDelay); });
+  }
+
+  function chunk(arr, size){
+    var out=[];
+    for(var i=0; i<arr.length; i+=size) out.push(arr.slice(i,i+size));
+    return out;
+  }
+
+  function fetchPositions(timestamps){
+    var chunks = chunk(timestamps, 10);
+    return Promise.all(chunks.map(function(part){
+      return fetchJSON('https://api.wheretheiss.at/v1/satellites/'+ISS_ID+'/positions?timestamps='+part.join(',')+'&units=kilometers', 10000);
+    })).then(function(results){
+      return [].concat.apply([], results).map(function(d){ return [Number(d.latitude), Number(d.longitude)]; });
+    });
+  }
+
+  function fetchPositionSamples(timestamps){
+    var chunks = chunk(timestamps, 10);
+    return Promise.all(chunks.map(function(part){
+      return fetchJSON('https://api.wheretheiss.at/v1/satellites/'+ISS_ID+'/positions?timestamps='+part.join(',')+'&units=kilometers', 12000);
+    })).then(function(results){
+      return [].concat.apply([], results).map(function(d){
+        return { lat:Number(d.latitude), lon:Number(d.longitude), alt:d.altitude == null ? 420 : Number(d.altitude), timestamp:Number(d.timestamp) };
+      }).filter(function(d){ return isFinite(d.lat) && isFinite(d.lon) && isFinite(d.timestamp); });
+    });
+  }
+
+  function renderPassWindows(windows){
+    var list = el('passList');
+    if(!list) return;
+    list.innerHTML = '';
+    if(!state.userLoc){
+      list.innerHTML = '<div class="pass-item"><strong>Location permission needed</strong><span>Allow location to estimate upcoming ISS overflight windows near you.</span></div>';
+      setText('passMode','Needs location'); setText('passGeometry','Location needed');
+      return;
+    }
+    if(!windows.length){
+      list.innerHTML = '<div class="pass-item"><strong>No close overflight in next 8h</strong><span>The ISS may still be visible farther away; this scan uses approximate line-of-sight geometry.</span></div>';
+      setText('passMode','No window found'); setText('passGeometry','Elevation ≥10°');
+      return;
+    }
+    windows.slice(0,3).forEach(function(w, idx){
+      var div = document.createElement('div');
+      div.className = 'pass-item';
+      div.innerHTML = '<strong>#'+(idx+1)+' · '+localTimeText(w.start)+' – '+localTimeText(w.end)+'</strong><span>'+qualityFromElevation(w.maxEl)+' · max elevation '+w.maxEl.toFixed(0)+'° · closest sampled ground distance '+fmtDist(w.minDist)+'.</span>';
+      list.appendChild(div);
+    });
+    setText('passMode', windows.length + ' elevated window' + (windows.length === 1 ? '' : 's'));
+    setText('passGeometry', 'Elevation ≥10° / sampled');
+  }
+
+  function scanPasses(){
+    if(!state.userLoc){ renderPassWindows([]); return; }
+    if(state.passScanBusy) return;
+    state.passScanBusy = true;
+    var btn = el('passBtn'); if(btn) btn.textContent = 'Scanning';
+    setText('passMode','Scanning future path'); setText('passGeometry','Sampling elevation');
+    var base = nowSec();
+    var ts = [];
+    var step = state.lowPower ? 240 : 180;
+    for(var t=300; t<=28800; t+=step) ts.push(base+t);
+    fetchPositionSamples(ts).then(function(samples){
+      var windows = [];
+      var current = null;
+      samples.forEach(function(s){
+        var dist = haversine(state.userLoc[0], state.userLoc[1], s.lat, s.lon);
+        var elv = elevationDeg(dist, s.alt);
+        var inRange = elv != null && elv >= 10;
+        if(inRange && !current){ current = { start:s.timestamp, end:s.timestamp, minDist:dist, maxEl:elv }; }
+        else if(inRange && current){ current.end = s.timestamp; current.minDist = Math.min(current.minDist, dist); current.maxEl = Math.max(current.maxEl, elv); }
+        else if(!inRange && current){ windows.push(current); current = null; }
+      });
+      if(current) windows.push(current);
+      windows.sort(function(a,b){ return a.start - b.start; });
+      state.passWindows = windows;
+      renderPassWindows(windows);
+      logMission('PASS', 'Elevation-angle future overflight scan completed for your location.');
+    }).catch(function(){
+      setText('passMode','Scan unavailable'); setText('passGeometry','API unavailable');
+      var l = el('passList'); if(l) l.innerHTML = '<div class="pass-item"><strong>Overflight scan unavailable</strong><span>Future position API did not respond. Try again later.</span></div>';
+    }).then(function(){
+      state.passScanBusy = false;
+      var b = el('passBtn'); if(b) b.textContent = 'Scan';
+    });
+  }
+
+  function refreshPath(){
+    if(!state.map || !window.L) return;
+    if(!state.pathVisible){ drawPath([], []); return; }
+    var base = nowSec();
+    var pastTs = [];
+    var futureTs = [];
+    var pathStep = state.lowPower ? 600 : 300;
+    for(var p=-2700; p<=0; p+=pathStep) pastTs.push(base+p);
+    for(var f=pathStep; f<=5400; f+=pathStep) futureTs.push(base+f);
+    Promise.all([fetchPositions(pastTs), fetchPositions(futureTs)]).then(function(pair){
+      drawPath(pair[0], pair[1]);
+      seedLiveTrail(pair[0]);
+      setText('pathMode','Past 45m + future 90m');
+      logMission('PATH', 'Past and future ground track refreshed.');
+    }).catch(function(){
+      setText('pathMode','Live trail only');
+    });
+  }
+
+  function fetchTle(){
+    fetchJSON('https://api.wheretheiss.at/v1/satellites/'+ISS_ID+'/tles', 9000).then(function(tle){
+      state.tle = parseTle(tle);
+      renderOrbitCount();
+    }).catch(function(){ setText('tleEpoch','Unavailable'); });
+  }
+
+  function fetchCrew(){
+    fetchJSON('https://api.open-notify.org/astros.json', 9000).then(function(d){
+      var crew = (d.people || []).filter(function(p){ return String(p.craft || '').toUpperCase() === 'ISS'; });
+      setText('crewCount', crew.length ? crew.length + ' aboard' : '—');
+      setText('crewCountPanel', crew.length ? crew.length + ' aboard' : '—');
+      var list = el('crewList');
+      if(!list) return;
+      list.innerHTML = '';
+      if(!crew.length){
+        list.innerHTML = '<div class="crew-person"><strong>No ISS crew returned</strong><span>API</span></div>';
+        return;
+      }
+      logMission('CREW', crew.length+' ISS crew/researchers returned by live API.');
+      crew.forEach(function(person){
+        var item = document.createElement('div');
+        item.className = 'crew-person';
+        var name = document.createElement('strong');
+        name.textContent = person.name || 'Crew member';
+        var craft = document.createElement('span');
+        craft.textContent = person.craft || 'ISS';
+        item.appendChild(name); item.appendChild(craft); list.appendChild(item);
+      });
+    }).catch(function(){
+      setText('crewCount','Unavailable');
+      setText('crewCountPanel','Unavailable');
+      var l = el('crewList'); if(l) l.innerHTML = '<div class="crew-person"><strong>Crew API unavailable</strong><span>Retry later</span></div>';
+    });
+  }
+
+  function tryGeolocation(){
+    if(!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(function(pos){
+      state.userLoc = [pos.coords.latitude, pos.coords.longitude];
+      renderTelemetry();
+      setText('passMode','Location ready');
+      logMission('GEO', 'Browser location enabled for distance and pass scan.');
+      scanPasses();
+    }, function(){}, { timeout:8000, maximumAge:180000 });
+  }
+
+  function tickClock(){
+    setText('utcClock', new Date().toISOString().slice(11,19));
+    renderOrbitCount();
+    updateAgeDisplays();
+  }
+
+  function bindVideoSources(){
+    var iframe = el('issVideo');
+    var tag = el('videoTag');
+    var status = el('videoStatus');
+    var buttons = Array.prototype.slice.call(document.querySelectorAll('.video-source'));
+    if(!iframe || !buttons.length) return;
+    buttons.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.classList.remove('is-active'); other.setAttribute('aria-pressed','false'); });
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-pressed','true');
+        iframe.src = btn.getAttribute('data-video');
+        var label = btn.getAttribute('data-label') || btn.textContent.trim();
+        if(tag) tag.textContent = label.toUpperCase();
+        if(status) status.textContent = 'Source switched to '+label+'. Keep the frame muted for best autoplay support.';
+        logMission('VIDEO', 'Video source switched to '+label+'.');
+      });
+    });
+  }
+
+  function bindUI(){
+    el('recenterBtn').addEventListener('click', function(){
+      if(state.map && state.lastLatLng) state.map.setView(state.lastLatLng, Math.max(state.map.getZoom(), 3));
+    });
+    el('unitBtn').addEventListener('click', function(){
+      state.unit = state.unit === 'km' ? 'mi' : 'km';
+      el('unitBtn').textContent = state.unit.toUpperCase();
+      renderTelemetry();
+      renderPositionHistoryTable();
+    });
+    el('pathBtn').addEventListener('click', function(){
+      state.pathVisible = !state.pathVisible;
+      var b = el('pathBtn');
+      b.textContent = state.pathVisible ? 'Path On' : 'Path Off';
+      b.classList.toggle('is-active', state.pathVisible);
+      b.setAttribute('aria-pressed', String(state.pathVisible));
+      if(state.pathVisible){
+        refreshPath();
+        if(state.lastLatLng) drawLiveTrail(state.lastLatLng[0], state.lastLatLng[1]);
+      }
+      else { drawPath([], []); clearLayerGroup(state.trailLayers); state.trailLayers = []; }
+    });
+    el('footprintBtn').addEventListener('click', function(){
+      state.footprintVisible = !state.footprintVisible;
+      var b = el('footprintBtn');
+      b.textContent = state.footprintVisible ? 'Footprint On' : 'Footprint Off';
+      b.classList.toggle('is-active', state.footprintVisible);
+      b.setAttribute('aria-pressed', String(state.footprintVisible));
+      setText('footprintMode', state.footprintVisible ? 'Visible' : 'Hidden');
+      if(state.lastData) drawFootprint(state.lastData);
+    });
+    el('terminatorBtn').addEventListener('click', function(){
+      state.terminatorVisible = !state.terminatorVisible;
+      var b = el('terminatorBtn');
+      b.textContent = state.terminatorVisible ? 'Terminator On' : 'Terminator Off';
+      b.classList.toggle('is-active', state.terminatorVisible);
+      b.setAttribute('aria-pressed', String(state.terminatorVisible));
+      setText('terminatorMode', state.terminatorVisible ? 'Visible' : 'Hidden');
+      drawTerminator();
+      drawSun();
+    });
+    el('followBtn').addEventListener('click', function(){
+      state.follow = !state.follow;
+      var b = el('followBtn');
+      b.textContent = state.follow ? 'Follow On' : 'Follow Off';
+      b.classList.toggle('is-active', state.follow);
+      b.setAttribute('aria-pressed', String(state.follow));
+      if(state.map && state.follow && state.lastLatLng) state.map.panTo(state.lastLatLng, { animate:true, duration:.8 });
+    });
+    el('passBtn').addEventListener('click', scanPasses);
+    el('locBtn').addEventListener('click', tryGeolocation);
+    window.addEventListener('resize', function(){ detectLowPower(); if(state.map) state.map.invalidateSize(); if(state.nadirMap) state.nadirMap.invalidateSize(); });
+  }
+
+  detectLowPower();
+  initMap();
+  initNadirMap();
+  bindUI();
+  bindVideoSources();
+  tickClock();
+  drawTerminator();
+  drawSun();
+  logMission('BOOT', state.lowPower ? 'Optimized low-power Orbital Command page initialized.' : 'Orbital Command page initialized.');
+  setInterval(tickClock, 1000);
+  setInterval(function(){ drawTerminator(); drawSun(); }, 60000);
+  tryGeolocation();
+  fetchCrew();
+  fetchTle();
+  poll();
+  refreshPath();
+  setInterval(refreshPath, 300000);
+  setInterval(fetchCrew, 900000);
+  setInterval(fetchTle, 3600000);
+}
+//]]>
+</script>
+<script>
+//<![CDATA[
+(function(){
+  'use strict';
+  var jsSources = [
+    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
+    'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+    'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'
+  ];
+  var cssSources = [
+    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css',
+    'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+    'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css'
+  ];
+  function addCssFallback(index){
+    if(index >= cssSources.length) return;
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = cssSources[index];
+    link.onerror = function(){ addCssFallback(index + 1); };
+    document.head.appendChild(link);
+  }
+  function loadLeaflet(index){
+    if(window.L){ bootISS(); return; }
+    if(index >= jsSources.length){
+      var app = document.getElementById('app');
+      if(app) app.classList.remove('loading');
+      var map = document.getElementById('map');
+      if(map){
+        map.innerHTML = '<div class="map-fallback"><div><strong>Map engine unavailable</strong><p>Leaflet could not load from the available CDNs. Telemetry UI is preserved, but the live map needs an internet/CDN connection.</p></div></div>';
+      }
+      return;
+    }
+    var script = document.createElement('script');
+    script.src = jsSources[index];
+    script.async = true;
+    script.onload = function(){ if(window.L) bootISS(); else loadLeaflet(index + 1); };
+    script.onerror = function(){ loadLeaflet(index + 1); };
+    document.head.appendChild(script);
+  }
+  addCssFallback(1);
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ loadLeaflet(0); });
+  } else {
+    loadLeaflet(0);
+  }
+})();
+//]]>
+</script>
