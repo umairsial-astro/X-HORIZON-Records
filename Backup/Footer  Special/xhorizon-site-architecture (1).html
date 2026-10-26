@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>X HORIZON site architecture wireframe and audit</title>
+<style>
+:root{--bg:#000;--pn:#0a0a0a;--ink:#f2f2f2;--mu:#9b9b9b;--ln:#3b3b3b;--gd:#171717;--ac:#f2f2f2;--rd:#ff6b8f;--am:#ffb347;--gn:#5ed6a6;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg) radial-gradient(var(--gd) 1px,transparent 1px) 0 0/18px 18px;color:var(--ink);font:14px/1.5 "Avenir Next","Trebuchet MS",system-ui,sans-serif}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px clamp(12px,3vw,40px);background:var(--bg);border-bottom:1px solid var(--ln)}
+.top b{margin-right:auto;white-space:nowrap;padding-right:12px}.top .pl{flex:0 0 auto}
+.pl{border:1px solid var(--ln);background:var(--pn);color:var(--ink);padding:5px 12px;border-radius:99px;font:inherit;font-size:12px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.pl:hover,.pl.on{background:var(--ink);color:var(--bg)}
+.pl:focus-visible,.top a:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.pl.f{border-color:var(--rd);color:var(--rd)}
+html,body{width:100%;min-height:100%}main{width:100%;max-width:none;margin:0;padding:0 clamp(12px,3vw,40px) 60px}.off{display:none!important}
+section{padding:34px 0 6px}
+h1{font-size:clamp(28px,5.5vw,46px);line-height:1.08;margin:30px 0 10px;letter-spacing:-.02em}
+h2{font-size:21px;margin:0 0 4px}
+.sub{color:var(--mu);margin:0 0 14px;max-width:80ch}
+.mu{color:var(--mu);font-size:12px}
+code,.sl{font-family:ui-monospace,Menlo,monospace}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:18px 0 6px}
+.st{border:1px solid var(--ln);border-radius:4px;padding:10px 12px;background:var(--pn)}.st b{display:block;font-size:24px}.st span{color:var(--mu);font-size:12px}
+.fr{border:1.5px dashed var(--ln);border-radius:4px;background:var(--pn);padding:12px}
+.fd{border:1px solid var(--ln);border-radius:4px;padding:12px;background:var(--pn)}
+.ph{border:1px solid var(--ln);display:grid;place-items:center;color:var(--mu);font-size:11px;text-align:center;background:linear-gradient(to top right,transparent calc(50% - .6px),var(--ln),transparent calc(50% + .6px)),linear-gradient(to bottom right,transparent calc(50% - .6px),var(--ln),transparent calc(50% + .6px))}
+.ph span{background:var(--pn);padding:1px 6px}
+.ln{display:block;height:6px;border-radius:3px;background:var(--ln);margin:7px 0;opacity:.65}
+.bt{display:inline-block;border:1.5px solid var(--ink);border-radius:99px;padding:3px 12px;font-size:11px;margin-top:8px}
+.bt small{color:var(--mu);margin-left:6px;font-family:ui-monospace,monospace}
+.g{display:grid;gap:10px}.g2{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.blk{margin:0 0 18px}.bh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin-bottom:5px}.bh em{font-style:normal;color:var(--mu);font-size:12px}
+.nav{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.menu,.gp{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:10px}
+.gp{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin-top:6px}
+.it{border:1px solid var(--ln);border-radius:3px;padding:7px 22px 7px 10px;font-size:12px;position:relative;background:var(--bg)}
+.it small{display:block;color:var(--mu);font:10px ui-monospace,monospace;overflow-wrap:anywhere}
+.it i{display:block;font-style:normal;color:var(--rd);font-size:10px}
+.it.f::after{content:"";position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--rd)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.cols .it{margin-top:6px}
+.row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}.row>*{flex:1 0 150px}
+.tk{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;color:var(--mu)}
+.sev{font:700 11px system-ui;padding:2px 8px;border-radius:99px;border:1px solid currentColor}
+.High{color:var(--rd)}.Medium{color:var(--am)}.Low{color:var(--gn)}
+.flag{color:var(--rd);font-size:12px}
+.tr,.tr ul{list-style:none;margin:0;padding:0}
+.tr ul{margin-left:12px;padding-left:20px;border-left:1px dashed var(--ln)}
+.tr li{position:relative;margin:7px 0}
+.tr ul>li::before{content:"";position:absolute;left:-20px;top:15px;width:20px;border-top:1px dashed var(--ln)}
+.tr summary{list-style:none;cursor:pointer;display:block}.tr summary::-webkit-details-marker{display:none}
+.tr summary::before{content:"\25B8";color:var(--mu);display:inline-block;width:19px}
+.tr details[open]>summary::before{content:"\25BE"}
+.tr li>.nd{margin-left:19px}
+.nd{display:inline-flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;border:1px dashed var(--ln);background:var(--pn);padding:5px 10px;border-radius:3px;font-size:12px;max-width:calc(100% - 20px);vertical-align:middle}
+.nd.gr{border:1.5px solid var(--ink)}
+.nd.rt{background:var(--ink);color:var(--bg)}.nd.rt em{color:var(--bg);opacity:.7}
+.nd em{font-style:normal;color:var(--mu);font-size:11px}
+.nd i{font-style:normal;color:var(--rd);font-size:11px}
+.nd code{font-size:11px;color:var(--mu)}
+.nd.f{border-color:var(--rd)}
+@media(prefers-reduced-motion:no-preference){.menu{animation:in .18s ease-out}@keyframes in{from{opacity:0;transform:translateY(-4px)}}}
+</style></head><body>
+<nav class="top"><b>X HORIZON map</b><button class="pl" data-t="sitemap">Sitemap</button><button class="pl" data-t="header">Header</button><button class="pl" data-t="home">Homepage</button><button class="pl" data-t="footer">Footer</button><button class="pl" data-t="arch">URL list</button><button class="pl" data-t="audit">Audit</button></nav>
+<main>
+<h1>X HORIZON site architecture</h1>
+<p class="sub">Wireframes of the header, homepage, footer and page tree of xhorizon.odoo.com, then an audit. Based on the live homepage markup on 2 Oct 2026. Red marks flag items from the audit.</p>
+<div class="stats" id="stats"></div>
+
+<section id="sitemap"><h2>Sitemap</h2><p class="sub">Which page links to which, and how. Built from the links on the homepage; links between subpages were not crawled.</p>
+<div class="nav" style="margin-bottom:12px"><button class="pl" id="ex">Expand all</button><button class="pl" id="cl">Collapse all</button><span class="mu">Solid box: menu or group. Dashed box: page. "also in": the same URL is linked from another place. Red: audit flag.</span></div>
+<div class="fr" id="tr"></div></section>
+
+<section id="header"><h2>Header</h2><p class="sub">Click a menu to open its dropdown.</p>
+<div class="fr"><div class="nav" id="nv"></div><div id="mn"></div><div class="nav" id="sb" style="margin-top:12px"></div></div></section>
+
+<section id="home"><h2>Homepage</h2><p class="sub">Blocks from top to bottom, between header and footer.</p><div id="hp"></div></section>
+
+<section id="footer"><h2>Footer</h2><div id="ft"></div></section>
+
+<section id="arch"><h2>URL list</h2><p class="sub" id="as"></p>
+<div class="fr" style="text-align:center;margin-bottom:12px"><b>xhorizon.odoo.com/</b><div class="mu">8 header menus, 4 footer columns, plus hubs and account pages</div></div>
+<div class="g g2" id="ar"></div></section>
+
+<section id="audit"><h2>Audit</h2><p class="sub">Findings from the homepage markup, grouped by how much they affect visitors, search, or maintenance.</p>
+<div class="nav" id="ac" style="margin-bottom:12px"></div><div class="g g2" id="al"></div>
+<div class="g g2" style="margin-top:14px">
+<div class="fd"><b>What is working</b><ul class="mu" style="padding-left:18px"><li>The six-step learning loop is clear and repeated on the page.</li><li>Every audience has a menu: concepts, skills, careers, simulations, live, community.</li><li>The footer carries the trust pages: rules, safety, founder, team, FAQs, contact.</li><li>Seven simulations set the platform apart from article-only sites.</li></ul></div>
+<div class="fd"><b>Not checked</b><p class="mu">Only the homepage was fetched. Subpage content and layout, broken-link status, page speed, mobile rendering, accessibility, and logged-in views still need a pass.</p></div></div></section>
+</main>
+<script>
+const $=s=>document.querySelector(s),D=s=>s.split("~").map(x=>x.split("|"));
+const L=n=>Array.from({length:n},(_,i)=>`<i class="ln" style="width:${[92,78,64,86,70][i%5]}%"></i>`).join("");
+const bt=(t,s)=>`<span class="bt">${t}${s?`<small>${s}</small>`:""}</span>`;
+const path=s=>s=="#"?"#":"/"+s;
+const FL={"cosmic-calendarr":"Typo in URL","sostware-tools-in-space-science":"Typo in URL","astrodynamics-life-support-system":"Slug does not match label","star-stellar-formation":"Label says Evolution","sitemap":"Duplicate of /site-map","site-map":"Duplicate of /sitemap","stellar-sky":"Second Sky Map URL (/sky-map)","sky-map":"Second Sky Map URL (/stellar-sky)","live-events":"Two menu items point here","suggest-us":"Suggest Us and Report an Issue","Contribute":"Capital letter in slug"};
+const item=m=>{const f=FL[m[1]];return `<div class="it${f?" f":""}">${m[0]}<small>${path(m[1])}</small>${f?`<i>${f}</i>`:""}</div>`};
+const N=[
+["Concepts",D("Universe & Cosmology|universe-cosmology~Galaxies & Large Scale Structure|galaxy-large-scale-structure~Black Holes & Related Phenomena|black-holes-related-concepts~Solar System & Planetary Science|solar-system-planetary-science~Space Technology & Exploration|space-technology-exploration~Exoplanets & Astrobiology|exoplanets-astrobiology~Nebula & Interstellar Objects|nebula-interstellar-objects~Star & Stellar Evolution|star-stellar-formation~Quantum Physics & Particle Concepts|quantum-physics-particle-concepts~Gravity & Relativity|gravity-relativity~High Energy Phenomena & Transient Event|high-energy-phenomena-transient-events~Sun & Solar Phenomena|sun-solar-phenomena~Human Space Flight & Life Support System|human-spaceflight-life-support-system~Astrodynamics & Space Mission Planning|astrodynamics-life-support-system~Software & Tools In Space Science|sostware-tools-in-space-science~Astronomy & Observational Terms|astronomy-observational-terms~Miscellaneous Terms|miscellaneous-terms")],
+["Skills",D("Rocket Lab|rocket-lab~Telescope Handling|telescope-handling~Astrophotography|astrophotography~Space Data Analysis|space-data-handling~Python for Space Science|python-learning~Satellite Operations|satellite-operations~Orbital Mechanics|orbital-mechanics~Scientific Writing|scientific-writing~Mathematics|mathematics")],
+["Careers",D("Overview|career~Scholarships & Internships|scholarships-internships~Universities|universities~Space Companies|space-companies~Worldwide Industries|industries")],
+["Media",D("History|history~Videos|videos")],
+["Live",D("Live ISS|live~Live Artemis|live-events~Live Events|live-events")],
+["Community",D("Hub|forum~Social Learning|social-learning~Professional Platforms|professional-platforms~Apps|apps")],
+["Simulations",D("Solar System|solar-system~Satellites|satellites~Sky Map|stellar-sky~Celestial Sphere|celestial-sphere~Black Hole|black-hole~Exoplanets|exoplanets~Where we are|where-we-are")],
+["Featured",D("Weather Forecast|weather-forecast~Collaboration|collaboration~Gravity Simulator|gravity-simulator~Cosmic Calendar|cosmic-calendarr~Courses|slides~Misson Designer|mission-designer~Muslim's Special|muslim-special~Dr. Clary's Special|dr-clary-s-special")]];
+const T=[...N,["Join Us",D("My Account|my/home~Logout|#")]];
+const FT=[["Core",D("Home|~About X Horizon|xhorizon-vision~Cosmic Gear|cosmic-gear~Space Library|space-library~Space Gallery|space-gallery")],
+["About Our Community",D("Community Guideliness|community-guidelines~Platform Rules|platform-rules~Safety & Moderation|explore-safely~Founder|founder-1~Our Team|our-team")],
+["Premium Features",D("Sitemap|sitemap~Space Updates|space-news~Pakistan's Special|pakistan-s-special~Donations|donations~Sky Map|sky-map")],
+["Support",D("My Account|web/login~Suggest Us|suggest-us~contribute|Contribute~Rate Us|ratings-reviews~Collaboration|collaboration")]];
+const FB=D("FAQs|frequently-asked-questions~Report an Issue|suggest-us~Contact|contactus");
+const U=D("Categories hub (Get started button)|categories~Site map (Learn more button)|site-map~Media (second bar)|media~Skills (second bar)|skills~My account|my/home~Login|web/login");
+
+/* header */
+let cur=0;
+function drawNav(){
+ $("#nv").innerHTML=`<div class="ph" style="width:40px;height:40px"><span>logo</span></div><span class="pl" style="border-style:dashed;cursor:default">Home</span>`+T.map((t,i)=>`<button class="pl${i==cur?" on":""}" data-i="${i}">${t[0]} ▾</button>`).join("");
+ $("#mn").innerHTML=`<div class="mu" style="margin-top:12px">${T[cur][0]}: ${T[cur][1].length} links</div><div class="menu">${T[cur][1].map(item).join("")}</div>`;
+}
+$("#nv").onclick=e=>{const b=e.target.closest("button");if(b){cur=+b.dataset.i;drawNav()}};
+$("#sb").innerHTML=`<span class="mu">Second bar:</span><span class="pl">Courses</span><span class="pl">Forum</span><span class="pl">media</span><span class="pl">Skills</span>`;
+drawNav();
+
+/* homepage */
+const hs=(h,p,b,s)=>`<div class="fr"><div class="ph" style="height:96px"><span>video background (mixkit mp4)</span></div><div class="mu" style="margin-top:8px">Welcome</div><b>${h}</b><div class="mu">${p}</div>${bt(b,s)}</div>`;
+const col=["Deep Field Atlas","Moon System","Launch Corridor","Orbit Watch","Nebula Archive","Telescope Field","Planet Route","Signal Desk"];
+const off=["Free Education","Strong Visuals","Career"],doo=["Education","Skills","Career","Visuals","Collaboration","Opportunities"];
+const why=["Free to use","High-quality content","Source, date and author on every page","Always available","Own accounts, no Google dependency","Users, scientists, astronauts, career guides","Built-in question and answer","Verified uploads, spam control, lifetime bans","Region and budget independent","Users request changes and contribute","Ratings and reviews"];
+const sts=[["100%","Authentic content"],["500+","Articles"],["100%","Flexible to demand"],["24/7","Service"],["Unlimited","User contributions"],["Anytime","Contact with team"]];
+const steps=["Join","Set up profile","View sitemap","Understand the vision","Learn","Build","Grow"];
+const HP=[
+["Hero carousel","2 slides, autoplay video","<div class='g g2'>"+hs("X HORIZON","Explore the nature beyond the horizon","Get started","/categories")+hs("Learning Hub","Explore data in soft form, quizzes and people contributions","Enroll now","/slides")+"</div>","Media loaded from an external host; hero markup repeats"],
+["Ticker","Scrolling phrase strip","<div class='fr tk'>Understand Articles · Learn Skills · Build Career · Experience Visuals · Build Knowledge · Give Quizzes · Review · Be Professional · Be an Astronomer</div>"],
+["Visual Collections","8-card image carousel with arrows","<div class='fr'><b>Visual Collections</b>"+L(1)+"<div class='row'>"+col.map(n=>`<div class="fd"><div class="ph" style="height:62px"><span>image</span></div><b style="font-size:12px;display:block;margin-top:6px">${n}</b>${L(2)}</div>`).join("")+"</div></div>","Images hotlinked at 1800px; block repeats in markup"],
+["What we offer","3 cards","<div class='g g2'>"+off.map(t=>`<div class="fd"><b>${t}</b>${L(3)}</div>`).join("")+"</div>"],
+["What we actually do","6 tiles","<div class='g g2'>"+doo.map(t=>`<div class="fd"><b>${t}</b>${L(2)}</div>`).join("")+"</div>"],
+["Why X HORIZON matters","11 points and 6 counters","<div class='g g2'><div class='fd'>"+why.map(w=>`<div class="mu">☐ ${w}</div>`).join("")+"</div><div class='g' style='grid-template-columns:1fr 1fr'>"+sts.map(s=>`<div class="fd"><b>${s[0]}</b><div class="mu">${s[1]}</div></div>`).join("")+"</div></div>"],
+["How it works","Image, core loop, link to site map","<div class='g g2'><div class='ph' style='min-height:120px'><span>image</span></div><div class='fd'><b>How it works</b><div class='mu'>Explore, Learn, Practice, Build, Prove, Grow</div>"+L(3)+bt("Learn more","/site-map")+"</div></div>"],
+["How to use","7-step path","<div class='nav'>"+steps.map((s,i)=>`<span class="pl" style="cursor:default">${i+1}. ${s}</span>`).join("")+"</div>"],
+["Closing call to action","Two headings and a line","<div class='fr' style='text-align:center'><b>What are you thinking now?</b><div class='mu'>Can you find a better one than X HORIZON</div><div class='mu'>Join us and make the planet a better place.</div></div>","Vague wording"]];
+$("#hp").innerHTML=HP.map((b,i)=>`<div class="blk"><div class="bh"><b>${i+1}. ${b[0]}</b><em>${b[1]}</em>${b[3]?`<span class="flag">Flag: ${b[3]}</span>`:""}</div>${b[2]}</div>`).join("");
+
+/* footer */
+$("#ft").innerHTML=`<div class="fr"><div class="cols"><div><div class="ph" style="width:44px;height:44px"><span>logo</span></div><b>X HORIZON</b><div class="mu">A focused astronomy platform for space education, simulations, live missions, careers, and community learning.</div><div class="mu" style="margin:6px 0">Education · Simulations · Live Space</div><div class="nav">${["YouTube","Instagram","LinkedIn","X","Facebook","GitHub"].map(s=>`<span class="pl${s=="X"||s=="Facebook"?" f":""}" style="cursor:default">${s}</span>`).join("")}</div>${"" }<div class="flag" style="margin-top:6px">X and Facebook link to the site roots</div></div>${FT.map(c=>`<div><b>${c[0]}</b>${c[1].map(item).join("")}</div>`).join("")}</div>
+<div class="nav" style="justify-content:space-between;margin-top:14px;border-top:1px dashed var(--ln);padding-top:10px"><span class="mu">Built for those who look beyond the sky.</span><span class="mu">X HORIZON © 2026</span></div><div class="menu">${FB.map(item).join("")}</div></div>
+<div class="fr" style="margin-top:10px;border-color:var(--rd)"><span class="flag">Second footer: Odoo default bar with "Copyright ©" (no name or year) and "Powered by Odoo - Create a free website"</span></div>`;
+
+/* page tree */
+const G=[...N.map(g=>[g[0]+" (header)",g[1]]),...FT.map(g=>[g[0]+" (footer)",g[1]]),["Footer bottom row",FB],["Hubs and account",U]];
+const all=new Set(["",...G.flatMap(g=>g[1].map(m=>m[1]))].filter(s=>s!="#"));
+const hs2=new Set(["",...N.flatMap(g=>g[1].map(m=>m[1]))]);
+const fo=[...all].filter(s=>!hs2.has(s)).length;
+const hl=N.reduce((a,g)=>a+g[1].length,0),fl=FT.reduce((a,g)=>a+g[1].length,0)+FB.length;
+$("#as").textContent=`${all.size} unique URLs found from the homepage. Dots mark URLs with an audit flag.`;
+$("#ar").innerHTML=G.map(g=>`<div class="fr"><div class="bh"><b>${g[0]}</b><em>${g[1].length} pages</em></div><div class="gp">${g[1].map(item).join("")}</div></div>`).join("");
+
+/* audit */
+const A=[
+["High","Navigation","Two sitemap URLs","Home 'Learn more' goes to /site-map; the footer goes to /sitemap.","Keep one and 301 the other."],
+["High","URLs","Typos in permanent URLs","/cosmic-calendarr, /sostware-tools-in-space-science, and /astrodynamics-life-support-system (label says Mission Planning).","Rename slugs, add redirects, update menus."],
+["High","Footer","Placeholder social links","X and Facebook point to x.com and facebook.com roots.","Add the real profiles or remove the icons."],
+["Medium","Homepage","Possible leaked editor snippet","The page text includes a code block labelled 'Hero Section Preview' with the hero markup repeated.","View the page source and delete the stray block."],
+["Medium","Header","Menu overload","8 dropdowns and 55 links, plus a second bar repeating Courses, Forum, Media, Skills.","Group into about 6 menus; link Concepts to one hub."],
+["Medium","Header","Duplicate destinations","Live Artemis and Live Events share /live-events. Header Sky Map is /stellar-sky, footer is /sky-map. My Account is /my/home vs /web/login. Report an Issue equals Suggest Us.","Use one target per intent."],
+["Medium","Header","Featured is a catch-all","Mixes tools, courses, weather, and identity pages (Muslim's, Dr. Clary's Special).","Tools to Simulations, Courses to Skills, Special pages to one Collections menu."],
+["Medium","Footer","Group names do not fit contents","'Premium Features' holds Sitemap, Donations, Space Updates; Library and Gallery sit under Core.","Regroup: Explore, Community, Support, About."],
+["Medium","Footer","Two footers","Custom footer plus the Odoo default bar with an empty copyright line.","Remove the default bar or fill it in."],
+["Medium","Performance","Blocks repeated in markup","Hero, Visual Collections, and the second bar each appear twice in the page source.","Confirm whether both copies render; keep one responsive block."],
+["Medium","Performance","Hotlinked heavy media","Two MP4s from assets.mixkit.co and 8 Unsplash images at 1800px.","Host in Odoo, resize near 800px, lazy-load, add a video poster."],
+["Medium","Account","Logout beside My Account","Join Us lists both; Logout links to #.","Show Join and Login to visitors, Logout only when signed in."],
+["Low","Copy","Spelling","Misson Designer, Community Guideliness, quizes, availbale, Sattellite.","Correct the text."],
+["Low","Labels","Label differs from slug","Star & Stellar Evolution is /star-stellar-formation; Space Data Analysis is /space-data-handling; Python for Space Science is /python-learning; Courses is /slides.","Align where possible and redirect old URLs."],
+["Low","Navigation","Inconsistent capitalization","'media' and 'contribute' are lowercase in menus; the slug is /Contribute.","Title-case labels, lowercase slugs."],
+["Low","Homepage","Vague closing call to action","'What are you thinking now?' and 'Can you find a better one than X HORIZON'.","Use a clear action such as 'Join X HORIZON, free'."],
+["Low","SEO","Share image is a chat photo","og:image is a WhatsApp JPEG; the title pattern is 'HOME | X HORIZON'.","Make a 1200x630 share card; title 'X HORIZON, free astronomy learning'."],
+["Low","Navigation","Thin menus","Media has 2 links, Live has 3 with a duplicate.","Merge into one Media and Live menu."]];
+let sf="All";
+function drawA(){
+ $("#ac").innerHTML=["All","High","Medium","Low"].map(s=>`<button class="pl${s==sf?" on":""}" data-s="${s}">${s}${s=="All"?" · "+A.length:" · "+A.filter(a=>a[0]==s).length}</button>`).join("");
+ $("#al").innerHTML=A.filter(a=>sf=="All"||a[0]==sf).map(a=>`<div class="fd"><div class="bh"><span class="sev ${a[0]}">${a[0]}</span><em>${a[1]}</em></div><b>${a[2]}</b><div class="mu" style="margin:4px 0 6px">${a[3]}</div><div style="font-size:12px"><b>Fix:</b> ${a[4]}</div></div>`).join("");
+}
+$("#ac").onclick=e=>{const b=e.target.closest("button");if(b){sf=b.dataset.s;drawA()}};
+drawA();
+$("#stats").innerHTML=[["Unique URLs",all.size],["Header links",hl],["Footer links",fl],["Footer-only pages",fo],["Audit findings",A.length]].map(s=>`<div class="st"><b>${s[1]}</b><span>${s[0]}</span></div>`).join("");
+
+/* sitemap tree */
+const S2=D("Courses|slides~Forum|forum~media|media~Skills|skills"),HB=D("Get started|categories~Enroll now|slides~Learn more|site-map");
+const SRC=[...T.map(t=>["Header > "+t[0],t[1]]),["Header > Second bar",S2],["Homepage > Buttons",HB],...FT.map(c=>["Footer > "+c[0],c[1]]),["Footer > Bottom row",FB]];
+const WH={};SRC.forEach(s=>s[1].forEach(m=>{(WH[m[1]]=WH[m[1]]||new Set()).add(s[0])}));
+const lf=(m,w)=>{const o=[...(WH[m[1]]||[])].filter(x=>x!=w),f=FL[m[1]];return `<li><span class="nd${f?" f":""}"><b>${m[0]}</b><code>${path(m[1])}</code>${o.length&&m[1]!="#"?`<em>also in ${o.join(", ")}</em>`:""}${f?`<i>${f}</i>`:""}</span></li>`};
+const lx=(n,u,note)=>`<li><span class="nd${note?" f":""}"><b>${n}</b><code>${u}</code><em>external</em>${note?`<i>${note}</i>`:""}</span></li>`;
+const gp=(t,ty,items,open)=>`<li><details${open?" open":""}><summary><span class="nd gr"><b>${t}</b><em>${ty} · ${items.length}</em></span></summary><ul>${items.join("")}</ul></details></li>`;
+const SO=[["YouTube","youtube.com/channel/UC6wx..."],["Instagram","instagram.com/xhorizon8.0"],["LinkedIn","linkedin.com/in/x-horizon-8b8b3442b"],["X","x.com","Site root only"],["Facebook","facebook.com","Site root only"],["GitHub","github.com/xhorizon80xh"]];
+$("#tr").innerHTML=`<ul class="tr"><li><details open><summary><span class="nd gr rt"><b>Home</b><code>xhorizon.odoo.com/</code><em>links out to ${all.size-1} other URLs</em></span></summary><ul>`+
+ gp("Header: primary menu","menus",T.map(t=>gp(t[0],"dropdown",t[1].map(m=>lf(m,"Header > "+t[0])),true)),true)+
+ gp("Header: second bar","text links",S2.map(m=>lf(m,"Header > Second bar")),true)+
+ gp("Homepage: buttons","hero and how it works",HB.map(m=>lf(m,"Homepage > Buttons")),true)+
+ gp("Footer","columns",[...FT.map(c=>gp(c[0],"text links",c[1].map(m=>lf(m,"Footer > "+c[0])),true)),gp("Bottom row","text links",FB.map(m=>lf(m,"Footer > Bottom row")),true),gp("Social","external links",SO.map(x=>lx(...x)),true)],true)+
+ `</ul></details></li></ul>`;
+$("#ex").onclick=()=>document.querySelectorAll("#tr details").forEach(d=>d.open=true);
+$("#cl").onclick=()=>document.querySelectorAll("#tr details").forEach((d,i)=>d.open=i==0);
+
+/* tabs */
+const TABS=["sitemap","header","home","footer","arch","audit"];
+function tab(t){document.querySelectorAll("main section").forEach(s=>s.classList.toggle("off",s.id!=t));document.querySelectorAll(".top [data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t==t));scrollTo(0,0)}
+document.querySelector(".top").onclick=e=>{const b=e.target.closest("[data-t]");if(b){tab(b.dataset.t);try{history.replaceState(null,"","#"+b.dataset.t)}catch(_){}}};
+tab(TABS.includes(location.hash.slice(1))?location.hash.slice(1):"sitemap");
+</script>
+</body></html>
