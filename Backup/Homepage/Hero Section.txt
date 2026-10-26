@@ -1,0 +1,298 @@
+<meta charset="utf-8">
+<title>X HORIZON — Explore Nature Beyond the Horizon</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="X HORIZON: a free, global space-science ecosystem. Concepts, Skills, Career, simulations, live missions, community, and the X HORIZON Database.">
+<style>
+@import url('https://fonts.googleapis.com/css?family=Hind:300,400,500,600,700&display=swap');
+#xh-home,#xh-home *,#xh-home *::before,#xh-home *::after{box-sizing:border-box;margin:0;padding:0}
+#xh-home{display:block;width:100%;background:#000000;color:#f2f2f2;font:400 16px/1.7 'Hind',Arial,sans-serif;-webkit-font-smoothing:antialiased;isolation:isolate}
+#xh-home a{color:inherit;text-decoration:none}
+#xh-home .w{max-width:1180px;margin:0 auto;padding:0 24px}
+#xh-home .eb{display:block;text-transform:uppercase;letter-spacing:3px;font-size:12px;font-weight:600;color:rgba(255,255,255,.66);margin-bottom:14px}
+#xh-home h2{font-size:34px;line-height:1.2;font-weight:700;margin-bottom:14px}
+#xh-home h3{font-size:18px;line-height:1.3;font-weight:600;margin-bottom:6px}
+#xh-home .lead{max-width:700px;color:rgba(255,255,255,.74);font-weight:300;font-size:17px;margin-bottom:38px}
+#xh-home .btn{display:inline-block;border:2px solid #fff;color:#fff;text-transform:uppercase;letter-spacing:1px;font-size:13px;font-weight:600;padding:14px 34px;transition:color .25s,background .25s}
+#xh-home .btn:hover,#xh-home .btn:focus{background:#fff;color:#111}
+/* hero */
+#xh-home .hero{position:relative;min-height:calc(100vh - 80px);min-height:640px;overflow:hidden;background:#000000}
+#xh-home .sl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .8s ease;background-size:cover;background-position:center}
+#xh-home .sl.on{opacity:1;visibility:visible}
+#xh-home .sl::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.6),rgba(0,0,0,.82));z-index:1}
+#xh-home .sl video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+#xh-home .hc{position:relative;z-index:3;text-align:center;max-width:780px;padding:100px 24px 90px}
+#xh-home .hc h1{font-size:46px;line-height:1.1;font-weight:700;margin-bottom:16px}
+#xh-home .hc p{color:rgba(255,255,255,.84);font-weight:300;font-size:17px;margin-bottom:30px}
+#xh-home .gate{display:inline-block;border:1px solid rgba(255,255,255,.5);padding:4px 14px;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:22px}
+#xh-home .sb{position:relative;display:flex;max-width:440px;margin:0 auto 28px;border:1px solid rgba(255,255,255,.55)}
+#xh-home .sb:focus-within{border-color:#fff}
+#xh-home .sb input{flex:1;background:transparent;border:0;outline:0;color:#fff;font:400 14px 'Hind',Arial,sans-serif;padding:13px 16px}
+#xh-home .sb input::placeholder{color:rgba(255,255,255,.62)}
+#xh-home .sb button{background:transparent;border:0;border-left:1px solid rgba(255,255,255,.55);color:#fff;padding:0 18px;cursor:pointer;font:600 12px 'Hind',Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;transition:background .25s,color .25s}
+#xh-home .sb button:hover{background:#fff;color:#111}
+#xh-home .dots{position:absolute;left:0;right:0;bottom:22px;z-index:10;display:flex;justify-content:center;gap:12px}
+#xh-home .dots button{background:transparent;border:1px solid rgba(255,255,255,.8);color:#fff;cursor:pointer;font:600 11px 'Hind',Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase;padding:7px 16px;transition:background .25s,color .25s}
+#xh-home .dots button.on,#xh-home .dots button:hover{background:#fff;color:#111}
+#xh-home .mq{display:flex;overflow:hidden;white-space:nowrap;background:#000;border-top:1px solid rgba(255,255,255,.18);border-bottom:1px solid rgba(255,255,255,.18);padding:14px 0}
+#xh-home .mqt{display:flex;flex:none;width:max-content;animation:xhmq 70s linear infinite}
+#xh-home .mq:hover .mqt{animation-play-state:paused}
+#xh-home .mqt span{flex:none;padding:0 36px;color:#dcdcdc;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:12px}
+@keyframes xhmq{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+#xh-home .hero.so .hc{z-index:20}
+#xh-home .sr{position:absolute;top:100%;left:-1px;right:-1px;z-index:30;background:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(18px) saturate(1.2);backdrop-filter:blur(18px) saturate(1.2);border:1px solid rgba(255,255,255,.35);max-height:270px;overflow:auto;text-align:left;box-shadow:0 14px 34px rgba(0,0,0,.5)}
+#xh-home .sr[hidden]{display:none}
+#xh-home .sr a{display:block;padding:10px 16px;font-size:14px;color:#f2f2f2;border-bottom:1px solid rgba(255,255,255,.14)}
+#xh-home .sr a:last-child{border-bottom:0}
+#xh-home .sr a:hover,#xh-home .sr a.k{background:rgba(255,255,255,.26);color:#fff}
+#xh-home .sr .no{display:block;padding:12px 16px;font-size:14px;color:rgba(255,255,255,.7)}
+#xh-home .rot,#xh-home .vid{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.18);background:#000;min-height:300px}
+#xh-home .rot.wide,#xh-home .vid{min-height:340px;margin-bottom:22px}
+#xh-home .rot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.3s ease;filter:brightness(.82)}
+#xh-home .rot img.on{opacity:1}
+#xh-home .vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.75)}
+#xh-home .vid span{position:absolute;left:22px;bottom:18px;z-index:2;font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:600}
+#xh-home .bgv{position:relative;overflow:hidden}
+#xh-home .bgv>video,#xh-home .bgv>.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;border:0;min-height:0}
+#xh-home .bgv::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.72);z-index:1}
+#xh-home .bgv>*:not(video):not(.bg){position:relative;z-index:2}
+#xh-home.js .rv{opacity:0;transform:translateY(28px);transition:opacity .85s ease,transform .85s cubic-bezier(.16,1,.3,1),border-color .25s,background .25s,color .25s}
+#xh-home.js .rv.in{opacity:1;transform:none}
+/* sections */
+#xh-home section.s{padding:92px 0}
+#xh-home .alt{background:#0a0a0a}
+#xh-home .g{display:grid;gap:16px}
+#xh-home .g2{grid-template-columns:repeat(2,1fr)}#xh-home .g3{grid-template-columns:repeat(3,1fr)}#xh-home .g4{grid-template-columns:repeat(4,1fr)}#xh-home .g5{grid-template-columns:repeat(5,1fr)}
+#xh-home .c{display:block;border:1px solid rgba(255,255,255,.16);padding:26px 24px;transition:border-color .25s,background .25s;background:transparent}
+#xh-home a.c:hover{border-color:#fff;background:rgba(255,255,255,.05)}
+#xh-home .c p{color:rgba(255,255,255,.68);font-size:15px;line-height:1.6;font-weight:300}
+#xh-home .c small{display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:10px}
+#xh-home .flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin-bottom:22px}
+#xh-home .flow .c{flex:1 1 220px;position:relative}
+#xh-home .flow .c+.c{border-left:0}
+#xh-home .flow .c b{position:absolute;top:22px;right:22px;font-size:20px;opacity:.5}
+#xh-home .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+#xh-home .tags span{border:1px solid rgba(255,255,255,.3);font-size:12px;padding:3px 12px;letter-spacing:1px;text-transform:uppercase}
+#xh-home .row{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center}
+#xh-home .cta{text-align:center;padding:100px 24px}
+#xh-home .links{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:26px}
+#xh-home .note{font-size:14px;color:rgba(255,255,255,.55);margin-top:18px}
+@media(max-width:900px){#xh-home .g3,#xh-home .g4,#xh-home .g5{grid-template-columns:repeat(2,1fr)}#xh-home .row{grid-template-columns:1fr;gap:30px}}
+@media(max-width:600px){#xh-home h2{font-size:26px}#xh-home .hc h1{font-size:30px}#xh-home .g2,#xh-home .g3,#xh-home .g4,#xh-home .g5{grid-template-columns:1fr}#xh-home section.s{padding:64px 0}#xh-home .hero{min-height:600px}#xh-home .dots button{padding:6px 10px}}
+@media(prefers-reduced-motion:reduce){#xh-home *{transition:none!important;animation:none!important}}
+</style>
+
+
+<div id="xh-home">
+
+
+<section class="hero" aria-label="X HORIZON gateways">
+  <div class="sl on" id="xh-s0" style="background-image:url('https://assets.mixkit.co/videos/45232/45232-thumb-720-0.jpg')">
+    <video autoplay="" muted="" loop="" playsinline="" preload="metadata" aria-hidden="true" poster="https://assets.mixkit.co/videos/45232/45232-thumb-720-0.jpg"><source src="https://assets.mixkit.co/videos/45232/45232-720.mp4" type="video/mp4"></video>
+    <div class="hc">
+      <span class="gate">Gateway 01 · The Website</span>
+      <h1>X HORIZON</h1>
+      <p>Explore the nature beyond the horizon. Understand the universe, build practical skills, find your path in astronomy, and experience space through simulations, live missions, and community.</p>
+      <form class="sb" role="search" autocomplete="off" novalidate=""><input type="text" name="xhq" placeholder="Search X HORIZON…" aria-label="Search" autocomplete="off"><button type="submit">Search</button><div class="sr" hidden=""></div></form>
+      <a href="/categories" class="btn">Enter the Website</a>
+    </div>
+  </div>
+  <div class="sl" id="xh-s1" style="background-image:url('https://assets.mixkit.co/videos/29351/29351-thumb-720-0.jpg')">
+    <video muted="" loop="" playsinline="" preload="none" aria-hidden="true" poster="https://assets.mixkit.co/videos/29351/29351-thumb-720-0.jpg"><source src="https://assets.mixkit.co/videos/29351/29351-720.mp4" type="video/mp4"></video>
+    <div class="hc">
+      <span class="gate">Gateway 02 · Study Materials</span>
+      <h1>X HORIZON DATABASE</h1>
+      <p>The separate home for in-depth study, one click away.</p>
+      <a id="xh-db-1" href="/slides" class="btn">Enter the Database</a>
+    </div>
+  </div>
+  <div class="dots" role="tablist">
+    <button class="on" data-i="0" role="tab">01 · Website</button>
+    <button data-i="1" role="tab">02 · Database</button>
+  </div>
+</section>
+
+<div class="mq" aria-label="Discover, learn, practice, explore, and grow"><div class="mqt"><span>A world-class, all-in-one astronomy ecosystem where immersive features work seamlessly together. Explore independently at your own pace, or follow our guided learning roadmap if you’re just getting started.</span><span>Discover · Learn · Build Skills · Choose Your Path in Career · Practice with Tools · Explore Simulation · Apply for Collaboration · Share your Content · Grow Together through Community ·</span><span aria-hidden="true">A world-class, all-in-one astronomy ecosystem where immersive features work seamlessly together. Explore independently at your own pace, or follow our guided learning roadmap if you’re just getting started.</span><span aria-hidden="true">Discover · Learn · Build Skills · Choose Your Path in Career · Practice with Tools · Explore Simulation · Apply for Collaboration · Share your Content · Grow Together through Community ·</span></div></div>
+
+
+
+<section class="s alt" id="xh-path"><div class="w">
+  <span class="eb">Two ways to use X HORIZON</span>
+  <h2>Follow the path, or go straight in.</h2>
+  <p class="lead">Follow the intended sequence from Concepts to Skills to Career, or open any single page directly. Both are always available.</p>
+  <div class="flow">
+    <a class="c" href="/concepts"><b>→</b><small>Step 01</small><h3>Concepts</h3><p>Astronomy and space science in 17 topic categories, each with articles at Beginner, Normal, and Advanced levels.</p></a>
+    <a class="c" href="/python-learning"><b>→</b><small>Step 02</small><h3>Skills</h3><p>Practical technical skills: Python for space science, data analysis, telescope handling, astrophotography, orbital mechanics, and more.</p></a>
+    <a class="c" href="/career"><small>Step 03</small><h3>Career</h3><p>Identify a path in astronomy: scholarships, internships, universities, space companies, and industries worldwide.</p></a>
+  </div>
+  <p style="color:rgba(255,255,255,.7);font-size:15px">After the path, apply what you learned with the Tools, or keep studying in the separate X HORIZON Database.</p>
+</div></section>
+
+
+<section class="s" id="xh-concepts"><div class="w"><div class="row">
+  <div>
+    <span class="eb">Concepts</span>
+    <h2>17 categories. Open every one, from day one.</h2>
+    <p class="lead" style="margin-bottom:22px">Every category is accessible without unlocking any other. Inside a category, articles come in three levels, and you progress by passing the quiz of the article before.</p>
+    <a href="/concepts" class="btn">Start with Concepts</a>
+  </div>
+  <div class="g">
+    <div class="rot" data-r="1462331940025-496dfbfc7564,1506318137071-a8e063b4bec0"></div>
+    <div class="c"><small>Levels</small><h3>Beginner · Normal · Advanced</h3><p>Pick the depth that fits you and grow into the next.</p></div>
+    <div class="c"><small>Quizzes</small><h3>Pass to unlock the next article</h3><p>Quizzes run in full-screen with a demanding pass mark, so progress reflects real understanding. Your progress is recorded.</p></div>
+    <div class="c"><small>Certificates</small><h3>Category and major certificates</h3><p>Complete a category for its own certificate. Complete all categories for the major X HORIZON certificate.</p></div>
+  </div>
+</div></div></section>
+
+
+<section class="s alt" id="xh-explore"><div class="w">
+  <span class="eb">Tools, experiences &amp; space services</span>
+  <h2>Experience the universe, not just read about it.</h2>
+  <p class="lead">Each service lives on its own independent page, so you can open exactly what you need.</p>
+  <div class="rot wide" data-r="1446776811953-b23d57bd21aa,1451187580459-43490279c0fa,1614728263952-84ea256f9679"></div>
+  <div class="g g4" id="xh-svc"></div>
+</div></section>
+
+
+<section class="s" id="xh-hm"><div class="w">
+  <span class="eb">History &amp; Media</span>
+  <h2>Know where it came from. See what it looks like.</h2>
+  <p class="lead">Two distinct services: one for knowledge, one for wonder.</p>
+  <div class="g g2">
+    <a class="c" href="/history"><small>History</small><h3>The history of the world and of science</h3><p>Learn about world history and the relevant historical knowledge behind astronomy and space exploration.</p></a>
+    <a class="c" href="/videos"><small>Media</small><h3>Visual science and space entertainment</h3><p>Visual representations of scientific concepts, plus visuals made for enjoyment, including movies and other space-related content.</p></a>
+  </div>
+</div></section>
+
+
+<section class="s alt" id="xh-db"><div class="w" style="text-align:center">
+  <span class="eb">Where the website ends</span>
+  <h2>Ready to go deeper?</h2>
+  <p class="lead" style="margin:0 auto 26px">The X HORIZON Database is its own gateway, separate from the website’s tools and simulations. Learn, practise and explore on the website, then move to the Database when you want to study in depth.</p>
+  <a id="xh-db-2" href="/slides" class="btn">Enter the Database</a>
+</div></section>
+
+
+<section class="s" id="xh-community"><div class="w">
+  <span class="eb">Community</span>
+  <h2>A universe of people, not paywalls.</h2>
+  <p class="lead">Ask, contribute, suggest, report, and rate. X HORIZON improves because of the people who use it.</p>
+  <div class="rot wide" data-r="1517976487492-5750f3195933,1543722530-d2c3201371e7"></div>
+  <div class="g g5" id="xh-com"></div>
+  <div class="g g2" style="margin-top:16px">
+    <a class="c" href="/collaboration"><small>For creators</small><h3>Collaborate with X HORIZON</h3><p>Space-content creators are publicly presented by platform type across three dedicated pages, helping smaller creators get recognised and reducing reliance on any single platform. Rules for free and open-source work are shown there too.</p><div class="tags"><span>Social Learning</span><span>Professional Platforms</span><span>Apps</span></div></a>
+    <a class="c" href="/platform-rules"><small>Trust &amp; safety</small><h3>Clear rules, safe exploring</h3><p>X HORIZON has platform rules for everyone’s benefit. Read them, and the community guidelines, before you take part.</p><div class="tags"><span>Platform Rules</span><span>Community Guidelines</span></div></a>
+  </div>
+</div></section>
+
+
+<section class="cta alt"><span class="eb">From Pakistan to the universe</span>
+  <h2>A local beginning. A global horizon.</h2>
+  <p class="lead" style="margin:0 auto">Initiated by Umair Sial in December 2025 to make space science more accessible to everyone. Free to explore, open to the world.</p>
+  <div class="links"><a href="/concepts" class="btn">Begin with Concepts</a><a href="/xhorizon-vision" class="btn">About X HORIZON</a><a href="/frequently-asked-questions" class="btn">FAQs</a></div>
+</section>
+
+</div>
+<script>
+(function(){
+var DB_URL='/slides'; /* <- set the X HORIZON Database address here (updates both buttons) */
+var r=document.getElementById('xh-home');
+r.querySelector('#xh-db-1').href=DB_URL;r.querySelector('#xh-db-2').href=DB_URL;
+function grid(id,a){r.querySelector(id).innerHTML=a.map(function(x){return '<a class="c" href="'+x[1]+'"><h3>'+x[0]+'</h3><p>'+x[2]+'</p></a>'}).join('')}
+grid('#xh-svc',[
+['Black Hole','/black-hole','An interactive black-hole experience.'],
+['Solar System','/solar-system','Explore our planetary neighbourhood in 3D.'],
+['Sky Map','/stellar-sky','Find stars and constellations in the night sky.'],
+['Live Missions','/live-events','Follow mission launches and live events.'],
+['Live ISS Tracker','/live','Track the International Space Station.'],
+['Exoplanets','/exoplanets','Worlds orbiting other stars.'],
+['Satellites','/satellites','Satellites orbiting Earth.'],
+['Gravity Calculator','/gravity-simulator','Calculate and simulate gravity.'],
+['Mission Designer','/mission-designer','Plan a space mission yourself.'],
+['Space Gallery','/space-gallery','A gallery of astronomy imagery.'],
+['Space News','/space-news','Space and astronomy news.'],
+['Space Calendar','/cosmic-calendar','Upcoming sky and space events.'],
+['Space Gear','/cosmic-gear','The tools used in space missions.'],
+['Space Library','/space-library','Discover leading learning materials.']]);
+grid('#xh-com',[
+['Forum','/forum','Ask questions and learn together.'],
+['Contribute','/contribute','Share your own content.'],
+['Suggest upgrades','/suggest-us','Tell us how to improve X HORIZON.'],
+['Report a problem','/suggest-us','Report fixes, faults, or issues.'],
+['Rate X HORIZON','/ratings-reviews','Tell us how we are doing.']]);
+/* search: runs fully in place on the homepage (own page index, never Odoo's search panel/results page) */
+var IDX='Concepts|/concepts|learning topics categories\nUniverse & Cosmology|/universe-cosmology|big bang concepts\nGalaxies & Large Scale Structure|/galaxy-large-scale-structure|concepts\nBlack Holes & Related Phenomena|/black-holes-related-phenomena|concepts\nSolar System & Planetary Science|/solar-system-planetary-science|planets concepts\nSpace Technology & Exploration|/space-technology-exploration|rockets concepts\nExoplanets & Astrobiology|/exoplanets-astrobiology|life concepts\nNebula & Interstellar Objects|/nebula-interstellar-objects|concepts\nStars & Stellar Evolution|/stars-stellar-evolution|star concepts\nQuantum Physics & Particle Concepts|/quantum-physics-particle-concepts|concepts\nGravity & Relativity|/gravity-relativity|einstein concepts\nHigh Energy Phenomena & Transient Events|/high-energy-phenomena-transient-events|supernova concepts\nSun & Solar Phenomena|/sun-solar-phenomena|solar concepts\nHuman Spaceflight & Life Support|/human-spaceflight-life-support-system|astronaut concepts\nAstrodynamics & Mission Planning|/astrodynamics-life-support-system|orbits concepts\nSoftware & Tools in Space Science|/software-tools-in-space-science|concepts\nAstronomy & Observational Terms|/astronomy-observational-terms|concepts\nMiscellaneous Terms|/miscellaneous-terms|concepts glossary\nRocket Lab|/rocket-lab|skills launch\nTelescope Handling|/telescope-handling|skills\nAstrophotography|/astrophotography|skills imaging\nSpace Data Analysis|/space-data-handling|skills\nPython for Space Science|/python-learning|skills coding\nSatellite Operations|/satellite-operations|skills\nOrbital Mechanics|/orbital-mechanics|skills\nScientific Writing|/scientific-writing|skills\nMathematics|/mathematics|skills maths\nCareer Overview|/career|careers jobs\nScholarships & Internships|/scholarships-internships|career\nUniversities|/universities|career study\nSpace Companies|/space-companies|career\nWorldwide Industries|/industries|career\nHistory|/history|media\nVideos|/videos|media graphical\nLive ISS Tracker|/live|live station\nLive Missions & Events|/live-events|live artemis launches\nForum|/forum|community ask hub\nSocial Learning|/social-learning|community\nProfessional Platforms|/professional-platforms|community collaboration\nApps|/apps|community collaboration\nSolar System|/solar-system|simulation 3d\nSatellites|/satellites|simulation\nSky Map|/stellar-sky|simulation stars\nCelestial Sphere|/celestial-sphere|simulation\nBlack Hole|/black-hole|simulation experience\nExoplanets|/exoplanets|simulation\nWhere We Are|/where-we-are|simulation scale\nWeather Forecast|/weather-forecast|space weather\nCollaboration|/collaboration|creators\nGravity Simulator|/gravity-simulator|calculator\nCosmic Calendar|/cosmic-calendar|space calendar events\nCourses|/slides|learning\nMission Designer|/mission-designer|tool\nSpace Gallery|/space-gallery|images\nSpace News|/space-news|updates\nSpace Gear|/cosmic-gear|equipment\nSpace Library|/space-library|learning materials\nAbout X HORIZON|/xhorizon-vision|vision\nPlatform Rules|/platform-rules|rules policy\nCommunity Guidelines|/community-guidelines|rules\nSafety & Moderation|/explore-safely|safe\nFounder|/founder|umair\nOur Team|/our-team|team\nSuggest Us|/suggest-us|feedback report issue\nContribute|/contribute|share content\nRate Us|/ratings-reviews|rating review\nDonations|/donations|support\nFAQs|/frequently-asked-questions|help\nContact|/contactus|help'.split("\n").map(function(l){var a=l.split("|");return{n:a[0],u:a[1],k:(a[0]+" "+a[2]).toLowerCase()}});
+var f=r.querySelector('.sb'),q=f.querySelector('input'),bx=f.querySelector('.sr'),hits=[],ai=-1;
+var hero=r.querySelector('.hero'),focused=false;
+function shut(){bx.hidden=true;hero.classList.remove('so')}
+function show(){bx.hidden=false;hero.classList.add('so')}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function mark(){var a=bx.querySelectorAll('a');a.forEach(function(x,i){x.classList.toggle('k',i===ai)});if(a[ai])a[ai].scrollIntoView({block:'nearest'})}
+function find(){
+  var t=q.value.toLowerCase().split(/\s+/).filter(Boolean);ai=-1;
+  if(!t.length){hits=[];bx.innerHTML='';shut();return}
+  hits=IDX.filter(function(e){return t.every(function(w){return e.k.indexOf(w)>-1})}).slice(0,8);
+  bx.innerHTML=hits.length?hits.map(function(e){return '<a href="'+e.u+'">'+esc(e.n)+'</a>'}).join(''):'<span class="no">No results found</span>';
+  show()}
+function goHit(){var h=hits[ai>-1?ai:0];if(h)location.href=h.u}
+q.addEventListener('input',find);
+q.addEventListener('focus',function(){focused=true;find()});
+q.addEventListener('blur',function(){focused=false});
+q.addEventListener('keydown',function(e){
+  if(e.key==='ArrowDown'&&hits.length){e.preventDefault();ai=(ai+1)%hits.length;mark()}
+  else if(e.key==='ArrowUp'&&hits.length){e.preventDefault();ai=(ai<=0?hits.length:ai)-1;mark()}
+  else if(e.key==='Escape'){shut()}
+  else if(e.key==='Enter'){e.preventDefault();e.stopPropagation();goHit()}
+});
+f.addEventListener('submit',function(e){e.preventDefault();e.stopPropagation();goHit()});
+document.addEventListener('click',function(e){if(e.composedPath().indexOf(f)<0)shut()});
+/* gateway carousel */
+var s=[r.querySelector('#xh-s0'),r.querySelector('#xh-s1')],b=r.querySelectorAll('.dots button'),c=0,t,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function go(i){c=i;s.forEach(function(e,k){var on=k===i;e.classList.toggle('on',on);b[k].classList.toggle('on',on);var v=e.querySelector('video');if(on){v.play&&v.play().catch(function(){})}else{v.pause()}});}
+function run(){clearInterval(t);if(!rm)t=setInterval(function(){if(focused||hero.classList.contains('so'))return;go((c+1)%2)},8000)}
+b.forEach(function(x){x.addEventListener('click',function(){go(+x.dataset.i);run()})});
+document.addEventListener('visibilitychange',function(){document.hidden?clearInterval(t):run()});
+go(0);run();
+/* auto-changing image banners */
+r.querySelectorAll('.rot[data-r]').forEach(function(b,n){var im=b.getAttribute('data-r').split(',').map(function(id,i){var e=new Image();e.alt='';e.loading='lazy';e.src='https://images.unsplash.com/photo-'+id+'?q=75&w=1200&auto=format&fit=crop';if(!i)e.className='on';b.appendChild(e);return e}),k=0;
+if(rm)return;setInterval(function(){if(document.hidden)return;im[k].className='';k=(k+1)%im.length;im[k].className='on'},5000+n*800)});
+/* isolation: every button and the search bar live in their own shadow root, so no page CSS can touch them */
+var ISO_CSS=[
+'*{box-sizing:border-box;margin:0;padding:0;font-family:Hind,Arial,sans-serif;-webkit-font-smoothing:antialiased}',
+'.btn{all:unset;box-sizing:border-box;display:inline-block;cursor:pointer;border:2px solid #fff;color:#fff;background:transparent;text-transform:uppercase;letter-spacing:1px;font:600 13px/1.7 Hind,Arial,sans-serif;padding:14px 34px;text-align:center;transition:color .25s,background .25s}',
+'.btn:hover,.btn:focus-visible{background:#fff;color:#111}',
+'.sb{position:relative;display:flex;border:1px solid rgba(255,255,255,.55);background:transparent}',
+'.sb:focus-within{border-color:#fff}',
+'.sb input{flex:1;min-width:0;background:transparent;border:0;border-radius:0;outline:0;color:#fff;font:400 14px Hind,Arial,sans-serif;padding:13px 16px;-webkit-appearance:none;appearance:none}',
+'.sb input::placeholder{color:rgba(255,255,255,.62)}',
+'.sb input::-webkit-search-cancel-button{-webkit-appearance:none}',
+'.sb button,.dots button{background:transparent;color:#fff;cursor:pointer;font:600 12px Hind,Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;border-radius:0;transition:background .25s,color .25s}',
+'.sb button{border:0;border-left:1px solid rgba(255,255,255,.55);padding:0 18px}',
+'.sb button:hover{background:#fff;color:#111}',
+'.sr{position:absolute;top:100%;left:-1px;right:-1px;z-index:30;background:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(18px) saturate(1.2);backdrop-filter:blur(18px) saturate(1.2);border:1px solid rgba(255,255,255,.35);max-height:270px;overflow:auto;text-align:left;box-shadow:0 14px 34px rgba(0,0,0,.5)}',
+'.sr[hidden]{display:none}',
+'.sr a{display:block;padding:10px 16px;font-size:14px;color:#f2f2f2;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.14)}',
+'.sr a:last-child{border-bottom:0}.sr a:hover{background:rgba(255,255,255,.26);color:#fff}',
+'.sr a.k{background:rgba(255,255,255,.26);color:#fff}',
+'.sr .no{display:block;padding:12px 16px;font-size:14px;color:rgba(255,255,255,.7)}',
+'.dots{display:flex;justify-content:center;gap:12px}',
+'.dots button{border:1px solid rgba(255,255,255,.8);font-size:11px;letter-spacing:1.5px;padding:7px 16px}',
+'.dots button.on,.dots button:hover{background:#fff;color:#111}',
+'@media(max-width:600px){.dots button{padding:6px 10px}}'].join('');
+var bc=document.body.classList,ed=bc.contains('o_web_editor')||bc.contains('o_edit_mode')||bc.contains('editor_enable');
+function iso(el,hs){if(!el||ed||!el.attachShadow)return;
+var h=document.createElement('xh-iso');
+h.style.cssText='display:inline-block!important;margin:0!important;padding:0!important;border:0!important;background:none!important;float:none!important;box-sizing:border-box!important;'+hs;
+var sr=h.attachShadow({mode:'open'}),st=document.createElement('style');st.textContent=ISO_CSS;
+el.parentNode.insertBefore(h,el);sr.appendChild(st);sr.appendChild(el)}
+r.querySelectorAll('.btn').forEach(function(e){iso(e,'')});
+iso(f,'display:block!important;width:100%!important;max-width:440px!important;margin:0 auto 28px!important;');
+iso(r.querySelector('.dots'),'display:block!important;position:absolute!important;left:0!important;right:0!important;bottom:22px!important;z-index:10!important;');
+/* scroll reveal */
+if(window.IntersectionObserver&&!rm){r.classList.add('js');
+var rv=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){var t=x.target;t.classList.add('in');rv.unobserve(t);setTimeout(function(){t.style.transitionDelay=''},1400)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+r.querySelectorAll('section.s .eb,section.s h2,section.s .lead,section.s .c,section.s .rot,section.s xh-iso,section.s p,.cta>*').forEach(function(e){var i=[].indexOf.call(e.parentNode.children,e);e.style.transitionDelay=Math.min(i,5)*80+'ms';e.classList.add('rv');rv.observe(e)})}
+/* videos play only while visible */
+if(window.IntersectionObserver){var io=new IntersectionObserver(function(es){es.forEach(function(x){var v=x.target;if(x.isIntersecting){if(!rm)v.play().catch(function(){})}else v.pause()})},{threshold:.15});
+r.querySelectorAll('video[data-lazy]').forEach(function(v){io.observe(v)})}
+})();
+</script>
