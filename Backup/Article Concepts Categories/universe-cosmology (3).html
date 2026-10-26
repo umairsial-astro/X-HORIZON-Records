@@ -1,0 +1,1064 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X Horizon — Universe &amp; Cosmology</title>
+<meta name="description" content="X Horizon Universe and Cosmology: 17 explained topics, each unlocked by a timed quiz.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+:root{--xh-ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;background:#000!important;color:#fff!important;font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+
+/* loader */
+.xh-loader{position:fixed;inset:0;z-index:100000;display:grid;place-items:center;background:#000;transition:opacity .65s var(--xh-ease),visibility .65s var(--xh-ease)}
+.xh-loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.xh-load-mark{position:relative;width:min(310px,82vw);height:118px;display:grid;place-items:center;overflow:hidden}
+.xh-load-x{position:absolute;left:42px;top:6px;z-index:2;color:#fff;font-size:96px;line-height:1;font-weight:900;letter-spacing:-.12em}
+.xh-load-word{position:absolute;left:112px;top:45px;z-index:3;color:#eee;font-size:22px;font-weight:900;letter-spacing:.2em;opacity:.18;line-height:1}
+.xh-loader.loading .xh-load-word{animation:xhBlink .42s steps(2,end) infinite}
+.xh-loader.ready .xh-load-word{opacity:1!important;animation:none!important;color:#fff}
+.xh-load-line{position:absolute;left:42px;bottom:10px;width:222px;height:4px;border-radius:99px;background:#161616;overflow:hidden}
+.xh-load-fill{display:block;width:0;height:100%;background:#d8d8d8}
+@keyframes xhBlink{0%,100%{opacity:.16}50%{opacity:.76}}
+
+/* page */
+#xhuc-page{position:relative;min-height:100vh;background:#000;color:#fff;overflow:hidden;isolation:isolate}
+#xhuc-page::before{content:"";position:fixed;inset:0;z-index:-5;background-image:radial-gradient(circle,rgba(255,255,255,.44) 0 1px,transparent 1.5px),radial-gradient(circle,rgba(255,255,255,.22) 0 1px,transparent 1.5px);background-size:150px 150px,230px 230px;background-position:20px 40px,95px 12px;opacity:.28;animation:xhDrift 46s linear infinite;pointer-events:none}
+@keyframes xhDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-150px,150px,0)}}
+.xhuc-hidden{display:none!important}
+.xhuc-shell{width:min(1240px,calc(100% - 34px));margin:0 auto}
+#xhuc-page a{color:inherit;text-decoration:none}
+
+/* hero */
+.xhuc-hero{position:relative;min-height:100vh;display:grid;place-items:center;text-align:center;padding:126px 20px 76px;overflow:hidden;isolation:isolate}
+.xhuc-hero::before{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.62) 68%,#000 100%),url("https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000751/GSFC_20171208_Archive_e000751~orig.jpg") center/cover no-repeat;filter:brightness(.78) saturate(.98) contrast(1.02)}
+.xhuc-hero::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,transparent,rgba(255,255,255,.86),transparent) left bottom/100% 2px no-repeat,radial-gradient(circle at 50% 50%,rgba(0,0,0,.03) 0 24%,rgba(0,0,0,.38) 72%,#000 100%);pointer-events:none}
+.xhuc-hero-in{position:relative;z-index:3;width:min(720px,100%);display:flex;flex-direction:column;align-items:center}
+.xhuc-search{width:min(520px,100%);display:flex;background:rgba(255,255,255,.045);border-radius:14px;padding:6px;margin:0 auto 30px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.xhuc-search input{flex:1;min-width:0;height:46px;border:0;outline:0;border-radius:10px;background:transparent;color:#fff;-webkit-text-fill-color:#fff;padding:0 14px;font-size:13px;font-weight:700;letter-spacing:.02em;color-scheme:dark}
+.xhuc-search input::placeholder{color:rgba(255,255,255,.62);-webkit-text-fill-color:rgba(255,255,255,.62)}
+.xhuc-title{margin:0 0 14px;max-width:680px;color:#fff;font-size:clamp(36px,6.2vw,72px);line-height:.92;letter-spacing:-.032em;font-weight:800}
+.xhuc-title span{display:block;margin-top:2px}
+.xhuc-lead{max-width:560px;margin:0;color:#cfcfcf;font-size:clamp(14px,1.45vw,17px);line-height:1.6;letter-spacing:.02em}
+.xhuc-prog{width:min(520px,100%);margin-top:24px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.045);text-align:left}
+.xhuc-prog-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:9px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#cfcfcf}
+.xhuc-prog-top b{color:#fff}
+.xhuc-line{height:6px;border-radius:99px;background:#1a1a1a;overflow:hidden}
+.xhuc-line i{display:block;height:100%;width:0;border-radius:inherit;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.25);transition:width .7s var(--xh-ease)}
+.xhuc-done-msg{margin:12px 0 0;color:#fff;font-size:13px;line-height:1.5}
+.xhuc-done-msg a{text-decoration:underline!important}
+
+/* cards */
+.xhuc-grid-section{padding:58px 0 86px;background:#000}
+.xhuc-section-head{display:flex;justify-content:space-between;gap:22px;align-items:end;margin-bottom:22px}
+.xhuc-section-head h2{margin:0;font-size:clamp(28px,4vw,48px);letter-spacing:-.045em;line-height:1.02}
+.xhuc-section-head p{margin:0;color:#cfcfcf;max-width:520px;line-height:1.55}
+.xhuc-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.xhuc-card{min-height:455px;background:#0b0b0b;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;transition:transform .22s ease,background .22s ease}
+.xhuc-card:hover{background:#141414;transform:translateY(-4px) scale(1.01)}
+.xhuc-card-media{height:190px;background:#050505;position:relative;overflow:hidden}
+.xhuc-card-media img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.92) saturate(1.03);transition:transform .35s ease,filter .3s ease}
+.xhuc-card:hover .xhuc-card-media img{transform:scale(1.045);filter:brightness(1.02) saturate(1.08)}
+.xhuc-card-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.76));pointer-events:none}
+.xhuc-card-id,.xhuc-badge{position:absolute;top:12px;z-index:2;background:rgba(0,0,0,.68);border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;color:#fff}
+.xhuc-card-id{left:12px}.xhuc-badge{right:12px}
+.xhuc-card-body{padding:19px;display:flex;flex-direction:column;flex:1}
+.xhuc-card h3{margin:0 0 9px;font-size:22px;line-height:1.05;letter-spacing:-.03em}
+.xhuc-card p{margin:0;color:#cfcfcf;line-height:1.55;font-size:14px}
+.xhuc-source{margin-top:14px;font-size:11px;color:#a8a8a8;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.xhuc-card-actions{margin-top:auto;padding-top:18px}
+.xhuc-btn{display:inline-flex;align-items:center;justify-content:center;width:100%;border:0;border-radius:12px;background:#fff;color:#000;padding:14px;font-size:13px;font-weight:800;cursor:pointer;transition:.2s ease}
+.xhuc-btn:hover{background:#e7e7e7;transform:translateY(-2px)}
+.xhuc-btn.alt{background:#111;color:#fff}.xhuc-btn.alt:hover{background:#181818}
+.xhuc-btn:disabled{background:#161616;color:#777;cursor:not-allowed;transform:none}
+.xhuc-card.is-locked .xhuc-card-media img{filter:grayscale(1) brightness(.35)}
+.xhuc-card.is-locked h3,.xhuc-card.is-locked p{opacity:.55}
+.xhuc-empty{grid-column:1/-1;background:#0b0b0b;border-radius:18px;color:#cfcfcf;padding:24px;text-align:center}
+
+/* article */
+.xhuc-article{display:none;min-height:100vh;background:#000;position:relative}
+.xhuc-article.xhuc-active{display:block}
+.xhuc-ahero{position:relative;min-height:400px;display:flex;align-items:flex-end;overflow:hidden}
+.xhuc-ahero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.4),#000 100%),var(--img) center/cover no-repeat;filter:saturate(.95)}
+.xhuc-atop{position:relative;z-index:1;padding:64px 0 32px}
+.xhuc-back{border:0;background:#111;color:#fff;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;margin-bottom:20px}
+.xhuc-back:hover{background:#181818}
+.xhuc-atitle{margin:0;font-size:clamp(34px,6.5vw,76px);letter-spacing:-.04em;line-height:.95;max-width:980px}
+.xhuc-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.xhuc-pill{background:rgba(255,255,255,.07);border-radius:999px;color:#dedede;padding:8px 12px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.xhuc-abody{max-width:900px;padding:34px 0 92px}
+.xhuc-alead{font-size:clamp(18px,2.2vw,22px);line-height:1.6;color:#fff;margin:0 0 10px}
+.xhuc-sec{background:#0b0b0b;border-radius:20px;padding:24px;margin:14px 0}
+.xhuc-sec h3{margin:0 0 10px;font-size:22px;letter-spacing:-.02em}
+.xhuc-sec p{margin:0;color:#d6d6d6;line-height:1.8;font-size:16px}
+.xhuc-sec ul{margin:0;padding-left:20px;color:#d6d6d6;line-height:1.8;font-size:16px}
+.xhuc-qcta p{margin-bottom:16px}
+.xhq-row{display:flex;gap:10px;flex-wrap:wrap}
+.xhq-row .xhuc-btn{width:auto;min-width:200px}
+
+/* quiz overlay */
+.xhuc-quiz{position:fixed;inset:0;z-index:100001;background:#000;display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto;-webkit-user-select:none;user-select:none}
+.xhq-box{width:min(760px,100%)}
+.xhq-k{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#a8a8a8;margin-bottom:12px}
+.xhq-k.bad{color:#ff9a9a}
+.xhq-box h2{margin:0 0 18px;font-size:clamp(26px,4vw,44px);letter-spacing:-.03em;line-height:1.1}
+.xhq-rules{margin:0 0 22px;padding-left:20px;color:#d6d6d6;line-height:1.8}
+.xhq-p{color:#cfcfcf;line-height:1.7;margin:0 0 22px}
+.xhq-top{display:flex;justify-content:space-between;color:#cfcfcf;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.xhq-top b{color:#fff;font-size:18px}
+.xhq-bar{height:5px;border-radius:99px;background:#1a1a1a;overflow:hidden;margin-bottom:26px}
+.xhq-bar i{display:block;height:100%;width:100%;background:#fff}
+.xhq-q{margin:0 0 22px;font-size:clamp(19px,2.6vw,27px);line-height:1.4;font-weight:700;white-space:pre-line}
+.xhq-opts{display:grid;gap:10px}
+.xhq-opt{text-align:left;border:0;border-radius:14px;background:#0b0b0b;color:#fff;padding:16px 18px;font-size:15px;line-height:1.5;cursor:pointer;transition:.15s ease}
+.xhq-opt:hover{background:#181818}
+.xhq-opt.xhq-pick{background:#fff;color:#000}
+.xhq-score{font-size:clamp(46px,9vw,84px);font-weight:900;letter-spacing:-.04em;margin:0 0 6px}
+.xhq-note{margin-top:14px;color:#ff9a9a;font-size:13px;min-height:18px}
+.xhq-btn{border:0;border-radius:12px;background:#fff;color:#000;padding:14px 22px;font-size:13px;font-weight:800;cursor:pointer}
+.xhq-btn:hover{background:#e7e7e7}
+.xhq-btn.alt{background:#111;color:#fff}.xhq-btn.alt:hover{background:#181818}
+
+@media(max-width:1050px){.xhuc-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){
+.xhuc-hero{padding:106px 14px 64px;min-height:100svh}
+.xhuc-cards{grid-template-columns:1fr}.xhuc-card{min-height:420px}
+.xhuc-section-head{display:block}.xhuc-section-head p{margin-top:10px}
+.xhuc-ahero{min-height:340px}.xhuc-sec{padding:18px}
+.xhq-row .xhuc-btn,.xhq-btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.xh-loader.loading .xh-load-word,#xhuc-page::before{animation:none}}
+
+/* levels, pictures, equations, history */
+.xhuc-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px}
+.xhuc-tab{border:0;border-radius:12px;background:#111;color:#cfcfcf;padding:12px 20px;font-size:13px;font-weight:800;cursor:pointer;transition:.15s ease}
+.xhuc-tab:hover{background:#181818}
+.xhuc-tab.on{background:#fff;color:#000}
+.xhuc-tab.lock{opacity:.55}
+.xhuc-lvmsg{color:#ff9a9a;font-size:13px;min-height:18px;margin:0 0 10px}
+.xhuc-figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:14px 0}
+.xhuc-fig{margin:0;background:#0b0b0b;border-radius:18px;overflow:hidden}
+.xhuc-fig img{width:100%;height:220px;object-fit:cover;display:block;background:#050505}
+.xhuc-fig figcaption{padding:12px 14px;color:#cfcfcf;font-size:13px;line-height:1.5}
+.xhuc-tex{overflow-x:auto;padding:14px 4px;font-family:Consolas,monospace;color:#fff;font-size:15px}
+.xhuc-tex .katex{font-size:1.25em}
+.xhuc-tl{list-style:none;margin:0;padding:0;border-left:2px solid #222}
+.xhuc-tl li{position:relative;padding:0 0 16px 22px;color:#d6d6d6;line-height:1.7;font-size:15px}
+.xhuc-tl li::before{content:"";position:absolute;left:-6px;top:8px;width:10px;height:10px;border-radius:50%;background:#fff}
+.xhuc-tl b{color:#fff;margin-right:10px}
+.xhuc-sec p+p{margin-top:10px}
+.xhuc-lvchips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.xhuc-lvchips span{background:#111;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800;color:#8a8a8a}
+.xhuc-lvchips span.on{background:#fff;color:#000}
+.xhq-nav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:24px}
+.xhq-un{color:#a8a8a8;font-size:13px}
+.xhq-btn:disabled{opacity:.4;cursor:not-allowed}
+@media(max-width:700px){.xhuc-fig img{height:200px}.xhq-nav{flex-wrap:wrap}.xhq-nav .xhq-btn{flex:1}}
+
+/* single reading box */
+.xhuc-doc{background:#0b0b0b;border-radius:22px;padding:clamp(20px,4vw,42px);margin:14px 0}
+.xhuc-doc h3{margin:32px 0 10px;font-size:22px;letter-spacing:-.02em;line-height:1.25}
+.xhuc-doc h3:first-child{margin-top:0}
+.xhuc-doc p{margin:0 0 14px;color:#d6d6d6;line-height:1.85;font-size:16px}
+.xhuc-doc ul:not(.xhuc-tl),.xhuc-doc ol{margin:0 0 14px;padding-left:22px;color:#d6d6d6;line-height:1.8;font-size:16px}
+.xhuc-doc .xhuc-tl{margin:0 0 14px}
+.xhuc-eqb{margin:20px 0;padding:2px 0 2px 18px;border-left:2px solid #2a2a2a}
+.xhuc-eqt{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#a8a8a8}
+.xhuc-doc .xhuc-eqb p{font-size:15px;color:#cfcfcf}
+.xhuc-refs li{font-size:14px;color:#a8a8a8;line-height:1.7}
+</style>
+
+<div class="xh-loader loading" id="xhLoader" aria-hidden="true">
+  <div class="xh-load-mark">
+    <div class="xh-load-x">X</div>
+    <div class="xh-load-word">HORIZON</div>
+    <div class="xh-load-line"><span class="xh-load-fill" id="xhLoadFill"></span></div>
+  </div>
+</div>
+<script>
+(function(){
+  var l=document.getElementById("xhLoader"),f=document.getElementById("xhLoadFill");if(!l||!f)return;
+  var s=Date.now(),d=1750,c=false;
+  function fin(){if(c)return;c=true;f.style.width="100%";l.className=l.className.replace(/\bloading\b/g,"").trim()+" ready";setTimeout(function(){l.className+=" done"},420)}
+  function fr(){var p=Math.min(100,Math.round((Date.now()-s)/d*100));f.style.width=p+"%";if(p>=100){fin();return}requestAnimationFrame(fr)}
+  if(document.readyState==="complete")requestAnimationFrame(fr);else document.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(fr)});
+  setTimeout(fin,3200);
+})();
+</script>
+
+<div id="xhuc-page">
+  <main id="xhuc-main">
+    <section class="xhuc-hero">
+      <div class="xhuc-hero-in">
+        <div class="xhuc-search"><input id="xhuc-search" type="search" autocomplete="off" placeholder="Search Universe and Cosmology..." aria-label="Search topics"></div>
+        <h1 class="xhuc-title">Universe <span>and Cosmology</span></h1>
+        <p class="xhuc-lead">Learn about the universe and its objects. Read each topic, then pass its quiz to unlock the next one.</p>
+        <div class="xhuc-prog" aria-label="Category progress">
+          <div class="xhuc-prog-top"><span>Your progress</span><b id="xhuc-count">0 / 17 completed</b></div>
+          <div class="xhuc-line"><i id="xhuc-fill"></i></div>
+          <p class="xhuc-done-msg xhuc-hidden" id="xhuc-done-msg">Category complete! Go back to the <a href="/concepts">Concepts page</a> to claim your certificate.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="xhuc-grid-section">
+      <div class="xhuc-shell">
+        <div class="xhuc-section-head">
+          <h2>Cosmology Topics</h2>
+          <p>Topics unlock in order. Open an article, study it, then take the timed quiz at the bottom to unlock the next card.</p>
+        </div>
+        <div id="xhuc-cards" class="xhuc-cards" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <section id="xhuc-article" class="xhuc-article" aria-live="polite"></section>
+  <div id="xhuc-quiz" class="xhuc-quiz xhuc-hidden" role="dialog" aria-modal="true" aria-label="Topic quiz"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var SLUG = "universe-cosmology";   /* must match the card link on the main page: /universe-cosmology */
+  var MAIN_URL = "/concepts";
+  var KEY = "xhLearnProgressV1", LKEY = "xhUCLevelsV1";
+  var NEXT_AFTER = "A";              /* quiz level that completes a topic and unlocks the next card: "E", "N" or "A" */
+  var LV = [["E", "Easy"], ["N", "Normal"], ["A", "Advanced"]];
+  var TIME = { E: 240, N: 420, A: 600 };   /* seconds for the WHOLE quiz */
+  var FALLBACK = "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ultra-deep-field-jpg.webp?w=1200";
+
+  /* ---------- shared progress API (same contract as the main page) ---------- */
+  function ld() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function put(d) { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} document.dispatchEvent(new Event("xhprogress")); }
+  window.XHProgress = window.XHProgress || {
+    get: function (s) { return ld()[s] || { r: [], n: 0 }; },
+    read: function (s, id, total) { var d = ld(), e = d[s] = d[s] || { r: [], n: 0 }; if (total) e.n = total; if (id && e.r.indexOf(id) < 0) e.r.push(id); put(d); },
+    set: function (s, read, total) { var d = ld(), r = [], i; for (i = 0; i < read; i++) r.push("#" + i); d[s] = { r: r, n: total }; put(d); },
+    reset: function () { put({}); }
+  };
+
+    var HUDF = "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ultra-deep-field-jpg.webp?w=1200";
+  var WTL = "https://science.nasa.gov/wp-content/uploads/2023/06/webb-universe-timeline-jpeg.webp?w=1800";
+  var EXP = "https://science.nasa.gov/wp-content/uploads/2024/09/whenspaceexpands.png?w=2048";
+  var INF = "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/wmap/060915_CMB_Timeline600.jpg?crop=faces%2Cfocalpoint&fit=clip&h=5960&w=8280";
+  var CMB = "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/wmap/ilc_9yr_moll4096.png?crop=faces%2Cfocalpoint&fit=clip&h=2048&w=4096";
+  var HDF = "https://science.nasa.gov/wp-content/uploads/2023/06/hubble-deep-field-jpeg.webp?w=720";
+  var BH = "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2025/webb-STScI-01JKREFYNJE7MT5SG2H0FBYG75-2K.png?crop=faces%2Cfocalpoint&fit=clip&h=1080&w=1920";
+  var EPO = "https://esahubble.org/media/archives/images/original/heic0805c.jpg";
+  var WEB = "https://svs.gsfc.nasa.gov/vis/a010000/a010100/a010118/CosmicWeb0013.jpg";
+  var LSE = "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/hubble/cosmology/cosmic-web/Hubble_CosmicWeb_SlimeMold_STScI-01EVSTSXM917S0M8VFYPD0QWHF.jpeg?crop=faces%2Cfocalpoint&fit=clip&h=2538&w=3531";
+  var BAO = "https://svs.gsfc.nasa.gov/vis/a010000/a013700/a013768/BAO_Still_4.jpg";
+  var DFL = "https://svs.gsfc.nasa.gov/vis/a010000/a010500/a010580/Dark_Flow_map_small.jpg";
+
+  var T = [
+    { id: "UC-001", t: "Universe", src: "NASA / Hubble Ultra Deep Field", img: HUDF,
+      d: "The total cosmic system of space, time, matter, energy, radiation, fields, and all structures we can observe or infer.",
+      s: [["What it is", "The universe is everything that exists: all of space and time, every form of matter and energy, the physical laws, and the structures built from them. Cosmology studies it as one system, asking how it began, what it contains and how it changes. What we can directly observe is only the observable universe, the region from which light has had time to reach us since the beginning."],
+          ["Size and age", "The universe is about 13.8 billion years old. Because space expanded while light was travelling, the observable universe now reaches about 46 billion light-years in every direction. Whether the whole universe is finite or infinite is unknown; the observable part is simply the portion we are able to see."],
+          ["What it is made of", "Measurements of the cosmic microwave background and of galaxy surveys indicate that about 5% of the universe is ordinary matter, about 27% is dark matter and about 68% is dark energy. The atoms that make up stars, planets and people are therefore the smallest share of the cosmic budget."]],
+      f: ["The universe is about 13.8 billion years old.", "The observable universe is the region whose light has had time to reach us.", "Ordinary matter makes up only about 5% of the universe's content.", "Dark energy makes up roughly two thirds of the universe's total content.", "Whether the whole universe is finite or infinite is still unknown."] },
+
+    { id: "UC-002", t: "Big Bang", src: "NASA / WMAP Timeline", img: WTL,
+      d: "The hot, dense early state from which the observable universe expanded and evolved into galaxies, stars, and large-scale structure.",
+      s: [["A hot, dense beginning", "The Big Bang is the model in which the universe began in an extremely hot, dense state about 13.8 billion years ago and has been expanding and cooling ever since. It was not an explosion at one point in space. Space itself expanded everywhere at once, so there is no centre from which galaxies fly outward."],
+          ["The evidence", "Four observations support the model: galaxies recede at speeds that grow with distance, the cosmic microwave background fills the sky as relic light, the light elements hydrogen, helium and lithium appear in the predicted proportions, and the growth of galaxies matches simulations of an expanding universe."],
+          ["The first minutes", "In the first few minutes, protons and neutrons fused into light nuclei in a process called Big Bang nucleosynthesis, leaving matter that was about 75% hydrogen and 25% helium by mass. Heavier elements were made later inside stars. The model describes how the hot early state evolved; it does not by itself explain what, if anything, came before it."]],
+      f: ["The Big Bang was an expansion of space everywhere, not an explosion at one point.", "Big Bang nucleosynthesis produced matter that was about 75% hydrogen and 25% helium by mass.", "The Big Bang model says the universe has been expanding and cooling for about 13.8 billion years.", "The Big Bang model does not by itself explain what came before the hot early state.", "The observed proportions of hydrogen, helium and lithium are key evidence for the Big Bang."] },
+
+    { id: "UC-003", t: "Hubble’s Law", src: "NASA / Hubble Redshift", img: EXP,
+      d: "The observational relation connecting galaxy distance with recession speed, showing that space itself is expanding.",
+      s: [["The relation", "Hubble’s Law states that, on large scales, a galaxy’s recession velocity is proportional to its distance: v = H₀ × d. A galaxy twice as far away appears to recede twice as fast. Edwin Hubble published the observed relation in 1929, building on Georges Lemaître’s theoretical work of 1927."],
+          ["Redshift as the measurement", "Velocity is inferred from redshift, the stretching of a galaxy’s light toward longer wavelengths. Distances come from standard candles such as Cepheid variable stars and Type Ia supernovae. Plotting redshift against distance gives a rising line whose slope is the Hubble constant."],
+          ["The Hubble constant", "H₀ is measured at roughly 67 to 74 kilometres per second per megaparsec. Methods based on the early universe give values near the low end, while local distance-ladder methods give values near the high end. This disagreement is called the Hubble tension and is an active research problem."]],
+      f: ["Hubble’s Law says recession velocity is proportional to distance: v = H₀ × d.", "Hubble published the velocity-distance relation in 1929; Lemaître had derived it theoretically in 1927.", "Hubble’s Law velocities are inferred from the redshift of galaxy light.", "The Hubble constant is measured at roughly 67 to 74 km/s per megaparsec.", "The disagreement between early- and late-universe Hubble constant values is called the Hubble tension."] },
+
+    { id: "UC-004", t: "Inflation", src: "NASA / WMAP Science Team", img: INF,
+      d: "A proposed ultra-rapid early expansion that stretched tiny quantum variations into the seeds of cosmic structure.",
+      s: [["A brief burst of expansion", "Cosmic inflation is a proposed period, roughly 10⁻³⁶ to 10⁻³² seconds after the beginning, when space expanded exponentially by a factor of at least about 10²⁶. It was proposed in the early 1980s by Alan Guth, with important contributions from Andrei Linde, Paul Steinhardt and Andreas Albrecht."],
+          ["Problems it solves", "Inflation explains why distant regions of the sky have almost the same temperature although they were never in contact (the horizon problem), why space is so close to geometrically flat (the flatness problem), and why magnetic monopoles predicted by some theories are not seen."],
+          ["Seeds of structure", "During inflation, tiny quantum fluctuations were stretched to enormous size. They became the density variations of about one part in 100,000 imprinted in the cosmic microwave background, which gravity later grew into galaxies and clusters. Inflation fits CMB observations very well, but its underlying mechanism has not yet been confirmed."]],
+      f: ["Inflation is a proposed period of exponential expansion in the first tiny fraction of a second.", "Alan Guth proposed cosmic inflation in the early 1980s.", "Inflation explains why distant regions of sky have nearly the same temperature (the horizon problem).", "Inflation stretched quantum fluctuations into the seeds of galaxies and clusters.", "Inflation fits observations well but its underlying mechanism is not yet confirmed."] },
+
+    { id: "UC-005", t: "Cosmic Microwave Background", src: "NASA / WMAP Science Team", img: CMB,
+      d: "The oldest light we can observe, released when the early universe became transparent and preserved as microwave radiation.",
+      s: [["The oldest light", "The cosmic microwave background (CMB) is radiation released about 380,000 years after the Big Bang, when the universe had cooled enough for atoms to form and light could travel freely. Stretched by cosmic expansion, it now reaches us as microwaves with a temperature of about 2.725 kelvin."],
+          ["Discovery and mapping", "Arno Penzias and Robert Wilson found it by accident in 1965 as an unexplained radio hiss, confirming a prediction of Big Bang theory. The spacecraft COBE, WMAP and Planck then mapped it in ever greater detail."],
+          ["Tiny ripples", "The CMB is almost perfectly uniform, yet it has temperature variations of only about one part in 100,000. These ripples record the density differences that grew into galaxies, and their pattern gives precise values for the age, geometry and contents of the universe."]],
+      f: ["The CMB was released about 380,000 years after the Big Bang.", "The present temperature of the CMB is about 2.725 kelvin.", "Penzias and Wilson discovered the CMB in 1965.", "CMB temperature variations are only about one part in 100,000.", "COBE, WMAP and Planck are spacecraft that mapped the CMB."] },
+
+    { id: "UC-006", t: "Recombination Era", src: "NASA / Webb Early Universe", img: WTL,
+      d: "The epoch when electrons combined with nuclei to form neutral atoms, clearing the cosmic fog and releasing the CMB.",
+      s: [["Atoms form", "Recombination is the epoch, about 380,000 years after the Big Bang, when the universe had cooled to roughly 3,000 kelvin and free electrons combined with protons and helium nuclei to form neutral atoms. The name is misleading, because these particles had never been combined before."],
+          ["Why light escaped", "Before recombination, free electrons scattered light constantly, making the universe an opaque, glowing fog. Once most electrons were bound into atoms, light could travel freely. That sudden transparency defines the surface of last scattering, and the light released then is the cosmic microwave background."],
+          ["Redshift and cooling", "Recombination happened at a redshift of about 1,100, meaning the universe has expanded by a factor of about 1,100 since then. That expansion cooled the light from about 3,000 K to the 2.7 K we measure today."]],
+      f: ["Recombination is when electrons and nuclei combined into neutral atoms.", "Recombination occurred when the universe had cooled to roughly 3,000 kelvin.", "Recombination happened at a redshift of about 1,100.", "The surface of last scattering marks when light began to travel freely after recombination.", "Before recombination, free electrons kept scattering light, so the universe was an opaque fog."] },
+
+    { id: "UC-007", t: "Dark Era", src: "NASA / Hubble Deep Field", img: HDF,
+      d: "The cosmic dark ages after the CMB and before the first stars, when the universe had neutral gas but no stellar light.",
+      s: [["Between the CMB and the first stars", "The Dark Era, also called the cosmic Dark Ages, began after recombination and the release of the CMB, about 380,000 years after the Big Bang, and lasted until the first stars formed a few hundred million years later. The universe was filled with neutral hydrogen and helium gas and dark matter, but no stars or galaxies shone yet."],
+          ["Gravity at work", "In the darkness, dark matter slowly clumped under gravity into halos, and gas fell into them. This quiet assembly set the stage for the first stars, which are thought to have been massive, hot and short-lived."],
+          ["Observing it", "Because there was no starlight, the Dark Era can only be studied through the 21-centimetre radio line emitted by neutral hydrogen. Radio experiments aim to map it, and the far side of the Moon, shielded from Earth’s radio noise, is a proposed ideal site."]],
+      f: ["The Dark Era lasted from the CMB release until the first stars formed.", "During the Dark Era the universe was filled mainly with neutral hydrogen and helium gas and dark matter.", "The 21-centimetre line of neutral hydrogen is the main way to observe the Dark Era.", "In the Dark Era, dark matter clumped into halos that later hosted the first stars.", "The far side of the Moon is a proposed quiet site for Dark Era radio observations."] },
+
+    { id: "UC-008", t: "Cosmological Principle", src: "NASA / Hubble Deep Fields", img: HUDF,
+      d: "The large-scale assumption that the universe is homogeneous and isotropic when viewed on the biggest cosmic scales.",
+      s: [["The same everywhere", "The cosmological principle assumes that on large enough scales the universe is homogeneous (the same in every location) and isotropic (the same in every direction). It does not claim the universe is smooth on small scales; planets, stars and galaxies are obviously clumpy."],
+          ["Evidence and scale", "Homogeneity is thought to emerge on scales of a few hundred million light-years or more. The CMB, nearly identical in all directions to about one part in 100,000, is strong evidence for isotropy, and large galaxy surveys support homogeneity."],
+          ["Why it matters", "The principle lets cosmologists describe the whole universe with the FLRW (Friedmann–Lemaître–Robertson–Walker) solutions of general relativity. It also extends the Copernican idea that we do not occupy a special place. It remains testable: unusually large structures and the dark flow debate probe where it might fail."]],
+      f: ["The cosmological principle says the universe is homogeneous and isotropic on large scales.", "Homogeneous means the same in every location; isotropic means the same in every direction.", "The nearly uniform CMB is strong evidence for isotropy.", "The cosmological principle underlies the FLRW solutions used to model the whole universe.", "The cosmological principle applies only on large scales, not to individual stars or galaxies."] },
+
+    { id: "UC-009", t: "Cosmic Censorship Conjecture", src: "NASA / Webb Black Hole Concept", img: BH,
+      d: "A deep relativity idea proposing that singularities produced by collapse are hidden behind horizons rather than exposed to the universe.",
+      s: [["Hidden singularities", "A singularity is a point where general relativity predicts infinite density and the equations break down. The weak cosmic censorship conjecture, proposed by Roger Penrose in 1969, says that singularities formed by realistic gravitational collapse are always hidden inside event horizons, so distant observers never see a naked singularity."],
+          ["The strong version", "The strong version says that spacetime stays predictable everywhere: no singularity can affect the future of any observer, even one falling in. Both versions remain unproven conjectures, not theorems."],
+          ["Tests and counterexamples", "Computer simulations have found special cases, such as finely tuned collapse, where naked singularities appear to form; whether they survive small changes is debated. Thought experiments about spinning a black hole past its limit are another test. If censorship failed, physics near a naked singularity could not be predicted."]],
+      f: ["Roger Penrose proposed the weak cosmic censorship conjecture in 1969.", "Cosmic censorship says singularities from realistic collapse are hidden behind event horizons.", "A singularity visible to distant observers would be called a naked singularity.", "Cosmic censorship is still an unproven conjecture, not a proven theorem.", "If cosmic censorship fails, physics near a naked singularity could not be predicted."] },
+
+    { id: "UC-010", t: "Cosmic Epochs", src: "NASA / ESA / Hubble", img: EPO,
+      d: "The timeline of major phases in cosmic history, from early radiation and dark ages to first galaxies and present structure.",
+      s: [["A timeline of phases", "Cosmic history is divided into epochs: the Planck epoch and inflation in the first instants, the quark and hadron epochs, nucleosynthesis in the first few minutes, the photon epoch until recombination, the Dark Era, cosmic dawn when the first stars lit up, reionization, and the long era of galaxy formation."],
+          ["What dominates the universe", "Epochs are tied to what dominates the universe’s energy. Radiation dominated first, then matter, and for the last several billion years dark energy has dominated, driving accelerating expansion. Each change of leader changes how fast and in what way the universe expands."],
+          ["Why epochs help", "Placing events on a timeline of time after the Big Bang and redshift lets cosmologists connect observations of very different eras into one story, from the CMB at 380,000 years to galaxies seen today."]],
+      f: ["The universe’s energy budget was dominated first by radiation, then by matter, and now by dark energy.", "Cosmic epochs include inflation, nucleosynthesis, recombination, the Dark Era, cosmic dawn and reionization.", "A cosmic epoch is a phase of cosmic history characterised by a dominant process or component.", "Cosmic dawn is the epoch when the first stars and galaxies began to light up.", "Cosmic epochs are placed on a timeline using time after the Big Bang and redshift."] },
+
+    { id: "UC-011", t: "Cosmic Web", src: "NASA SVS / Cosmic Web", img: WEB,
+      d: "The immense network of galaxies, clusters, filaments, and voids formed by gravity across the largest scales.",
+      s: [["The structure of the universe", "On scales above tens of millions of light-years, galaxies are not scattered randomly. They lie along long filaments and sheets that meet at dense nodes where galaxy clusters sit, surrounded by vast, nearly empty voids. This network is called the cosmic web."],
+          ["How it formed", "Tiny density ripples left over from the early universe were amplified by gravity. Dark matter collapsed first into sheets and filaments, and ordinary gas followed, forming galaxies where filaments cross. Large simulations such as Millennium and IllustrisTNG reproduce the web."],
+          ["Scale and observation", "Voids can be hundreds of millions of light-years across and filaments can stretch just as far. Redshift surveys such as SDSS and 2dF mapped the web in three dimensions, and the Laniakea Supercluster, which contains the Milky Way, is one local structure within it."]],
+      f: ["The cosmic web consists of filaments, sheets and nodes surrounding giant voids.", "Galaxy clusters sit at the dense nodes where cosmic web filaments meet.", "Cosmic web voids are vast regions containing very few galaxies.", "Dark matter collapsed first, forming the scaffold of the cosmic web.", "Redshift surveys such as SDSS mapped the cosmic web in three dimensions."] },
+
+    { id: "UC-012", t: "Reionization", src: "NASA / Webb Early Universe", img: WTL,
+      d: "The period when light from the first stars and galaxies ionized neutral hydrogen and made the universe more transparent to starlight.",
+      s: [["A second ionization", "After recombination the gas in the universe was neutral. When the first stars and galaxies formed, their ultraviolet light stripped electrons from hydrogen atoms again. This process, called reionization, turned the thin intergalactic gas back into a mostly ionized plasma."],
+          ["Timing", "Reionization began perhaps 150 to 400 million years after the Big Bang and was largely complete about one billion years after it, at a redshift near 6. The polarization of the CMB and the spectra of distant quasars and galaxies constrain the timeline, and the James Webb Space Telescope now finds many early galaxies that may have powered it."],
+          ["Why it matters", "Reionization ended the Dark Era and made intergalactic space transparent to ultraviolet light, shaping how early galaxies grew. The gas was by then so thin that the universe did not return to the opaque fog of the early plasma."]],
+      f: ["Reionization is when ultraviolet light from the first stars and galaxies re-ionized intergalactic hydrogen.", "Reionization was largely complete about one billion years after the Big Bang.", "Distant quasar spectra and CMB polarization help constrain the timing of reionization.", "The James Webb Space Telescope finds early galaxies that may have powered reionization.", "Reionization ended the Dark Era by making intergalactic gas transparent to ultraviolet light."] },
+
+    { id: "UC-013", t: "Multiverse", src: "NASA / WMAP Inflation Timeline", img: INF,
+      d: "A speculative family of ideas suggesting our universe may be one region or outcome within a larger physical reality.",
+      s: [["Many universes?", "The multiverse is a speculative idea that our observable universe is one of many regions or universes. It is not one theory but a family of proposals, and none has been confirmed by observation."],
+          ["Where the ideas come from", "Eternal inflation suggests that inflation never stops everywhere, producing separate bubble universes. String theory’s landscape allows a vast number of possible low-energy physics, perhaps realised in different bubbles. The many-worlds interpretation of quantum mechanics is a different notion of many universes."],
+          ["Scientific status", "A claim counts as science when it makes testable predictions. Some proposals predict possible signatures, such as marks in the CMB from collisions between bubble universes, but none has been found. Many physicists regard the multiverse as speculation, while others see it as a natural outcome of inflation."]],
+      f: ["The multiverse is a speculative idea with no confirmed observational evidence.", "Eternal inflation proposes bubble universes forming in an ever-inflating background.", "The string theory landscape allows a vast number of possible physical laws.", "Proposed multiverse tests include searching the CMB for bubble-collision signatures.", "The many-worlds interpretation of quantum mechanics is a different idea from the inflationary multiverse."] },
+
+    { id: "UC-014", t: "Expansion of the Universe", src: "NASA / Cosmological Redshift", img: EXP,
+      d: "The stretching of space that increases distances between galaxies and shifts their light toward longer wavelengths.",
+      s: [["Space stretches", "The expansion of the universe means that distances between unbound galaxies grow over time because space itself is stretching, not because galaxies move through space. It has no centre and no edge; every observer sees distant galaxies receding. Galaxies, stars and atoms do not expand, because gravity and other forces hold them together."],
+          ["Redshift and the scale factor", "As light travels through expanding space its wavelength stretches, producing cosmological redshift. The scale factor describes how much distances have grown compared with today; when the universe was half its present size the scale factor was 0.5 and the redshift was z = 1."],
+          ["Acceleration", "In 1998 two teams measured distant Type Ia supernovae and found that expansion is speeding up, a discovery honoured with the 2011 Nobel Prize in Physics. The cause is called dark energy. The simplest explanation is Einstein’s cosmological constant, a constant energy density of empty space."]],
+      f: ["Expansion increases distances between galaxies because space itself stretches.", "The expansion of the universe has no centre and no edge.", "Cosmological redshift happens because light’s wavelength stretches as space expands.", "The 2011 Nobel Prize in Physics honoured the discovery of accelerating expansion.", "The scale factor describes how much cosmic distances have grown relative to today."] },
+
+    { id: "UC-015", t: "Large-Scale Evolution", src: "NASA / Hubble Cosmic Web", img: LSE,
+      d: "The growth of structure from early density fluctuations into galaxies, clusters, filaments, and cosmic web patterns.",
+      s: [["From ripples to galaxies", "Large-scale evolution describes how structure grew from tiny early density variations into galaxies, clusters and the cosmic web. Gravity pulls matter toward slightly denser regions, which become denser still, a process called gravitational instability."],
+          ["Hierarchical growth", "In the standard Lambda-CDM model, small dark matter halos form first and merge into larger ones, so galaxies and clusters assemble from the bottom up. Gas cools inside halos and forms stars, and mergers reshape galaxies over billions of years."],
+          ["The role of dark matter and dark energy", "Dark matter supplies most of the gravity that drives growth. Later, dark energy’s accelerating expansion slows the growth of new large structures, so galaxy clusters are today the largest gravitationally bound objects. Simulations are compared with surveys of galaxy positions and shapes to test the model."]],
+      f: ["Simulated structure growth is compared with galaxy surveys to test cosmological models.", "Gravitational instability makes denser regions attract more matter and grow denser.", "In the Lambda-CDM model, small dark matter halos form first and merge into larger ones.", "Dark energy slows the growth of new large structures in the recent universe.", "Galaxy clusters are the largest gravitationally bound structures today."] },
+
+    { id: "UC-016", t: "Baryonic Acoustic Oscillation", src: "NASA SVS / BAO", img: BAO,
+      d: "Frozen primordial sound-wave imprints in galaxy clustering, used as a cosmic ruler for measuring expansion history.",
+      s: [["Sound waves in the early universe", "Before recombination, the universe was a hot plasma in which light and baryons (ordinary matter) were tightly coupled. Gravity pulled matter into dense regions while radiation pressure pushed outward, setting up sound waves known as baryon acoustic oscillations."],
+          ["A frozen ruler", "At recombination the waves stopped travelling, leaving a preferred distance called the sound horizon, about 150 megaparsecs or roughly 490 million light-years. Galaxies are slightly more likely to be separated by this distance, producing a faint bump in galaxy clustering that was first detected in 2005 by the SDSS and 2dF surveys."],
+          ["A standard ruler", "Because the true size of the ruler is known from the CMB, measuring its apparent size at different redshifts reveals distances and therefore the expansion history. Surveys such as BOSS, eBOSS and DESI use BAO to measure the behaviour of dark energy."]],
+      f: ["Baryon acoustic oscillations are frozen sound waves from the early plasma.", "The BAO sound horizon is about 150 megaparsecs, roughly 490 million light-years.", "The BAO feature was first detected in galaxy clustering in 2005.", "BAO acts as a standard ruler for measuring cosmic distances and expansion history.", "Surveys such as BOSS and DESI use BAO to study dark energy."] },
+
+    { id: "UC-017", t: "Dark Flow", src: "NASA GSFC / Dark Flow", img: DFL,
+      d: "A reported large-scale motion of distant galaxy clusters, studied using galaxy cluster data and cosmic microwave background measurements.",
+      s: [["A claimed bulk motion", "Dark flow is a reported large-scale motion of galaxy clusters toward one patch of sky that is not explained by the gravity of known structures. In 2008, Alexander Kashlinsky and colleagues claimed speeds of roughly 600 to 1,000 kilometres per second over very large distances."],
+          ["How it was measured", "The team used the kinematic Sunyaev–Zel’dovich effect: hot gas in moving galaxy clusters slightly shifts the temperature of CMB light passing through it. Averaging many clusters in WMAP data seemed to show a coherent flow."],
+          ["The debate", "Later analyses, including the Planck collaboration’s in 2013, found no significant evidence for dark flow, and many cosmologists consider it unconfirmed. It matters because a genuine bulk flow on such scales could challenge the cosmological principle or point to new physics."]],
+      f: ["Dark flow is a claimed large-scale coherent motion of galaxy clusters.", "Dark flow was reported in 2008 by Alexander Kashlinsky and colleagues.", "Dark flow analyses used the kinematic Sunyaev–Zel’dovich effect in CMB data.", "Planck analyses did not find significant evidence for dark flow.", "A real dark flow could challenge the cosmological principle."] }
+  ];
+
+
+var XH_X = [];
+var WM = function (n) { return "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(n) + "?width=900"; };
+
+XH_X.push({ id: "UC-001",
+  pics: [[HUDF, "Hubble Ultra Deep Field: thousands of galaxies in a tiny patch of sky (NASA/ESA)"], [WTL, "Timeline of the universe from the Big Bang to today (NASA)"], [HDF, "The Hubble Deep Field, the first deep look at distant galaxies (NASA)"]],
+  E: { s: [["Our home, with everything in it", "The universe is everything there is: all the space, all the stars, all the planets, and even time itself. Our Sun is one of hundreds of billions of stars in the Milky Way, and the Milky Way is one of hundreds of billions of galaxies that we can see."],
+           ["How old and how big?", "The universe is about 13.8 billion years old. It is so large that light, the fastest thing there is, needs billions of years to cross the part we can see. Nobody knows whether the universe has an edge."]],
+       ex: [["Looking back in time", "When you look at a star 100 light-years away, you see it as it was 100 years ago, because its light took that long to reach you. Looking far into space is also looking far back in time."]],
+       f: ["The universe contains all of space, time, matter and energy.", "Our Sun is one star among hundreds of billions in the Milky Way.", "Light takes time to travel, so looking far away means looking into the past.", "The universe is about 13.8 billion years old.", "Scientists do not know whether the universe has an edge."] },
+  N: { eq: [["Critical density of the universe", "\\rho_c = \\frac{3H_0^2}{8\\pi G}", "The density at which space is geometrically flat. With H₀ ≈ 70 km/s per megaparsec, ρc is about 9 × 10⁻²⁷ kg per cubic metre, roughly five hydrogen atoms per cubic metre. The measured total density is extremely close to this value."]],
+       ex: [["Counting the budget", "If the universe's total content is 100 units, about 5 units are ordinary atoms, 27 units are dark matter and 68 units are dark energy."]],
+       h: [["1917", "Einstein applies general relativity to the whole universe and adds a cosmological constant to keep it static."], ["1923–24", "Edwin Hubble shows that the Andromeda 'nebula' is a separate galaxy far outside the Milky Way."], ["1998", "Supernova surveys reveal that cosmic expansion is accelerating."], ["2013", "The Planck satellite fixes the age of the universe at 13.8 billion years with high precision."]] },
+  A: { s: [["The standard model of cosmology", "The standard ΛCDM model describes the universe with six parameters fitted to data: the densities of baryons and cold dark matter, the expansion rate, the amplitude and tilt of primordial fluctuations, and the optical depth to reionization. It fits the CMB, galaxy clustering and supernovae remarkably well and predicts a flat geometry, with total density equal to critical to within about 0.2%."],
+           ["Observable versus whole", "The observable universe has a comoving radius of about 46.5 billion light-years, larger than 13.8 billion because space expanded while the light travelled. Beyond this particle horizon lies space we cannot yet see, which may be far larger or even infinite. Statements about the whole universe rest on extrapolation from the observable patch."]],
+       eq: [["Friedmann equation", "\\left(\\frac{\\dot a}{a}\\right)^2 = \\frac{8\\pi G}{3}\\rho - \\frac{kc^2}{a^2} + \\frac{\\Lambda c^2}{3}", "The master equation of cosmology, derived from general relativity under the cosmological principle. a(t) is the scale factor, ρ the matter and radiation density, k the spatial curvature and Λ the cosmological constant."],
+            ["Density parameters", "\\Omega_m + \\Omega_r + \\Omega_\\Lambda = 1 - \\Omega_k", "Dividing the Friedmann equation by H² expresses each component as a fraction of the critical density. Planck gives Ω_m ≈ 0.31, Ω_Λ ≈ 0.69 and |Ω_k| below about 0.002, so space is very close to flat."]],
+       ex: [["Matter density", "With Ω_m ≈ 0.31 and H₀ ≈ 67.4 km/s/Mpc, ρc ≈ 8.5 × 10⁻²⁷ kg/m³, so the mean matter density is about 0.31 × 8.5 × 10⁻²⁷ ≈ 2.6 × 10⁻²⁷ kg/m³, around 1.6 protons per cubic metre."]],
+       h: [["1927–1929", "Lemaître and Hubble establish that the universe is expanding."], ["1965", "The CMB discovery makes the Big Bang the leading model."], ["2018", "Planck final results fix the six ΛCDM parameters to sub-percent accuracy."]],
+       f: ["The standard ΛCDM model is fitted with six parameters.", "The Friedmann equation links the expansion rate to the density and curvature of the universe.", "Planck data show the universe's spatial curvature is consistent with flat to about 0.2%.", "The observable universe has a comoving radius of about 46.5 billion light-years.", "Statements about the whole universe beyond the observable patch rely on extrapolation."] }
+});
+
+XH_X.push({ id: "UC-002",
+  pics: [[WTL, "Timeline of the universe from the Big Bang onward (NASA)"], [INF, "The early expansion in the WMAP timeline (NASA/WMAP)"], [CMB, "The CMB map: relic light of the hot early universe (NASA/WMAP)"]],
+  E: { s: [["Like blowing up a balloon", "Imagine a balloon with dots drawn on it. When you blow it up, every dot moves away from every other dot, and no dot is the centre. The universe works like this: space itself stretched and carried the galaxies apart."],
+           ["From hot and tiny to cool and huge", "Long ago the whole universe was extremely hot and packed into a tiny space. As it expanded it cooled, and over billions of years it formed atoms, stars and galaxies."]],
+       ex: [["The balloon", "Draw dots on a balloon and inflate it. Every dot sees all the others moving away, just as galaxies do in the universe, yet the balloon's surface has no centre."]],
+       f: ["The Big Bang was not an explosion in empty space.", "Space itself has been stretching since the Big Bang.", "The early universe was extremely hot and dense.", "The universe cooled as it expanded, allowing atoms and stars to form.", "The balloon picture shows that expansion has no centre."] },
+  N: { eq: [["Temperature falls as space stretches", "T \\propto \\frac{1}{a} = 1 + z", "Radiation cools in proportion to how much space expands. When the universe was a thousand times smaller (z ≈ 1,000) it was about a thousand times hotter, near 3,000 K."]],
+       ex: [["Rewinding the clock", "The CMB is 2.725 K today. At redshift 1,100 it was 2.725 × 1,101 ≈ 3,000 K, hot enough to keep hydrogen ionized."]],
+       h: [["1927", "Georges Lemaître proposes an expanding universe that began from a 'primeval atom'."], ["1948", "Alpher, Bethe and Gamow compute how light elements formed; Alpher and Herman predict a relic radiation of a few kelvin."], ["1949", "Fred Hoyle coins the name 'Big Bang' on BBC radio while arguing for a rival steady-state model."], ["1965", "Discovery of the CMB settles the debate in favour of the Big Bang."]] },
+  A: { s: [["Nucleosynthesis in detail", "Between about 1 second and 20 minutes the temperature fell from 10¹⁰ K to 10⁸ K. Neutrons and protons, in a ratio near 1 to 7 after some neutrons decayed, combined into deuterium and then helium-4. The model predicts a helium mass fraction of about 0.245, which matches observations, and deuterium that matches too. Lithium-7 is observed lower than predicted, a long-standing puzzle called the lithium problem."],
+           ["What the model does not cover", "The Planck time, about 5 × 10⁻⁴⁴ s, marks where general relativity alone fails and a theory of quantum gravity would be needed. Extrapolating the expansion backward gives a singularity in classical theory, which most physicists read as a limit of the theory, not a proven physical beginning."]],
+       eq: [["Neutron-to-proton ratio", "\\frac{n}{p} = e^{-\\Delta m c^2 / k_B T}", "Before nucleosynthesis, the weak force kept neutrons and protons in equilibrium with the ratio set by the mass difference Δmc² = 1.29 MeV. When the reactions froze out near 0.8 MeV, n/p was about 1/6, falling to about 1/7 as neutrons decayed."],
+            ["Helium mass fraction", "Y_p = \\frac{2\\,(n/p)}{1 + n/p} \\approx 0.25", "If nearly every neutron ends up in helium-4, each neutron pairs with a proton, so helium carries twice the neutron mass fraction. With n/p ≈ 1/7 this gives about 0.25."]],
+       ex: [["Quick check", "For n/p = 1/7: Y = 2(1/7) / (1 + 1/7) = (2/7)/(8/7) = 0.25, matching the observed 25% helium by mass."]],
+       h: [["1948", "Alpher, Bethe and Gamow calculate light-element formation in the hot early universe."], ["1990", "COBE shows the CMB follows a near-perfect blackbody spectrum."], ["2013", "Planck pins down the baryon density that fixes the predicted light-element abundances."]],
+       f: ["Big Bang nucleosynthesis ran from roughly 1 second to 20 minutes after the beginning.", "A neutron-to-proton ratio near 1/7 sets the primordial helium fraction to about 25%.", "The Planck time is about 5 × 10⁻⁴⁴ seconds.", "The lithium problem is that observed lithium-7 is lower than the Big Bang prediction.", "COBE showed the CMB spectrum is a near-perfect blackbody."] }
+});
+
+XH_X.push({ id: "UC-003",
+  pics: [[WM("Edwin Hubble.jpg"), "Edwin Hubble (1889–1953), who published the velocity–distance relation (Wikimedia Commons)"], [EXP, "Light waves stretch as space expands, producing redshift (NASA)"], [HUDF, "Distant galaxies in the Hubble Ultra Deep Field, all receding (NASA/ESA)"]],
+  E: { s: [["Farther means faster", "Astronomers measured how fast galaxies are moving away from us and found a simple pattern: the farther away a galaxy is, the faster it moves away. This is called Hubble's Law."],
+           ["Why does this happen?", "Galaxies are not racing through space. Space itself is stretching, so the gaps between faraway galaxies grow. The more space in between, the more stretching, and the faster the apparent speed."]],
+       ex: [["Dots on a stretching rubber band", "Mark dots on a rubber band and stretch it to twice its length in one second. Two dots 1 cm apart end up 2 cm apart, moving apart at 1 cm per second. Two dots 3 cm apart end up 6 cm apart, moving apart at 3 cm per second. Farther dots separate faster."]],
+       f: ["Hubble's Law says farther galaxies move away faster.", "Galaxies are carried apart because space itself stretches.", "The pattern was discovered by Edwin Hubble.", "Redshift tells astronomers how fast a galaxy is receding.", "In Hubble's Law, doubling the distance doubles the speed."] },
+  N: { eq: [["Hubble–Lemaître law", "v = H_0\\, d", "v is the recession speed, d the distance and H₀ the Hubble constant, about 70 km/s per megaparsec. It holds when distances are large enough that local motions are small."],
+            ["Redshift and speed (small z)", "z = \\frac{\\lambda_{obs}-\\lambda_{emit}}{\\lambda_{emit}} \\approx \\frac{v}{c}", "For small redshifts, z is roughly v/c. A galaxy with z = 0.01 recedes at about 3,000 km/s."]],
+       ex: [["How far is that galaxy?", "A galaxy recedes at 7,000 km/s. With H₀ = 70 km/s/Mpc, d = v / H₀ = 100 Mpc, about 326 million light-years."]],
+       h: [["1912", "Vesto Slipher finds that most spiral nebulae have redshifted spectra."], ["1927", "Lemaître derives the expansion law and estimates the constant."], ["1929", "Hubble plots velocity against distance for 24 galaxies and finds a linear trend."], ["2018", "The IAU votes to call it the Hubble–Lemaître law."]] },
+  A: { s: [["Beyond the simple law", "At high redshift the relation is no longer linear. The recession 'velocity' is the rate of change of proper distance, v = H(t)·d, not a speed through space. Beyond the Hubble radius c/H₀, about 4,300 Mpc, it exceeds the speed of light without violating relativity, because nothing moves through space faster than light locally."],
+           ["The Hubble tension", "Calibrating the distance ladder with Cepheids and supernovae gives H₀ near 73 km/s/Mpc. Planck CMB data fitted with ΛCDM give 67.4 ± 0.5. The gap of roughly five standard deviations may signal hidden systematic errors or new physics such as early dark energy. Independent methods, including the tip of the red giant branch and JWST observations, keep testing it."]],
+       eq: [["Hubble parameter and scale factor", "H(t) = \\frac{\\dot a}{a}", "H is the fractional expansion rate. The Hubble constant H₀ is H measured today, about 2.3 × 10⁻¹⁸ per second. Its inverse, the Hubble time 1/H₀ ≈ 14 billion years, approximates the age of the universe."],
+            ["Redshift and scale factor", "1 + z = \\frac{a(t_0)}{a(t_{emit})}", "Light emitted when the universe was a fraction a of its present size is stretched by the factor 1 + z. A galaxy seen at z = 2 is seen as it was when the universe was one third of its present size."]],
+       ex: [["Hubble time", "H₀ = 70 km/s/Mpc = 2.27 × 10⁻¹⁸ s⁻¹, so 1/H₀ = 4.4 × 10¹⁷ s ≈ 14 billion years."]],
+       h: [["1998", "Distant supernovae show expansion is accelerating, so H changes with time."], ["2019", "The SH0ES team reports H₀ ≈ 74 km/s/Mpc, in conflict with Planck's lower value."], ["2023–24", "JWST observations of Cepheids support the Hubble Space Telescope distances used in the high value."]],
+       f: ["The Hubble constant H₀ is the expansion rate ȧ/a measured at the present time.", "The Hubble radius c/H₀ is about 4,300 megaparsecs.", "Planck CMB data give H₀ near 67.4 km/s/Mpc while the distance ladder gives about 73.", "The Hubble time 1/H₀ is about 14 billion years.", "A redshift z means the light was emitted when the universe was 1/(1+z) of its present size."] }
+});
+
+XH_X.push({ id: "UC-004",
+  pics: [[INF, "Inflation at the start of the WMAP cosmic timeline (NASA/WMAP)"], [CMB, "CMB ripples, the stretched quantum seeds of structure (NASA/WMAP)"], [WM("Lambda-Cold Dark Matter, Accelerated Expansion of the Universe, Big Bang-Inflation.svg"), "Diagram of cosmic history from inflation to today (Wikimedia Commons / NASA)"]],
+  E: { s: [["A super-fast stretch", "Scientists think that in the first tiny fraction of a second, space stretched incredibly fast, from a size far smaller than an atom to at least the size of a marble. This super-fast stretch is called inflation."],
+           ["Why scientists like the idea", "It explains two puzzles: why the universe looks almost the same in every direction, and why space is so flat. It also explains where galaxies come from, because tiny quantum wiggles were stretched into huge patterns."]],
+       ex: [["Stretching a crumpled sheet", "A tiny crumpled, wrinkled sheet stretched to enormous size looks smooth and flat, with only faint ripples left. Inflation did something similar to the universe."]],
+       f: ["Inflation was a super-fast stretch of space very early in cosmic history.", "Inflation makes the universe look nearly the same in every direction.", "Inflation made space very flat.", "Tiny quantum wiggles stretched by inflation became the seeds of galaxies.", "Inflation is supported by observations but is not yet proven."] },
+  N: { eq: [["Exponential expansion", "a(t) \\propto e^{Ht}", "During inflation the expansion rate H was nearly constant, so the scale factor grew exponentially. Growing by 60 e-folds means a factor e⁶⁰ ≈ 10²⁶."],
+            ["Number of e-folds", "N = \\int_{t_i}^{t_f} H\\,dt \\gtrsim 60", "At least about 60 e-folds are needed for inflation to solve the horizon and flatness problems."]],
+       ex: [["How big is 10²⁶?", "A region 10⁻²⁶ m across, vastly smaller than a proton at 10⁻¹⁵ m, stretched by 10²⁶ becomes about 1 metre."]],
+       h: [["1979–81", "Alan Guth realises that a rapid early expansion could solve the horizon, flatness and monopole problems."], ["1981–82", "Linde, and Albrecht and Steinhardt, develop 'new inflation' to end inflation gracefully."], ["1992", "COBE detects the CMB ripples that inflation predicts."], ["2014", "BICEP2 claims a gravitational-wave signal of inflation; it is later shown to be galactic dust."]] },
+  A: { s: [["The inflaton and slow roll", "Inflation is usually modelled by a scalar field, the inflaton, rolling slowly down a potential V(φ). While its kinetic energy is small, V acts like a cosmological constant and space expands almost exponentially. Inflation ends when the field reaches the steep part of the potential and its energy decays into particles in a phase called reheating."],
+           ["Predictions to test", "Simple models predict nearly scale-invariant, Gaussian, adiabatic fluctuations with a scalar spectral index slightly below 1. Planck measures n_s = 0.965 ± 0.004, matching this. Inflation also predicts primordial gravitational waves, measured by the tensor-to-scalar ratio r; current limits give r < 0.036, ruling out some models."]],
+       eq: [["Slow-roll condition", "\\epsilon = \\frac{M_{Pl}^2}{2}\\left(\\frac{V'}{V}\\right)^2 \\ll 1", "The slow-roll parameter ε must be small for inflation to last. Inflation ends when ε reaches 1."],
+            ["Scalar spectral index", "n_s - 1 = -6\\epsilon + 2\\eta", "Slow-roll parameters set the tilt of the fluctuation spectrum. Planck's n_s = 0.965 implies 6ε − 2η ≈ 0.035."]],
+       ex: [["Reading the tilt", "With n_s = 0.965 the spectrum has slightly more power on large scales than on small scales; a perfectly scale-invariant spectrum would have n_s = 1."]],
+       h: [["1980", "Starobinsky proposes a quantum-corrected gravity model that inflates; it remains a leading candidate."], ["1981", "Guth publishes the original 'old inflation' paper."], ["2013", "Planck's detection of n_s below 1 favours slow-roll inflation."], ["2021", "BICEP/Keck sets r < 0.036."]],
+       f: ["Inflation is usually modelled by a scalar field called the inflaton.", "Planck measures the scalar spectral index n_s close to 0.965.", "The tensor-to-scalar ratio r measures primordial gravitational waves from inflation.", "Slow roll requires the slow-roll parameter ε to be much smaller than 1.", "Reheating is when the inflaton decays into particles after inflation ends."] }
+});
+
+XH_X.push({ id: "UC-005",
+  pics: [[CMB, "Full-sky map of CMB temperature ripples, WMAP nine-year (NASA/WMAP)"], [WM("Horn Antenna-in Holmdel, New Jersey.jpeg"), "The Holmdel Horn Antenna used by Penzias and Wilson (Wikimedia Commons / NASA)"], [INF, "The CMB in the timeline of cosmic history (NASA/WMAP)"]],
+  E: { s: [["The first light", "A very long time ago the universe was so hot and foggy that light could not travel far. When it cooled enough, the fog cleared and light flew free. That oldest light is still all around us today and is called the cosmic microwave background."],
+           ["Invisible but everywhere", "Today that light has become cold microwaves, which our eyes cannot see. A small part of the 'snow' on an old analogue TV screen between channels came from it."]],
+       ex: [["A baby picture of the universe", "The CMB is like a baby photo of the universe, taken when it was only about 380,000 years old. The tiny warmer and cooler patches in the picture show where galaxies would later form."]],
+       f: ["The CMB is the oldest light we can see.", "The CMB is now cold microwave light that our eyes cannot see.", "The CMB comes from every direction in the sky.", "The CMB is like a baby picture of the universe.", "Tiny warmer and cooler patches in the CMB show where galaxies later formed."] },
+  N: { eq: [["Blackbody radiation (Planck's law)", "B_\\nu(T) = \\frac{2h\\nu^3}{c^2}\\frac{1}{e^{h\\nu/k_BT}-1}", "The CMB has the most perfect blackbody spectrum ever measured, at T = 2.725 K. Its spectrum peaks near 160 GHz, a wavelength of about 1.9 mm."],
+            ["Wien's displacement law", "\\lambda_{max}\\,T = 2.898\\times10^{-3}\\ \\text{m K}", "For T = 2.725 K this gives λ_max ≈ 1.06 mm when the spectrum is expressed per unit wavelength, in the microwave band."]],
+       ex: [["Cooling by expansion", "T(z) = 2.725 K × (1 + z). At z = 1,100 that is about 3,000 K, as hot as the surface of a cool red star."]],
+       h: [["1948", "Alpher and Herman predict a relic radiation of about 5 K."], ["1965", "Penzias and Wilson detect a microwave hiss at Bell Labs; Dicke's group explains it."], ["1992", "COBE finds ripples of one part in 100,000."], ["2001–2013", "WMAP and Planck refine the age, geometry and composition of the universe."]] },
+  A: { s: [["Anisotropies and the power spectrum", "The CMB temperature map is decomposed into spherical harmonics, and its angular power spectrum shows a series of acoustic peaks. The first peak at multipole ℓ ≈ 220 measures geometry and shows that space is flat; the relative heights of the peaks give the baryon and dark matter densities. Polarization, in E-modes and B-modes, adds information on reionization and primordial gravitational waves."],
+           ["The dipole and spectral distortions", "COBE's FIRAS instrument found deviations from a perfect blackbody below about one part in 10⁴. A dipole of 3.36 mK, caused by the Sun's motion of about 370 km/s relative to the CMB frame, is the largest anisotropy and is subtracted before analysis. Future missions search for spectral distortions that would reveal energy injected into the early universe."]],
+       eq: [["Temperature fluctuation expansion", "\\frac{\\Delta T}{T}(\\theta,\\phi) = \\sum_{\\ell m} a_{\\ell m} Y_{\\ell m}(\\theta,\\phi)", "The sky map is expanded in spherical harmonics. The power spectrum C_ℓ = ⟨|a_ℓm|²⟩ compresses the map into numbers that theory can predict."],
+            ["Doppler dipole", "\\frac{\\Delta T}{T} \\approx \\frac{v}{c}\\cos\\theta", "Motion at speed v through the CMB frame shifts the temperature by about v/c. A dipole of 3.36 mK on 2.725 K gives v ≈ 370 km/s."]],
+       ex: [["Computing our speed", "ΔT/T = 3.36 mK / 2.725 K = 1.23 × 10⁻³, so v ≈ 1.23 × 10⁻³ × 299,792 km/s ≈ 370 km/s."]],
+       h: [["1989–1996", "COBE measures the blackbody spectrum (FIRAS) and the anisotropies (DMR); Mather and Smoot share the 2006 Nobel Prize."], ["2003", "WMAP first-year results give an age of 13.7 billion years and confirm a flat universe."], ["2018", "Planck's final release measures the acoustic peaks and cosmic parameters at sub-percent precision."]],
+       f: ["The first acoustic peak of the CMB power spectrum is at multipole ℓ of about 220.", "The CMB dipole of about 3.36 mK reflects our motion of roughly 370 km/s.", "CMB spectrum deviations from a perfect blackbody are below about one part in 10⁴.", "CMB polarization is divided into E-modes and B-modes.", "The CMB angular power spectrum is built from spherical harmonic coefficients a_ℓm."] }
+});
+
+XH_X.push({ id: "UC-006",
+  pics: [[WTL, "Recombination and the release of the CMB on the cosmic timeline (NASA)"], [CMB, "The surface of last scattering seen as the CMB map (NASA/WMAP)"], [INF, "WMAP timeline showing the era of recombination (NASA/WMAP)"]],
+  E: { s: [["Fog turns into clear air", "Early on, the universe was like a thick glowing fog full of tiny charged particles. Light bounced around so much that it could not go anywhere."],
+           ["Atoms form", "When the universe cooled to about 3,000 degrees, electrons joined with nuclei to make atoms. With the particles tied up in atoms, the fog cleared and light could finally travel far."]],
+       ex: [["A foggy morning clearing", "On a foggy morning you can see only a few metres. When the fog lifts you suddenly see far away. The universe's 'fog' lifted in the same way when atoms formed."]],
+       f: ["Recombination is when atoms first formed in the universe.", "Before recombination the universe was like a thick glowing fog.", "After recombination light could travel freely.", "Recombination happened when the universe cooled to about 3,000 degrees.", "The light that escaped during recombination is the cosmic microwave background."] },
+  N: { eq: [["Ionization energy of hydrogen", "E_I = 13.6\\ \\text{eV}", "Hydrogen can survive only when photons rarely have enough energy to ionize it. Because there are about a billion photons per atom, recombination happens when kT is only about 0.3 eV (T ≈ 3,000 K), far below 13.6 eV."],
+            ["Redshift of recombination", "1 + z_{rec} = \\frac{T_{rec}}{T_0} \\approx \\frac{3000\\ \\text{K}}{2.725\\ \\text{K}} \\approx 1100", "The temperature at recombination divided by today's CMB temperature gives a redshift of about 1,100."]],
+       ex: [["Why not at 13.6 eV?", "Photons outnumber atoms by about 10⁹ to 1, so even the rare high-energy tail of the photon spectrum can ionize atoms until kT falls to a few tenths of an eV."]],
+       h: [["1968", "Peebles, and independently Zeldovich, Kurt and Sunyaev, work out the physics of hydrogen recombination."], ["1990s", "COBE and balloon experiments show the CMB from the last-scattering surface is smooth to one part in 100,000."], ["2013", "Planck measures the redshift of last scattering at about 1,090."]] },
+  A: { s: [["Why recombination is not instantaneous", "The Saha equation gives the equilibrium ionization, but the real process is controlled by the slow escape of Lyman-alpha photons and two-photon decays, because direct recombination to the ground state emits a photon that immediately ionizes a neighbouring atom. Codes such as RECFAST and CosmoRec follow it in detail. The visibility function has a width of about Δz ≈ 80, so last scattering is a thin shell, not a surface."],
+           ["Residual ionization and the drag epoch", "After last scattering a small ionized fraction of about 10⁻⁴ remains, enough to keep the gas thermally coupled to the CMB until about z ≈ 150. The sound horizon at the drag epoch, about 147 Mpc, is set when baryons decouple from photons, shortly after recombination."]],
+       eq: [["Saha equation", "\\frac{n_e n_p}{n_H} = \\left(\\frac{m_e k_B T}{2\\pi\\hbar^2}\\right)^{3/2} e^{-13.6\\ \\text{eV}/k_BT}", "Gives the equilibrium ionized fraction. Setting the fraction to one half gives T ≈ 3,700 K, and the full non-equilibrium calculation shifts last scattering to the observed redshift near 1,090."],
+            ["Optical depth to last scattering", "\\tau(z) = \\int n_e \\sigma_T c \\frac{dt}{dz}\\,dz", "The Thomson-scattering optical depth. Last scattering occurs where τ ≈ 1, at z ≈ 1,090 for the CMB."]],
+       ex: [["Thickness of the shell", "A visibility width of Δz ≈ 80 at z ≈ 1,090 corresponds to a thickness of roughly 40,000 years of cosmic time."]],
+       h: [["1968", "Peebles and the Zeldovich group compute hydrogen recombination."], ["1999", "Seager, Sasselov and Scott publish RECFAST with a multi-level atom."], ["2013", "Planck measures last scattering at z ≈ 1,090 and the drag epoch at z ≈ 1,060."]],
+       f: ["The Saha equation gives equilibrium ionization but real recombination is slower.", "The visibility function of last scattering has a width of about Δz ≈ 80.", "Direct recombination to the hydrogen ground state is blocked because the emitted photon re-ionizes a neighbour.", "About 10⁻⁴ of the gas stays ionized after last scattering.", "The sound horizon at the drag epoch is about 147 megaparsecs."] }
+});
+
+XH_X.push({ id: "UC-007",
+  pics: [[HDF, "The Hubble Deep Field shows galaxies whose ancestors ended the Dark Era (NASA)"], [WTL, "Timeline: the Dark Era lies between the CMB release and the first stars (NASA)"], [CMB, "The CMB: the last light before the Dark Era (NASA/WMAP)"]],
+  E: { s: [["The universe goes dark", "After the fog cleared, the universe was cooling and full of gas, but there were no stars yet. No new light was being made, so the universe stayed dark for a very long time."],
+           ["Waiting for the first stars", "Gravity slowly pulled the gas into clumps. After a few hundred million years the clumps became so dense that the very first stars switched on, ending the Dark Era."]],
+       ex: [["A dark room before the lights", "Imagine a huge dark room where workers quietly build lamps. Nothing is lit until the first lamp is switched on. The Dark Era is that quiet building time before the first stars."]],
+       f: ["The Dark Era is the time before the first stars lit up.", "During the Dark Era the universe was filled with gas but had no stars.", "Gravity slowly pulled gas into clumps during the Dark Era.", "The first stars ended the Dark Era.", "The Dark Era lasted for a few hundred million years."] },
+  N: { eq: [["The 21 cm line of hydrogen", "\\nu_{21} = 1420.4\\ \\text{MHz},\\quad \\lambda = 21.1\\ \\text{cm}", "Neutral hydrogen emits radio waves when the electron's spin flips relative to the proton's. Because of cosmic redshift, signals from the Dark Era reach us at low frequencies."],
+            ["Observed frequency", "\\nu_{obs} = \\frac{1420.4\\ \\text{MHz}}{1+z}", "Hydrogen at z = 30, about 100 million years after the Big Bang, is seen at 1420.4/31 ≈ 46 MHz, in the low-frequency radio range below the FM band."]],
+       ex: [["Tuning to the past", "At z = 20 the 21 cm line is observed at 1420.4/21 ≈ 68 MHz. At z = 100 it is at about 14 MHz, which is partly blocked by Earth's ionosphere."]],
+       h: [["1944", "Hendrik van de Hulst predicts the 21 cm line of hydrogen."], ["1951", "Ewen and Purcell detect the 21 cm line from our own galaxy."], ["2018", "The EDGES experiment reports an unexpected absorption signal near 78 MHz, which other experiments have not confirmed."]] },
+  A: { s: [["Structure growth in the dark", "During the Dark Era, matter density perturbations grow linearly. Dark matter, which decoupled from light earlier, forms halos first; baryons fall in once their pressure no longer resists. The first minihalos of about 10⁵ to 10⁶ solar masses cool through molecular hydrogen and form Population III stars, perhaps at z ≈ 20 to 30, roughly 100 to 200 million years after the Big Bang."],
+           ["The 21 cm signal", "The 21 cm brightness depends on the spin temperature of the gas relative to the CMB. Just after recombination the gas cools faster than the CMB and the line appears in absorption. Later, Lyman-alpha light from the first stars couples the spin temperature to the gas (the Wouthuysen–Field effect), and X-ray heating and reionization turn the signal into emission and then remove it."]],
+       eq: [["Brightness temperature of the 21 cm line", "\\delta T_b \\approx 27\\,x_{HI}\\left(1-\\frac{T_{CMB}}{T_S}\\right)\\left(\\frac{1+z}{10}\\right)^{1/2}\\ \\text{mK}", "When the spin temperature T_S is below the CMB temperature, the signal is seen in absorption. Predicted signals are tens of millikelvin, far below the foreground sky noise, which makes detection very difficult."],
+            ["Growth of density perturbations", "\\ddot\\delta + 2H\\dot\\delta = 4\\pi G\\bar\\rho\\,\\delta", "In a matter-dominated universe δ grows in proportion to the scale factor a, so overdensities grow by roughly the factor 1 + z."]],
+       ex: [["Growth factor", "A seed amplitude of 10⁻⁵ at z ≈ 1,090 grows by a factor of about 1,000 in linear theory. Dark matter perturbations began growing earlier than baryon perturbations, so small dark matter halos reach nonlinear collapse first."]],
+       h: [["1958–59", "George Field and others work out how the 21 cm line can probe the early universe."], ["2018", "EDGES reports an absorption trough near 78 MHz."], ["2022", "SARAS 3 rejects the EDGES profile at 95% confidence."], ["2020s", "HERA, LOFAR and the SKA aim to detect the cosmic dawn and reionization signal; far-side lunar concepts target the Dark Era itself."]],
+       f: ["Population III stars are thought to have formed in minihalos cooled by molecular hydrogen.", "The Wouthuysen–Field effect couples the 21 cm spin temperature to the gas through Lyman-alpha photons.", "The 21 cm line has a rest frequency of 1420.4 MHz.", "The EDGES 2018 absorption detection near 78 MHz has not been confirmed by independent experiments.", "Predicted 21 cm signals of tens of millikelvin are much weaker than the foreground sky noise."] }
+});
+
+XH_X.push({ id: "UC-008",
+  pics: [[HUDF, "Deep field: distant galaxies look statistically alike in every direction (NASA/ESA)"], [CMB, "The CMB is nearly identical in every direction (NASA/WMAP)"], [WEB, "Large-scale distribution of matter in simulation (NASA SVS)"]],
+  E: { s: [["The universe looks the same everywhere", "If you could view the universe from very far away, it would look about the same wherever you stood and whichever way you looked. That idea is called the cosmological principle."],
+           ["Smooth from far away", "Up close the universe is lumpy: planets, stars and galaxies. Zoom out far enough and the lumps average out, just as a sandy beach looks smooth from an aeroplane even though it is made of separate grains."]],
+       ex: [["A sandy beach", "In your hand a beach is many separate grains. From an aeroplane it looks smooth and the same everywhere. The universe is like the beach: lumpy up close, smooth from far away."]],
+       f: ["The cosmological principle says the universe looks the same everywhere on large scales.", "The universe looks lumpy up close but smooth from very far away.", "The cosmological principle says we do not live in a special place.", "The cosmological principle works like a beach that looks smooth from a plane.", "Planets and stars are lumps that the principle does not apply to."] },
+  N: { eq: [["FLRW metric", "ds^2 = -c^2dt^2 + a(t)^2\\left[\\frac{dr^2}{1-kr^2} + r^2 d\\Omega^2\\right]", "The Friedmann–Lemaître–Robertson–Walker metric is the most general spacetime that is homogeneous and isotropic. k = 0, +1 or −1 describes flat, closed or open space, and a(t) is the scale factor."],
+            ["Matter density fluctuation", "\\delta(\\mathbf{x}) = \\frac{\\rho(\\mathbf{x})-\\bar\\rho}{\\bar\\rho}", "On scales above about 100 Mpc the typical size of δ is much less than 1, which means the universe is nearly homogeneous there."]],
+       ex: [["Averaging out", "Count galaxies in boxes 10 Mpc wide and the counts vary enormously from box to box. In boxes 300 Mpc wide the counts agree to within a few percent."]],
+       h: [["1543", "Copernicus puts the Sun, not Earth, at the centre, starting the idea that we are not special."], ["1917", "Einstein assumes a homogeneous, isotropic universe in his first cosmological model."], ["1922–35", "Friedmann, Lemaître, Robertson and Walker work out the expanding solutions and the metric form."], ["2005", "SDSS shows galaxy clustering becomes homogeneous on large scales."]] },
+  A: { s: [["Statistical homogeneity and isotropy", "The principle is statistical: the average properties of any large region are the same, not the exact arrangement of galaxies. Observationally the galaxy distribution approaches homogeneity beyond roughly 70 to 100 Mpc/h. Isotropy is tested with the CMB and quasar counts. Homogeneity is harder to test directly because we observe only along our past light cone, so it also relies on the Copernican assumption."],
+           ["Possible violations", "Structures claimed to be billions of light-years across, such as the Hercules–Corona Borealis Great Wall, strain the expected homogeneity scale, and the CMB shows large-angle anomalies such as a hemispherical power asymmetry. Studies of the quasar dipole have also found an amplitude larger than the CMB predicts. So far these results are statistically debated and may be explained by selection effects."]],
+       eq: [["Acceleration equation", "\\frac{\\ddot a}{a} = -\\frac{4\\pi G}{3}\\left(\\rho + \\frac{3p}{c^2}\\right) + \\frac{\\Lambda c^2}{3}", "Applying the cosmological principle to general relativity gives this equation. Acceleration requires a component with pressure p < −ρc²/3, as dark energy has."],
+            ["Variance in a sphere", "\\sigma^2(R) = \\int \\frac{d^3k}{(2\\pi)^3}P(k)\\,W^2(kR)", "The rms density fluctuation within spheres of radius R is built from the matter power spectrum P(k). It falls to roughly 10% at R near 100 Mpc/h, marking the approach to homogeneity."]],
+       ex: [["Reading σ(R)", "σ₈ ≈ 0.81 means the density in spheres of radius 8 Mpc/h varies by about 81%. At 100 Mpc/h the variation is only around 10%, close to uniform."]],
+       h: [["1998", "Sylos Labini and colleagues argue that galaxy clustering is fractal, starting a debate."], ["2005", "Hogg and colleagues use SDSS luminous red galaxies to show the distribution is homogeneous beyond about 70 Mpc/h."], ["2021", "Secrest and colleagues report a quasar dipole larger than the CMB-based expectation."]],
+       f: ["The cosmological principle is a statistical statement about average properties on large scales.", "Galaxy surveys indicate homogeneity beyond roughly 70 to 100 Mpc/h.", "FLRW is the most general metric that is both homogeneous and isotropic.", "Homogeneity is hard to test directly because we only observe along our past light cone.", "A reported quasar dipole tension challenges the cosmological principle."] }
+});
+
+XH_X.push({ id: "UC-009",
+  pics: [[BH, "Webb view of black-hole environments, where horizons hide singularities (NASA/ESA/CSA/STScI)"], [WM("Black hole - Messier 87 crop max res.jpg"), "Event Horizon Telescope image of the black hole in M87 (EHT collaboration, via Wikimedia Commons)"]],
+  E: { s: [["What is a singularity?", "In the middle of a black hole, the rules of physics as we know them are expected to break down. This point is called a singularity, where matter would be squeezed to endless density."],
+           ["The hiding rule", "The cosmic censorship idea says nature is kind to us: every singularity made by a collapsing star is wrapped inside a black hole's event horizon, a point of no return. That means we could never see one directly, and it could never affect the rest of the universe."]],
+       ex: [["A locked room", "Think of a singularity as something dangerous in a locked room. The black hole's horizon is the locked door: nothing inside can get out to cause trouble outside."]],
+       f: ["A singularity is a place where the known laws of physics break down.", "Cosmic censorship says singularities are hidden inside black holes.", "The event horizon is the point of no return around a black hole.", "Cosmic censorship would protect the universe from exposed singularities.", "Scientists have not been able to prove cosmic censorship."] },
+  N: { eq: [["Schwarzschild radius", "r_s = \\frac{2GM}{c^2}", "The size of the event horizon of a non-spinning black hole. For the Sun it would be about 3 km, and for Earth about 9 mm."],
+            ["Kerr black hole horizon", "r_+ = \\frac{GM}{c^2}\\left(1 + \\sqrt{1 - a_*^2}\\right),\\quad a_* = \\frac{cJ}{GM^2} \\le 1", "A spinning black hole keeps a horizon only if its spin parameter a* ≤ 1. If a* could exceed 1 the horizon would vanish and a naked singularity would appear, which is exactly what censorship forbids."]],
+       ex: [["Black hole sizes", "A black hole of 10 solar masses has r_s = 2.95 km × 10 ≈ 30 km, a horizon about the size of a city."]],
+       h: [["1916", "Schwarzschild finds the first black hole solution of general relativity."], ["1965", "Penrose proves the singularity theorem, showing that collapse leads to singularities."], ["1969", "Penrose proposes the cosmic censorship conjecture."], ["1993", "Choptuik finds a critical collapse threshold where a naked singularity appears in fine-tuned collapse."]] },
+  A: { s: [["Weak and strong forms", "Weak censorship states that for generic initial data, singularities formed in gravitational collapse are not visible from far away (future null infinity). Strong censorship states that the maximal development of generic data cannot be extended past a singularity, so general relativity stays deterministic. Charged and spinning black holes have inner Cauchy horizons, which strong censorship predicts are unstable."],
+           ["Evidence and counterexamples", "Christodoulou proved weak censorship for generic spherically symmetric Einstein–scalar field collapse in 1999. Choptuik's 1993 critical collapse shows naked singularities only on a fine-tuned boundary. Higher-dimensional black strings can pinch off into naked singularities (Lehner and Pretorius, 2010), and special anti-de Sitter settings give violations (Crisford and Santos, 2017). In 2017 Dafermos and Luk showed that a C⁰ version of strong censorship fails for Kerr black holes. Censorship in realistic four-dimensional spacetimes remains unproven."]],
+       eq: [["Penrose inequality", "M_{ADM} \\ge \\sqrt{\\frac{A}{16\\pi}}", "In geometric units, the total mass must be at least √(A/16π), where A is the area of the outermost horizon. This is expected if censorship holds. The Riemannian version was proved by Huisken and Ilmanen and by Bray in 2001."],
+            ["Extremal Kerr–Newman bound", "M^2 \\ge a^2 + Q^2", "Black holes with mass M, spin parameter a and charge Q have horizons only when M² ≥ a² + Q². Attempts to over-spin or over-charge an extremal black hole with test particles fail once back-reaction is included, as first shown by Wald in 1974."]],
+       ex: [["Spin limit", "For M = 1 in geometric units, a = 1.1 would give 1 − a² < 0, so there would be no horizon. The Kerr limit a ≤ M forbids this."]],
+       h: [["1969", "Penrose states the weak cosmic censorship conjecture."], ["1974", "Wald shows that an extremal Kerr black hole cannot be over-spun by test particles."], ["1993", "Choptuik discovers critical collapse."], ["1999", "Christodoulou proves weak censorship for generic spherical Einstein–scalar field collapse."], ["2017", "Dafermos and Luk show that a C⁰ form of strong censorship fails for Kerr."]],
+       f: ["Weak cosmic censorship says singularities are not visible from far away for generic initial data.", "Strong cosmic censorship concerns determinism: the maximal development of generic data should be inextendible.", "Choptuik's critical collapse found naked singularities only on a fine-tuned boundary.", "The Penrose inequality bounds the total mass by the horizon area, M ≥ √(A/16π).", "Christodoulou proved weak censorship for generic spherical Einstein–scalar field collapse in 1999."] }
+});
+
+XH_X.push({ id: "UC-010",
+  pics: [[EPO, "Hubble image of galaxies seen across cosmic time (NASA/ESA)"], [WTL, "Timeline of cosmic epochs (NASA)"], [INF, "WMAP timeline from inflation to today (NASA/WMAP)"]],
+  E: { s: [["The universe's life story", "The universe has a story with chapters called epochs. Each chapter is a period when something special was happening, like very fast stretching, atoms forming, the first stars lighting up, or galaxies growing."],
+           ["The main chapters", "First came a tiny, hot, fast-growing universe. Then atoms formed and light escaped. After a dark time, the first stars and galaxies appeared. Today galaxies are still growing and the stretching of space is speeding up."]],
+       ex: [["Like a book", "Think of the history of the universe as a book with chapters. Each epoch is a chapter with its own main event, and together they tell the full story from the Big Bang to today."]],
+       f: ["Cosmic epochs are chapters in the history of the universe.", "Inflation was an epoch of very fast stretching.", "Atoms formed in an epoch after the universe cooled.", "The first stars and galaxies appeared after the Dark Era.", "Today the stretching of space is speeding up."] },
+  N: { eq: [["How densities change with expansion", "\\rho_r \\propto a^{-4},\\quad \\rho_m \\propto a^{-3},\\quad \\rho_\\Lambda = \\text{constant}", "Radiation loses energy as it is redshifted, so its density falls fastest. Matter just dilutes with volume. Dark energy density stays constant. So radiation dominated first, then matter, and now dark energy."],
+            ["Matter–radiation equality", "1 + z_{eq} = \\frac{\\Omega_m}{\\Omega_r} \\approx 3400", "The moment when matter and radiation densities were equal, about 50,000 years after the Big Bang."]],
+       ex: [["A tale of three eras", "At z = 10,000 radiation dominated. At z = 1,000 matter dominated. At z ≈ 0.3, about 10 billion years after the Big Bang, dark energy became larger than matter."]],
+       h: [["1948", "Alpher, Bethe and Gamow describe the radiation-dominated early universe."], ["1965", "The CMB discovery fixes the epoch of recombination."], ["1998", "The dark energy era is identified from supernova observations."], ["2022", "JWST finds galaxies at z > 10, probing cosmic dawn."]] },
+  A: { s: [["Epochs and energy scales", "Epochs are tied to energy scales: the Planck epoch (t < 10⁻⁴³ s), inflation (about 10⁻³⁶ to 10⁻³² s), the electroweak epoch (down to 10⁻¹² s, about 100 GeV), the quark–gluon plasma until about 10⁻⁵ s when the QCD transition near 150 MeV forms protons and neutrons, neutrino decoupling at 1 s, electron–positron annihilation at about 6 s, nucleosynthesis between 3 and 20 minutes, matter–radiation equality at about 50,000 years, and recombination at 380,000 years."],
+           ["Late epochs", "After the Dark Era, Population III stars formed at z ≈ 30 to 20, beginning cosmic dawn. Reionization ended by z ≈ 6. Star formation peaked at z ≈ 2 ('cosmic noon') about 10 billion years ago and has declined since. Expansion started to accelerate at z ≈ 0.65, about 6 billion years ago, and dark energy has dominated the energy budget since z ≈ 0.3."]],
+       eq: [["Acceleration onset", "\\ddot a = 0 \\;\\Rightarrow\\; (1+z)^3 = \\frac{2\\Omega_\\Lambda}{\\Omega_m}", "Setting the acceleration to zero in a flat universe with matter and Λ gives this relation. With Ω_m = 0.31 and Ω_Λ = 0.69 it gives z ≈ 0.65."],
+            ["Age of a flat ΛCDM universe", "t_0 = \\frac{2}{3H_0\\sqrt{\\Omega_\\Lambda}}\\sinh^{-1}\\sqrt{\\frac{\\Omega_\\Lambda}{\\Omega_m}}", "Integrating the Friedmann equation gives the age. With H₀ = 67.4 km/s/Mpc and Ω_m = 0.315 it yields 13.8 billion years."]],
+       ex: [["Checking the age", "1/H₀ = 14.5 Gyr, and 2/(3√0.685) = 0.805. arcsinh(√(0.685/0.315)) = 1.18. The product 14.5 × 0.805 × 1.18 ≈ 13.8 billion years."]],
+       h: [["1980s", "The standard hot Big Bang timeline is established, with inflation adding earlier epochs."], ["2003–2013", "WMAP and Planck fix the timing of equality and recombination."], ["2022", "JWST discovers galaxies in the first 400 million years, testing cosmic dawn models."]],
+       f: ["Matter–radiation equality occurred at redshift about 3,400, roughly 50,000 years after the Big Bang.", "Radiation density scales as a⁻⁴ while matter density scales as a⁻³.", "Expansion began accelerating at a redshift of about 0.65, roughly 6 billion years ago.", "Cosmic star formation peaked around z ≈ 2, called cosmic noon.", "The QCD transition from quark–gluon plasma to hadrons occurred at about 150 MeV."] }
+});
+
+XH_X.push({ id: "UC-011",
+  pics: [[WEB, "Simulated cosmic web of matter filaments and voids (NASA SVS)"], [LSE, "Hubble view of cosmic web filaments feeding galaxies (NASA/ESA/STScI)"], [HUDF, "Galaxies strung along the web in a deep field (NASA/ESA)"]],
+  E: { s: [["A giant spider web of galaxies", "If you could see the whole universe, galaxies would look like beads on a giant spider web. Long threads of galaxies cross each other, with enormous empty gaps between them."],
+           ["Threads, knots and holes", "The threads are called filaments, the places where threads meet are knots with crowded clusters of galaxies, and the empty gaps are called voids."]],
+       ex: [["Soap bubbles", "In a foam of soap bubbles, the soap collects along the thin walls and edges while the bubbles themselves are empty. In the universe, galaxies collect along filaments and the voids are the empty bubbles."]],
+       f: ["The cosmic web looks like a giant network of galaxy threads.", "Filaments are long threads of galaxies.", "Galaxy clusters sit where filaments meet.", "Voids are huge, nearly empty regions of space.", "The cosmic web is like foam, with galaxies on the walls and empty bubbles between."] },
+  N: { eq: [["Density contrast", "\\delta = \\frac{\\rho - \\bar\\rho}{\\bar\\rho}", "Positive δ marks filaments and clusters, while δ close to −1 marks voids, which can have less than 10% of the average density."],
+            ["Two-point correlation function", "\\xi(r) = \\left(\\frac{r}{r_0}\\right)^{-\\gamma},\\quad r_0 \\approx 5\\,h^{-1}\\text{Mpc},\\ \\gamma \\approx 1.8", "Measures how much more likely two galaxies are to be separated by r than in a random distribution. The power law shows that clustering is strong at small separations and fades with distance."]],
+       ex: [["Void size", "A typical void is about 20 to 50 Mpc across (65 to 160 million light-years). The Boötes void is about 330 million light-years across."]],
+       h: [["1981", "Kirshner and colleagues discover the Boötes void."], ["1989", "Geller and Huchra discover the CfA Great Wall."], ["2003–2005", "The 2dF and SDSS surveys map hundreds of thousands of galaxies, confirming the web."], ["2005", "The Millennium Simulation reproduces the cosmic web."]] },
+  A: { s: [["Zel'dovich collapse and web formation", "The web arises from the anisotropic collapse of initial density fluctuations: collapse along the shortest axis first forms sheets (pancakes), then filaments, then nodes (the Zel'dovich approximation, 1970). Bond, Kofman and Pogosyan (1996) showed that the initial tidal field shapes the web. Halos at nodes grow by accreting along filaments, which feed cold gas into galaxies."],
+           ["Observing the web", "Redshift surveys such as 2dF, SDSS and DESI map galaxies. Weak lensing maps dark matter filaments, and the Lyman-alpha forest in quasar spectra traces intergalactic gas. MUSE has imaged Lyman-alpha emission from filaments (2016), X-ray absorption by hot filament gas was detected in 2018, and in 2020 fast radio burst dispersion measures located the missing baryons."]],
+       eq: [["Zel'dovich approximation", "\\mathbf{x}(\\mathbf{q},t) = \\mathbf{q} + D(t)\\,\\nabla_{\\mathbf q}\\Phi_0(\\mathbf q)", "Particles move from initial position q along the gradient of the initial potential, scaled by the growth factor D(t). Collapse occurs when 1 − Dλ_i = 0 for an eigenvalue λ_i of the deformation tensor, first along the largest eigenvalue."],
+            ["Power spectrum", "\\langle\\delta(\\mathbf k)\\delta^*(\\mathbf k')\\rangle = (2\\pi)^3 P(k)\\,\\delta_D(\\mathbf k-\\mathbf k')", "P(k) measures how much structure there is on each scale k. The statistics of the cosmic web are encoded in P(k), which turns over near k ≈ 0.02 h/Mpc."]],
+       ex: [["Collapse order", "If the deformation eigenvalues satisfy λ₁ > λ₂ > λ₃, collapse along the λ₁ axis forms a sheet first, collapse along λ₂ then makes a filament, and λ₃ completes a node."]],
+       h: [["1970", "Zel'dovich proposes pancake collapse."], ["1996", "Bond, Kofman and Pogosyan present the cosmic web theory."], ["2005", "Springel and colleagues publish the Millennium Simulation."], ["2018–2020", "Hot gas in filaments is detected and the missing baryons are located."]],
+       f: ["The Zel'dovich approximation predicts that collapse occurs first along the shortest axis, forming sheets.", "The matter power spectrum P(k) turns over near k ≈ 0.02 h/Mpc.", "The Lyman-alpha forest in quasar spectra traces intergalactic gas in the cosmic web.", "Weak gravitational lensing can map dark matter filaments.", "Fast radio burst dispersion measures were used in 2020 to locate the missing baryons."] }
+});
+
+XH_X.push({ id: "UC-012",
+  pics: [[WTL, "Reionization on the cosmic timeline (NASA)"], [HDF, "The Hubble Deep Field: galaxies descended from the sources of reionization (NASA)"], [HUDF, "Hubble Ultra Deep Field, faint early galaxies (NASA/ESA)"]],
+  E: { s: [["Stars switch the lights on", "When the first stars and galaxies formed, they gave off strong ultraviolet light. This powerful light hit the gas around them and knocked electrons off the atoms, turning the gas back into charged particles."],
+           ["The second great change", "This is called reionization. It spread like bubbles growing and merging until nearly all the gas between galaxies was ionized, about a billion years after the Big Bang."]],
+       ex: [["Bubbles of light", "Imagine many lamps in a dark, foggy field, each lamp clearing a bubble around itself. The bubbles grow and join until the whole field is clear. That is how reionization spread."]],
+       f: ["Reionization was caused by ultraviolet light from the first stars and galaxies.", "Reionization spread like growing bubbles that merged.", "During reionization the gas between galaxies lost its electrons again.", "Reionization was almost complete about one billion years after the Big Bang.", "Reionization ended the Dark Era."] },
+  N: { eq: [["Thomson optical depth", "\\tau = \\int_0^{z_{max}} n_e(z)\\,\\sigma_T\\,c\\,\\frac{dt}{dz}\\,dz \\approx 0.054", "CMB photons scatter off the free electrons of reionization, so τ measures how much ionized gas exists. Planck measures τ ≈ 0.054, which puts the midpoint of reionization near z ≈ 7.7."],
+            ["Strömgren radius", "R_S = \\left(\\frac{3\\dot N_{ion}}{4\\pi\\alpha_B n_H^2}\\right)^{1/3}", "The radius of the ionized bubble around a source emitting Ṅ ionizing photons per second into hydrogen of density n_H, where α_B is the recombination coefficient."]],
+       ex: [["Bubble size", "A source emitting 10⁴⁹ ionizing photons per second into gas with n_H = 1 cm⁻³ and α_B = 2.6 × 10⁻¹³ cm³/s makes an ionized bubble of radius about 70 parsecs."]],
+       h: [["1965", "Gunn and Peterson show how quasar spectra can limit neutral hydrogen between galaxies."], ["2001", "Quasars at z ≈ 6 show Gunn–Peterson troughs, suggesting reionization ended near z ≈ 6."], ["2003", "WMAP's high optical depth hints at earlier reionization."], ["2016–18", "Planck finds a lower optical depth and later reionization."]] },
+  A: { s: [["Sources and topology", "Reionization sources are likely faint star-forming galaxies, with a small contribution from quasars. The escape fraction of ionizing photons from galaxies, perhaps 10 to 20%, is a key uncertainty. Ionization proceeds inside-out: dense regions near galaxies ionize first and voids last. Long Lyman-alpha troughs in quasar spectra suggest the process ended late, near z ≈ 5.3."],
+           ["Constraints and JWST", "Constraints combine the CMB optical depth, the kinetic Sunyaev–Zel'dovich effect, quasar damping wings and the fraction of galaxies showing Lyman-alpha emission. JWST has found abundant UV-bright galaxies at z > 10, possibly more than models predicted, raising a debate about whether early galaxies were so efficient at making ionizing photons that the photon budget is oversupplied."]],
+       eq: [["Ionized fraction evolution", "\\frac{dQ_{HII}}{dt} = \\frac{\\dot n_{ion}}{\\bar n_H} - \\frac{Q_{HII}}{t_{rec}}", "Q is the volume fraction of ionized hydrogen. It grows with the ionizing photon emissivity ṅ_ion and is reduced by recombinations, which clumpy gas speeds up."],
+            ["Gunn–Peterson optical depth", "\\tau_{GP} \\approx 2.3\\times10^{5}\\,x_{HI}\\left(\\frac{1+z}{7}\\right)^{3/2}", "Even a neutral fraction of 10⁻⁴ gives τ > 20, so quasar light just blueward of Lyman-alpha is absorbed almost completely. This is why quasars at z > 6 show dark troughs."]],
+       ex: [["Opaque even when nearly ionized", "For x_HI = 10⁻⁴ at z = 6, τ ≈ 2.3 × 10⁵ × 10⁻⁴ = 23, so transmission is e⁻²³ ≈ 10⁻¹⁰. Seeing any flux means the gas is ionized to far better than 99.99%."]],
+       h: [["1965", "Gunn and Peterson predict an absorption trough from neutral hydrogen."], ["2001", "Becker and colleagues, and Fan and colleagues, find the trough in quasars at z ≈ 6."], ["2018", "Planck measures τ ≈ 0.054."], ["2022", "JWST discovers UV-bright galaxies at z > 10, while long troughs suggest reionization ended near z ≈ 5.3."]],
+       f: ["The Thomson optical depth measured by Planck is about 0.054.", "Reionization is thought to proceed inside-out, with dense regions ionizing first.", "The Gunn–Peterson trough in quasar spectra indicates neutral hydrogen in the intergalactic medium.", "Reionization may have ended near redshift 5.3.", "The escape fraction of ionizing photons from galaxies is a key uncertainty in reionization models."] }
+});
+
+XH_X.push({ id: "UC-013",
+  pics: [[INF, "Inflation on the cosmic timeline, where many multiverse ideas begin (NASA/WMAP)"], [CMB, "The CMB map, where bubble-collision marks would be searched for (NASA/WMAP)"]],
+  E: { s: [["Is our universe the only one?", "Some scientists wonder whether our universe could be just one of many, like one bubble in a huge bubble bath. This idea is called the multiverse."],
+           ["An idea, not a fact", "Nobody has seen another universe, and we might never be able to. So the multiverse is speculation for now. Scientists keep discussing it, but they need ways to test it."]],
+       ex: [["A bubble bath", "In a bubble bath, each bubble is its own little round world, and there are many of them. Some ideas say universes could be like those bubbles, each with its own rules."]],
+       f: ["The multiverse is the idea that our universe might be one of many.", "Nobody has observed another universe.", "The multiverse is speculation, not a proven fact.", "The multiverse idea is like many bubbles in a bubble bath.", "Scientists need tests to know if the multiverse is real."] },
+  N: { eq: [["Growth of volume in eternal inflation", "\\frac{dV}{dt} = 3H\\,V", "In eternal inflation, regions keep inflating exponentially faster than they decay, so the total inflating volume grows forever and bubble universes keep forming inside it."],
+            ["Size of the string landscape", "N_{vac} \\sim 10^{500}", "String theory may allow roughly 10⁵⁰⁰ different vacuum states, each with different physical constants. This landscape is the basis for many multiverse models."]],
+       ex: [["A huge number", "10⁵⁰⁰ is far more than the roughly 10⁸⁰ atoms in the observable universe. If each vacuum became a bubble, almost every combination of constants might occur somewhere."]],
+       h: [["1957", "Hugh Everett proposes the many-worlds interpretation of quantum mechanics."], ["1983–86", "Steinhardt, Vilenkin and Linde develop eternal inflation."], ["2003", "Susskind popularises the string theory landscape."], ["2011", "Searches for bubble-collision marks in the WMAP map find no evidence."]] },
+  A: { s: [["Kinds of multiverse", "Max Tegmark classified them in four levels. Level I is regions of an infinite space beyond our horizon, with the same laws. Level II is bubble universes from eternal inflation, possibly with different constants. Level III is the branches of the quantum wavefunction in the many-worlds interpretation. Level IV is mathematically distinct structures. Only the first follows straightforwardly from an infinite universe; the others are more speculative."],
+           ["Anthropic arguments and testability", "In 1987 Weinberg used anthropic reasoning to bound the cosmological constant before dark energy was observed, which is often cited as the best support for multiverse reasoning. Critics argue that the multiverse is unfalsifiable and suffers from the measure problem, which makes probabilities in an infinite spacetime ambiguous. Possible tests include CMB bubble collisions, a small spatial curvature, and variations of constants."]],
+       eq: [["Weinberg's anthropic bound on Λ", "\\rho_\\Lambda \\lesssim (\\text{a few}) \\times \\rho_{m,0}", "If Λ were much larger, structures would not have formed, so observers should see a Λ not much larger than the present matter density. The observed ratio ρΛ/ρm is about 2.2, consistent with the bound."],
+            ["Eternal inflation condition", "\\frac{H}{2\\pi} > \\frac{|\\dot\\phi|}{H}", "In some regions the quantum jump of the inflaton per Hubble time, H/2π, exceeds its classical roll, φ̇/H. Those regions can climb the potential and keep inflating forever."]],
+       ex: [["The measure problem", "In an infinite inflating spacetime the number of observers of every kind is infinite, so relative frequencies depend on how the volume is cut off. Different cutoffs give different probabilities."]],
+       h: [["1987", "Weinberg uses anthropic reasoning to bound the cosmological constant."], ["1998", "Supernovae reveal a small positive cosmological constant, near the bound."], ["2003", "Tegmark proposes the four-level multiverse classification."], ["2011", "Searches for bubble collisions in WMAP find no significant signal."]],
+       f: ["Max Tegmark proposed a four-level classification of multiverses.", "Weinberg used anthropic reasoning in 1987 to bound a small positive cosmological constant.", "In eternal inflation, quantum jumps of size H/2π can exceed the classical roll φ̇/H.", "The measure problem makes probabilities in an infinite multiverse ambiguous.", "The string landscape may contain roughly 10⁵⁰⁰ vacuum states."] }
+});
+
+XH_X.push({ id: "UC-014",
+  pics: [[EXP, "Light waves stretch as space expands (NASA)"], [WTL, "Expansion across cosmic history (NASA)"], [WM("Lambda-Cold Dark Matter, Accelerated Expansion of the Universe, Big Bang-Inflation.svg"), "Diagram of accelerating expansion (Wikimedia Commons / NASA)"]],
+  E: { s: [["Space is stretching", "Space itself is growing bigger all the time. Galaxies are not zooming through empty space; the space between them is stretching, so they move farther apart."],
+           ["Does it make us bigger?", "No. You, the Earth, the Sun and our galaxy stay the same size because gravity and other forces hold them together. Only the huge gaps between faraway galaxies grow."]],
+       ex: [["Raisin bread", "Raisins in dough move apart as the dough rises. Every raisin sees all the others moving away, and no raisin is the centre. The raisins are galaxies and the dough is space."]],
+       f: ["The universe's expansion means the space between galaxies is growing.", "Galaxies are carried apart by stretching space.", "You and the Earth do not expand because forces hold things together.", "The raisin bread picture shows that expansion has no centre.", "The expansion of the universe is now speeding up."] },
+  N: { eq: [["Scale factor and distance", "d(t) = a(t)\\,\\chi", "The proper distance d between two galaxies is the scale factor a(t) multiplied by their fixed comoving separation χ. As a grows, d grows even though χ stays fixed."],
+            ["Cosmological redshift", "1 + z = \\frac{a_0}{a_{emit}} = \\frac{\\lambda_{obs}}{\\lambda_{emit}}", "Light stretches along with space. If space doubles in size while light travels, the wavelength doubles and 1 + z = 2."]],
+       ex: [["Stretched hydrogen light", "Hydrogen Lyman-alpha light has a wavelength of 121.6 nm. From a galaxy at z = 6 it arrives at 121.6 × 7 = 851 nm, in the near infrared."]],
+       h: [["1915–17", "Einstein's general relativity points to an expanding or contracting universe, which he avoids by adding a cosmological constant."], ["1922", "Friedmann finds expanding solutions."], ["1929", "Hubble's observations confirm expansion."], ["1998", "Two supernova teams discover accelerating expansion; Perlmutter, Riess and Schmidt share the 2011 Nobel Prize."]] },
+  A: { s: [["Deceleration, then acceleration", "Matter and radiation decelerate expansion, while a cosmological constant accelerates it. The deceleration parameter q changed from +0.5 in the matter era to about −0.53 today. Dark energy is described by an equation of state w = p/ρc² close to −1. Planck, supernovae and BAO give w near −1.03 ± 0.03, consistent with a cosmological constant, but the DESI results of 2024–25 hint that dark energy may be weakening."],
+           ["Horizons and the future", "With a cosmological constant the universe approaches de Sitter expansion with H tending to H₀√Ω_Λ ≈ 56 km/s/Mpc. The cosmic event horizon, about 16 billion light-years today, means galaxies beyond it can never receive a signal sent now. Most currently visible galaxies will eventually leave causal contact, and the CMB will become undetectable over tens of billions of years."]],
+       eq: [["Deceleration parameter", "q = -\\frac{\\ddot a\\,a}{\\dot a^2} = \\frac{\\Omega_m}{2} - \\Omega_\\Lambda", "For flat ΛCDM today, q = 0.31/2 − 0.69 ≈ −0.53. It is negative, so the expansion is accelerating."],
+            ["Dark energy equation of state", "w = \\frac{p}{\\rho c^2},\\quad \\rho_{DE}\\propto a^{-3(1+w)}", "w = −1 gives a constant density, a cosmological constant. w < −1 would give a growing density, called phantom energy."]],
+       ex: [["Redshift to scale factor", "A supernova at z = 0.5 exploded when the universe was 1/(1 + 0.5) = 67% of its present size, a scale factor of a = 0.67."]],
+       h: [["1998", "The High-z Supernova Search Team and the Supernova Cosmology Project discover acceleration."], ["2011", "The Nobel Prize in Physics honours the discovery."], ["2024–25", "DESI BAO data combined with supernovae and the CMB hint that dark energy may weaken with time."]],
+       f: ["The deceleration parameter q of flat ΛCDM is about −0.53 today.", "Dark energy with equation of state w = −1 has constant density.", "Planck, supernovae and BAO give w close to −1.", "DESI results hint that dark energy might weaken over time.", "With a cosmological constant the cosmic event horizon is about 16 billion light-years."] }
+});
+
+XH_X.push({ id: "UC-015",
+  pics: [[LSE, "Hubble view of the cosmic web where galaxies grow (NASA/ESA/STScI)"], [WEB, "Simulated growth of structure (NASA SVS)"], [EPO, "Galaxies at different cosmic epochs (NASA/ESA)"]],
+  E: { s: [["From tiny ripples to huge structures", "At the beginning, some places in the universe had a tiny bit more matter than others. Gravity pulled matter toward those places, and they slowly grew into galaxies and clusters of galaxies."],
+           ["Small first, then big", "Small clumps formed first. Over billions of years small clumps merged to make bigger and bigger ones, like raindrops joining into puddles."]],
+       ex: [["A snowball rolling downhill", "A small snowball picks up more snow and grows faster as it gets bigger. In the same way, a place with slightly more matter attracts more matter and grows."]],
+       f: ["Large structures grew from tiny differences in the early universe.", "Gravity pulls matter toward places with more matter.", "Small clumps formed first and merged into bigger ones.", "Galaxies and clusters of galaxies are the result of structure growth.", "The growth of structure took billions of years."] },
+  N: { eq: [["Growth of density fluctuations", "\\delta(t) \\propto a(t)\\quad \\text{(matter era)}", "Overdense regions grow in proportion to the scale factor while matter dominates. Dark energy later slows the growth."],
+            ["Spherical collapse threshold", "\\delta_c = 1.686", "A region collapses into a bound halo when its linear overdensity reaches about 1.686. The resulting halo is about 200 times denser than the cosmic mean."]],
+       ex: [["Growing by 1,000", "A density difference of 10⁻⁵ at z ≈ 1,000 grows to about 10⁻² by today in linear theory. Dark matter began growing earlier, so structure formed in time."]],
+       h: [["1902", "James Jeans shows that gravity makes a uniform gas unstable to collapse."], ["1970", "Zel'dovich proposes the pancake picture."], ["1984", "Blumenthal, Faber, Primack and Rees propose cold dark matter structure formation."], ["2005", "The Millennium Simulation follows 10 billion particles through cosmic history."]] },
+  A: { s: [["Halo mass function and hierarchical growth", "Press and Schechter (1974) derived the number of halos of mass M from the statistics of the initial Gaussian density field, and Sheth and Tormen later improved it. Halos merge hierarchically, and merger trees describe the history of each halo. The NFW profile describes the density inside halos. Baryonic physics, such as gas cooling, star formation, and supernova and black-hole feedback, shapes the galaxies that form within them."],
+           ["Tests and tensions", "Simulations such as IllustrisTNG, EAGLE and FLAMINGO reproduce many observed properties. The S₈ parameter from weak lensing surveys such as KiDS and DES came out slightly lower than Planck predicts, a mild tension that has shrunk in recent analyses. Small-scale issues such as the cusp–core and missing satellites problems are largely eased by baryonic effects."]],
+       eq: [["Linear growth equation", "\\ddot\\delta + 2H\\dot\\delta = 4\\pi G\\bar\\rho_m\\,\\delta", "The Hubble drag term 2Hδ̇ slows growth. In matter domination δ ∝ a. When dark energy dominates, growth stalls."],
+            ["NFW halo profile", "\\rho(r) = \\frac{\\rho_s}{(r/r_s)(1 + r/r_s)^2}", "Navarro, Frenk and White found this universal density profile in dark matter simulations. The slope is −1 at small radii and −3 at large radii."]],
+       ex: [["Mass function intuition", "In the Press–Schechter picture, halos below a characteristic mass M* are common and halos above it are exponentially rare. At z = 0, M* is about 10¹³ solar masses. At z = 2 it is far smaller, so massive clusters assembled late."]],
+       h: [["1974", "Press and Schechter derive the halo mass function."], ["1996", "Navarro, Frenk and White find the universal halo profile."], ["2005", "The Millennium Simulation is published."], ["2014–15", "The Illustris and EAGLE simulations reproduce realistic galaxies."]],
+       f: ["The Press–Schechter formalism predicts the number of dark matter halos as a function of mass.", "The NFW profile has a density slope of −1 at small radii and −3 at large radii.", "A linear overdensity of about 1.686 marks the threshold for spherical collapse.", "The weak-lensing S₈ parameter showed a mild tension with Planck predictions.", "Massive clusters assembled late because the characteristic collapsing mass grows with time."] }
+});
+
+XH_X.push({ id: "UC-016",
+  pics: [[BAO, "Visualization of the baryon acoustic oscillation feature in galaxy clustering (NASA SVS)"], [WEB, "The cosmic web, where the BAO ring appears as a subtle excess (NASA SVS)"], [CMB, "CMB acoustic oscillations set the BAO scale (NASA/WMAP)"]],
+  E: { s: [["Sound waves in the early universe", "Very early on, the universe was a hot, thick soup. Waves like sound ripples moved through it, like when you drop a stone in a pond and rings spread out."],
+           ["The rings were frozen", "When the universe cooled and became transparent, the ripples stopped. Their size was frozen into the universe, so galaxies are slightly more likely to be found at that special distance from one another."]],
+       ex: [["Ripples in a pond", "Throw a stone in a pond and watch the rings spread. If the pond froze instantly, the rings would stay there. BAO are the frozen rings from the early universe."]],
+       f: ["BAO are frozen sound waves from the early universe.", "The early universe was a hot soup that carried sound waves.", "The sound waves stopped moving when the universe became transparent.", "Galaxies are slightly more likely to be found at the frozen ring distance.", "BAO can be used like a ruler for measuring the universe."] },
+  N: { eq: [["Sound speed in the early plasma", "c_s = \\frac{c}{\\sqrt{3(1+R)}},\\quad R = \\frac{3\\rho_b}{4\\rho_\\gamma}", "Sound travels at about 57% of the speed of light (c/√3) in the photon-dominated plasma, and slower as baryons add inertia."],
+            ["Sound horizon", "r_s = \\int_{z_d}^{\\infty}\\frac{c_s\\,dz}{H(z)} \\approx 147\\ \\text{Mpc}", "The distance sound waves travelled before the drag epoch. This comoving length is the standard ruler."]],
+       ex: [["Using the ruler", "At z = 0.5 the comoving distance is about 1,900 Mpc, so the 147 Mpc ruler spans about 147/1,900 ≈ 0.077 radians, or 4.4 degrees, on the sky."]],
+       h: [["1970", "Peebles and Yu, and Sunyaev and Zeldovich, predict acoustic oscillations in the early universe."], ["2000", "BOOMERanG and MAXIMA measure the CMB acoustic peaks."], ["2005", "Eisenstein and colleagues with SDSS, and Cole and colleagues with 2dF, detect BAO in galaxy clustering."], ["2014", "BOSS measures the expansion history with BAO to about 1% precision."]] },
+  A: { s: [["The BAO signal and its use", "In the galaxy correlation function the BAO appears as a peak near 105 h⁻¹ Mpc, and in the power spectrum as small wiggles. Measuring the peak position along and across the line of sight gives H(z) and the angular diameter distance separately, the Alcock–Paczyński test. Reconstruction, which undoes the bulk motions of galaxies, sharpens the peak. BOSS and eBOSS reached distances to 1% precision up to z ≈ 2.2, and DESI extends to z above 3 with the Lyman-alpha forest."],
+           ["DESI and dark energy", "DESI results from 2024 and 2025, combined with the CMB and supernovae, favour dark energy with w₀ above −1 and wₐ below 0 at roughly 2.8 to 4.2 standard deviations depending on the supernova sample. This may mean dark energy evolves, or it could be a statistical fluke or systematic error. More data are awaited."]],
+       eq: [["Angular scale of the BAO ring", "\\theta_{BAO} = \\frac{r_s}{D_M(z)}", "The transverse BAO scale, with D_M the comoving angular diameter distance, measures the distance to redshift z when r_s is known from the CMB."],
+            ["Radial scale", "\\Delta z_{BAO} = \\frac{r_s\\,H(z)}{c}", "Along the line of sight the BAO scale appears as a redshift interval, which measures H(z) directly."]],
+       ex: [["Radial measurement", "At z = 0.5, H ≈ 89 km/s/Mpc, so Δz = 147 × 89 / 299,792 ≈ 0.044. The ruler spans about 0.044 in redshift along the line of sight."]],
+       h: [["2005", "First detections of BAO in SDSS and 2dF."], ["2012–14", "BOSS measures BAO in galaxies and the Lyman-alpha forest to about 1%."], ["2024", "DESI first-year results hint at evolving dark energy."], ["2025", "DESI three-year results strengthen the hint to roughly 2.8 to 4.2 standard deviations."]],
+       f: ["The BAO peak in the galaxy correlation function is at about 105 h⁻¹ Mpc.", "The Alcock–Paczyński test uses BAO to measure H(z) and the angular diameter distance separately.", "BAO reconstruction sharpens the peak by undoing galaxy bulk motions.", "DESI results with the CMB and supernovae hint that dark energy may evolve with time.", "The speed of sound in the early plasma is about c/√3 when baryons are neglected."] }
+});
+
+XH_X.push({ id: "UC-017",
+  pics: [[DFL, "Map of the claimed dark flow direction (NASA GSFC)"], [CMB, "CMB map used to search for the kinematic SZ effect (NASA/WMAP)"], [WEB, "Large-scale structure that might pull on clusters (NASA SVS)"]],
+  E: { s: [["Do big groups of galaxies drift together?", "Scientists once reported that huge groups of galaxies seem to drift in the same direction across a vast part of the universe, as if something were pulling them. They named it dark flow."],
+           ["An unsolved puzzle", "Other scientists checked and did not find the same drift, so dark flow is not an accepted fact. Scientists keep testing it because the answer would teach us how the universe is arranged."]],
+       ex: [["Fish swimming together", "Imagine a huge school of fish all swimming the same way across a whole ocean, not just a small group. Dark flow would be like that, but with galaxy clusters."]],
+       f: ["Dark flow is the claim that big groups of galaxies drift in the same direction.", "Dark flow was reported by a team of scientists in 2008.", "Other scientists did not find the same drift.", "Dark flow is not an accepted fact.", "Scientists keep testing dark flow because it teaches about the universe's structure."] },
+  N: { eq: [["Kinematic Sunyaev–Zel'dovich effect", "\\frac{\\Delta T}{T_{CMB}} = -\\tau_e\\,\\frac{v_r}{c}", "Free electrons in a moving galaxy cluster Doppler-shift the CMB photons passing through. The temperature shift is proportional to the cluster's optical depth τ_e and its line-of-sight velocity v_r."],
+            ["Typical size of the signal", "\\Delta T \\approx 9\\ \\mu\\text{K}\\left(\\frac{\\tau_e}{10^{-3}}\\right)\\left(\\frac{v_r}{1000\\ \\text{km/s}}\\right)", "A cluster with τ_e of about 10⁻³ moving at 1,000 km/s changes the CMB temperature by only about 9 microkelvin."]],
+       ex: [["Why averaging is needed", "A single cluster's signal of about 9 μK is buried in CMB fluctuations of around 100 μK, so analyses average the signal over hundreds or thousands of clusters."]],
+       h: [["2008", "Kashlinsky, Atrio-Barandela, Kocevski and Ebeling report a coherent flow of about 600 to 1,000 km/s."], ["2009", "Keisler re-analyses the data and finds the signal consistent with noise."], ["2010", "The Kashlinsky team claims the flow extends to about 800 Mpc."], ["2014", "Planck's analysis finds no evidence for dark flow."]] },
+  A: { s: [["The original analysis", "Kashlinsky and colleagues used WMAP temperature maps and X-ray cluster catalogues. After filtering the maps they compared temperatures at the positions of clusters with a pairwise estimator and found a dipole pattern that implies a bulk flow of 600 to 1,000 km/s toward a point in the southern sky, on scales beyond 300 Mpc. That is larger than ΛCDM expects, which is about 100 to 200 km/s."],
+           ["Rebuttals and where it stands", "Planck Intermediate Results XIII (2014) found the kSZ dipole at cluster positions consistent with zero, with upper limits well below the claim. Osborne and colleagues (2011) and Mody and Hajian (2012) also found no evidence. Bulk flows measured from galaxy peculiar velocities are consistent with ΛCDM. So dark flow is not considered established, though bulk flows remain a test of the cosmological principle."]],
+       eq: [["Pairwise kSZ estimator", "\\hat T_{kSZ}(r) = -\\frac{\\sum_{i<j}(T_i - T_j)\\,c_{ij}}{\\sum_{i<j}c_{ij}^2},\\quad c_{ij}=\\hat r_{ij}\\cdot\\frac{\\hat r_i+\\hat r_j}{2}", "Computes the average temperature difference between cluster pairs, weighted by the pair geometry c_ij, which responds to a bulk flow. A similar pairwise approach was used for the ACT detection of the kSZ effect in 2012."],
+            ["Bulk flow in ΛCDM", "v_{rms}(R) = H_0\\,f\\,\\sigma_{v}(R),\\quad \\sigma_v^2(R)=\\frac{1}{2\\pi^2}\\int P(k)\\,W^2(kR)\\,dk", "In linear theory the rms bulk flow in a sphere of radius R is fixed by the matter power spectrum. For R of about 300 Mpc, ΛCDM predicts bulk flows of roughly 100 to 200 km/s, well below the claimed 600 to 1,000 km/s."]],
+       ex: [["Comparison", "A claimed 800 km/s flow compared with an expected 150 km/s is about 5 times larger in speed and about 28 times larger in kinetic energy."]],
+       h: [["2008", "Kashlinsky and colleagues report dark flow."], ["2011–12", "Osborne and colleagues, and Mody and Hajian, find no evidence."], ["2014", "Planck Intermediate Results XIII find no dark flow."], ["2020s", "Cosmicflows-4 and kSZ studies with ACT and Planck constrain bulk flows."]],
+       f: ["Dark flow claims used the pairwise kinematic Sunyaev–Zel'dovich estimator on WMAP maps.", "ΛCDM predicts bulk flows of roughly 100 to 200 km/s on scales near 300 Mpc.", "Kashlinsky and colleagues claimed a bulk flow of 600 to 1,000 km/s.", "Planck Intermediate Results XIII found the kSZ dipole consistent with zero.", "Bulk flows from galaxy peculiar velocities are consistent with ΛCDM expectations."] }
+});
+
+
+
+var XH_A2 = {
+"UC-001": { s: [
+  ["Geometry, topology and the particle horizon", "The Friedmann–Lemaître–Robertson–Walker metric fixes the local geometry of space but not its global topology. A spatially flat universe may be infinite, or it may be a finite, torus-like space with identified faces. Searches for matched circles and correlated patterns in the WMAP and Planck CMB maps find no evidence of non-trivial topology on scales up to the diameter of the last-scattering surface, roughly 28 Gpc in comoving terms. The particle horizon, χ_p = c∫dt/a(t), defines the observable volume and is about 14 Gpc (46 billion light-years) today. Any statement about the extent of the universe beyond that horizon is an extrapolation of the ΛCDM model, not a measurement."],
+  ["Composition, tensions and the road ahead", "The ΛCDM parameters are now measured at the percent level by Planck (CMB), BOSS and DESI (baryon acoustic oscillations) and Pantheon+ (Type Ia supernovae). Three tensions remain: the Hubble constant (about 5σ), a mild S₈ discrepancy in weak lensing, and recent hints of evolving dark energy from DESI. Forthcoming facilities will show whether these reflect systematic error or new physics: ESA's Euclid (launched 2023, with NASA contributions), NASA's Nancy Grace Roman Space Telescope (scheduled to launch by May 2027), the Vera C. Rubin Observatory, the Simons Observatory and JAXA's LiteBIRD."]],
+  f: ["The particle horizon of the observable universe is about 14 gigaparsecs in comoving distance.", "Searches for matched circles in WMAP and Planck CMB maps found no evidence of non-trivial cosmic topology."],
+  r: ["Planck Collaboration (2020). Planck 2018 results. VI. Cosmological parameters. A&A 641, A6.", "Peebles, P. J. E. (1993). Principles of Physical Cosmology. Princeton University Press.", "Weinberg, S. (2008). Cosmology. Oxford University Press."] },
+
+"UC-002": { s: [
+  ["Thermal history in the radiation era", "In the radiation-dominated epoch the expansion rate scales as H ≈ 1.66 g*^{1/2} T²/M_Pl, where g* counts the effective relativistic degrees of freedom. In the Standard Model g* falls from 106.75 above 100 GeV to 3.36 after electron–positron annihilation. Neutrino decoupling near 1 MeV, followed by e⁺e⁻ annihilation, heats the photons relative to the neutrinos and leaves T_ν/T_γ = (4/11)^{1/3}. The relic neutrino background of about 112 cm⁻³ per flavour and an effective neutrino number N_eff = 3.044 are firm predictions; Planck measures N_eff = 2.99 ± 0.17."],
+  ["Observational status", "The baryon-to-photon ratio η ≈ 6.1 × 10⁻¹⁰, determined independently from the CMB acoustic peaks, predicts a primordial deuterium abundance D/H ≈ 2.5 × 10⁻⁵, in agreement with measurements in metal-poor quasar absorption systems (Cooke et al. 2018). The inferred primordial helium mass fraction Y_p ≈ 0.245 from metal-poor H II regions also matches. The roughly threefold excess of predicted ⁷Li over observation persists and has been addressed through stellar depletion, nuclear reaction rates and new physics. Conditions before about 10⁻⁴³ s lie outside the model, and the initial singularity is a limit of classical general relativity, not a prediction to be tested."]],
+  f: ["After electron–positron annihilation the neutrino temperature is lower than the photon temperature by the factor (4/11)^(1/3).", "The Standard Model prediction for the effective number of neutrino species is N_eff = 3.044."],
+  r: ["Alpher, R. A., Bethe, H., & Gamow, G. (1948). The origin of chemical elements. Phys. Rev. 73, 803.", "Cyburt, R. H., et al. (2016). Big bang nucleosynthesis: Present status. Rev. Mod. Phys. 88, 015004.", "Cooke, R. J., et al. (2018). Precision measures of the primordial abundance of deuterium. ApJ 855, 102."] },
+
+"UC-003": { s: [
+  ["Distance ladder and calibration", "Extragalactic distances are built in rungs. Geometric anchors (Gaia parallaxes of Milky Way Cepheids, detached eclipsing binaries in the Large Magellanic Cloud and the maser distance to NGC 4258) calibrate the Cepheid period–luminosity relation. Cepheids in nearby supernova host galaxies then calibrate the peak luminosity of Type Ia supernovae, which are observed far into the Hubble flow. In 2022 the SH0ES team reported H₀ = 73.04 ± 1.04 km/s/Mpc using the Hubble Space Telescope. Calibrations using the tip of the red giant branch (Freedman and colleagues, about 70 km/s/Mpc) and J-region asymptotic giant branch stars give lower values, and the role of systematics such as Cepheid crowding is still debated."],
+  ["Early-universe inference and prospects", "The CMB fixes the sound horizon and the angular acoustic scale with great precision, so its inferred H₀ depends on the assumed cosmological model. Reducing the sound horizon by about 7% before recombination (through early dark energy, extra relativistic species or a varying electron mass) could raise the inferred H₀, but such models typically worsen other fits such as S₈. Independent routes include gravitational-wave standard sirens (GW170817 gave about 70 +12/−8 km/s/Mpc), time-delay gravitational lensing (H0LiCOW, TDCOSMO) and the BAO-plus-BBN inverse distance ladder. JWST observations of Cepheids, tip-of-the-red-giant-branch and J-region stars in supernova hosts directly test the photometric systematics."]],
+  f: ["SH0ES reported H₀ = 73.04 ± 1.04 km/s/Mpc in 2022 using Cepheids and Type Ia supernovae.", "The GW170817 standard-siren measurement gave an H₀ of about 70 km/s/Mpc with large uncertainty."],
+  r: ["Lemaître, G. (1927). Un univers homogène de masse constante. Ann. Soc. Sci. Bruxelles 47, 49.", "Hubble, E. (1929). A relation between distance and radial velocity among extra-galactic nebulae. PNAS 15, 168.", "Riess, A. G., et al. (2022). A comprehensive measurement of the local value of the Hubble constant. ApJ 934, L7."] },
+
+"UC-004": { s: [
+  ["Quantum origin of perturbations", "Quantum fluctuations of the inflaton, with amplitude H/2π at horizon exit, are stretched beyond the Hubble radius, where they freeze and become classical curvature perturbations ζ. The dimensionless scalar power spectrum is P_ζ = H²/(8π² ε M_Pl²), evaluated at k = aH, and Planck measures A_s ≈ 2.1 × 10⁻⁹ at k = 0.05 Mpc⁻¹. Tensor modes, the two polarizations of primordial gravitational waves, have P_t = 2H²/(π² M_Pl²), so a measurement of r = P_t/P_ζ would fix the energy scale of inflation, V^{1/4} ≈ 1.04 × 10¹⁶ GeV (r/0.01)^{1/4}."],
+  ["Model space and future tests", "Planck and BICEP/Keck data (r < 0.036 at 95% confidence) disfavour simple monomial potentials such as φ² and favour plateau potentials, including Starobinsky R² inflation and Higgs inflation, which predict r of about 0.003 to 0.004. Future B-mode searches by the Simons Observatory, BICEP Array and JAXA's LiteBIRD aim to reach r ≈ 10⁻³. Primordial non-Gaussianity, constrained by Planck to f_NL(local) = −0.9 ± 5.1, limits multi-field scenarios. Alternatives such as bouncing and ekpyrotic cosmologies must reproduce the same near scale-invariance together with a very small tensor amplitude."]],
+  f: ["Planck measures the amplitude of primordial scalar fluctuations as A_s of about 2.1 × 10⁻⁹.", "Plateau potentials such as Starobinsky R² inflation predict a tensor-to-scalar ratio r near 0.003."],
+  r: ["Guth, A. H. (1981). Inflationary universe: A possible solution to the horizon and flatness problems. Phys. Rev. D 23, 347.", "Linde, A. D. (1982). A new inflationary universe scenario. Phys. Lett. B 108, 389.", "BICEP/Keck Collaboration (2021). Improved constraints on primordial gravitational waves. Phys. Rev. Lett. 127, 151301."] },
+
+"UC-005": { s: [
+  ["Acoustic physics and parameter extraction", "Before decoupling, photon–baryon fluid oscillations driven by gravitational potential wells produce peaks in the angular power spectrum at ℓ_n ≈ nπ D_M/r_s. The first peak fixes the acoustic angular scale θ* = r_s/D_M ≈ 0.0104, measured by Planck to about 0.03%. The relative heights of the odd and even peaks give the baryon density Ω_b h² ≈ 0.0224. Silk damping at high ℓ and gravitational lensing, which smooths the peaks and converts E-mode into B-mode polarization, supply further information, and together with BAO limit the sum of neutrino masses to below about 0.12 eV (95% confidence)."],
+  ["Distortions, anomalies and frontiers", "Spectral distortions of μ-type and y-type arise from energy injection at redshifts above and below about 5 × 10⁴. The standard Compton-y distortion from structure formation is of order 10⁻⁶, below the FIRAS limit |y| < 1.5 × 10⁻⁵. Large-angle anomalies, including the low quadrupole and a hemispherical power asymmetry, are marginal (about 2 to 3σ) and may be statistical. The Atacama Cosmology Telescope and the South Pole Telescope extend the power spectrum to ℓ of several thousand and give independent parameter estimates, including H₀ near 68 km/s/Mpc, consistent with Planck."]],
+  f: ["Planck measured the CMB acoustic angular scale θ* to about 0.03% precision.", "Planck together with BAO limits the sum of neutrino masses to below about 0.12 eV."],
+  r: ["Penzias, A. A., & Wilson, R. W. (1965). A measurement of excess antenna temperature at 4080 Mc/s. ApJ 142, 419.", "Fixsen, D. J. (2009). The temperature of the cosmic microwave background. ApJ 707, 916.", "Planck Collaboration (2020). Planck 2018 results. I. Overview and the cosmological legacy of Planck. A&A 641, A1."] },
+
+"UC-006": { s: [
+  ["Ionization history and the visibility function", "The free-electron fraction x_e(z) falls from unity at z of about 1,600 and freezes out near 2 × 10⁻⁴ at low redshift. The visibility function g(z) = −τ̇ e^{−τ} peaks at z* = 1089.9 ± 0.2 with a width σ_z of about 80. The delay relative to Saha equilibrium arises because Lyman-alpha photons are repeatedly reabsorbed, which is captured by the Peebles C-factor of order 0.1, and because the 2s→1s two-photon decay, with rate Λ_2γ = 8.22 s⁻¹, becomes the bottleneck. Multi-level atom codes such as RECFAST, HyRec and CosmoRec reach about 0.1% accuracy, which Planck-level analyses require."],
+  ["Extensions and non-standard histories", "Variations of fundamental constants, or energy injection from dark matter annihilation or primordial black holes, change the recombination history, broaden the visibility function and suppress small-scale temperature and polarization power. Planck limits the annihilation parameter to p_ann < 3.2 × 10⁻²⁸ cm³ s⁻¹ GeV⁻¹ at 95% confidence. Models that shift recombination earlier, such as a varying electron mass or primordial magnetic fields, have been proposed to ease the Hubble tension and are being tested with ACT and SPT polarization data."]],
+  f: ["The two-photon decay of the hydrogen 2s state is a bottleneck that delays recombination relative to Saha equilibrium.", "Energy injection from dark matter annihilation during recombination is constrained by Planck CMB data."],
+  r: ["Peebles, P. J. E. (1968). Recombination of the primeval plasma. ApJ 153, 1.", "Seager, S., Sasselov, D. D., & Scott, D. (1999). A new calculation of the recombination epoch. ApJ 523, L1.", "Planck Collaboration (2020). Planck 2018 results. VI. Cosmological parameters. A&A 641, A6."] },
+
+"UC-007": { s: [
+  ["Thermal and chemical evolution of the gas", "After decoupling the gas temperature follows the CMB, T ∝ (1+z), until Compton coupling weakens near z ≈ 150, after which adiabatic cooling gives T_gas ∝ (1+z)². The 21 cm spin temperature is tied to the gas temperature by hydrogen collisions at roughly 30 < z < 200, producing a predicted absorption trough of about −40 mK near z ≈ 90. Molecular hydrogen formed through the H⁻ channel, at an abundance near 10⁻³ in minihalos, allows gas to cool to about 200 K and collapse in halos of 10⁵ to 10⁶ solar masses, forming the first stars (Tegmark et al. 1997)."],
+  ["Observational prospects", "The Dark Era signal is accessible only below about 30 MHz, where the terrestrial ionosphere and radio interference are limiting, so the lunar far side, shielded from Earth, is the proposed site. NASA-supported concepts include LuSEE-Night, a radio spectrometer planned for a commercial lunar lander, and larger far-side arrays such as FARSIDE. A detection would constrain primordial non-Gaussianity, dark matter–baryon interactions and the small-scale power spectrum, which no other probe can reach."]],
+  f: ["After about z ≈ 150 the intergalactic gas temperature falls as (1+z)² through adiabatic cooling.", "The predicted Dark Era 21 cm absorption trough is about −40 mK near z ≈ 90."],
+  r: ["Pritchard, J. R., & Loeb, A. (2012). 21 cm cosmology in the 21st century. Rep. Prog. Phys. 75, 086901.", "Bowman, J. D., et al. (2018). An absorption profile centred at 78 megahertz in the sky-averaged spectrum. Nature 555, 67.", "Singh, S., et al. (2022). On the detection of a cosmic dawn signal in the radio background. Nature Astronomy 6, 607."] },
+
+"UC-008": { s: [
+  ["Observational tests", "Isotropy is tested with the CMB, whose statistical isotropy holds at the 10⁻⁵ level after dipole subtraction, with radio and quasar number counts, and with the Hubble flow. Homogeneity is tested through the radial dependence of source counts and clustering statistics. The kinematic Sunyaev–Zel'dovich effect and the Ellis–Baldwin number-count dipole compare the matter rest frame with the CMB rest frame, which in ΛCDM must agree beyond a few hundred megaparsecs. Models that drop the principle, such as Lemaître–Tolman–Bondi void models, can mimic supernova dimming but are strongly constrained by the kSZ effect and the CMB, and generally require fine-tuning."],
+  ["Theoretical significance", "The cosmological principle is a postulate consistent with, but not demanded by, general relativity. Inflation explains why it should hold approximately: pre-existing anisotropies and inhomogeneities are diluted, leaving fluctuations of order 10⁻⁵. Backreaction proposals ask whether averaging over inhomogeneities below the homogeneity scale changes the effective expansion. Most analyses find corrections at the 10⁻⁵ level, far too small to mimic dark energy, though the strongly nonlinear regime is not fully settled."]],
+  f: ["The Ellis–Baldwin test compares the dipole of radio source counts with the CMB dipole.", "Lemaître–Tolman–Bondi void models that violate the cosmological principle are strongly constrained by the kSZ effect."],
+  r: ["Hogg, D. W., et al. (2005). Cosmic homogeneity demonstrated with luminous red galaxies. ApJ 624, 54.", "Secrest, N. J., et al. (2021). A test of the cosmological principle with quasars. ApJ 908, L51.", "Peebles, P. J. E. (1993). Principles of Physical Cosmology. Princeton University Press."] },
+
+"UC-009": { s: [
+  ["Mathematical formulation", "In the Cauchy-problem formulation one considers the globally hyperbolic development of initial data (Σ, h_ab, K_ab) satisfying the constraint equations. Weak censorship requires that future null infinity be complete for generic asymptotically flat data, so the domain of outer communication is free of singularities. Strong censorship requires the maximal Cauchy development to be inextendible as a Lorentzian manifold in a suitable regularity class, such as C⁰ or H¹_loc. The distinction matters because the Cauchy horizons of Reissner–Nordström and Kerr black holes suffer the blue-shift instability described by Penrose in 1968, and quantified through mass inflation by Poisson and Israel in 1990."],
+  ["Astrophysical and quantum perspectives", "Gravitational-wave observations by LIGO, Virgo and KAGRA of binary black-hole mergers give remnant spins below the Kerr limit and ringdown frequencies consistent with a Kerr horizon, and the Event Horizon Telescope images of M87* and Sgr A* are consistent with horizons, although neither can exclude exotic compact objects. Hawking evaporation cannot drive a black hole past extremality, consistent with third-law-like behaviour, but the final stage of evaporation lies beyond semiclassical theory. Cosmic censorship is also linked to the Weak Gravity Conjecture through the requirement that charged states with charge-to-mass ratio of at least one exist."]],
+  f: ["Poisson and Israel's mass inflation describes the blue-shift instability of the inner Cauchy horizon.", "Strong cosmic censorship is tied to the blue-shift instability of Cauchy horizons identified by Penrose in 1968."],
+  r: ["Penrose, R. (1969). Gravitational collapse: The role of general relativity. Riv. Nuovo Cimento 1, 252.", "Christodoulou, D. (1999). The instability of naked singularities in the gravitational collapse of a scalar field. Ann. Math. 149, 183.", "Dafermos, M., & Luk, J. (2017). The interior of dynamical vacuum black holes I: The C⁰-stability of the Kerr Cauchy horizon. arXiv:1710.01722."] },
+
+"UC-010": { s: [
+  ["Phase transitions and relics", "The early epochs are punctuated by phase transitions and decouplings that leave relics: the electroweak transition at about 160 GeV, which is a smooth crossover in the Standard Model; the QCD transition near 155 MeV, also a crossover at zero chemical potential as shown by lattice QCD; neutrino decoupling near 1 MeV; and electron–positron annihilation near 0.2 MeV. Baryogenesis must occur by the end of the electroweak epoch and requires Sakharov's three conditions: baryon-number violation, C and CP violation, and departure from thermal equilibrium. The observed baryon asymmetry η ≈ 6 × 10⁻¹⁰ is not explained by the Standard Model."],
+  ["Observational windows", "Each epoch has a characteristic window: gravitational waves from inflation and phase transitions (LISA, pulsar timing arrays, B-mode polarization), light-element abundances for nucleosynthesis, the CMB for recombination and reionization, the 21 cm line from the Dark Era to reionization, and galaxy surveys with JWST for cosmic dawn. Pulsar timing arrays (NANOGrav, EPTA, PPTA and CPTA) reported evidence for a stochastic gravitational-wave background in 2023, usually attributed to supermassive black-hole binaries, with cosmological sources not excluded."]],
+  f: ["The electroweak and QCD transitions are smooth crossovers in the Standard Model at zero chemical potential.", "Sakharov's three conditions are required for baryogenesis."],
+  r: ["Planck Collaboration (2020). Planck 2018 results. VI. Cosmological parameters. A&A 641, A6.", "Weinberg, S. (2008). Cosmology. Oxford University Press.", "Kolb, E. W., & Turner, M. S. (1990). The Early Universe. Addison-Wesley."] },
+
+"UC-011": { s: [
+  ["Morphology and the skeleton", "Quantitative analyses classify the elements of the web using the eigenvalues of the tidal tensor T_ij = ∂_i∂_jΦ (the T-web) or of the velocity shear (the V-web): points with zero, one, two or three eigenvalues above a threshold are voids, sheets, filaments and knots. Topological tools, including Minkowski functionals, Betti numbers and the persistent-homology skeleton extracted by DisPerSE, characterize connectivity. Roughly half of the mass lies in filaments, which fill only a few percent of the volume, while voids occupy about three quarters of the volume but hold only around 15% of the mass (Cautun et al. 2014)."],
+  ["Baryons in the web", "At low redshift roughly 30% of baryons are thought to reside in the warm-hot intergalactic medium, at 10⁵ to 10⁷ K, concentrated in filaments and detectable through O VII and O VIII X-ray absorption and the thermal Sunyaev–Zel'dovich effect in stacked filaments. In 2020 the fast radio burst dispersion measure–redshift relation (the Macquart relation) recovered a diffuse intergalactic baryon fraction consistent with BBN and CMB values, resolving the missing-baryon problem in a statistical sense. Future X-ray missions such as NewAthena and AXIS are designed to map the warm-hot medium directly."]],
+  f: ["In the T-web classification the number of positive eigenvalues of the tidal tensor distinguishes voids, sheets, filaments and knots.", "About 30% of baryons at low redshift are thought to reside in the warm-hot intergalactic medium."],
+  r: ["Zel'dovich, Ya. B. (1970). Gravitational instability: An approximate theory for large density perturbations. A&A 5, 84.", "Bond, J. R., Kofman, L., & Pogosyan, D. (1996). How filaments of galaxies are woven into the cosmic web. Nature 380, 603.", "Macquart, J.-P., et al. (2020). A census of baryons in the Universe from localized fast radio bursts. Nature 581, 391."] },
+
+"UC-012": { s: [
+  ["Radiative transfer and sources", "Keeping the intergalactic medium ionized at z of about 6 requires an ionizing emissivity of roughly 10^50.5 photons per second per cubic megaparsec (Madau, Haardt and Rees 1999), for a clumping factor near 3. The contribution of galaxies depends on the ionizing photon production efficiency ξ_ion, typically about 10^25.5 Hz per erg, and the escape fraction f_esc, which is measured to be generally below 0.1 for galaxies at z of about 3. JWST spectroscopy indicates that faint galaxies at z above 6 have high ξ_ion, intensifying the photon budget debate, and the abundance of faint active galactic nuclei found by JWST at z of about 4 to 7 suggests they may contribute more than previously assumed."],
+  ["Morphology and observables", "Semi-numerical and radiation-hydrodynamic simulations such as 21cmFAST, THESAN and CoDa predict inside-out reionization with ionized bubbles of 10 to 50 Mpc at the midpoint. Observables include the kinetic Sunyaev–Zel'dovich power from patchy reionization (the South Pole Telescope limits its duration to Δz < 4.1), the Lyman-alpha damping wings of quasars at z above 7, which indicate a neutral fraction of roughly 0.4 to 0.6 near z of 7.5, the declining fraction of Lyman-alpha emitting galaxies, and 21 cm fluctuations that HERA, LOFAR and the SKA aim to measure. HERA's limits already exclude scenarios with a cold intergalactic medium and minimal X-ray heating."]],
+  f: ["Madau, Haardt and Rees estimated the ionizing emissivity needed to keep the intergalactic medium ionized at z of about 6.", "The South Pole Telescope kSZ measurement limits the duration of reionization to Δz below 4.1."],
+  r: ["Gunn, J. E., & Peterson, B. A. (1965). On the density of neutral hydrogen in intergalactic space. ApJ 142, 1633.", "Planck Collaboration (2020). Planck 2018 results. VI. Cosmological parameters. A&A 641, A6.", "Bosman, S. E. I., et al. (2022). Hydrogen reionization ends by z = 5.3. MNRAS 514, 55."] },
+
+"UC-013": { s: [
+  ["Eternal inflation and the landscape", "In stochastic inflation the probability distribution of the inflaton evolves under a classical drift down the potential plus a quantum diffusion of amplitude H/2π per Hubble time. Regions where diffusion dominates continue inflating, so the physical volume grows without bound while bubbles nucleate through Coleman–De Luccia tunnelling between metastable vacua. Flux compactifications of string theory (Bousso and Polchinski 2000; Kachru, Kallosh, Linde and Trivedi 2003) suggest a landscape of order 10⁵⁰⁰ metastable vacua. The swampland programme argues that many apparent low-energy theories cannot be completed in quantum gravity, which would shrink that landscape."],
+  ["The measure problem and predictivity", "Extracting predictions requires a probability measure on an infinite spacetime. Proposals include the proper-time cutoff, the scale-factor cutoff, the causal patch and stationary measures, and they give different predictions, some leading to paradoxes such as the youngness problem and Boltzmann brains. Claimed successes, including Weinberg's prediction of Λ and the anthropic explanation of ρ_Λ being comparable to ρ_m, are debated because they depend on the measure and on the assumed prior distribution of Λ across vacua. Critics such as Ellis and Silk argue that the multiverse fails the test of falsifiability, while supporters point to possible tests such as a small non-zero spatial curvature."]],
+  f: ["Bousso and Polchinski proposed a flux-compactification mechanism that yields a vast landscape of vacua.", "Stochastic inflation describes the inflaton with a classical drift plus quantum diffusion."],
+  r: ["Weinberg, S. (1987). Anthropic bound on the cosmological constant. Phys. Rev. Lett. 59, 2607.", "Bousso, R., & Polchinski, J. (2000). Quantization of four-form fluxes and dynamical neutralization of the cosmological constant. JHEP 06, 006.", "Tegmark, M. (2003). Parallel universes. Scientific American 288 (5), 40."] },
+
+"UC-014": { s: [
+  ["Dynamics and thermodynamics of expansion", "The Friedmann and acceleration equations together imply the continuity equation ρ̇ + 3H(ρ + p/c²) = 0. For a constant equation of state w the density scales as a^{−3(1+w)}, so dust (w = 0), radiation (w = 1/3) and vacuum energy (w = −1) scale as a⁻³, a⁻⁴ and a constant. Time-varying dark energy is commonly parametrized by the Chevallier–Polarski–Linder form w(a) = w₀ + wₐ(1 − a). Joint constraints from DESI, the CMB and supernovae favour w₀ > −1 and wₐ < 0 at 2.8 to 4.2σ depending on the supernova sample, which would mean dark energy weakens at late times, although ΛCDM is not yet excluded."],
+  ["Light propagation and distance measures", "Light travelling through an expanding universe is described by the comoving distance χ = c∫dz/H(z), the luminosity distance d_L = (1+z)χ and the angular-diameter distance d_A = χ/(1+z) in a flat universe. The redshift drift, a direct observation of expansion, is the slow change dz/dt₀ = (1+z)H₀ − H(z), which amounts to about 5 cm/s per decade at z ≈ 4. Measurements with the ELT's ANDES spectrograph, and with the SKA through the 21 cm line, aim to detect it in the 2030s."]],
+  f: ["The Chevallier–Polarski–Linder parametrization writes the dark energy equation of state as w(a) = w₀ + wₐ(1 − a).", "Redshift drift is the slow change of an object's redshift caused by cosmic expansion, about 5 cm/s per decade at z ≈ 4."],
+  r: ["Riess, A. G., et al. (1998). Observational evidence from supernovae for an accelerating universe and a cosmological constant. AJ 116, 1009.", "Perlmutter, S., et al. (1999). Measurements of Ω and Λ from 42 high-redshift supernovae. ApJ 517, 565.", "DESI Collaboration (2024). DESI 2024 VI: Cosmological constraints from the measurements of baryon acoustic oscillations. arXiv:2404.03002."] },
+
+"UC-015": { s: [
+  ["From linear to nonlinear regimes", "Perturbation theory describes growth until δ is of order one on a given scale, after which N-body simulations are required. The linear growth rate f = d ln D / d ln a is approximately Ω_m(a)^γ with γ ≈ 0.55 in general relativity, so measuring fσ₈ through redshift-space distortions tests gravity: deviations from γ = 0.55 would indicate modified gravity. Standard perturbation theory, the effective field theory of large-scale structure, and emulators calibrated on simulations extend predictions into the quasi-linear regime at percent accuracy."],
+  ["The galaxy–halo connection and baryonic feedback", "Galaxies populate halos according to a halo occupation distribution, with the star formation efficiency peaking at roughly 20% in halos of 10¹¹ to 10¹² solar masses. Supernova feedback suppresses star formation in low-mass halos and AGN feedback quenches massive ones. Baryonic effects redistribute matter and suppress the matter power spectrum by up to about 10 to 30% near k of 10 h/Mpc, a systematic that Stage-IV lensing surveys such as Euclid and Rubin must model. Cluster abundances from eROSITA, SPT and ACT, and weak lensing from KiDS, DES and HSC, constrain S₈ = σ₈(Ω_m/0.3)^{1/2} to roughly 0.77 to 0.83."]],
+  f: ["The linear growth rate f is approximately Ω_m(a)^γ with γ of about 0.55 in general relativity.", "Baryonic feedback can suppress the matter power spectrum by up to about 10 to 30% near k of 10 h/Mpc."],
+  r: ["Press, W. H., & Schechter, P. (1974). Formation of galaxies and clusters of galaxies by self-similar gravitational condensation. ApJ 187, 425.", "Navarro, J. F., Frenk, C. S., & White, S. D. M. (1996). The structure of cold dark matter halos. ApJ 462, 563.", "Springel, V., et al. (2005). Simulations of the formation, evolution and clustering of galaxies and quasars. Nature 435, 629."] },
+
+"UC-016": { s: [
+  ["Physics of the acoustic feature", "In Fourier space the oscillations in the matter power spectrum have a wavenumber period of about 2π/r_s, roughly 0.06 h/Mpc, and an amplitude of order 5 to 10% of the smooth spectrum. They are damped by nonlinear structure growth with a Gaussian factor exp(−k²Σ_nl²/2), where Σ_nl is of order 8 h⁻¹ Mpc at z = 0 and about half that after reconstruction. Because the BAO scale is large, it is little affected by nonlinearities, galaxy bias and redshift-space distortions, making it a robust standard ruler with systematic errors below about 0.5%."],
+  ["Survey results and extensions", "BOSS and eBOSS measured the transverse and radial BAO scales from galaxies, quasars and the Lyman-alpha forest between z of 0.15 and 2.5, together giving Ω_m of about 0.30 in flat ΛCDM. DESI (2024 and 2025) improved the precision to 0.5 to 1% over 0.1 < z < 4.2 and, combined with the CMB and supernovae, shows a preference for evolving dark energy. Combining BAO with BBN instead of the CMB gives H₀ of about 68 km/s/Mpc with roughly 1% uncertainty, in line with the Planck value. Euclid, Roman and the 4MOST and PFS spectroscopic surveys will extend BAO measurements further."]],
+  f: ["BAO wiggles in the matter power spectrum have a wavenumber period of 2π/r_s.", "BAO reconstruction reduces the nonlinear damping scale of the feature by roughly half."],
+  r: ["Eisenstein, D. J., et al. (2005). Detection of the baryon acoustic peak in the large-scale correlation function of SDSS luminous red galaxies. ApJ 633, 560.", "Cole, S., et al. (2005). The 2dF Galaxy Redshift Survey: Power-spectrum analysis of the final data set. MNRAS 362, 505.", "DESI Collaboration (2024). DESI 2024 VI: Cosmological constraints from the measurements of baryon acoustic oscillations. arXiv:2404.03002."] },
+
+"UC-017": { s: [
+  ["Statistical considerations", "The pairwise kSZ estimator averages down the primary CMB anisotropy, but its error budget is dominated by residual CMB, instrument noise and uncertainties in cluster optical depths τ_e, which must be inferred from X-ray luminosity or mass proxies through scaling relations. The cluster-based dipole also requires an aperture-photometry filter at the cluster positions, and its significance depends on the filter, the cluster catalogue and the treatment of correlated noise. Independent catalogues and maps (Planck Intermediate Results XIII; Osborne et al. 2011; Mody and Hajian 2012) do not reproduce the original detection, suggesting that systematics, including contamination from the thermal SZ effect, were underestimated."],
+  ["Cosmological implications and tests", "A genuine coherent flow of 600 km/s on 800 Mpc scales would imply an enormous pre-inflationary inhomogeneity, or a primordial tilt of the universe relative to the CMB frame (Turner's tilted-universe proposal of 1991), and would be at odds with the near-Gaussian spectra measured by Planck. Peculiar-velocity surveys such as Cosmicflows-4 find bulk flows consistent with ΛCDM on scales up to a few hundred megaparsecs. Upcoming ACT, SPT-3G and Simons Observatory maps, combined with DESI spectroscopy, will measure the kSZ signal at percent-level precision and should settle the question."]],
+  f: ["Turner's tilted universe proposal explains a bulk flow as a primordial tilt relative to the CMB frame.", "The pairwise kSZ estimator needs cluster optical depths estimated from X-ray scaling relations."],
+  r: ["Kashlinsky, A., Atrio-Barandela, F., Kocevski, D., & Ebeling, H. (2008). A measurement of large-scale peculiar velocities of clusters of galaxies. ApJ 686, L49.", "Keisler, R. (2009). ApJ 707, L42.", "Planck Collaboration (2014). Planck intermediate results. XIII. Constraints on peculiar velocities. A&A 561, A97."] }
+};
+
+  /* ---------- merge base text + level data ---------- */
+  var XM = {}; XH_X.forEach(function (x) { XM[x.id] = x; });
+  T.forEach(function (c) {
+    var x = XM[c.id] || {}, E = x.E || {}, N = x.N || {}, A = x.A || {}, a2 = XH_A2[c.id] || {};
+    c.pics = (x.pics && x.pics.length) ? x.pics : [[c.img, c.t + " — " + c.src]];
+    c.L = {
+      E: { s: E.s || [["Overview", c.d]], ex: E.ex || [], eq: [], h: [], r: [], f: (E.f && E.f.length > 2) ? E.f : c.f.slice(0, 3) },
+      N: { s: c.s.concat(N.s || []), ex: N.ex || [], eq: N.eq || [], h: N.h || [], r: [], f: c.f },
+      A: { s: (A.s || []).concat(a2.s || []), ex: A.ex || [], eq: A.eq || [], h: A.h || [], r: a2.r || [], f: ((A.f && A.f.length > 2) ? A.f : c.f).concat(a2.f || []) }
+    };
+  });
+
+  /* ---------- helpers ---------- */
+  var $ = function (id) { return document.getElementById(id); };
+  var grid = $("xhuc-cards"), search = $("xhuc-search"), mainEl = $("xhuc-main"), art = $("xhuc-article"), qz = $("xhuc-quiz");
+  var cur = -1, curL = "E", Q = null;
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function uniq(a) { return a.filter(function (x, i) { return a.indexOf(x) === i; }); }
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function lvName(L) { return LV.filter(function (x) { return x[0] === L; })[0][1]; }
+  function fmt(s) { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); }
+  function done() { var all = T.map(function (c) { return c.id; }); return window.XHProgress.get(SLUG).r.filter(function (x) { return all.indexOf(x) > -1; }); }
+  window.xhucImg = function (el) { if (el && el.src !== FALLBACK) el.src = FALLBACK; };
+
+  function lvAll() { try { return JSON.parse(localStorage.getItem(LKEY)) || {}; } catch (e) { return {}; } }
+  function lvOk(id, L) { return !!((lvAll()[id] || {})[L]) || done().indexOf(id) > -1; }
+  function lvSet(id, L) {
+    var a = lvAll(); (a[id] = a[id] || {})[L] = 1;
+    try { localStorage.setItem(LKEY, JSON.stringify(a)); } catch (e) {}
+    if (L === NEXT_AFTER) window.XHProgress.read(SLUG, id, T.length);
+  }
+  function prevL(L) { return L === "N" ? "E" : L === "A" ? "N" : null; }
+  function nextL(L) { return L === "E" ? "N" : L === "N" ? "A" : null; }
+  function tabOpen(i, L) { return L === "E" || lvOk(T[i].id, prevL(L)); }
+  function topicOpen(i) { return i === 0 || done().indexOf(T[i - 1].id) > -1; }
+  function renderTex() {
+    if (!window.katex) return;
+    [].forEach.call(document.querySelectorAll(".xhuc-tex[data-tex]"), function (el) {
+      try { window.katex.render(el.getAttribute("data-tex"), el, { displayMode: true, throwOnError: false }); el.removeAttribute("data-tex"); } catch (e) {}
+    });
+  }
+
+  /* ---------- cards + progress ---------- */
+  function renderCards(q) {
+    var d = done(), f = String(q || "").trim().toLowerCase(), html = "";
+    T.forEach(function (c, i) {
+      if (f && (c.t + " " + c.d).toLowerCase().indexOf(f) < 0) return;
+      var ok = d.indexOf(c.id) > -1, open = topicOpen(i), lock = !open && !ok;
+      html += '<article class="xhuc-card' + (lock ? " is-locked" : "") + '"><div class="xhuc-card-media"><span class="xhuc-card-id">' + c.id + "</span>" +
+        (ok ? '<span class="xhuc-badge">Completed ✓</span>' : lock ? '<span class="xhuc-badge">Locked</span>' : "") +
+        '<img src="' + esc(c.img) + '" alt="' + esc(c.t) + ' visual reference" loading="lazy" onerror="xhucImg(this)"></div>' +
+        '<div class="xhuc-card-body"><h3>' + esc(c.t) + "</h3><p>" + esc(c.d) + '</p><div class="xhuc-source">' + esc(c.src) + "</div>" +
+        '<div class="xhuc-lvchips">' + LV.map(function (x) { return "<span" + (lvOk(c.id, x[0]) ? ' class="on"' : "") + ">" + x[1] + "</span>"; }).join("") + "</div>" +
+        '<div class="xhuc-card-actions"><button class="xhuc-btn" type="button" data-open="' + i + '"' + (lock ? " disabled" : "") + ">" +
+        (ok ? "Review article" : lock ? "Pass the previous topic to unlock" : (lvOk(c.id, "E") ? "Continue learning" : "Open article")) + "</button></div></div></article>";
+    });
+    grid.innerHTML = html || '<div class="xhuc-empty">No topics match this search.</div>';
+    var n = d.length, p = Math.round(n / T.length * 100);
+    $("xhuc-count").textContent = n + " / " + T.length + " completed";
+    $("xhuc-fill").style.width = p + "%";
+    $("xhuc-done-msg").classList.toggle("xhuc-hidden", n < T.length);
+  }
+
+  /* ---------- article with Easy / Normal / Advanced tabs ---------- */
+  function artHTML(i, L) {
+    var c = T[i], d = c.L[L], ok = lvOk(c.id, L), nl = nextL(L), nq = buildQuiz(i, L).length, pass = Math.ceil(nq * 0.7);
+    var figs = c.pics.slice(0, L === "E" ? 1 : L === "N" ? 2 : 3);
+    var h = '<div class="xhuc-ahero" style="--img:url(\'' + esc(c.img) + '\')"><div class="xhuc-shell xhuc-atop"><button class="xhuc-back" id="xhuc-back" type="button">← Back to topics</button>' +
+      '<h2 class="xhuc-atitle">' + esc(c.t) + '</h2><div class="xhuc-meta"><span class="xhuc-pill">' + c.id + '</span><span class="xhuc-pill">' + lvName(L) + ' level</span><span class="xhuc-pill">' + esc(c.src) + "</span></div></div></div>" +
+      '<div class="xhuc-shell xhuc-abody"><div class="xhuc-tabs">' +
+      LV.map(function (x) { return '<button class="xhuc-tab' + (x[0] === L ? " on" : "") + (tabOpen(i, x[0]) ? "" : " lock") + '" type="button" data-lv="' + x[0] + '">' + x[1] + (lvOk(c.id, x[0]) ? " ✓" : (tabOpen(i, x[0]) ? "" : " 🔒")) + "</button>"; }).join("") +
+      '</div><div class="xhuc-lvmsg" id="xhuc-lvmsg"></div><p class="xhuc-alead">' + esc(c.d) + "</p>";
+    h += '<div class="xhuc-figs">' + figs.map(function (p) {
+      return '<figure class="xhuc-fig"><img src="' + esc(p[0]) + '" alt="' + esc(p[1]) + '" loading="lazy" onerror="this.parentNode.parentNode&&this.parentNode.parentNode.removeChild(this.parentNode)"><figcaption>' + esc(p[1]) + "</figcaption></figure>";
+    }).join("") + "</div>";
+    h += '<article class="xhuc-doc">';
+    d.s.forEach(function (s) { h += "<h3>" + esc(s[0]) + "</h3><p>" + esc(s[1]) + "</p>"; });
+    d.eq.forEach(function (e) {
+      h += '<div class="xhuc-eqb"><div class="xhuc-eqt">' + esc(e[0]) + '</div><div class="xhuc-tex" data-tex="' + esc(e[1]) + '">' + esc(e[1]) + "</div><p>" + esc(e[2]) + "</p></div>";
+    });
+    if (d.ex.length) h += "<h3>" + (L === "E" ? "Everyday example" : "Worked example") + "</h3>" + d.ex.map(function (e) { return "<p><b>" + esc(e[0]) + ".</b> " + esc(e[1]) + "</p>"; }).join("");
+    if (d.h.length) h += '<h3>History of the idea</h3><ul class="xhuc-tl">' + d.h.map(function (e) { return "<li><b>" + esc(e[0]) + "</b>" + esc(e[1]) + "</li>"; }).join("") + "</ul>";
+    h += "<h3>Key takeaways</h3><ul>" + d.f.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>";
+    if (d.r && d.r.length) h += '<h3>Key references</h3><ol class="xhuc-refs">' + d.r.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ol>";
+    h += "</article>";
+    h += '<div class="xhuc-sec xhuc-qcta"><h3>' + (ok ? lvName(L) + " quiz passed ✓" : lvName(L) + " quiz") + "</h3><p>" +
+      (ok ? (nl ? "Well done. The " + lvName(nl) + " stage is open." : "You have finished every stage of this topic.")
+          : nq + " questions generated from this " + lvName(L) + " article. You have " + fmt(TIME[L]) + " minutes for the whole quiz. Score " + pass + " of " + nq + " or more to pass. It runs in full screen and is cancelled if you switch tabs.") +
+      '</p><div class="xhq-row"><button class="xhuc-btn" id="xhuc-startq" type="button">' + (ok ? "Retake quiz" : "Take the " + lvName(L) + " quiz") + "</button>" +
+      (ok && nl ? '<button class="xhuc-btn alt" id="xhuc-nextlv" type="button">Go to ' + lvName(nl) + "</button>" : "") +
+      (ok && !nl && i < T.length - 1 && done().indexOf(c.id) > -1 ? '<button class="xhuc-btn alt" id="xhuc-nexttopic" type="button">Open next topic</button>' : "") + "</div></div></div>";
+    return h;
+  }
+  function showArticle(i, L) {
+    cur = i; curL = L; art.innerHTML = artHTML(i, L);
+    $("xhuc-back").onclick = function () { closeArticle(); };
+    $("xhuc-startq").onclick = function () { quizIntro(i, L); };
+    var nx = $("xhuc-nexttopic"); if (nx) nx.onclick = function () { openArticle(i + 1, "E"); };
+    var nl = $("xhuc-nextlv"); if (nl) nl.onclick = function () { showArticle(i, nextL(L)); window.scrollTo({ top: 0, behavior: "smooth" }); };
+    [].forEach.call(art.querySelectorAll(".xhuc-tab"), function (b) {
+      b.onclick = function () {
+        var l = b.getAttribute("data-lv");
+        if (!tabOpen(i, l)) { $("xhuc-lvmsg").textContent = "Pass the " + lvName(prevL(l)) + " quiz to unlock the " + lvName(l) + " stage."; return; }
+        showArticle(i, l);
+      };
+    });
+    renderTex();
+  }
+  function openArticle(i, L) {
+    var lv = L || (!lvOk(T[i].id, "E") ? "E" : !lvOk(T[i].id, "N") ? "N" : "A");
+    showArticle(i, lv); mainEl.classList.add("xhuc-hidden"); art.classList.add("xhuc-active"); window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  function closeArticle(scrollIdx) {
+    cur = -1; art.classList.remove("xhuc-active"); art.innerHTML = ""; mainEl.classList.remove("xhuc-hidden"); renderCards(search.value);
+    var cards = grid.querySelectorAll(".xhuc-card"), el = typeof scrollIdx === "number" ? cards[scrollIdx] : null;
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" }); else window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ---------- quiz generated from the level data (one timer for the whole quiz) ---------- */
+  function buildQuiz(i, L) {
+    var c = T[i], d = c.L[L], n = L === "E" ? 5 : L === "N" ? 6 : 7;
+    var others = T.filter(function (_, k) { return k !== i; });
+    function foreign() { var f = null, g = 0; while (g++ < 40) { f = pick(pick(others).L[L].f); if (d.f.indexOf(f) < 0) return f; } return f; }
+    function wrongFacts() { var w = []; while (w.length < 3) { var f = foreign(); if (w.indexOf(f) < 0) w.push(f); } return w; }
+    function trueQ(fact) { return { q: "Which statement is true about " + c.t + "?", a: fact, o: shuffle([fact].concat(wrongFacts())) }; }
+    function oddQ() { var a = foreign(); return { q: "Which statement does NOT belong to " + c.t + "?", a: a, o: shuffle([a].concat(shuffle(d.f).slice(0, 3))) }; }
+    function descQ() { return { q: "Which concept does this description refer to?\n“" + c.d + "”", a: c.t, o: shuffle([c.t].concat(shuffle(others).slice(0, 3).map(function (o) { return o.t; }))) }; }
+    function eqQ(k) {
+      var e = d.eq[k], pool = uniq(others.reduce(function (acc, o) { return acc.concat(o.L[L].eq.map(function (x) { return x[0]; })); }, [])).filter(function (x) { return x !== e[0]; });
+      if (pool.length < 3) return null;
+      return { q: "Which relation belongs to the " + lvName(L) + " treatment of " + c.t + "?", a: e[0], o: shuffle([e[0]].concat(shuffle(pool).slice(0, 3))) };
+    }
+    /* every attempt draws a random subset of topics from the level data, a random question type for each, random wrong answers and a random order */
+    var slots = d.f.map(function (_, k) { return { t: "f", k: k }; });
+    if (L === "E") slots.push({ t: "desc" });
+    if (L !== "E") d.eq.forEach(function (_, k) { slots.push({ t: "eq", k: k }); });
+    var odd = 0;
+    var qs = shuffle(slots).slice(0, n).map(function (s) {
+      if (s.t === "desc") return descQ();
+      if (s.t === "eq") return eqQ(s.k);
+      if (odd < 2 && d.f.length >= 4 && Math.random() < 0.4) { odd++; return oddQ(); }
+      return trueQ(d.f[s.k]);
+    }).filter(Boolean);
+    return shuffle(qs);
+  }
+  function showQ(html) { qz.innerHTML = '<div class="xhq-box">' + html + "</div>"; qz.classList.remove("xhuc-hidden"); }
+  function inFS() { return document.fullscreenElement || document.webkitFullscreenElement; }
+
+  function quizIntro(i, L) {
+    var c = T[i], n = buildQuiz(i, L).length, pass = Math.ceil(n * 0.7);
+    showQ('<div class="xhq-k">' + lvName(L) + " quiz · " + c.id + "</div><h2>" + esc(c.t) + "</h2>" +
+      '<ul class="xhq-rules"><li>' + n + " questions generated from the " + lvName(L) + " article.</li>" +
+      "<li>Total time for the whole quiz: " + fmt(TIME[L]) + " minutes. You can move between questions and change answers until you submit or time runs out.</li>" +
+      "<li>Pass mark: " + pass + " of " + n + " correct.</li>" +
+      "<li>The quiz runs in full screen. Switching tab, minimising the window or leaving full screen cancels it.</li></ul>" +
+      '<div class="xhq-row"><button class="xhq-btn" id="xhq-go" type="button">Start quiz</button><button class="xhq-btn alt" id="xhq-x" type="button">Not now</button></div><div class="xhq-note" id="xhq-note"></div>');
+    $("xhq-go").onclick = function () { startQuiz(i, L); };
+    $("xhq-x").onclick = closeQuiz;
+  }
+  async function startQuiz(i, L) {
+    var rf = qz.requestFullscreen || qz.webkitRequestFullscreen, fs = false;
+    if (rf) {
+      try { await rf.call(qz); fs = true; }
+      catch (e) { var n = $("xhq-note"); if (n) n.textContent = "Full screen is required for the quiz. Please allow it and press Start again."; return; }
+    }
+    Q = { i: i, L: L, qs: buildQuiz(i, L), n: 0, ans: [], fs: fs, on: true, t0: Date.now(), end: Date.now() + TIME[L] * 1000, tm: null };
+    document.addEventListener("visibilitychange", onVis);
+    window.addEventListener("blur", onBlur);
+    document.addEventListener("fullscreenchange", onFs);
+    document.addEventListener("webkitfullscreenchange", onFs);
+    document.addEventListener("contextmenu", noCtx);
+    document.addEventListener("copy", noCtx);
+    renderQ();
+    Q.tm = setInterval(tick, 250);
+  }
+  function tick() {
+    if (!Q || !Q.on) return;
+    var left = (Q.end - Date.now()) / 1000, t = $("xhq-time"), f = $("xhq-fill");
+    if (t) t.textContent = fmt(left); if (f) f.style.width = Math.max(0, left / TIME[Q.L] * 100) + "%";
+    if (left <= 0) submitQuiz();
+  }
+  function renderQ() {
+    var q = Q.qs[Q.n], sel = Q.ans[Q.n], last = Q.n === Q.qs.length - 1, un = Q.qs.length - Q.ans.filter(function (a) { return a != null; }).length;
+    showQ('<div class="xhq-top"><span>Question ' + (Q.n + 1) + " / " + Q.qs.length + '</span><b id="xhq-time">' + fmt((Q.end - Date.now()) / 1000) + '</b></div><div class="xhq-bar"><i id="xhq-fill"></i></div>' +
+      '<h3 class="xhq-q">' + esc(q.q) + '</h3><div class="xhq-opts">' +
+      q.o.map(function (o, k) { return '<button class="xhq-opt' + (sel === k ? " xhq-pick" : "") + '" type="button" data-k="' + k + '">' + esc(o) + "</button>"; }).join("") + "</div>" +
+      '<div class="xhq-nav"><button class="xhq-btn alt" id="xhq-prev" type="button"' + (Q.n ? "" : " disabled") + '>Previous</button><span class="xhq-un">' + un + " unanswered</span>" +
+      (last ? '<button class="xhq-btn" id="xhq-sub" type="button">Submit quiz</button>' : '<button class="xhq-btn" id="xhq-next" type="button">Next</button>') + "</div>");
+    [].forEach.call(qz.querySelectorAll(".xhq-opt"), function (b) { b.onclick = function () { Q.ans[Q.n] = +b.getAttribute("data-k"); renderQ(); }; });
+    $("xhq-prev").onclick = function () { if (Q.n > 0) { Q.n--; renderQ(); } };
+    var nx = $("xhq-next"); if (nx) nx.onclick = function () { Q.n++; renderQ(); };
+    var sb = $("xhq-sub"); if (sb) sb.onclick = submitQuiz;
+    tick();
+  }
+  function endQuiz() {
+    if (!Q) return;
+    Q.on = false; clearInterval(Q.tm);
+    document.removeEventListener("visibilitychange", onVis);
+    window.removeEventListener("blur", onBlur);
+    document.removeEventListener("fullscreenchange", onFs);
+    document.removeEventListener("webkitfullscreenchange", onFs);
+    document.removeEventListener("contextmenu", noCtx);
+    document.removeEventListener("copy", noCtx);
+    if (inFS()) { var p = (document.exitFullscreen || document.webkitExitFullscreen).call(document); if (p && p.catch) p.catch(function () {}); }
+  }
+  function submitQuiz() {
+    if (!Q || !Q.on) return;
+    var i = Q.i, L = Q.L, n = Q.qs.length, need = Math.ceil(n * 0.7), timeUp = Q.end - Date.now() <= 0, sc = 0;
+    Q.qs.forEach(function (q, k) { if (Q.ans[k] != null && q.o[Q.ans[k]] === q.a) sc++; });
+    endQuiz();
+    var pass = sc >= need, id = T[i].id, nl = nextL(L), topicDone = false, last = i === T.length - 1;
+    if (pass) { lvSet(id, L); topicDone = done().indexOf(id) > -1; renderCards(search.value); }
+    var msg;
+    if (!pass) msg = (timeUp ? "Time ran out. " : "") + "You need " + need + " correct answers to pass. Review the article and try again; each attempt uses a fresh set of questions.";
+    else if (topicDone) msg = last ? "You have completed every topic in Universe and Cosmology. Return to the Concepts page to see your progress and certificate." : "Topic complete. Next topic unlocked: <b>" + esc(T[i + 1].t) + "</b>.";
+    else msg = nl ? "Well done. The <b>" + lvName(nl) + "</b> stage is now unlocked." : "Well done.";
+    showQ('<div class="xhq-k' + (pass ? "" : " bad") + '">' + (pass ? "Quiz passed" : "Not passed") + '</div><p class="xhq-score">' + sc + " / " + n + '</p><p class="xhq-p">' + msg + "</p>" +
+      '<div class="xhq-row">' + (pass ? '<button class="xhq-btn" id="xhq-c" type="button">Continue</button>' : '<button class="xhq-btn" id="xhq-r" type="button">Try again</button><button class="xhq-btn alt" id="xhq-b" type="button">Back to article</button>') + "</div>");
+    if (pass) $("xhq-c").onclick = function () {
+      qz.classList.add("xhuc-hidden"); qz.innerHTML = "";
+      if (topicDone) closeArticle(last ? undefined : i + 1);
+      else if (nl) { showArticle(i, nl); window.scrollTo({ top: 0, behavior: "smooth" }); }
+      else showArticle(i, L);
+    };
+    else { $("xhq-r").onclick = function () { quizIntro(i, L); }; $("xhq-b").onclick = closeQuiz; }
+  }
+  function cancelQuiz(reason) {
+    if (!Q || !Q.on) return;
+    var i = Q.i, L = Q.L; endQuiz();
+    showQ('<div class="xhq-k bad">Quiz cancelled</div><h2>' + esc(reason) + '</h2><p class="xhq-p">No score was saved. You can start a new attempt with a fresh set of questions.</p>' +
+      '<div class="xhq-row"><button class="xhq-btn" id="xhq-r" type="button">Try again</button><button class="xhq-btn alt" id="xhq-b" type="button">Back to article</button></div>');
+    $("xhq-r").onclick = function () { quizIntro(i, L); }; $("xhq-b").onclick = closeQuiz;
+  }
+  function closeQuiz() {
+    if (Q && Q.on) endQuiz();
+    qz.classList.add("xhuc-hidden"); qz.innerHTML = "";
+    if (cur >= 0) showArticle(cur, curL);
+  }
+  function grace() { return Q && Date.now() - Q.t0 > 900; }
+  function onVis() { if (document.hidden && Q && Q.on) cancelQuiz("You switched tabs or minimised the window."); }
+  function onBlur() { if (grace()) cancelQuiz("The quiz window lost focus."); }
+  function onFs() { if (Q && Q.on && Q.fs && !inFS() && grace()) cancelQuiz("You left full screen."); }
+  function noCtx(e) { if (Q && Q.on) e.preventDefault(); }
+
+  /* ---------- wire up ---------- */
+  grid.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("[data-open]");
+    if (b && !b.disabled) openArticle(+b.getAttribute("data-open"));
+  });
+  search.addEventListener("input", function () { renderCards(search.value); });
+  window.addEventListener("storage", function (e) { if (e.key === KEY || e.key === LKEY) renderCards(search.value); });
+  window.addEventListener("load", renderTex);
+
+  window.XHProgress.read(SLUG, null, T.length);   /* tell the main page how many topics this category has */
+  renderCards("");
+})();
+
+</script>
