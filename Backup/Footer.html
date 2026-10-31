@@ -275,10 +275,30 @@
     display:inline-flex !important;
     align-items:center !important;
     min-height:27px !important;
+    transform:translateY(-4px) !important;
   }
 
   #xhFooter .xhfOdooLanguage > *{
     margin:0 !important;
+  }
+
+  /* Keep Odoo's native language menu; only make its dropdown arrow visible. */
+  #xhFooter .xhfOdooLanguage .dropdown-toggle{
+    display:inline-flex !important;
+    align-items:center !important;
+  }
+
+  #xhFooter .xhfOdooLanguage .dropdown-toggle::after{
+    display:inline-block !important;
+    content:"" !important;
+    width:0 !important;
+    height:0 !important;
+    margin-left:.4em !important;
+    vertical-align:.15em !important;
+    border-top:.3em solid currentColor !important;
+    border-right:.3em solid transparent !important;
+    border-bottom:0 !important;
+    border-left:.3em solid transparent !important;
   }
 
   @media(max-width:1080px){
