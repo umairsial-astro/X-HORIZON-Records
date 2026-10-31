@@ -277,11 +277,46 @@
     min-height:27px !important;
   }
 
+  /* Language selector sits directly beneath Premium Features and Support */
+  #xhFooter .xhfLanguageSection{
+    grid-column:4 / 6 !important;
+    grid-row:2 !important;
+    justify-self:start !important;
+    align-self:start !important;
+    min-width:0 !important;
+    margin-top:-2px !important;
+  }
+
+  #xhFooter .xhfLanguageSection .xhfTitle{
+    margin-bottom:10px !important;
+  }
+
+  #xhFooter .xhfLanguageSection .xhfOdooLanguage{
+    min-height:36px !important;
+  }
+
+  #xhFooter .xhfLanguageSection .xhfOdooLanguage .dropdown-toggle,
+  #xhFooter .xhfLanguageSection .xhfOdooLanguage button,
+  #xhFooter .xhfLanguageSection .xhfOdooLanguage a{
+    color:rgba(255,255,255,.82) !important;
+    -webkit-text-fill-color:rgba(255,255,255,.82) !important;
+  }
+
+  #xhFooter .xhfLanguageSection .xhfOdooLanguage .dropdown-menu{
+    z-index:20 !important;
+  }
+
   #xhFooter .xhfOdooLanguage > *{
     margin:0 !important;
   }
 
   @media(max-width:1080px){
+    #xhFooter .xhfLanguageSection{
+      grid-column:1 / -1 !important;
+      grid-row:auto !important;
+      margin-top:0 !important;
+    }
+
     #xhFooter .xhfTop{
       grid-template-columns:1.2fr 1fr 1fr !important;
       gap:28px !important;
@@ -441,6 +476,13 @@
           <a href="/collaboration">Collaboration</a>
         </div>
       </nav>
+
+      <div class="xhfLanguageSection" aria-label="Website language selector">
+        <h3 class="xhfTitle">Language</h3>
+        <t t-call="portal.language_selector">
+          <t t-set="_div_classes" t-value="'xhfOdooLanguage dropup'"/>
+        </t>
+      </div>
     </div>
 
     <div class="xhfTerminator" aria-hidden="true"></div>
@@ -450,9 +492,6 @@
       <div class="xhfBottomCenter">X HORIZON © 2026</div>
       <div class="xhfLegal">
 
-        <t t-call="portal.language_selector">
-          <t t-set="_div_classes" t-value="'xhfOdooLanguage dropup'"/>
-        </t>
         <a href="/frequently-asked-questions">FAQs</a>
         <a href="/contactus">Contact</a>
       </div>
