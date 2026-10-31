@@ -294,6 +294,68 @@
   #xhFooter .xhfOdooLanguage .dropdown-toggle{
     display:inline-flex !important;
     align-items:center !important;
+    gap:6px !important;
+    min-height:34px !important;
+    padding:7px 11px !important;
+    color:#fff !important;
+    -webkit-text-fill-color:#fff !important;
+    background:rgba(255,255,255,.055) !important;
+    border:1px solid rgba(255,255,255,.18) !important;
+    border-radius:6px !important;
+    box-shadow:none !important;
+    font:500 12px/1.35 Arial,Helvetica,sans-serif !important;
+    text-decoration:none !important;
+    cursor:pointer !important;
+  }
+
+  #xhFooter .xhfOdooLanguage .dropdown-toggle:hover,
+  #xhFooter .xhfOdooLanguage .dropdown-toggle:focus,
+  #xhFooter .xhfOdooLanguage .dropdown-toggle[aria-expanded="true"]{
+    color:#fff !important;
+    -webkit-text-fill-color:#fff !important;
+    background:rgba(255,255,255,.11) !important;
+    border-color:rgba(255,255,255,.34) !important;
+    outline:none !important;
+  }
+
+  #xhFooter .xhfOdooLanguage .dropdown-menu{
+    z-index:1100 !important;
+    min-width:150px !important;
+    max-height: min(60vh, 320px) !important;
+    overflow-y:auto !important;
+    padding:6px !important;
+    background:#101010 !important;
+    border:1px solid rgba(255,255,255,.18) !important;
+    border-radius:7px !important;
+    box-shadow:0 12px 32px rgba(0,0,0,.55) !important;
+  }
+
+  #xhFooter .xhfOdooLanguage .dropdown-menu a,
+  #xhFooter .xhfOdooLanguage .dropdown-menu .dropdown-item{
+    display:flex !important;
+    align-items:center !important;
+    width:100% !important;
+    min-height:32px !important;
+    padding:7px 10px !important;
+    color:rgba(255,255,255,.82) !important;
+    -webkit-text-fill-color:rgba(255,255,255,.82) !important;
+    background:transparent !important;
+    border:0 !important;
+    border-radius:4px !important;
+    font:400 12px/1.35 Arial,Helvetica,sans-serif !important;
+    text-decoration:none !important;
+    white-space:normal !important;
+  }
+
+  #xhFooter .xhfOdooLanguage .dropdown-menu a:hover,
+  #xhFooter .xhfOdooLanguage .dropdown-menu a:focus,
+  #xhFooter .xhfOdooLanguage .dropdown-menu .dropdown-item:hover,
+  #xhFooter .xhfOdooLanguage .dropdown-menu .dropdown-item:focus,
+  #xhFooter .xhfOdooLanguage .dropdown-menu .dropdown-item.active{
+    color:#fff !important;
+    -webkit-text-fill-color:#fff !important;
+    background:rgba(255,255,255,.12) !important;
+    outline:none !important;
   }
 
   #xhFooter .xhfOdooLanguage .dropdown-toggle::after{
@@ -475,10 +537,13 @@
         </div>
       </nav>
 
-      <section class="xhfLanguageSection" aria-label="Website language">
+      <section class="xhfLanguageSection" aria-label="Website language selector">
+        <h3 class="xhfTitle">Language</h3>
+        <div class="xhfLanguageControl">
         <t t-call="website.placeholder_header_language_selector">
           <t t-set="_div_classes" t-valuef="xhfOdooLanguage dropup"/>
         </t>
+        </div>
       </section>
     </div>
 
