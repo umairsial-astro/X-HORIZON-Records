@@ -318,8 +318,49 @@
     -webkit-text-fill-color:rgba(255,255,255,.82) !important;
   }
 
-  #xhFooter .xhfLanguageSection .xhfOdooLanguage .dropdown-menu{
-    z-index:20 !important;
+  #xhFooter .xhfLanguageSection .xhfOdooLanguage .dropdown-menu,
+  #xhFooter .xhfLanguageSection .xhfLanguageMenu{
+    z-index:1000 !important;
+    min-width:180px !important;
+    margin-top:6px !important;
+    padding:6px !important;
+    background:#111 !important;
+    border:1px solid rgba(255,255,255,.2) !important;
+    border-radius:8px !important;
+    box-shadow:0 12px 32px rgba(0,0,0,.45) !important;
+  }
+
+  #xhFooter .xhfLanguageSection .xhfLanguageButton{
+    display:inline-flex !important;
+    align-items:center !important;
+    gap:8px !important;
+    min-height:36px !important;
+    padding:7px 12px !important;
+    color:#fff !important;
+    -webkit-text-fill-color:#fff !important;
+    background:#171717 !important;
+    border:1px solid rgba(255,255,255,.24) !important;
+    border-radius:6px !important;
+    font-size:13px !important;
+    cursor:pointer !important;
+  }
+
+  #xhFooter .xhfLanguageSection .xhfLanguageMenu .dropdown-item{
+    display:block !important;
+    width:100% !important;
+    padding:8px 10px !important;
+    color:rgba(255,255,255,.86) !important;
+    -webkit-text-fill-color:rgba(255,255,255,.86) !important;
+    border-radius:5px !important;
+    white-space:nowrap !important;
+  }
+
+  #xhFooter .xhfLanguageSection .xhfLanguageMenu .dropdown-item:hover,
+  #xhFooter .xhfLanguageSection .xhfLanguageMenu .dropdown-item:focus,
+  #xhFooter .xhfLanguageSection .xhfLanguageMenu .dropdown-item.active{
+    color:#fff !important;
+    -webkit-text-fill-color:#fff !important;
+    background:rgba(255,255,255,.12) !important;
   }
 
   #xhFooter .xhfOdooLanguage > *{
@@ -496,8 +537,12 @@
       <section class="xhfLanguageSection" aria-label="Website language selector">
         <h3 class="xhfTitle">Language</h3>
         <div class="xhfLanguageControl">
-          <t t-call="website.placeholder_header_language_selector">
+          <!-- Use Odoo's actual language selector component directly.
+               The header placeholder is only a slot for header templates. -->
+          <t t-call="portal.language_selector">
             <t t-set="_div_classes" t-valuef="xhfOdooLanguage dropup"/>
+            <t t-set="_btn_class" t-valuef="xhfLanguageButton dropdown-toggle"/>
+            <t t-set="_dropdown_menu_class" t-valuef="xhfLanguageMenu"/>
           </t>
         </div>
       </section>
