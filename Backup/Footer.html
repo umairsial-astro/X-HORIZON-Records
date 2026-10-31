@@ -271,83 +271,19 @@
     outline:none !important;
   }
 
-  /* Compact language dropdown, kept on the social-icons line. */
-  #xhFooter .xhfLanguageDropdown{
-    position:relative !important;
-    display:inline-flex !important;
-    flex:0 0 auto !important;
-    align-self:center !important;
-    margin:0 0 0 3px !important;
-    padding:0 !important;
-  }
-
-  #xhFooter .xhfLanguageDropdown > button{
-    min-height:37px !important;
-    display:inline-flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-    gap:7px !important;
-    padding:0 11px !important;
-    color:rgba(255,255,255,.82) !important;
-    -webkit-text-fill-color:rgba(255,255,255,.82) !important;
-    background:rgba(255,255,255,.055) !important;
-    border:1px solid rgba(255,255,255,.12) !important;
-    border-radius:999px !important;
-    box-shadow:none !important;
-    font:600 11px/1 Arial,Helvetica,sans-serif !important;
-    white-space:nowrap !important;
-    cursor:pointer !important;
-  }
-
-  #xhFooter .xhfLanguageDropdown > button:hover,
-  #xhFooter .xhfLanguageDropdown > button:focus{
-    color:#fff !important;
-    -webkit-text-fill-color:#fff !important;
-    background:rgba(255,255,255,.12) !important;
-    border-color:rgba(255,255,255,.28) !important;
-    outline:none !important;
-  }
-
-  #xhFooter .xhfLanguageDropdown .xhfLanguageMenu{
-    position:absolute !important;
-    z-index:1055 !important;
-    right:0 !important;
-    bottom:calc(100% + 7px) !important;
-    left:auto !important;
-    top:auto !important;
-    min-width:145px !important;
-    margin:0 !important;
-    padding:5px !important;
-    list-style:none !important;
-    background:#111 !important;
-    border:1px solid rgba(255,255,255,.16) !important;
-    border-radius:8px !important;
-    box-shadow:0 10px 30px rgba(0,0,0,.5) !important;
-  }
-
-  #xhFooter .xhfLanguageDropdown .xhfLanguageMenu a{
-    display:flex !important;
-    width:100% !important;
-    min-height:32px !important;
-    align-items:center !important;
-    padding:7px 9px !important;
-    color:rgba(255,255,255,.82) !important;
-    -webkit-text-fill-color:rgba(255,255,255,.82) !important;
-    background:transparent !important;
-    border:0 !important;
-    border-radius:5px !important;
-    font-size:12px !important;
-    line-height:1.3 !important;
-    white-space:nowrap !important;
-  }
-
-  #xhFooter .xhfLanguageDropdown .xhfLanguageMenu a:hover,
-  #xhFooter .xhfLanguageDropdown .xhfLanguageMenu a[aria-current="true"]{
-    color:#fff !important;
-    -webkit-text-fill-color:#fff !important;
-    background:rgba(255,255,255,.12) !important;
-  }
-
+  /* Minimal language selector aligned with social icons below the link columns. */
+  #xhFooter .xhfSocialRow{width:100% !important;display:flex !important;align-items:center !important;justify-content:flex-start !important;gap:12px !important;margin-top:22px !important;}
+  #xhFooter .xhfSocial{display:flex !important;flex-wrap:wrap !important;align-items:center !important;gap:8px !important;margin:0 !important;}
+  #xhFooter .xhfLanguageDropdown{position:relative !important;display:inline-flex !important;flex:0 0 auto !important;align-self:center !important;margin:0 !important;padding:0 !important;}
+  #xhFooter .xhfLanguageDropdown > button{position:relative !important;display:flex !important;flex-direction:column !important;align-items:stretch !important;justify-content:flex-start !important;gap:5px !important;min-width:76px !important;min-height:37px !important;padding:9px 0 0 !important;color:rgba(255,255,255,.72) !important;-webkit-text-fill-color:rgba(255,255,255,.72) !important;background:transparent !important;border:0 !important;border-radius:0 !important;box-shadow:none !important;font:400 12px/1.2 Arial,Helvetica,sans-serif !important;text-align:left !important;cursor:pointer !important;}
+  #xhFooter .xhfLanguageDropdown > button::before{content:"" !important;display:block !important;width:100% !important;height:1px !important;background:rgba(255,255,255,.48) !important;order:0 !important;}
+  #xhFooter .xhfLanguageDropdown > button > span{display:block !important;order:1 !important;}
+  #xhFooter .xhfLanguageDropdown > button > svg{position:absolute !important;top:0 !important;right:0 !important;width:9px !important;height:9px !important;fill:currentColor !important;}
+  #xhFooter .xhfLanguageDropdown > button:hover,#xhFooter .xhfLanguageDropdown > button:focus{color:#fff !important;-webkit-text-fill-color:#fff !important;background:transparent !important;outline:none !important;}
+  #xhFooter .xhfLanguageDropdown .xhfLanguageMenu{position:absolute !important;z-index:1055 !important;right:0 !important;bottom:calc(100% + 7px) !important;left:auto !important;top:auto !important;min-width:145px !important;margin:0 !important;padding:5px !important;list-style:none !important;background:#111 !important;border:1px solid rgba(255,255,255,.16) !important;border-radius:6px !important;box-shadow:0 10px 30px rgba(0,0,0,.5) !important;}
+  #xhFooter .xhfLanguageDropdown .xhfLanguageMenu a{display:flex !important;width:100% !important;min-height:32px !important;align-items:center !important;padding:7px 9px !important;color:rgba(255,255,255,.82) !important;-webkit-text-fill-color:rgba(255,255,255,.82) !important;background:transparent !important;border:0 !important;border-radius:4px !important;font-size:12px !important;line-height:1.3 !important;white-space:nowrap !important;}
+  #xhFooter .xhfLanguageDropdown .xhfLanguageMenu a:hover,#xhFooter .xhfLanguageDropdown .xhfLanguageMenu a[aria-current="true"]{color:#fff !important;-webkit-text-fill-color:#fff !important;background:rgba(255,255,255,.12) !important;}
+  @media(max-width:760px){#xhFooter .xhfSocialRow{flex-wrap:wrap !important;gap:12px !important;}}
   @media(max-width:1080px){
     #xhFooter .xhfTop{
       grid-template-columns:1.2fr 1fr 1fr !important;
@@ -438,51 +374,7 @@
           <span class="xhfBadge" tabindex="0">Live Space</span>
         </div>
 
-        <div class="xhfSocial" aria-label="Social links">
-          <a href="https://www.youtube.com/channel/UC6wxjseAGqaUWiqcHLT86vw" target="_blank" rel="noopener" aria-label="YouTube">
-            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"></path></svg>
-          </a>
 
-          <a href="https://www.instagram.com/xhorizon8.0/" target="_blank" rel="noopener" aria-label="Instagram">
-            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zM12 7.4a4.6 4.6 0 1 1 0 9.2 4.6 4.6 0 0 1 0-9.2zm0 2a2.6 2.6 0 1 0 0 5.2 2.6 2.6 0 0 0 0-5.2zm5-2.35a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1z"></path></svg>
-          </a>
-
-          <a href="https://www.linkedin.com/in/x-horizon-8b8b3442b" target="_blank" rel="noopener" aria-label="LinkedIn">
-            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5.001 2.5 2.5 0 0 1 0-5zM3 9.4h4v11.1H3V9.4zm6.2 0H13v1.5h.05c.53-1 1.82-2.05 3.75-2.05 4 0 4.75 2.64 4.75 6.08v5.57h-4v-4.94c0-1.18-.02-2.7-1.64-2.7-1.65 0-1.9 1.28-1.9 2.6v5.04h-4V9.4z"></path></svg>
-          </a>
-
-          <a href="https://x.com/xhorizon08" target="_blank" rel="noopener" aria-label="X">
-            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M18.9 2h3.3l-7.2 8.25L23.5 22h-6.65l-5.2-6.8L5.7 22H2.4l7.7-8.8L2 2h6.8l4.7 6.2L18.9 2zm-1.15 18h1.82L7.8 3.9H5.85L17.75 20z"></path></svg>
-          </a>
-
-          <a href="https://www.facebook.com/profile.php?id=61593627639811" target="_blank" rel="noopener" aria-label="Facebook">
-            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M14.2 8.1V6.4c0-.82.55-1.01.94-1.01h2.4V2.13L14.23 2.1c-3.68 0-4.52 2.76-4.52 4.53V8.1H6.8v3.7h2.9V22h4.5V11.8h3.05l.41-3.7H14.2z"></path></svg>
-          </a>
-
-          <a href="https://umairsial-astro.github.io/umairsial-astro/" target="_blank" rel="noopener" aria-label="GitHub">
-            <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.82-.26.82-.58v-2.04c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.74.08-.74 1.2.08 1.84 1.24 1.84 1.24 1.08 1.84 2.82 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.46-1.33-5.46-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.3 11.3 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.21.69.83.57A12 12 0 0 0 12 .5z"></path></svg>
-          </a>
-          <t t-if="len(frontend_languages) &gt; 1">
-            <div class="xhfLanguageDropdown dropup" aria-label="Website language selector">
-              <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <span>Language</span>
-                <svg viewbox="0 0 12 12" aria-hidden="true" style="width:10px;height:10px;fill:currentColor;transform:rotate(180deg);"><path d="M2 7.5 6 3.5l4 4z"/></svg>
-              </button>
-              <ul class="dropdown-menu xhfLanguageMenu">
-                <t t-foreach="frontend_languages.values()" t-as="lg">
-                  <li>
-                    <a class="dropdown-item"
-                       t-att-href="url_localized(lang_code=lg.code, prefetch_langs=True, force_default_lang=True)"
-                       t-att-aria-current="'true' if lg.code == lang else None"
-                       t-att-lang="lg.code">
-                      <t t-out="lg.name"/>
-                    </a>
-                  </li>
-                </t>
-              </ul>
-            </div>
-          </t>
-        </div>
       </section>
 
       <nav class="xhfCol" aria-label="Core links">
@@ -529,6 +421,52 @@
         </div>
       </nav>
 
+    </div>
+
+    <div class="xhfSocialRow" aria-label="Language and social links">
+      <div class="xhfSocial" aria-label="Social links">
+        <t t-if="len(frontend_languages) &gt; 1">
+          <div class="xhfLanguageDropdown dropup" aria-label="Website language selector">
+            <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <span>Language</span>
+              <svg viewbox="0 0 12 12" aria-hidden="true"><path d="M2 8 6 3l4 5z"/></svg>
+            </button>
+            <ul class="dropdown-menu xhfLanguageMenu">
+              <t t-foreach="frontend_languages.values()" t-as="lg">
+                <li><a class="dropdown-item" t-att-href="url_localized(lang_code=lg.code, prefetch_langs=True, force_default_lang=True)" t-att-aria-current="'true' if lg.code == lang else None" t-att-lang="lg.code"><t t-out="lg.name"/></a></li>
+              </t>
+            </ul>
+          </div>
+        </t>
+
+        <a href="https://www.youtube.com/channel/UC6wxjseAGqaUWiqcHLT86vw" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"></path></svg>
+        </a>
+
+        <a href="https://www.instagram.com/xhorizon8.0/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zM12 7.4a4.6 4.6 0 1 1 0 9.2 4.6 4.6 0 0 1 0-9.2zm0 2a2.6 2.6 0 1 0 0 5.2 2.6 2.6 0 0 0 0-5.2zm5-2.35a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1z"></path></svg>
+        </a>
+
+        <a href="https://www.linkedin.com/in/x-horizon-8b8b3442b" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5.001 2.5 2.5 0 0 1 0-5zM3 9.4h4v11.1H3V9.4zm6.2 0H13v1.5h.05c.53-1 1.82-2.05 3.75-2.05 4 0 4.75 2.64 4.75 6.08v5.57h-4v-4.94c0-1.18-.02-2.7-1.64-2.7-1.65 0-1.9 1.28-1.9 2.6v5.04h-4V9.4z"></path></svg>
+        </a>
+
+        <a href="https://x.com/xhorizon08" target="_blank" rel="noopener" aria-label="X">
+          <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M18.9 2h3.3l-7.2 8.25L23.5 22h-6.65l-5.2-6.8L5.7 22H2.4l7.7-8.8L2 2h6.8l4.7 6.2L18.9 2zm-1.15 18h1.82L7.8 3.9H5.85L17.75 20z"></path></svg>
+        </a>
+
+        <a href="https://www.facebook.com/profile.php?id=61593627639811" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M14.2 8.1V6.4c0-.82.55-1.01.94-1.01h2.4V2.13L14.23 2.1c-3.68 0-4.52 2.76-4.52 4.53V8.1H6.8v3.7h2.9V22h4.5V11.8h3.05l.41-3.7H14.2z"></path></svg>
+        </a>
+
+        <a href="https://umairsial-astro.github.io/umairsial-astro/" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.82-.26.82-.58v-2.04c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.74.08-.74 1.2.08 1.84 1.24 1.84 1.24 1.08 1.84 2.82 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.46-1.33-5.46-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.3 11.3 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.21.69.83.57A12 12 0 0 0 12 .5z"></path></svg>
+        </a>
+
+            </ul>
+          </div>
+        </t>
+      </div>
     </div>
 
     <div class="xhfTerminator" aria-hidden="true"></div>
