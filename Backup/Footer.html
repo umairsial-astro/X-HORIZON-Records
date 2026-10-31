@@ -450,8 +450,8 @@
       <div class="xhfBottomCenter">X HORIZON © 2026</div>
       <div class="xhfLegal">
 
-        <t t-call="website.placeholder_footer_language_selector">
-          <t t-set="_div_classes" t-valuef="xhfOdooLanguage"></t>
+        <t t-call="portal.language_selector">
+          <t t-set="_div_classes" t-value="'xhfOdooLanguage dropup'"/>
         </t>
         <a href="/frequently-asked-questions">FAQs</a>
         <a href="/contactus">Contact</a>
