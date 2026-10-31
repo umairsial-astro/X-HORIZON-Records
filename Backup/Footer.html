@@ -271,100 +271,56 @@
     outline:none !important;
   }
 
-  #xhFooter .xhfOdooLanguage{
-    display:inline-flex !important;
+  /* Language choices stay beside the social icons; no extra footer row/column. */
+  #xhFooter .xhfSocial{
     align-items:center !important;
-    min-height:27px !important;
   }
 
-  /* Dedicated, visibly separated language area beneath Premium Features and Support */
-  #xhFooter .xhfLanguageSection{
-    grid-column:4 / 6 !important;
-    grid-row:2 !important;
-    justify-self:start !important;
-    align-self:start !important;
-    display:block !important;
-    width:100% !important;
+  #xhFooter .xhfLanguageInline{
+    display:inline-flex !important;
+    align-items:center !important;
+    flex-wrap:wrap !important;
+    gap:7px !important;
     min-width:0 !important;
-    min-height:76px !important;
-    margin:8px 0 0 !important;
-    padding:15px 0 0 !important;
-    border-top:1px solid rgba(255,255,255,.22) !important;
+    margin:0 0 0 5px !important;
+    padding:0 !important;
+    color:rgba(255,255,255,.58) !important;
+    font-size:11px !important;
+    line-height:1.4 !important;
   }
 
-  #xhFooter .xhfLanguageSection .xhfTitle{
-    display:block !important;
-    margin:0 0 10px !important;
+  #xhFooter .xhfLanguageInline .xhfLanguageLabel{
+    color:rgba(255,255,255,.48) !important;
+    font-size:10px !important;
+    font-weight:700 !important;
+    letter-spacing:.5px !important;
+    text-transform:uppercase !important;
   }
 
-  #xhFooter .xhfLanguageControl{
-    display:block !important;
-    min-height:36px !important;
-    visibility:visible !important;
-    opacity:1 !important;
-  }
-
-  #xhFooter .xhfLanguageSection .xhfOdooLanguage{
-    display:inline-flex !important;
-    min-height:36px !important;
-    visibility:visible !important;
-    opacity:1 !important;
-  }
-
-  #xhFooter .xhfLanguageSection .xhfOdooLanguage .dropdown-toggle,
-  #xhFooter .xhfLanguageSection .xhfOdooLanguage button,
-  #xhFooter .xhfLanguageSection .xhfOdooLanguage a{
-    color:rgba(255,255,255,.82) !important;
-    -webkit-text-fill-color:rgba(255,255,255,.82) !important;
-  }
-
-  #xhFooter .xhfLanguageSection .xhfOdooLanguage .dropdown-menu,
-  #xhFooter .xhfLanguageSection .xhfLanguageMenu{
-    z-index:1000 !important;
-    min-width:180px !important;
-    margin-top:6px !important;
-    padding:6px !important;
-    background:#111 !important;
-    border:1px solid rgba(255,255,255,.2) !important;
-    border-radius:8px !important;
-    box-shadow:0 12px 32px rgba(0,0,0,.45) !important;
-  }
-
-  #xhFooter .xhfLanguageSection .xhfLanguageButton{
+  #xhFooter .xhfLanguageInline a{
     display:inline-flex !important;
     align-items:center !important;
-    gap:8px !important;
-    min-height:36px !important;
-    padding:7px 12px !important;
-    color:#fff !important;
-    -webkit-text-fill-color:#fff !important;
-    background:#171717 !important;
-    border:1px solid rgba(255,255,255,.24) !important;
-    border-radius:6px !important;
-    font-size:13px !important;
-    cursor:pointer !important;
-  }
-
-  #xhFooter .xhfLanguageSection .xhfLanguageMenu .dropdown-item{
-    display:block !important;
-    width:100% !important;
-    padding:8px 10px !important;
-    color:rgba(255,255,255,.86) !important;
-    -webkit-text-fill-color:rgba(255,255,255,.86) !important;
+    min-height:26px !important;
+    padding:3px 7px !important;
+    color:rgba(255,255,255,.78) !important;
+    -webkit-text-fill-color:rgba(255,255,255,.78) !important;
+    background:rgba(255,255,255,.055) !important;
+    border:1px solid rgba(255,255,255,.12) !important;
     border-radius:5px !important;
+    font-size:11px !important;
+    line-height:1.2 !important;
     white-space:nowrap !important;
+    transition:background .18s ease,border-color .18s ease,color .18s ease !important;
   }
 
-  #xhFooter .xhfLanguageSection .xhfLanguageMenu .dropdown-item:hover,
-  #xhFooter .xhfLanguageSection .xhfLanguageMenu .dropdown-item:focus,
-  #xhFooter .xhfLanguageSection .xhfLanguageMenu .dropdown-item.active{
+  #xhFooter .xhfLanguageInline a:hover,
+  #xhFooter .xhfLanguageInline a:focus,
+  #xhFooter .xhfLanguageInline a[aria-current="true"]{
     color:#fff !important;
     -webkit-text-fill-color:#fff !important;
-    background:rgba(255,255,255,.12) !important;
-  }
-
-  #xhFooter .xhfOdooLanguage > *{
-    margin:0 !important;
+    background:rgba(255,255,255,.14) !important;
+    border-color:rgba(255,255,255,.3) !important;
+    outline:none !important;
   }
 
   @media(max-width:1080px){
@@ -487,6 +443,18 @@
           <a href="https://umairsial-astro.github.io/umairsial-astro/" target="_blank" rel="noopener" aria-label="GitHub">
             <svg viewbox="0 0 24 24" aria-hidden="true"><path d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.82-.26.82-.58v-2.04c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.74.08-.74 1.2.08 1.84 1.24 1.84 1.24 1.08 1.84 2.82 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.46-1.33-5.46-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.3 11.3 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.21.69.83.57A12 12 0 0 0 12 .5z"></path></svg>
           </a>
+          <t t-if="len(frontend_languages) &gt; 1">
+            <div class="xhfLanguageInline" aria-label="Choose website language">
+              <span class="xhfLanguageLabel">Language</span>
+              <t t-foreach="frontend_languages.values()" t-as="lg">
+                <a t-att-href="url_localized(lang_code=lg.code, prefetch_langs=True, force_default_lang=True)"
+                   t-att-aria-current="'true' if lg.code == lang else None"
+                   t-att-lang="lg.code">
+                  <t t-out="lg.name"/>
+                </a>
+              </t>
+            </div>
+          </t>
         </div>
       </section>
 
@@ -534,18 +502,6 @@
         </div>
       </nav>
 
-      <section class="xhfLanguageSection" aria-label="Website language selector">
-        <h3 class="xhfTitle">Language</h3>
-        <div class="xhfLanguageControl">
-          <!-- Use Odoo's actual language selector component directly.
-               The header placeholder is only a slot for header templates. -->
-          <t t-call="portal.language_selector">
-            <t t-set="_div_classes" t-valuef="xhfOdooLanguage dropup"/>
-            <t t-set="_btn_class" t-valuef="xhfLanguageButton dropdown-toggle"/>
-            <t t-set="_dropdown_menu_class" t-valuef="xhfLanguageMenu"/>
-          </t>
-        </div>
-      </section>
     </div>
 
     <div class="xhfTerminator" aria-hidden="true"></div>
