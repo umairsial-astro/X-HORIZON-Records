@@ -277,22 +277,38 @@
     min-height:27px !important;
   }
 
-  /* Language selector sits directly beneath Premium Features and Support */
+  /* Dedicated, visibly separated language area beneath Premium Features and Support */
   #xhFooter .xhfLanguageSection{
     grid-column:4 / 6 !important;
     grid-row:2 !important;
     justify-self:start !important;
     align-self:start !important;
+    display:block !important;
+    width:100% !important;
     min-width:0 !important;
-    margin-top:-2px !important;
+    min-height:76px !important;
+    margin:8px 0 0 !important;
+    padding:15px 0 0 !important;
+    border-top:1px solid rgba(255,255,255,.22) !important;
   }
 
   #xhFooter .xhfLanguageSection .xhfTitle{
-    margin-bottom:10px !important;
+    display:block !important;
+    margin:0 0 10px !important;
+  }
+
+  #xhFooter .xhfLanguageControl{
+    display:block !important;
+    min-height:36px !important;
+    visibility:visible !important;
+    opacity:1 !important;
   }
 
   #xhFooter .xhfLanguageSection .xhfOdooLanguage{
+    display:inline-flex !important;
     min-height:36px !important;
+    visibility:visible !important;
+    opacity:1 !important;
   }
 
   #xhFooter .xhfLanguageSection .xhfOdooLanguage .dropdown-toggle,
@@ -477,12 +493,14 @@
         </div>
       </nav>
 
-      <div class="xhfLanguageSection" aria-label="Website language selector">
+      <section class="xhfLanguageSection" aria-label="Website language selector">
         <h3 class="xhfTitle">Language</h3>
-        <t t-call="portal.language_selector">
-          <t t-set="_div_classes" t-value="'xhfOdooLanguage dropup'"/>
-        </t>
-      </div>
+        <div class="xhfLanguageControl">
+          <t t-call="website.placeholder_header_language_selector">
+            <t t-set="_div_classes" t-valuef="xhfOdooLanguage dropup"/>
+          </t>
+        </div>
+      </section>
     </div>
 
     <div class="xhfTerminator" aria-hidden="true"></div>
